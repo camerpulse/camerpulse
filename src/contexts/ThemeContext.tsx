@@ -174,13 +174,21 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const applyThemeToDocument = (theme: ThemeConfig) => {
     const root = document.documentElement
     
-    // Apply CSS custom properties
+    // Apply CSS custom properties to theme variables
     root.style.setProperty('--theme-primary', theme.colors.primary)
     root.style.setProperty('--theme-secondary', theme.colors.secondary)
     root.style.setProperty('--theme-accent', theme.colors.accent)
     root.style.setProperty('--theme-background', theme.colors.background)
     root.style.setProperty('--theme-card', theme.colors.card)
     root.style.setProperty('--theme-text', theme.colors.text)
+    
+    // Apply to design system variables
+    root.style.setProperty('--primary', theme.colors.primary.replace('hsl(', '').replace(')', ''))
+    root.style.setProperty('--secondary', theme.colors.secondary.replace('hsl(', '').replace(')', ''))
+    root.style.setProperty('--accent', theme.colors.accent.replace('hsl(', '').replace(')', ''))
+    root.style.setProperty('--background', theme.colors.background.replace('hsl(', '').replace(')', ''))
+    root.style.setProperty('--card', theme.colors.card.replace('hsl(', '').replace(')', ''))
+    root.style.setProperty('--foreground', theme.colors.text.replace('hsl(', '').replace(')', ''))
     
     // Apply fonts
     root.style.setProperty('--theme-font-heading', theme.fonts.heading)
