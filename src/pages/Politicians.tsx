@@ -10,6 +10,8 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Header } from '@/components/Layout/Header';
+import { PoliticianDetailModal } from '@/components/Politicians/PoliticianDetailModal';
+import { PoliticianComparisonModal } from '@/components/Politicians/PoliticianComparisonModal';
 import { 
   Star, 
   MapPin, 
@@ -96,10 +98,11 @@ const Politicians = () => {
   const [regionFilter, setRegionFilter] = useState('all');
   const [sortBy, setSortBy] = useState('civic_score');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
-  const [selectedPolitician, setSelectedPolitician] = useState<Politician | null>(null);
-  const [politicianPromises, setPoliticianPromises] = useState<Promise[]>([]);
+  const [selectedPoliticianId, setSelectedPoliticianId] = useState<string | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
   const [compareMode, setCompareMode] = useState(false);
   const [comparedPoliticians, setComparedPoliticians] = useState<Politician[]>([]);
+  const [showComparisonModal, setShowComparisonModal] = useState(false);
 
   useEffect(() => {
     fetchPoliticians();
@@ -479,7 +482,11 @@ const Politicians = () => {
                 </Button>
 
                 {comparedPoliticians.length === 2 && (
-                  <Button size="sm" variant="secondary">
+                  <Button 
+                    size="sm" 
+                    variant="secondary"
+                    onClick={() => setShowComparisonModal(true)}
+                  >
                     Comparer les sélectionnés
                   </Button>
                 )}
@@ -689,6 +696,19 @@ const Politicians = () => {
                             </>
                           )}
                         </Button>
+
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="flex-1"
+                          onClick={() => {
+                            setSelectedPoliticianId(politician.id);
+                            setShowDetailModal(true);
+                          }}
+                        >
+                          <ExternalLink className="w-4 h-4 mr-1" />
+                          Voir profil
+                        </Button>
                         
                         {compareMode && (
                           <Button 
@@ -717,6 +737,22 @@ const Politicians = () => {
               })}
             </div>
           )}
+
+          {/* Modals */}
+          <PoliticianDetailModal
+            politicianId={selectedPoliticianId}
+            isOpen={showDetailModal}
+            onClose={() => {
+              setShowDetailModal(false);
+              setSelectedPoliticianId(null);
+            }}
+          />
+
+          <PoliticianComparisonModal
+            politicians={comparedPoliticians}
+            isOpen={showComparisonModal}
+            onClose={() => setShowComparisonModal(false)}
+          />
         </div>
       </div>
     </>
