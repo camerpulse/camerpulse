@@ -14,16 +14,556 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      approval_ratings: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          id: string
+          politician_id: string
+          rating: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          politician_id: string
+          rating?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          id?: string
+          politician_id?: string
+          rating?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_ratings_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      donations: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string | null
+          id: string
+          is_anonymous: boolean | null
+          message: string | null
+          payment_method: string | null
+          payment_status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          is_anonymous?: boolean | null
+          message?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          is_anonymous?: boolean | null
+          message?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      follows: {
+        Row: {
+          created_at: string | null
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string | null
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string | null
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: []
+      }
+      marketplace_products: {
+        Row: {
+          category: string | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          id: string
+          images: string[] | null
+          in_stock: boolean | null
+          name: string
+          price: number
+          stock_quantity: number | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          name: string
+          price: number
+          stock_quantity?: number | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          name?: string
+          price?: number
+          stock_quantity?: number | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_products_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_vendors: {
+        Row: {
+          business_name: string
+          created_at: string | null
+          description: string | null
+          id: string
+          kyc_document_url: string | null
+          rating: number | null
+          total_sales: number | null
+          updated_at: string | null
+          user_id: string
+          vendor_id: string
+          verification_status: string | null
+        }
+        Insert: {
+          business_name: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          kyc_document_url?: string | null
+          rating?: number | null
+          total_sales?: number | null
+          updated_at?: string | null
+          user_id: string
+          vendor_id: string
+          verification_status?: string | null
+        }
+        Update: {
+          business_name?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          kyc_document_url?: string | null
+          rating?: number | null
+          total_sales?: number | null
+          updated_at?: string | null
+          user_id?: string
+          vendor_id?: string
+          verification_status?: string | null
+        }
+        Relationships: []
+      }
+      news_articles: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          is_pinned: boolean | null
+          published_at: string | null
+          sentiment_label: string | null
+          sentiment_score: number | null
+          source_name: string | null
+          source_url: string | null
+          title: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          is_pinned?: boolean | null
+          published_at?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          source_name?: string | null
+          source_url?: string | null
+          title: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          is_pinned?: boolean | null
+          published_at?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          source_name?: string | null
+          source_url?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      politicians: {
+        Row: {
+          bio: string | null
+          civic_score: number | null
+          created_at: string | null
+          id: string
+          name: string
+          party: string | null
+          profile_image_url: string | null
+          region: string | null
+          role_title: string | null
+          updated_at: string | null
+          user_id: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          bio?: string | null
+          civic_score?: number | null
+          created_at?: string | null
+          id?: string
+          name: string
+          party?: string | null
+          profile_image_url?: string | null
+          region?: string | null
+          role_title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          bio?: string | null
+          civic_score?: number | null
+          created_at?: string | null
+          id?: string
+          name?: string
+          party?: string | null
+          profile_image_url?: string | null
+          region?: string | null
+          role_title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
+      poll_votes: {
+        Row: {
+          created_at: string | null
+          id: string
+          option_index: number
+          poll_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          option_index: number
+          poll_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          option_index?: number
+          poll_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_votes_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      polls: {
+        Row: {
+          created_at: string | null
+          creator_id: string
+          description: string | null
+          ends_at: string | null
+          id: string
+          is_active: boolean | null
+          options: Json
+          title: string
+          votes_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          creator_id: string
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          options: Json
+          title: string
+          votes_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          creator_id?: string
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          options?: Json
+          title?: string
+          votes_count?: number | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string | null
+          display_name: string | null
+          id: string
+          is_diaspora: boolean | null
+          location: string | null
+          updated_at: string | null
+          user_id: string
+          username: string
+          verified: boolean | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          is_diaspora?: boolean | null
+          location?: string | null
+          updated_at?: string | null
+          user_id: string
+          username: string
+          verified?: boolean | null
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          is_diaspora?: boolean | null
+          location?: string | null
+          updated_at?: string | null
+          user_id?: string
+          username?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
+      pulse_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          post_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          post_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          post_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pulse_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "pulse_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pulse_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pulse_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "pulse_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pulse_posts: {
+        Row: {
+          comments_count: number | null
+          content: string
+          created_at: string | null
+          hashtags: string[] | null
+          id: string
+          image_url: string | null
+          likes_count: number | null
+          mentions: string[] | null
+          sentiment_label: string | null
+          sentiment_score: number | null
+          shares_count: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          comments_count?: number | null
+          content: string
+          created_at?: string | null
+          hashtags?: string[] | null
+          id?: string
+          image_url?: string | null
+          likes_count?: number | null
+          mentions?: string[] | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          shares_count?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          comments_count?: number | null
+          content?: string
+          created_at?: string | null
+          hashtags?: string[] | null
+          id?: string
+          image_url?: string | null
+          likes_count?: number | null
+          mentions?: string[] | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          shares_count?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          granted_at: string | null
+          granted_by: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          granted_at?: string | null
+          granted_by?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          granted_at?: string | null
+          granted_by?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_vendor_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      has_role: {
+        Args: {
+          _user_id: string
+          _role: Database["public"]["Enums"]["app_role"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role:
+        | "admin"
+        | "moderator"
+        | "verified_politician"
+        | "verified_vendor"
+        | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +690,14 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: [
+        "admin",
+        "moderator",
+        "verified_politician",
+        "verified_vendor",
+        "user",
+      ],
+    },
   },
 } as const
