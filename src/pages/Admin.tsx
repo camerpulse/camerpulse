@@ -338,7 +338,7 @@ const Admin = () => {
                   Pulse & Forums
                 </TabsTrigger>
                 <TabsTrigger value="themes" className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
+                  <Monitor className="h-4 w-4" />
                   Thèmes
                 </TabsTrigger>
                 <TabsTrigger value="ai-control" className="flex items-center gap-2">
@@ -933,17 +933,17 @@ const Admin = () => {
             {/* THEMES MANAGEMENT */}
             <TabsContent value="themes">
               <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Settings className="h-5 w-5" />
-                      Gestion des Thèmes
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ThemeManagement />
-                  </CardContent>
-                </Card>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h2 className="text-2xl font-bold">Theme Management</h2>
+                    <p className="text-muted-foreground">Manage visual themes and platform appearance</p>
+                  </div>
+                  <Button variant="outline">
+                    <Monitor className="h-4 w-4 mr-2" />
+                    Preview Mode
+                  </Button>
+                </div>
+                <ThemeManagement />
               </div>
             </TabsContent>
 
