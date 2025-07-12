@@ -105,9 +105,14 @@ const Security = () => {
 
       if (error) throw error;
       setDevices((data || []).map(device => ({
-        ...device,
-        ip_address: device.ip_address || '',
-        user_agent: device.user_agent || ''
+        id: device.id,
+        device_name: device.device_name,
+        device_fingerprint: device.device_fingerprint,
+        ip_address: device.ip_address as string || '',
+        user_agent: device.user_agent as string || '',
+        is_trusted: device.is_trusted || false,
+        last_seen_at: device.last_seen_at,
+        created_at: device.created_at
       })));
     } catch (error) {
       console.error('Error fetching devices:', error);
@@ -125,9 +130,13 @@ const Security = () => {
 
       if (error) throw error;
       setSecurityLogs((data || []).map(log => ({
-        ...log,
-        ip_address: log.ip_address || null,
-        user_agent: log.user_agent || null
+        id: log.id,
+        event_type: log.event_type,
+        ip_address: log.ip_address as string || undefined,
+        user_agent: log.user_agent as string || undefined,
+        severity: log.severity as 'info' | 'warning' | 'critical',
+        created_at: log.created_at,
+        metadata: log.metadata
       })));
     } catch (error) {
       console.error('Error fetching security logs:', error);
