@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 import { Header } from './Header';
 import { MobileNavigation } from './MobileNavigation';
 import { PWAInstallPrompt } from './PWAInstallPrompt';
+import { ThemeStatusBadge } from '@/components/Theme/ThemeStatusBadge';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -19,6 +20,9 @@ export const AppLayout = ({ children, showMobileNav = true }: AppLayoutProps) =>
       
       {showMobileNav && <MobileNavigation />}
       <PWAInstallPrompt />
+      
+      {/* Theme Status Badge - Shows current active theme */}
+      <ThemeStatusBadge position="top-right" />
     </div>
   );
 };

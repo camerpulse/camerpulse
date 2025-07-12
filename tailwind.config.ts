@@ -129,11 +129,45 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'heartbeat': {
+					'0%': { transform: 'scale(1)' },
+					'14%': { transform: 'scale(1.3)' },
+					'28%': { transform: 'scale(1)' },
+					'42%': { transform: 'scale(1.3)' },
+					'70%': { transform: 'scale(1)' }
+				},
+				'pulse-heartbeat': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.8' }
+				},
+				'heartbeat-line': {
+					'0%': { strokeDasharray: '0, 100' },
+					'50%': { strokeDasharray: '50, 100' },
+					'100%': { strokeDasharray: '100, 100' }
+				},
+				'fade-in-up': {
+					'0%': { opacity: '0', transform: 'translateY(20px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'press': {
+					'0%': { transform: 'scale(1)' },
+					'50%': { transform: 'scale(0.95)' },
+					'100%': { transform: 'scale(1)' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'heartbeat': 'heartbeat 2s infinite',
+				'pulse-heartbeat': 'pulse-heartbeat 2s infinite',
+				'heartbeat-line': 'heartbeat-line 3s infinite',
+				'fade-in-up': 'fade-in-up 0.6s ease-out',
+				'press': 'press 0.1s ease-out'
+			},
+			animationDelay: {
+				'300': '300ms',
+				'500': '500ms'
 			}
 		}
 	},

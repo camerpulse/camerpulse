@@ -3,6 +3,7 @@ import { MonumentBackground } from './MonumentBackground'
 import { HeartbeatLogo } from './HeartbeatLogo'
 import { CivicBanner } from './CivicBanner'
 import { PartyGrid } from './PartyGrid'
+import { EmergenceFAB } from './EmergenceFAB'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -17,6 +18,7 @@ interface Emergence2035HomePageProps {
 export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ className }) => {
   const navigate = useNavigate()
   const { user } = useAuth()
+  // Note: Theme context will provide component visibility settings
 
   const quickActions = [
     {
@@ -50,17 +52,35 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
   ]
 
   return (
-    <div className={cn("relative min-h-screen", className)}>
-      {/* Monument Background */}
+    <div className={cn("relative min-h-screen overflow-hidden", className)}>
+      {/* Monument Background - Only show if theme setting enabled */}
       <MonumentBackground className="text-theme-text" />
       
+      {/* Patriotic gradient overlay for enhanced atmosphere */}
+      <div className="absolute inset-0 bg-gradient-to-br from-theme-background via-transparent to-theme-background/50 pointer-events-none z-[1]" />
+      
       <div className="relative z-10 container mx-auto px-4 py-8 space-y-12">
-        {/* Hero Section with Heartbeat Logo */}
+        {/* Hero Section with Heartbeat Logo - Conditional based on theme */}
         <section className="text-center py-12 md:py-20">
           <HeartbeatLogo showAnimation={true} />
+          
+          {/* Patriotic welcome message */}
+          <div className={cn(
+            "mt-8 p-6 rounded-2xl",
+            "bg-gradient-to-r from-theme-primary/5 via-theme-accent/5 to-theme-secondary/5",
+            "border border-theme-accent/20 backdrop-blur-sm",
+            "animate-fade-in-up animation-delay-500"
+          )}>
+            <p className={cn(
+              "text-lg md:text-xl text-theme-text/80 italic",
+              "font-[family-name:var(--theme-font-body)]"
+            )}>
+              "Unis dans la diversité, forts dans l'unité" 🇨🇲
+            </p>
+          </div>
         </section>
 
-        {/* Civic Banner */}
+        {/* Civic Banner - Conditional rendering */}
         <section>
           <CivicBanner />
         </section>
@@ -176,6 +196,9 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
           </div>
         </section>
       </div>
+
+      {/* Floating Action Button - Mobile Native Feel */}
+      <EmergenceFAB />
     </div>
   )
 }

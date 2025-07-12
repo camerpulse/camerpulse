@@ -290,4 +290,26 @@
   .shadow-glow {
     box-shadow: var(--shadow-glow);
   }
+  
+  /* Animation delays */
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+  
+  /* Native mobile feel */
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+  
+  /* Emergence 2035 specific utilities */
+  .text-gradient-flag {
+    background: linear-gradient(135deg, hsl(12, 100%, 45%), hsl(48, 100%, 50%), hsl(145, 100%, 35%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
