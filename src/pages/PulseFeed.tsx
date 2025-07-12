@@ -270,7 +270,7 @@ const PulseFeed = () => {
                 <Button 
                   onClick={createPost}
                   disabled={!newPost.trim() || posting}
-                  className="bg-cameroon-primary hover:bg-cameroon-primary/90"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   <Send className="w-4 h-4 mr-2" />
                   {posting ? 'Publication...' : 'Publier'}
@@ -368,20 +368,20 @@ const PulseFeed = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => toggleLike(post.id, post.user_has_liked || false)}
-                        className={`flex items-center gap-2 ${
-                          post.user_has_liked ? 'text-red-600' : 'text-gray-600'
+                        className={`flex items-center gap-2 hover:bg-accent hover:text-accent-foreground ${
+                          post.user_has_liked ? 'text-destructive' : 'text-muted-foreground'
                         }`}
                       >
                         <Heart className={`w-4 h-4 ${post.user_has_liked ? 'fill-current' : ''}`} />
                         {post.likes_count}
                       </Button>
 
-                      <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-600">
+                      <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground">
                         <MessageCircle className="w-4 h-4" />
                         {post.comments_count}
                       </Button>
 
-                      <Button variant="ghost" size="sm" className="flex items-center gap-2 text-gray-600">
+                      <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground">
                         <Share2 className="w-4 h-4" />
                         {post.shares_count}
                       </Button>
