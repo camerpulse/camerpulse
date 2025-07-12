@@ -21,6 +21,7 @@ import PoliticaAI from "./pages/PoliticaAI";
 import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
+import { MobileProvider } from "./contexts/MobileContext";
 
 const queryClient = new QueryClient();
 
@@ -42,8 +43,9 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <TooltipProvider>
+      <MobileProvider>
+        <AuthProvider>
+          <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -69,7 +71,8 @@ const App = () => {
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
-    </QueryClientProvider>
+    </MobileProvider>
+  </QueryClientProvider>
   );
 };
 

@@ -122,6 +122,86 @@
     @apply min-h-[44px] min-w-[44px];
   }
   
+  /* Mobile optimizations */
+  .mobile-card {
+    @apply transition-all duration-200 hover:shadow-md;
+  }
+
+  /* Animations and interactions */
+  .animate-press {
+    @apply active:scale-95 transition-transform duration-75;
+  }
+
+  /* Remove tap highlights on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Allow text selection where needed */
+  input, textarea, [contenteditable], p, span, div[role="text"] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  /* Font smoothing */
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Scrollbar hiding for mobile */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Line clamping for mobile */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  /* Mobile gestures */
+  .swipe-indicator {
+    @apply absolute inset-x-0 top-2 h-1 w-12 mx-auto bg-muted-foreground/30 rounded-full;
+  }
+
+  /* Mobile pull indicator */
+  .pull-indicator {
+    @apply flex items-center justify-center py-2 text-muted-foreground;
+  }
+
+  /* Mobile safe areas */
+  .safe-area-padding {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+  
   /* PWA specific styles */
   @media (display-mode: standalone) {
     body {

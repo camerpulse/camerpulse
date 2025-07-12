@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Header } from "@/components/Layout/Header";
+import { AppLayout } from "@/components/Layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -266,9 +266,8 @@ const Admin = () => {
 
   if (!userRole) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header />
-        <main className="container mx-auto px-4 py-8">
+      <AppLayout showMobileNav={false}>
+        <div className="container mx-auto px-4 py-8">
           <Card>
             <CardContent className="py-8 text-center">
               <AlertTriangle className="h-12 w-12 text-destructive mx-auto mb-4" />
@@ -276,8 +275,8 @@ const Admin = () => {
               <p className="text-muted-foreground">You don't have admin privileges to access this page.</p>
             </CardContent>
           </Card>
-        </main>
-      </div>
+        </div>
+      </AppLayout>
     );
   }
 
@@ -298,10 +297,8 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
-      <main className="container mx-auto px-4 py-8">
+    <AppLayout showMobileNav={false}>
+      <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-foreground mb-2">Admin Dashboard</h1>
@@ -1721,8 +1718,8 @@ const Admin = () => {
             </TabsContent>
           </Tabs>
         </div>
-      </main>
-    </div>
+      </div>
+    </AppLayout>
   );
 };
 

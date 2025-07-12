@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Header } from '@/components/Layout/Header';
+import { AppLayout } from '@/components/Layout/AppLayout';
 import { 
   Shield, 
   Smartphone, 
@@ -490,8 +490,7 @@ const Security = () => {
 
   if (!user) {
     return (
-      <>
-        <Header />
+      <AppLayout>
         <div className="min-h-screen bg-gradient-cameroon flex items-center justify-center p-4">
           <Card className="w-full max-w-md text-center">
             <CardContent className="pt-6">
@@ -500,14 +499,13 @@ const Security = () => {
             </CardContent>
           </Card>
         </div>
-      </>
+      </AppLayout>
     );
   }
 
   return (
-    <>
-      <Header />
-      <div className="min-h-screen bg-gradient-subtle">
+    <AppLayout>
+      <div className="min-h-screen bg-gradient-subtle safe-area-padding">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-cameroon-primary mb-2 flex items-center gap-2">
@@ -939,7 +937,7 @@ const Security = () => {
           </Tabs>
         </div>
       </div>
-    </>
+    </AppLayout>
   );
 };
 
