@@ -25,6 +25,8 @@ interface AILog {
   completed_at?: string;
   ai_confidence_score?: number;
   changes_made: any;
+  sources_verified?: any;
+  error_message?: string;
 }
 
 export const PoliticaAIDashboard = () => {
@@ -219,45 +221,111 @@ export const PoliticaAIDashboard = () => {
             <CardHeader>
               <CardTitle>Recent AI Activity</CardTitle>
               <CardDescription>
-                Latest verification scans and updates
+                Latest verification scans and detailed field updates
               </CardDescription>
             </CardHeader>
             <CardContent>
               {logsLoading ? (
                 <div>Loading activity...</div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-4">
                   {recentLogs?.map((log) => (
-                    <div key={log.id} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="flex-1">
-                        <p className="font-medium">
-                          {log.action_type} - {log.target_type}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {new Date(log.created_at).toLocaleString()}
-                        </p>
-                        {log.changes_made?.length > 0 && (
-                          <p className="text-xs text-blue-600">
-                            {log.changes_made.length} changes made
+                    <div key={log.id} className="border rounded-lg p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <p className="font-semibold text-lg">
+                            {log.action_type.toUpperCase()} - {log.target_type.replace('_', ' ').toUpperCase()}
                           </p>
-                        )}
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {log.ai_confidence_score && (
-                          <Badge variant="outline">
-                            {Math.round(log.ai_confidence_score * 100)}%
+                          <p className="text-sm text-muted-foreground">
+                            Started: {new Date(log.created_at).toLocaleString()}
+                            {log.completed_at && (
+                              <span> • Completed: {new Date(log.completed_at).toLocaleString()}</span>
+                            )}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {log.ai_confidence_score && (
+                            <Badge variant="outline" className="text-lg px-3 py-1">
+                              {Math.round(log.ai_confidence_score * 100)}% confidence
+                            </Badge>
+                          )}
+                          <Badge variant={
+                            log.status === 'completed' ? 'default' :
+                            log.status === 'failed' ? 'destructive' :
+                            log.status === 'requires_review' ? 'secondary' : 'outline'
+                          } className="text-sm px-3 py-1">
+                            {log.status.replace('_', ' ').toUpperCase()}
                           </Badge>
-                        )}
-                        <Badge variant={
-                          log.status === 'completed' ? 'default' :
-                          log.status === 'failed' ? 'destructive' :
-                          log.status === 'requires_review' ? 'secondary' : 'outline'
-                        }>
-                          {log.status}
-                        </Badge>
+                        </div>
                       </div>
+
+                      {/* Sources Verified */}
+                      {log.sources_verified && Array.isArray(log.sources_verified) && log.sources_verified.length > 0 && (
+                        <div className="bg-blue-50 p-3 rounded-md">
+                          <p className="font-medium text-sm text-blue-900 mb-2">
+                            🔍 Sources Verified ({log.sources_verified.length}):
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            {log.sources_verified.map((source: string, idx: number) => (
+                              <Badge key={idx} variant="secondary" className="text-xs">
+                                {source}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Detailed Changes */}
+                      {log.changes_made && Array.isArray(log.changes_made) && log.changes_made.length > 0 && (
+                        <div className="space-y-2">
+                          <p className="font-medium text-sm">
+                            📝 Field Updates ({log.changes_made.length}):
+                          </p>
+                          <div className="grid gap-2">
+                            {log.changes_made.map((change: any, idx: number) => (
+                              <div key={idx} className="bg-gray-50 p-3 rounded-md text-sm">
+                                <div className="flex items-start justify-between mb-1">
+                                  <span className="font-medium text-gray-900 capitalize">
+                                    {change.field?.replace(/_/g, ' ')}
+                                  </span>
+                                  <Badge variant="outline" className="text-xs">
+                                    {Math.round((change.confidence || 0) * 100)}% confidence
+                                  </Badge>
+                                </div>
+                                <div className="space-y-1">
+                                  <p className="text-gray-600">
+                                    <span className="font-medium">Before:</span> {change.current_value || 'Empty'}
+                                  </p>
+                                  <p className="text-gray-900">
+                                    <span className="font-medium">After:</span> {change.found_value || 'No change'}
+                                  </p>
+                                  {change.source_url && (
+                                    <p className="text-blue-600 text-xs">
+                                      Source: {change.source_url}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Error Message */}
+                      {log.error_message && (
+                        <div className="bg-red-50 p-3 rounded-md">
+                          <p className="font-medium text-sm text-red-900 mb-1">❌ Error:</p>
+                          <p className="text-red-700 text-sm">{log.error_message}</p>
+                        </div>
+                      )}
                     </div>
                   ))}
+                  
+                  {recentLogs?.length === 0 && (
+                    <div className="text-center py-8 text-muted-foreground">
+                      No recent AI activity found. Click "Trigger Scan" to start verification.
+                    </div>
+                  )}
                 </div>
               )}
             </CardContent>
