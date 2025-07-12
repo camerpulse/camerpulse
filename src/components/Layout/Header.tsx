@@ -41,6 +41,7 @@ export const Header = () => {
     { name: 'Politicians', name_fr: 'Politiciens', icon: Users, href: '/politicians' },
     { name: 'Polls', name_fr: 'Sondages', icon: TrendingUp, href: '/polls' },
     { name: 'Marketplace', name_fr: 'Marché', icon: ShoppingBag, href: '/marketplace' },
+    { name: 'Social', name_fr: 'Social', icon: Users, href: '/social' },
     { name: 'News', name_fr: 'Actualités', icon: Globe, href: '/news' }
   ];
 

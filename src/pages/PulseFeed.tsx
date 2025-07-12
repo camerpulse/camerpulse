@@ -8,6 +8,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { Header } from '@/components/Layout/Header';
+import { UserProfile } from '@/components/Social/UserProfile';
 import { 
   Heart, 
   MessageCircle, 
@@ -34,6 +35,7 @@ interface PulsePost {
   shares_count: number;
   created_at: string;
   profiles: {
+    user_id: string;
     username: string;
     display_name?: string;
     avatar_url?: string;
@@ -50,6 +52,7 @@ const PulseFeed = () => {
   const [newPost, setNewPost] = useState('');
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPosts();
@@ -61,7 +64,7 @@ const PulseFeed = () => {
         .from('pulse_posts')
         .select(`
           *,
-          profiles(username, display_name, avatar_url, is_diaspora, verified)
+          profiles(user_id, username, display_name, avatar_url, is_diaspora, verified)
         `)
         .order('created_at', { ascending: false })
         .limit(50);
@@ -311,7 +314,7 @@ const PulseFeed = () => {
                 <Card key={post.id} className="border-cameroon-yellow/20 hover:shadow-lg transition-shadow">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-3 mb-4">
-                      <Avatar>
+                      <Avatar className="cursor-pointer" onClick={() => setSelectedUserId(post.profiles.user_id)}>
                         <AvatarImage src={post.profiles.avatar_url} />
                         <AvatarFallback className="bg-cameroon-yellow text-cameroon-primary">
                           {post.profiles.username[0].toUpperCase()}
@@ -319,7 +322,12 @@ const PulseFeed = () => {
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium">{post.profiles.display_name || post.profiles.username}</span>
+                          <span 
+                            className="font-medium cursor-pointer hover:underline"
+                            onClick={() => setSelectedUserId(post.profiles.user_id)}
+                          >
+                            {post.profiles.display_name || post.profiles.username}
+                          </span>
                           <span className="text-gray-500">@{post.profiles.username}</span>
                           {post.profiles.verified && (
                             <Badge variant="outline" className="border-blue-500 text-blue-600">Vérifié</Badge>
@@ -392,6 +400,15 @@ const PulseFeed = () => {
           )}
         </div>
       </div>
+
+      {/* User Profile Modal */}
+      {selectedUserId && (
+        <UserProfile
+          userId={selectedUserId}
+          isOpen={!!selectedUserId}
+          onClose={() => setSelectedUserId(null)}
+        />
+      )}
     </>
   );
 };
