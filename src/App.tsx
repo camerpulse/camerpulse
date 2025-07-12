@@ -36,7 +36,7 @@ const App = () => (
             <Route path="/politicians" element={<Politicians />} />
             <Route path="/security" element={<Security />} />
             <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/polls" element={<Polls />} />
+            <Route path="/political-parties" element={<PoliticalParties />} />
             <Route path="/donate" element={<Donations />} />
             <Route path="/social" element={<Social />} />
             <Route path="/news" element={<News />} />
