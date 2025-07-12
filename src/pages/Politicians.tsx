@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Header } from '@/components/Layout/Header';
 import { PoliticianDetailModal } from '@/components/Politicians/PoliticianDetailModal';
 import { PoliticianComparisonModal } from '@/components/Politicians/PoliticianComparisonModal';
+import { ClaimProfileButton } from '@/components/Politics/ClaimProfileButton';
 import { 
   Star, 
   MapPin, 
@@ -75,6 +76,9 @@ interface Politician {
     in_progress: number;
     total: number;
   };
+  is_claimed?: boolean;
+  is_claimable?: boolean;
+  auto_imported?: boolean;
 }
 
 interface Promise {
@@ -724,6 +728,18 @@ const Politicians = () => {
                             <Eye className="w-4 h-4" />
                           </Button>
                         )}
+                       </div>
+
+                      {/* Claim Profile Button */}
+                      <div className="mt-2">
+                        <ClaimProfileButton
+                          type="politician"
+                          targetName={politician.name}
+                          targetId={politician.id}
+                          isClaimed={politician.is_claimed}
+                          isClaimable={politician.is_claimable}
+                          className="w-full text-sm"
+                        />
                       </div>
 
                       {/* Stats Footer */}

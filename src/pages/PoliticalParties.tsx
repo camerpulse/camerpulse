@@ -8,8 +8,9 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Search, Users, MapPin, Calendar, Award, TrendingUp, AlertCircle } from "lucide-react";
+import { Search, Users, MapPin, Calendar, Award, TrendingUp, AlertCircle, Globe, Mail, Building2, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import { ClaimProfileButton } from "@/components/Politics/ClaimProfileButton";
 
 interface PoliticalParty {
   id: string;
@@ -29,6 +30,13 @@ interface PoliticalParty {
   approval_rating: number;
   total_ratings: number;
   is_active: boolean;
+  contact_email: string | null;
+  official_website: string | null;
+  mission_statement: string | null;
+  vision_statement: string | null;
+  is_claimed: boolean;
+  is_claimable: boolean;
+  auto_imported: boolean;
 }
 
 const PoliticalParties = () => {
@@ -60,7 +68,14 @@ const PoliticalParties = () => {
           mayors_count,
           approval_rating,
           total_ratings,
-          is_active
+          is_active,
+          contact_email,
+          official_website,
+          mission_statement,
+          vision_statement,
+          is_claimed,
+          is_claimable,
+          auto_imported
         `)
         .eq("is_active", true)
         .order("name", { ascending: true });
@@ -232,10 +247,21 @@ const PoliticalParties = () => {
             {/* Parties Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {sortedParties.map((party) => (
-                <Link key={party.id} to={`/political-parties/${party.id}`}>
-                  <Card className="hover:shadow-lg transition-shadow cursor-pointer border-l-4 border-l-primary h-full">
-                    <CardHeader className="pb-3">
-                      <div className="flex items-start justify-between">
+                <Card key={party.id} className="hover:shadow-lg transition-shadow border-l-4 border-l-primary h-full">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3 flex-1">
+                        {party.logo_url ? (
+                          <img 
+                            src={party.logo_url} 
+                            alt={`${party.name} logo`}
+                            className="w-12 h-12 rounded-lg object-cover"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 bg-muted rounded-lg flex items-center justify-center">
+                            <Building2 className="h-6 w-6 text-muted-foreground" />
+                          </div>
+                        )}
                         <div className="flex-1">
                           <CardTitle className="text-lg font-bold text-primary">
                             {party.acronym || party.name}
@@ -243,83 +269,138 @@ const PoliticalParties = () => {
                           <p className="text-sm text-muted-foreground font-medium">
                             {party.name}
                           </p>
+                          <div className="flex items-center gap-2 mt-1">
+                            {party.auto_imported && (
+                              <Badge variant="secondary" className="text-xs">
+                                Auto-imported
+                              </Badge>
+                            )}
+                            {party.is_claimed && (
+                              <Badge variant="default" className="text-xs gap-1">
+                                <Shield className="h-3 w-3" />
+                                Claimed
+                              </Badge>
+                            )}
+                          </div>
                         </div>
-                        {party.logo_url && (
-                          <img 
-                            src={party.logo_url} 
-                            alt={`${party.name} logo`}
-                            className="w-12 h-12 rounded-lg object-cover"
-                          />
-                        )}
                       </div>
-                    </CardHeader>
-                    
-                    <CardContent className="space-y-3">
-                      {/* Leadership */}
-                      {party.party_president && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Users className="h-4 w-4 text-primary" />
-                          <span className="font-medium">President:</span>
-                          <span className="truncate">{party.party_president}</span>
-                        </div>
-                      )}
+                    </div>
+                  </CardHeader>
+                  
+                  <CardContent className="space-y-3">
+                    {/* Mission Statement */}
+                    {party.mission_statement && (
+                      <p className="text-sm text-muted-foreground italic line-clamp-2">
+                        "{party.mission_statement}"
+                      </p>
+                    )}
 
-                      {/* Location */}
-                      {(party.headquarters_city || party.headquarters_region) && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <MapPin className="h-4 w-4 text-primary" />
-                          <span className="truncate">
-                            {[party.headquarters_city, party.headquarters_region].filter(Boolean).join(", ")}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Founding Date */}
-                      {party.founding_date && (
-                        <div className="flex items-center gap-2 text-sm">
-                          <Calendar className="h-4 w-4 text-primary" />
-                          <span>Founded: {new Date(party.founding_date).getFullYear()}</span>
-                        </div>
-                      )}
-
-                      {/* Political Stats */}
-                      <div className="flex gap-2 flex-wrap">
-                        <Badge variant="secondary" className="text-xs">
-                          {party.mps_count || 0} MPs
-                        </Badge>
-                        <Badge variant="secondary" className="text-xs">
-                          {party.senators_count || 0} Senators
-                        </Badge>
-                        <Badge variant="secondary" className="text-xs">
-                          {party.mayors_count || 0} Mayors
-                        </Badge>
+                    {/* Leadership */}
+                    {party.party_president && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Users className="h-4 w-4 text-primary" />
+                        <span className="font-medium">President:</span>
+                        <span className="truncate">{party.party_president}</span>
                       </div>
+                    )}
 
-                      {/* Ideology Badge */}
-                      {party.political_leaning && (
-                        <Badge variant="outline" className="w-fit">
-                          {party.political_leaning}
-                        </Badge>
-                      )}
+                    {/* Location */}
+                    {(party.headquarters_city || party.headquarters_region) && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <MapPin className="h-4 w-4 text-primary" />
+                        <span className="truncate">
+                          {[party.headquarters_city, party.headquarters_region].filter(Boolean).join(", ")}
+                        </span>
+                      </div>
+                    )}
 
-                      {/* Approval Rating */}
-                      <div className="flex items-center justify-between pt-2">
-                        <div className="flex items-center gap-2">
-                          <TrendingUp className="h-4 w-4 text-primary" />
-                          <span className="text-sm font-medium">
-                            Approval: {(party.approval_rating || 0).toFixed(1)}/5
-                          </span>
+                    {/* Contact Info */}
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                      {party.contact_email && (
+                        <div className="flex items-center gap-1 truncate">
+                          <Mail className="h-3 w-3 flex-shrink-0" />
+                          <span className="truncate">{party.contact_email}</span>
                         </div>
+                      )}
+                      {party.official_website && (
                         <div className="flex items-center gap-1">
-                          <Award className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">
-                            {party.total_ratings || 0} ratings
-                          </span>
+                          <Globe className="h-3 w-3 flex-shrink-0" />
+                          <a 
+                            href={party.official_website} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="truncate hover:text-primary"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            Website
+                          </a>
                         </div>
+                      )}
+                    </div>
+
+                    {/* Founding Date */}
+                    {party.founding_date && (
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        <span>Founded: {new Date(party.founding_date).getFullYear()}</span>
                       </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                    )}
+
+                    {/* Political Stats */}
+                    <div className="flex gap-2 flex-wrap">
+                      <Badge variant="secondary" className="text-xs">
+                        {party.mps_count || 0} MPs
+                      </Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        {party.senators_count || 0} Senators
+                      </Badge>
+                      <Badge variant="secondary" className="text-xs">
+                        {party.mayors_count || 0} Mayors
+                      </Badge>
+                    </div>
+
+                    {/* Ideology Badge */}
+                    {party.political_leaning && (
+                      <Badge variant="outline" className="w-fit">
+                        {party.political_leaning}
+                      </Badge>
+                    )}
+
+                    {/* Approval Rating */}
+                    <div className="flex items-center justify-between pt-2">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4 text-primary" />
+                        <span className="text-sm font-medium">
+                          Approval: {(party.approval_rating || 0).toFixed(1)}/5
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Award className="h-4 w-4 text-muted-foreground" />
+                        <span className="text-xs text-muted-foreground">
+                          {party.total_ratings || 0} ratings
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex flex-col gap-2 pt-2">
+                      <Link to={`/political-parties/${party.id}`}>
+                        <button className="w-full px-3 py-2 text-sm bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">
+                          View Details
+                        </button>
+                      </Link>
+                      
+                      <ClaimProfileButton
+                        type="party"
+                        targetName={party.name}
+                        targetId={party.id}
+                        isClaimed={party.is_claimed}
+                        isClaimable={party.is_claimable}
+                        className="w-full text-sm"
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
 
