@@ -34,7 +34,8 @@ interface PulsePost {
   comments_count: number;
   shares_count: number;
   created_at: string;
-  profiles: {
+  user_id: string;
+  user_profile?: {
     user_id: string;
     username: string;
     display_name?: string;
@@ -60,19 +61,30 @@ const PulseFeed = () => {
 
   const fetchPosts = async () => {
     try {
-      const { data, error } = await supabase
+      // First get the posts
+      const { data: postsData, error: postsError } = await supabase
         .from('pulse_posts')
-        .select(`
-          *,
-          profiles(user_id, username, display_name, avatar_url, is_diaspora, verified)
-        `)
+        .select('*')
         .order('created_at', { ascending: false })
         .limit(50);
 
-      if (error) throw error;
+      if (postsError) throw postsError;
 
-      // Get likes for current user
-      const postIds = data?.map(p => p.id) || [];
+      if (!postsData || postsData.length === 0) {
+        setPosts([]);
+        setLoading(false);
+        return;
+      }
+
+      // Get user profiles for the posts
+      const userIds = [...new Set(postsData.map(post => post.user_id))];
+      const { data: profilesData } = await supabase
+        .from('profiles')
+        .select('user_id, username, display_name, avatar_url, is_diaspora, verified')
+        .in('user_id', userIds);
+
+      // Get likes for current user if authenticated
+      const postIds = postsData.map(p => p.id);
       const { data: likesData } = user ? await supabase
         .from('pulse_likes')
         .select('post_id')
@@ -81,16 +93,21 @@ const PulseFeed = () => {
 
       const likedPostIds = new Set(likesData?.map(like => like.post_id) || []);
 
-      const postsWithLikes: PulsePost[] = data?.map((post: any) => ({
-        ...post,
-        sentiment_label: post.sentiment_label as 'positive' | 'negative' | 'neutral' | undefined,
-        likes_count: post.likes_count || 0,
-        comments_count: post.comments_count || 0,
-        shares_count: post.shares_count || 0,
-        user_has_liked: likedPostIds.has(post.id)
-      })) || [];
+      // Combine the data
+      const postsWithProfiles: PulsePost[] = postsData.map((post: any) => {
+        const userProfile = profilesData?.find(profile => profile.user_id === post.user_id);
+        return {
+          ...post,
+          sentiment_label: post.sentiment_label as 'positive' | 'negative' | 'neutral' | undefined,
+          likes_count: post.likes_count || 0,
+          comments_count: post.comments_count || 0,
+          shares_count: post.shares_count || 0,
+          user_profile: userProfile,
+          user_has_liked: likedPostIds.has(post.id)
+        };
+      });
 
-      setPosts(postsWithLikes);
+      setPosts(postsWithProfiles);
     } catch (error) {
       console.error('Error fetching posts:', error);
       toast({
@@ -314,25 +331,25 @@ const PulseFeed = () => {
                 <Card key={post.id} className="border-cameroon-yellow/20 hover:shadow-lg transition-shadow">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-3 mb-4">
-                      <Avatar className="cursor-pointer" onClick={() => setSelectedUserId(post.profiles.user_id)}>
-                        <AvatarImage src={post.profiles.avatar_url} />
+                      <Avatar className="cursor-pointer" onClick={() => setSelectedUserId(post.user_id)}>
+                        <AvatarImage src={post.user_profile?.avatar_url} />
                         <AvatarFallback className="bg-cameroon-yellow text-cameroon-primary">
-                          {post.profiles.username[0].toUpperCase()}
+                          {post.user_profile?.username?.[0]?.toUpperCase() || 'U'}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <span 
                             className="font-medium cursor-pointer hover:underline"
-                            onClick={() => setSelectedUserId(post.profiles.user_id)}
+                            onClick={() => setSelectedUserId(post.user_id)}
                           >
-                            {post.profiles.display_name || post.profiles.username}
+                            {post.user_profile?.display_name || post.user_profile?.username || 'Utilisateur'}
                           </span>
-                          <span className="text-gray-500">@{post.profiles.username}</span>
-                          {post.profiles.verified && (
+                          <span className="text-gray-500">@{post.user_profile?.username || 'anonymous'}</span>
+                          {post.user_profile?.verified && (
                             <Badge variant="outline" className="border-blue-500 text-blue-600">Vérifié</Badge>
                           )}
-                          {post.profiles.is_diaspora && (
+                          {post.user_profile?.is_diaspora && (
                             <Badge variant="outline" className="border-cameroon-yellow text-cameroon-yellow">
                               🌍
                             </Badge>
