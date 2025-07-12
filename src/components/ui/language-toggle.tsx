@@ -12,8 +12,8 @@ export const LanguageToggle = () => {
   const [language, setLanguage] = useState<'fr' | 'en'>('fr');
 
   const languages = [
-    { code: 'fr', name: 'Français', flag: '🇫🇷' },
-    { code: 'en', name: 'English', flag: '🇬🇧' },
+    { code: 'fr', name: 'Français', flag: '🇫🇷', initials: 'FR' },
+    { code: 'en', name: 'English', flag: '🇬🇧', initials: 'ENG' },
   ];
 
   const currentLanguage = languages.find(lang => lang.code === language);
@@ -24,9 +24,9 @@ export const LanguageToggle = () => {
         <Button variant="ghost" size="sm" className="gap-2">
           <Languages className="h-4 w-4" />
           <span className="hidden sm:inline-block">
-            {currentLanguage?.flag} {currentLanguage?.name}
+            {currentLanguage?.initials}
           </span>
-          <span className="sm:hidden">{currentLanguage?.flag}</span>
+          <span className="sm:hidden">{currentLanguage?.initials}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[150px]">
