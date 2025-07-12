@@ -2,6 +2,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
+import { useState } from 'react';
 import { 
   ShoppingCart, 
   Star, 
@@ -10,7 +13,8 @@ import {
   Package,
   Shield,
   Truck,
-  CreditCard
+  CreditCard,
+  Loader2
 } from 'lucide-react';
 
 interface Product {
@@ -34,11 +38,68 @@ interface Product {
 }
 
 export const ProductCard = ({ product }: { product: Product }) => {
+  const { toast } = useToast();
+  const [isProcessing, setIsProcessing] = useState(false);
+
   const formatPrice = (price: number, currency = 'XAF') => {
     return new Intl.NumberFormat('fr-CM', {
       style: 'currency',
       currency: currency === 'XAF' ? 'XAF' : currency
     }).format(price);
+  };
+
+  const handlePurchase = async () => {
+    if (!product.in_stock) {
+      toast({
+        title: "Out of Stock",
+        description: "This product is currently out of stock.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+
+    try {
+      toast({
+        title: "Processing...",
+        description: "Creating secure checkout session...",
+      });
+
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          productId: product.id,
+          quantity: 1,
+          customerInfo: {
+            // Add any pre-filled customer info here if available
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      if (data.url) {
+        // Open Stripe checkout in a new tab
+        window.open(data.url, '_blank');
+        
+        toast({
+          title: "Checkout Opened",
+          description: "Complete your purchase in the new tab.",
+        });
+      } else {
+        throw new Error('No checkout URL returned');
+      }
+
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Payment Error",
+        description: error instanceof Error ? error.message : "Failed to create checkout session",
+        variant: "destructive"
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const getProductImage = () => {
@@ -158,11 +219,16 @@ export const ProductCard = ({ product }: { product: Product }) => {
         <div className="flex gap-2">
           <Button 
             className="flex-1" 
-            disabled={!product.in_stock}
+            disabled={!product.in_stock || isProcessing}
             size="sm"
+            onClick={handlePurchase}
           >
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            {product.in_stock ? 'Add to Cart' : 'Out of Stock'}
+            {isProcessing ? (
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            ) : (
+              <ShoppingCart className="h-4 w-4 mr-2" />
+            )}
+            {isProcessing ? 'Processing...' : product.in_stock ? 'Buy Now' : 'Out of Stock'}
           </Button>
           
           <Button variant="outline" size="sm">

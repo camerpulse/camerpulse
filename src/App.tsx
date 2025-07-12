@@ -17,6 +17,7 @@ import Admin from "./pages/Admin";
 import PoliticalParties from "./pages/PoliticalParties";
 import PoliticalPartyDetail from "./pages/PoliticalPartyDetail";
 import PoliticaAI from "./pages/PoliticaAI";
+import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/politica-ai" element={<PoliticaAI />} />
+            <Route path="/marketplace/order-success" element={<OrderSuccess />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
