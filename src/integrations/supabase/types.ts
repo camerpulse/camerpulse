@@ -518,50 +518,238 @@ export type Database = {
         }
         Relationships: []
       }
+      politician_detailed_ratings: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          development_impact_rating: number | null
+          id: string
+          integrity_rating: number | null
+          politician_id: string
+          transparency_rating: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          development_impact_rating?: number | null
+          id?: string
+          integrity_rating?: number | null
+          politician_id: string
+          transparency_rating?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          development_impact_rating?: number | null
+          id?: string
+          integrity_rating?: number | null
+          politician_id?: string
+          transparency_rating?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "politician_detailed_ratings_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      politician_follows: {
+        Row: {
+          created_at: string | null
+          id: string
+          politician_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          politician_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          politician_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "politician_follows_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      politician_promises: {
+        Row: {
+          created_at: string | null
+          date_made: string | null
+          date_updated: string | null
+          description: string | null
+          evidence_url: string | null
+          id: string
+          politician_id: string
+          promise_text: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date_made?: string | null
+          date_updated?: string | null
+          description?: string | null
+          evidence_url?: string | null
+          id?: string
+          politician_id: string
+          promise_text: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date_made?: string | null
+          date_updated?: string | null
+          description?: string | null
+          evidence_url?: string | null
+          id?: string
+          politician_id?: string
+          promise_text?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "politician_promises_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       politicians: {
         Row: {
           bio: string | null
+          birth_date: string | null
+          career_background: string | null
           civic_score: number | null
+          constituency: string | null
+          contact_office: string | null
+          contact_phone: string | null
+          contact_website: string | null
           created_at: string | null
+          development_impact_rating: number | null
+          education: string | null
+          follower_count: number | null
+          former_roles: string[] | null
+          gender: string | null
           id: string
+          integrity_rating: number | null
+          is_archived: boolean | null
+          level_of_office: string | null
           name: string
           party: string | null
+          political_party_id: string | null
+          position_end_date: string | null
+          position_start_date: string | null
           profile_image_url: string | null
+          promise_tracker: Json | null
           region: string | null
           role_title: string | null
+          timeline_roles: Json | null
+          transparency_rating: number | null
           updated_at: string | null
           user_id: string | null
           verified: boolean | null
         }
         Insert: {
           bio?: string | null
+          birth_date?: string | null
+          career_background?: string | null
           civic_score?: number | null
+          constituency?: string | null
+          contact_office?: string | null
+          contact_phone?: string | null
+          contact_website?: string | null
           created_at?: string | null
+          development_impact_rating?: number | null
+          education?: string | null
+          follower_count?: number | null
+          former_roles?: string[] | null
+          gender?: string | null
           id?: string
+          integrity_rating?: number | null
+          is_archived?: boolean | null
+          level_of_office?: string | null
           name: string
           party?: string | null
+          political_party_id?: string | null
+          position_end_date?: string | null
+          position_start_date?: string | null
           profile_image_url?: string | null
+          promise_tracker?: Json | null
           region?: string | null
           role_title?: string | null
+          timeline_roles?: Json | null
+          transparency_rating?: number | null
           updated_at?: string | null
           user_id?: string | null
           verified?: boolean | null
         }
         Update: {
           bio?: string | null
+          birth_date?: string | null
+          career_background?: string | null
           civic_score?: number | null
+          constituency?: string | null
+          contact_office?: string | null
+          contact_phone?: string | null
+          contact_website?: string | null
           created_at?: string | null
+          development_impact_rating?: number | null
+          education?: string | null
+          follower_count?: number | null
+          former_roles?: string[] | null
+          gender?: string | null
           id?: string
+          integrity_rating?: number | null
+          is_archived?: boolean | null
+          level_of_office?: string | null
           name?: string
           party?: string | null
+          political_party_id?: string | null
+          position_end_date?: string | null
+          position_start_date?: string | null
           profile_image_url?: string | null
+          promise_tracker?: Json | null
           region?: string | null
           role_title?: string | null
+          timeline_roles?: Json | null
+          transparency_rating?: number | null
           updated_at?: string | null
           user_id?: string | null
           verified?: boolean | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_politician_party"
+            columns: ["political_party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       poll_votes: {
         Row: {
