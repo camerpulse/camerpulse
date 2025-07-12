@@ -40,7 +40,7 @@ export const Header = () => {
   const navItems = [
     { name: 'Pulse Feed', name_fr: 'Flux Pulse', icon: MessageCircle, href: '/pulse' },
     { name: 'Politicians', name_fr: 'Politiciens', icon: Users, href: '/politicians' },
-    { name: 'Political Parties', name_fr: 'Partis Politiques', icon: Building2, href: '/political-parties' },
+    { name: 'Parties', name_fr: 'Partis', icon: Building2, href: '/political-parties' },
     { name: 'Polls', name_fr: 'Sondages', icon: TrendingUp, href: '/polls' },
     { name: 'Marketplace', name_fr: 'Marché', icon: ShoppingBag, href: '/marketplace' },
     { name: 'Social', name_fr: 'Social', icon: Users, href: '/social' },
