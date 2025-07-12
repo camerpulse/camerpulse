@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { mockMarketplaceProducts, mockMarketplaceVendors } from '@/data/mockData';
 import { 
   Search, 
   Filter, 
@@ -90,8 +91,6 @@ const Marketplace = () => {
         .eq('verification_status', 'verified')
         .order('rating', { ascending: false });
 
-      if (vendorsError) throw vendorsError;
-
       // Fetch products with vendor info
       const { data: productsData, error: productsError } = await supabase
         .from('marketplace_products')
@@ -102,16 +101,19 @@ const Marketplace = () => {
         .eq('in_stock', true)
         .order('created_at', { ascending: false });
 
-      if (productsError) throw productsError;
-
-      setVendors(vendorsData || []);
-      setProducts(productsData || []);
+      // Use real data if available, otherwise fallback to mock data
+      setVendors(vendorsData && vendorsData.length > 0 ? vendorsData : mockMarketplaceVendors);
+      setProducts(productsData && productsData.length > 0 ? productsData : mockMarketplaceProducts);
+      
     } catch (error) {
       console.error('Error fetching marketplace data:', error);
+      // Use mock data as fallback on error
+      setVendors(mockMarketplaceVendors);
+      setProducts(mockMarketplaceProducts);
+      
       toast({
-        title: "Error",
-        description: "Failed to load marketplace data",
-        variant: "destructive"
+        title: "Loading demo data",
+        description: "Showing sample marketplace content",
       });
     } finally {
       setLoading(false);

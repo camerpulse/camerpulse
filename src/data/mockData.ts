@@ -149,6 +149,122 @@ export const mockPoliticians = [
   }
 ];
 
+export const mockMarketplaceVendors = [
+  {
+    id: '1',
+    user_id: '4',
+    vendor_id: 'CM-1234567',
+    business_name: 'TechHub Cameroon',
+    description: 'Leading electronics and gadgets store in Central Africa',
+    verification_status: 'verified',
+    rating: 4.8,
+    total_sales: 156,
+    profile: {
+      username: 'tech_guy',
+      display_name: 'David Tcheutchoua',
+      avatar_url: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face'
+    }
+  },
+  {
+    id: '2',
+    user_id: '5',
+    vendor_id: 'CM-2345678',
+    business_name: 'Mama Africa Crafts',
+    description: 'Authentic African crafts and traditional items',
+    verification_status: 'verified',
+    rating: 4.6,
+    total_sales: 89,
+    profile: {
+      username: 'mama_africa',
+      display_name: 'Aminata Kone',
+      avatar_url: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face'
+    }
+  },
+  {
+    id: '3',
+    user_id: '3',
+    vendor_id: 'CM-3456789',
+    business_name: 'Green Valley Farms',
+    description: 'Organic produce and agricultural products from Cameroon',
+    verification_status: 'pending',
+    rating: 4.2,
+    total_sales: 34,
+    profile: {
+      username: 'marie_douala',
+      display_name: 'Marie Nkomo',
+      avatar_url: 'https://images.unsplash.com/photo-1494790108755-2616b612b494?w=150&h=150&fit=crop&crop=face'
+    }
+  }
+];
+
+export const mockMarketplaceProducts = [
+  {
+    id: '1',
+    vendor_id: '1',
+    name: 'Professional Laptop',
+    description: 'High-performance laptop perfect for developers and content creators',
+    price: 750000,
+    currency: 'XAF',
+    category: 'Electronics',
+    images: ['https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=500&h=400&fit=crop'],
+    stock_quantity: 15,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[0]
+  },
+  {
+    id: '2',
+    vendor_id: '1',
+    name: 'Gaming Setup',
+    description: 'Complete gaming setup with monitor and accessories',
+    price: 1200000,
+    currency: 'XAF',
+    category: 'Electronics',
+    images: ['https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=500&h=400&fit=crop'],
+    stock_quantity: 8,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[0]
+  },
+  {
+    id: '3',
+    vendor_id: '2',
+    name: 'Traditional Kente Cloth',
+    description: 'Handwoven Kente cloth with authentic African patterns',
+    price: 85000,
+    currency: 'XAF',
+    category: 'Fashion',
+    images: ['https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=400&fit=crop'],
+    stock_quantity: 25,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[1]
+  },
+  {
+    id: '4',
+    vendor_id: '2',
+    name: 'Wooden Sculpture',
+    description: 'Beautiful handcrafted wooden sculpture by local artisans',
+    price: 45000,
+    currency: 'XAF',
+    category: 'Art',
+    images: ['https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&h=400&fit=crop'],
+    stock_quantity: 12,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[1]
+  },
+  {
+    id: '5',
+    vendor_id: '3',
+    name: 'Organic Coffee Beans',
+    description: 'Premium Arabica coffee beans grown in the highlands of Cameroon',
+    price: 12000,
+    currency: 'XAF',
+    category: 'Food',
+    images: ['https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&h=400&fit=crop'],
+    stock_quantity: 100,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[2]
+  }
+];
+
 export const mockVendors = [
   {
     id: '1',
