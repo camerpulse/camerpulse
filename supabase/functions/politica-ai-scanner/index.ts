@@ -48,6 +48,26 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
+    // Check if AI is enabled
+    const { data: aiConfig } = await supabaseClient
+      .from('politica_ai_config')
+      .select('config_value')
+      .eq('config_key', 'ai_enabled')
+      .single();
+
+    if (!aiConfig || aiConfig.config_value !== 'true') {
+      return new Response(
+        JSON.stringify({ 
+          success: false, 
+          error: 'Politica AI is currently disabled by admin' 
+        }),
+        { 
+          status: 403, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
     const { target_type, target_id, manual_scan = false, bulk_import = false } = await req.json();
 
     // Handle bulk import from MINAT government website

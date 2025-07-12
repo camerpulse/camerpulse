@@ -21,10 +21,14 @@ import {
   Plus,
   Edit,
   Trash2,
-  AlertTriangle
+  AlertTriangle,
+  Bot,
+  Power,
+  Settings
 } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -195,6 +199,45 @@ const Admin = () => {
     },
   });
 
+  // AI Control Management
+  const { data: aiConfig } = useQuery({
+    queryKey: ["ai_config"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("politica_ai_config")
+        .select("*")
+        .in("config_key", ["ai_enabled", "auto_import_enabled", "auto_verification_enabled"]);
+      if (error) throw error;
+      
+      const configMap: Record<string, boolean> = {};
+      data?.forEach(item => {
+        configMap[item.config_key] = item.config_value === "true" || item.config_value === true;
+      });
+      return configMap;
+    },
+    enabled: !!userRole,
+  });
+
+  const updateAIConfigMutation = useMutation({
+    mutationFn: async ({ key, value }: { key: string; value: boolean }) => {
+      const { error } = await supabase
+        .from("politica_ai_config")
+        .update({ 
+          config_value: value.toString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq("config_key", key);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["ai_config"] });
+      toast({ title: "AI configuration updated successfully" });
+    },
+    onError: () => {
+      toast({ title: "Error updating AI configuration", variant: "destructive" });
+    },
+  });
+
   if (!userRole) {
     return (
       <div className="min-h-screen bg-background">
@@ -244,6 +287,7 @@ const Admin = () => {
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="vendors">Vendors</TabsTrigger>
               <TabsTrigger value="news">News</TabsTrigger>
+              <TabsTrigger value="ai-control">AI Control</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview">
@@ -475,6 +519,107 @@ const Admin = () => {
                   </div>
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            <TabsContent value="ai-control">
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Bot className="h-5 w-5" />
+                      Politica AI Control Panel
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <Power className="h-4 w-4" />
+                          <h3 className="font-semibold">Master AI Switch</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Enable or disable all Politica AI operations
+                        </p>
+                      </div>
+                      <Switch
+                        checked={aiConfig?.ai_enabled || false}
+                        onCheckedChange={(checked) => 
+                          updateAIConfigMutation.mutate({ key: "ai_enabled", value: checked })
+                        }
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="h-4 w-4" />
+                          <h3 className="font-semibold">Auto Import</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Automatically import parties from government sources
+                        </p>
+                      </div>
+                      <Switch
+                        checked={aiConfig?.auto_import_enabled || false}
+                        disabled={!aiConfig?.ai_enabled}
+                        onCheckedChange={(checked) => 
+                          updateAIConfigMutation.mutate({ key: "auto_import_enabled", value: checked })
+                        }
+                      />
+                    </div>
+
+                    <div className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="h-4 w-4" />
+                          <h3 className="font-semibold">Auto Verification</h3>
+                        </div>
+                        <p className="text-sm text-muted-foreground">
+                          Automatically verify political data using AI
+                        </p>
+                      </div>
+                      <Switch
+                        checked={aiConfig?.auto_verification_enabled || false}
+                        disabled={!aiConfig?.ai_enabled}
+                        onCheckedChange={(checked) => 
+                          updateAIConfigMutation.mutate({ key: "auto_verification_enabled", value: checked })
+                        }
+                      />
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Settings className="h-5 w-5" />
+                      AI Status
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center p-4 border rounded-lg">
+                        <div className={`text-2xl font-bold ${aiConfig?.ai_enabled ? 'text-green-600' : 'text-red-600'}`}>
+                          {aiConfig?.ai_enabled ? 'ACTIVE' : 'DISABLED'}
+                        </div>
+                        <p className="text-sm text-muted-foreground">Main AI Status</p>
+                      </div>
+                      <div className="text-center p-4 border rounded-lg">
+                        <div className={`text-2xl font-bold ${aiConfig?.auto_import_enabled && aiConfig?.ai_enabled ? 'text-green-600' : 'text-gray-400'}`}>
+                          {aiConfig?.auto_import_enabled && aiConfig?.ai_enabled ? 'ON' : 'OFF'}
+                        </div>
+                        <p className="text-sm text-muted-foreground">Auto Import</p>
+                      </div>
+                      <div className="text-center p-4 border rounded-lg">
+                        <div className={`text-2xl font-bold ${aiConfig?.auto_verification_enabled && aiConfig?.ai_enabled ? 'text-green-600' : 'text-gray-400'}`}>
+                          {aiConfig?.auto_verification_enabled && aiConfig?.ai_enabled ? 'ON' : 'OFF'}
+                        </div>
+                        <p className="text-sm text-muted-foreground">Auto Verification</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
