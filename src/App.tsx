@@ -9,6 +9,8 @@ import PulseFeed from "./pages/PulseFeed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
 import Marketplace from "./pages/Marketplace";
+import Polls from "./pages/Polls";
+import Donations from "./pages/Donations";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -28,6 +30,8 @@ const App = () => (
             <Route path="/politicians" element={<Politicians />} />
             <Route path="/security" element={<Security />} />
             <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/polls" element={<Polls />} />
+            <Route path="/donate" element={<Donations />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

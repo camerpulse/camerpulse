@@ -1,0 +1,352 @@
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Card, CardContent } from '@/components/ui/card';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { format } from 'date-fns';
+import { 
+  Plus, 
+  X, 
+  Calendar as CalendarIcon,
+  Vote,
+  Clock,
+  Users
+} from 'lucide-react';
+
+interface CreatePollDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialogProps) => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    options: ['', ''],
+    hasExpiry: false,
+    expiryDate: undefined as Date | undefined
+  });
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const addOption = () => {
+    if (formData.options.length < 6) {
+      setFormData(prev => ({
+        ...prev,
+        options: [...prev.options, '']
+      }));
+    }
+  };
+
+  const removeOption = (index: number) => {
+    if (formData.options.length > 2) {
+      setFormData(prev => ({
+        ...prev,
+        options: prev.options.filter((_, i) => i !== index)
+      }));
+    }
+  };
+
+  const updateOption = (index: number, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      options: prev.options.map((option, i) => i === index ? value : option)
+    }));
+  };
+
+  const createPoll = async () => {
+    if (!user) return;
+
+    // Validation
+    if (!formData.title.trim()) {
+      toast({
+        title: "Title required",
+        description: "Please enter a poll title",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const validOptions = formData.options.filter(option => option.trim());
+    if (validOptions.length < 2) {
+      toast({
+        title: "Options required",
+        description: "Please provide at least 2 options",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (formData.hasExpiry && !formData.expiryDate) {
+      toast({
+        title: "Expiry date required",
+        description: "Please select an expiry date",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const { error } = await supabase
+        .from('polls')
+        .insert({
+          creator_id: user.id,
+          title: formData.title.trim(),
+          description: formData.description.trim() || null,
+          options: validOptions,
+          ends_at: formData.hasExpiry && formData.expiryDate 
+            ? formData.expiryDate.toISOString() 
+            : null,
+          is_active: true
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Poll created!",
+        description: "Your poll has been published and is now live"
+      });
+
+      // Reset form
+      setFormData({
+        title: '',
+        description: '',
+        options: ['', ''],
+        hasExpiry: false,
+        expiryDate: undefined
+      });
+
+      onSuccess();
+    } catch (error) {
+      console.error('Error creating poll:', error);
+      toast({
+        title: "Failed to create poll",
+        description: "There was an error creating your poll. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const isFormValid = () => {
+    const validOptions = formData.options.filter(option => option.trim());
+    return formData.title.trim() && 
+           validOptions.length >= 2 && 
+           (!formData.hasExpiry || formData.expiryDate);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle className="flex items-center gap-2">
+            <Vote className="h-5 w-5" />
+            Create New Poll
+          </DialogTitle>
+        </DialogHeader>
+
+        <div className="space-y-6">
+          {/* Basic Information */}
+          <Card>
+            <CardContent className="pt-6 space-y-4">
+              <div>
+                <Label htmlFor="title">Poll Title *</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => handleInputChange('title', e.target.value)}
+                  placeholder="What question would you like to ask?"
+                  maxLength={200}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formData.title.length}/200 characters
+                </p>
+              </div>
+
+              <div>
+                <Label htmlFor="description">Description (Optional)</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  placeholder="Provide additional context for your poll"
+                  rows={3}
+                  maxLength={500}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  {formData.description.length}/500 characters
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Poll Options */}
+          <Card>
+            <CardContent className="pt-6 space-y-4">
+              <Label>Poll Options *</Label>
+              
+              {formData.options.map((option, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <div className="flex-1">
+                    <Input
+                      value={option}
+                      onChange={(e) => updateOption(index, e.target.value)}
+                      placeholder={`Option ${index + 1}`}
+                      maxLength={100}
+                    />
+                  </div>
+                  
+                  {formData.options.length > 2 && (
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => removeOption(index)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+
+              {formData.options.length < 6 && (
+                <Button
+                  variant="outline"
+                  onClick={addOption}
+                  className="w-full"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Option ({formData.options.length}/6)
+                </Button>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Poll Settings */}
+          <Card>
+            <CardContent className="pt-6 space-y-4">
+              <Label>Poll Settings</Label>
+              
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label htmlFor="hasExpiry">Set Expiry Date</Label>
+                  <p className="text-sm text-muted-foreground">
+                    Automatically close the poll after a specific date
+                  </p>
+                </div>
+                <Switch
+                  id="hasExpiry"
+                  checked={formData.hasExpiry}
+                  onCheckedChange={(checked) => handleInputChange('hasExpiry', checked)}
+                />
+              </div>
+
+              {formData.hasExpiry && (
+                <div>
+                  <Label>Expiry Date</Label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !formData.expiryDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {formData.expiryDate ? (
+                          format(formData.expiryDate, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={formData.expiryDate}
+                        onSelect={(date) => handleInputChange('expiryDate', date)}
+                        disabled={(date) => date < new Date()}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Preview */}
+          <Card className="bg-muted/50">
+            <CardContent className="pt-6">
+              <Label className="text-sm font-medium">Poll Preview</Label>
+              <div className="mt-2 space-y-2">
+                <h4 className="font-semibold">
+                  {formData.title || 'Your poll title will appear here'}
+                </h4>
+                {formData.description && (
+                  <p className="text-sm text-muted-foreground">
+                    {formData.description}
+                  </p>
+                )}
+                <div className="space-y-1">
+                  {formData.options.map((option, index) => (
+                    option.trim() && (
+                      <div key={index} className="p-2 bg-background rounded border text-sm">
+                        {option}
+                      </div>
+                    )
+                  ))}
+                </div>
+                <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <Users className="w-3 h-3" />
+                    <span>0 votes</span>
+                  </div>
+                  {formData.hasExpiry && formData.expiryDate && (
+                    <div className="flex items-center gap-1">
+                      <Clock className="w-3 h-3" />
+                      <span>Ends {format(formData.expiryDate, "PPP")}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex justify-between pt-4">
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          
+          <Button 
+            onClick={createPoll} 
+            disabled={!isFormValid() || loading}
+          >
+            {loading ? 'Creating...' : 'Create Poll'}
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
