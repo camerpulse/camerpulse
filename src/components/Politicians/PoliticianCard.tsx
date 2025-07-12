@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { VerificationBadge } from '@/components/AI/VerificationBadge';
+import { AIVerificationModal } from '@/components/AI/AIVerificationModal';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -74,10 +75,17 @@ export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) 
                 </Badge>
               )}
               {politician.aiVerificationStatus && (
-                <VerificationBadge 
-                  status={politician.aiVerificationStatus}
-                  score={politician.aiVerificationScore}
-                />
+                <AIVerificationModal
+                  targetId={politician.id}
+                  targetType="politician"
+                  targetName={politician.name}
+                >
+                  <VerificationBadge 
+                    status={politician.aiVerificationStatus}
+                    score={politician.aiVerificationScore}
+                    className="cursor-pointer"
+                  />
+                </AIVerificationModal>
               )}
             </div>
             

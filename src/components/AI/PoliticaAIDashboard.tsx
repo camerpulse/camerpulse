@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bot, Activity, CheckCircle, AlertTriangle, Clock, RefreshCw } from "lucide-react";
 import { VerificationBadge } from "./VerificationBadge";
+import { useToast } from "@/hooks/use-toast";
 
 interface AIStats {
   total_scans: number;
@@ -27,6 +28,8 @@ interface AILog {
 }
 
 export const PoliticaAIDashboard = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
   // Fetch AI statistics
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ["politica-ai-stats"],
@@ -83,6 +86,38 @@ export const PoliticaAIDashboard = () => {
     }
   });
 
+  // Trigger scan mutation
+  const triggerScanMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke('politica-ai-manager', {
+        body: { action: 'trigger_scan' }
+      });
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Scan Triggered",
+        description: `Politica AI scan started for ${data.politicians_scanned + data.parties_scanned} profiles`,
+      });
+      // Refresh queries
+      queryClient.invalidateQueries({ queryKey: ["politica-ai-stats"] });
+      queryClient.invalidateQueries({ queryKey: ["politica-ai-recent-logs"] });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Scan Failed",
+        description: error.message || "Failed to trigger Politica AI scan",
+        variant: "destructive",
+      });
+    }
+  });
+
+  const triggerScan = () => {
+    triggerScanMutation.mutate();
+  };
+
   if (statsLoading) {
     return <div>Loading Politica AI Dashboard...</div>;
   }
@@ -101,9 +136,13 @@ export const PoliticaAIDashboard = () => {
           </p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Trigger Scan
+          <Button 
+            variant="outline" 
+            onClick={triggerScan}
+            disabled={triggerScanMutation.isPending}
+          >
+            <RefreshCw className={`w-4 h-4 mr-2 ${triggerScanMutation.isPending ? 'animate-spin' : ''}`} />
+            {triggerScanMutation.isPending ? 'Scanning...' : 'Trigger Scan'}
           </Button>
           <Button>
             <Activity className="w-4 h-4 mr-2" />

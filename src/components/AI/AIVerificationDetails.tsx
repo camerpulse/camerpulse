@@ -6,8 +6,9 @@ import { VerificationBadge } from "./VerificationBadge";
 
 interface Source {
   url: string;
-  title: string;
-  verified_at: string;
+  title?: string;
+  verified_at?: string;
+  checked_at?: string;
 }
 
 interface AIVerificationDetailsProps {
