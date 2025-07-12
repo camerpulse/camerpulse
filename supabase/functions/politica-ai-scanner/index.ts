@@ -134,13 +134,17 @@ async function scanPolitician(supabaseClient: any, politicianId: string): Promis
   const verifications: VerificationResult[] = [];
   const sourcesChecked: string[] = [];
 
-  // Simulate verification checks (in production, this would make real web requests)
+  // Comprehensive verification checks following user's rules
   const verificationPromises = [
     verifyPoliticianName(politician.name, sourcesChecked),
-    verifyPoliticianPosition(politician.role_title, politician.name, sourcesChecked),
-    verifyPoliticianParty(politician.party, politician.name, sourcesChecked),
-    verifyPoliticianBio(politician.bio, politician.name, sourcesChecked),
-  ];
+    politician.birth_date ? verifyPoliticianBirthDate(politician.birth_date, politician.name, sourcesChecked) : null,
+    politician.profile_image_url ? verifyPoliticianImage(politician.profile_image_url, politician.name, sourcesChecked) : null,
+    politician.role_title ? verifyPoliticianPosition(politician.role_title, politician.name, sourcesChecked) : null,
+    politician.party ? verifyPoliticianParty(politician.party, politician.name, sourcesChecked) : null,
+    politician.education ? verifyPoliticianEducation(politician.education, politician.name, sourcesChecked) : null,
+    verifyPoliticianStatus(politician.name, sourcesChecked),
+    politician.bio ? verifyPoliticianBio(politician.bio, politician.name, sourcesChecked) : null,
+  ].filter(promise => promise !== null);
 
   const results = await Promise.allSettled(verificationPromises);
   results.forEach((result, index) => {
@@ -242,16 +246,30 @@ async function verifyPoliticianPosition(position: string, name: string, sourcesC
     const searchResults = await performIntelligentWebSearch(`${name} ${position}`, 'gov.cm');
     sourcesChecked.push('gov.cm');
     
+    // Check if person is still in office or former
+    const statusAnalysis = analyzeCurrentStatus(name, searchResults);
+    let correctedPosition = position;
+    
+    // Apply "Former" prefix rule if not currently active
+    if (statusAnalysis.status === 'Retired' || statusAnalysis.confidence > 0.6) {
+      if (!position.toLowerCase().includes('former') && !position.toLowerCase().includes('ancien')) {
+        correctedPosition = `Former ${position}`;
+      }
+    }
+    
+    // Ensure proper title formatting (Minister of X, Director of Y)
+    correctedPosition = formatOfficialTitle(correctedPosition);
+    
     // Analyze results for position mentions
     const confidence = analyzePositionInformation(position, name, searchResults);
     
     return {
-      field: 'position',
+      field: 'role_title',
       current_value: position || '',
-      found_value: position || '',
+      found_value: correctedPosition,
       source_url: 'https://gov.cm/gouvernement',
       confidence: confidence,
-      needs_update: confidence < 0.7
+      needs_update: correctedPosition !== position && confidence > 0.5
     };
   } catch (error) {
     console.error('Error verifying politician position:', error);
@@ -278,6 +296,104 @@ async function verifyPoliticianParty(party: string, name: string, sourcesChecked
     };
   } catch (error) {
     console.error('Error verifying politician party:', error);
+    return null;
+  }
+}
+
+async function verifyPoliticianBirthDate(birthDate: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  try {
+    console.log(`Verifying birth date: ${birthDate} for ${name}`);
+    
+    const searchResults = await performIntelligentWebSearch(`${name} born birth date`);
+    sourcesChecked.push('gov.cm');
+    
+    const confidence = analyzeDateInformation(birthDate, name, searchResults);
+    
+    return {
+      field: 'birth_date',
+      current_value: birthDate || '',
+      found_value: birthDate || '',
+      source_url: 'https://gov.cm/officials',
+      confidence: confidence,
+      needs_update: confidence < 0.6
+    };
+  } catch (error) {
+    console.error('Error verifying birth date:', error);
+    return null;
+  }
+}
+
+async function verifyPoliticianImage(imageUrl: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  try {
+    console.log(`Verifying profile image for ${name}`);
+    
+    // Check if image is from verified sources
+    const verifiedSources = ['gov.cm', 'assemblee-nationale.cm', 'senat.cm', 'minat.gov.cm'];
+    const isFromVerifiedSource = verifiedSources.some(source => imageUrl.includes(source));
+    
+    const searchResults = await performIntelligentWebSearch(`${name} photo official`);
+    sourcesChecked.push('gov.cm');
+    
+    // Higher confidence for government-hosted images
+    const confidence = isFromVerifiedSource ? 0.9 : 0.4;
+    
+    return {
+      field: 'profile_image_url',
+      current_value: imageUrl || '',
+      found_value: imageUrl || '',
+      source_url: 'https://gov.cm/officials',
+      confidence: confidence,
+      needs_update: !isFromVerifiedSource && imageUrl.length > 0
+    };
+  } catch (error) {
+    console.error('Error verifying profile image:', error);
+    return null;
+  }
+}
+
+async function verifyPoliticianEducation(education: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  try {
+    console.log(`Verifying education: ${education} for ${name}`);
+    
+    const searchResults = await performIntelligentWebSearch(`${name} education university degree`);
+    sourcesChecked.push('cameroon-tribune.cm');
+    
+    const confidence = analyzeEducationInformation(education, name, searchResults);
+    
+    return {
+      field: 'education',
+      current_value: education || '',
+      found_value: education || '',
+      source_url: 'https://cameroon-tribune.cm',
+      confidence: confidence,
+      needs_update: confidence < 0.5
+    };
+  } catch (error) {
+    console.error('Error verifying education:', error);
+    return null;
+  }
+}
+
+async function verifyPoliticianStatus(name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  try {
+    console.log(`Verifying current status for ${name}`);
+    
+    const searchResults = await performIntelligentWebSearch(`${name} active retired former current`);
+    sourcesChecked.push('gov.cm');
+    
+    const status = analyzeCurrentStatus(name, searchResults);
+    const confidence = status.confidence;
+    
+    return {
+      field: 'status',
+      current_value: '',
+      found_value: status.status,
+      source_url: 'https://gov.cm/current-officials',
+      confidence: confidence,
+      needs_update: confidence > 0.7 && status.status !== 'Active'
+    };
+  } catch (error) {
+    console.error('Error verifying status:', error);
     return null;
   }
 }
@@ -813,4 +929,112 @@ function analyzeLocationInformation(location: string, entity: string, searchResu
   
   if (totalLocationMentions === 0) return 0.4;
   return Math.min((locationConfirmed / totalLocationMentions) + 0.1, 1.0);
+}
+
+function analyzeEducationInformation(education: string, name: string, searchResults: string[]): number {
+  if (!education || searchResults.length === 0) return 0.3;
+  
+  const educationKeywords = education.toLowerCase().split(/[,\s]+/).filter(word => word.length > 3);
+  const nameKeywords = name.toLowerCase().split(/\s+/);
+  const educationTerms = ['university', 'college', 'degree', 'studied', 'graduated', 'université', 'diplôme'];
+  
+  let educationConfirmed = 0;
+  let totalEducationMentions = 0;
+  
+  searchResults.forEach(text => {
+    const lowerText = text.toLowerCase();
+    const hasName = nameKeywords.some(keyword => lowerText.includes(keyword));
+    const hasEducation = educationKeywords.some(keyword => lowerText.includes(keyword));
+    const hasEducationTerm = educationTerms.some(term => lowerText.includes(term));
+    
+    if (hasName && hasEducationTerm) {
+      totalEducationMentions++;
+      if (hasEducation) {
+        educationConfirmed++;
+      }
+    }
+  });
+  
+  if (totalEducationMentions === 0) return 0.4;
+  return Math.min((educationConfirmed / totalEducationMentions) + 0.1, 1.0);
+}
+
+function analyzeCurrentStatus(name: string, searchResults: string[]): { status: string, confidence: number } {
+  if (searchResults.length === 0) return { status: 'Active', confidence: 0.3 };
+  
+  const nameKeywords = name.toLowerCase().split(/\s+/);
+  const activeTerms = ['current', 'serves', 'minister', 'deputy', 'actuel', 'ministre'];
+  const formerTerms = ['former', 'ex-', 'retired', 'ancien', 'retraité'];
+  const deceasedTerms = ['died', 'deceased', 'death', 'mort', 'décédé'];
+  
+  let activeScore = 0;
+  let formerScore = 0;
+  let deceasedScore = 0;
+  let totalMentions = 0;
+  
+  searchResults.forEach(text => {
+    const lowerText = text.toLowerCase();
+    const hasName = nameKeywords.some(keyword => lowerText.includes(keyword));
+    
+    if (hasName) {
+      totalMentions++;
+      
+      if (activeTerms.some(term => lowerText.includes(term))) {
+        activeScore++;
+      }
+      if (formerTerms.some(term => lowerText.includes(term))) {
+        formerScore++;
+      }
+      if (deceasedTerms.some(term => lowerText.includes(term))) {
+        deceasedScore++;
+      }
+    }
+  });
+  
+  if (totalMentions === 0) return { status: 'Active', confidence: 0.3 };
+  
+  const activeConf = activeScore / totalMentions;
+  const formerConf = formerScore / totalMentions;
+  const deceasedConf = deceasedScore / totalMentions;
+  
+  if (deceasedConf > 0.3) {
+    return { status: 'Deceased', confidence: deceasedConf };
+  } else if (formerConf > activeConf && formerConf > 0.2) {
+    return { status: 'Retired', confidence: formerConf };
+  } else {
+    return { status: 'Active', confidence: Math.max(activeConf, 0.4) };
+  }
+}
+
+function formatOfficialTitle(title: string): string {
+  if (!title) return title;
+  
+  // Common title patterns to standardize
+  const titlePatterns = [
+    { pattern: /\bministre?\b/gi, replacement: 'Minister' },
+    { pattern: /\bdirecteur?\b/gi, replacement: 'Director' },
+    { pattern: /\bsecrétaire?\s+général?\b/gi, replacement: 'Secretary General' },
+    { pattern: /\bgouverneur?\b/gi, replacement: 'Governor' },
+    { pattern: /\bmaire?\b/gi, replacement: 'Mayor' },
+    { pattern: /\bdéputé?\b/gi, replacement: 'Deputy' },
+    { pattern: /\bsénateur?\b/gi, replacement: 'Senator' }
+  ];
+  
+  let formattedTitle = title;
+  
+  titlePatterns.forEach(({ pattern, replacement }) => {
+    formattedTitle = formattedTitle.replace(pattern, replacement);
+  });
+  
+  // Ensure proper capitalization
+  formattedTitle = formattedTitle.replace(/\b\w+/g, word => 
+    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+  );
+  
+  // Handle "of" prepositions properly
+  formattedTitle = formattedTitle.replace(/\bOf\b/g, 'of');
+  formattedTitle = formattedTitle.replace(/\bAnd\b/g, 'and');
+  formattedTitle = formattedTitle.replace(/\bThe\b/g, 'the');
+  
+  return formattedTitle;
 }
