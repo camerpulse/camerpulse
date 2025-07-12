@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bot, Activity, CheckCircle, AlertTriangle, Clock, RefreshCw } from "lucide-react";
 import { VerificationBadge } from "./VerificationBadge";
+import { BulkImportButton } from "./BulkImportButton";
 import { useToast } from "@/hooks/use-toast";
 
 interface AIStats {
@@ -138,6 +139,7 @@ export const PoliticaAIDashboard = () => {
           </p>
         </div>
         <div className="flex gap-2">
+          <BulkImportButton />
           <Button 
             variant="outline" 
             onClick={triggerScan}

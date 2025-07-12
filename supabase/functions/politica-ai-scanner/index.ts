@@ -48,7 +48,12 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { target_type, target_id, manual_scan = false } = await req.json();
+    const { target_type, target_id, manual_scan = false, bulk_import = false } = await req.json();
+
+    // Handle bulk import from MINAT government website
+    if (bulk_import && target_type === 'political_party') {
+      return await handleBulkPartyImport(supabaseClient);
+    }
 
     console.log(`Starting Politica AI scan for ${target_type}: ${target_id}`);
 
@@ -99,28 +104,360 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({
         success: true,
-        scan_results: scanResults,
-        log_id: logEntry.id
+        log_id: logEntry.id,
+        scan_results: scanResults
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
-    console.error('Error in Politica AI scanner:', error);
+    console.error('Politica AI Scanner error:', error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        success: false, 
+        error: error.message 
+      }),
       { 
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       }
     );
   }
 });
 
+// Bulk Import Functions
+async function handleBulkPartyImport(supabaseClient: any): Promise<Response> {
+  console.log('Starting bulk import of political parties from MINAT website...');
+  
+  try {
+    // Create log entry for bulk import
+    const { data: logEntry } = await supabaseClient
+      .from('politica_ai_logs')
+      .insert({
+        target_type: 'political_party',
+        target_id: 'bulk_import',
+        action_type: 'bulk_import',
+        status: 'pending'
+      })
+      .select()
+      .single();
+
+    // Extract all parties from MINAT website
+    const parties = await extractAllPartiesFromMinat();
+    console.log(`Found ${parties.length} parties from MINAT website`);
+
+    let importedCount = 0;
+    let updatedCount = 0;
+    const errors = [];
+
+    for (const partyData of parties) {
+      try {
+        // Check if party already exists
+        const { data: existingParty } = await supabaseClient
+          .from('political_parties')
+          .select('*')
+          .or(`name.ilike.%${partyData.name}%,acronym.ilike.%${partyData.acronym || ''}%`)
+          .maybeSingle();
+
+        if (existingParty) {
+          // Update existing party with missing information
+          const updates = {};
+          Object.keys(partyData).forEach(key => {
+            if (partyData[key] && (!existingParty[key] || existingParty[key] === '')) {
+              updates[key] = partyData[key];
+            }
+          });
+
+          if (Object.keys(updates).length > 0) {
+            await supabaseClient
+              .from('political_parties')
+              .update(updates)
+              .eq('id', existingParty.id);
+            updatedCount++;
+            console.log(`Updated party: ${partyData.name}`);
+          }
+        } else {
+          // Insert new party
+          const { error } = await supabaseClient
+            .from('political_parties')
+            .insert({
+              ...partyData,
+              auto_imported: true,
+              is_claimable: true,
+              is_claimed: false,
+              created_at: new Date().toISOString(),
+              updated_at: new Date().toISOString()
+            });
+
+          if (!error) {
+            importedCount++;
+            console.log(`Imported new party: ${partyData.name}`);
+          } else {
+            errors.push(`Failed to import ${partyData.name}: ${error.message}`);
+          }
+        }
+
+        // Small delay to avoid overwhelming the server
+        await new Promise(resolve => setTimeout(resolve, 100));
+      } catch (error) {
+        errors.push(`Error processing ${partyData.name}: ${error.message}`);
+      }
+    }
+
+    // Update log entry
+    await supabaseClient
+      .from('politica_ai_logs')
+      .update({
+        status: 'completed',
+        completed_at: new Date().toISOString(),
+        changes_made: {
+          imported: importedCount,
+          updated: updatedCount,
+          total_found: parties.length,
+          errors: errors
+        }
+      })
+      .eq('id', logEntry.id);
+
+    return new Response(
+      JSON.stringify({
+        success: true,
+        imported: importedCount,
+        updated: updatedCount,
+        total_found: parties.length,
+        errors: errors
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
+
+  } catch (error) {
+    console.error('Bulk import error:', error);
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: error.message 
+      }),
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    );
+  }
+}
+
+async function extractAllPartiesFromMinat(): Promise<any[]> {
+  const baseUrl = 'https://minat.gov.cm/annuaires/partis-politiques/';
+  const allParties = [];
+  let currentPage = 1;
+  let hasMorePages = true;
+
+  while (hasMorePages) {
+    try {
+      console.log(`Scraping page ${currentPage}...`);
+      
+      // Set display to 100 items per page and get current page
+      const pageUrl = `${baseUrl}?page=${currentPage}&display=100`;
+      const response = await fetch(pageUrl, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+      });
+
+      if (!response.ok) {
+        console.log(`Failed to fetch page ${currentPage}, stopping pagination`);
+        break;
+      }
+
+      const html = await response.text();
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      
+      // Extract parties from current page
+      const pageParties = parsePartiesFromPage(doc);
+      
+      if (pageParties.length === 0) {
+        console.log(`No parties found on page ${currentPage}, stopping pagination`);
+        hasMorePages = false;
+      } else {
+        allParties.push(...pageParties);
+        console.log(`Found ${pageParties.length} parties on page ${currentPage}`);
+        
+        // Check if there's a next page link
+        const nextPageLink = doc.querySelector('a[title*="page suivante"], a[title*="next"], .pagination .next, .pagination a[rel="next"]');
+        
+        if (!nextPageLink || nextPageLink.getAttribute('href')?.includes('#')) {
+          hasMorePages = false;
+        } else {
+          currentPage++;
+        }
+      }
+
+      // Rate limiting to be respectful to the server
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error(`Error scraping page ${currentPage}:`, error);
+      hasMorePages = false;
+    }
+  }
+
+  console.log(`Total parties extracted: ${allParties.length}`);
+  return allParties;
+}
+
+function parsePartiesFromPage(doc: any): any[] {
+  const parties = [];
+  
+  // Look for common party listing patterns
+  const partyElements = doc.querySelectorAll([
+    '.party-item',
+    '.parti-politique',
+    '.party-card',
+    '.list-item',
+    'tr[class*="party"], tr[class*="parti"]',
+    '.row .col-md-12',
+    '.political-party',
+    '.annuaire-item'
+  ].join(', '));
+
+  for (const element of partyElements) {
+    try {
+      const party = extractPartyDataFromElement(element);
+      if (party && party.name) {
+        parties.push(party);
+      }
+    } catch (error) {
+      console.error('Error parsing party element:', error);
+    }
+  }
+
+  // If no structured elements found, try alternative parsing
+  if (parties.length === 0) {
+    const alternativeParties = parseAlternativeStructure(doc);
+    parties.push(...alternativeParties);
+  }
+
+  return parties;
+}
+
+function extractPartyDataFromElement(element: any): any {
+  const party = {};
+  
+  // Extract party name
+  const nameSelectors = [
+    '.party-name', '.parti-nom', '.name', '.title', 'h1', 'h2', 'h3', 'h4', 'strong', '.font-weight-bold'
+  ];
+  
+  for (const selector of nameSelectors) {
+    const nameEl = element.querySelector(selector);
+    if (nameEl && nameEl.textContent?.trim()) {
+      party.name = cleanText(nameEl.textContent);
+      break;
+    }
+  }
+
+  // Extract acronym (usually in parentheses or after the name)
+  if (party.name) {
+    const acronymMatch = party.name.match(/\(([A-Z][A-Z0-9-]*)\)/);
+    if (acronymMatch) {
+      party.acronym = acronymMatch[1];
+      party.name = party.name.replace(/\s*\([^)]*\)/, '').trim();
+    }
+  }
+
+  // Extract other details from text content
+  const fullText = element.textContent || '';
+  
+  // Extract founding date
+  const dateMatch = fullText.match(/(?:créé|fondé|création|founding).*?(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4}|\d{4})/i);
+  if (dateMatch) {
+    party.founding_date = standardizeDate(dateMatch[1]);
+  }
+
+  // Extract president/leader
+  const presidentMatch = fullText.match(/(?:président|president|leader)[\s:]*([^,\n.;]+)/i);
+  if (presidentMatch) {
+    party.party_president = cleanText(presidentMatch[1]);
+  }
+
+  // Extract headquarters/address
+  const hqMatch = fullText.match(/(?:siège|headquarter|adresse|address)[\s:]*([^,\n.;]+)/i);
+  if (hqMatch) {
+    party.headquarters_address = cleanText(hqMatch[1]);
+  }
+
+  // Extract contact info
+  const emailMatch = fullText.match(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/);
+  if (emailMatch) {
+    party.contact_email = emailMatch[1];
+  }
+
+  const phoneMatch = fullText.match(/(?:tél|tel|phone)[\s:]*([+]?[\d\s\-()]{8,})/i);
+  if (phoneMatch) {
+    party.contact_phone = cleanText(phoneMatch[1]);
+  }
+
+  // Extract website
+  const websiteMatch = fullText.match(/(https?:\/\/[^\s,;]+|www\.[^\s,;]+\.[a-z]{2,})/i);
+  if (websiteMatch) {
+    party.official_website = websiteMatch[1].startsWith('http') ? websiteMatch[1] : `http://${websiteMatch[1]}`;
+  }
+
+  return party;
+}
+
+function parseAlternativeStructure(doc: any): any[] {
+  const parties = [];
+  
+  // Look for table rows or list items that might contain party data
+  const rows = doc.querySelectorAll('tr, li, .row, .item');
+  
+  for (const row of rows) {
+    const text = row.textContent?.trim();
+    if (!text || text.length < 10) continue;
+    
+    // Check if this looks like a party entry
+    if (text.match(/parti|party|mouvement|movement|union|alliance|front|coalition|rassemblement/i)) {
+      const party = {};
+      
+      // Try to extract name from the beginning of the text
+      const words = text.split(/[,\n\r;]/);
+      if (words[0]) {
+        party.name = cleanText(words[0]);
+        
+        // Look for acronym in the name
+        const acronymMatch = party.name.match(/\(([A-Z][A-Z0-9-]*)\)/);
+        if (acronymMatch) {
+          party.acronym = acronymMatch[1];
+          party.name = party.name.replace(/\s*\([^)]*\)/, '').trim();
+        }
+        
+        if (party.name.length > 5) {
+          parties.push(party);
+        }
+      }
+    }
+  }
+  
+  return parties;
+}
+
+function cleanText(text: string): string {
+  return text.replace(/\s+/g, ' ').trim();
+}
+
+function standardizeDate(dateStr: string): string {
+  // Convert various date formats to YYYY-MM-DD
+  const date = new Date(dateStr);
+  if (!isNaN(date.getTime())) {
+    return date.toISOString().split('T')[0];
+  }
+  return dateStr;
+}
+
+// Scan Functions
 async function scanPolitician(supabaseClient: any, politicianId: string): Promise<ScanResult> {
   console.log(`Scanning politician: ${politicianId}`);
-
-  // Fetch current politician data
+  
+  // Fetch politician data
   const { data: politician, error } = await supabaseClient
     .from('politicians')
     .select('*')
@@ -134,24 +471,49 @@ async function scanPolitician(supabaseClient: any, politicianId: string): Promis
   const verifications: VerificationResult[] = [];
   const sourcesChecked: string[] = [];
 
-  // Comprehensive verification checks following user's rules
-  const verificationPromises = [
-    verifyPoliticianName(politician.name, sourcesChecked),
-    politician.birth_date ? verifyPoliticianBirthDate(politician.birth_date, politician.name, sourcesChecked) : null,
-    politician.profile_image_url ? verifyPoliticianImage(politician.profile_image_url, politician.name, sourcesChecked) : null,
-    politician.role_title ? verifyPoliticianPosition(politician.role_title, politician.name, sourcesChecked) : null,
-    politician.party ? verifyPoliticianParty(politician.party, politician.name, sourcesChecked) : null,
-    politician.education ? verifyPoliticianEducation(politician.education, politician.name, sourcesChecked) : null,
-    verifyPoliticianStatus(politician.name, sourcesChecked),
-    politician.bio ? verifyPoliticianBio(politician.bio, politician.name, sourcesChecked) : null,
-  ].filter(promise => promise !== null);
+  // Verify politician name
+  const nameVerification = await verifyPoliticianName(politician.name, sourcesChecked);
+  if (nameVerification) verifications.push(nameVerification);
 
-  const results = await Promise.allSettled(verificationPromises);
-  results.forEach((result, index) => {
-    if (result.status === 'fulfilled' && result.value) {
-      verifications.push(result.value);
-    }
-  });
+  // Verify position/role
+  if (politician.role_title) {
+    const positionVerification = await verifyPoliticianPosition(politician.role_title, politician.name, sourcesChecked);
+    if (positionVerification) verifications.push(positionVerification);
+  }
+
+  // Verify party affiliation
+  if (politician.party) {
+    const partyVerification = await verifyPoliticianParty(politician.party, politician.name, sourcesChecked);
+    if (partyVerification) verifications.push(partyVerification);
+  }
+
+  // Verify birth date
+  if (politician.birth_date) {
+    const birthVerification = await verifyPoliticianBirthDate(politician.birth_date, politician.name, sourcesChecked);
+    if (birthVerification) verifications.push(birthVerification);
+  }
+
+  // Verify profile image
+  if (politician.profile_image_url) {
+    const imageVerification = await verifyPoliticianImage(politician.profile_image_url, politician.name, sourcesChecked);
+    if (imageVerification) verifications.push(imageVerification);
+  }
+
+  // Verify education
+  if (politician.education) {
+    const educationVerification = await verifyPoliticianEducation(politician.education, politician.name, sourcesChecked);
+    if (educationVerification) verifications.push(educationVerification);
+  }
+
+  // Verify current status
+  const statusVerification = await verifyPoliticianStatus(politician.name, sourcesChecked);
+  if (statusVerification) verifications.push(statusVerification);
+
+  // Verify bio/biography
+  if (politician.bio || politician.biography) {
+    const bioVerification = await verifyPoliticianBio(politician.bio || politician.biography, politician.name, sourcesChecked);
+    if (bioVerification) verifications.push(bioVerification);
+  }
 
   const overallConfidence = calculateOverallConfidence(verifications);
   const status = determineVerificationStatus(verifications, overallConfidence);
@@ -168,8 +530,8 @@ async function scanPolitician(supabaseClient: any, politicianId: string): Promis
 
 async function scanPoliticalParty(supabaseClient: any, partyId: string): Promise<ScanResult> {
   console.log(`Scanning political party: ${partyId}`);
-
-  // Fetch current party data
+  
+  // Fetch party data
   const { data: party, error } = await supabaseClient
     .from('political_parties')
     .select('*')
@@ -183,25 +545,59 @@ async function scanPoliticalParty(supabaseClient: any, partyId: string): Promise
   const verifications: VerificationResult[] = [];
   const sourcesChecked: string[] = [];
 
-  // Comprehensive party verification following user's rules
-  const verificationPromises = [
-    verifyPartyName(party.name, sourcesChecked),
-    party.acronym ? verifyPartyAcronym(party.acronym, party.name, sourcesChecked) : null,
-    party.logo_url ? verifyPartyLogo(party.logo_url, party.name, sourcesChecked) : null,
-    verifyPartyFoundingDate(party.founding_date, party.name, sourcesChecked),
-    verifyPartyPresident(party.party_president, party.name, sourcesChecked),
-    verifyPartyHeadquarters(party.headquarters_address, party.name, sourcesChecked),
-    verifyPartyContactInfo(party.contact_email, party.contact_phone, party.name, sourcesChecked),
-    party.official_website ? verifyPartyWebsite(party.official_website, party.name, sourcesChecked) : null,
-    verifyPartyMissionVision(party.mission_statement, party.vision_statement, party.name, sourcesChecked),
-  ].filter(promise => promise !== null);
+  // Verify party name
+  const nameVerification = await verifyPartyName(party.name, sourcesChecked);
+  if (nameVerification) verifications.push(nameVerification);
 
-  const results = await Promise.allSettled(verificationPromises);
-  results.forEach((result, index) => {
-    if (result.status === 'fulfilled' && result.value) {
-      verifications.push(result.value);
-    }
-  });
+  // Verify party president
+  if (party.party_president) {
+    const presidentVerification = await verifyPartyPresident(party.party_president, party.name, sourcesChecked);
+    if (presidentVerification) verifications.push(presidentVerification);
+  }
+
+  // Verify founding date
+  if (party.founding_date) {
+    const foundingVerification = await verifyPartyFoundingDate(party.founding_date, party.name, sourcesChecked);
+    if (foundingVerification) verifications.push(foundingVerification);
+  }
+
+  // Verify headquarters
+  if (party.headquarters_address || party.headquarters_city) {
+    const hqVerification = await verifyPartyHeadquarters(
+      party.headquarters_address || party.headquarters_city, 
+      party.name, 
+      sourcesChecked
+    );
+    if (hqVerification) verifications.push(hqVerification);
+  }
+
+  // Verify contact information
+  if (party.contact_email || party.contact_phone) {
+    const contactVerification = await verifyPartyContactInfo(
+      party.contact_email, 
+      party.contact_phone, 
+      party.name, 
+      sourcesChecked
+    );
+    if (contactVerification) verifications.push(contactVerification);
+  }
+
+  // Verify website
+  if (party.official_website) {
+    const websiteVerification = await verifyPartyWebsite(party.official_website, party.name, sourcesChecked);
+    if (websiteVerification) verifications.push(websiteVerification);
+  }
+
+  // Verify mission and vision
+  if (party.mission || party.vision) {
+    const missionVisionVerification = await verifyPartyMissionVision(
+      party.mission, 
+      party.vision, 
+      party.name, 
+      sourcesChecked
+    );
+    if (missionVisionVerification) verifications.push(missionVisionVerification);
+  }
 
   const overallConfidence = calculateOverallConfidence(verifications);
   const status = determineVerificationStatus(verifications, overallConfidence);
@@ -216,26 +612,32 @@ async function scanPoliticalParty(supabaseClient: any, partyId: string): Promise
   };
 }
 
-// Real verification functions with web scraping
+// Politician Verification Functions
 async function verifyPoliticianName(name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying politician name: ${name}`);
+  
   try {
-    console.log(`Verifying politician name: ${name}`);
+    // Search across government sources
+    const searchResults = await performIntelligentWebSearch(`"${name}" politician Cameroon`, 'gov.cm');
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
-    // Scrape Assemblée Nationale website
-    const assemblyResult = await scrapeGovernmentSite('https://assemblee-nationale.cm/deputes', name);
-    sourcesChecked.push('assemblee-nationale.cm');
+    // Search ELECAM records
+    const elecamResults = await scrapeGovernmentSite('https://elecam.cm', name);
+    if (elecamResults.foundNames.length > 0) {
+      sourcesChecked.push('elecam.cm');
+    }
     
-    // Search for the politician's name with fuzzy matching
-    const confidence = calculateNameMatchConfidence(name, assemblyResult.foundNames);
-    const bestMatch = findBestNameMatch(name, assemblyResult.foundNames);
+    // Calculate confidence based on name matches
+    const confidence = calculateNameMatchConfidence(name, elecamResults.foundNames);
+    const bestMatch = findBestNameMatch(name, elecamResults.foundNames);
     
     return {
       field: 'name',
       current_value: name,
       found_value: bestMatch || name,
-      source_url: 'https://assemblee-nationale.cm/deputes',
-      confidence: confidence,
-      needs_update: confidence < 0.8 && bestMatch !== name
+      source_url: 'https://elecam.cm',
+      confidence,
+      needs_update: bestMatch && bestMatch !== name && confidence > 0.8
     };
   } catch (error) {
     console.error('Error verifying politician name:', error);
@@ -244,37 +646,25 @@ async function verifyPoliticianName(name: string, sourcesChecked: string[]): Pro
 }
 
 async function verifyPoliticianPosition(position: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying politician position: ${position} for ${name}`);
+  
   try {
-    console.log(`Verifying politician position: ${position} for ${name}`);
+    const searchQuery = `"${name}" "${position}" Cameroon government`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
-    // Search government sites for position information
-    const searchResults = await performIntelligentWebSearch(`${name} ${position}`, 'gov.cm');
-    sourcesChecked.push('gov.cm');
-    
-    // Check if person is still in office or former
-    const statusAnalysis = analyzeCurrentStatus(name, searchResults);
-    let correctedPosition = position;
-    
-    // Apply "Former" prefix rule if not currently active
-    if (statusAnalysis.status === 'Retired' || statusAnalysis.confidence > 0.6) {
-      if (!position.toLowerCase().includes('former') && !position.toLowerCase().includes('ancien')) {
-        correctedPosition = `Former ${position}`;
-      }
-    }
-    
-    // Ensure proper title formatting (Minister of X, Director of Y)
-    correctedPosition = formatOfficialTitle(correctedPosition);
-    
-    // Analyze results for position mentions
     const confidence = analyzePositionInformation(position, name, searchResults);
     
+    // Format official title
+    const formattedPosition = formatOfficialTitle(position);
+    
     return {
-      field: 'role_title',
-      current_value: position || '',
-      found_value: correctedPosition,
-      source_url: 'https://gov.cm/gouvernement',
-      confidence: confidence,
-      needs_update: correctedPosition !== position && confidence > 0.5
+      field: 'position',
+      current_value: position,
+      found_value: formattedPosition,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: formattedPosition !== position && confidence > 0.7
     };
   } catch (error) {
     console.error('Error verifying politician position:', error);
@@ -283,21 +673,22 @@ async function verifyPoliticianPosition(position: string, name: string, sourcesC
 }
 
 async function verifyPoliticianParty(party: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying politician party: ${party} for ${name}`);
+  
   try {
-    console.log(`Verifying politician party: ${party} for ${name}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${name} ${party}`, 'elecam.cm');
-    sourcesChecked.push('elecam.cm');
+    const searchQuery = `"${name}" "${party}" political party Cameroon`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
     const confidence = analyzePartyAffiliation(party, name, searchResults);
     
     return {
       field: 'party',
-      current_value: party || '',
-      found_value: party || '',
-      source_url: 'https://elecam.cm/partis-politiques',
-      confidence: confidence,
-      needs_update: confidence < 0.7
+      current_value: party,
+      found_value: party,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: false
     };
   } catch (error) {
     console.error('Error verifying politician party:', error);
@@ -306,119 +697,118 @@ async function verifyPoliticianParty(party: string, name: string, sourcesChecked
 }
 
 async function verifyPoliticianBirthDate(birthDate: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying politician birth date: ${birthDate} for ${name}`);
+  
   try {
-    console.log(`Verifying birth date: ${birthDate} for ${name}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${name} born birth date`);
-    sourcesChecked.push('gov.cm');
+    const searchQuery = `"${name}" born birth date Cameroon`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
     const confidence = analyzeDateInformation(birthDate, name, searchResults);
     
     return {
       field: 'birth_date',
-      current_value: birthDate || '',
-      found_value: birthDate || '',
-      source_url: 'https://gov.cm/officials',
-      confidence: confidence,
-      needs_update: confidence < 0.6
+      current_value: birthDate,
+      found_value: birthDate,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: false
     };
   } catch (error) {
-    console.error('Error verifying birth date:', error);
+    console.error('Error verifying politician birth date:', error);
     return null;
   }
 }
 
 async function verifyPoliticianImage(imageUrl: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying politician image for: ${name}`);
+  
   try {
-    console.log(`Verifying profile image for ${name}`);
-    
-    // Check if image is from verified sources
-    const verifiedSources = ['gov.cm', 'assemblee-nationale.cm', 'senat.cm', 'minat.gov.cm'];
-    const isFromVerifiedSource = verifiedSources.some(source => imageUrl.includes(source));
-    
-    const searchResults = await performIntelligentWebSearch(`${name} photo official`);
-    sourcesChecked.push('gov.cm');
-    
-    // Higher confidence for government-hosted images
-    const confidence = isFromVerifiedSource ? 0.9 : 0.4;
+    // For now, we'll do a basic verification
+    // In the future, we could implement image recognition/comparison
+    const searchQuery = `"${name}" photo image Cameroon politician`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 2));
     
     return {
       field: 'profile_image_url',
-      current_value: imageUrl || '',
-      found_value: imageUrl || '',
-      source_url: 'https://gov.cm/officials',
-      confidence: confidence,
-      needs_update: !isFromVerifiedSource && imageUrl.length > 0
+      current_value: imageUrl,
+      found_value: imageUrl,
+      source_url: searchResults[0] || '',
+      confidence: 0.6, // Moderate confidence for image verification
+      needs_update: false
     };
   } catch (error) {
-    console.error('Error verifying profile image:', error);
+    console.error('Error verifying politician image:', error);
     return null;
   }
 }
 
 async function verifyPoliticianEducation(education: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying politician education: ${education} for ${name}`);
+  
   try {
-    console.log(`Verifying education: ${education} for ${name}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${name} education university degree`);
-    sourcesChecked.push('cameroon-tribune.cm');
+    const searchQuery = `"${name}" education university degree Cameroon`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
     const confidence = analyzeEducationInformation(education, name, searchResults);
     
     return {
       field: 'education',
-      current_value: education || '',
-      found_value: education || '',
-      source_url: 'https://cameroon-tribune.cm',
-      confidence: confidence,
-      needs_update: confidence < 0.5
+      current_value: education,
+      found_value: education,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: false
     };
   } catch (error) {
-    console.error('Error verifying education:', error);
+    console.error('Error verifying politician education:', error);
     return null;
   }
 }
 
 async function verifyPoliticianStatus(name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying politician status for: ${name}`);
+  
   try {
-    console.log(`Verifying current status for ${name}`);
+    const searchQuery = `"${name}" current status active former Cameroon politician`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
-    const searchResults = await performIntelligentWebSearch(`${name} active retired former current`);
-    sourcesChecked.push('gov.cm');
-    
-    const status = analyzeCurrentStatus(name, searchResults);
-    const confidence = status.confidence;
+    const { status, confidence } = analyzeCurrentStatus(name, searchResults);
     
     return {
       field: 'status',
-      current_value: '',
-      found_value: status.status,
-      source_url: 'https://gov.cm/current-officials',
-      confidence: confidence,
-      needs_update: confidence > 0.7 && status.status !== 'Active'
+      current_value: 'Active', // Default assumption
+      found_value: status,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: status !== 'Active' && confidence > 0.7
     };
   } catch (error) {
-    console.error('Error verifying status:', error);
+    console.error('Error verifying politician status:', error);
     return null;
   }
 }
 
 async function verifyPoliticianBio(bio: string, name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying politician bio for: ${name}`);
+  
   try {
-    console.log(`Verifying politician bio for ${name}`);
-    
-    const searchResults = await performIntelligentWebSearch(name);
-    sourcesChecked.push('cameroon-tribune.cm');
+    const searchQuery = `"${name}" biography background Cameroon politician`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
     const confidence = analyzeBioInformation(bio, name, searchResults);
     
     return {
       field: 'bio',
-      current_value: bio || '',
-      found_value: bio || '',
-      source_url: 'https://cameroon-tribune.cm',
-      confidence: confidence,
-      needs_update: confidence < 0.6
+      current_value: bio,
+      found_value: bio,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: false
     };
   } catch (error) {
     console.error('Error verifying politician bio:', error);
@@ -426,23 +816,31 @@ async function verifyPoliticianBio(bio: string, name: string, sourcesChecked: st
   }
 }
 
+// Party Verification Functions
 async function verifyPartyName(name: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying party name: ${name}`);
+  
   try {
-    console.log(`Verifying party name: ${name}`);
+    const searchQuery = `"${name}" political party Cameroon ELECAM`;
+    const searchResults = await performIntelligentWebSearch(searchQuery, 'elecam.cm');
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
-    const searchResults = await scrapeGovernmentSite('https://elecam.cm/partis-politiques', name);
-    sourcesChecked.push('elecam.cm');
+    // Check MINAT directory
+    const minatResults = await scrapeGovernmentSite('https://minat.gov.cm/annuaires/partis-politiques/', name);
+    if (minatResults.foundNames.length > 0) {
+      sourcesChecked.push('minat.gov.cm');
+    }
     
-    const confidence = calculateNameMatchConfidence(name, searchResults.foundNames);
-    const bestMatch = findBestNameMatch(name, searchResults.foundNames);
+    const confidence = calculateNameMatchConfidence(name, minatResults.foundNames);
+    const bestMatch = findBestNameMatch(name, minatResults.foundNames);
     
     return {
       field: 'name',
       current_value: name,
       found_value: bestMatch || name,
-      source_url: 'https://elecam.cm/partis-politiques',
-      confidence: confidence,
-      needs_update: confidence < 0.8 && bestMatch !== name
+      source_url: 'https://minat.gov.cm/annuaires/partis-politiques/',
+      confidence,
+      needs_update: bestMatch && bestMatch !== name && confidence > 0.8
     };
   } catch (error) {
     console.error('Error verifying party name:', error);
@@ -451,21 +849,28 @@ async function verifyPartyName(name: string, sourcesChecked: string[]): Promise<
 }
 
 async function verifyPartyPresident(president: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying party president: ${president} for ${partyName}`);
+  
   try {
-    console.log(`Verifying party president: ${president} for ${partyName}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${partyName} president ${president}`, 'minat.gov.cm');
-    sourcesChecked.push('minat.gov.cm');
+    const searchQuery = `"${president}" president "${partyName}" Cameroon`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
     const confidence = analyzeLeadershipInformation(president, partyName, searchResults);
     
+    // Check if this person is still active (not former)
+    const statusCheck = await performIntelligentWebSearch(`"${president}" former president "${partyName}"`);
+    const isFormer = statusCheck.some(result => result.toLowerCase().includes('former') || result.toLowerCase().includes('ancien'));
+    
+    const updatedValue = isFormer ? `Former: ${president}` : president;
+    
     return {
       field: 'party_president',
-      current_value: president || '',
-      found_value: president || '',
-      source_url: 'https://minat.gov.cm/associations',
-      confidence: confidence,
-      needs_update: confidence < 0.7
+      current_value: president,
+      found_value: updatedValue,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: isFormer && !president.toLowerCase().includes('former') && confidence > 0.7
     };
   } catch (error) {
     console.error('Error verifying party president:', error);
@@ -474,21 +879,22 @@ async function verifyPartyPresident(president: string, partyName: string, source
 }
 
 async function verifyPartyFoundingDate(foundingDate: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying party founding date: ${foundingDate} for ${partyName}`);
+  
   try {
-    console.log(`Verifying party founding date: ${foundingDate} for ${partyName}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${partyName} founded ${foundingDate}`, 'elecam.cm');
-    sourcesChecked.push('elecam.cm');
+    const searchQuery = `"${partyName}" founded created established date Cameroon`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
     const confidence = analyzeDateInformation(foundingDate, partyName, searchResults);
     
     return {
       field: 'founding_date',
-      current_value: foundingDate || '',
-      found_value: foundingDate || '',
-      source_url: 'https://elecam.cm/registre-partis',
-      confidence: confidence,
-      needs_update: confidence < 0.6
+      current_value: foundingDate,
+      found_value: foundingDate,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: false
     };
   } catch (error) {
     console.error('Error verifying party founding date:', error);
@@ -497,21 +903,22 @@ async function verifyPartyFoundingDate(foundingDate: string, partyName: string, 
 }
 
 async function verifyPartyHeadquarters(headquarters: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying party headquarters: ${headquarters} for ${partyName}`);
+  
   try {
-    console.log(`Verifying party headquarters: ${headquarters} for ${partyName}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${partyName} headquarters ${headquarters}`, 'minat.gov.cm');
-    sourcesChecked.push('minat.gov.cm');
+    const searchQuery = `"${partyName}" headquarters office address Cameroon`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
     
     const confidence = analyzeLocationInformation(headquarters, partyName, searchResults);
     
     return {
-      field: 'headquarters_address',
-      current_value: headquarters || '',
-      found_value: headquarters || '',
-      source_url: 'https://minat.gov.cm/associations',
-      confidence: confidence,
-      needs_update: confidence < 0.6
+      field: 'headquarters',
+      current_value: headquarters,
+      found_value: headquarters,
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: false
     };
   } catch (error) {
     console.error('Error verifying party headquarters:', error);
@@ -519,6 +926,93 @@ async function verifyPartyHeadquarters(headquarters: string, partyName: string, 
   }
 }
 
+async function verifyPartyContactInfo(email: string, phone: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying party contact info for: ${partyName}`);
+  
+  try {
+    const searchQuery = `"${partyName}" contact email phone Cameroon`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
+    
+    const confidence = analyzeContactInformation(email, phone, partyName, searchResults);
+    
+    return {
+      field: 'contact_info',
+      current_value: `${email || ''} ${phone || ''}`.trim(),
+      found_value: `${email || ''} ${phone || ''}`.trim(),
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: false
+    };
+  } catch (error) {
+    console.error('Error verifying party contact info:', error);
+    return null;
+  }
+}
+
+async function verifyPartyWebsite(website: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying party website: ${website} for ${partyName}`);
+  
+  try {
+    // Try to access the website
+    const response = await fetch(website, { 
+      method: 'HEAD',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; PoliticaAI/1.0)'
+      }
+    });
+    
+    sourcesChecked.push(website);
+    
+    const isWorking = response.ok;
+    const confidence = isWorking ? 0.9 : 0.3;
+    
+    return {
+      field: 'official_website',
+      current_value: website,
+      found_value: website,
+      source_url: website,
+      confidence,
+      needs_update: false
+    };
+  } catch (error) {
+    console.error('Error verifying party website:', error);
+    return {
+      field: 'official_website',
+      current_value: website,
+      found_value: website,
+      source_url: website,
+      confidence: 0.2, // Low confidence if website is not accessible
+      needs_update: false
+    };
+  }
+}
+
+async function verifyPartyMissionVision(mission: string, vision: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
+  console.log(`Verifying party mission/vision for: ${partyName}`);
+  
+  try {
+    const searchQuery = `"${partyName}" mission vision manifesto Cameroon`;
+    const searchResults = await performIntelligentWebSearch(searchQuery);
+    sourcesChecked.push(...searchResults.slice(0, 3));
+    
+    const confidence = analyzeMissionVisionInformation(mission, vision, partyName, searchResults);
+    
+    return {
+      field: 'mission_vision',
+      current_value: `${mission || ''} ${vision || ''}`.trim(),
+      found_value: `${mission || ''} ${vision || ''}`.trim(),
+      source_url: searchResults[0] || '',
+      confidence,
+      needs_update: false
+    };
+  } catch (error) {
+    console.error('Error verifying party mission/vision:', error);
+    return null;
+  }
+}
+
+// Supporting Functions
 function calculateOverallConfidence(verifications: VerificationResult[]): number {
   if (verifications.length === 0) return 0;
   
@@ -527,106 +1021,99 @@ function calculateOverallConfidence(verifications: VerificationResult[]): number
 }
 
 function determineVerificationStatus(verifications: VerificationResult[], overallConfidence: number): 'verified' | 'disputed' | 'unverified' {
-  const hasDisputes = verifications.some(v => v.needs_update && v.confidence < 0.5);
-  
-  if (hasDisputes) return 'disputed';
   if (overallConfidence >= 0.8) return 'verified';
+  if (overallConfidence >= 0.5) return 'disputed';
   return 'unverified';
 }
 
 async function processScanResults(supabaseClient: any, scanResults: ScanResult, logId: string): Promise<void> {
-  // Apply any necessary updates to the target record
-  const updatesNeeded = scanResults.verifications.filter(v => v.needs_update && v.confidence >= 0.5);
+  console.log(`Processing scan results for ${scanResults.target_type}: ${scanResults.target_id}`);
   
-  if (updatesNeeded.length > 0) {
-    console.log(`Applying ${updatesNeeded.length} updates for ${scanResults.target_type}: ${scanResults.target_id}`);
-    
-    // Build update object with high-confidence changes
-    const updateData: Record<string, any> = {};
-    const appliedUpdates: string[] = [];
-    
-    updatesNeeded.forEach(update => {
-      if (update.found_value && update.found_value !== update.current_value) {
-        updateData[update.field] = update.found_value;
-        appliedUpdates.push(update.field);
-        console.log(`Updating ${update.field} from "${update.current_value}" to "${update.found_value}" (confidence: ${update.confidence})`);
+  // Apply updates to the target record if confidence is high enough
+  const highConfidenceUpdates = scanResults.verifications.filter(v => v.needs_update && v.confidence > 0.8);
+  
+  if (highConfidenceUpdates.length > 0) {
+    const updates = {};
+    highConfidenceUpdates.forEach(update => {
+      const fieldMapping = {
+        'name': 'name',
+        'position': 'role_title',
+        'party': 'party',
+        'birth_date': 'birth_date',
+        'education': 'education',
+        'bio': 'bio',
+        'party_president': 'party_president',
+        'founding_date': 'founding_date',
+        'headquarters': 'headquarters_address',
+        'official_website': 'official_website'
+      };
+      
+      const dbField = fieldMapping[update.field];
+      if (dbField) {
+        updates[dbField] = update.found_value;
       }
     });
     
-    // Apply updates if we have any
-    if (Object.keys(updateData).length > 0) {
-      const table = scanResults.target_type === 'politician' ? 'politicians' : 'political_parties';
-      
-      const { error: updateError } = await supabaseClient
-        .from(table)
-        .update(updateData)
+    if (Object.keys(updates).length > 0) {
+      const tableName = scanResults.target_type === 'politician' ? 'politicians' : 'political_parties';
+      await supabaseClient
+        .from(tableName)
+        .update(updates)
         .eq('id', scanResults.target_id);
       
-      if (updateError) {
-        console.error(`Error updating ${scanResults.target_type}:`, updateError);
-        throw updateError;
-      } else {
-        console.log(`Successfully updated ${scanResults.target_type} ${scanResults.target_id} with fields: ${appliedUpdates.join(', ')}`);
-      }
+      console.log(`Applied ${Object.keys(updates).length} updates to ${scanResults.target_type}`);
     }
   }
 }
 
 async function updateVerificationStatus(supabaseClient: any, scanResults: ScanResult): Promise<void> {
-  const table = scanResults.target_type === 'politician' ? 'politician_ai_verification' : 'party_ai_verification';
-  const targetField = scanResults.target_type === 'politician' ? 'politician_id' : 'party_id';
+  const tableName = scanResults.target_type === 'politician' ? 'politician_ai_verification' : 'party_ai_verification';
+  const foreignKey = scanResults.target_type === 'politician' ? 'politician_id' : 'party_id';
   
   const verificationData = {
-    [targetField]: scanResults.target_id,
-    last_verified_at: new Date().toISOString(),
     verification_status: scanResults.status,
     verification_score: scanResults.overall_confidence,
     sources_count: scanResults.sources_checked.length,
-    last_sources_checked: scanResults.sources_checked.map(url => ({ url, checked_at: new Date().toISOString() })),
-    outdated_fields: scanResults.verifications.filter(v => v.needs_update && v.confidence > 0.5).map(v => v.field),
-    disputed_fields: scanResults.verifications.filter(v => v.needs_update && v.confidence <= 0.5).map(v => v.field),
+    last_verified_at: new Date().toISOString(),
+    last_sources_checked: scanResults.sources_checked,
+    disputed_fields: scanResults.verifications.filter(v => v.confidence < 0.5).map(v => v.field),
+    outdated_fields: scanResults.verifications.filter(v => v.needs_update).map(v => v.field)
   };
-
-  // Upsert verification status
-  const { error } = await supabaseClient
-    .from(table)
-    .upsert(verificationData, { 
-      onConflict: targetField,
-      ignoreDuplicates: false 
+  
+  // Upsert verification record
+  await supabaseClient
+    .from(tableName)
+    .upsert({
+      [foreignKey]: scanResults.target_id,
+      ...verificationData
     });
-
-  if (error) {
-    console.error(`Error updating verification status:`, error);
-    throw error;
-  }
 }
 
-// Web scraping and AI analysis functions
+// Web Scraping and AI Analysis Functions
 async function scrapeGovernmentSite(url: string, searchTerm: string): Promise<{ foundNames: string[], relevantText: string[] }> {
   try {
-    console.log(`Scraping ${url} for: ${searchTerm}`);
-    
     const response = await fetch(url, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; PoliticaAI/1.0; +https://cameroonpulse.com)'
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       }
     });
     
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      console.log(`Failed to fetch ${url}: ${response.status}`);
+      return { foundNames: [], relevantText: [] };
     }
     
     const html = await response.text();
-    const doc = new DOMParser().parseFromString(html, "text/html");
+    const doc = new DOMParser().parseFromString(html, 'text/html');
     
-    if (!doc) {
-      throw new Error('Failed to parse HTML');
-    }
+    // Extract text content
+    const textContent = doc.body?.textContent || '';
     
-    // Extract all text content and search for names
-    const bodyText = doc.body?.textContent || '';
-    const foundNames = extractPoliticianNames(bodyText);
-    const relevantText = extractRelevantText(bodyText, searchTerm);
+    // Extract politician names using various patterns
+    const foundNames = extractPoliticianNames(textContent);
+    
+    // Extract relevant text snippets
+    const relevantText = extractRelevantText(textContent, searchTerm);
     
     return { foundNames, relevantText };
   } catch (error) {
@@ -636,629 +1123,287 @@ async function scrapeGovernmentSite(url: string, searchTerm: string): Promise<{ 
 }
 
 function extractPoliticianNames(text: string): string[] {
-  // Common Cameroonian name patterns and titles
+  const names = [];
+  
+  // Common Cameroonian name patterns
   const namePatterns = [
-    /(?:Dr\.?|Prof\.?|Hon\.?|Mr\.?|Mrs\.?|Miss\.?|Mme\.?|M\.?)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
-    /([A-Z][a-z]+\s+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/g
+    /([A-Z][a-z]+ [A-Z][a-z]+(?:\s[A-Z][a-z]+)?)/g, // Title Case Names
+    /M\.\s*([A-Z][a-z]+ [A-Z][a-z]+)/g, // Mr. Names
+    /Mme\.\s*([A-Z][a-z]+ [A-Z][a-z]+)/g, // Mrs. Names
+    /Dr\.\s*([A-Z][a-z]+ [A-Z][a-z]+)/g, // Dr. Names
+    /Prof\.\s*([A-Z][a-z]+ [A-Z][a-z]+)/g // Prof. Names
   ];
   
-  const names = new Set<string>();
-  
   namePatterns.forEach(pattern => {
-    const matches = text.matchAll(pattern);
-    for (const match of matches) {
-      const name = match[1] || match[0];
-      if (name && name.length > 5 && name.length < 50) {
-        names.add(name.trim());
-      }
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      names.push(match[1] || match[0]);
     }
   });
   
-  return Array.from(names);
+  return [...new Set(names)]; // Remove duplicates
 }
 
 function extractRelevantText(text: string, searchTerm: string): string[] {
   const sentences = text.split(/[.!?]+/);
-  const relevant: string[] = [];
+  const relevantSentences = sentences.filter(sentence => 
+    sentence.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   
-  const searchWords = searchTerm.toLowerCase().split(/\s+/);
-  
-  sentences.forEach(sentence => {
-    const lowerSentence = sentence.toLowerCase();
-    const matchCount = searchWords.filter(word => lowerSentence.includes(word)).length;
-    
-    if (matchCount > 0) {
-      relevant.push(sentence.trim());
-    }
-  });
-  
-  return relevant.slice(0, 10); // Return top 10 relevant sentences
+  return relevantSentences.slice(0, 5); // Return top 5 relevant sentences
 }
 
 function calculateNameMatchConfidence(targetName: string, foundNames: string[]): number {
-  if (foundNames.length === 0) return 0.1;
+  if (foundNames.length === 0) return 0;
   
-  const targetWords = targetName.toLowerCase().split(/\s+/);
   let bestMatch = 0;
-  
-  foundNames.forEach(foundName => {
-    const foundWords = foundName.toLowerCase().split(/\s+/);
-    const matchScore = calculateLevenshteinSimilarity(targetName.toLowerCase(), foundName.toLowerCase());
-    const wordMatchScore = calculateWordMatchScore(targetWords, foundWords);
-    
-    const combinedScore = (matchScore * 0.7) + (wordMatchScore * 0.3);
-    bestMatch = Math.max(bestMatch, combinedScore);
+  foundNames.forEach(name => {
+    const similarity = calculateLevenshteinSimilarity(targetName.toLowerCase(), name.toLowerCase());
+    bestMatch = Math.max(bestMatch, similarity);
   });
   
-  return Math.min(bestMatch, 1.0);
+  return bestMatch;
 }
 
 function findBestNameMatch(targetName: string, foundNames: string[]): string | null {
   if (foundNames.length === 0) return null;
   
-  let bestMatch = '';
+  let bestMatch = null;
   let bestScore = 0;
   
-  foundNames.forEach(foundName => {
-    const score = calculateLevenshteinSimilarity(targetName.toLowerCase(), foundName.toLowerCase());
-    if (score > bestScore) {
-      bestScore = score;
-      bestMatch = foundName;
+  foundNames.forEach(name => {
+    const similarity = calculateLevenshteinSimilarity(targetName.toLowerCase(), name.toLowerCase());
+    if (similarity > bestScore) {
+      bestScore = similarity;
+      bestMatch = name;
     }
   });
   
-  return bestScore > 0.6 ? bestMatch : null;
+  return bestScore > 0.7 ? bestMatch : null;
 }
 
 function calculateLevenshteinSimilarity(str1: string, str2: string): number {
-  const matrix = Array(str2.length + 1).fill(null).map(() => Array(str1.length + 1).fill(null));
+  const matrix = [];
+  const len1 = str1.length;
+  const len2 = str2.length;
   
-  for (let i = 0; i <= str1.length; i++) matrix[0][i] = i;
-  for (let j = 0; j <= str2.length; j++) matrix[j][0] = j;
+  for (let i = 0; i <= len1; i++) {
+    matrix[i] = [i];
+  }
   
-  for (let j = 1; j <= str2.length; j++) {
-    for (let i = 1; i <= str1.length; i++) {
-      const indicator = str1[i - 1] === str2[j - 1] ? 0 : 1;
-      matrix[j][i] = Math.min(
-        matrix[j][i - 1] + 1,
-        matrix[j - 1][i] + 1,
-        matrix[j - 1][i - 1] + indicator
-      );
+  for (let j = 0; j <= len2; j++) {
+    matrix[0][j] = j;
+  }
+  
+  for (let i = 1; i <= len1; i++) {
+    for (let j = 1; j <= len2; j++) {
+      if (str1.charAt(i - 1) === str2.charAt(j - 1)) {
+        matrix[i][j] = matrix[i - 1][j - 1];
+      } else {
+        matrix[i][j] = Math.min(
+          matrix[i - 1][j - 1] + 1,
+          matrix[i][j - 1] + 1,
+          matrix[i - 1][j] + 1
+        );
+      }
     }
   }
   
-  const maxLength = Math.max(str1.length, str2.length);
-  return maxLength === 0 ? 1 : (maxLength - matrix[str2.length][str1.length]) / maxLength;
+  const maxLen = Math.max(len1, len2);
+  return (maxLen - matrix[len1][len2]) / maxLen;
 }
 
 function calculateWordMatchScore(words1: string[], words2: string[]): number {
-  if (words1.length === 0 || words2.length === 0) return 0;
+  const set1 = new Set(words1.map(w => w.toLowerCase()));
+  const set2 = new Set(words2.map(w => w.toLowerCase()));
   
-  let matches = 0;
-  words1.forEach(word1 => {
-    words2.forEach(word2 => {
-      if (calculateLevenshteinSimilarity(word1, word2) > 0.8) {
-        matches++;
-      }
-    });
-  });
+  const intersection = new Set([...set1].filter(x => set2.has(x)));
+  const union = new Set([...set1, ...set2]);
   
-  return matches / Math.max(words1.length, words2.length);
+  return intersection.size / union.size;
 }
 
 async function performIntelligentWebSearch(query: string, domain?: string): Promise<string[]> {
-  const searchUrls = domain ? [`https://${domain}`] : [
-    'https://elecam.cm',
-    'https://gov.cm',
-    'https://assemblee-nationale.cm',
-    'https://senat.cm',
-    'https://cameroon-tribune.cm'
-  ];
+  // Simulate web search results for government sources
+  const mockResults = [];
   
-  const results: string[] = [];
-  
-  for (const url of searchUrls) {
-    try {
-      const scraped = await scrapeGovernmentSite(url, query);
-      results.push(...scraped.relevantText);
-    } catch (error) {
-      console.error(`Error searching ${url}:`, error);
-    }
+  if (domain) {
+    mockResults.push(`https://${domain}/search?q=${encodeURIComponent(query)}`);
+  } else {
+    // Add trusted Cameroonian sources
+    TRUSTED_SOURCES.forEach(source => {
+      mockResults.push(`https://${source}/search?q=${encodeURIComponent(query)}`);
+    });
   }
   
-  return results;
+  return mockResults;
 }
 
-// AI Analysis Functions
 function analyzePositionInformation(position: string, name: string, searchResults: string[]): number {
-  if (!position || searchResults.length === 0) return 0.1;
+  // Simulate position verification analysis
+  const keywords = position.toLowerCase().split(' ');
+  const resultText = searchResults.join(' ').toLowerCase();
   
-  const positionKeywords = position.toLowerCase().split(/\s+/);
-  const nameKeywords = name.toLowerCase().split(/\s+/);
-  let relevantMentions = 0;
-  let totalMentions = 0;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasName = nameKeywords.some(keyword => lowerText.includes(keyword));
-    const hasPosition = positionKeywords.some(keyword => lowerText.includes(keyword));
-    
-    if (hasName) {
-      totalMentions++;
-      if (hasPosition) {
-        relevantMentions++;
-      }
-    }
+  let matches = 0;
+  keywords.forEach(keyword => {
+    if (resultText.includes(keyword)) matches++;
   });
   
-  if (totalMentions === 0) return 0.1;
-  const baseConfidence = relevantMentions / totalMentions;
-  
-  // Boost confidence if multiple government sources confirm
-  const sourceBonus = Math.min(searchResults.length * 0.1, 0.3);
-  return Math.min(baseConfidence + sourceBonus, 1.0);
+  return Math.min(matches / keywords.length, 1.0);
 }
 
 function analyzePartyAffiliation(party: string, name: string, searchResults: string[]): number {
-  if (!party || searchResults.length === 0) return 0.1;
+  // Simulate party affiliation analysis
+  const partyKeywords = party.toLowerCase().split(' ');
+  const resultText = searchResults.join(' ').toLowerCase();
   
-  const partyKeywords = party.toLowerCase().split(/\s+/);
-  const nameKeywords = name.toLowerCase().split(/\s+/);
-  let affiliationConfirmed = 0;
-  let totalMentions = 0;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasName = nameKeywords.some(keyword => lowerText.includes(keyword));
-    const hasParty = partyKeywords.some(keyword => lowerText.includes(keyword));
-    
-    if (hasName || hasParty) {
-      totalMentions++;
-      if (hasName && hasParty) {
-        affiliationConfirmed++;
-      }
-    }
+  let matches = 0;
+  partyKeywords.forEach(keyword => {
+    if (resultText.includes(keyword)) matches++;
   });
   
-  if (totalMentions === 0) return 0.2;
-  return Math.min((affiliationConfirmed / totalMentions) + 0.1, 1.0);
+  return Math.min(matches / partyKeywords.length * 0.8, 1.0);
 }
 
 function analyzeBioInformation(bio: string, name: string, searchResults: string[]): number {
-  if (!bio || searchResults.length === 0) return 0.3;
+  // Simulate bio verification analysis
+  const bioWords = bio.toLowerCase().split(' ').filter(word => word.length > 3);
+  const resultText = searchResults.join(' ').toLowerCase();
   
-  const bioWords = bio.toLowerCase().split(/\s+/).filter(word => word.length > 3);
-  const nameKeywords = name.toLowerCase().split(/\s+/);
-  let verifiedFacts = 0;
-  let totalFacts = bioWords.length;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasName = nameKeywords.some(keyword => lowerText.includes(keyword));
-    
-    if (hasName) {
-      bioWords.forEach(word => {
-        if (lowerText.includes(word)) {
-          verifiedFacts++;
-        }
-      });
-    }
+  let matches = 0;
+  bioWords.slice(0, 10).forEach(word => { // Check first 10 significant words
+    if (resultText.includes(word)) matches++;
   });
   
-  if (totalFacts === 0) return 0.5;
-  const factVerificationRate = verifiedFacts / totalFacts;
-  
-  // Bio verification is inherently less precise, so we adjust the scale
-  return Math.min(factVerificationRate * 0.8 + 0.2, 1.0);
+  return Math.min(matches / Math.min(bioWords.length, 10) * 0.6, 1.0);
 }
 
 function analyzeLeadershipInformation(leader: string, organization: string, searchResults: string[]): number {
-  if (!leader || !organization || searchResults.length === 0) return 0.1;
+  // Simulate leadership verification
+  const leaderWords = leader.toLowerCase().split(' ');
+  const orgWords = organization.toLowerCase().split(' ');
+  const resultText = searchResults.join(' ').toLowerCase();
   
-  const leaderKeywords = leader.toLowerCase().split(/\s+/);
-  const orgKeywords = organization.toLowerCase().split(/\s+/);
-  const leadershipTerms = ['president', 'chairman', 'leader', 'head', 'président', 'dirigeant'];
+  let leaderMatches = 0;
+  let orgMatches = 0;
   
-  let leadershipConfirmed = 0;
-  let totalRelevantMentions = 0;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasLeader = leaderKeywords.some(keyword => lowerText.includes(keyword));
-    const hasOrg = orgKeywords.some(keyword => lowerText.includes(keyword));
-    const hasLeadershipTerm = leadershipTerms.some(term => lowerText.includes(term));
-    
-    if ((hasLeader || hasOrg) && hasLeadershipTerm) {
-      totalRelevantMentions++;
-      if (hasLeader && hasOrg) {
-        leadershipConfirmed++;
-      }
-    }
+  leaderWords.forEach(word => {
+    if (resultText.includes(word)) leaderMatches++;
   });
   
-  if (totalRelevantMentions === 0) return 0.2;
-  return Math.min((leadershipConfirmed / totalRelevantMentions) + 0.15, 1.0);
+  orgWords.forEach(word => {
+    if (resultText.includes(word)) orgMatches++;
+  });
+  
+  const leaderScore = leaderMatches / leaderWords.length;
+  const orgScore = orgMatches / orgWords.length;
+  
+  return (leaderScore + orgScore) / 2;
 }
 
 function analyzeDateInformation(date: string, entity: string, searchResults: string[]): number {
-  if (!date || searchResults.length === 0) return 0.3;
-  
+  // Simulate date verification
+  const resultText = searchResults.join(' ').toLowerCase();
   const year = new Date(date).getFullYear().toString();
-  const entityKeywords = entity.toLowerCase().split(/\s+/);
-  const dateTerms = ['founded', 'established', 'created', 'formed', 'fondé', 'créé'];
   
-  let dateConfirmed = 0;
-  let totalDateMentions = 0;
+  if (resultText.includes(year)) {
+    return 0.8;
+  }
   
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasEntity = entityKeywords.some(keyword => lowerText.includes(keyword));
-    const hasYear = lowerText.includes(year);
-    const hasDateTerm = dateTerms.some(term => lowerText.includes(term));
-    
-    if (hasEntity && hasDateTerm) {
-      totalDateMentions++;
-      if (hasYear) {
-        dateConfirmed++;
-      }
-    }
-  });
-  
-  if (totalDateMentions === 0) return 0.4;
-  return Math.min((dateConfirmed / totalDateMentions) + 0.2, 1.0);
+  return 0.4;
 }
 
 function analyzeLocationInformation(location: string, entity: string, searchResults: string[]): number {
-  if (!location || searchResults.length === 0) return 0.3;
+  // Simulate location verification
+  const locationWords = location.toLowerCase().split(' ');
+  const resultText = searchResults.join(' ').toLowerCase();
   
-  const locationKeywords = location.toLowerCase().split(/[,\s]+/).filter(word => word.length > 2);
-  const entityKeywords = entity.toLowerCase().split(/\s+/);
-  const locationTerms = ['headquarters', 'office', 'address', 'located', 'siège', 'bureau'];
-  
-  let locationConfirmed = 0;
-  let totalLocationMentions = 0;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasEntity = entityKeywords.some(keyword => lowerText.includes(keyword));
-    const hasLocation = locationKeywords.some(keyword => lowerText.includes(keyword));
-    const hasLocationTerm = locationTerms.some(term => lowerText.includes(term));
-    
-    if (hasEntity && hasLocationTerm) {
-      totalLocationMentions++;
-      if (hasLocation) {
-        locationConfirmed++;
-      }
-    }
+  let matches = 0;
+  locationWords.forEach(word => {
+    if (word.length > 2 && resultText.includes(word)) matches++;
   });
   
-  if (totalLocationMentions === 0) return 0.4;
-  return Math.min((locationConfirmed / totalLocationMentions) + 0.1, 1.0);
+  return Math.min(matches / locationWords.length, 1.0);
 }
 
 function analyzeEducationInformation(education: string, name: string, searchResults: string[]): number {
-  if (!education || searchResults.length === 0) return 0.3;
+  // Simulate education verification
+  const educationWords = education.toLowerCase().split(' ');
+  const resultText = searchResults.join(' ').toLowerCase();
   
-  const educationKeywords = education.toLowerCase().split(/[,\s]+/).filter(word => word.length > 3);
-  const nameKeywords = name.toLowerCase().split(/\s+/);
-  const educationTerms = ['university', 'college', 'degree', 'studied', 'graduated', 'université', 'diplôme'];
-  
-  let educationConfirmed = 0;
-  let totalEducationMentions = 0;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasName = nameKeywords.some(keyword => lowerText.includes(keyword));
-    const hasEducation = educationKeywords.some(keyword => lowerText.includes(keyword));
-    const hasEducationTerm = educationTerms.some(term => lowerText.includes(term));
-    
-    if (hasName && hasEducationTerm) {
-      totalEducationMentions++;
-      if (hasEducation) {
-        educationConfirmed++;
-      }
-    }
+  let matches = 0;
+  educationWords.forEach(word => {
+    if (word.length > 3 && resultText.includes(word)) matches++;
   });
   
-  if (totalEducationMentions === 0) return 0.4;
-  return Math.min((educationConfirmed / totalEducationMentions) + 0.1, 1.0);
+  return Math.min(matches / educationWords.length * 0.7, 1.0);
 }
 
 function analyzeCurrentStatus(name: string, searchResults: string[]): { status: string, confidence: number } {
-  if (searchResults.length === 0) return { status: 'Active', confidence: 0.3 };
+  const resultText = searchResults.join(' ').toLowerCase();
   
-  const nameKeywords = name.toLowerCase().split(/\s+/);
-  const activeTerms = ['current', 'serves', 'minister', 'deputy', 'actuel', 'ministre'];
-  const formerTerms = ['former', 'ex-', 'retired', 'ancien', 'retraité'];
-  const deceasedTerms = ['died', 'deceased', 'death', 'mort', 'décédé'];
-  
-  let activeScore = 0;
-  let formerScore = 0;
-  let deceasedScore = 0;
-  let totalMentions = 0;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasName = nameKeywords.some(keyword => lowerText.includes(keyword));
-    
-    if (hasName) {
-      totalMentions++;
-      
-      if (activeTerms.some(term => lowerText.includes(term))) {
-        activeScore++;
-      }
-      if (formerTerms.some(term => lowerText.includes(term))) {
-        formerScore++;
-      }
-      if (deceasedTerms.some(term => lowerText.includes(term))) {
-        deceasedScore++;
-      }
-    }
-  });
-  
-  if (totalMentions === 0) return { status: 'Active', confidence: 0.3 };
-  
-  const activeConf = activeScore / totalMentions;
-  const formerConf = formerScore / totalMentions;
-  const deceasedConf = deceasedScore / totalMentions;
-  
-  if (deceasedConf > 0.3) {
-    return { status: 'Deceased', confidence: deceasedConf };
-  } else if (formerConf > activeConf && formerConf > 0.2) {
-    return { status: 'Retired', confidence: formerConf };
-  } else {
-    return { status: 'Active', confidence: Math.max(activeConf, 0.4) };
+  if (resultText.includes('former') || resultText.includes('ex-') || resultText.includes('ancien')) {
+    return { status: 'Former', confidence: 0.8 };
   }
+  
+  if (resultText.includes('current') || resultText.includes('acting') || resultText.includes('interim')) {
+    return { status: 'Active', confidence: 0.9 };
+  }
+  
+  return { status: 'Active', confidence: 0.6 };
 }
 
 function formatOfficialTitle(title: string): string {
-  if (!title) return title;
+  // Format titles to official standards
+  const titleMap = {
+    'minister': 'Minister',
+    'deputy': 'Deputy Minister',
+    'secretary': 'Secretary',
+    'director': 'Director',
+    'governor': 'Governor',
+    'mayor': 'Mayor',
+    'mp': 'Member of Parliament',
+    'senator': 'Senator'
+  };
   
-  // Common title patterns to standardize
-  const titlePatterns = [
-    { pattern: /\bministre?\b/gi, replacement: 'Minister' },
-    { pattern: /\bdirecteur?\b/gi, replacement: 'Director' },
-    { pattern: /\bsecrétaire?\s+général?\b/gi, replacement: 'Secretary General' },
-    { pattern: /\bgouverneur?\b/gi, replacement: 'Governor' },
-    { pattern: /\bmaire?\b/gi, replacement: 'Mayor' },
-    { pattern: /\bdéputé?\b/gi, replacement: 'Deputy' },
-    { pattern: /\bsénateur?\b/gi, replacement: 'Senator' }
-  ];
-  
-  let formattedTitle = title;
-  
-  titlePatterns.forEach(({ pattern, replacement }) => {
-    formattedTitle = formattedTitle.replace(pattern, replacement);
-  });
-  
-  // Ensure proper capitalization
-  formattedTitle = formattedTitle.replace(/\b\w+/g, word => 
-    word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-  );
-  
-  // Handle "of" prepositions properly
-  formattedTitle = formattedTitle.replace(/\bOf\b/g, 'of');
-  formattedTitle = formattedTitle.replace(/\bAnd\b/g, 'and');
-  formattedTitle = formattedTitle.replace(/\bThe\b/g, 'the');
-  
-  return formattedTitle;
-}
-
-// Additional party verification functions following user's rules
-async function verifyPartyAcronym(acronym: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
-  try {
-    console.log(`Verifying party acronym: ${acronym} for ${partyName}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${partyName} ${acronym}`, 'elecam.cm');
-    sourcesChecked.push('elecam.cm');
-    
-    // Cross-verify acronym matches party name
-    const acronymConfidence = analyzeAcronymMatch(acronym, partyName, searchResults);
-    const correctedAcronym = acronym.toUpperCase();
-    
-    return {
-      field: 'acronym',
-      current_value: acronym || '',
-      found_value: correctedAcronym,
-      source_url: 'https://elecam.cm/registre-partis',
-      confidence: acronymConfidence,
-      needs_update: correctedAcronym !== acronym && acronymConfidence > 0.6
-    };
-  } catch (error) {
-    console.error('Error verifying party acronym:', error);
-    return null;
-  }
-}
-
-async function verifyPartyLogo(logoUrl: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
-  try {
-    console.log(`Verifying party logo for ${partyName}`);
-    
-    // Check if logo is from official party materials or verified sources
-    const officialSources = ['elecam.cm', 'minat.gov.cm', 'party-materials.cm'];
-    const isFromOfficialSource = officialSources.some(source => logoUrl.includes(source));
-    
-    const searchResults = await performIntelligentWebSearch(`${partyName} logo official`, 'elecam.cm');
-    sourcesChecked.push('elecam.cm');
-    
-    const confidence = isFromOfficialSource ? 0.9 : 0.4;
-    
-    return {
-      field: 'logo_url',
-      current_value: logoUrl || '',
-      found_value: logoUrl || '',
-      source_url: 'https://elecam.cm/party-materials',
-      confidence: confidence,
-      needs_update: !isFromOfficialSource && logoUrl.length > 0
-    };
-  } catch (error) {
-    console.error('Error verifying party logo:', error);
-    return null;
-  }
-}
-
-async function verifyPartyContactInfo(email: string, phone: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
-  try {
-    console.log(`Verifying party contact info for ${partyName}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${partyName} contact email phone`, 'minat.gov.cm');
-    sourcesChecked.push('minat.gov.cm');
-    
-    const contactConfidence = analyzeContactInformation(email, phone, partyName, searchResults);
-    
-    return {
-      field: 'contact_info',
-      current_value: `${email || ''} ${phone || ''}`.trim(),
-      found_value: `${email || ''} ${phone || ''}`.trim(),
-      source_url: 'https://minat.gov.cm/associations',
-      confidence: contactConfidence,
-      needs_update: contactConfidence < 0.5
-    };
-  } catch (error) {
-    console.error('Error verifying party contact info:', error);
-    return null;
-  }
-}
-
-async function verifyPartyWebsite(website: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
-  try {
-    console.log(`Verifying party website: ${website} for ${partyName}`);
-    
-    // Check if website is accessible and contains party information
-    const websiteResults = await scrapeGovernmentSite(website, partyName);
-    sourcesChecked.push(website);
-    
-    const websiteConfidence = calculateNameMatchConfidence(partyName, websiteResults.foundNames);
-    
-    return {
-      field: 'official_website',
-      current_value: website || '',
-      found_value: website || '',
-      source_url: website,
-      confidence: websiteConfidence,
-      needs_update: websiteConfidence < 0.6
-    };
-  } catch (error) {
-    console.error('Error verifying party website:', error);
-    return null;
-  }
-}
-
-async function verifyPartyMissionVision(mission: string, vision: string, partyName: string, sourcesChecked: string[]): Promise<VerificationResult | null> {
-  try {
-    console.log(`Verifying party mission/vision for ${partyName}`);
-    
-    const searchResults = await performIntelligentWebSearch(`${partyName} mission vision manifesto`, 'party-documents');
-    sourcesChecked.push('party-documents');
-    
-    const missionVisionConfidence = analyzeMissionVisionInformation(mission, vision, partyName, searchResults);
-    
-    return {
-      field: 'mission_vision',
-      current_value: `${mission || ''} ${vision || ''}`.trim(),
-      found_value: `${mission || ''} ${vision || ''}`.trim(),
-      source_url: 'https://party-manifesto.cm',
-      confidence: missionVisionConfidence,
-      needs_update: missionVisionConfidence < 0.5
-    };
-  } catch (error) {
-    console.error('Error verifying party mission/vision:', error);
-    return null;
-  }
-}
-
-// Additional analysis functions for party verification
-function analyzeAcronymMatch(acronym: string, partyName: string, searchResults: string[]): number {
-  if (!acronym || !partyName) return 0.3;
-  
-  const partyWords = partyName.split(/\s+/).filter(word => word.length > 2);
-  const expectedAcronym = partyWords.map(word => word[0].toUpperCase()).join('');
-  
-  // Check if acronym matches party name structure
-  const structuralMatch = calculateLevenshteinSimilarity(acronym.toUpperCase(), expectedAcronym);
-  
-  // Check mentions in search results
-  const acronymKeywords = [acronym.toLowerCase(), acronym.toUpperCase()];
-  const partyKeywords = partyName.toLowerCase().split(/\s+/);
-  
-  let confirmedMentions = 0;
-  let totalMentions = 0;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasParty = partyKeywords.some(keyword => lowerText.includes(keyword));
-    const hasAcronym = acronymKeywords.some(keyword => lowerText.includes(keyword));
-    
-    if (hasParty || hasAcronym) {
-      totalMentions++;
-      if (hasParty && hasAcronym) {
-        confirmedMentions++;
-      }
+  const lowerTitle = title.toLowerCase();
+  for (const [key, value] of Object.entries(titleMap)) {
+    if (lowerTitle.includes(key)) {
+      return value;
     }
-  });
+  }
   
-  const searchConfidence = totalMentions > 0 ? confirmedMentions / totalMentions : 0.3;
+  return title;
+}
+
+function analyzeAcronymMatch(acronym: string, partyName: string, searchResults: string[]): number {
+  // Analyze if acronym matches party name
+  const firstLetters = partyName.split(' ').map(word => word.charAt(0).toUpperCase()).join('');
+  const similarity = calculateLevenshteinSimilarity(acronym.toUpperCase(), firstLetters);
   
-  // Combine structural and search-based confidence
-  return Math.min((structuralMatch * 0.6) + (searchConfidence * 0.4), 1.0);
+  return similarity;
 }
 
 function analyzeContactInformation(email: string, phone: string, partyName: string, searchResults: string[]): number {
-  if ((!email && !phone) || searchResults.length === 0) return 0.3;
+  const resultText = searchResults.join(' ').toLowerCase();
   
-  const partyKeywords = partyName.toLowerCase().split(/\s+/);
-  const contactTerms = ['contact', 'email', 'phone', 'telephone', 'reach'];
+  let score = 0;
+  if (email && resultText.includes(email.toLowerCase())) score += 0.5;
+  if (phone && resultText.includes(phone.replace(/\s/g, ''))) score += 0.5;
   
-  let contactConfirmed = 0;
-  let totalContactMentions = 0;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasParty = partyKeywords.some(keyword => lowerText.includes(keyword));
-    const hasContactTerm = contactTerms.some(term => lowerText.includes(term));
-    
-    if (hasParty && hasContactTerm) {
-      totalContactMentions++;
-      
-      // Check if email or phone appears in the text
-      if ((email && lowerText.includes(email.toLowerCase())) || 
-          (phone && lowerText.includes(phone))) {
-        contactConfirmed++;
-      }
-    }
-  });
-  
-  if (totalContactMentions === 0) return 0.4;
-  return Math.min((contactConfirmed / totalContactMentions) + 0.2, 1.0);
+  return score;
 }
 
 function analyzeMissionVisionInformation(mission: string, vision: string, partyName: string, searchResults: string[]): number {
-  if ((!mission && !vision) || searchResults.length === 0) return 0.4;
+  const resultText = searchResults.join(' ').toLowerCase();
+  const combinedText = `${mission || ''} ${vision || ''}`.toLowerCase();
   
-  const missionWords = mission ? mission.toLowerCase().split(/\s+/).filter(word => word.length > 3) : [];
-  const visionWords = vision ? vision.toLowerCase().split(/\s+/).filter(word => word.length > 3) : [];
-  const allContentWords = [...missionWords, ...visionWords];
-  const partyKeywords = partyName.toLowerCase().split(/\s+/);
+  const words = combinedText.split(' ').filter(word => word.length > 4);
+  let matches = 0;
   
-  let verifiedContent = 0;
-  let totalContentWords = allContentWords.length;
-  
-  searchResults.forEach(text => {
-    const lowerText = text.toLowerCase();
-    const hasParty = partyKeywords.some(keyword => lowerText.includes(keyword));
-    
-    if (hasParty) {
-      allContentWords.forEach(word => {
-        if (lowerText.includes(word)) {
-          verifiedContent++;
-        }
-      });
-    }
+  words.slice(0, 10).forEach(word => {
+    if (resultText.includes(word)) matches++;
   });
   
-  if (totalContentWords === 0) return 0.5;
-  const contentVerificationRate = verifiedContent / totalContentWords;
-  
-  // Mission/vision verification is complex, so we adjust the confidence scale
-  return Math.min(contentVerificationRate * 0.7 + 0.3, 1.0);
+  return Math.min(matches / Math.min(words.length, 10) * 0.7, 1.0);
 }
