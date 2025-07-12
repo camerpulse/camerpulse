@@ -20,8 +20,9 @@ export default {
 		extend: {
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
-				'poppins': ['Poppins', 'system-ui', 'sans-serif'],
-				'inter': ['Inter', 'system-ui', 'sans-serif'],
+				inter: ['Inter', 'system-ui', 'sans-serif'],
+				serif: ['Playfair Display', 'Georgia', 'serif'],
+				playfair: ['Playfair Display', 'Georgia', 'serif']
 			},
 			screens: {
 				'xs': '375px',
@@ -154,6 +155,10 @@ export default {
 					'0%': { transform: 'scale(1)' },
 					'50%': { transform: 'scale(0.95)' },
 					'100%': { transform: 'scale(1)' }
+				},
+				'slide-shine': {
+					'0%': { transform: 'translateX(-100%) skewX(12deg)' },
+					'100%': { transform: 'translateX(200%) skewX(12deg)' }
 				}
 			},
 			animation: {
@@ -163,7 +168,8 @@ export default {
 				'pulse-heartbeat': 'pulse-heartbeat 2s infinite',
 				'heartbeat-line': 'heartbeat-line 3s infinite',
 				'fade-in-up': 'fade-in-up 0.6s ease-out',
-				'press': 'press 0.1s ease-out'
+				'press': 'press 0.1s ease-out',
+				'slide-shine': 'slide-shine 2s infinite'
 			},
 			animationDelay: {
 				'300': '300ms',

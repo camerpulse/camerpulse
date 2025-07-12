@@ -59,19 +59,19 @@ const defaultTheme: ThemeConfig = {
 const emergence2035Theme: ThemeConfig = {
   id: 'emergence-2035',
   name: 'Emergence 2035',
-  description: 'National pride and civic progress theme reflecting Cameroon\'s vision for 2035',
+  description: 'La Voix du Peuple - Professional civic democracy platform embodying Cameroon\'s national pride and democratic strength',
   isActive: false,
   colors: {
-    primary: 'hsl(12, 100%, 45%)', // Cameroon Red
-    secondary: 'hsl(145, 100%, 35%)', // Cameroon Green  
-    accent: 'hsl(48, 100%, 50%)', // Cameroon Yellow
-    background: 'hsl(0, 0%, 98%)',
-    card: 'hsl(0, 0%, 100%)',
-    text: 'hsl(0, 0%, 15%)'
+    primary: 'hsl(12, 85%, 35%)', // Deep Cameroon Red - Authority & Power
+    secondary: 'hsl(145, 75%, 25%)', // Rich Cameroon Green - Growth & Prosperity  
+    accent: 'hsl(48, 95%, 45%)', // Bold Cameroon Yellow - Hope & Unity
+    background: 'hsl(0, 0%, 97%)', // Presidential White
+    card: 'hsl(0, 0%, 99%)', // Pure White Cards
+    text: 'hsl(0, 0%, 8%)' // Executive Black Text
   },
   fonts: {
-    heading: 'Poppins',
-    body: 'Inter'
+    heading: 'Playfair Display', // Sophisticated serif for authority
+    body: 'Inter' // Clean modern sans-serif
   },
   components: {
     showCivicBanner: true,

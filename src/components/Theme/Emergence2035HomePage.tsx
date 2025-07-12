@@ -1,13 +1,21 @@
 import React from 'react'
-import { MonumentBackground } from './MonumentBackground'
-import { HeartbeatLogo } from './HeartbeatLogo'
-import { CivicBanner } from './CivicBanner'
+import { PresidentialHero } from './PresidentialHero'
+import { ImpactMetrics } from './ImpactMetrics'
+import { VoiceOfTheVoiceless } from './VoiceOfTheVoiceless'
 import { PartyGrid } from './PartyGrid'
-import { EmergenceFAB } from './EmergenceFAB'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { ArrowRight, Users, Vote, Shield, TrendingUp } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { 
+  Vote, 
+  Users, 
+  MessageSquare, 
+  TrendingUp, 
+  Shield, 
+  Heart,
+  ArrowRight,
+  Star
+} from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
 
@@ -18,168 +26,193 @@ interface Emergence2035HomePageProps {
 export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ className }) => {
   const navigate = useNavigate()
   const { user } = useAuth()
-  // Note: Theme context will provide component visibility settings
 
-  const quickActions = [
+  const powerfulActions = [
     {
-      title: "Pulse Feed",
-      description: "Suivez l'actualité politique",
-      icon: Users,
+      title: "Pulse Citoyen",
+      description: "Exprimez-vous, débattez, influencez les décisions nationales",
+      icon: MessageSquare,
       path: "/pulse",
-      color: "from-theme-primary to-theme-primary/80"
+      color: "from-theme-primary to-theme-primary/80",
+      highlight: "Votre voix compte"
     },
     {
-      title: "Sondages",
-      description: "Participez aux débats",
+      title: "Votes & Sondages",
+      description: "Participez aux consultations qui façonnent notre démocratie",
       icon: Vote,
       path: "/polls",
-      color: "from-theme-secondary to-theme-secondary/80"
+      color: "from-theme-secondary to-theme-secondary/80",
+      highlight: "Démocratie directe"
     },
     {
-      title: "Politiciens",
-      description: "Découvrez les leaders",
+      title: "Politiciens Transparents",
+      description: "Évaluez, suivez et exigez des comptes de vos représentants",
       icon: Shield,
       path: "/politicians",
-      color: "from-theme-accent to-theme-accent/80"
+      color: "from-theme-accent to-theme-accent/80",
+      highlight: "Transparence totale"
     },
     {
-      title: "Marketplace",
-      description: "Commerce équitable",
-      icon: TrendingUp,
-      path: "/marketplace",
-      color: "from-theme-primary to-theme-secondary"
+      title: "Engagement Social",
+      description: "Connectez-vous avec d'autres citoyens engagés",
+      icon: Users,
+      path: "/social",
+      color: "from-theme-primary via-theme-accent to-theme-secondary",
+      highlight: "Force collective"
     }
   ]
 
   return (
-    <div className={cn("relative min-h-screen overflow-hidden", className)}>
-      {/* Monument Background - Only show if theme setting enabled */}
-      <MonumentBackground className="text-theme-text" />
-      
-      {/* Patriotic gradient overlay for enhanced atmosphere */}
-      <div className="absolute inset-0 bg-gradient-to-br from-theme-background via-transparent to-theme-background/50 pointer-events-none z-[1]" />
-      
-      <div className="relative z-10 container mx-auto px-4 py-8 space-y-12">
-        {/* Hero Section with Heartbeat Logo - Conditional based on theme */}
-        <section className="text-center py-12 md:py-20">
-          <HeartbeatLogo showAnimation={true} />
-          
-          {/* Patriotic welcome message */}
-          <div className={cn(
-            "mt-8 p-6 rounded-2xl",
-            "bg-gradient-to-r from-theme-primary/5 via-theme-accent/5 to-theme-secondary/5",
-            "border border-theme-accent/20 backdrop-blur-sm",
-            "animate-fade-in-up animation-delay-500"
-          )}>
-            <p className={cn(
-              "text-lg md:text-xl text-theme-text/80 italic",
-              "font-[family-name:var(--theme-font-body)]"
-            )}>
-              "Unis dans la diversité, forts dans l'unité" 🇨🇲
-            </p>
-          </div>
-        </section>
+    <div className={cn("relative min-h-screen", className)}>
+      {/* Presidential Hero Section */}
+      <PresidentialHero />
 
-        {/* Civic Banner - Conditional rendering */}
-        <section>
-          <CivicBanner />
-        </section>
+      {/* Impact Metrics Dashboard */}
+      <ImpactMetrics />
 
-        {/* Quick Actions */}
-        <section className="space-y-8">
-          <div className="text-center">
+      {/* Powerful Actions Grid */}
+      <section className="py-20 bg-theme-card">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
             <h2 className={cn(
-              "text-2xl md:text-3xl font-bold text-theme-text mb-4",
+              "text-4xl md:text-5xl font-bold text-theme-text mb-6",
               "font-[family-name:var(--theme-font-heading)]"
             )}>
-              Agissez pour le Cameroun
+              Votre Pouvoir Démocratique
             </h2>
-            <p className="text-theme-text/70 max-w-2xl mx-auto">
-              Participez activement à la démocratie camerounaise avec nos outils d'engagement civique
+            <p className="text-xl text-theme-text/70 max-w-3xl mx-auto">
+              Quatre moyens puissants de participer activement à la démocratie camerounaise 
+              et d'influencer l'avenir de notre nation
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {quickActions.map((action) => {
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {powerfulActions.map((action, index) => {
               const IconComponent = action.icon
               return (
-                <Card 
-                  key={action.path}
+                <Card
+                  key={index}
                   className={cn(
-                    "group cursor-pointer transition-all duration-300 hover:shadow-lg",
+                    "group relative overflow-hidden cursor-pointer",
                     "border border-theme-accent/20 hover:border-theme-accent/40",
-                    "bg-gradient-to-br from-theme-card to-theme-card/80"
+                    "transition-all duration-500 hover:shadow-2xl transform hover:scale-[1.02]",
+                    "bg-gradient-to-br from-theme-card via-theme-background to-theme-card"
                   )}
                   onClick={() => navigate(action.path)}
                 >
-                  <CardContent className="p-6 text-center space-y-4">
+                  <CardContent className="p-8 relative">
+                    {/* Background gradient overlay */}
                     <div className={cn(
-                      "mx-auto w-16 h-16 rounded-full flex items-center justify-center",
-                      `bg-gradient-to-br ${action.color}`,
-                      "group-hover:scale-110 transition-transform duration-300"
-                    )}>
-                      <IconComponent className="h-8 w-8 text-white" />
-                    </div>
-                    
-                    <div>
+                      "absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500",
+                      `bg-gradient-to-br ${action.color}`
+                    )} />
+
+                    <div className="relative">
+                      {/* Highlight badge */}
+                      <div className={cn(
+                        "inline-flex items-center px-3 py-1 mb-4 text-xs font-bold rounded-full",
+                        "bg-gradient-to-r from-theme-accent/20 to-theme-accent/10",
+                        "border border-theme-accent/30 text-theme-accent"
+                      )}>
+                        <Star className="h-3 w-3 mr-1 fill-current" />
+                        {action.highlight}
+                      </div>
+
+                      {/* Icon */}
+                      <div className={cn(
+                        "p-4 rounded-2xl mb-6 inline-flex",
+                        `bg-gradient-to-br ${action.color}`,
+                        "group-hover:scale-110 transition-transform duration-300"
+                      )}>
+                        <IconComponent className="h-10 w-10 text-white" />
+                      </div>
+
+                      {/* Content */}
                       <h3 className={cn(
-                        "font-semibold text-theme-text group-hover:text-theme-primary transition-colors",
-                        "font-[family-name:var(--theme-font-heading)]"
+                        "text-2xl font-bold text-theme-text mb-4",
+                        "font-[family-name:var(--theme-font-heading)]",
+                        "group-hover:text-theme-primary transition-colors"
                       )}>
                         {action.title}
                       </h3>
-                      <p className="text-sm text-theme-text/70 mt-1">
+
+                      <p className="text-theme-text/70 mb-6 leading-relaxed">
                         {action.description}
                       </p>
-                    </div>
 
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="group-hover:bg-theme-primary/10 transition-colors"
-                    >
-                      Accéder
-                      <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
+                      {/* Action button */}
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "group-hover:bg-theme-primary/10 group-hover:border-theme-primary",
+                          "transition-all duration-300 font-medium"
+                        )}
+                      >
+                        Accéder
+                        <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               )
             })}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Political Parties Grid */}
-        <section>
+      {/* Voice of the Voiceless */}
+      <VoiceOfTheVoiceless />
+
+      {/* Political Parties Grid */}
+      <section className="py-20 bg-theme-background">
+        <div className="container mx-auto px-6">
           <PartyGrid />
-        </section>
+        </div>
+      </section>
 
-        {/* Call to Action */}
-        <section className={cn(
-          "text-center py-16 px-8 rounded-3xl",
-          "bg-gradient-to-r from-theme-primary/10 via-theme-accent/10 to-theme-secondary/10",
-          "border border-theme-accent/20"
-        )}>
+      {/* Presidential Call to Action */}
+      <section className={cn(
+        "py-20 relative overflow-hidden",
+        "bg-gradient-to-br from-theme-primary via-theme-accent to-theme-secondary"
+      )}>
+        {/* Presidential pattern overlay */}
+        <div className="absolute inset-0 opacity-10">
+          <svg className="w-full h-full" viewBox="0 0 100 100">
+            <defs>
+              <pattern id="presidential-cta-pattern" x="0" y="0" width="25" height="25" patternUnits="userSpaceOnUse">
+                <path d="M12.5 3 L15 10 L22 10 L16.5 15 L19 22 L12.5 18 L6 22 L8.5 15 L3 10 L10 10 Z" 
+                      fill="white" opacity="0.3"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#presidential-cta-pattern)"/>
+          </svg>
+        </div>
+
+        <div className="relative container mx-auto px-6 text-center">
           <h2 className={cn(
-            "text-3xl md:text-4xl font-bold text-theme-text mb-4",
+            "text-4xl md:text-5xl font-bold text-white mb-8",
             "font-[family-name:var(--theme-font-heading)]"
           )}>
-            Ensemble vers 2035
+            Ensemble, Bâtissons le Cameroun de 2035
           </h2>
-          <p className="text-lg text-theme-text/70 mb-8 max-w-3xl mx-auto">
-            Rejoignez le mouvement qui transforme le Cameroun. Votre engagement aujourd'hui façonne notre nation de demain.
-          </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <p className="text-xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
+            L'émergence n'est pas un rêve, c'est un engagement. Rejoignez le mouvement qui transforme 
+            notre nation grâce à l'engagement citoyen et la démocratie participative.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
             {!user && (
               <Button
                 onClick={() => navigate('/auth')}
                 className={cn(
-                  "bg-gradient-to-r from-theme-primary to-theme-secondary",
-                  "hover:opacity-90 transition-opacity",
-                  "text-white font-medium px-8 py-3 text-lg"
+                  "bg-white text-theme-primary hover:bg-white/90",
+                  "font-bold text-lg px-8 py-4 rounded-xl shadow-xl",
+                  "transform hover:scale-105 transition-all duration-300"
                 )}
               >
-                Rejoindre CamerPulse
+                <Heart className="h-5 w-5 mr-3" />
+                REJOINDRE LA RÉVOLUTION DÉMOCRATIQUE
               </Button>
             )}
             
@@ -187,18 +220,27 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
               variant="outline"
               onClick={() => navigate('/pulse')}
               className={cn(
-                "border-theme-primary text-theme-primary hover:bg-theme-primary/10",
-                "px-8 py-3 text-lg"
+                "border-white/30 text-white hover:bg-white/10",
+                "font-bold text-lg px-8 py-4 rounded-xl",
+                "backdrop-blur-sm"
               )}
             >
-              Explorer le Pulse
+              <TrendingUp className="h-5 w-5 mr-3" />
+              EXPLORER LE PULSE
             </Button>
           </div>
-        </section>
-      </div>
 
-      {/* Floating Action Button - Mobile Native Feel */}
-      <EmergenceFAB />
+          {/* National motto */}
+          <div className="mt-16 pt-8 border-t border-white/20">
+            <p className={cn(
+              "text-white/80 text-lg font-medium tracking-wide",
+              "font-[family-name:var(--theme-font-heading)]"
+            )}>
+              "PAIX • TRAVAIL • PATRIE" 🇨🇲
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   )
 }
