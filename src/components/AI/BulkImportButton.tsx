@@ -2,56 +2,63 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Download, Loader2 } from "lucide-react";
+import { Bot, Loader2, Zap } from "lucide-react";
 
 export const BulkImportButton = () => {
-  const [isImporting, setIsImporting] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const { toast } = useToast();
 
-  const handleBulkImport = async () => {
-    setIsImporting(true);
+  const runAutonomousAI = async () => {
+    setIsRunning(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('politica-ai-scanner', {
-        body: {
-          bulk_import: true,
-          target_type: 'political_party'
-        }
+      toast({
+        title: "🤖 Politica AI Activated",
+        description: "AI is now running autonomously: importing, verifying & updating all parties...",
       });
+
+      const { data, error } = await supabase.functions.invoke('politica-ai-manager');
 
       if (error) throw error;
 
       toast({
-        title: "Bulk Import Completed",
-        description: `Imported ${data.imported} new parties, updated ${data.updated} existing parties. Total found: ${data.total_found}`,
+        title: "✅ Autonomous Operation Complete",
+        description: data.message,
+        duration: 5000,
       });
 
       // Refresh the page to show new data
-      window.location.reload();
+      setTimeout(() => window.location.reload(), 1000);
     } catch (error) {
-      console.error('Bulk import error:', error);
+      console.error('Autonomous AI error:', error);
       toast({
-        title: "Import Failed",
-        description: error.message || "Failed to import parties from MINAT website",
+        title: "❌ AI Operation Failed",
+        description: error.message || "Failed to run autonomous AI operation",
         variant: "destructive",
       });
     } finally {
-      setIsImporting(false);
+      setIsRunning(false);
     }
   };
 
   return (
     <Button 
-      onClick={handleBulkImport} 
-      disabled={isImporting}
-      className="gap-2"
+      onClick={runAutonomousAI} 
+      disabled={isRunning}
+      className="gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
     >
-      {isImporting ? (
-        <Loader2 className="h-4 w-4 animate-spin" />
+      {isRunning ? (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <span>AI Running...</span>
+        </>
       ) : (
-        <Download className="h-4 w-4" />
+        <>
+          <Zap className="h-4 w-4" />
+          <Bot className="h-4 w-4" />
+          <span>Run Autonomous AI</span>
+        </>
       )}
-      {isImporting ? "Importing..." : "Import All Parties from MINAT"}
     </Button>
   );
 };
