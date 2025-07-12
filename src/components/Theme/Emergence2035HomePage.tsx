@@ -33,7 +33,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
       description: "Exprimez-vous, débattez, influencez les décisions nationales",
       icon: MessageSquare,
       path: "/pulse",
-      color: "from-theme-primary to-theme-primary/80",
+      gradient: "from-primary to-primary/80",
       highlight: "Votre voix compte"
     },
     {
@@ -41,7 +41,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
       description: "Participez aux consultations qui façonnent notre démocratie",
       icon: Vote,
       path: "/polls",
-      color: "from-theme-secondary to-theme-secondary/80",
+      gradient: "from-secondary to-accent",
       highlight: "Démocratie directe"
     },
     {
@@ -49,7 +49,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
       description: "Évaluez, suivez et exigez des comptes de vos représentants",
       icon: Shield,
       path: "/politicians",
-      color: "from-theme-accent to-theme-accent/80",
+      gradient: "from-accent to-accent/80",
       highlight: "Transparence totale"
     },
     {
@@ -57,7 +57,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
       description: "Connectez-vous avec d'autres citoyens engagés",
       icon: Users,
       path: "/social",
-      color: "from-theme-primary via-theme-accent to-theme-secondary",
+      gradient: "from-primary via-accent to-secondary",
       highlight: "Force collective"
     }
   ]
@@ -71,16 +71,16 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
       <ImpactMetrics />
 
       {/* Powerful Actions Grid */}
-      <section className="py-20 bg-theme-card">
+      <section className="py-20 bg-card">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className={cn(
-              "text-4xl md:text-5xl font-bold text-theme-text mb-6",
-              "font-[family-name:var(--theme-font-heading)]"
+              "text-4xl md:text-5xl font-bold text-foreground mb-6",
+              "font-['Playfair_Display',serif]"
             )}>
               Votre Pouvoir Démocratique
             </h2>
-            <p className="text-xl text-theme-text/70 max-w-3xl mx-auto">
+            <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
               Quatre moyens puissants de participer activement à la démocratie camerounaise 
               et d'influencer l'avenir de notre nation
             </p>
@@ -94,9 +94,9 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
                   key={index}
                   className={cn(
                     "group relative overflow-hidden cursor-pointer",
-                    "border border-theme-accent/20 hover:border-theme-accent/40",
+                    "border border-border hover:border-primary/40",
                     "transition-all duration-500 hover:shadow-2xl transform hover:scale-[1.02]",
-                    "bg-gradient-to-br from-theme-card via-theme-background to-theme-card"
+                    "bg-gradient-to-br from-card via-background to-card"
                   )}
                   onClick={() => navigate(action.path)}
                 >
@@ -104,15 +104,14 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
                     {/* Background gradient overlay */}
                     <div className={cn(
                       "absolute inset-0 opacity-0 group-hover:opacity-5 transition-opacity duration-500",
-                      `bg-gradient-to-br ${action.color}`
+                      `bg-gradient-to-br ${action.gradient}`
                     )} />
 
                     <div className="relative">
                       {/* Highlight badge */}
                       <div className={cn(
                         "inline-flex items-center px-3 py-1 mb-4 text-xs font-bold rounded-full",
-                        "bg-gradient-to-r from-theme-accent/20 to-theme-accent/10",
-                        "border border-theme-accent/30 text-theme-accent"
+                        "bg-accent/10 border border-accent/30 text-accent"
                       )}>
                         <Star className="h-3 w-3 mr-1 fill-current" />
                         {action.highlight}
@@ -121,7 +120,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
                       {/* Icon */}
                       <div className={cn(
                         "p-4 rounded-2xl mb-6 inline-flex",
-                        `bg-gradient-to-br ${action.color}`,
+                        `bg-gradient-to-br ${action.gradient}`,
                         "group-hover:scale-110 transition-transform duration-300"
                       )}>
                         <IconComponent className="h-10 w-10 text-white" />
@@ -129,14 +128,14 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
 
                       {/* Content */}
                       <h3 className={cn(
-                        "text-2xl font-bold text-theme-text mb-4",
-                        "font-[family-name:var(--theme-font-heading)]",
-                        "group-hover:text-theme-primary transition-colors"
+                        "text-2xl font-bold text-foreground mb-4",
+                        "font-['Playfair_Display',serif]",
+                        "group-hover:text-primary transition-colors"
                       )}>
                         {action.title}
                       </h3>
 
-                      <p className="text-theme-text/70 mb-6 leading-relaxed">
+                      <p className="text-foreground/70 mb-6 leading-relaxed">
                         {action.description}
                       </p>
 
@@ -144,7 +143,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
                       <Button
                         variant="outline"
                         className={cn(
-                          "group-hover:bg-theme-primary/10 group-hover:border-theme-primary",
+                          "group-hover:bg-primary/10 group-hover:border-primary",
                           "transition-all duration-300 font-medium"
                         )}
                       >
@@ -164,7 +163,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
       <VoiceOfTheVoiceless />
 
       {/* Political Parties Grid */}
-      <section className="py-20 bg-theme-background">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-6">
           <PartyGrid />
         </div>
@@ -173,7 +172,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
       {/* Presidential Call to Action */}
       <section className={cn(
         "py-20 relative overflow-hidden",
-        "bg-gradient-to-br from-theme-primary via-theme-accent to-theme-secondary"
+        "bg-gradient-to-br from-primary via-accent to-secondary"
       )}>
         {/* Presidential pattern overlay */}
         <div className="absolute inset-0 opacity-10">
@@ -191,7 +190,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
         <div className="relative container mx-auto px-6 text-center">
           <h2 className={cn(
             "text-4xl md:text-5xl font-bold text-white mb-8",
-            "font-[family-name:var(--theme-font-heading)]"
+            "font-['Playfair_Display',serif]"
           )}>
             Ensemble, Bâtissons le Cameroun de 2035
           </h2>
@@ -206,7 +205,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
               <Button
                 onClick={() => navigate('/auth')}
                 className={cn(
-                  "bg-white text-theme-primary hover:bg-white/90",
+                  "bg-white text-primary hover:bg-white/90",
                   "font-bold text-lg px-8 py-4 rounded-xl shadow-xl",
                   "transform hover:scale-105 transition-all duration-300"
                 )}
@@ -234,7 +233,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
           <div className="mt-16 pt-8 border-t border-white/20">
             <p className={cn(
               "text-white/80 text-lg font-medium tracking-wide",
-              "font-[family-name:var(--theme-font-heading)]"
+              "font-['Playfair_Display',serif]"
             )}>
               "PAIX • TRAVAIL • PATRIE" 🇨🇲
             </p>
