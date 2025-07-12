@@ -8,6 +8,7 @@ import Auth from "./pages/Auth";
 import PulseFeed from "./pages/PulseFeed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
+import Marketplace from "./pages/Marketplace";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 
@@ -26,6 +27,7 @@ const App = () => (
             <Route path="/pulse" element={<PulseFeed />} />
             <Route path="/politicians" element={<Politicians />} />
             <Route path="/security" element={<Security />} />
+            <Route path="/marketplace" element={<Marketplace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
