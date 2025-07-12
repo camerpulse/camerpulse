@@ -193,6 +193,53 @@
   .pull-indicator {
     @apply flex items-center justify-center py-2 text-muted-foreground;
   }
+  
+  /* Emergence 2035 Theme Animations */
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1.05); }
+    75% { transform: scale(1.15); }
+  }
+  
+  @keyframes heartbeat-line {
+    0%, 100% { opacity: 0.6; stroke-dasharray: 0, 100; }
+    50% { opacity: 1; stroke-dasharray: 50, 100; }
+  }
+  
+  @keyframes pulse-heartbeat {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+  
+  .animate-heartbeat {
+    animation: heartbeat 2s ease-in-out;
+  }
+  
+  .animate-heartbeat-line {
+    animation: heartbeat-line 2s ease-in-out;
+  }
+  
+  .animate-pulse-heartbeat {
+    animation: pulse-heartbeat 1s ease-in-out 3;
+  }
+  
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+  }
+  
+  .animation-delay-300 {
+    animation-delay: 0.3s;
+  }
+  
+  .animation-delay-500 {
+    animation-delay: 0.5s;
+  }
 
   /* Mobile safe areas */
   .safe-area-padding {

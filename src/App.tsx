@@ -22,6 +22,7 @@ import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 
 const queryClient = new QueryClient();
 
@@ -43,9 +44,10 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MobileProvider>
-        <AuthProvider>
-          <TooltipProvider>
+      <ThemeProvider>
+        <MobileProvider>
+          <AuthProvider>
+            <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -72,7 +74,8 @@ const App = () => {
         </TooltipProvider>
       </AuthProvider>
     </MobileProvider>
-  </QueryClientProvider>
+  </ThemeProvider>
+</QueryClientProvider>
   );
 };
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ThemeManagement } from "@/components/Theme/ThemeManagement";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -335,6 +336,10 @@ const Admin = () => {
                 <TabsTrigger value="pulse-feed" className="flex items-center gap-2">
                   <Activity className="h-4 w-4" />
                   Pulse & Forums
+                </TabsTrigger>
+                <TabsTrigger value="themes" className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Thèmes
                 </TabsTrigger>
                 <TabsTrigger value="ai-control" className="flex items-center gap-2">
                   <Bot className="h-4 w-4" />
@@ -920,6 +925,23 @@ const Admin = () => {
                         </Button>
                       </div>
                     </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* THEMES MANAGEMENT */}
+            <TabsContent value="themes">
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Settings className="h-5 w-5" />
+                      Gestion des Thèmes
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ThemeManagement />
                   </CardContent>
                 </Card>
               </div>
