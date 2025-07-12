@@ -415,16 +415,39 @@ function determineVerificationStatus(verifications: VerificationResult[], overal
 
 async function processScanResults(supabaseClient: any, scanResults: ScanResult, logId: string): Promise<void> {
   // Apply any necessary updates to the target record
-  const updatesNeeded = scanResults.verifications.filter(v => v.needs_update);
+  const updatesNeeded = scanResults.verifications.filter(v => v.needs_update && v.confidence >= 0.5);
   
   if (updatesNeeded.length > 0) {
     console.log(`Applying ${updatesNeeded.length} updates for ${scanResults.target_type}: ${scanResults.target_id}`);
     
-    // In a production system, you would apply the updates here
-    // For now, we'll just log them
+    // Build update object with high-confidence changes
+    const updateData: Record<string, any> = {};
+    const appliedUpdates: string[] = [];
+    
     updatesNeeded.forEach(update => {
-      console.log(`Would update ${update.field} from "${update.current_value}" to "${update.found_value}"`);
+      if (update.found_value && update.found_value !== update.current_value) {
+        updateData[update.field] = update.found_value;
+        appliedUpdates.push(update.field);
+        console.log(`Updating ${update.field} from "${update.current_value}" to "${update.found_value}" (confidence: ${update.confidence})`);
+      }
     });
+    
+    // Apply updates if we have any
+    if (Object.keys(updateData).length > 0) {
+      const table = scanResults.target_type === 'politician' ? 'politicians' : 'political_parties';
+      
+      const { error: updateError } = await supabaseClient
+        .from(table)
+        .update(updateData)
+        .eq('id', scanResults.target_id);
+      
+      if (updateError) {
+        console.error(`Error updating ${scanResults.target_type}:`, updateError);
+        throw updateError;
+      } else {
+        console.log(`Successfully updated ${scanResults.target_type} ${scanResults.target_id} with fields: ${appliedUpdates.join(', ')}`);
+      }
+    }
   }
 }
 
