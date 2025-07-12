@@ -29,36 +29,36 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
 
   const powerfulActions = [
     {
-      title: "Pulse Citoyen",
-      description: "Exprimez-vous, débattez, influencez les décisions nationales",
+      title: "Citizen Pulse",
+      description: "Express yourself, debate, influence national decisions",
       icon: MessageSquare,
       path: "/pulse",
       gradient: "from-primary to-primary/80",
-      highlight: "Votre voix compte"
+      highlight: "Your voice matters"
     },
     {
-      title: "Votes & Sondages",
-      description: "Participez aux consultations qui façonnent notre démocratie",
+      title: "Votes & Polls",
+      description: "Participate in consultations that shape our democracy",
       icon: Vote,
       path: "/polls",
       gradient: "from-secondary to-accent",
-      highlight: "Démocratie directe"
+      highlight: "Direct democracy"
     },
     {
-      title: "Politiciens Transparents",
-      description: "Évaluez, suivez et exigez des comptes de vos représentants",
+      title: "Transparent Politicians",
+      description: "Evaluate, follow and hold your representatives accountable",
       icon: Shield,
       path: "/politicians",
       gradient: "from-accent to-accent/80",
-      highlight: "Transparence totale"
+      highlight: "Total transparency"
     },
     {
-      title: "Engagement Social",
-      description: "Connectez-vous avec d'autres citoyens engagés",
+      title: "Social Engagement",
+      description: "Connect with other engaged citizens",
       icon: Users,
       path: "/social",
       gradient: "from-primary via-accent to-secondary",
-      highlight: "Force collective"
+      highlight: "Collective strength"
     }
   ]
 
@@ -78,11 +78,11 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
               "text-4xl md:text-5xl font-bold text-foreground mb-6",
               "font-['Playfair_Display',serif]"
             )}>
-              Votre Pouvoir Démocratique
+              Your Democratic Power
             </h2>
             <p className="text-xl text-foreground/70 max-w-3xl mx-auto">
-              Quatre moyens puissants de participer activement à la démocratie camerounaise 
-              et d'influencer l'avenir de notre nation
+              Four powerful ways to actively participate in Cameroonian democracy 
+              and influence the future of our nation
             </p>
           </div>
 
@@ -147,7 +147,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
                           "transition-all duration-300 font-medium"
                         )}
                       >
-                        Accéder
+                        Access
                         <ArrowRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />
                       </Button>
                     </div>
@@ -192,12 +192,12 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
             "text-4xl md:text-5xl font-bold text-white mb-8",
             "font-['Playfair_Display',serif]"
           )}>
-            Ensemble, Bâtissons le Cameroun de 2035
+            Together, Let's Build Cameroon 2035
           </h2>
           
           <p className="text-xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed">
-            L'émergence n'est pas un rêve, c'est un engagement. Rejoignez le mouvement qui transforme 
-            notre nation grâce à l'engagement citoyen et la démocratie participative.
+            Emergence is not a dream, it's a commitment. Join the movement that transforms 
+            our nation through citizen engagement and participatory democracy.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -211,7 +211,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
                 )}
               >
                 <Heart className="h-5 w-5 mr-3" />
-                REJOINDRE LA RÉVOLUTION DÉMOCRATIQUE
+                JOIN THE DEMOCRATIC REVOLUTION
               </Button>
             )}
             
@@ -225,7 +225,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
               )}
             >
               <TrendingUp className="h-5 w-5 mr-3" />
-              EXPLORER LE PULSE
+              EXPLORE THE PULSE
             </Button>
           </div>
 
@@ -235,7 +235,7 @@ export const Emergence2035HomePage: React.FC<Emergence2035HomePageProps> = ({ cl
               "text-white/80 text-lg font-medium tracking-wide",
               "font-['Playfair_Display',serif]"
             )}>
-              "PAIX • TRAVAIL • PATRIE" 🇨🇲
+              "PEACE • WORK • FATHERLAND" 🇨🇲
             </p>
           </div>
         </div>

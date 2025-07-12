@@ -55,7 +55,7 @@ export const PresidentialHero: React.FC<PresidentialHeroProps> = ({ className })
                 CAMERPULSE
               </span>
               <span className="block text-2xl md:text-3xl lg:text-4xl font-medium text-foreground/80 mt-2">
-                La Voix du Peuple
+                Voice of the People
               </span>
             </h1>
             
@@ -66,7 +66,7 @@ export const PresidentialHero: React.FC<PresidentialHeroProps> = ({ className })
               "text-foreground font-medium"
             )}>
               <Shield className="h-5 w-5 mr-3 text-primary" />
-              ÉMERGENCE 2035
+              EMERGENCE 2035
               <Star className="h-4 w-4 ml-3 text-accent fill-current" />
             </div>
           </div>
@@ -82,21 +82,21 @@ export const PresidentialHero: React.FC<PresidentialHeroProps> = ({ className })
               "text-xl md:text-2xl text-foreground/90 italic leading-relaxed",
               "font-['Playfair_Display',serif]"
             )}>
-              "Unis dans la diversité, nous bâtissons une nation où chaque voix compte, 
-              où la transparence guide nos actions, et où l'émergence de 2035 devient réalité."
+              "United in diversity, we build a nation where every voice matters, 
+              where transparency guides our actions, and where emergence 2035 becomes reality."
             </blockquote>
             <footer className="mt-6 text-foreground/70 font-medium">
-              — Vision Cameroun 2035
+              — Vision Cameroon 2035
             </footer>
           </div>
 
           {/* Power Statistics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
             {[
-              { number: "10M+", label: "Citoyens Connectés", icon: Users },
-              { number: "237", label: "Circonscriptions", icon: Shield },
-              { number: "85%", label: "Transparence", icon: TrendingUp },
-              { number: "2035", label: "Vision Émergence", icon: Star }
+              { number: "10M+", label: "Connected Citizens", icon: Users },
+              { number: "237", label: "Constituencies", icon: Shield },
+              { number: "85%", label: "Transparency", icon: TrendingUp },
+              { number: "2035", label: "Emergence Vision", icon: Star }
             ].map((stat, index) => {
               const IconComponent = stat.icon
               return (
@@ -135,7 +135,7 @@ export const PresidentialHero: React.FC<PresidentialHeroProps> = ({ className })
               "transition-all duration-300 transform hover:scale-105",
               "font-['Playfair_Display',serif]"
             )}>
-              <span>REJOINDRE LE MOUVEMENT</span>
+              <span>JOIN THE MOVEMENT</span>
               <ArrowRight className="h-5 w-5 ml-3 group-hover:translate-x-1 transition-transform" />
               
               {/* Power pulse effect */}

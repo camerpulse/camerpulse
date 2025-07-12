@@ -9,34 +9,34 @@ interface ImpactMetricsProps {
 export const ImpactMetrics: React.FC<ImpactMetricsProps> = ({ className }) => {
   const metrics = [
     {
-      title: "Engagement Civique",
+      title: "Civic Engagement",
       value: "2.3M",
       change: "+23%",
-      description: "Citoyens actifs ce mois",
+      description: "Active citizens this month",
       icon: Users,
       color: "primary"
     },
     {
-      title: "Transparence Politique", 
+      title: "Political Transparency", 
       value: "89%",
       change: "+12%",
-      description: "Score de transparence national",
+      description: "National transparency score",
       icon: Shield,
       color: "secondary"
     },
     {
-      title: "Croissance Démocratique",
+      title: "Democratic Growth",
       value: "156%",
       change: "+45%", 
-      description: "Participation aux débats",
+      description: "Debate participation",
       icon: TrendingUp,
       color: "accent"
     },
     {
-      title: "Impact Social",
+      title: "Social Impact",
       value: "4.7/5",
       change: "+0.8",
-      description: "Note de satisfaction citoyenne",
+      description: "Citizen satisfaction rating",
       icon: Award,
       color: "primary"
     }
@@ -88,10 +88,10 @@ export const ImpactMetrics: React.FC<ImpactMetricsProps> = ({ className }) => {
             "text-3xl md:text-4xl font-bold text-foreground mb-4",
             "font-['Playfair_Display',serif]"
           )}>
-            Impact Démocratique Mesuré
+            Measured Democratic Impact
           </h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            Des données en temps réel qui reflètent l'engagement civique et le progrès démocratique du Cameroun
+            Real-time data reflecting civic engagement and democratic progress in Cameroon
           </p>
         </div>
 
@@ -164,10 +164,10 @@ export const ImpactMetrics: React.FC<ImpactMetricsProps> = ({ className }) => {
                 "text-2xl font-bold text-foreground",
                 "font-['Playfair_Display',serif]"
               )}>
-                Progrès Émergence 2035
+                Emergence 2035 Progress
               </h3>
               <p className="text-foreground/70">
-                Objectifs de développement national
+                National development objectives
               </p>
             </div>
             <div className="text-right">
@@ -178,7 +178,7 @@ export const ImpactMetrics: React.FC<ImpactMetricsProps> = ({ className }) => {
                 73%
               </div>
               <div className="text-sm text-foreground/60">
-                Objectifs atteints
+                Objectives achieved
               </div>
             </div>
           </div>
