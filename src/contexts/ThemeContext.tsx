@@ -125,12 +125,12 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         .from('politica_ai_config')
         .select('config_value')
         .eq('config_key', 'active_theme')
-        .single()
+        .maybeSingle()
 
       console.log('Theme loading:', { data, error })
 
       if (!error && data?.config_value) {
-        const themeId = data.config_value as string
+        const themeId = String(data.config_value).replace(/"/g, '') // Remove quotes if present
         console.log('Found theme ID:', themeId)
         const theme = availableThemes.find(t => t.id === themeId)
         if (theme) {
