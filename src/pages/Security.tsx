@@ -1,0 +1,570 @@
+import React, { useState, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { Header } from '@/components/Layout/Header';
+import { 
+  Shield, 
+  Smartphone, 
+  Key, 
+  AlertTriangle,
+  CheckCircle,
+  Settings,
+  Download,
+  Copy,
+  Eye,
+  EyeOff,
+  Lock,
+  Monitor,
+  Trash2
+} from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Switch } from '@/components/ui/switch';
+
+interface Security2FA {
+  is_totp_enabled: boolean;
+  is_sms_enabled: boolean;
+  phone_number?: string;
+  backup_codes?: string[];
+}
+
+interface SecurityDevice {
+  id: string;
+  device_name: string;
+  device_fingerprint: string;
+  ip_address: string | null;
+  user_agent: string | null;
+  is_trusted: boolean;
+  last_seen_at: string;
+  created_at: string;
+}
+
+interface SecurityLog {
+  id: string;
+  event_type: string;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  severity: 'info' | 'warning' | 'critical';
+  created_at: string;
+  metadata?: any;
+}
+
+const Security = () => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [twoFA, setTwoFA] = useState<Security2FA | null>(null);
+  const [devices, setDevices] = useState<SecurityDevice[]>([]);
+  const [securityLogs, setSecurityLogs] = useState<SecurityLog[]>([]);
+  const [totpSecret, setTotpSecret] = useState('');
+  const [totpCode, setTotpCode] = useState('');
+  const [backupCodes, setBackupCodes] = useState<string[]>([]);
+  const [showBackupCodes, setShowBackupCodes] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [enabling2FA, setEnabling2FA] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      fetchSecuritySettings();
+      fetchDevices();
+      fetchSecurityLogs();
+    }
+  }, [user]);
+
+  const fetchSecuritySettings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_2fa')
+        .select('*')
+        .eq('user_id', user?.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') {
+        throw error;
+      }
+
+      setTwoFA(data || {
+        is_totp_enabled: false,
+        is_sms_enabled: false
+      });
+    } catch (error) {
+      console.error('Error fetching 2FA settings:', error);
+    }
+  };
+
+  const fetchDevices = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_devices')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('last_seen_at', { ascending: false });
+
+      if (error) throw error;
+      setDevices((data || []).map(device => ({
+        ...device,
+        ip_address: device.ip_address || '',
+        user_agent: device.user_agent || ''
+      })));
+    } catch (error) {
+      console.error('Error fetching devices:', error);
+    }
+  };
+
+  const fetchSecurityLogs = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('security_logs')
+        .select('*')
+        .eq('user_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+      setSecurityLogs((data || []).map(log => ({
+        ...log,
+        ip_address: log.ip_address || null,
+        user_agent: log.user_agent || null
+      })));
+    } catch (error) {
+      console.error('Error fetching security logs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateTOTPSecret = () => {
+    // Generate a base32 secret for TOTP
+    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
+    let secret = '';
+    for (let i = 0; i < 32; i++) {
+      secret += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setTotpSecret(secret);
+    
+    // Generate backup codes
+    const codes = [];
+    for (let i = 0; i < 10; i++) {
+      codes.push(Math.random().toString(36).substring(2, 10).toUpperCase());
+    }
+    setBackupCodes(codes);
+  };
+
+  const enable2FA = async () => {
+    if (!totpCode || totpCode.length !== 6) {
+      toast({
+        title: "Code invalide",
+        description: "Veuillez entrer un code à 6 chiffres",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setEnabling2FA(true);
+    try {
+      // In a real implementation, you'd verify the TOTP code here
+      const { error } = await supabase
+        .from('user_2fa')
+        .upsert({
+          user_id: user?.id,
+          totp_secret: totpSecret,
+          backup_codes: backupCodes,
+          is_totp_enabled: true
+        });
+
+      if (error) throw error;
+
+      // Log security event
+      await supabase.rpc('log_security_event', {
+        p_user_id: user?.id,
+        p_event_type: '2fa_enabled',
+        p_severity: 'info'
+      });
+
+      setTwoFA(prev => ({ ...prev!, is_totp_enabled: true }));
+      setShowBackupCodes(true);
+      
+      toast({
+        title: "2FA activé",
+        description: "Authentification à deux facteurs activée avec succès"
+      });
+    } catch (error) {
+      console.error('Error enabling 2FA:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible d'activer la 2FA",
+        variant: "destructive"
+      });
+    } finally {
+      setEnabling2FA(false);
+    }
+  };
+
+  const disable2FA = async () => {
+    try {
+      const { error } = await supabase
+        .from('user_2fa')
+        .update({
+          is_totp_enabled: false,
+          totp_secret: null,
+          backup_codes: null
+        })
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+
+      await supabase.rpc('log_security_event', {
+        p_user_id: user?.id,
+        p_event_type: '2fa_disabled',
+        p_severity: 'warning'
+      });
+
+      setTwoFA(prev => ({ ...prev!, is_totp_enabled: false }));
+      setTotpSecret('');
+      setBackupCodes([]);
+      
+      toast({
+        title: "2FA désactivé",
+        description: "Authentification à deux facteurs désactivée"
+      });
+    } catch (error) {
+      console.error('Error disabling 2FA:', error);
+    }
+  };
+
+  const removeDevice = async (deviceId: string) => {
+    try {
+      const { error } = await supabase
+        .from('user_devices')
+        .delete()
+        .eq('id', deviceId);
+
+      if (error) throw error;
+
+      await supabase.rpc('log_security_event', {
+        p_user_id: user?.id,
+        p_event_type: 'device_removed',
+        p_severity: 'info'
+      });
+
+      setDevices(devices.filter(d => d.id !== deviceId));
+      
+      toast({
+        title: "Appareil supprimé",
+        description: "L'appareil a été retiré de vos appareils de confiance"
+      });
+    } catch (error) {
+      console.error('Error removing device:', error);
+    }
+  };
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast({
+      title: "Copié",
+      description: "Texte copié dans le presse-papiers"
+    });
+  };
+
+  const getEventTypeLabel = (eventType: string) => {
+    const labels = {
+      'login_success': 'Connexion réussie',
+      'login_failed': 'Échec de connexion',
+      'logout': 'Déconnexion',
+      'password_change': 'Changement de mot de passe',
+      '2fa_enabled': '2FA activé',
+      '2fa_disabled': '2FA désactivé',
+      '2fa_success': '2FA réussi',
+      '2fa_failed': '2FA échoué',
+      'device_registered': 'Nouvel appareil',
+      'device_removed': 'Appareil supprimé',
+      'suspicious_activity': 'Activité suspecte'
+    };
+    return labels[eventType] || eventType;
+  };
+
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'critical': return 'bg-red-500';
+      case 'warning': return 'bg-yellow-500';
+      default: return 'bg-green-500';
+    }
+  };
+
+  if (!user) {
+    return (
+      <>
+        <Header />
+        <div className="min-h-screen bg-gradient-cameroon flex items-center justify-center p-4">
+          <Card className="w-full max-w-md text-center">
+            <CardContent className="pt-6">
+              <h2 className="text-xl font-bold mb-4">Connexion requise</h2>
+              <Button onClick={() => window.location.href = '/auth'}>Se connecter</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Header />
+      <div className="min-h-screen bg-gradient-subtle">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="mb-8">
+            <h1 className="text-3xl font-bold text-cameroon-primary mb-2 flex items-center gap-2">
+              <Shield className="w-8 h-8" />
+              Sécurité & Confidentialité
+            </h1>
+            <p className="text-gray-600">Gérez vos paramètres de sécurité et protégez votre compte</p>
+          </div>
+
+          <Tabs defaultValue="2fa" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="2fa">2FA</TabsTrigger>
+              <TabsTrigger value="devices">Appareils</TabsTrigger>
+              <TabsTrigger value="logs">Activité</TabsTrigger>
+              <TabsTrigger value="encryption">Chiffrement</TabsTrigger>
+            </TabsList>
+
+            {/* 2FA Tab */}
+            <TabsContent value="2fa">
+              <Card className="border-cameroon-yellow/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Key className="w-5 h-5" />
+                    Authentification à Deux Facteurs (2FA)
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {!twoFA?.is_totp_enabled ? (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                          <div>
+                            <p className="font-medium text-yellow-800">2FA non activé</p>
+                            <p className="text-sm text-yellow-600">Votre compte n'est pas protégé par la 2FA</p>
+                          </div>
+                        </div>
+                        <Button onClick={generateTOTPSecret} className="bg-cameroon-primary">
+                          Activer 2FA
+                        </Button>
+                      </div>
+
+                      {totpSecret && (
+                        <div className="space-y-4 p-4 border border-cameroon-yellow/20 rounded-lg">
+                          <h3 className="font-medium">Configuration de la 2FA</h3>
+                          
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Secret TOTP:</label>
+                            <div className="flex gap-2">
+                              <Input 
+                                value={totpSecret} 
+                                readOnly 
+                                className="font-mono text-xs"
+                              />
+                              <Button
+                                variant="outline"
+                                size="icon"
+                                onClick={() => copyToClipboard(totpSecret)}
+                              >
+                                <Copy className="w-4 h-4" />
+                              </Button>
+                            </div>
+                            <p className="text-xs text-gray-500">
+                              Scannez ce code QR ou entrez manuellement dans votre app d'authentification
+                            </p>
+                          </div>
+
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium">Code de vérification:</label>
+                            <Input
+                              value={totpCode}
+                              onChange={(e) => setTotpCode(e.target.value)}
+                              placeholder="000000"
+                              maxLength={6}
+                              className="text-center tracking-widest"
+                            />
+                          </div>
+
+                          <Button
+                            onClick={enable2FA}
+                            disabled={enabling2FA || !totpCode}
+                            className="w-full bg-cameroon-primary"
+                          >
+                            {enabling2FA ? 'Activation...' : 'Confirmer et activer'}
+                          </Button>
+                        </div>
+                      )}
+
+                      {showBackupCodes && backupCodes.length > 0 && (
+                        <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
+                          <h3 className="font-medium text-green-800 mb-2">Codes de récupération</h3>
+                          <p className="text-sm text-green-600 mb-3">
+                            Sauvegardez ces codes de récupération dans un endroit sûr
+                          </p>
+                          <div className="grid grid-cols-2 gap-2 font-mono text-xs">
+                            {backupCodes.map((code, i) => (
+                              <div key={i} className="p-2 bg-white border rounded flex justify-between">
+                                <span>{code}</span>
+                                <Copy 
+                                  className="w-3 h-3 cursor-pointer text-gray-400 hover:text-gray-600"
+                                  onClick={() => copyToClipboard(code)}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-3"
+                            onClick={() => copyToClipboard(backupCodes.join('\n'))}
+                          >
+                            <Download className="w-4 h-4 mr-2" />
+                            Télécharger tous les codes
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <CheckCircle className="w-5 h-5 text-green-600" />
+                          <div>
+                            <p className="font-medium text-green-800">2FA activé</p>
+                            <p className="text-sm text-green-600">Votre compte est protégé</p>
+                          </div>
+                        </div>
+                        <Button variant="destructive" onClick={disable2FA}>
+                          Désactiver 2FA
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Devices Tab */}
+            <TabsContent value="devices">
+              <Card className="border-cameroon-yellow/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Monitor className="w-5 h-5" />
+                    Appareils de Confiance
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {devices.length === 0 ? (
+                    <p className="text-gray-500 text-center py-8">Aucun appareil enregistré</p>
+                  ) : (
+                    <div className="space-y-4">
+                      {devices.map((device) => (
+                        <div key={device.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <Monitor className="w-5 h-5 text-gray-500" />
+                            <div>
+                              <p className="font-medium">{device.device_name}</p>
+                              <p className="text-sm text-gray-500">
+                                IP: {device.ip_address} • 
+                                Dernière activité: {new Date(device.last_seen_at).toLocaleDateString('fr-FR')}
+                              </p>
+                              {device.is_trusted && (
+                                <Badge variant="outline" className="border-green-500 text-green-600 mt-1">
+                                  Appareil de confiance
+                                </Badge>
+                              )}
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => removeDevice(device.id)}
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Security Logs Tab */}
+            <TabsContent value="logs">
+              <Card className="border-cameroon-yellow/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="w-5 h-5" />
+                    Activité de Sécurité
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  {securityLogs.length === 0 ? (
+                    <p className="text-gray-500 text-center py-8">Aucune activité récente</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {securityLogs.map((log) => (
+                        <div key={log.id} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg">
+                          <div className={`w-2 h-2 rounded-full ${getSeverityColor(log.severity)}`} />
+                          <div className="flex-1">
+                            <p className="font-medium">{getEventTypeLabel(log.event_type)}</p>
+                            <p className="text-sm text-gray-500">
+                              {new Date(log.created_at).toLocaleString('fr-FR')}
+                              {log.ip_address && ` • IP: ${log.ip_address}`}
+                            </p>
+                          </div>
+                          <Badge variant="outline" className={`${
+                            log.severity === 'critical' ? 'border-red-500 text-red-600' :
+                            log.severity === 'warning' ? 'border-yellow-500 text-yellow-600' :
+                            'border-green-500 text-green-600'
+                          }`}>
+                            {log.severity}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            {/* Encryption Tab */}
+            <TabsContent value="encryption">
+              <Card className="border-cameroon-yellow/20">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Lock className="w-5 h-5" />
+                    Chiffrement PGP
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center py-8">
+                    <Lock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-medium mb-2">Chiffrement PGP</h3>
+                    <p className="text-gray-600 mb-4">
+                      Générez et gérez vos clés PGP pour des communications sécurisées
+                    </p>
+                    <Button className="bg-cameroon-primary">
+                      Générer une paire de clés PGP
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default Security;

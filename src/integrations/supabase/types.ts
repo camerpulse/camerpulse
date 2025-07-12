@@ -88,6 +88,69 @@ export type Database = {
         }
         Relationships: []
       }
+      encrypted_messages: {
+        Row: {
+          created_at: string | null
+          encrypted_content: string
+          encryption_method: string | null
+          expires_at: string | null
+          id: string
+          is_anonymous: boolean | null
+          recipient_id: string
+          sender_id: string
+          signature_verified: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          encrypted_content: string
+          encryption_method?: string | null
+          expires_at?: string | null
+          id?: string
+          is_anonymous?: boolean | null
+          recipient_id: string
+          sender_id: string
+          signature_verified?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          encrypted_content?: string
+          encryption_method?: string | null
+          expires_at?: string | null
+          id?: string
+          is_anonymous?: boolean | null
+          recipient_id?: string
+          sender_id?: string
+          signature_verified?: boolean | null
+        }
+        Relationships: []
+      }
+      failed_login_attempts: {
+        Row: {
+          attempt_time: string | null
+          email: string
+          id: string
+          ip_address: unknown
+          reason: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          attempt_time?: string | null
+          email: string
+          id?: string
+          ip_address: unknown
+          reason?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          attempt_time?: string | null
+          email?: string
+          id?: string
+          ip_address?: unknown
+          reason?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string | null
@@ -246,6 +309,48 @@ export type Database = {
           source_name?: string | null
           source_url?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      password_policies: {
+        Row: {
+          id: string
+          lockout_duration_minutes: number | null
+          max_age_days: number | null
+          max_failed_attempts: number | null
+          min_length: number | null
+          prevent_reuse_count: number | null
+          require_lowercase: boolean | null
+          require_numbers: boolean | null
+          require_symbols: boolean | null
+          require_uppercase: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          lockout_duration_minutes?: number | null
+          max_age_days?: number | null
+          max_failed_attempts?: number | null
+          min_length?: number | null
+          prevent_reuse_count?: number | null
+          require_lowercase?: boolean | null
+          require_numbers?: boolean | null
+          require_symbols?: boolean | null
+          require_uppercase?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          lockout_duration_minutes?: number | null
+          max_age_days?: number | null
+          max_failed_attempts?: number | null
+          min_length?: number | null
+          prevent_reuse_count?: number | null
+          require_lowercase?: boolean | null
+          require_numbers?: boolean | null
+          require_symbols?: boolean | null
+          require_uppercase?: boolean | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -516,6 +621,153 @@ export type Database = {
         }
         Relationships: []
       }
+      security_logs: {
+        Row: {
+          created_at: string | null
+          device_fingerprint: string | null
+          event_type: string
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          severity: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          severity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          severity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_2fa: {
+        Row: {
+          backup_codes: string[] | null
+          created_at: string | null
+          id: string
+          is_sms_enabled: boolean | null
+          is_totp_enabled: boolean | null
+          last_used_at: string | null
+          phone_number: string | null
+          totp_secret: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          backup_codes?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_sms_enabled?: boolean | null
+          is_totp_enabled?: boolean | null
+          last_used_at?: string | null
+          phone_number?: string | null
+          totp_secret?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          backup_codes?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_sms_enabled?: boolean | null
+          is_totp_enabled?: boolean | null
+          last_used_at?: string | null
+          phone_number?: string | null
+          totp_secret?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_devices: {
+        Row: {
+          created_at: string | null
+          device_fingerprint: string
+          device_name: string
+          id: string
+          ip_address: unknown | null
+          is_trusted: boolean | null
+          last_seen_at: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          device_fingerprint: string
+          device_name: string
+          id?: string
+          ip_address?: unknown | null
+          is_trusted?: boolean | null
+          last_seen_at?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          device_fingerprint?: string
+          device_name?: string
+          id?: string
+          ip_address?: unknown | null
+          is_trusted?: boolean | null
+          last_seen_at?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_pgp_keys: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_primary: boolean | null
+          key_fingerprint: string
+          key_name: string
+          private_key_encrypted: string
+          public_key: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          key_fingerprint: string
+          key_name: string
+          private_key_encrypted: string
+          public_key: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          key_fingerprint?: string
+          key_name?: string
+          private_key_encrypted?: string
+          public_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           granted_at: string | null
@@ -555,6 +807,30 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
         }
         Returns: boolean
+      }
+      log_security_event: {
+        Args: {
+          p_user_id: string
+          p_event_type: string
+          p_ip_address?: unknown
+          p_user_agent?: string
+          p_metadata?: Json
+          p_severity?: string
+        }
+        Returns: string
+      }
+      register_user_device: {
+        Args: {
+          p_device_name: string
+          p_device_fingerprint: string
+          p_ip_address?: unknown
+          p_user_agent?: string
+        }
+        Returns: string
+      }
+      validate_password_strength: {
+        Args: { password: string }
+        Returns: Json
       }
     }
     Enums: {
