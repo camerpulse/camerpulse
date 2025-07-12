@@ -405,31 +405,44 @@ export type Database = {
         Row: {
           acronym: string | null
           approval_rating: number | null
+          auto_imported: boolean | null
+          claim_documents_url: string[] | null
+          claim_fee_paid: boolean | null
+          claim_payment_reference: string | null
+          claim_status: string | null
+          claimed_at: string | null
+          claimed_by: string | null
           contact_email: string | null
           contact_phone: string | null
           created_at: string
           development_rating: number | null
           founded_by: string[] | null
           founding_date: string | null
+          headquarters_address: string | null
           headquarters_city: string | null
           headquarters_region: string | null
           historical_promises: string[] | null
           id: string
           ideology: string | null
           is_active: boolean | null
+          is_claimable: boolean | null
+          is_claimed: boolean | null
           key_milestones: Json | null
           logo_url: string | null
           mayors_count: number | null
           media_gallery: string[] | null
           mission: string | null
+          mission_statement: string | null
           mps_count: number | null
           name: string
           official_website: string | null
+          party_history: Json | null
           party_president: string | null
           political_leaning: string | null
           promises_failed: number | null
           promises_fulfilled: number | null
           promises_ongoing: number | null
+          public_promises: Json | null
           secretary_general: string | null
           senators_count: number | null
           total_ratings: number | null
@@ -437,37 +450,52 @@ export type Database = {
           treasurer: string | null
           trust_rating: number | null
           updated_at: string
+          verification_notes: string | null
           vice_president: string | null
           vision: string | null
+          vision_statement: string | null
         }
         Insert: {
           acronym?: string | null
           approval_rating?: number | null
+          auto_imported?: boolean | null
+          claim_documents_url?: string[] | null
+          claim_fee_paid?: boolean | null
+          claim_payment_reference?: string | null
+          claim_status?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
           development_rating?: number | null
           founded_by?: string[] | null
           founding_date?: string | null
+          headquarters_address?: string | null
           headquarters_city?: string | null
           headquarters_region?: string | null
           historical_promises?: string[] | null
           id?: string
           ideology?: string | null
           is_active?: boolean | null
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
           key_milestones?: Json | null
           logo_url?: string | null
           mayors_count?: number | null
           media_gallery?: string[] | null
           mission?: string | null
+          mission_statement?: string | null
           mps_count?: number | null
           name: string
           official_website?: string | null
+          party_history?: Json | null
           party_president?: string | null
           political_leaning?: string | null
           promises_failed?: number | null
           promises_fulfilled?: number | null
           promises_ongoing?: number | null
+          public_promises?: Json | null
           secretary_general?: string | null
           senators_count?: number | null
           total_ratings?: number | null
@@ -475,37 +503,52 @@ export type Database = {
           treasurer?: string | null
           trust_rating?: number | null
           updated_at?: string
+          verification_notes?: string | null
           vice_president?: string | null
           vision?: string | null
+          vision_statement?: string | null
         }
         Update: {
           acronym?: string | null
           approval_rating?: number | null
+          auto_imported?: boolean | null
+          claim_documents_url?: string[] | null
+          claim_fee_paid?: boolean | null
+          claim_payment_reference?: string | null
+          claim_status?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
           contact_email?: string | null
           contact_phone?: string | null
           created_at?: string
           development_rating?: number | null
           founded_by?: string[] | null
           founding_date?: string | null
+          headquarters_address?: string | null
           headquarters_city?: string | null
           headquarters_region?: string | null
           historical_promises?: string[] | null
           id?: string
           ideology?: string | null
           is_active?: boolean | null
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
           key_milestones?: Json | null
           logo_url?: string | null
           mayors_count?: number | null
           media_gallery?: string[] | null
           mission?: string | null
+          mission_statement?: string | null
           mps_count?: number | null
           name?: string
           official_website?: string | null
+          party_history?: Json | null
           party_president?: string | null
           political_leaning?: string | null
           promises_failed?: number | null
           promises_fulfilled?: number | null
           promises_ongoing?: number | null
+          public_promises?: Json | null
           secretary_general?: string | null
           senators_count?: number | null
           total_ratings?: number | null
@@ -513,8 +556,10 @@ export type Database = {
           treasurer?: string | null
           trust_rating?: number | null
           updated_at?: string
+          verification_notes?: string | null
           vice_president?: string | null
           vision?: string | null
+          vision_statement?: string | null
         }
         Relationships: []
       }
