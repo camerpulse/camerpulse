@@ -312,6 +312,62 @@ export type Database = {
         }
         Relationships: []
       }
+      party_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_fee_amount: number
+          created_at: string
+          documents_uploaded: string[] | null
+          id: string
+          party_id: string
+          payment_method: string | null
+          payment_reference: string | null
+          payment_status: string | null
+          processed_at: string | null
+          processed_by: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_fee_amount?: number
+          created_at?: string
+          documents_uploaded?: string[] | null
+          id?: string
+          party_id: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_fee_amount?: number
+          created_at?: string
+          documents_uploaded?: string[] | null
+          id?: string
+          party_id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "party_claims_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       party_ratings: {
         Row: {
           approval_rating: number | null
@@ -563,6 +619,62 @@ export type Database = {
         }
         Relationships: []
       }
+      politician_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_fee_amount: number
+          created_at: string
+          documents_uploaded: string[] | null
+          id: string
+          payment_method: string | null
+          payment_reference: string | null
+          payment_status: string | null
+          politician_id: string
+          processed_at: string | null
+          processed_by: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_fee_amount?: number
+          created_at?: string
+          documents_uploaded?: string[] | null
+          id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          politician_id: string
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_fee_amount?: number
+          created_at?: string
+          documents_uploaded?: string[] | null
+          id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          politician_id?: string
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "politician_claims_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       politician_detailed_ratings: {
         Row: {
           comment: string | null
@@ -685,11 +797,21 @@ export type Database = {
       }
       politicians: {
         Row: {
+          auto_imported: boolean | null
           bio: string | null
+          biography: string | null
           birth_date: string | null
+          campaign_promises: Json | null
           career_background: string | null
           civic_score: number | null
+          claim_documents_url: string[] | null
+          claim_fee_paid: boolean | null
+          claim_payment_reference: string | null
+          claim_status: string | null
+          claimed_at: string | null
+          claimed_by: string | null
           constituency: string | null
+          contact_details: Json | null
           contact_office: string | null
           contact_phone: string | null
           contact_website: string | null
@@ -702,9 +824,12 @@ export type Database = {
           id: string
           integrity_rating: number | null
           is_archived: boolean | null
+          is_claimable: boolean | null
+          is_claimed: boolean | null
           level_of_office: string | null
           name: string
           party: string | null
+          performance_score: number | null
           political_party_id: string | null
           position_end_date: string | null
           position_start_date: string | null
@@ -712,18 +837,32 @@ export type Database = {
           promise_tracker: Json | null
           region: string | null
           role_title: string | null
+          term_end_date: string | null
+          term_start_date: string | null
+          timeline_events: Json | null
           timeline_roles: Json | null
           transparency_rating: number | null
           updated_at: string | null
           user_id: string | null
+          verification_notes: string | null
           verified: boolean | null
         }
         Insert: {
+          auto_imported?: boolean | null
           bio?: string | null
+          biography?: string | null
           birth_date?: string | null
+          campaign_promises?: Json | null
           career_background?: string | null
           civic_score?: number | null
+          claim_documents_url?: string[] | null
+          claim_fee_paid?: boolean | null
+          claim_payment_reference?: string | null
+          claim_status?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
           constituency?: string | null
+          contact_details?: Json | null
           contact_office?: string | null
           contact_phone?: string | null
           contact_website?: string | null
@@ -736,9 +875,12 @@ export type Database = {
           id?: string
           integrity_rating?: number | null
           is_archived?: boolean | null
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
           level_of_office?: string | null
           name: string
           party?: string | null
+          performance_score?: number | null
           political_party_id?: string | null
           position_end_date?: string | null
           position_start_date?: string | null
@@ -746,18 +888,32 @@ export type Database = {
           promise_tracker?: Json | null
           region?: string | null
           role_title?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          timeline_events?: Json | null
           timeline_roles?: Json | null
           transparency_rating?: number | null
           updated_at?: string | null
           user_id?: string | null
+          verification_notes?: string | null
           verified?: boolean | null
         }
         Update: {
+          auto_imported?: boolean | null
           bio?: string | null
+          biography?: string | null
           birth_date?: string | null
+          campaign_promises?: Json | null
           career_background?: string | null
           civic_score?: number | null
+          claim_documents_url?: string[] | null
+          claim_fee_paid?: boolean | null
+          claim_payment_reference?: string | null
+          claim_status?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
           constituency?: string | null
+          contact_details?: Json | null
           contact_office?: string | null
           contact_phone?: string | null
           contact_website?: string | null
@@ -770,9 +926,12 @@ export type Database = {
           id?: string
           integrity_rating?: number | null
           is_archived?: boolean | null
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
           level_of_office?: string | null
           name?: string
           party?: string | null
+          performance_score?: number | null
           political_party_id?: string | null
           position_end_date?: string | null
           position_start_date?: string | null
@@ -780,10 +939,14 @@ export type Database = {
           promise_tracker?: Json | null
           region?: string | null
           role_title?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          timeline_events?: Json | null
           timeline_roles?: Json | null
           transparency_rating?: number | null
           updated_at?: string | null
           user_id?: string | null
+          verification_notes?: string | null
           verified?: boolean | null
         }
         Relationships: [
