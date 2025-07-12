@@ -1,122 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* CamerPulse - Cameroonian Civic Intelligence Platform Design System */
-
 @layer base {
   :root {
-    /* Cameroonian Flag Colors - Primary Palette */
-    --cm-green: 120 60% 25%;           /* Deep Cameroonian Green */
-    --cm-green-light: 120 50% 35%;     /* Lighter green variant */
-    --cm-red: 0 75% 45%;               /* Cameroonian Red */
-    --cm-red-light: 0 65% 55%;         /* Lighter red variant */
-    --cm-yellow: 45 95% 50%;           /* Cameroonian Yellow/Gold */
-    --cm-yellow-light: 45 85% 60%;     /* Lighter yellow variant */
+    /* Core Brand Colors - Cameroon Flag Inspired */
+    --primary: 142 69% 32%;          /* Deep green #00A651 */
+    --primary-foreground: 0 0% 100%; /* White text */
     
-    /* Neutral & Supporting Colors */
-    --background: 0 0% 98%;
-    --foreground: 0 0% 8%;
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 10%;
+    --secondary: 46 100% 50%;        /* Bright yellow #FFD700 */
+    --secondary-foreground: 0 0% 0%; /* Black text */
     
-    /* Primary uses Cameroonian Green */
-    --primary: 120 60% 25%;
-    --primary-foreground: 0 0% 98%;
-    --primary-glow: 120 50% 35%;
+    --accent: 0 84% 54%;             /* Rich red #DC2626 */
+    --accent-foreground: 0 0% 100%;  /* White text */
     
-    /* Secondary uses Cameroonian Red */
-    --secondary: 0 75% 45%;
-    --secondary-foreground: 0 0% 98%;
+    /* Semantic Colors */
+    --background: 0 0% 100%;         /* White */
+    --foreground: 222 84% 5%;        /* Near black */
     
-    /* Accent uses Cameroonian Yellow */
-    --accent: 45 95% 50%;
-    --accent-foreground: 0 0% 15%;
+    --card: 0 0% 100%;               /* White */
+    --card-foreground: 222 84% 5%;   /* Near black */
     
-    /* Muted colors */
-    --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 40%;
+    --popover: 0 0% 100%;            /* White */
+    --popover-foreground: 222 84% 5%; /* Near black */
     
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
+    --muted: 210 40% 96%;            /* Light gray */
+    --muted-foreground: 215 16% 47%; /* Medium gray */
     
-    --border: 0 0% 90%;
-    --input: 0 0% 95%;
-    --ring: 120 60% 25%;
-
-    --radius: 0.75rem;
+    --border: 214 32% 91%;           /* Light border */
+    --input: 214 32% 91%;            /* Input background */
+    --ring: 142 69% 32%;             /* Focus ring - primary */
     
-    /* Cameroonian Gradients */
-    --gradient-flag: linear-gradient(135deg, hsl(var(--cm-green)), hsl(var(--cm-red)), hsl(var(--cm-yellow)));
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-civic: linear-gradient(180deg, hsl(var(--cm-green)), hsl(var(--cm-green-light)));
-    --gradient-pulse: linear-gradient(90deg, hsl(var(--cm-red)), hsl(var(--cm-yellow)));
+    /* Status Colors */
+    --destructive: 0 84% 60%;        /* Red */
+    --destructive-foreground: 0 0% 100%; /* White */
     
-    /* Shadows with Cameroonian colors */
-    --shadow-green: 0 10px 30px -10px hsl(var(--cm-green) / 0.3);
-    --shadow-red: 0 10px 30px -10px hsl(var(--cm-red) / 0.3);
-    --shadow-yellow: 0 10px 30px -10px hsl(var(--cm-yellow) / 0.3);
-    --shadow-elegant: 0 20px 40px -15px hsl(var(--primary) / 0.25);
+    /* Cameroon Specific */
+    --cm-green: 142 69% 32%;         /* Cameroon green */
+    --cm-yellow: 46 100% 50%;        /* Cameroon yellow */
+    --cm-red: 0 84% 54%;             /* Cameroon red */
+    
+    /* Gradients */
+    --gradient-civic: linear-gradient(135deg, hsl(var(--cm-green)), hsl(var(--cm-green)) 60%, hsl(var(--cm-yellow)) 100%);
+    --gradient-flag: linear-gradient(to right, hsl(var(--cm-green)) 33%, hsl(var(--cm-red)) 33%, hsl(var(--cm-red)) 66%, hsl(var(--cm-yellow)) 66%);
+    
+    /* Shadows */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
+    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.4);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    --radius: 0.75rem; /* 12px rounded corners */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Dark Mode Colors */
+    --background: 222 84% 5%;        /* Very dark */
+    --foreground: 210 40% 98%;       /* Nearly white */
+    
+    --card: 222 84% 5%;              /* Dark card */
+    --card-foreground: 210 40% 98%;  /* Light text */
+    
+    --popover: 222 84% 5%;           /* Dark popover */
+    --popover-foreground: 210 40% 98%; /* Light text */
+    
+    --primary: 142 69% 40%;          /* Slightly lighter green */
+    --primary-foreground: 0 0% 100%; /* White text */
+    
+    --secondary: 46 100% 60%;        /* Slightly muted yellow */
+    --secondary-foreground: 0 0% 0%; /* Black text */
+    
+    --muted: 217 33% 17%;            /* Dark muted */
+    --muted-foreground: 215 20% 65%; /* Light muted text */
+    
+    --accent: 0 84% 60%;             /* Bright red */
+    --accent-foreground: 0 0% 100%;  /* White text */
+    
+    --destructive: 0 63% 31%;        /* Dark red */
+    --destructive-foreground: 0 0% 100%; /* White text */
+    
+    --border: 217 33% 17%;           /* Dark border */
+    --input: 217 33% 17%;            /* Dark input */
+    --ring: 142 69% 40%;             /* Focus ring */
+    
+    /* Dark mode gradients */
+    --gradient-civic: linear-gradient(135deg, hsl(var(--primary)), hsl(217 33% 17%));
   }
 }
 
@@ -124,8 +94,73 @@
   * {
     @apply border-border;
   }
-
+  
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-inter;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    /* Optimize for mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Mobile optimizations */
+  html {
+    /* Prevent zoom on input focus in iOS */
+    -webkit-text-size-adjust: 100%;
+    /* Enable momentum scrolling */
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Remove tap highlight on mobile */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  
+  /* Better touch targets */
+  button, a, input, select, textarea {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* PWA specific styles */
+  @media (display-mode: standalone) {
+    body {
+      /* Add safe area padding for PWA */
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+      padding-left: env(safe-area-inset-left);
+      padding-right: env(safe-area-inset-right);
+    }
+  }
+}
+
+@layer utilities {
+  /* Custom Cameroon gradients */
+  .bg-gradient-civic {
+    background: var(--gradient-civic);
+  }
+  
+  .bg-gradient-flag {
+    background: var(--gradient-flag);
+  }
+  
+  /* Mobile-first responsive text */
+  .text-responsive {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+  
+  /* Better mobile scrolling */
+  .scroll-smooth-mobile {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Custom shadows */
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
+  }
+  
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
   }
 }

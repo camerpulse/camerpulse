@@ -1,232 +1,203 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { DarkModeToggle } from "@/components/ui/dark-mode-toggle";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
-  Heart, 
-  MessageCircle, 
-  Users, 
-  TrendingUp, 
-  ShoppingBag, 
-  Shield,
-  Building2,
-  Menu,
-  X,
-  Star,
-  Globe,
-  LogOut,
-  Settings,
+  Bell, 
+  ChevronDown, 
+  LogOut, 
+  Menu, 
+  Settings, 
   User,
-  Search,
-  Bell
-} from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+  Globe,
+  X
+} from "lucide-react";
 
 export const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { user, profile, signOut, loading } = useAuth();
+  const { user, signOut } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [language, setLanguage] = useState('EN');
   const navigate = useNavigate();
 
-  const handleAuthAction = () => {
-    if (user) {
-      signOut();
-    } else {
-      navigate('/auth');
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate('/');
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
   };
 
-  const navItems = [
-    { name: 'Pulse Feed', name_fr: 'Flux Pulse', icon: MessageCircle, href: '/pulse' },
-    { name: 'Politicians', name_fr: 'Politiciens', icon: Users, href: '/politicians' },
-    { name: 'Parties', name_fr: 'Partis', icon: Building2, href: '/political-parties' },
-    { name: 'Polls', name_fr: 'Sondages', icon: TrendingUp, href: '/polls' },
-    { name: 'Marketplace', name_fr: 'Marché', icon: ShoppingBag, href: '/marketplace' },
-    { name: 'Social', name_fr: 'Social', icon: Users, href: '/social' },
-    { name: 'News', name_fr: 'Actualités', icon: Globe, href: '/news' }
-  ];
+  const toggleLanguage = () => {
+    setLanguage(language === 'EN' ? 'FR' : 'EN');
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
   return (
-    <header className="bg-gradient-civic border-b border-border/50 backdrop-blur-sm sticky top-0 z-50 shadow-elegant">
-      <div className="container mx-auto px-4 py-3">
-        <div className="flex items-center justify-between">
+    <header className="bg-gradient-civic border-b border-border/50 backdrop-blur-sm sticky top-0 z-50 shadow-elegant pt-safe-top">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
           {/* Logo & Branding */}
-          <div className="flex items-center space-x-3 cursor-pointer" onClick={() => navigate('/')}>
+          <Link to="/" className="flex items-center space-x-3">
             <div className="relative">
-              <div className="w-10 h-10 bg-gradient-flag rounded-full flex items-center justify-center shadow-lg">
-                <Star className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+                <span className="text-primary font-bold text-lg">CP</span>
               </div>
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-cm-yellow rounded-full border-2 border-white"></div>
             </div>
-            <div>
-              <h1 className="text-xl font-bold text-primary-foreground">CamerPulse</h1>
-              <p className="text-xs text-primary-foreground/80">Tracking the Heartbeat of Cameroon 🇨🇲</p>
+            <div className="hidden sm:block">
+              <h1 className="text-xl font-bold text-white font-poppins">CamerPulse</h1>
+              <p className="text-white/80 text-xs">Civic SuperApp</p>
             </div>
-          </div>
+          </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
-            {navItems.map((item) => (
-              <Button
-                key={item.href}
-                variant="ghost"
-                size="sm"
-                className="text-primary-foreground hover:bg-white/10 hover:text-white transition-smooth"
-                onClick={() => navigate(item.href)}
-              >
-                <item.icon className="w-4 h-4 mr-2" />
-                {item.name}
-              </Button>
-            ))}
+          {/* Desktop Navigation - Hidden on mobile */}
+          <nav className="hidden lg:flex items-center space-x-1">
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/pulse">Pulse Feed</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/politicians">Politicians</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/marketplace">Marketplace</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/news">News</Link>
+            </Button>
           </nav>
 
-          {/* Action Buttons */}
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10 hidden sm:flex">
-              <Search className="h-4 w-4" />
+          {/* Right side actions */}
+          <div className="flex items-center space-x-2">
+            {/* Language Toggle */}
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-white hover:bg-white/10 text-xs hidden sm:flex"
+              onClick={toggleLanguage}
+            >
+              <Globe className="w-4 h-4 mr-1" />
+              {language}
             </Button>
-            
-            {user && (
-              <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10">
-                <Bell className="h-4 w-4" />
-              </Button>
-            )}
 
-            <Badge variant="secondary" className="bg-cm-yellow text-cm-yellow-foreground hidden sm:flex cursor-pointer" onClick={() => navigate('/donate')}>
-              <Heart className="w-3 h-3 mr-1" />
-              Donate
-            </Badge>
-            
+            {/* Dark Mode Toggle */}
+            <DarkModeToggle size="sm" className="text-white hover:bg-white/10" />
+
+            {/* Notifications */}
+            <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 relative">
+              <Bell className="w-4 h-4" />
+              <Badge className="absolute -top-1 -right-1 w-4 h-4 p-0 text-[10px] bg-destructive text-white border-0 flex items-center justify-center">
+                3
+              </Badge>
+            </Button>
+
+            {/* User Menu or Auth Buttons */}
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-white/10 relative">
+                  <Button variant="ghost" className="text-white hover:bg-white/10 gap-2">
                     <Avatar className="h-8 w-8">
-                      <AvatarImage src={profile?.avatar_url} />
-                      <AvatarFallback className="bg-cameroon-yellow text-cameroon-primary">
-                        {profile?.username?.[0]?.toUpperCase() || 'U'}
+                      <AvatarImage src={user.user_metadata?.avatar_url} />
+                      <AvatarFallback className="text-primary text-xs bg-white">
+                        {user.email?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    {profile?.is_diaspora && (
-                      <div className="absolute -top-1 -right-1 w-3 h-3 bg-cameroon-yellow rounded-full border border-white" title="Diaspora" />
-                    )}
+                    <div className="hidden sm:block text-left">
+                      <div className="text-sm font-medium">
+                        {user.user_metadata?.full_name || user.email?.split('@')[0]}
+                      </div>
+                      <div className="text-xs text-white/70">
+                        {user.email}
+                      </div>
+                    </div>
+                    <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-white border-cameroon-yellow/20">
-                  <div className="px-3 py-2">
-                    <p className="text-sm font-medium text-cameroon-primary">
-                      {profile?.display_name || profile?.username}
-                    </p>
-                    <p className="text-xs text-gray-500">@{profile?.username}</p>
-                    {profile?.is_diaspora && (
-                      <p className="text-xs text-cameroon-yellow flex items-center gap-1 mt-1">
-                        🌍 Diaspora
-                      </p>
-                    )}
-                  </div>
+                <DropdownMenuContent align="end" className="w-56 bg-white border-border/20">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigate('/profile')}>
-                    <User className="mr-2 h-4 w-4" />
-                    Profil
+                  <DropdownMenuItem asChild>
+                    <Link to="/social" className="cursor-pointer">
+                      <User className="mr-2 h-4 w-4" />
+                      Profile
+                    </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigate('/settings')}>
+                  <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
-                    Paramètres
+                    Settings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleAuthAction} className="text-red-600">
+                  <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4" />
-                    Déconnexion
+                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Button 
-                onClick={handleAuthAction} 
-                variant="secondary" 
-                size="sm"
-                className="bg-cm-yellow text-cm-yellow-foreground hover:bg-cm-yellow/90"
-                disabled={loading}
-              >
-                <Shield className="w-4 h-4 mr-2" />
-                {loading ? "..." : "Login"}
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button asChild variant="ghost" size="sm" className="text-white hover:bg-white/10">
+                  <Link to="/auth">Sign In</Link>
+                </Button>
+                <Button asChild size="sm" className="bg-white text-primary hover:bg-white/90">
+                  <Link to="/auth">Sign Up</Link>
+                </Button>
+              </div>
             )}
 
             {/* Mobile Menu Toggle */}
             <Button
               variant="ghost"
               size="sm"
-              className="md:hidden text-primary-foreground"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="lg:hidden text-white hover:bg-white/10"
+              onClick={toggleMobileMenu}
             >
-              {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <nav className="md:hidden mt-4 pb-4 border-t border-white/20">
-            <div className="space-y-2 pt-4">
-              {user && (
-                <div className="px-3 py-2 bg-white/10 rounded-lg mb-3">
-                  <p className="text-sm font-medium text-primary-foreground">
-                    {profile?.display_name || profile?.username}
-                  </p>
-                  <p className="text-xs text-primary-foreground/60">@{profile?.username}</p>
-                  {profile?.is_diaspora && (
-                    <p className="text-xs text-cm-yellow flex items-center gap-1 mt-1">
-                      🌍 Diaspora
-                    </p>
-                  )}
-                </div>
-              )}
-              
-              {navItems.map((item) => (
-                <Button
-                  key={item.href}
-                  variant="ghost"
-                  className="w-full justify-start text-primary-foreground hover:bg-white/10"
-                  onClick={() => {
-                    navigate(item.href);
-                    setIsMenuOpen(false);
-                  }}
-                >
-                  <item.icon className="w-4 h-4 mr-3" />
-                  <span>{item.name}</span>
-                  <span className="text-xs text-primary-foreground/60 ml-2">/ {item.name_fr}</span>
-                </Button>
-              ))}
-              
-              {user && (
-                <>
-                  <DropdownMenuSeparator className="bg-white/20" />
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-primary-foreground hover:bg-white/10"
-                    onClick={() => {
-                      navigate('/profile');
-                      setIsMenuOpen(false);
-                    }}
-                  >
-                    <User className="w-4 h-4 mr-3" />
-                    Profil
-                  </Button>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start text-red-400 hover:bg-red-500/10"
-                    onClick={() => {
-                      handleAuthAction();
-                      setIsMenuOpen(false);
-                    }}
-                  >
-                    <LogOut className="w-4 h-4 mr-3" />
-                    Déconnexion
-                  </Button>
-                </>
-              )}
+        {/* Mobile Menu - Only visible when toggled */}
+        {mobileMenuOpen && (
+          <nav className="lg:hidden mt-4 pb-4 border-t border-white/20">
+            <div className="grid grid-cols-2 gap-2 mt-4">
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/pulse" onClick={() => setMobileMenuOpen(false)}>Pulse Feed</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>Politicians</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/marketplace" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/news" onClick={() => setMobileMenuOpen(false)}>News</Link>
+              </Button>
+            </div>
+
+            {/* Mobile Language Toggle */}
+            <div className="mt-4 pt-4 border-t border-white/20">
+              <Button 
+                variant="ghost" 
+                className="text-white hover:bg-white/10 w-full justify-start"
+                onClick={toggleLanguage}
+              >
+                <Globe className="w-4 h-4 mr-2" />
+                Language: {language}
+              </Button>
             </div>
           </nav>
         )}

@@ -1,3 +1,4 @@
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,36 +24,53 @@ import { AuthProvider } from "./contexts/AuthContext";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/pulse" element={<PulseFeed />} />
-            <Route path="/politicians" element={<Politicians />} />
-            <Route path="/security" element={<Security />} />
-            <Route path="/marketplace" element={<Marketplace />} />
-            <Route path="/political-parties" element={<PoliticalParties />} />
-            <Route path="/donate" element={<Donations />} />
-            <Route path="/social" element={<Social />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/political-parties" element={<PoliticalParties />} />
-            <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/politica-ai" element={<PoliticaAI />} />
-            <Route path="/marketplace/order-success" element={<OrderSuccess />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  React.useEffect(() => {
+    // Register service worker for PWA functionality
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered: ', registration);
+          })
+          .catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
+    }
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/pulse" element={<PulseFeed />} />
+              <Route path="/politicians" element={<Politicians />} />
+              <Route path="/security" element={<Security />} />
+              <Route path="/marketplace" element={<Marketplace />} />
+              <Route path="/political-parties" element={<PoliticalParties />} />
+              <Route path="/donate" element={<Donations />} />
+              <Route path="/social" element={<Social />} />
+              <Route path="/news" element={<News />} />
+              <Route path="/political-parties" element={<PoliticalParties />} />
+              <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/politica-ai" element={<PoliticaAI />} />
+              <Route path="/marketplace/order-success" element={<OrderSuccess />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
