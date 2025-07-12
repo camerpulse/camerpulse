@@ -172,6 +172,351 @@ export type Database = {
         }
         Relationships: []
       }
+      lux_aeterna_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          affected_regions: string[] | null
+          alert_type: string
+          auto_generated: boolean | null
+          created_at: string
+          description: string | null
+          id: string
+          recommended_actions: string[] | null
+          related_content_ids: string[] | null
+          sentiment_data: Json | null
+          severity: string
+          title: string
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_regions?: string[] | null
+          alert_type: string
+          auto_generated?: boolean | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          recommended_actions?: string[] | null
+          related_content_ids?: string[] | null
+          sentiment_data?: Json | null
+          severity: string
+          title: string
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_regions?: string[] | null
+          alert_type?: string
+          auto_generated?: boolean | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          recommended_actions?: string[] | null
+          related_content_ids?: string[] | null
+          sentiment_data?: Json | null
+          severity?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      lux_aeterna_config: {
+        Row: {
+          auto_updated: boolean | null
+          config_key: string
+          config_type: string
+          config_value: Json
+          created_at: string
+          description: string | null
+          id: string
+          last_evolution_update: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_updated?: boolean | null
+          config_key: string
+          config_type: string
+          config_value: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          last_evolution_update?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_updated?: boolean | null
+          config_key?: string
+          config_type?: string
+          config_value?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          last_evolution_update?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      lux_aeterna_influencers: {
+        Row: {
+          content_categories: string[] | null
+          created_at: string
+          credibility_score: number | null
+          engagement_rate: number | null
+          follower_count: number | null
+          handle: string
+          id: string
+          influence_score: number | null
+          last_active_at: string | null
+          manipulation_risk: number | null
+          platform: string
+          political_leaning: string | null
+          sentiment_impact: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          content_categories?: string[] | null
+          created_at?: string
+          credibility_score?: number | null
+          engagement_rate?: number | null
+          follower_count?: number | null
+          handle: string
+          id?: string
+          influence_score?: number | null
+          last_active_at?: string | null
+          manipulation_risk?: number | null
+          platform: string
+          political_leaning?: string | null
+          sentiment_impact?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          content_categories?: string[] | null
+          created_at?: string
+          credibility_score?: number | null
+          engagement_rate?: number | null
+          follower_count?: number | null
+          handle?: string
+          id?: string
+          influence_score?: number | null
+          last_active_at?: string | null
+          manipulation_risk?: number | null
+          platform?: string
+          political_leaning?: string | null
+          sentiment_impact?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      lux_aeterna_learning_logs: {
+        Row: {
+          applied_at: string | null
+          confidence_improvement: number | null
+          created_at: string
+          id: string
+          input_data: Json
+          learning_type: string
+          model_adjustment: Json | null
+          pattern_identified: string | null
+          validation_score: number | null
+        }
+        Insert: {
+          applied_at?: string | null
+          confidence_improvement?: number | null
+          created_at?: string
+          id?: string
+          input_data: Json
+          learning_type: string
+          model_adjustment?: Json | null
+          pattern_identified?: string | null
+          validation_score?: number | null
+        }
+        Update: {
+          applied_at?: string | null
+          confidence_improvement?: number | null
+          created_at?: string
+          id?: string
+          input_data?: Json
+          learning_type?: string
+          model_adjustment?: Json | null
+          pattern_identified?: string | null
+          validation_score?: number | null
+        }
+        Relationships: []
+      }
+      lux_aeterna_regional_sentiment: {
+        Row: {
+          content_volume: number | null
+          created_at: string
+          date_recorded: string
+          dominant_emotions: string[] | null
+          id: string
+          notable_events: string[] | null
+          overall_sentiment: number | null
+          region: string
+          sentiment_breakdown: Json | null
+          threat_level: string | null
+          top_concerns: string[] | null
+          trending_hashtags: string[] | null
+        }
+        Insert: {
+          content_volume?: number | null
+          created_at?: string
+          date_recorded?: string
+          dominant_emotions?: string[] | null
+          id?: string
+          notable_events?: string[] | null
+          overall_sentiment?: number | null
+          region: string
+          sentiment_breakdown?: Json | null
+          threat_level?: string | null
+          top_concerns?: string[] | null
+          trending_hashtags?: string[] | null
+        }
+        Update: {
+          content_volume?: number | null
+          created_at?: string
+          date_recorded?: string
+          dominant_emotions?: string[] | null
+          id?: string
+          notable_events?: string[] | null
+          overall_sentiment?: number | null
+          region?: string
+          sentiment_breakdown?: Json | null
+          threat_level?: string | null
+          top_concerns?: string[] | null
+          trending_hashtags?: string[] | null
+        }
+        Relationships: []
+      }
+      lux_aeterna_sentiment_logs: {
+        Row: {
+          author_handle: string | null
+          author_influence_score: number | null
+          confidence_score: number | null
+          content_category: string[] | null
+          content_id: string | null
+          content_text: string
+          created_at: string
+          emotional_tone: string[] | null
+          engagement_metrics: Json | null
+          flagged_for_review: boolean | null
+          hashtags: string[] | null
+          id: string
+          keywords_detected: string[] | null
+          language_detected: string | null
+          mentions: string[] | null
+          platform: string
+          processed_at: string | null
+          region_detected: string | null
+          sentiment_polarity: string
+          sentiment_score: number | null
+          threat_level: string | null
+        }
+        Insert: {
+          author_handle?: string | null
+          author_influence_score?: number | null
+          confidence_score?: number | null
+          content_category?: string[] | null
+          content_id?: string | null
+          content_text: string
+          created_at?: string
+          emotional_tone?: string[] | null
+          engagement_metrics?: Json | null
+          flagged_for_review?: boolean | null
+          hashtags?: string[] | null
+          id?: string
+          keywords_detected?: string[] | null
+          language_detected?: string | null
+          mentions?: string[] | null
+          platform: string
+          processed_at?: string | null
+          region_detected?: string | null
+          sentiment_polarity: string
+          sentiment_score?: number | null
+          threat_level?: string | null
+        }
+        Update: {
+          author_handle?: string | null
+          author_influence_score?: number | null
+          confidence_score?: number | null
+          content_category?: string[] | null
+          content_id?: string | null
+          content_text?: string
+          created_at?: string
+          emotional_tone?: string[] | null
+          engagement_metrics?: Json | null
+          flagged_for_review?: boolean | null
+          hashtags?: string[] | null
+          id?: string
+          keywords_detected?: string[] | null
+          language_detected?: string | null
+          mentions?: string[] | null
+          platform?: string
+          processed_at?: string | null
+          region_detected?: string | null
+          sentiment_polarity?: string
+          sentiment_score?: number | null
+          threat_level?: string | null
+        }
+        Relationships: []
+      }
+      lux_aeterna_trending_topics: {
+        Row: {
+          category: string | null
+          emotional_breakdown: Json | null
+          first_detected_at: string
+          growth_rate: number | null
+          id: string
+          influencer_mentions: string[] | null
+          last_updated_at: string | null
+          platform_breakdown: Json | null
+          regional_breakdown: Json | null
+          related_hashtags: string[] | null
+          sentiment_score: number | null
+          threat_indicators: boolean | null
+          topic_text: string
+          trend_status: string | null
+          volume_score: number | null
+        }
+        Insert: {
+          category?: string | null
+          emotional_breakdown?: Json | null
+          first_detected_at?: string
+          growth_rate?: number | null
+          id?: string
+          influencer_mentions?: string[] | null
+          last_updated_at?: string | null
+          platform_breakdown?: Json | null
+          regional_breakdown?: Json | null
+          related_hashtags?: string[] | null
+          sentiment_score?: number | null
+          threat_indicators?: boolean | null
+          topic_text: string
+          trend_status?: string | null
+          volume_score?: number | null
+        }
+        Update: {
+          category?: string | null
+          emotional_breakdown?: Json | null
+          first_detected_at?: string
+          growth_rate?: number | null
+          id?: string
+          influencer_mentions?: string[] | null
+          last_updated_at?: string | null
+          platform_breakdown?: Json | null
+          regional_breakdown?: Json | null
+          related_hashtags?: string[] | null
+          sentiment_score?: number | null
+          threat_indicators?: boolean | null
+          topic_text?: string
+          trend_status?: string | null
+          volume_score?: number | null
+        }
+        Relationships: []
+      }
       marketplace_products: {
         Row: {
           category: string | null

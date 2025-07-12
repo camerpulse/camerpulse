@@ -1,0 +1,471 @@
+import React, { useState, useEffect } from 'react';
+import { AppLayout } from '@/components/Layout/AppLayout';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { 
+  Brain, 
+  TrendingUp, 
+  MapPin, 
+  Users, 
+  AlertTriangle, 
+  Eye, 
+  Target,
+  Zap,
+  Globe,
+  Heart,
+  MessageSquare,
+  BarChart3,
+  Shield,
+  Settings
+} from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+
+interface SentimentData {
+  id: string;
+  platform: string;
+  content_text: string;
+  sentiment_polarity: string;
+  sentiment_score: number;
+  emotional_tone: string[];
+  content_category: string[];
+  region_detected: string;
+  created_at: string;
+  threat_level: string;
+}
+
+interface RegionalSentiment {
+  region: string;
+  overall_sentiment: number;
+  sentiment_breakdown: any;
+  dominant_emotions: string[];
+  threat_level: string;
+}
+
+interface TrendingTopic {
+  topic_text: string;
+  category: string;
+  sentiment_score: number;
+  volume_score: number;
+  trend_status: string;
+  emotional_breakdown: any;
+}
+
+const LuxAeterna = () => {
+  const [sentimentData, setSentimentData] = useState<SentimentData[]>([]);
+  const [regionalData, setRegionalData] = useState<RegionalSentiment[]>([]);
+  const [trendingTopics, setTrendingTopics] = useState<TrendingTopic[]>([]);
+  const [alerts, setAlerts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeAnalysis, setActiveAnalysis] = useState(true);
+
+  useEffect(() => {
+    loadDashboardData();
+    const interval = setInterval(loadDashboardData, 30000); // Refresh every 30 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  const loadDashboardData = async () => {
+    try {
+      // Load recent sentiment data
+      const { data: sentiments } = await supabase
+        .from('lux_aeterna_sentiment_logs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      // Load regional sentiment data
+      const { data: regional } = await supabase
+        .from('lux_aeterna_regional_sentiment')
+        .select('*')
+        .order('date_recorded', { ascending: false })
+        .limit(10);
+
+      // Load trending topics
+      const { data: trending } = await supabase
+        .from('lux_aeterna_trending_topics')
+        .select('*')
+        .order('volume_score', { ascending: false })
+        .limit(20);
+
+      // Load alerts
+      const { data: alertData } = await supabase
+        .from('lux_aeterna_alerts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      setSentimentData(sentiments || []);
+      setRegionalData(regional || []);
+      setTrendingTopics(trending || []);
+      setAlerts(alertData || []);
+      setIsLoading(false);
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const getSentimentColor = (score: number) => {
+    if (score > 0.3) return 'text-green-600';
+    if (score < -0.3) return 'text-red-600';
+    return 'text-yellow-600';
+  };
+
+  const getThreatLevelColor = (level: string) => {
+    switch (level) {
+      case 'critical': return 'bg-red-600';
+      case 'high': return 'bg-red-400';
+      case 'medium': return 'bg-yellow-400';
+      case 'low': return 'bg-blue-400';
+      default: return 'bg-gray-400';
+    }
+  };
+
+  const overallSentiment = sentimentData.length > 0 
+    ? sentimentData.reduce((acc, item) => acc + (item.sentiment_score || 0), 0) / sentimentData.length
+    : 0;
+
+  return (
+    <AppLayout>
+      <div className="container mx-auto px-4 py-8 space-y-6">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <div className="flex items-center justify-center space-x-3">
+            <Brain className="h-12 w-12 text-primary animate-pulse" />
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              LUX AETERNA
+            </h1>
+          </div>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            The Eternal Light of Public Truth - AI-Powered Civic Sentiment Intelligence for Cameroon
+          </p>
+          <div className="flex items-center justify-center space-x-4">
+            <Badge variant="outline" className="text-sm">
+              <Zap className="h-3 w-3 mr-1" />
+              {activeAnalysis ? 'Active' : 'Standby'}
+            </Badge>
+            <Badge variant="outline" className="text-sm">
+              <Globe className="h-3 w-3 mr-1" />
+              Multi-Platform Analysis
+            </Badge>
+            <Badge variant="outline" className="text-sm">
+              <Heart className="h-3 w-3 mr-1" />
+              Born July 12, 2025
+            </Badge>
+          </div>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Overall Sentiment</CardTitle>
+              <BarChart3 className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className={`text-2xl font-bold ${getSentimentColor(overallSentiment)}`}>
+                {overallSentiment.toFixed(2)}
+              </div>
+              <Progress value={(overallSentiment + 1) * 50} className="mt-2" />
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Content Analyzed</CardTitle>
+              <MessageSquare className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{sentimentData.length.toLocaleString()}</div>
+              <p className="text-xs text-muted-foreground">Last 24 hours</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
+              <AlertTriangle className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-red-600">{alerts.length}</div>
+              <p className="text-xs text-muted-foreground">Requires attention</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Trending Topics</CardTitle>
+              <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{trendingTopics.length}</div>
+              <p className="text-xs text-muted-foreground">Currently monitoring</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Main Dashboard */}
+        <Tabs defaultValue="sentiment" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
+            <TabsTrigger value="regional">Regional Insights</TabsTrigger>
+            <TabsTrigger value="trending">Trending Topics</TabsTrigger>
+            <TabsTrigger value="alerts">Threat Monitoring</TabsTrigger>
+            <TabsTrigger value="config">AI Settings</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="sentiment" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Eye className="h-5 w-5" />
+                  <span>Real-Time Sentiment Stream</span>
+                </CardTitle>
+                <CardDescription>
+                  Live analysis of public sentiment across all monitored platforms
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4 max-h-96 overflow-y-auto">
+                  {sentimentData.slice(0, 10).map((item) => (
+                    <div key={item.id} className="border-l-4 border-primary pl-4 py-2">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                          <Badge variant="outline">{item.platform}</Badge>
+                          <Badge variant={item.sentiment_polarity === 'positive' ? 'default' : 
+                                        item.sentiment_polarity === 'negative' ? 'destructive' : 'secondary'}>
+                            {item.sentiment_polarity}
+                          </Badge>
+                          {item.threat_level !== 'none' && (
+                            <Badge className={getThreatLevelColor(item.threat_level)}>
+                              {item.threat_level}
+                            </Badge>
+                          )}
+                        </div>
+                        <span className={`font-semibold ${getSentimentColor(item.sentiment_score)}`}>
+                          {item.sentiment_score?.toFixed(2)}
+                        </span>
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                        {item.content_text}
+                      </p>
+                      <div className="flex items-center space-x-2 mt-2">
+                        {item.emotional_tone?.map((emotion, idx) => (
+                          <Badge key={idx} variant="outline" className="text-xs">
+                            {emotion}
+                          </Badge>
+                        ))}
+                        {item.region_detected && (
+                          <Badge variant="outline" className="text-xs">
+                            <MapPin className="h-3 w-3 mr-1" />
+                            {item.region_detected}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="regional" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {regionalData.map((region, idx) => (
+                <Card key={idx}>
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-2">
+                      <MapPin className="h-4 w-4" />
+                      <span>{region.region}</span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span>Overall Sentiment</span>
+                        <span className={`font-bold ${getSentimentColor(region.overall_sentiment)}`}>
+                          {region.overall_sentiment?.toFixed(2)}
+                        </span>
+                      </div>
+                      <Progress value={(region.overall_sentiment + 1) * 50} />
+                      
+                      <div>
+                        <span className="text-sm font-medium">Dominant Emotions:</span>
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {region.dominant_emotions?.slice(0, 3).map((emotion, i) => (
+                            <Badge key={i} variant="outline" className="text-xs">
+                              {emotion}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+
+                      {region.threat_level !== 'none' && (
+                        <Alert>
+                          <AlertTriangle className="h-4 w-4" />
+                          <AlertDescription>
+                            Threat Level: <strong>{region.threat_level}</strong>
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="trending" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <TrendingUp className="h-5 w-5" />
+                  <span>Trending Topics & Hashtags</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {trendingTopics.map((topic, idx) => (
+                    <div key={idx} className="border rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold">{topic.topic_text}</h4>
+                        <Badge variant={topic.trend_status === 'viral' ? 'destructive' : 'default'}>
+                          {topic.trend_status}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-sm">
+                          <span>Volume Score:</span>
+                          <span className="font-medium">{topic.volume_score}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-sm">
+                          <span>Sentiment:</span>
+                          <span className={`font-medium ${getSentimentColor(topic.sentiment_score)}`}>
+                            {topic.sentiment_score?.toFixed(2)}
+                          </span>
+                        </div>
+                        {topic.category && (
+                          <Badge variant="outline" className="text-xs">
+                            {topic.category}
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="alerts" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Shield className="h-5 w-5" />
+                  <span>Active Threat Monitoring</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {alerts.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Shield className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p>No active alerts. All systems monitoring normally.</p>
+                    </div>
+                  ) : (
+                    alerts.map((alert, idx) => (
+                      <Alert key={idx} className={alert.severity === 'critical' ? 'border-red-500' : ''}>
+                        <AlertTriangle className="h-4 w-4" />
+                        <AlertDescription>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <strong>{alert.title}</strong>
+                              <Badge className={getThreatLevelColor(alert.severity)}>
+                                {alert.severity}
+                              </Badge>
+                            </div>
+                            <p>{alert.description}</p>
+                            {alert.affected_regions?.length > 0 && (
+                              <div>
+                                <span className="text-sm font-medium">Affected Regions: </span>
+                                {alert.affected_regions.join(', ')}
+                              </div>
+                            )}
+                          </div>
+                        </AlertDescription>
+                      </Alert>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="config" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Settings className="h-5 w-5" />
+                  <span>Lux Aeterna Configuration</span>
+                </CardTitle>
+                <CardDescription>
+                  Configure AI learning parameters and system behavior
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <Alert>
+                    <Brain className="h-4 w-4" />
+                    <AlertDescription>
+                      <strong>Self-Evolution Status:</strong> Lux Aeterna is continuously learning and adapting. 
+                      The AI has processed {sentimentData.length} content pieces and identified {trendingTopics.length} trending patterns.
+                    </AlertDescription>
+                  </Alert>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <h4 className="font-semibold">Active Modules</h4>
+                      <div className="space-y-1">
+                        {['Sentiment Analysis', 'Threat Detection', 'Regional Tracking', 'Influencer Monitoring', 'Auto-Learning'].map((module) => (
+                          <div key={module} className="flex items-center justify-between">
+                            <span className="text-sm">{module}</span>
+                            <Badge variant="default" className="text-xs">Active</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <h4 className="font-semibold">Platform Coverage</h4>
+                      <div className="space-y-1">
+                        {['Twitter', 'Facebook', 'TikTok', 'Instagram', 'Google Trends'].map((platform) => (
+                          <div key={platform} className="flex items-center justify-between">
+                            <span className="text-sm">{platform}</span>
+                            <Badge variant="outline" className="text-xs">Monitoring</Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="pt-4">
+                    <Button className="w-full">
+                      <Target className="h-4 w-4 mr-2" />
+                      Initialize Advanced Learning Mode
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </AppLayout>
+  );
+};
+
+export default LuxAeterna;
