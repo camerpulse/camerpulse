@@ -2,41 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* CamerPulse - Cameroonian Civic Intelligence Platform Design System */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
+    /* Cameroonian Flag Colors - Primary Palette */
+    --cm-green: 120 60% 25%;           /* Deep Cameroonian Green */
+    --cm-green-light: 120 50% 35%;     /* Lighter green variant */
+    --cm-red: 0 75% 45%;               /* Cameroonian Red */
+    --cm-red-light: 0 65% 55%;         /* Lighter red variant */
+    --cm-yellow: 45 95% 50%;           /* Cameroonian Yellow/Gold */
+    --cm-yellow-light: 45 85% 60%;     /* Lighter yellow variant */
+    
+    /* Neutral & Supporting Colors */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 8%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
+    --card-foreground: 0 0% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 0 0% 10%;
+    
+    /* Primary uses Cameroonian Green */
+    --primary: 120 60% 25%;
+    --primary-foreground: 0 0% 98%;
+    --primary-glow: 120 50% 35%;
+    
+    /* Secondary uses Cameroonian Red */
+    --secondary: 0 75% 45%;
+    --secondary-foreground: 0 0% 98%;
+    
+    /* Accent uses Cameroonian Yellow */
+    --accent: 45 95% 50%;
+    --accent-foreground: 0 0% 15%;
+    
+    /* Muted colors */
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 40%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    
+    --border: 0 0% 90%;
+    --input: 0 0% 95%;
+    --ring: 120 60% 25%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+    
+    /* Cameroonian Gradients */
+    --gradient-flag: linear-gradient(135deg, hsl(var(--cm-green)), hsl(var(--cm-red)), hsl(var(--cm-yellow)));
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-civic: linear-gradient(180deg, hsl(var(--cm-green)), hsl(var(--cm-green-light)));
+    --gradient-pulse: linear-gradient(90deg, hsl(var(--cm-red)), hsl(var(--cm-yellow)));
+    
+    /* Shadows with Cameroonian colors */
+    --shadow-green: 0 10px 30px -10px hsl(var(--cm-green) / 0.3);
+    --shadow-red: 0 10px 30px -10px hsl(var(--cm-red) / 0.3);
+    --shadow-yellow: 0 10px 30px -10px hsl(var(--cm-yellow) / 0.3);
+    --shadow-elegant: 0 20px 40px -15px hsl(var(--primary) / 0.25);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 

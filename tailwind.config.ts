@@ -26,7 +26,8 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -61,7 +62,36 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Cameroonian Flag Colors
+				'cm-green': {
+					DEFAULT: 'hsl(var(--cm-green))',
+					light: 'hsl(var(--cm-green-light))'
+				},
+				'cm-red': {
+					DEFAULT: 'hsl(var(--cm-red))',
+					light: 'hsl(var(--cm-red-light))'
+				},
+				'cm-yellow': {
+					DEFAULT: 'hsl(var(--cm-yellow))',
+					light: 'hsl(var(--cm-yellow-light))'
 				}
+			},
+			backgroundImage: {
+				'gradient-flag': 'var(--gradient-flag)',
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-civic': 'var(--gradient-civic)',
+				'gradient-pulse': 'var(--gradient-pulse)'
+			},
+			boxShadow: {
+				'green': 'var(--shadow-green)',
+				'red': 'var(--shadow-red)',
+				'yellow': 'var(--shadow-yellow)',
+				'elegant': 'var(--shadow-elegant)'
+			},
+			transitionTimingFunction: {
+				'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
+				'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
