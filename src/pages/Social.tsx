@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
-import { Header } from '@/components/Layout/Header';
+import { AppLayout } from '@/components/Layout/AppLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -284,8 +284,7 @@ const Social = () => {
 
   if (!user) {
     return (
-      <>
-        <Header />
+      <AppLayout>
         <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
           <Card className="w-full max-w-md text-center">
             <CardContent className="pt-6">
@@ -296,13 +295,12 @@ const Social = () => {
             </CardContent>
           </Card>
         </div>
-      </>
+      </AppLayout>
     );
   }
 
   return (
-    <>
-      <Header />
+    <AppLayout>
       <div className="min-h-screen bg-gradient-subtle">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="mb-8">
@@ -427,7 +425,7 @@ const Social = () => {
           onClose={() => setSelectedUserId(null)}
         />
       )}
-    </>
+    </AppLayout>
   );
 };
 

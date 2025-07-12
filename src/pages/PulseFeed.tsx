@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Header } from '@/components/Layout/Header';
+import { AppLayout } from '@/components/Layout/AppLayout';
 import { UserProfile } from '@/components/Social/UserProfile';
 import { 
   Heart, 
@@ -21,6 +21,8 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { usePullToRefresh } from '@/hooks/usePullToRefresh';
+import { PullToRefreshIndicator } from '@/components/ui/pull-to-refresh';
 
 interface PulsePost {
   id: string;
@@ -226,11 +228,22 @@ const PulseFeed = () => {
     }
   };
 
+  // Pull to refresh
+  const {
+    containerRef,
+    isPulling,
+    pullDistance,
+    isRefreshing,
+    pullProgress,
+    canTrigger,
+  } = usePullToRefresh({
+    onRefresh: fetchPosts,
+  });
+
   if (!user) {
     return (
-      <>
-        <Header />
-        <div className="min-h-screen bg-gradient-cameroon flex items-center justify-center p-4">
+      <AppLayout>
+        <div className="min-h-screen bg-gradient-civic flex items-center justify-center p-4">
           <Card className="w-full max-w-md text-center">
             <CardContent className="pt-6">
               <h2 className="text-xl font-bold mb-4">Connexion requise</h2>
@@ -239,14 +252,20 @@ const PulseFeed = () => {
             </CardContent>
           </Card>
         </div>
-      </>
+      </AppLayout>
     );
   }
 
   return (
-    <>
-      <Header />
-      <div className="min-h-screen bg-gradient-subtle">
+    <AppLayout>
+      <div ref={containerRef} className="min-h-screen bg-gradient-subtle">
+        <PullToRefreshIndicator
+          isPulling={isPulling}
+          pullDistance={pullDistance}
+          isRefreshing={isRefreshing}
+          pullProgress={pullProgress}
+          canTrigger={canTrigger}
+        />
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-cameroon-primary mb-2">Pulse Feed</h1>
@@ -426,7 +445,7 @@ const PulseFeed = () => {
           onClose={() => setSelectedUserId(null)}
         />
       )}
-    </>
+    </AppLayout>
   );
 };
 

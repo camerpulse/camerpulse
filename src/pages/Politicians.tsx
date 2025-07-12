@@ -9,7 +9,7 @@ import { Progress } from '@/components/ui/progress';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Header } from '@/components/Layout/Header';
+import { AppLayout } from '@/components/Layout/AppLayout';
 import { PoliticianDetailModal } from '@/components/Politicians/PoliticianDetailModal';
 import { PoliticianComparisonModal } from '@/components/Politicians/PoliticianComparisonModal';
 import { ClaimProfileButton } from '@/components/Politics/ClaimProfileButton';
@@ -398,8 +398,7 @@ const Politicians = () => {
   };
 
   return (
-    <>
-      <Header />
+    <AppLayout>
       <div className="min-h-screen bg-gradient-subtle">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
@@ -771,7 +770,7 @@ const Politicians = () => {
           />
         </div>
       </div>
-    </>
+    </AppLayout>
   );
 };
 

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { DarkModeToggle } from "@/components/ui/dark-mode-toggle";
+import { LanguageToggle } from "@/components/ui/language-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -83,19 +84,11 @@ export const Header = () => {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-2">
-            {/* Language Toggle */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="text-white hover:bg-white/10 text-xs hidden sm:flex"
-              onClick={toggleLanguage}
-            >
-              <Globe className="w-4 h-4 mr-1" />
-              {language}
-            </Button>
-
-            {/* Dark Mode Toggle */}
-            <DarkModeToggle size="sm" className="text-white hover:bg-white/10" />
+            {/* Language & Theme Toggles */}
+            <div className="hidden sm:flex items-center gap-1">
+              <LanguageToggle />
+              <DarkModeToggle size="sm" className="text-white hover:bg-white/10" />
+            </div>
 
             {/* Notifications */}
             <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 relative">
@@ -189,15 +182,9 @@ export const Header = () => {
             </div>
 
             {/* Mobile Language Toggle */}
-            <div className="mt-4 pt-4 border-t border-white/20">
-              <Button 
-                variant="ghost" 
-                className="text-white hover:bg-white/10 w-full justify-start"
-                onClick={toggleLanguage}
-              >
-                <Globe className="w-4 h-4 mr-2" />
-                Language: {language}
-              </Button>
+            <div className="mt-4 pt-4 border-t border-white/20 flex justify-between items-center">
+              <LanguageToggle />
+              <DarkModeToggle size="sm" className="text-white hover:bg-white/10" />
             </div>
           </nav>
         )}

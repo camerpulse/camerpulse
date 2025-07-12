@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Header } from "@/components/Layout/Header";
+import { AppLayout } from "@/components/Layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -64,9 +64,7 @@ const News = () => {
   const regularArticles = articles?.filter(article => !article.is_pinned) || [];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
-      
+    <AppLayout>
       <main className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header Section */}
@@ -281,7 +279,7 @@ const News = () => {
           )}
         </div>
       </main>
-    </div>
+    </AppLayout>
   );
 };
 
