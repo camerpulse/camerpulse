@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { PGPService, PGPKey } from '@/services/pgpService';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
@@ -20,7 +22,11 @@ import {
   EyeOff,
   Lock,
   Monitor,
-  Trash2
+  Trash2,
+  Plus,
+  FileKey,
+  Send,
+  Unlock
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
@@ -54,23 +60,36 @@ interface SecurityLog {
 }
 
 const Security = () => {
-  const { user } = useAuth();
+  const { user, profile } = useAuth();
   const { toast } = useToast();
   const [twoFA, setTwoFA] = useState<Security2FA | null>(null);
   const [devices, setDevices] = useState<SecurityDevice[]>([]);
   const [securityLogs, setSecurityLogs] = useState<SecurityLog[]>([]);
+  const [pgpKeys, setPgpKeys] = useState<PGPKey[]>([]);
   const [totpSecret, setTotpSecret] = useState('');
   const [totpCode, setTotpCode] = useState('');
   const [backupCodes, setBackupCodes] = useState<string[]>([]);
   const [showBackupCodes, setShowBackupCodes] = useState(false);
   const [loading, setLoading] = useState(true);
   const [enabling2FA, setEnabling2FA] = useState(false);
+  
+  // PGP states
+  const [pgpKeyName, setPgpKeyName] = useState('');
+  const [pgpPassphrase, setPgpPassphrase] = useState('');
+  const [generatingPGP, setGeneratingPGP] = useState(false);
+  const [encryptMessage, setEncryptMessage] = useState('');
+  const [decryptMessage, setDecryptMessage] = useState('');
+  const [encryptedResult, setEncryptedResult] = useState('');
+  const [decryptedResult, setDecryptedResult] = useState('');
+  const [selectedRecipientKey, setSelectedRecipientKey] = useState('');
+  const [importKeyText, setImportKeyText] = useState('');
 
   useEffect(() => {
     if (user) {
       fetchSecuritySettings();
       fetchDevices();
       fetchSecurityLogs();
+      fetchPGPKeys();
     }
   }, [user]);
 
@@ -142,6 +161,172 @@ const Security = () => {
       console.error('Error fetching security logs:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchPGPKeys = async () => {
+    try {
+      const keys = await PGPService.getUserKeys(user?.id);
+      setPgpKeys(keys);
+    } catch (error) {
+      console.error('Error fetching PGP keys:', error);
+    }
+  };
+
+  const generatePGPKeyPair = async () => {
+    if (!pgpKeyName || !pgpPassphrase || !profile?.display_name) {
+      toast({
+        title: "Champs requis",
+        description: "Veuillez remplir tous les champs",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setGeneratingPGP(true);
+    try {
+      const keyPair = await PGPService.generateKeyPair(
+        profile.display_name,
+        user?.email || '',
+        pgpPassphrase
+      );
+
+      await PGPService.saveKeyPair(
+        pgpKeyName,
+        keyPair.publicKey,
+        keyPair.privateKey,
+        keyPair.fingerprint,
+        pgpPassphrase,
+        pgpKeys.length === 0 // Set as primary if it's the first key
+      );
+
+      await fetchPGPKeys();
+      setPgpKeyName('');
+      setPgpPassphrase('');
+
+      toast({
+        title: "Clé PGP générée",
+        description: "Votre paire de clés PGP a été créée avec succès"
+      });
+    } catch (error) {
+      console.error('Error generating PGP key:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de générer la clé PGP",
+        variant: "destructive"
+      });
+    } finally {
+      setGeneratingPGP(false);
+    }
+  };
+
+  const deletePGPKey = async (keyId: string) => {
+    try {
+      await PGPService.deleteKey(keyId);
+      await fetchPGPKeys();
+      
+      toast({
+        title: "Clé supprimée",
+        description: "La clé PGP a été supprimée"
+      });
+    } catch (error) {
+      console.error('Error deleting PGP key:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de supprimer la clé",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const setPrimaryPGPKey = async (keyId: string) => {
+    try {
+      await PGPService.setPrimaryKey(keyId);
+      await fetchPGPKeys();
+      
+      toast({
+        title: "Clé principale définie",
+        description: "Cette clé est maintenant votre clé principale"
+      });
+    } catch (error) {
+      console.error('Error setting primary key:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de définir la clé principale",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const encryptMessageWithPGP = async () => {
+    if (!encryptMessage || !selectedRecipientKey) {
+      toast({
+        title: "Champs requis",
+        description: "Veuillez saisir un message et sélectionner une clé",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const recipientKey = await PGPService.exportPublicKey(selectedRecipientKey);
+      const encrypted = await PGPService.encryptMessage(encryptMessage, recipientKey);
+      
+      setEncryptedResult(encrypted);
+      toast({
+        title: "Message chiffré",
+        description: "Votre message a été chiffré avec succès"
+      });
+    } catch (error) {
+      console.error('Error encrypting message:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de chiffrer le message",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const decryptMessageWithPGP = async () => {
+    if (!decryptMessage || !pgpPassphrase) {
+      toast({
+        title: "Champs requis",
+        description: "Veuillez saisir le message chiffré et votre phrase de passe",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const primaryKey = pgpKeys.find(key => key.is_primary);
+      if (!primaryKey) {
+        throw new Error("Aucune clé principale trouvée");
+      }
+
+      const privateKey = await PGPService.decryptPrivateKeyFromStorage(
+        primaryKey.private_key_encrypted,
+        pgpPassphrase
+      );
+
+      const result = await PGPService.decryptMessage(
+        decryptMessage,
+        privateKey,
+        pgpPassphrase
+      );
+
+      setDecryptedResult(result.data);
+      
+      toast({
+        title: result.verified ? "Message déchiffré et vérifié" : "Message déchiffré",
+        description: result.verified ? "La signature est valide" : "Message déchiffré avec succès"
+      });
+    } catch (error) {
+      console.error('Error decrypting message:', error);
+      toast({
+        title: "Erreur",
+        description: "Impossible de déchiffrer le message",
+        variant: "destructive"
+      });
     }
   };
 
@@ -556,15 +741,197 @@ const Security = () => {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-8">
-                    <Lock className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <h3 className="text-lg font-medium mb-2">Chiffrement PGP</h3>
-                    <p className="text-gray-600 mb-4">
-                      Générez et gérez vos clés PGP pour des communications sécurisées
-                    </p>
-                    <Button className="bg-cameroon-primary">
-                      Générer une paire de clés PGP
-                    </Button>
+                  <div className="space-y-6">
+                    {/* Generate New Key Pair */}
+                    <div className="space-y-4 p-4 border border-cameroon-yellow/20 rounded-lg">
+                      <h3 className="font-medium flex items-center gap-2">
+                        <Plus className="w-4 h-4" />
+                        Générer une nouvelle paire de clés PGP
+                      </h3>
+                      
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">Nom de la clé:</label>
+                          <Input
+                            value={pgpKeyName}
+                            onChange={(e) => setPgpKeyName(e.target.value)}
+                            placeholder="Ma clé personnelle"
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">Phrase de passe:</label>
+                          <Input
+                            type="password"
+                            value={pgpPassphrase}
+                            onChange={(e) => setPgpPassphrase(e.target.value)}
+                            placeholder="Phrase de passe sécurisée"
+                          />
+                        </div>
+                      </div>
+
+                      <Button
+                        onClick={generatePGPKeyPair}
+                        disabled={generatingPGP}
+                        className="bg-cameroon-primary"
+                      >
+                        <FileKey className="w-4 h-4 mr-2" />
+                        {generatingPGP ? 'Génération...' : 'Générer la paire de clés'}
+                      </Button>
+                    </div>
+
+                    {/* Existing Keys */}
+                    {pgpKeys.length > 0 && (
+                      <div className="space-y-4">
+                        <h3 className="font-medium">Mes clés PGP</h3>
+                        <div className="space-y-3">
+                          {pgpKeys.map((key) => (
+                            <div key={key.id} className="p-4 border border-gray-200 rounded-lg">
+                              <div className="flex items-center justify-between mb-2">
+                                <div className="flex items-center gap-2">
+                                  <FileKey className="w-4 h-4 text-cameroon-primary" />
+                                  <span className="font-medium">{key.key_name}</span>
+                                  {key.is_primary && (
+                                    <Badge className="bg-cameroon-yellow text-cameroon-primary">
+                                      Principale
+                                    </Badge>
+                                  )}
+                                </div>
+                                <div className="flex gap-2">
+                                  {!key.is_primary && (
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => setPrimaryPGPKey(key.id)}
+                                    >
+                                      Définir comme principale
+                                    </Button>
+                                  )}
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => deletePGPKey(key.id)}
+                                    className="text-red-600 hover:text-red-700"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              </div>
+                              <p className="text-sm text-gray-500 font-mono">
+                                Empreinte: {key.key_fingerprint}
+                              </p>
+                              <p className="text-xs text-gray-400">
+                                Créée le {new Date(key.created_at).toLocaleDateString('fr-FR')}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Encrypt Message */}
+                    <div className="space-y-4 p-4 border border-cameroon-yellow/20 rounded-lg">
+                      <h3 className="font-medium flex items-center gap-2">
+                        <Lock className="w-4 h-4" />
+                        Chiffrer un message
+                      </h3>
+                      
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Message à chiffrer:</label>
+                        <Textarea
+                          value={encryptMessage}
+                          onChange={(e) => setEncryptMessage(e.target.value)}
+                          placeholder="Tapez votre message secret ici..."
+                          rows={3}
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Clé du destinataire:</label>
+                        <select
+                          value={selectedRecipientKey}
+                          onChange={(e) => setSelectedRecipientKey(e.target.value)}
+                          className="w-full p-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="">Sélectionner une clé</option>
+                          {pgpKeys.map((key) => (
+                            <option key={key.id} value={key.id}>
+                              {key.key_name} ({key.key_fingerprint.slice(0, 8)}...)
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <Button onClick={encryptMessageWithPGP} className="bg-cameroon-primary">
+                        <Send className="w-4 h-4 mr-2" />
+                        Chiffrer
+                      </Button>
+
+                      {encryptedResult && (
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">Résultat chiffré:</label>
+                          <Textarea
+                            value={encryptedResult}
+                            readOnly
+                            rows={6}
+                            className="font-mono text-xs"
+                          />
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => copyToClipboard(encryptedResult)}
+                          >
+                            <Copy className="w-4 h-4 mr-2" />
+                            Copier
+                          </Button>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Decrypt Message */}
+                    <div className="space-y-4 p-4 border border-cameroon-yellow/20 rounded-lg">
+                      <h3 className="font-medium flex items-center gap-2">
+                        <Unlock className="w-4 h-4" />
+                        Déchiffrer un message
+                      </h3>
+                      
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Message chiffré:</label>
+                        <Textarea
+                          value={decryptMessage}
+                          onChange={(e) => setDecryptMessage(e.target.value)}
+                          placeholder="Collez le message chiffré ici..."
+                          rows={4}
+                          className="font-mono text-xs"
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="text-sm font-medium">Phrase de passe:</label>
+                        <Input
+                          type="password"
+                          value={pgpPassphrase}
+                          onChange={(e) => setPgpPassphrase(e.target.value)}
+                          placeholder="Votre phrase de passe"
+                        />
+                      </div>
+
+                      <Button onClick={decryptMessageWithPGP} className="bg-cameroon-red">
+                        <Unlock className="w-4 h-4 mr-2" />
+                        Déchiffrer
+                      </Button>
+
+                      {decryptedResult && (
+                        <div className="space-y-2">
+                          <label className="text-sm font-medium">Message déchiffré:</label>
+                          <Textarea
+                            value={decryptedResult}
+                            readOnly
+                            rows={3}
+                            className="bg-green-50 border-green-200"
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
