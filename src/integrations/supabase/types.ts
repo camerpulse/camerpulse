@@ -312,6 +312,56 @@ export type Database = {
         }
         Relationships: []
       }
+      party_ai_verification: {
+        Row: {
+          created_at: string
+          disputed_fields: string[] | null
+          id: string
+          last_sources_checked: Json | null
+          last_verified_at: string | null
+          outdated_fields: string[] | null
+          party_id: string
+          sources_count: number | null
+          updated_at: string
+          verification_score: number | null
+          verification_status: string
+        }
+        Insert: {
+          created_at?: string
+          disputed_fields?: string[] | null
+          id?: string
+          last_sources_checked?: Json | null
+          last_verified_at?: string | null
+          outdated_fields?: string[] | null
+          party_id: string
+          sources_count?: number | null
+          updated_at?: string
+          verification_score?: number | null
+          verification_status?: string
+        }
+        Update: {
+          created_at?: string
+          disputed_fields?: string[] | null
+          id?: string
+          last_sources_checked?: Json | null
+          last_verified_at?: string | null
+          outdated_fields?: string[] | null
+          party_id?: string
+          sources_count?: number | null
+          updated_at?: string
+          verification_score?: number | null
+          verification_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "party_ai_verification_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: true
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       party_claims: {
         Row: {
           admin_notes: string | null
@@ -454,6 +504,87 @@ export type Database = {
           require_symbols?: boolean | null
           require_uppercase?: boolean | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      politica_ai_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      politica_ai_logs: {
+        Row: {
+          action_type: string
+          ai_confidence_score: number | null
+          changes_made: Json | null
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          proof_urls: string[] | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sources_verified: Json | null
+          status: string
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          action_type: string
+          ai_confidence_score?: number | null
+          changes_made?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          proof_urls?: string[] | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sources_verified?: Json | null
+          status?: string
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          action_type?: string
+          ai_confidence_score?: number | null
+          changes_made?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          proof_urls?: string[] | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sources_verified?: Json | null
+          status?: string
+          target_id?: string
+          target_type?: string
         }
         Relationships: []
       }
@@ -618,6 +749,56 @@ export type Database = {
           vision_statement?: string | null
         }
         Relationships: []
+      }
+      politician_ai_verification: {
+        Row: {
+          created_at: string
+          disputed_fields: string[] | null
+          id: string
+          last_sources_checked: Json | null
+          last_verified_at: string | null
+          outdated_fields: string[] | null
+          politician_id: string
+          sources_count: number | null
+          updated_at: string
+          verification_score: number | null
+          verification_status: string
+        }
+        Insert: {
+          created_at?: string
+          disputed_fields?: string[] | null
+          id?: string
+          last_sources_checked?: Json | null
+          last_verified_at?: string | null
+          outdated_fields?: string[] | null
+          politician_id: string
+          sources_count?: number | null
+          updated_at?: string
+          verification_score?: number | null
+          verification_status?: string
+        }
+        Update: {
+          created_at?: string
+          disputed_fields?: string[] | null
+          id?: string
+          last_sources_checked?: Json | null
+          last_verified_at?: string | null
+          outdated_fields?: string[] | null
+          politician_id?: string
+          sources_count?: number | null
+          updated_at?: string
+          verification_score?: number | null
+          verification_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "politician_ai_verification_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: true
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       politician_claims: {
         Row: {

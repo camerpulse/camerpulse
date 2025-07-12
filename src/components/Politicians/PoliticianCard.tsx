@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
+import { VerificationBadge } from '@/components/AI/VerificationBadge';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -29,6 +30,9 @@ interface PoliticianProps {
   isVerified: boolean;
   lastActive?: string;
   bio: string;
+  // AI Verification
+  aiVerificationStatus?: "verified" | "unverified" | "disputed" | "pending";
+  aiVerificationScore?: number;
 }
 
 export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) => {
@@ -68,6 +72,12 @@ export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) 
                   <Shield className="w-3 h-3 mr-1" />
                   Verified
                 </Badge>
+              )}
+              {politician.aiVerificationStatus && (
+                <VerificationBadge 
+                  status={politician.aiVerificationStatus}
+                  score={politician.aiVerificationScore}
+                />
               )}
             </div>
             
