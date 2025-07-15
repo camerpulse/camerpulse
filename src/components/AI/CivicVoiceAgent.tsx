@@ -391,7 +391,6 @@ export const CivicVoiceAgent = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="en">English</SelectItem>
-                  <SelectItem value="fr" disabled>French (Disabled)</SelectItem>
                   <SelectItem value="pidgin">Pidgin</SelectItem>
                 </SelectContent>
               </Select>

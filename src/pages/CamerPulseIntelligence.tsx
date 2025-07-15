@@ -500,7 +500,7 @@ const CamerPulseIntelligence = () => {
                           </div>
                           <div className="flex justify-between">
                             <span>Language Support:</span>
-                            <span className="text-sm">English, French, Pidgin</span>
+                            <span className="text-sm">English, Pidgin</span>
                           </div>
                           <div className="flex justify-between">
                             <span>Platforms Monitored:</span>

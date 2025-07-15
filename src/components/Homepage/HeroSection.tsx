@@ -20,38 +20,34 @@ export const HeroSection = () => {
     { 
       icon: TrendingUp, 
       title: 'Live Sentiment', 
-      title_fr: 'Sentiment en Direct',
       desc: 'Track public opinion in real-time',
       color: 'bg-cm-green'
     },
     { 
       icon: Users, 
       title: 'Politician Ratings', 
-      title_fr: 'Notes Politiciens',
       desc: 'Transparent approval tracking',
       color: 'bg-cm-red'
     },
     { 
       icon: MessageCircle, 
       title: 'Pulse Feed', 
-      title_fr: 'Flux Pulse',
       desc: 'Civic social media platform',
       color: 'bg-cm-yellow'
     },
     { 
       icon: ShoppingBag, 
       title: 'Verified Marketplace', 
-      title_fr: 'Marché Vérifié',
       desc: 'Secure Cameroonian commerce',
       color: 'bg-primary'
     }
   ];
 
   const stats = [
-    { number: '2.5M+', label: 'Active Citizens', label_fr: 'Citoyens Actifs' },
-    { number: '180K+', label: 'Daily Pulses', label_fr: 'Pulses Quotidiens' },
-    { number: '95%', label: 'Verified Vendors', label_fr: 'Vendeurs Vérifiés' },
-    { number: '24/7', label: 'Sentiment Tracking', label_fr: 'Suivi Sentiment' }
+    { number: '2.5M+', label: 'Active Citizens' },
+    { number: '180K+', label: 'Daily Pulses' },
+    { number: '95%', label: 'Verified Vendors' },
+    { number: '24/7', label: 'Sentiment Tracking' }
   ];
 
   return (
@@ -121,8 +117,7 @@ export const HeroSection = () => {
                   <div className={`w-12 h-12 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg`}>
                     <feature.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-1">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-2">{feature.title_fr}</p>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">{feature.desc}</p>
                 </CardContent>
               </Card>
@@ -136,7 +131,6 @@ export const HeroSection = () => {
                 <div key={index} className="text-primary-foreground">
                   <div className="text-3xl lg:text-4xl font-bold mb-2">{stat.number}</div>
                   <div className="text-sm opacity-90">{stat.label}</div>
-                  <div className="text-xs opacity-70">{stat.label_fr}</div>
                 </div>
               ))}
             </div>

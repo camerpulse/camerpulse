@@ -53,7 +53,7 @@ interface GenerationSettings {
   focus: 'balanced' | 'security' | 'political' | 'social';
   includeQuotes: boolean;
   includePredictions: boolean;
-  language: 'english' | 'french';
+  language: 'english';
 }
 
 export const CivicNarrativeGenerator: React.FC = () => {
@@ -569,7 +569,6 @@ export const CivicNarrativeGenerator: React.FC = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="english">English</SelectItem>
-                      <SelectItem value="french" disabled>Français (Disabled)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

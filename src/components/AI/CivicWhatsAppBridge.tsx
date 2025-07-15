@@ -383,7 +383,7 @@ const CivicWhatsAppBridge = () => {
                 <span>Multi-Language Analysis</span>
               </CardTitle>
               <CardDescription>
-                Language distribution and sentiment analysis across English, French, and Pidgin
+                Language distribution and sentiment analysis across English and Pidgin
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -408,7 +408,7 @@ const CivicWhatsAppBridge = () => {
 
                 <Card className="border-l-4 border-blue-400">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">Français</CardTitle>
+                    <CardTitle className="text-lg">French (Disabled)</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">

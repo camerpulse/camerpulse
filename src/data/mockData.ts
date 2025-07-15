@@ -323,7 +323,6 @@ export const mockNews = [
   {
     id: '1',
     title: 'Cameroon Launches National Digital ID System',
-    title_fr: 'Le Cameroun lance un système national d\'identité numérique',
     excerpt: 'The government announces the rollout of a comprehensive digital identity system aimed at improving public services and reducing bureaucracy.',
     source: 'Cameroon Tribune',
     timestamp: '3 hours ago',
@@ -333,7 +332,6 @@ export const mockNews = [
   {
     id: '2',
     title: 'Infrastructure Development Continues in Northern Regions',
-    title_fr: 'Le développement des infrastructures se poursuit dans les régions du Nord',
     excerpt: 'Major road construction projects are underway to improve connectivity between the northern regions and the rest of the country.',
     source: 'Journal du Cameroun',
     timestamp: '1 day ago',

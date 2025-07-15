@@ -208,7 +208,7 @@ export const MultimodalEmotionProcessor = () => {
               <div>
                 <label className="text-sm font-medium">Text Content</label>
                 <Textarea
-                  placeholder="Enter text content to analyze for emotional tone (English, French, or Pidgin)..."
+                  placeholder="Enter text content to analyze for emotional tone (English or Pidgin)..."
                   value={content.text || ''}
                   onChange={(e) => setContent(prev => ({ ...prev, text: e.target.value }))}
                   className="mt-2 min-h-[120px]"
@@ -267,7 +267,7 @@ export const MultimodalEmotionProcessor = () => {
                   className="mt-2"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
-                  Analyze voice tone, chants, speeches, and emotional audio content (supports English, French, Pidgin)
+                  Analyze voice tone, chants, speeches, and emotional audio content (supports English and Pidgin)
                 </p>
               </div>
             </TabsContent>
@@ -455,7 +455,7 @@ export const MultimodalEmotionProcessor = () => {
               </h4>
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• Voice tone detection</li>
-                <li>• Multi-language support (EN/FR/Pidgin)</li>
+                <li>• Multi-language support (EN/Pidgin)</li>
                 <li>• Chant and speech analysis</li>
                 <li>• Emotional voice patterns</li>
                 <li>• Regional dialect identification</li>

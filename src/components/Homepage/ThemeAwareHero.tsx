@@ -44,37 +44,33 @@ export const ThemeAwareHero = () => {
             { 
               icon: Lightbulb, 
               title: 'Enlightened Governance', 
-              title_fr: 'Gouvernance Éclairée',
               desc: 'Illuminating the path to progress',
               color: 'bg-primary shadow-patriotic'
             },
             { 
               icon: Flag, 
               title: 'Patriotic Unity', 
-              title_fr: 'Unité Patriotique',
               desc: 'Strengthening national bonds',
               color: 'bg-secondary shadow-patriotic'
             },
             { 
               icon: Trophy, 
               title: 'Excellence in Service', 
-              title_fr: 'Excellence en Service',
               desc: 'Upholding the highest standards',
               color: 'bg-accent shadow-patriotic'
             },
             { 
               icon: Crown, 
               title: 'Noble Leadership', 
-              title_fr: 'Leadership Noble',
               desc: 'Dignified representation for all',
               color: 'bg-primary shadow-patriotic'
             }
           ],
           stats: [
-            { number: '4.2M+', label: 'Patriotic Citizens', label_fr: 'Citoyens Patriotes' },
-            { number: '250K+', label: 'Daily Illuminations', label_fr: 'Illuminations Quotidiennes' },
-            { number: '99%', label: 'Hope Verified', label_fr: 'Espoir Vérifié' },
-            { number: '∞', label: 'Eternal Light', label_fr: 'Lumière Éternelle' }
+            { number: '4.2M+', label: 'Patriotic Citizens' },
+            { number: '250K+', label: 'Daily Illuminations' },
+            { number: '99%', label: 'Hope Verified' },
+            { number: '∞', label: 'Eternal Light' }
           ],
           backgroundClass: "relative min-h-screen bg-gradient-to-br from-background via-secondary/5 to-primary/10 flex items-center",
           containerClass: "container mx-auto px-4 py-16 relative z-10 animate-hope-rise"
@@ -98,37 +94,33 @@ export const ThemeAwareHero = () => {
             { 
               icon: TrendingUp, 
               title: 'Economic Growth', 
-              title_fr: 'Croissance Économique',
               desc: 'Tracking progress toward emergence',
               color: 'bg-cm-green'
             },
             { 
               icon: Users, 
               title: 'Democratic Progress', 
-              title_fr: 'Progrès Démocratique',
               desc: 'Strengthening civic participation',
               color: 'bg-cm-red'
             },
             { 
               icon: Globe, 
               title: 'Global Integration', 
-              title_fr: 'Intégration Mondiale',
               desc: 'Connecting with the world',
               color: 'bg-cm-yellow'
             },
             { 
               icon: Shield, 
               title: 'National Security', 
-              title_fr: 'Sécurité Nationale',
               desc: 'Protecting our sovereignty',
               color: 'bg-primary'
             }
           ],
           stats: [
-            { number: '2035', label: 'Vision Year', label_fr: 'Année Vision' },
-            { number: '180K+', label: 'Daily Pulses', label_fr: 'Pulses Quotidiens' },
-            { number: '95%', label: 'Verified Data', label_fr: 'Données Vérifiées' },
-            { number: '24/7', label: 'Monitoring', label_fr: 'Surveillance' }
+            { number: '2035', label: 'Vision Year' },
+            { number: '180K+', label: 'Daily Pulses' },
+            { number: '95%', label: 'Verified Data' },
+            { number: '24/7', label: 'Monitoring' }
           ],
           backgroundClass: "relative min-h-screen bg-gradient-to-br from-background via-muted/30 to-primary/5 flex items-center",
           containerClass: "container mx-auto px-4 py-16 relative z-10 animate-fade-in-up"
@@ -152,37 +144,33 @@ export const ThemeAwareHero = () => {
             { 
               icon: TrendingUp, 
               title: 'Live Sentiment', 
-              title_fr: 'Sentiment en Direct',
               desc: 'Track public opinion in real-time',
               color: 'bg-cm-green'
             },
             { 
               icon: Users, 
               title: 'Politician Ratings', 
-              title_fr: 'Notes Politiciens',
               desc: 'Transparent approval tracking',
               color: 'bg-cm-red'
             },
             { 
               icon: MessageCircle, 
               title: 'Pulse Feed', 
-              title_fr: 'Flux Pulse',
               desc: 'Civic social media platform',
               color: 'bg-cm-yellow'
             },
             { 
               icon: ShoppingBag, 
               title: 'Verified Marketplace', 
-              title_fr: 'Marché Vérifié',
               desc: 'Secure Cameroonian commerce',
               color: 'bg-primary'
             }
           ],
           stats: [
-            { number: '2.5M+', label: 'Active Citizens', label_fr: 'Citoyens Actifs' },
-            { number: '180K+', label: 'Daily Pulses', label_fr: 'Pulses Quotidiens' },
-            { number: '95%', label: 'Verified Vendors', label_fr: 'Vendeurs Vérifiés' },
-            { number: '24/7', label: 'Sentiment Tracking', label_fr: 'Suivi Sentiment' }
+            { number: '2.5M+', label: 'Active Citizens' },
+            { number: '180K+', label: 'Daily Pulses' },
+            { number: '95%', label: 'Verified Vendors' },
+            { number: '24/7', label: 'Sentiment Tracking' }
           ],
           backgroundClass: "relative min-h-screen bg-gradient-to-br from-background via-muted/30 to-primary/5 flex items-center",
           containerClass: "container mx-auto px-4 py-16 relative z-10"
@@ -286,8 +274,7 @@ export const ThemeAwareHero = () => {
                   <div className={`w-12 h-12 ${feature.color} rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg ${currentTheme.id === 'lux-aeterna' ? 'animate-eternal-glow' : ''}`}>
                     <feature.icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-foreground mb-1">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground mb-2">{feature.title_fr}</p>
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
                   <p className="text-sm text-muted-foreground">{feature.desc}</p>
                 </CardContent>
               </Card>
@@ -301,7 +288,6 @@ export const ThemeAwareHero = () => {
                 <div key={index} className="text-primary-foreground">
                   <div className={`text-3xl lg:text-4xl font-bold mb-2 ${currentTheme.id === 'lux-aeterna' ? 'animate-patriotic-pulse' : ''}`}>{stat.number}</div>
                   <div className="text-sm opacity-90">{stat.label}</div>
-                  <div className="text-xs opacity-70">{stat.label_fr}</div>
                 </div>
               ))}
             </div>

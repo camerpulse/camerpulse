@@ -500,7 +500,6 @@ export const FeedbackLearningLoop = () => {
                     onChange={(e) => setNewPatternForm(prev => ({ ...prev, language: e.target.value as any }))}
                   >
                     <option value="en">English</option>
-                    <option value="fr">French</option>
                     <option value="pidgin">Pidgin</option>
                   </select>
                 </div>
