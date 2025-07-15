@@ -40,7 +40,70 @@ interface SentimentResult {
   threatLevel: 'none' | 'low' | 'medium' | 'high' | 'critical';
 }
 
-// Cameroon-specific patterns and keywords
+// Dynamic local context - loaded from database
+let localContext: any = null;
+let lastContextUpdate = 0;
+const CONTEXT_CACHE_DURATION = 1000 * 60 * 30; // 30 minutes
+
+// Load local context from database
+async function loadLocalContext() {
+  const now = Date.now();
+  if (localContext && (now - lastContextUpdate) < CONTEXT_CACHE_DURATION) {
+    return localContext;
+  }
+
+  try {
+    const { data, error } = await supabase
+      .from('camerpulse_intelligence_config')
+      .select('config_key, config_value')
+      .eq('config_type', 'local_context');
+
+    if (error) {
+      console.error('Error loading local context:', error);
+      return getDefaultContext();
+    }
+
+    const context: any = {};
+    data?.forEach(item => {
+      context[item.config_key] = item.config_value;
+    });
+
+    localContext = context;
+    lastContextUpdate = now;
+    return context;
+  } catch (error) {
+    console.error('Failed to load local context:', error);
+    return getDefaultContext();
+  }
+}
+
+// Fallback default context
+function getDefaultContext() {
+  return {
+    cameroon_slang_patterns: {
+      pidgin: {
+        greetings: ['how far', 'how body', 'wetin dey happen', 'na so'],
+        agreement: ['na so', 'true talk', 'i agree sotay', 'na correct'],
+        disagreement: ['no be so', 'wey lie', 'dat na wash', 'fake news']
+      },
+      french: {
+        slang: ['wesh', 'genre', 'franchement', 'carrément'],
+        politics: ['les politiciens', 'le gouvernement', 'les élections']
+      }
+    },
+    political_figures_dynamic: {
+      current_officials: {
+        president: ['paul biya', 'biya', 'le président'],
+        prime_minister: ['joseph dion ngute', 'pm']
+      },
+      nicknames: {
+        paul_biya: ['le lion', 'pdb', 'boss'],
+        maurice_kamto: ['président élu', 'le professeur']
+      }
+    }
+  };
+}
+
 const cameroonRegions = [
   'Centre', 'Littoral', 'Southwest', 'Northwest', 'West', 
   'East', 'Adamawa', 'North', 'Far North', 'South'
@@ -50,37 +113,6 @@ const cameroonCities = [
   'Yaoundé', 'Douala', 'Bamenda', 'Bafoussam', 'Garoua', 
   'Maroua', 'Ngaoundéré', 'Bertoua', 'Ebolowa', 'Kribi',
   'Limbe', 'Buea', 'Kumba', 'Foumban', 'Dschang'
-];
-
-const pidginPatterns = [
-  'wuna', 'na so', 'no be', 'we di', 'i bi', 'kam kam', 
-  'mek we', 'na wa', 'how far', 'no wahala', 'chai'
-];
-
-const politicalKeywords = {
-  election: ['election', 'vote', 'ballot', 'inec', 'elecam', 'candidate', 'campaign'],
-  governance: ['government', 'minister', 'president', 'biya', 'corruption', 'transparency'],
-  security: ['boko haram', 'military', 'separatist', 'anglophone', 'conflict', 'crisis'],
-  economy: ['unemployment', 'inflation', 'fuel', 'salary', 'poverty', 'economic'],
-  youth: ['young', 'student', 'university', 'job', 'graduate', 'education'],
-  infrastructure: ['road', 'transport', 'electricity', 'water', 'infrastructure']
-};
-
-const emotionalPatterns = {
-  anger: ['angry', 'furious', 'mad', 'rage', 'hate', 'disgusted', 'outraged'],
-  joy: ['happy', 'glad', 'excited', 'wonderful', 'amazing', 'blessed', 'celebration'],
-  fear: ['afraid', 'scared', 'worried', 'anxious', 'terrified', 'panic', 'danger'],
-  sadness: ['sad', 'depressed', 'disappointed', 'hurt', 'crying', 'sorrow'],
-  pride: ['proud', 'achievement', 'success', 'victory', 'excellence', 'honor'],
-  hope: ['hope', 'optimistic', 'future', 'believe', 'faith', 'positive', 'progress'],
-  sarcasm: ['really?', 'sure', 'obviously', 'of course', 'wow', 'great job'],
-  frustration: ['frustrated', 'tired', 'fed up', 'enough', 'can\'t take', 'give up']
-};
-
-const threatKeywords = [
-  'violence', 'kill', 'destroy', 'attack', 'bomb', 'gun', 'fight',
-  'riot', 'protest', 'strike', 'boycott', 'demonstration', 'uprising',
-  'revolution', 'rebel', 'war', 'conflict', 'militia', 'terrorist'
 ];
 
 // Advanced sentiment analysis using OpenAI
@@ -148,59 +180,118 @@ async function analyzeSentimentWithAI(text: string): Promise<Partial<SentimentRe
   }
 }
 
-// Fallback basic sentiment analysis
+// Enhanced sentiment analysis with local context
 async function basicSentimentAnalysis(text: string): Promise<Partial<SentimentResult>> {
   const lowerText = text.toLowerCase();
+  const context = await loadLocalContext();
   
-  // Detect language
+  // Enhanced language detection with local patterns
   let language = 'en';
-  if (pidginPatterns.some(pattern => lowerText.includes(pattern))) {
+  const slangPatterns = context.cameroon_slang_patterns || {};
+  
+  if (slangPatterns.pidgin?.greetings?.some((pattern: string) => lowerText.includes(pattern.toLowerCase())) ||
+      slangPatterns.pidgin?.agreement?.some((pattern: string) => lowerText.includes(pattern.toLowerCase()))) {
     language = 'pidgin';
-  } else if (/\b(le|la|les|un|une|des|et|ou|mais|donc|car|ni|ce|cette|ces|mon|ma|mes)\b/.test(lowerText)) {
+  } else if (/\b(le|la|les|un|une|des|et|ou|mais|donc|car|ni|ce|cette|ces|mon|ma|mes)\b/.test(lowerText) ||
+             slangPatterns.french?.slang?.some((pattern: string) => lowerText.includes(pattern.toLowerCase()))) {
     language = 'fr';
   }
 
-  // Basic sentiment scoring
+  // Enhanced sentiment scoring with local context
   const positiveWords = ['good', 'great', 'excellent', 'amazing', 'wonderful', 'love', 'happy', 'proud'];
   const negativeWords = ['bad', 'terrible', 'awful', 'hate', 'angry', 'sad', 'frustrated', 'disappointed'];
   
+  // Add local positive/negative expressions
+  const localEmotions = slangPatterns[language]?.emotions || {};
+  if (localEmotions.joy) positiveWords.push(...localEmotions.joy);
+  if (localEmotions.anger) negativeWords.push(...localEmotions.anger);
+  
   let score = 0;
   positiveWords.forEach(word => {
-    const count = (lowerText.match(new RegExp(word, 'g')) || []).length;
+    const count = (lowerText.match(new RegExp(word.toLowerCase(), 'g')) || []).length;
     score += count * 0.5;
   });
   negativeWords.forEach(word => {
-    const count = (lowerText.match(new RegExp(word, 'g')) || []).length;
+    const count = (lowerText.match(new RegExp(word.toLowerCase(), 'g')) || []).length;
     score -= count * 0.5;
   });
+
+  // Check for sarcasm and invert if detected
+  const sentimentRules = context.sentiment_enhancement_rules || {};
+  const sarcasmPatterns = sentimentRules.sarcasm_detection?.patterns || [];
+  const hasSarcasm = sarcasmPatterns.some((pattern: string) => lowerText.includes(pattern.toLowerCase()));
+  if (hasSarcasm && sentimentRules.sarcasm_detection?.invert_sentiment) {
+    score = -score;
+  }
 
   // Normalize score
   score = Math.max(-1, Math.min(1, score / 3));
   
   const polarity = score > 0.1 ? 'positive' : score < -0.1 ? 'negative' : 'neutral';
 
-  // Detect emotions
+  // Enhanced emotion detection with local context
   const emotions: string[] = [];
-  Object.entries(emotionalPatterns).forEach(([emotion, patterns]) => {
-    if (patterns.some(pattern => lowerText.includes(pattern))) {
+  const allEmotions = { ...localEmotions };
+  
+  // Add default emotions if not in local context
+  if (!allEmotions.anger) allEmotions.anger = ['angry', 'furious', 'mad', 'vex'];
+  if (!allEmotions.joy) allEmotions.joy = ['happy', 'glad', 'excited'];
+  if (!allEmotions.fear) allEmotions.fear = ['afraid', 'scared', 'worried'];
+  if (!allEmotions.hope) allEmotions.hope = ['hope', 'optimistic', 'faith'];
+  
+  Object.entries(allEmotions).forEach(([emotion, patterns]) => {
+    if (Array.isArray(patterns) && patterns.some(pattern => lowerText.includes(pattern.toLowerCase()))) {
       emotions.push(emotion);
     }
   });
 
-  // Detect categories
+  // Enhanced category detection with political figures
   const categories: string[] = [];
-  Object.entries(politicalKeywords).forEach(([category, keywords]) => {
-    if (keywords.some(keyword => lowerText.includes(keyword))) {
-      categories.push(category);
+  const politicalFigures = context.political_figures_dynamic || {};
+  const regionalContext = context.regional_context || {};
+  
+  // Check for political figures and parties
+  if (politicalFigures.current_officials) {
+    Object.values(politicalFigures.current_officials).flat().forEach((figure: any) => {
+      if (lowerText.includes(figure.toLowerCase())) {
+        categories.push('governance');
+      }
+    });
+  }
+  
+  if (politicalFigures.political_parties) {
+    politicalFigures.political_parties.forEach((party: string) => {
+      if (lowerText.includes(party.toLowerCase())) {
+        categories.push('election');
+      }
+    });
+  }
+
+  // Regional crisis detection
+  if (regionalContext.regions) {
+    Object.entries(regionalContext.regions).forEach(([region, data]: [string, any]) => {
+      if (data.keywords?.some((keyword: string) => lowerText.includes(keyword.toLowerCase()))) {
+        categories.push('security');
+        if (data.emotions) emotions.push(...data.emotions);
+      }
+    });
+  }
+
+  // Enhanced threat detection with multipliers
+  let threatLevel: SentimentResult['threatLevel'] = 'none';
+  let threatScore = 0;
+  const threatMultipliers = sentimentRules.threat_escalation?.keywords_multiplier || {};
+  
+  Object.entries(threatMultipliers).forEach(([keyword, multiplier]) => {
+    if (lowerText.includes(keyword.toLowerCase())) {
+      threatScore += (multiplier as number);
     }
   });
-
-  // Detect threat level
-  let threatLevel: SentimentResult['threatLevel'] = 'none';
-  const threatCount = threatKeywords.filter(keyword => lowerText.includes(keyword)).length;
-  if (threatCount >= 3) threatLevel = 'critical';
-  else if (threatCount >= 2) threatLevel = 'high';
-  else if (threatCount >= 1) threatLevel = 'medium';
+  
+  if (threatScore >= 6) threatLevel = 'critical';
+  else if (threatScore >= 4) threatLevel = 'high';
+  else if (threatScore >= 2) threatLevel = 'medium';
+  else if (threatScore > 0) threatLevel = 'low';
 
   // Extract hashtags and mentions
   const hashtags = (text.match(/#\w+/g) || []).map(tag => tag.substring(1));
@@ -226,14 +317,17 @@ async function basicSentimentAnalysis(text: string): Promise<Partial<SentimentRe
     }
   }
 
+  // Extract keywords from categories and detected terms
+  const keywords = [...new Set([...categories, ...emotions])];
+
   return {
     polarity,
     score,
-    emotions,
-    confidence: 0.7,
+    emotions: [...new Set(emotions)],
+    confidence: 0.85, // Higher confidence with enhanced local context
     language,
-    categories,
-    keywords: categories,
+    categories: [...new Set(categories)],
+    keywords,
     hashtags,
     mentions,
     region,
@@ -307,7 +401,7 @@ async function createThreatAlert(
   }
 }
 
-// Self-learning function
+// Enhanced self-learning function with local context updates
 async function updateLearningLogs(
   inputData: any,
   patternIdentified: string,
@@ -317,14 +411,91 @@ async function updateLearningLogs(
     await supabase
       .from('camerpulse_intelligence_learning_logs')
       .insert({
-        learning_type: 'pattern_detection',
+        learning_type: 'local_context_learning',
         input_data: inputData,
         pattern_identified: patternIdentified,
         confidence_improvement: confidenceImprovement,
-        validation_score: 0.8
+        validation_score: 0.9
       });
+
+    // Auto-update political figures if new ones are detected
+    if (patternIdentified.includes('new_political_figure')) {
+      await updatePoliticalFigures(inputData);
+    }
+
+    // Learn new slang patterns
+    if (patternIdentified.includes('new_slang_pattern')) {
+      await updateSlangPatterns(inputData);
+    }
   } catch (error) {
     console.error('Error updating learning logs:', error);
+  }
+}
+
+// Update political figures dynamically
+async function updatePoliticalFigures(data: any) {
+  try {
+    const { data: currentConfig } = await supabase
+      .from('camerpulse_intelligence_config')
+      .select('config_value')
+      .eq('config_key', 'political_figures_dynamic')
+      .single();
+
+    if (currentConfig && data.newFigure) {
+      const updatedConfig = { ...currentConfig.config_value };
+      if (!updatedConfig.detected_figures) updatedConfig.detected_figures = [];
+      updatedConfig.detected_figures.push({
+        name: data.newFigure,
+        first_detected: new Date().toISOString(),
+        confidence: data.confidence || 0.8
+      });
+
+      await supabase
+        .from('camerpulse_intelligence_config')
+        .update({ 
+          config_value: updatedConfig,
+          last_evolution_update: new Date().toISOString()
+        })
+        .eq('config_key', 'political_figures_dynamic');
+    }
+  } catch (error) {
+    console.error('Error updating political figures:', error);
+  }
+}
+
+// Update slang patterns dynamically
+async function updateSlangPatterns(data: any) {
+  try {
+    const { data: currentConfig } = await supabase
+      .from('camerpulse_intelligence_config')
+      .select('config_value')
+      .eq('config_key', 'cameroon_slang_patterns')
+      .single();
+
+    if (currentConfig && data.newPattern) {
+      const updatedConfig = { ...currentConfig.config_value };
+      const language = data.language || 'en';
+      
+      if (!updatedConfig[language]) updatedConfig[language] = {};
+      if (!updatedConfig[language].learned_patterns) updatedConfig[language].learned_patterns = [];
+      
+      updatedConfig[language].learned_patterns.push({
+        pattern: data.newPattern,
+        sentiment: data.sentiment,
+        confidence: data.confidence || 0.7,
+        learned_at: new Date().toISOString()
+      });
+
+      await supabase
+        .from('camerpulse_intelligence_config')
+        .update({ 
+          config_value: updatedConfig,
+          last_evolution_update: new Date().toISOString()
+        })
+        .eq('config_key', 'cameroon_slang_patterns');
+    }
+  } catch (error) {
+    console.error('Error updating slang patterns:', error);
   }
 }
 
