@@ -3789,6 +3789,84 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_intelligence_missions: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          created_by: string
+          data_sources: string[] | null
+          execution_duration_seconds: number | null
+          id: string
+          is_autonomous: boolean
+          is_public: boolean
+          metadata: Json
+          mission_objective: string
+          mission_prompt: string
+          mission_title: string
+          mission_type: string
+          output_type: string
+          priority_level: string
+          regions: string[] | null
+          started_at: string | null
+          status: string
+          target_entities: string[] | null
+          timeframe_end: string | null
+          timeframe_start: string | null
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by: string
+          data_sources?: string[] | null
+          execution_duration_seconds?: number | null
+          id?: string
+          is_autonomous?: boolean
+          is_public?: boolean
+          metadata?: Json
+          mission_objective: string
+          mission_prompt: string
+          mission_title: string
+          mission_type?: string
+          output_type?: string
+          priority_level?: string
+          regions?: string[] | null
+          started_at?: string | null
+          status?: string
+          target_entities?: string[] | null
+          timeframe_end?: string | null
+          timeframe_start?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string
+          data_sources?: string[] | null
+          execution_duration_seconds?: number | null
+          id?: string
+          is_autonomous?: boolean
+          is_public?: boolean
+          metadata?: Json
+          mission_objective?: string
+          mission_prompt?: string
+          mission_title?: string
+          mission_type?: string
+          output_type?: string
+          priority_level?: string
+          regions?: string[] | null
+          started_at?: string | null
+          status?: string
+          target_entities?: string[] | null
+          timeframe_end?: string | null
+          timeframe_start?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       civic_knowledge_entities: {
         Row: {
           aliases: string[] | null
@@ -3884,6 +3962,272 @@ export type Database = {
           youtube_channel?: string | null
         }
         Relationships: []
+      }
+      civic_mission_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_description: string
+          alert_title: string
+          alert_type: string
+          auto_actions_taken: string[] | null
+          confidence_level: number | null
+          created_at: string
+          entities_involved: Json | null
+          id: string
+          is_acknowledged: boolean | null
+          metadata: Json | null
+          mission_id: string | null
+          regions_affected: string[] | null
+          requires_human_review: boolean | null
+          resolution_status: string | null
+          severity: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_description: string
+          alert_title: string
+          alert_type: string
+          auto_actions_taken?: string[] | null
+          confidence_level?: number | null
+          created_at?: string
+          entities_involved?: Json | null
+          id?: string
+          is_acknowledged?: boolean | null
+          metadata?: Json | null
+          mission_id?: string | null
+          regions_affected?: string[] | null
+          requires_human_review?: boolean | null
+          resolution_status?: string | null
+          severity?: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_description?: string
+          alert_title?: string
+          alert_type?: string
+          auto_actions_taken?: string[] | null
+          confidence_level?: number | null
+          created_at?: string
+          entities_involved?: Json | null
+          id?: string
+          is_acknowledged?: boolean | null
+          metadata?: Json | null
+          mission_id?: string | null
+          regions_affected?: string[] | null
+          requires_human_review?: boolean | null
+          resolution_status?: string | null
+          severity?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mission_alerts_mission"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "civic_intelligence_missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_mission_execution_logs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          data_processed: Json | null
+          duration_ms: number | null
+          error_details: string | null
+          id: string
+          mission_id: string
+          results_found: number | null
+          started_at: string | null
+          status: string
+          step_name: string
+          step_order: number
+          step_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          data_processed?: Json | null
+          duration_ms?: number | null
+          error_details?: string | null
+          id?: string
+          mission_id: string
+          results_found?: number | null
+          started_at?: string | null
+          status?: string
+          step_name: string
+          step_order: number
+          step_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          data_processed?: Json | null
+          duration_ms?: number | null
+          error_details?: string | null
+          id?: string
+          mission_id?: string
+          results_found?: number | null
+          started_at?: string | null
+          status?: string
+          step_name?: string
+          step_order?: number
+          step_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mission_logs_mission"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "civic_intelligence_missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_mission_findings: {
+        Row: {
+          affected_entities: Json | null
+          confidence_score: number
+          correlation_strength: number | null
+          created_at: string
+          evidence_data: Json | null
+          finding_description: string
+          finding_title: string
+          finding_type: string
+          id: string
+          is_verified: boolean | null
+          metadata: Json | null
+          mission_id: string
+          recommended_actions: string[] | null
+          regional_impact: string[] | null
+          severity_level: string
+          source_tables: string[] | null
+          time_period: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          affected_entities?: Json | null
+          confidence_score?: number
+          correlation_strength?: number | null
+          created_at?: string
+          evidence_data?: Json | null
+          finding_description: string
+          finding_title: string
+          finding_type: string
+          id?: string
+          is_verified?: boolean | null
+          metadata?: Json | null
+          mission_id: string
+          recommended_actions?: string[] | null
+          regional_impact?: string[] | null
+          severity_level?: string
+          source_tables?: string[] | null
+          time_period?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          affected_entities?: Json | null
+          confidence_score?: number
+          correlation_strength?: number | null
+          created_at?: string
+          evidence_data?: Json | null
+          finding_description?: string
+          finding_title?: string
+          finding_type?: string
+          id?: string
+          is_verified?: boolean | null
+          metadata?: Json | null
+          mission_id?: string
+          recommended_actions?: string[] | null
+          regional_impact?: string[] | null
+          severity_level?: string
+          source_tables?: string[] | null
+          time_period?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mission_findings_mission"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "civic_intelligence_missions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_mission_reports: {
+        Row: {
+          action_items: string[] | null
+          created_at: string
+          data_visualizations: Json | null
+          detailed_findings: string | null
+          download_links: Json | null
+          executive_summary: string
+          id: string
+          is_published: boolean | null
+          mission_id: string
+          public_summary: string | null
+          published_at: string | null
+          recommendations: string[] | null
+          report_title: string
+          report_type: string
+          report_url: string | null
+          updated_at: string
+          visual_charts: Json | null
+        }
+        Insert: {
+          action_items?: string[] | null
+          created_at?: string
+          data_visualizations?: Json | null
+          detailed_findings?: string | null
+          download_links?: Json | null
+          executive_summary: string
+          id?: string
+          is_published?: boolean | null
+          mission_id: string
+          public_summary?: string | null
+          published_at?: string | null
+          recommendations?: string[] | null
+          report_title: string
+          report_type?: string
+          report_url?: string | null
+          updated_at?: string
+          visual_charts?: Json | null
+        }
+        Update: {
+          action_items?: string[] | null
+          created_at?: string
+          data_visualizations?: Json | null
+          detailed_findings?: string | null
+          download_links?: Json | null
+          executive_summary?: string
+          id?: string
+          is_published?: boolean | null
+          mission_id?: string
+          public_summary?: string | null
+          published_at?: string | null
+          recommendations?: string[] | null
+          report_title?: string
+          report_type?: string
+          report_url?: string | null
+          updated_at?: string
+          visual_charts?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mission_reports_mission"
+            columns: ["mission_id"]
+            isOneToOne: false
+            referencedRelation: "civic_intelligence_missions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       civic_module_visibility: {
         Row: {
@@ -7990,6 +8334,10 @@ export type Database = {
           change_detected: boolean
           changes_count: number
         }[]
+      }
+      execute_civic_mission: {
+        Args: { p_mission_id: string }
+        Returns: Json
       }
       generate_vendor_id: {
         Args: Record<PropertyKey, never>

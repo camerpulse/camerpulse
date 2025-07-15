@@ -28,6 +28,7 @@ import { NaturalLanguagePluginBuilder } from './NaturalLanguagePluginBuilder';
 import { EmergencyRevertSystem } from './EmergencyRevertSystem';
 import ZeroInputMode from './ZeroInputMode';
 import AshenDevTerminal from './AshenDevTerminal';
+import CivicIntelligenceMissions from './CivicIntelligenceMissions';
 
 interface ErrorLog {
   id: string;
@@ -435,6 +436,7 @@ export default function AshenDebugCore() {
         <TabsList className="grid w-full grid-cols-12 gap-1">
           <TabsTrigger value="error-dashboard" className="text-xs">Error Dashboard</TabsTrigger>
           <TabsTrigger value="dev-terminal" className="text-xs">Dev Terminal</TabsTrigger>
+          <TabsTrigger value="civic-missions" className="text-xs">Civic Missions</TabsTrigger>
           <TabsTrigger value="zero-input-mode" className="text-xs">Zero Input Mode</TabsTrigger>
           <TabsTrigger value="security" className="text-xs">Security</TabsTrigger>
           <TabsTrigger value="patch-intelligence" className="text-xs">Patch Intelligence</TabsTrigger>
@@ -443,7 +445,6 @@ export default function AshenDebugCore() {
           <TabsTrigger value="batch-fix" className="text-xs">Batch Fix</TabsTrigger>
           <TabsTrigger value="patch-deploy" className="text-xs">Patch Deploy</TabsTrigger>
           <TabsTrigger value="camerpulse-watchdog" className="text-xs">CamerPulse</TabsTrigger>
-          <TabsTrigger value="plugin-watchdog" className="text-xs">Plugin Watchdog</TabsTrigger>
           <TabsTrigger value="emergency-revert" className="text-xs">Emergency Revert</TabsTrigger>
         </TabsList>
 
@@ -453,6 +454,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="dev-terminal" className="space-y-4">
           <AshenDevTerminal />
+        </TabsContent>
+        
+        <TabsContent value="civic-missions" className="space-y-4">
+          <CivicIntelligenceMissions />
         </TabsContent>
         
         <TabsContent value="zero-input-mode" className="space-y-4">
