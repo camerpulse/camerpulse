@@ -58,8 +58,12 @@ import {
   UserCheck,
   Ban,
   Unlock,
-  Monitor
+  Monitor,
+  Building2,
+  Star
 } from "lucide-react";
+import PartyDirectorySync from "@/components/AI/PartyDirectorySync";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
@@ -449,7 +453,95 @@ const Admin = () => {
             {/* 4. POLITICIANS & PARTIES */}
             <TabsContent value="politicians">
               <div className="space-y-6">
-                <PoliticalImportDashboard />
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <UserCheck className="h-5 w-5" />
+                      Politicians & Parties Management
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <Tabs defaultValue="politicians" className="w-full">
+                      <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="politicians">Politicians</TabsTrigger>
+                        <TabsTrigger value="parties">Parties</TabsTrigger>
+                        <TabsTrigger value="party-sync">MINAT Sync</TabsTrigger>
+                      </TabsList>
+                      
+                      <TabsContent value="politicians" className="space-y-4">
+                        <PoliticalImportDashboard />
+                      </TabsContent>
+                      
+                      <TabsContent value="parties" className="space-y-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                          <Card>
+                            <CardContent className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Building2 className="h-4 w-4 text-primary" />
+                                <span className="text-sm">Total Parties</span>
+                              </div>
+                              <div className="text-2xl font-bold mt-2">19</div>
+                              <p className="text-xs text-muted-foreground">vs 330 in MINAT</p>
+                            </CardContent>
+                          </Card>
+                          <Card>
+                            <CardContent className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Shield className="h-4 w-4 text-green-600" />
+                                <span className="text-sm">Auto-imported</span>
+                              </div>
+                              <div className="text-2xl font-bold mt-2">15</div>
+                              <p className="text-xs text-muted-foreground">MINAT sourced</p>
+                            </CardContent>
+                          </Card>
+                          <Card>
+                            <CardContent className="p-4">
+                              <div className="flex items-center gap-2">
+                                <Star className="h-4 w-4 text-yellow-600" />
+                                <span className="text-sm">With Ratings</span>
+                              </div>
+                              <div className="text-2xl font-bold mt-2">0</div>
+                              <p className="text-xs text-muted-foreground">Citizen rated</p>
+                            </CardContent>
+                          </Card>
+                          <Card>
+                            <CardContent className="p-4">
+                              <div className="flex items-center gap-2">
+                                <UserCheck className="h-4 w-4 text-blue-600" />
+                                <span className="text-sm">Claimed</span>
+                              </div>
+                              <div className="text-2xl font-bold mt-2">0</div>
+                              <p className="text-xs text-muted-foreground">Verified parties</p>
+                            </CardContent>
+                          </Card>
+                        </div>
+                        
+                        <Alert>
+                          <AlertTriangle className="h-4 w-4" />
+                          <AlertDescription>
+                            <strong>Incomplete Directory:</strong> Only 19 of 330 registered political parties are currently in the database. 
+                            Use the MINAT Sync feature to import all official parties from the Ministry of Territorial Administration.
+                          </AlertDescription>
+                        </Alert>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <Button className="gap-2" onClick={() => window.open('/political-parties', '_blank')}>
+                            <Eye className="h-4 w-4" />
+                            View Public Directory
+                          </Button>
+                          <Button variant="outline" className="gap-2">
+                            <Download className="h-4 w-4" />
+                            Export Party Data
+                          </Button>
+                        </div>
+                      </TabsContent>
+                      
+                      <TabsContent value="party-sync">
+                        <PartyDirectorySync />
+                      </TabsContent>
+                    </Tabs>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 
