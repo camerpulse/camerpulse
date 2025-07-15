@@ -27,7 +27,7 @@ import {
   Target,
   Clock,
   Download,
-  Map
+  Map as MapIcon
 } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -192,8 +192,8 @@ const RedRoomPanel: React.FC = () => {
       });
 
       // Calculate overall threat level
-      const regions = Array.from(regionMap.values());
-      const maxRegionalThreat = regions.length > 0 ? Math.max(...regions.map(r => r.threatScore), 0) : 0;
+      const regions: RegionThreat[] = Array.from(regionMap.values());
+      const maxRegionalThreat = regions.length > 0 ? Math.max(...regions.map((r: RegionThreat) => r.threatScore), 0) : 0;
       const alertCount = alertsData.data?.length || 0;
       const manipulationRisk = influencerData.data?.length || 0;
       
@@ -681,7 +681,7 @@ const RedRoomPanel: React.FC = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Map className="h-5 w-5" />
+                <MapIcon className="h-5 w-5" />
                 Security Incident Heat Map
               </CardTitle>
             </CardHeader>
