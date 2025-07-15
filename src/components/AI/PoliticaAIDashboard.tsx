@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bot, Activity, CheckCircle, AlertTriangle, Clock, RefreshCw } from "lucide-react";
 import { VerificationBadge } from "./VerificationBadge";
 import { BulkImportButton } from "./BulkImportButton";
-import DailyReportGenerator from "./DailyReportGenerator";
+import { CivicNarrativeGenerator } from "./CivicNarrativeGenerator";
 import SignalIntelligenceCore from "./SignalIntelligenceCore";
 import { useToast } from "@/hooks/use-toast";
 
@@ -374,7 +374,7 @@ export const PoliticaAIDashboard = () => {
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-4">
-          <DailyReportGenerator />
+          <CivicNarrativeGenerator />
         </TabsContent>
       </Tabs>
     </div>
