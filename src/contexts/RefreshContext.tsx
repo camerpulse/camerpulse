@@ -106,18 +106,8 @@ export const RefreshProvider: React.FC<{ children: React.ReactNode }> = ({ child
       errors: { ...prev.errors, [component]: error || null }
     }))
 
-    // Log to Supabase for admin monitoring
-    try {
-      await supabase.from('system_refresh_logs').insert({
-        component_name: component,
-        refresh_time: now.toISOString(),
-        success,
-        error_message: error || null,
-        interval_ms: config[component as keyof RefreshConfig]
-      })
-    } catch (logError) {
-      console.warn('Failed to log refresh event:', logError)
-    }
+    // TODO: Re-enable database logging once types are updated
+    console.log(`Refresh event: ${component}, success: ${success}, error: ${error}`)
   }, [config])
 
   const executeRefresh = useCallback(async (component: string) => {

@@ -102,7 +102,7 @@ export const RefreshControlPanel: React.FC = () => {
     })
   }
 
-  const getStatusColor = (component: string): string => {
+  const getStatusColor = (component: string): "default" | "secondary" | "destructive" | "outline" => {
     const error = state.errors[component]
     if (error) return 'destructive'
     

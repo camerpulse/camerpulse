@@ -4753,6 +4753,36 @@ export type Database = {
         }
         Relationships: []
       }
+      system_refresh_logs: {
+        Row: {
+          component_name: string
+          created_at: string
+          error_message: string | null
+          id: string
+          interval_ms: number | null
+          refresh_time: string
+          success: boolean
+        }
+        Insert: {
+          component_name: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          interval_ms?: number | null
+          refresh_time?: string
+          success?: boolean
+        }
+        Update: {
+          component_name?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          interval_ms?: number | null
+          refresh_time?: string
+          success?: boolean
+        }
+        Relationships: []
+      }
       trust_events: {
         Row: {
           created_at: string
