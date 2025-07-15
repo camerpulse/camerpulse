@@ -9,6 +9,7 @@ import { Bot, Activity, CheckCircle, AlertTriangle, Clock, RefreshCw } from "luc
 import { VerificationBadge } from "./VerificationBadge";
 import { BulkImportButton } from "./BulkImportButton";
 import { CivicNarrativeGenerator } from "./CivicNarrativeGenerator";
+import { AutonomousRefreshEngine } from "./AutonomousRefreshEngine";
 import SignalIntelligenceCore from "./SignalIntelligenceCore";
 import { useToast } from "@/hooks/use-toast";
 
@@ -219,6 +220,7 @@ export const PoliticaAIDashboard = () => {
           <TabsTrigger value="activity">Recent Activity</TabsTrigger>
           <TabsTrigger value="config">Configuration</TabsTrigger>
           <TabsTrigger value="intelligence">Signal Intelligence</TabsTrigger>
+          <TabsTrigger value="refresh">Autonomous Refresh</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
         </TabsList>
 
@@ -371,6 +373,10 @@ export const PoliticaAIDashboard = () => {
 
         <TabsContent value="intelligence" className="space-y-4">
           <SignalIntelligenceCore />
+        </TabsContent>
+
+        <TabsContent value="refresh" className="space-y-4">
+          <AutonomousRefreshEngine />
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-4">

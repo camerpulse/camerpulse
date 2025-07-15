@@ -180,9 +180,9 @@ export const RoleControlSystem: React.FC = () => {
       const { data: authUsers, error: authError } = await supabase.auth.admin.listUsers();
       
       // Combine the data
-      const usersWithRoles: UserWithRole[] = profiles?.map(profile => {
-        const authUser = authUsers?.users?.find(au => au.id === profile.user_id);
-        const userRole = roles?.find(r => r.user_id === profile.user_id);
+      const usersWithRoles: UserWithRole[] = (profiles || []).map(profile => {
+        const authUser = authUsers?.users?.find((au: any) => au.id === profile.user_id);
+        const userRole = (roles || []).find((r: any) => r.user_id === profile.user_id);
         
         return {
           id: profile.user_id,
