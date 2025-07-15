@@ -1150,6 +1150,241 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_simulation_device_configs: {
+        Row: {
+          created_at: string
+          device_name: string
+          device_type: string
+          id: string
+          is_active: boolean | null
+          network_conditions: Json | null
+          touch_enabled: boolean | null
+          updated_at: string
+          user_agent: string
+          viewport_height: number
+          viewport_width: number
+        }
+        Insert: {
+          created_at?: string
+          device_name: string
+          device_type: string
+          id?: string
+          is_active?: boolean | null
+          network_conditions?: Json | null
+          touch_enabled?: boolean | null
+          updated_at?: string
+          user_agent: string
+          viewport_height: number
+          viewport_width: number
+        }
+        Update: {
+          created_at?: string
+          device_name?: string
+          device_type?: string
+          id?: string
+          is_active?: boolean | null
+          network_conditions?: Json | null
+          touch_enabled?: boolean | null
+          updated_at?: string
+          user_agent?: string
+          viewport_height?: number
+          viewport_width?: number
+        }
+        Relationships: []
+      }
+      ashen_simulation_replay_logs: {
+        Row: {
+          action_data: Json | null
+          action_type: string
+          coordinates: Json | null
+          created_at: string
+          error_message: string | null
+          id: string
+          result_id: string
+          screenshot_url: string | null
+          step_number: number
+          target_element: string | null
+          timestamp_ms: number
+        }
+        Insert: {
+          action_data?: Json | null
+          action_type: string
+          coordinates?: Json | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          result_id: string
+          screenshot_url?: string | null
+          step_number: number
+          target_element?: string | null
+          timestamp_ms: number
+        }
+        Update: {
+          action_data?: Json | null
+          action_type?: string
+          coordinates?: Json | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          result_id?: string
+          screenshot_url?: string | null
+          step_number?: number
+          target_element?: string | null
+          timestamp_ms?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_simulation_replay_logs_result_id_fkey"
+            columns: ["result_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_simulation_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_simulation_results: {
+        Row: {
+          browser: string | null
+          created_at: string
+          device_model: string | null
+          device_type: string
+          errors_found: number | null
+          execution_date: string
+          id: string
+          performance_metrics: Json | null
+          results_summary: Json | null
+          status: string
+          test_duration_ms: number | null
+          test_id: string
+          ux_score: number | null
+          warnings_found: number | null
+        }
+        Insert: {
+          browser?: string | null
+          created_at?: string
+          device_model?: string | null
+          device_type: string
+          errors_found?: number | null
+          execution_date?: string
+          id?: string
+          performance_metrics?: Json | null
+          results_summary?: Json | null
+          status?: string
+          test_duration_ms?: number | null
+          test_id: string
+          ux_score?: number | null
+          warnings_found?: number | null
+        }
+        Update: {
+          browser?: string | null
+          created_at?: string
+          device_model?: string | null
+          device_type?: string
+          errors_found?: number | null
+          execution_date?: string
+          id?: string
+          performance_metrics?: Json | null
+          results_summary?: Json | null
+          status?: string
+          test_duration_ms?: number | null
+          test_id?: string
+          ux_score?: number | null
+          warnings_found?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_simulation_results_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_simulation_tests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_simulation_test_paths: {
+        Row: {
+          created_at: string
+          expected_outcomes: Json | null
+          id: string
+          is_active: boolean | null
+          is_critical: boolean | null
+          path_description: string | null
+          path_name: string
+          steps: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          expected_outcomes?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_critical?: boolean | null
+          path_description?: string | null
+          path_name: string
+          steps?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          expected_outcomes?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_critical?: boolean | null
+          path_description?: string | null
+          path_name?: string
+          steps?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ashen_simulation_tests: {
+        Row: {
+          auto_run: boolean | null
+          browser: string | null
+          created_at: string
+          device_model: string | null
+          device_type: string
+          id: string
+          is_active: boolean | null
+          run_frequency: string | null
+          simulation_config: Json | null
+          test_name: string
+          test_paths: Json | null
+          test_type: string
+          updated_at: string
+        }
+        Insert: {
+          auto_run?: boolean | null
+          browser?: string | null
+          created_at?: string
+          device_model?: string | null
+          device_type?: string
+          id?: string
+          is_active?: boolean | null
+          run_frequency?: string | null
+          simulation_config?: Json | null
+          test_name: string
+          test_paths?: Json | null
+          test_type?: string
+          updated_at?: string
+        }
+        Update: {
+          auto_run?: boolean | null
+          browser?: string | null
+          created_at?: string
+          device_model?: string | null
+          device_type?: string
+          id?: string
+          is_active?: boolean | null
+          run_frequency?: string | null
+          simulation_config?: Json | null
+          test_name?: string
+          test_paths?: Json | null
+          test_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ashen_style_patterns: {
         Row: {
           confidence_score: number | null
@@ -6913,6 +7148,14 @@ export type Database = {
           p_device_fingerprint: string
           p_ip_address?: unknown
           p_user_agent?: string
+        }
+        Returns: string
+      }
+      run_ashen_simulation: {
+        Args: {
+          p_test_id?: string
+          p_device_type?: string
+          p_device_model?: string
         }
         Returns: string
       }
