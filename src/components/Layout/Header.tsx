@@ -75,22 +75,19 @@ export const Header = () => {
               <Link to="/politicians">Politicians</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/political-parties">Parties</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/polls">Polls</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/marketplace">Marketplace</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/civic-portal">🌍 Civic Portal</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/regional-analytics">📊 Analytics</Link>
+              <Link to="/regional-analytics">📊 Regional Analytics</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/news">📰 News</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/camerpulse-intelligence">🧠 Pan-African Intel</Link>
             </Button>
           </nav>
 
@@ -186,12 +183,6 @@ export const Header = () => {
                 <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>Politicians</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/political-parties" onClick={() => setMobileMenuOpen(false)}>Parties</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>Polls</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/marketplace" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
@@ -201,7 +192,10 @@ export const Header = () => {
                 <Link to="/civic-portal" onClick={() => setMobileMenuOpen(false)}>Civic Portal</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/regional-analytics" onClick={() => setMobileMenuOpen(false)}>Analytics</Link>
+                <Link to="/regional-analytics" onClick={() => setMobileMenuOpen(false)}>Regional Analytics</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start col-span-2">
+                <Link to="/camerpulse-intelligence" onClick={() => setMobileMenuOpen(false)}>Intelligence Dashboard</Link>
               </Button>
             </div>
 

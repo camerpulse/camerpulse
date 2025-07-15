@@ -100,7 +100,7 @@ const Security = () => {
         .from('user_2fa')
         .select('*')
         .eq('user_id', user?.id)
-        .maybeSingle();
+        .single();
 
       if (error && error.code !== 'PGRST116') {
         throw error;

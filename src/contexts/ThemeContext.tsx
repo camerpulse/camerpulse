@@ -127,12 +127,18 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
         .eq('config_key', 'active_theme')
         .maybeSingle()
 
+      console.log('Theme loading:', { data, error })
+
       if (!error && data?.config_value) {
         const themeId = String(data.config_value).replace(/"/g, '') // Remove quotes if present
+        console.log('Found theme ID:', themeId)
         const theme = availableThemes.find(t => t.id === themeId)
         if (theme) {
+          console.log('Setting theme:', theme.name)
           setCurrentTheme({ ...theme, isActive: true })
         }
+      } else {
+        console.log('No theme found in database, using default')
       }
     } catch (error) {
       console.error('Error loading theme:', error)
