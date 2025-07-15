@@ -80,6 +80,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import TermOfOfficeValidator from "@/components/AI/TermOfOfficeValidator";
 import GovWebsiteScraper from "@/components/AI/GovWebsiteScraper";
 import { SystemHealthCheck } from "@/components/Admin/SystemHealthCheck";
+import AshenDebugCore from "@/components/Admin/AshenDebugCore";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -263,6 +264,10 @@ const Admin = () => {
                  <TabsTrigger value="system-health" className="flex items-center gap-2">
                    <Activity className="h-4 w-4" />
                    System Health
+                 </TabsTrigger>
+                 <TabsTrigger value="ashen-debug" className="flex items-center gap-2">
+                   <Bot className="h-4 w-4" />
+                   Ashen Debug
                  </TabsTrigger>
               </TabsList>
             </ScrollArea>
@@ -1057,6 +1062,11 @@ const Admin = () => {
               <div className="space-y-6">
                 <SystemHealthCheck />
               </div>
+            </TabsContent>
+
+            {/* 18. ASHEN DEBUG CORE */}
+            <TabsContent value="ashen-debug">
+              <AshenDebugCore />
             </TabsContent>
           </Tabs>
         </div>

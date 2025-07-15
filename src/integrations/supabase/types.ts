@@ -202,6 +202,192 @@ export type Database = {
           },
         ]
       }
+      ashen_behavior_tests: {
+        Row: {
+          created_at: string
+          device_type: string
+          id: string
+          issues_found: Json | null
+          metadata: Json | null
+          performance_metrics: Json | null
+          route_tested: string
+          screenshot_url: string | null
+          test_name: string
+          test_result: string
+          test_type: string
+        }
+        Insert: {
+          created_at?: string
+          device_type?: string
+          id?: string
+          issues_found?: Json | null
+          metadata?: Json | null
+          performance_metrics?: Json | null
+          route_tested: string
+          screenshot_url?: string | null
+          test_name: string
+          test_result: string
+          test_type: string
+        }
+        Update: {
+          created_at?: string
+          device_type?: string
+          id?: string
+          issues_found?: Json | null
+          metadata?: Json | null
+          performance_metrics?: Json | null
+          route_tested?: string
+          screenshot_url?: string | null
+          test_name?: string
+          test_result?: string
+          test_type?: string
+        }
+        Relationships: []
+      }
+      ashen_code_analysis: {
+        Row: {
+          analysis_type: string
+          auto_fixable: boolean | null
+          file_path: string
+          id: string
+          issues_found: number | null
+          last_analyzed: string
+          metadata: Json | null
+          quality_score: number | null
+          suggestions: Json | null
+        }
+        Insert: {
+          analysis_type: string
+          auto_fixable?: boolean | null
+          file_path: string
+          id?: string
+          issues_found?: number | null
+          last_analyzed?: string
+          metadata?: Json | null
+          quality_score?: number | null
+          suggestions?: Json | null
+        }
+        Update: {
+          analysis_type?: string
+          auto_fixable?: boolean | null
+          file_path?: string
+          id?: string
+          issues_found?: number | null
+          last_analyzed?: string
+          metadata?: Json | null
+          quality_score?: number | null
+          suggestions?: Json | null
+        }
+        Relationships: []
+      }
+      ashen_error_logs: {
+        Row: {
+          component_path: string
+          confidence_score: number | null
+          created_at: string
+          error_message: string
+          error_type: string
+          id: string
+          line_number: number | null
+          metadata: Json | null
+          resolved_at: string | null
+          resolved_by: string | null
+          screenshot_url: string | null
+          severity: string
+          status: string
+          suggested_fix: string | null
+        }
+        Insert: {
+          component_path: string
+          confidence_score?: number | null
+          created_at?: string
+          error_message: string
+          error_type: string
+          id?: string
+          line_number?: number | null
+          metadata?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screenshot_url?: string | null
+          severity?: string
+          status?: string
+          suggested_fix?: string | null
+        }
+        Update: {
+          component_path?: string
+          confidence_score?: number | null
+          created_at?: string
+          error_message?: string
+          error_type?: string
+          id?: string
+          line_number?: number | null
+          metadata?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screenshot_url?: string | null
+          severity?: string
+          status?: string
+          suggested_fix?: string | null
+        }
+        Relationships: []
+      }
+      ashen_learning_patterns: {
+        Row: {
+          created_at: string
+          id: string
+          pattern_data: Json
+          pattern_type: string
+          success_rate: number | null
+          updated_at: string
+          usage_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          pattern_data: Json
+          pattern_type: string
+          success_rate?: number | null
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          pattern_data?: Json
+          pattern_type?: string
+          success_rate?: number | null
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
+      ashen_monitoring_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          id: string
+          is_active: boolean | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       cache_flush_operations: {
         Row: {
           cache_layers: string[]
