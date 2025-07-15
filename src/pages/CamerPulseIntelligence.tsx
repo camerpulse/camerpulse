@@ -35,6 +35,7 @@ import { AutonomousRefreshEngine } from '@/components/AI/AutonomousRefreshEngine
 import { FeedbackLearningLoop } from '@/components/AI/FeedbackLearningLoop';
 import { CivicNarrativeGenerator } from '@/components/AI/CivicNarrativeGenerator';
 import SignalIntelligenceCore from '@/components/AI/SignalIntelligenceCore';
+import { MultimodalEmotionProcessor } from '@/components/AI/MultimodalEmotionProcessor';
 
 interface SentimentData {
   id: string;
@@ -231,6 +232,7 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
             <TabsTrigger value="memory">Civic Memory</TabsTrigger>
+            <TabsTrigger value="multimodal">Multimodal Processor</TabsTrigger>
             <TabsTrigger value="refresh">Autonomous Refresh</TabsTrigger>
             <TabsTrigger value="learning">Learning Loop</TabsTrigger>
             <TabsTrigger value="narrative">Narrative Generator</TabsTrigger>
@@ -320,6 +322,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="memory" className="space-y-4">
             <CivicMemoryEngine />
+          </TabsContent>
+
+          <TabsContent value="multimodal" className="space-y-4">
+            <MultimodalEmotionProcessor />
           </TabsContent>
 
           <TabsContent value="refresh" className="space-y-4">

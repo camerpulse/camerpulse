@@ -273,6 +273,8 @@ export type Database = {
       }
       camerpulse_intelligence_sentiment_logs: {
         Row: {
+          audio_emotion_analysis: Json | null
+          audio_transcript: string | null
           author_handle: string | null
           author_influence_score: number | null
           confidence_score: number | null
@@ -282,20 +284,28 @@ export type Database = {
           created_at: string
           emotional_tone: string[] | null
           engagement_metrics: Json | null
+          facial_emotion_scores: Json | null
           flagged_for_review: boolean | null
           hashtags: string[] | null
           id: string
           keywords_detected: string[] | null
           language_detected: string | null
+          media_metadata: Json | null
+          media_type: string | null
+          media_url: string | null
           mentions: string[] | null
+          multimodal_confidence: number | null
           platform: string
           processed_at: string | null
           region_detected: string | null
           sentiment_polarity: string
           sentiment_score: number | null
           threat_level: string | null
+          visual_emotions: Json | null
         }
         Insert: {
+          audio_emotion_analysis?: Json | null
+          audio_transcript?: string | null
           author_handle?: string | null
           author_influence_score?: number | null
           confidence_score?: number | null
@@ -305,20 +315,28 @@ export type Database = {
           created_at?: string
           emotional_tone?: string[] | null
           engagement_metrics?: Json | null
+          facial_emotion_scores?: Json | null
           flagged_for_review?: boolean | null
           hashtags?: string[] | null
           id?: string
           keywords_detected?: string[] | null
           language_detected?: string | null
+          media_metadata?: Json | null
+          media_type?: string | null
+          media_url?: string | null
           mentions?: string[] | null
+          multimodal_confidence?: number | null
           platform: string
           processed_at?: string | null
           region_detected?: string | null
           sentiment_polarity: string
           sentiment_score?: number | null
           threat_level?: string | null
+          visual_emotions?: Json | null
         }
         Update: {
+          audio_emotion_analysis?: Json | null
+          audio_transcript?: string | null
           author_handle?: string | null
           author_influence_score?: number | null
           confidence_score?: number | null
@@ -328,18 +346,24 @@ export type Database = {
           created_at?: string
           emotional_tone?: string[] | null
           engagement_metrics?: Json | null
+          facial_emotion_scores?: Json | null
           flagged_for_review?: boolean | null
           hashtags?: string[] | null
           id?: string
           keywords_detected?: string[] | null
           language_detected?: string | null
+          media_metadata?: Json | null
+          media_type?: string | null
+          media_url?: string | null
           mentions?: string[] | null
+          multimodal_confidence?: number | null
           platform?: string
           processed_at?: string | null
           region_detected?: string | null
           sentiment_polarity?: string
           sentiment_score?: number | null
           threat_level?: string | null
+          visual_emotions?: Json | null
         }
         Relationships: []
       }
