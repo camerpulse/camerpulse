@@ -21,6 +21,7 @@ import PoliticaAI from "./pages/PoliticaAI";
 import CamerPulseIntelligence from "./pages/CamerPulseIntelligence";
 import CivicPublicPortal from "./pages/CivicPublicPortal";
 import Promises from "./pages/Promises";
+import RegionalAnalytics from "./pages/RegionalAnalytics";
 import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -84,6 +85,7 @@ const App = () => {
               } />
               <Route path="/civic-portal" element={<CivicPublicPortal />} />
               <Route path="/promises" element={<Promises />} />
+              <Route path="/regional-analytics" element={<RegionalAnalytics />} />
               <Route path="/marketplace/order-success" element={<OrderSuccess />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

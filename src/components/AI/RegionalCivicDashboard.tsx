@@ -4,8 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { RegionEmbed } from './OfficialEmbedEngine';
+import { RegionRepAnalytics } from './RegionRepAnalytics';
 import {
   MapPin,
   Users,
@@ -15,7 +17,8 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  Activity
+  Activity,
+  BarChart3
 } from 'lucide-react';
 
 interface RegionalStats {
@@ -266,6 +269,28 @@ export const RegionalCivicDashboard: React.FC<RegionalCivicDashboardProps> = ({ 
 
       {/* Regional Representatives */}
       <RegionEmbed regionName={targetRegion} />
+
+      {/* Regional Analytics Link */}
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <BarChart3 className="w-8 h-8 text-blue-600" />
+              <div>
+                <h3 className="text-lg font-semibold text-blue-800">Detailed Regional Analytics</h3>
+                <p className="text-blue-600 text-sm">
+                  Explore comprehensive representation analysis for {targetRegion} region
+                </p>
+              </div>
+            </div>
+            <Button asChild className="bg-blue-600 hover:bg-blue-700">
+              <a href="/regional-analytics" target="_blank" rel="noopener noreferrer">
+                View Full Analytics
+              </a>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Recent Regional Activity */}
       {insights && insights.length > 0 && (

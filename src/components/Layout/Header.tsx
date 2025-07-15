@@ -81,6 +81,9 @@ export const Header = () => {
               <Link to="/civic-portal">🌍 Civic Portal</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/regional-analytics">📊 Regional Analytics</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/news">📰 News</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
@@ -187,6 +190,9 @@ export const Header = () => {
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/civic-portal" onClick={() => setMobileMenuOpen(false)}>Civic Portal</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/regional-analytics" onClick={() => setMobileMenuOpen(false)}>Regional Analytics</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start col-span-2">
                 <Link to="/camerpulse-intelligence" onClick={() => setMobileMenuOpen(false)}>Intelligence Dashboard</Link>
