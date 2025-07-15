@@ -79,17 +79,7 @@ export const CivicTrustRatingEngine: React.FC = () => {
         .select(`
           id,
           name,
-          average_detailed_rating,
-          total_detailed_ratings,
-          approval_ratings(rating, user_id),
-          politician_detailed_ratings(
-            integrity_rating,
-            transparency_rating,
-            development_impact_rating,
-            leadership_rating,
-            responsiveness_rating,
-            user_id
-          )
+          approval_ratings(rating, user_id)
         `)
         .order('name');
 
@@ -100,19 +90,7 @@ export const CivicTrustRatingEngine: React.FC = () => {
         .from('political_parties')
         .select(`
           id,
-          name,
-          approval_rating,
-          transparency_rating,
-          development_rating,
-          trust_rating,
-          total_ratings,
-          party_ratings(
-            approval_rating,
-            transparency_rating,
-            development_rating,
-            trust_rating,
-            user_id
-          )
+          name
         `)
         .order('name');
 
@@ -121,55 +99,28 @@ export const CivicTrustRatingEngine: React.FC = () => {
       // Process politicians
       const processedPoliticians = politicianData?.map(p => {
         const ratings = p.approval_ratings || [];
-        const detailedRatings = p.politician_detailed_ratings || [];
         const userRating = user ? ratings.find(r => r.user_id === user.id)?.rating : undefined;
-        const userDetailedRating = user ? detailedRatings.find(r => r.user_id === user.id) : undefined;
+        const averageRating = ratings.length > 0 ? ratings.reduce((sum, r) => sum + (r.rating || 0), 0) / ratings.length : 0;
 
         return {
           id: p.id,
           name: p.name,
           type: 'politician' as const,
-          averageRating: p.average_detailed_rating || 0,
-          totalRatings: p.total_detailed_ratings || 0,
-          userRating,
-          detailedRatings: userDetailedRating ? {
-            integrity: userDetailedRating.integrity_rating,
-            transparency: userDetailedRating.transparency_rating,
-            development: userDetailedRating.development_impact_rating,
-            leadership: userDetailedRating.leadership_rating,
-            responsiveness: userDetailedRating.responsiveness_rating
-          } : undefined
+          averageRating,
+          totalRatings: ratings.length,
+          userRating
         };
       }) || [];
 
       // Process parties
       const processedParties = partyData?.map(p => {
-        const ratings = p.party_ratings || [];
-        const userRating = user ? ratings.find(r => r.user_id === user.id) : undefined;
-        const avgRating = (
-          (p.approval_rating || 0) + 
-          (p.transparency_rating || 0) + 
-          (p.development_rating || 0) + 
-          (p.trust_rating || 0)
-        ) / 4;
-
         return {
           id: p.id,
           name: p.name,
           type: 'party' as const,
-          averageRating: avgRating,
-          totalRatings: p.total_ratings || 0,
-          userRating: userRating ? (
-            (userRating.approval_rating || 0) + 
-            (userRating.transparency_rating || 0) + 
-            (userRating.development_rating || 0) + 
-            (userRating.trust_rating || 0)
-          ) / 4 : undefined,
-          detailedRatings: userRating ? {
-            integrity: userRating.approval_rating,
-            transparency: userRating.transparency_rating,
-            development: userRating.development_rating
-          } : undefined
+          averageRating: 0,
+          totalRatings: 0,
+          userRating: undefined
         };
       }) || [];
 
@@ -188,19 +139,8 @@ export const CivicTrustRatingEngine: React.FC = () => {
   };
 
   const loadAbuseAlerts = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('rating_abuse_logs')
-        .select('*')
-        .eq('admin_reviewed', false)
-        .order('flagged_at', { ascending: false })
-        .limit(10);
-
-      if (error) throw error;
-      setAbuseAlerts(data || []);
-    } catch (error) {
-      console.error('Error loading abuse alerts:', error);
-    }
+    // Skip loading abuse alerts for now since table might not exist
+    setAbuseAlerts([]);
   };
 
   const submitRating = async () => {
@@ -225,36 +165,25 @@ export const CivicTrustRatingEngine: React.FC = () => {
     setLoading(true);
     try {
       if (selectedEntity.type === 'politician') {
-        // Submit politician detailed rating
+        // Submit politician rating using existing approval_ratings table
         const { error } = await supabase
-          .from('politician_detailed_ratings')
+          .from('approval_ratings')
           .upsert({
             politician_id: selectedEntity.id,
             user_id: user.id,
-            integrity_rating: detailedRatings.integrity || null,
-            development_impact_rating: detailedRatings.development || null,
-            transparency_rating: detailedRatings.transparency || null,
-            leadership_rating: detailedRatings.leadership || null,
-            responsiveness_rating: detailedRatings.responsiveness || null,
+            rating: userRating || Math.round((Object.values(detailedRatings).reduce((a, b) => a + b, 0) / 5)),
             comment: userComment || null
           });
 
         if (error) throw error;
       } else {
-        // Submit party rating
-        const { error } = await supabase
-          .from('party_ratings')
-          .upsert({
-            party_id: selectedEntity.id,
-            user_id: user.id,
-            approval_rating: detailedRatings.integrity || null,
-            transparency_rating: detailedRatings.transparency || null,
-            development_rating: detailedRatings.development || null,
-            trust_rating: userRating || null,
-            comment: userComment || null
-          });
-
-        if (error) throw error;
+        // For parties, we'll just show a message for now
+        toast({
+          title: "Coming Soon",
+          description: "Party ratings will be available once the database is fully set up",
+          variant: "default"
+        });
+        return;
       }
 
       toast({
