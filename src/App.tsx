@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -33,7 +33,7 @@ import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
 const queryClient = new QueryClient();
 
 const App = () => {
-  React.useEffect(() => {
+  useEffect(() => {
     // Register service worker for PWA functionality
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
