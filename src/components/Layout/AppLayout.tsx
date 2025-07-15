@@ -4,6 +4,8 @@ import { MobileNavigation } from './MobileNavigation';
 import { PWAInstallPrompt } from './PWAInstallPrompt';
 import { LuxAeternaParticles } from '@/components/Theme/LuxAeternaParticles';
 import { LuxAeternaEffects } from '@/components/Theme/LuxAeternaEffects';
+import { LuxAeternaWeatherEffects } from '@/components/Theme/LuxAeternaWeatherEffects';
+import { LuxAeternaControlPanel } from '@/components/Theme/LuxAeternaControlPanel';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -15,6 +17,7 @@ export const AppLayout = ({ children, showMobileNav = true }: AppLayoutProps) =>
     <LuxAeternaEffects>
       <div className="min-h-screen bg-background">
         <LuxAeternaParticles />
+        <LuxAeternaWeatherEffects />
         <ThemeAwareHeader />
         
         <main className="flex-1 relative z-10">
@@ -22,6 +25,7 @@ export const AppLayout = ({ children, showMobileNav = true }: AppLayoutProps) =>
         </main>
         
         {showMobileNav && <MobileNavigation />}
+        <LuxAeternaControlPanel />
         <PWAInstallPrompt />
       </div>
     </LuxAeternaEffects>
