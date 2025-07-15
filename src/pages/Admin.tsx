@@ -9,6 +9,8 @@ import { CivicAlertBot } from "@/components/AI/CivicAlertBot";
 import { DailyReportGenerator } from "@/components/AI/DailyReportGenerator";
 import { CivicAlertSystem } from "@/components/Security/CivicAlertSystem";
 import { RoleControlSystem } from "@/components/Security/RoleControlSystem";
+import { CacheManagementDashboard } from "@/components/Admin/CacheManagementDashboard";
+import { CacheStatusMonitor } from "@/components/Admin/CacheStatusMonitor";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -246,6 +248,10 @@ const Admin = () => {
                 <TabsTrigger value="civic-control" className="flex items-center gap-2">
                   <Eye className="h-4 w-4" />
                   Portal Control
+                </TabsTrigger>
+                <TabsTrigger value="cache-management" className="flex items-center gap-2">
+                  <Database className="h-4 w-4" />
+                  Cache Management
                 </TabsTrigger>
               </TabsList>
             </ScrollArea>
@@ -996,6 +1002,35 @@ const Admin = () => {
             <TabsContent value="civic-control">
               <div className="space-y-6">
                 <CivicViewControlPanel />
+              </div>
+            </TabsContent>
+
+            {/* 15. CACHE MANAGEMENT */}
+            <TabsContent value="cache-management">
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Database className="h-5 w-5" />
+                      System Cache Status
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CacheStatusMonitor />
+                  </CardContent>
+                </Card>
+                
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <RefreshCw className="h-5 w-5" />
+                      Cache Management Dashboard
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CacheManagementDashboard />
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
           </Tabs>

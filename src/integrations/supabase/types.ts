@@ -202,6 +202,92 @@ export type Database = {
           },
         ]
       }
+      cache_flush_operations: {
+        Row: {
+          cache_layers: string[]
+          completed_at: string | null
+          error_details: Json | null
+          id: string
+          initiated_by: string | null
+          metadata: Json | null
+          operation_type: string
+          started_at: string | null
+          status: string
+          success_details: Json | null
+        }
+        Insert: {
+          cache_layers: string[]
+          completed_at?: string | null
+          error_details?: Json | null
+          id?: string
+          initiated_by?: string | null
+          metadata?: Json | null
+          operation_type: string
+          started_at?: string | null
+          status?: string
+          success_details?: Json | null
+        }
+        Update: {
+          cache_layers?: string[]
+          completed_at?: string | null
+          error_details?: Json | null
+          id?: string
+          initiated_by?: string | null
+          metadata?: Json | null
+          operation_type?: string
+          started_at?: string | null
+          status?: string
+          success_details?: Json | null
+        }
+        Relationships: []
+      }
+      cache_status_tracking: {
+        Row: {
+          cache_layer: string
+          completed_at: string | null
+          error_message: string | null
+          id: string
+          items_cleared: number | null
+          metadata: Json | null
+          operation_id: string | null
+          size_cleared_mb: number | null
+          started_at: string | null
+          status: string
+        }
+        Insert: {
+          cache_layer: string
+          completed_at?: string | null
+          error_message?: string | null
+          id?: string
+          items_cleared?: number | null
+          metadata?: Json | null
+          operation_id?: string | null
+          size_cleared_mb?: number | null
+          started_at?: string | null
+          status?: string
+        }
+        Update: {
+          cache_layer?: string
+          completed_at?: string | null
+          error_message?: string | null
+          id?: string
+          items_cleared?: number | null
+          metadata?: Json | null
+          operation_id?: string | null
+          size_cleared_mb?: number | null
+          started_at?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cache_status_tracking_operation_id_fkey"
+            columns: ["operation_id"]
+            isOneToOne: false
+            referencedRelation: "cache_flush_operations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cameroon_locations: {
         Row: {
           alternative_names: string[] | null
@@ -4622,6 +4708,48 @@ export type Database = {
           subscription_tier?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      system_cache_config: {
+        Row: {
+          auto_flush_enabled: boolean | null
+          auto_flush_interval_hours: number | null
+          cache_layer: string
+          config_metadata: Json | null
+          created_at: string | null
+          flush_priority: number | null
+          id: string
+          is_active: boolean | null
+          max_size_mb: number | null
+          retention_hours: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_flush_enabled?: boolean | null
+          auto_flush_interval_hours?: number | null
+          cache_layer: string
+          config_metadata?: Json | null
+          created_at?: string | null
+          flush_priority?: number | null
+          id?: string
+          is_active?: boolean | null
+          max_size_mb?: number | null
+          retention_hours?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_flush_enabled?: boolean | null
+          auto_flush_interval_hours?: number | null
+          cache_layer?: string
+          config_metadata?: Json | null
+          created_at?: string | null
+          flush_priority?: number | null
+          id?: string
+          is_active?: boolean | null
+          max_size_mb?: number | null
+          retention_hours?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }
