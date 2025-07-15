@@ -37,6 +37,7 @@ import { CivicNarrativeGenerator } from '@/components/AI/CivicNarrativeGenerator
 import SignalIntelligenceCore from '@/components/AI/SignalIntelligenceCore';
 import { MultimodalEmotionProcessor } from '@/components/AI/MultimodalEmotionProcessor';
 import CivicWhatsAppBridge from '@/components/AI/CivicWhatsAppBridge';
+import LocalSentimentMapper from '@/components/AI/LocalSentimentMapper';
 
 interface SentimentData {
   id: string;
@@ -224,11 +225,12 @@ const CamerPulseIntelligence = () => {
 
         {/* Main Dashboard */}
         <Tabs defaultValue="civic" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-11">
+          <TabsList className="grid w-full grid-cols-12">
             <TabsTrigger value="civic">Civic Feed</TabsTrigger>
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
             <TabsTrigger value="election">Election Tracker</TabsTrigger>
             <TabsTrigger value="regional">Regional Insights</TabsTrigger>
+            <TabsTrigger value="local">Local Mapper</TabsTrigger>
             <TabsTrigger value="diaspora">Diaspora Echo</TabsTrigger>
             <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
@@ -308,6 +310,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="regional" className="space-y-4">
             <RegionalSentimentHeatmap />
+          </TabsContent>
+
+          <TabsContent value="local" className="space-y-4">
+            <LocalSentimentMapper />
           </TabsContent>
 
           <TabsContent value="diaspora" className="space-y-4">
