@@ -8,6 +8,7 @@ import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Za
 import ErrorDashboard from "./ErrorDashboard";
 import HealingHistory from "./HealingHistory";
 import { UIBugLogs } from "./UIBugLogs";
+import { LearningEngine } from "./LearningEngine";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -176,6 +177,27 @@ export default function AshenDebugCore() {
     }
   };
 
+  const runLearningEngine = async () => {
+    setIsAnalyzing(true);
+    try {
+      const response = await supabase.functions.invoke('ashen-learning-engine', {
+        body: { action: 'train' }
+      });
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      toast.success(`Learning complete - discovered ${response.data.patterns_learned} new patterns`);
+      loadData(); // Refresh data
+    } catch (error) {
+      console.error('Error running learning engine:', error);
+      toast.error('Failed to run learning engine');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const resolveError = async (errorId: string) => {
     try {
       await supabase
@@ -246,7 +268,7 @@ export default function AshenDebugCore() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             <Button
               onClick={() => runAnalysis('analyze')}
               disabled={isAnalyzing}
@@ -254,6 +276,15 @@ export default function AshenDebugCore() {
             >
               <Eye className="h-6 w-6" />
               <span>Analyze Code</span>
+            </Button>
+            <Button
+              onClick={() => runLearningEngine()}
+              disabled={isAnalyzing}
+              variant="secondary"
+              className="h-20 flex-col space-y-2"
+            >
+              <Brain className="h-6 w-6" />
+              <span>Learn Patterns</span>
             </Button>
             <Button
               onClick={() => runVisualInspection()}
@@ -297,9 +328,10 @@ export default function AshenDebugCore() {
 
       {/* Main Dashboard */}
       <Tabs defaultValue="error-dashboard" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
           <TabsTrigger value="healing-history">Healing History</TabsTrigger>
+          <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
           <TabsTrigger value="ui-inspector">UI Inspector</TabsTrigger>
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
@@ -313,6 +345,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="healing-history" className="space-y-4">
           <HealingHistory />
+        </TabsContent>
+        
+        <TabsContent value="learning-engine" className="space-y-4">
+          <LearningEngine />
         </TabsContent>
         
         <TabsContent value="ui-inspector" className="space-y-4">

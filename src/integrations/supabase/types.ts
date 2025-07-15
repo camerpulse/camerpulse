@@ -204,6 +204,9 @@ export type Database = {
       }
       ashen_auto_healing_history: {
         Row: {
+          admin_feedback: string | null
+          admin_feedback_reason: string | null
+          admin_id: string | null
           applied_by: string
           backup_created: boolean | null
           code_changes: Json | null
@@ -216,10 +219,14 @@ export type Database = {
           fix_description: string | null
           fix_method: string
           id: string
+          learning_weight: number | null
           result_status: string
           rollback_info: Json | null
         }
         Insert: {
+          admin_feedback?: string | null
+          admin_feedback_reason?: string | null
+          admin_id?: string | null
           applied_by?: string
           backup_created?: boolean | null
           code_changes?: Json | null
@@ -232,10 +239,14 @@ export type Database = {
           fix_description?: string | null
           fix_method: string
           id?: string
+          learning_weight?: number | null
           result_status?: string
           rollback_info?: Json | null
         }
         Update: {
+          admin_feedback?: string | null
+          admin_feedback_reason?: string | null
+          admin_id?: string | null
           applied_by?: string
           backup_created?: boolean | null
           code_changes?: Json | null
@@ -248,6 +259,7 @@ export type Database = {
           fix_description?: string | null
           fix_method?: string
           id?: string
+          learning_weight?: number | null
           result_status?: string
           rollback_info?: Json | null
         }
@@ -387,6 +399,57 @@ export type Database = {
           severity?: string
           status?: string
           suggested_fix?: string | null
+        }
+        Relationships: []
+      }
+      ashen_learning_insights: {
+        Row: {
+          applicable_contexts: Json | null
+          confidence_score: number | null
+          created_at: string
+          example_cases: Json | null
+          id: string
+          insight_type: string
+          is_active: boolean | null
+          last_applied: string | null
+          learned_rules: Json | null
+          pattern_description: string | null
+          pattern_name: string
+          success_rate: number | null
+          updated_at: string
+          usage_frequency: number | null
+        }
+        Insert: {
+          applicable_contexts?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          example_cases?: Json | null
+          id?: string
+          insight_type: string
+          is_active?: boolean | null
+          last_applied?: string | null
+          learned_rules?: Json | null
+          pattern_description?: string | null
+          pattern_name: string
+          success_rate?: number | null
+          updated_at?: string
+          usage_frequency?: number | null
+        }
+        Update: {
+          applicable_contexts?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          example_cases?: Json | null
+          id?: string
+          insight_type?: string
+          is_active?: boolean | null
+          last_applied?: string | null
+          learned_rules?: Json | null
+          pattern_description?: string | null
+          pattern_name?: string
+          success_rate?: number | null
+          updated_at?: string
+          usage_frequency?: number | null
         }
         Relationships: []
       }
