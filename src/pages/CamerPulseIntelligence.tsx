@@ -40,6 +40,7 @@ import CivicWhatsAppBridge from '@/components/AI/CivicWhatsAppBridge';
 import LocalSentimentMapper from '@/components/AI/LocalSentimentMapper';
 import { CivicSimulationCore } from '@/components/AI/CivicSimulationCore';
 import { DisinfoShieldAI } from '@/components/AI/DisinfoShieldAI';
+import CivicPersonaEngine from '@/components/AI/CivicPersonaEngine';
 
 interface SentimentData {
   id: string;
@@ -235,6 +236,7 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="local">Local Mapper</TabsTrigger>
             <TabsTrigger value="simulation">Civic Simulation</TabsTrigger>
             <TabsTrigger value="disinfoShield">DisinfoShield AI</TabsTrigger>
+            <TabsTrigger value="personas">Civic Personas</TabsTrigger>
             <TabsTrigger value="diaspora">Diaspora Echo</TabsTrigger>
             <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
@@ -326,6 +328,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="disinfoShield" className="space-y-4">
             <DisinfoShieldAI />
+          </TabsContent>
+
+          <TabsContent value="personas" className="space-y-4">
+            <CivicPersonaEngine />
           </TabsContent>
 
           <TabsContent value="diaspora" className="space-y-4">
