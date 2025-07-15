@@ -9,7 +9,7 @@ import { Bot, Activity, CheckCircle, AlertTriangle, Clock, RefreshCw } from "luc
 import { VerificationBadge } from "./VerificationBadge";
 import { BulkImportButton } from "./BulkImportButton";
 
-import SignalIntelligenceCore from "./SignalIntelligenceCore";
+
 import { useToast } from "@/hooks/use-toast";
 
 interface AIStats {
@@ -218,7 +218,6 @@ export const PoliticaAIDashboard = () => {
         <TabsList>
           <TabsTrigger value="activity">Recent Activity</TabsTrigger>
           <TabsTrigger value="config">Configuration</TabsTrigger>
-          <TabsTrigger value="intelligence">Signal Intelligence</TabsTrigger>
         </TabsList>
 
         <TabsContent value="activity" className="space-y-4">
@@ -368,9 +367,6 @@ export const PoliticaAIDashboard = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="intelligence" className="space-y-4">
-          <SignalIntelligenceCore />
-        </TabsContent>
       </Tabs>
     </div>
   );

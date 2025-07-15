@@ -34,6 +34,7 @@ import { CivicMemoryEngine } from '@/components/AI/CivicMemoryEngine';
 import { AutonomousRefreshEngine } from '@/components/AI/AutonomousRefreshEngine';
 import { FeedbackLearningLoop } from '@/components/AI/FeedbackLearningLoop';
 import { CivicNarrativeGenerator } from '@/components/AI/CivicNarrativeGenerator';
+import SignalIntelligenceCore from '@/components/AI/SignalIntelligenceCore';
 
 interface SentimentData {
   id: string;
@@ -233,6 +234,7 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="refresh">Autonomous Refresh</TabsTrigger>
             <TabsTrigger value="learning">Learning Loop</TabsTrigger>
             <TabsTrigger value="narrative">Narrative Generator</TabsTrigger>
+            <TabsTrigger value="intelligence">Signal Intelligence</TabsTrigger>
             <TabsTrigger value="alerts">Threat Monitoring</TabsTrigger>
             <TabsTrigger value="config">AI Settings</TabsTrigger>
           </TabsList>
@@ -330,6 +332,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="narrative" className="space-y-4">
             <CivicNarrativeGenerator />
+          </TabsContent>
+
+          <TabsContent value="intelligence" className="space-y-4">
+            <SignalIntelligenceCore />
           </TabsContent>
 
           <TabsContent value="alerts" className="space-y-4">
