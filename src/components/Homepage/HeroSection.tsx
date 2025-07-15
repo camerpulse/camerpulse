@@ -14,8 +14,29 @@ import {
   Brain
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '@/contexts/ThemeContext';
+import { useToast } from '@/hooks/use-toast';
 
 export const HeroSection = () => {
+  const { switchTheme, currentTheme } = useTheme();
+  const { toast } = useToast();
+
+  const handleSwitchToDefault = async () => {
+    try {
+      await switchTheme('default');
+      toast({
+        title: "Theme switched",
+        description: "Default theme activated successfully"
+      });
+    } catch (error) {
+      toast({
+        title: "Error", 
+        description: "Failed to switch theme",
+        variant: "destructive"
+      });
+    }
+  };
+
   const features = [
     { 
       icon: TrendingUp, 
@@ -111,6 +132,16 @@ export const HeroSection = () => {
                 Donate Now
               </Link>
             </Button>
+            {currentTheme.id !== 'default' && (
+              <Button 
+                onClick={handleSwitchToDefault}
+                variant="secondary" 
+                size="lg" 
+                className="bg-accent/10 hover:bg-accent/20 px-8 py-3"
+              >
+                Switch to Default Theme
+              </Button>
+            )}
           </div>
 
           {/* Feature Grid */}
