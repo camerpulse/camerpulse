@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import * as React from 'react'
 import { supabase } from '@/integrations/supabase/client'
 
 export interface ThemeConfig {
@@ -89,10 +89,10 @@ interface ThemeContextType {
   isLoading: boolean
 }
 
-const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
+const ThemeContext = React.createContext<ThemeContextType | undefined>(undefined)
 
 export const useTheme = () => {
-  const context = useContext(ThemeContext)
+  const context = React.useContext(ThemeContext)
   if (context === undefined) {
     throw new Error('useTheme must be used within a ThemeProvider')
   }
@@ -104,15 +104,15 @@ interface ThemeProviderProps {
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme)
-  const [availableThemes] = useState<ThemeConfig[]>([defaultTheme, emergence2035Theme])
-  const [isLoading, setIsLoading] = useState(true)
+  const [currentTheme, setCurrentTheme] = React.useState<ThemeConfig>(defaultTheme)
+  const [availableThemes] = React.useState<ThemeConfig[]>([defaultTheme, emergence2035Theme])
+  const [isLoading, setIsLoading] = React.useState(true)
 
-  useEffect(() => {
+  React.useEffect(() => {
     loadActiveTheme()
   }, [])
 
-  useEffect(() => {
+  React.useEffect(() => {
     applyThemeToDocument(currentTheme)
   }, [currentTheme])
 
