@@ -27,6 +27,7 @@ import { ElectionSentimentTracker } from '@/components/AI/ElectionSentimentTrack
 import RegionalSentimentHeatmap from '@/components/AI/RegionalSentimentHeatmap';
 import DiasporaEcho from '@/components/AI/DiasporaEcho';
 import EmotionalSpotlight from '@/components/AI/EmotionalSpotlight';
+import TrendRadar from '@/components/AI/TrendRadar';
 
 interface SentimentData {
   id: string;
@@ -297,45 +298,7 @@ const CamerPulseIntelligence = () => {
           </TabsContent>
 
           <TabsContent value="trending" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <TrendingUp className="h-5 w-5" />
-                  <span>Trending Topics & Hashtags</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {trendingTopics.map((topic, idx) => (
-                    <div key={idx} className="border rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold">{topic.topic_text}</h4>
-                        <Badge variant={topic.trend_status === 'viral' ? 'destructive' : 'default'}>
-                          {topic.trend_status}
-                        </Badge>
-                      </div>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-sm">
-                          <span>Volume Score:</span>
-                          <span className="font-medium">{topic.volume_score}</span>
-                        </div>
-                        <div className="flex items-center justify-between text-sm">
-                          <span>Sentiment:</span>
-                          <span className={`font-medium ${getSentimentColor(topic.sentiment_score)}`}>
-                            {topic.sentiment_score?.toFixed(2)}
-                          </span>
-                        </div>
-                        {topic.category && (
-                          <Badge variant="outline" className="text-xs">
-                            {topic.category}
-                          </Badge>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <TrendRadar />
           </TabsContent>
 
           <TabsContent value="alerts" className="space-y-4">
