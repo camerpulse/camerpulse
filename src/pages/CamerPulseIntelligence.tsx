@@ -31,6 +31,9 @@ import EmotionalSpotlight from '@/components/AI/EmotionalSpotlight';
 import TrendRadar from '@/components/AI/TrendRadar';
 import { CivicFeed } from '@/components/AI/CivicFeed';
 import { CivicMemoryEngine } from '@/components/AI/CivicMemoryEngine';
+import { AutonomousRefreshEngine } from '@/components/AI/AutonomousRefreshEngine';
+import { FeedbackLearningLoop } from '@/components/AI/FeedbackLearningLoop';
+import { CivicNarrativeGenerator } from '@/components/AI/CivicNarrativeGenerator';
 
 interface SentimentData {
   id: string;
@@ -227,6 +230,9 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
             <TabsTrigger value="memory">Civic Memory</TabsTrigger>
+            <TabsTrigger value="refresh">Autonomous Refresh</TabsTrigger>
+            <TabsTrigger value="learning">Learning Loop</TabsTrigger>
+            <TabsTrigger value="narrative">Narrative Generator</TabsTrigger>
             <TabsTrigger value="alerts">Threat Monitoring</TabsTrigger>
             <TabsTrigger value="config">AI Settings</TabsTrigger>
           </TabsList>
@@ -312,6 +318,18 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="memory" className="space-y-4">
             <CivicMemoryEngine />
+          </TabsContent>
+
+          <TabsContent value="refresh" className="space-y-4">
+            <AutonomousRefreshEngine />
+          </TabsContent>
+
+          <TabsContent value="learning" className="space-y-4">
+            <FeedbackLearningLoop />
+          </TabsContent>
+
+          <TabsContent value="narrative" className="space-y-4">
+            <CivicNarrativeGenerator />
           </TabsContent>
 
           <TabsContent value="alerts" className="space-y-4">
