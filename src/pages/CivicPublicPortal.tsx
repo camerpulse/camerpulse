@@ -1,30 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { MobileForm, MobileFormField, MobileInput, MobileTextarea, MobileButton } from '@/components/ui/mobile-form';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
 import { 
-  Heart, 
   TrendingUp, 
   MapPin, 
-  Users, 
   AlertTriangle, 
   Eye,
   MessageSquare,
   Send,
-  Mic,
-  Camera,
   Shield,
   Globe,
-  BarChart3,
-  Flag,
-  Clock
+  Clock,
+  Smartphone,
+  Wifi,
+  Signal
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -72,25 +68,22 @@ const CivicPublicPortal = () => {
 
   useEffect(() => {
     loadPublicData();
-    const interval = setInterval(loadPublicData, 60000); // Refresh every minute
+    const interval = setInterval(loadPublicData, 60000);
     return () => clearInterval(interval);
   }, []);
 
   const loadPublicData = async () => {
     try {
-      // Load aggregated sentiment data (non-sensitive)
       const { data: sentiments } = await supabase
         .from('camerpulse_intelligence_sentiment_logs')
         .select('sentiment_score, region_detected')
         .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
-      // Load regional sentiment summary
       const { data: regional } = await supabase
         .from('camerpulse_intelligence_regional_sentiment')
         .select('*')
         .gte('date_recorded', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
 
-      // Load trending topics (non-sensitive)
       const { data: trending } = await supabase
         .from('camerpulse_intelligence_trending_topics')
         .select('topic_text, emotional_breakdown, volume_score')
@@ -98,15 +91,11 @@ const CivicPublicPortal = () => {
         .limit(5);
 
       if (sentiments && sentiments.length > 0) {
-        // Calculate national sentiment
         const nationalAvg = sentiments.reduce((acc, s) => acc + (s.sentiment_score || 0), 0) / sentiments.length;
         setNationalSentiment(nationalAvg);
-
-        // Mock diaspora sentiment (would come from diaspora-specific analysis)
         setDiasporaSentiment(nationalAvg + 0.1);
       }
 
-      // Process trending issues
       if (trending) {
         const issues = trending.map(t => ({
           issue: t.topic_text,
@@ -118,7 +107,6 @@ const CivicPublicPortal = () => {
         setTrendingIssues(issues);
       }
 
-      // Process regional data
       if (regional) {
         const moods = regional.map(r => ({
           region: r.region,
@@ -146,19 +134,6 @@ const CivicPublicPortal = () => {
 
     setIsSubmitting(true);
     try {
-      // Submit to public reports table (would need to be created)
-      const reportData = {
-        content_text: report.description,
-        location_reported: report.location,
-        issue_category: report.issue,
-        emotion_reported: report.emotion,
-        is_anonymous: report.isAnonymous,
-        platform: 'Public Portal',
-        status: 'pending_review', // All reports reviewed before publishing
-        created_at: new Date().toISOString()
-      };
-
-      // For now, insert into sentiment logs table with a special flag
       const { error } = await supabase
         .from('camerpulse_intelligence_sentiment_logs')
         .insert({
@@ -179,7 +154,6 @@ const CivicPublicPortal = () => {
         description: "Your civic report has been submitted for review. Thank you for contributing to our national dialogue.",
       });
 
-      // Reset form
       setReport({
         location: '',
         issue: '',
@@ -201,9 +175,9 @@ const CivicPublicPortal = () => {
   };
 
   const getSentimentColor = (score: number) => {
-    if (score > 0.3) return 'text-green-600';
-    if (score > 0) return 'text-yellow-600';
-    return 'text-red-600';
+    if (score > 0.3) return 'text-success';
+    if (score > 0) return 'text-warning';
+    return 'text-destructive';
   };
 
   const getSentimentLabel = (score: number) => {
@@ -214,11 +188,11 @@ const CivicPublicPortal = () => {
 
   const getDangerColor = (level: string) => {
     switch (level) {
-      case 'critical': return 'bg-red-600';
-      case 'high': return 'bg-orange-600';
-      case 'medium': return 'bg-yellow-600';
-      case 'low': return 'bg-green-600';
-      default: return 'bg-gray-600';
+      case 'critical': return 'bg-destructive text-destructive-foreground';
+      case 'high': return 'bg-warning text-warning-foreground';
+      case 'medium': return 'bg-secondary text-secondary-foreground';
+      case 'low': return 'bg-success text-success-foreground';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
@@ -250,73 +224,83 @@ const CivicPublicPortal = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-primary to-secondary text-white py-8 px-4">
-        <div className="container mx-auto text-center">
-          <div className="flex items-center justify-center space-x-3 mb-4">
-            <Globe className="h-8 w-8" />
-            <h1 className="text-3xl font-bold">CamerPulse Civic Portal</h1>
-          </div>
-          <p className="text-lg opacity-90 max-w-2xl mx-auto">
-            Real-time civic insights for every Cameroonian citizen - Track national mood, issues, and regional developments
-          </p>
-          <div className="flex items-center justify-center space-x-4 mt-4">
-            <Badge variant="outline" className="text-white border-white/50">
-              <Eye className="h-3 w-3 mr-1" />
-              Public Access
-            </Badge>
-            <Badge variant="outline" className="text-white border-white/50">
-              <Shield className="h-3 w-3 mr-1" />
-              Privacy Protected
-            </Badge>
+      {/* Mobile-First Header - Responsive */}
+      <div className="bg-gradient-to-br from-primary via-primary/90 to-secondary text-primary-foreground py-6 sm:py-8 px-4">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center space-y-4">
+            <div className="flex items-center justify-center space-x-2 sm:space-x-3">
+              <Globe className="h-6 w-6 sm:h-8 sm:w-8" />
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight">
+                CamerPulse Civic Portal
+              </h1>
+            </div>
+            
+            <p className="text-sm sm:text-base md:text-lg opacity-90 max-w-2xl mx-auto px-2">
+              Real-time civic insights for every Cameroonian citizen - Track national mood, issues, and regional developments
+            </p>
+            
+            <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-4 mt-4">
+              <Badge variant="outline" className="text-primary-foreground border-primary-foreground/50 text-xs sm:text-sm">
+                <Eye className="h-3 w-3 mr-1" />
+                Public Access
+              </Badge>
+              <Badge variant="outline" className="text-primary-foreground border-primary-foreground/50 text-xs sm:text-sm">
+                <Shield className="h-3 w-3 mr-1" />
+                Privacy Protected
+              </Badge>
+              <Badge variant="outline" className="text-primary-foreground border-primary-foreground/50 text-xs sm:text-sm">
+                <Smartphone className="h-3 w-3 mr-1" />
+                Mobile Optimized
+              </Badge>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 space-y-6">
-        {/* National Mood Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card>
-            <CardHeader className="text-center">
-              <CardTitle className="text-lg">National Mood</CardTitle>
+      <div className="container mx-auto max-w-6xl px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
+        {/* Mobile-Native Mood Overview - Stacked on Mobile */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+          <Card className="transition-all duration-200 hover:shadow-md">
+            <CardHeader className="text-center pb-3">
+              <CardTitle className="text-base sm:text-lg">National Mood</CardTitle>
             </CardHeader>
-            <CardContent className="text-center">
-              <div className={`text-4xl font-bold mb-2 ${getSentimentColor(nationalSentiment)}`}>
+            <CardContent className="text-center pt-0">
+              <div className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 ${getSentimentColor(nationalSentiment)}`}>
                 {getSentimentLabel(nationalSentiment)}
               </div>
-              <Progress value={(nationalSentiment + 1) * 50} className="mb-2" />
-              <p className="text-sm text-muted-foreground">
+              <Progress value={(nationalSentiment + 1) * 50} className="mb-2 h-2" />
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Score: {nationalSentiment.toFixed(2)}
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="text-center">
-              <CardTitle className="text-lg">Diaspora Mood</CardTitle>
+          <Card className="transition-all duration-200 hover:shadow-md">
+            <CardHeader className="text-center pb-3">
+              <CardTitle className="text-base sm:text-lg">Diaspora Mood</CardTitle>
             </CardHeader>
-            <CardContent className="text-center">
-              <div className={`text-4xl font-bold mb-2 ${getSentimentColor(diasporaSentiment)}`}>
+            <CardContent className="text-center pt-0">
+              <div className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 ${getSentimentColor(diasporaSentiment)}`}>
                 {getSentimentLabel(diasporaSentiment)}
               </div>
-              <Progress value={(diasporaSentiment + 1) * 50} className="mb-2" />
-              <p className="text-sm text-muted-foreground">
+              <Progress value={(diasporaSentiment + 1) * 50} className="mb-2 h-2" />
+              <p className="text-xs sm:text-sm text-muted-foreground">
                 Score: {diasporaSentiment.toFixed(2)}
               </p>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader className="text-center">
-              <CardTitle className="text-lg">Mood Comparison</CardTitle>
+          <Card className="transition-all duration-200 hover:shadow-md sm:col-span-2 lg:col-span-1">
+            <CardHeader className="text-center pb-3">
+              <CardTitle className="text-base sm:text-lg">Mood Comparison</CardTitle>
             </CardHeader>
-            <CardContent className="text-center">
+            <CardContent className="text-center pt-0">
               <div className="space-y-2">
-                <div className="text-2xl font-bold">
+                <div className="text-xl sm:text-2xl font-bold">
                   {Math.abs(nationalSentiment - diasporaSentiment) < 0.1 ? 'Aligned' : 
                    nationalSentiment > diasporaSentiment ? 'Home Higher' : 'Diaspora Higher'}
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-xs sm:text-sm text-muted-foreground">
                   Difference: {Math.abs(nationalSentiment - diasporaSentiment).toFixed(2)}
                 </div>
               </div>
@@ -324,47 +308,65 @@ const CivicPublicPortal = () => {
           </Card>
         </div>
 
-        {/* Main Content Tabs */}
+        {/* Mobile-Native Tabs with Scroll */}
         <Tabs defaultValue="issues" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="issues">Trending Issues</TabsTrigger>
-            <TabsTrigger value="regions">Regional Status</TabsTrigger>
-            <TabsTrigger value="report">Submit Report</TabsTrigger>
-            <TabsTrigger value="alerts">Safety Alerts</TabsTrigger>
-          </TabsList>
+          <div className="w-full overflow-x-auto">
+            <TabsList className="grid w-full grid-cols-4 min-w-fit h-auto p-1">
+              <TabsTrigger value="issues" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <TrendingUp className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Trending</span>
+              </TabsTrigger>
+              <TabsTrigger value="regions" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <MapPin className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Regions</span>
+              </TabsTrigger>
+              <TabsTrigger value="report" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <MessageSquare className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Report</span>
+              </TabsTrigger>
+              <TabsTrigger value="alerts" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <AlertTriangle className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Alerts</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="issues" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <TrendingUp className="h-5 w-5" />
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span>Top 5 Civic Issues</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+              <CardContent className="pt-0">
+                <div className="space-y-3 sm:space-y-4">
                   {trendingIssues.map((issue, idx) => (
-                    <div key={idx} className="border rounded-lg p-4">
+                    <div key={idx} className="border rounded-lg p-3 sm:p-4 transition-all duration-200 hover:shadow-sm">
                       <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-semibold">{issue.issue}</h3>
-                        <Badge variant="outline">Volume: {issue.volume}</Badge>
+                        <h3 className="font-semibold text-sm sm:text-base text-foreground truncate flex-1 pr-2">
+                          {issue.issue}
+                        </h3>
+                        <Badge variant="outline" className="text-xs whitespace-nowrap">
+                          Vol: {issue.volume}
+                        </Badge>
                       </div>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                        <div className="text-center">
-                          <div className="text-red-600 font-semibold">{issue.emotionBreakdown.anger}%</div>
-                          <div className="text-muted-foreground">Anger</div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
+                        <div className="text-center p-2 rounded bg-muted/50">
+                          <div className="text-destructive font-semibold text-sm sm:text-base">{issue.emotionBreakdown.anger}%</div>
+                          <div className="text-muted-foreground text-xs">Anger</div>
                         </div>
-                        <div className="text-center">
-                          <div className="text-green-600 font-semibold">{issue.emotionBreakdown.hope}%</div>
-                          <div className="text-muted-foreground">Hope</div>
+                        <div className="text-center p-2 rounded bg-muted/50">
+                          <div className="text-success font-semibold text-sm sm:text-base">{issue.emotionBreakdown.hope}%</div>
+                          <div className="text-muted-foreground text-xs">Hope</div>
                         </div>
-                        <div className="text-center">
-                          <div className="text-blue-600 font-semibold">{issue.emotionBreakdown.sadness}%</div>
-                          <div className="text-muted-foreground">Sadness</div>
+                        <div className="text-center p-2 rounded bg-muted/50">
+                          <div className="text-primary font-semibold text-sm sm:text-base">{issue.emotionBreakdown.sadness}%</div>
+                          <div className="text-muted-foreground text-xs">Sadness</div>
                         </div>
-                        <div className="text-center">
-                          <div className="text-orange-600 font-semibold">{issue.emotionBreakdown.fear}%</div>
-                          <div className="text-muted-foreground">Fear</div>
+                        <div className="text-center p-2 rounded bg-muted/50">
+                          <div className="text-warning font-semibold text-sm sm:text-base">{issue.emotionBreakdown.fear}%</div>
+                          <div className="text-muted-foreground text-xs">Fear</div>
                         </div>
                       </div>
                     </div>
@@ -376,34 +378,34 @@ const CivicPublicPortal = () => {
 
           <TabsContent value="regions" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <MapPin className="h-5 w-5" />
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span>Regional Safety & Mood</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CardContent className="pt-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {regionalMoods.map((mood, idx) => (
-                    <div key={idx} className="border rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-semibold">{mood.region}</h3>
-                        <Badge className={getDangerColor(mood.dangerLevel)}>
+                    <div key={idx} className="border rounded-lg p-3 sm:p-4 transition-all duration-200 hover:shadow-sm">
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="font-semibold text-sm sm:text-base">{mood.region}</h3>
+                        <Badge className={`text-xs whitespace-nowrap ${getDangerColor(mood.dangerLevel)}`}>
                           {getDangerLabel(mood.dangerLevel)}
                         </Badge>
                       </div>
-                      <div className="space-y-2">
+                      <div className="space-y-3">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm">Mood:</span>
-                          <span className={`font-semibold ${getSentimentColor(mood.sentiment)}`}>
+                          <span className="text-xs sm:text-sm text-muted-foreground">Mood:</span>
+                          <span className={`font-semibold text-xs sm:text-sm ${getSentimentColor(mood.sentiment)}`}>
                             {getSentimentLabel(mood.sentiment)}
                           </span>
                         </div>
                         <Progress value={(mood.sentiment + 1) * 50} className="h-2" />
                         {mood.topIssues.length > 0 && (
-                          <div className="text-sm">
-                            <span className="font-medium">Top Concerns:</span>
-                            <div className="flex flex-wrap gap-1 mt-1">
+                          <div className="text-xs sm:text-sm space-y-2">
+                            <span className="font-medium text-muted-foreground">Top Concerns:</span>
+                            <div className="flex flex-wrap gap-1">
                               {mood.topIssues.slice(0, 3).map((issue, issueIdx) => (
                                 <Badge key={issueIdx} variant="outline" className="text-xs">
                                   {issue}
@@ -422,22 +424,21 @@ const CivicPublicPortal = () => {
 
           <TabsContent value="report" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <MessageSquare className="h-5 w-5" />
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span>Submit Civic Report</span>
                 </CardTitle>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs sm:text-sm text-muted-foreground mt-2">
                   Share your observations, concerns, or civic issues anonymously. All reports are reviewed before publication.
                 </p>
               </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="location">Location/Region *</Label>
+              <CardContent className="pt-0">
+                <MobileForm className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <MobileFormField label="Location/Region" required>
                       <Select value={report.location} onValueChange={(value) => setReport({...report, location: value})}>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-12 text-base">
                           <SelectValue placeholder="Select your region" />
                         </SelectTrigger>
                         <SelectContent>
@@ -446,12 +447,11 @@ const CivicPublicPortal = () => {
                           ))}
                         </SelectContent>
                       </Select>
-                    </div>
+                    </MobileFormField>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="issue">Issue Category *</Label>
+                    <MobileFormField label="Issue Category" required>
                       <Select value={report.issue} onValueChange={(value) => setReport({...report, issue: value})}>
-                        <SelectTrigger>
+                        <SelectTrigger className="h-12 text-base">
                           <SelectValue placeholder="What is this about?" />
                         </SelectTrigger>
                         <SelectContent>
@@ -460,13 +460,12 @@ const CivicPublicPortal = () => {
                           ))}
                         </SelectContent>
                       </Select>
-                    </div>
+                    </MobileFormField>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="emotion">Your Emotion</Label>
+                  <MobileFormField label="Your Emotion">
                     <Select value={report.emotion} onValueChange={(value) => setReport({...report, emotion: value})}>
-                      <SelectTrigger>
+                      <SelectTrigger className="h-12 text-base">
                         <SelectValue placeholder="How does this make you feel?" />
                       </SelectTrigger>
                       <SelectContent>
@@ -475,44 +474,40 @@ const CivicPublicPortal = () => {
                         ))}
                       </SelectContent>
                     </Select>
-                  </div>
+                  </MobileFormField>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="description">Your Report *</Label>
-                    <Textarea
-                      id="description"
+                  <MobileFormField label="Your Report" required>
+                    <MobileTextarea
                       placeholder="Describe what you want to report..."
                       value={report.description}
                       onChange={(e) => setReport({...report, description: e.target.value})}
                       rows={4}
                     />
-                  </div>
+                  </MobileFormField>
 
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
+                  <div className="flex items-center space-x-3">
+                    <Checkbox
                       id="anonymous"
                       checked={report.isAnonymous}
-                      onChange={(e) => setReport({...report, isAnonymous: e.target.checked})}
-                      className="rounded"
+                      onCheckedChange={(checked) => setReport({...report, isAnonymous: !!checked})}
                     />
-                    <Label htmlFor="anonymous" className="text-sm">
+                    <Label htmlFor="anonymous" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
                       Submit anonymously (recommended)
                     </Label>
                   </div>
 
-                  <Alert>
+                  <Alert className="border-l-4 border-l-primary">
                     <Shield className="h-4 w-4" />
-                    <AlertDescription>
+                    <AlertDescription className="text-sm">
                       <strong>Privacy Notice:</strong> All reports are reviewed by our team before being included in public analysis. 
                       No personal information is stored or shared without explicit consent.
                     </AlertDescription>
                   </Alert>
 
-                  <Button 
+                  <MobileButton 
                     onClick={submitCivicReport} 
                     disabled={isSubmitting}
-                    className="w-full"
+                    className="w-full transition-all duration-200"
                   >
                     {isSubmitting ? (
                       <>
@@ -525,27 +520,27 @@ const CivicPublicPortal = () => {
                         Submit Report
                       </>
                     )}
-                  </Button>
-                </div>
+                  </MobileButton>
+                </MobileForm>
               </CardContent>
             </Card>
           </TabsContent>
 
           <TabsContent value="alerts" className="space-y-4">
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <AlertTriangle className="h-5 w-5" />
+              <CardHeader className="pb-4">
+                <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <AlertTriangle className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span>Current Safety Alerts</span>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="pt-0">
                 <div className="space-y-4">
                   {regionalMoods.filter(mood => mood.dangerLevel !== 'low').length === 0 ? (
                     <div className="text-center py-8">
-                      <Shield className="h-12 w-12 mx-auto mb-4 text-green-600" />
-                      <h3 className="text-lg font-semibold text-green-600 mb-2">All Clear</h3>
-                      <p className="text-muted-foreground">
+                      <Shield className="h-12 w-12 mx-auto mb-4 text-success" />
+                      <h3 className="text-lg font-semibold text-success mb-2">All Clear</h3>
+                      <p className="text-muted-foreground text-sm sm:text-base">
                         No critical safety alerts across Cameroon regions at this time.
                       </p>
                     </div>
@@ -556,14 +551,14 @@ const CivicPublicPortal = () => {
                         <Alert key={idx} className="border-l-4 border-l-current">
                           <AlertTriangle className="h-4 w-4" />
                           <AlertDescription>
-                            <div className="space-y-2">
+                            <div className="space-y-3">
                               <div className="flex items-center justify-between">
-                                <h4 className="font-semibold">{mood.region} Region</h4>
-                                <Badge className={getDangerColor(mood.dangerLevel)}>
+                                <h4 className="font-semibold text-sm sm:text-base">{mood.region} Region</h4>
+                                <Badge className={`text-xs ${getDangerColor(mood.dangerLevel)}`}>
                                   {getDangerLabel(mood.dangerLevel)}
                                 </Badge>
                               </div>
-                              <p className="text-sm">
+                              <p className="text-xs sm:text-sm">
                                 {mood.dangerLevel === 'critical' ? 
                                   'Critical situation detected. Monitor local news and follow official guidance.' :
                                   mood.dangerLevel === 'high' ?
@@ -572,9 +567,9 @@ const CivicPublicPortal = () => {
                                 }
                               </p>
                               {mood.topIssues.length > 0 && (
-                                <div className="text-sm">
+                                <div className="text-xs sm:text-sm space-y-2">
                                   <span className="font-medium">Related Issues:</span>
-                                  <div className="flex flex-wrap gap-1 mt-1">
+                                  <div className="flex flex-wrap gap-1">
                                     {mood.topIssues.slice(0, 3).map((issue, issueIdx) => (
                                       <Badge key={issueIdx} variant="outline" className="text-xs">
                                         {issue}
@@ -594,13 +589,21 @@ const CivicPublicPortal = () => {
           </TabsContent>
         </Tabs>
 
-        {/* Footer */}
-        <div className="text-center py-8 text-muted-foreground">
-          <p className="text-sm">
+        {/* Mobile-Optimized Footer */}
+        <div className="text-center py-6 sm:py-8 text-muted-foreground border-t mt-8">
+          <div className="flex items-center justify-center mb-3">
+            <Signal className="h-4 w-4 mr-2" />
+            <Wifi className="h-4 w-4 mr-2" />
+            <Smartphone className="h-4 w-4" />
+          </div>
+          <p className="text-xs sm:text-sm font-medium">
             CamerPulse Civic Portal - Empowering citizens with real-time civic insights
           </p>
-          <p className="text-xs mt-2">
+          <p className="text-xs mt-2 text-muted-foreground/80">
             Data updated every minute • Privacy protected • Anonymous reporting available
+          </p>
+          <p className="text-xs mt-1 text-muted-foreground/60">
+            Optimized for mobile devices • Works on 2G/3G networks
           </p>
         </div>
       </div>
