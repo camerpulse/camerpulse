@@ -10,6 +10,7 @@ import HealingHistory from "./HealingHistory";
 import { UIBugLogs } from "./UIBugLogs";
 import { LearningEngine } from "./LearningEngine";
 import HumanSimulationEngine from "./HumanSimulationEngine";
+import BrowserEmulationLayer from "./BrowserEmulationLayer";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AshenAlertSystem } from "./AshenAlertSystem";
@@ -419,7 +420,7 @@ export default function AshenDebugCore() {
 
       {/* Main Dashboard */}
       <Tabs defaultValue="error-dashboard" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-10">
+        <TabsList className="grid w-full grid-cols-11">
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
           <TabsTrigger value="healing-history">Healing History</TabsTrigger>
           <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
@@ -427,6 +428,7 @@ export default function AshenDebugCore() {
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="human-simulation">Human Simulation</TabsTrigger>
+          <TabsTrigger value="browser-emulation">Browser Emulation</TabsTrigger>
           <TabsTrigger value="ux-simulation">UX Simulation</TabsTrigger>
           <TabsTrigger value="alert-system">Alert System</TabsTrigger>
           <TabsTrigger value="monitor">System Monitor</TabsTrigger>
@@ -516,6 +518,10 @@ export default function AshenDebugCore() {
 
         <TabsContent value="human-simulation" className="space-y-4">
           <HumanSimulationEngine />
+        </TabsContent>
+
+        <TabsContent value="browser-emulation" className="space-y-4">
+          <BrowserEmulationLayer />
         </TabsContent>
 
         <TabsContent value="tests" className="space-y-4">

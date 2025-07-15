@@ -13,6 +13,7 @@ interface AshenConfig {
   emergency_alert_threshold: number;
   healing_modes_enabled: string[];
   human_simulation_enabled: boolean;
+  browser_emulation_enabled: boolean;
 }
 
 interface AshenStatus {
@@ -37,7 +38,8 @@ export const useAshenDebugCore = () => {
     fix_type_filter: 'all',
     emergency_alert_threshold: 3,
     healing_modes_enabled: [],
-    human_simulation_enabled: false
+    human_simulation_enabled: false,
+    browser_emulation_enabled: false
   });
 
   const [status, setStatus] = useState<AshenStatus>({
@@ -78,7 +80,8 @@ export const useAshenDebugCore = () => {
           fix_type_filter: configMap.fix_type_filter || 'all',
           emergency_alert_threshold: parseInt(configMap.emergency_alert_threshold || '3'),
           healing_modes_enabled: Array.isArray(configMap.healing_modes_enabled) ? configMap.healing_modes_enabled : [],
-          human_simulation_enabled: configMap.human_simulation_enabled === 'true'
+          human_simulation_enabled: configMap.human_simulation_enabled === 'true',
+          browser_emulation_enabled: configMap.browser_emulation_enabled === 'true'
         });
       }
 
