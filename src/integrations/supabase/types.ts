@@ -647,6 +647,51 @@ export type Database = {
         }
         Relationships: []
       }
+      camerpulse_activity_timeline: {
+        Row: {
+          activity_summary: string
+          activity_type: string
+          confidence_score: number | null
+          created_at: string
+          details: Json | null
+          id: string
+          module: string
+          performed_by: string | null
+          related_component: string | null
+          related_entity_id: string | null
+          status: string
+          timestamp: string
+        }
+        Insert: {
+          activity_summary: string
+          activity_type: string
+          confidence_score?: number | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          module: string
+          performed_by?: string | null
+          related_component?: string | null
+          related_entity_id?: string | null
+          status?: string
+          timestamp?: string
+        }
+        Update: {
+          activity_summary?: string
+          activity_type?: string
+          confidence_score?: number | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          module?: string
+          performed_by?: string | null
+          related_component?: string | null
+          related_entity_id?: string | null
+          status?: string
+          timestamp?: string
+        }
+        Relationships: []
+      }
       camerpulse_intelligence_alerts: {
         Row: {
           acknowledged: boolean | null

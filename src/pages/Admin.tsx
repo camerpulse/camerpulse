@@ -84,6 +84,7 @@ import { SystemHealthCheck } from "@/components/Admin/SystemHealthCheck";
 import AshenDebugCore from "@/components/Admin/AshenDebugCore";
 import CodeHealthLog from "@/components/Admin/CodeHealthLog";
 import UXSimulationLog from "@/components/Admin/UXSimulationLog";
+import CamerPulseActivityTimeline from "@/components/Admin/CamerPulseActivityTimeline";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -279,6 +280,10 @@ const Admin = () => {
                   <TabsTrigger value="ux-simulation" className="flex items-center gap-2">
                     <Activity className="h-4 w-4" />
                     UX Simulation
+                  </TabsTrigger>
+                  <TabsTrigger value="activity-timeline" className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Activity Timeline
                   </TabsTrigger>
               </TabsList>
             </ScrollArea>
@@ -1088,6 +1093,11 @@ const Admin = () => {
             {/* 20. UX SIMULATION LOG */}
             <TabsContent value="ux-simulation">
               <UXSimulationLog />
+            </TabsContent>
+
+            {/* 21. ACTIVITY TIMELINE */}
+            <TabsContent value="activity-timeline">
+              <CamerPulseActivityTimeline />
             </TabsContent>
           </Tabs>
         </div>
