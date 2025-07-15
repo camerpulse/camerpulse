@@ -126,24 +126,15 @@ export const CacheManagementDashboard = () => {
     setOperationResults([]);
     
     try {
-      const response = await fetch('/functions/v1/system-cache-flush', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
-        },
-        body: JSON.stringify({
+      const { data: result, error } = await supabase.functions.invoke('system-cache-flush', {
+        body: {
           cache_layers: cacheConfigs.map(c => c.cache_layer),
           operation_type: 'manual',
           force: true
-        })
+        }
       });
 
-      const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Flush operation failed');
-      }
+      if (error) throw error;
 
       setCurrentOperation(result);
       setOperationResults(result.results || []);
@@ -171,24 +162,15 @@ export const CacheManagementDashboard = () => {
     setOperationResults([]);
     
     try {
-      const response = await fetch('/functions/v1/system-cache-flush', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`
-        },
-        body: JSON.stringify({
+      const { data: result, error } = await supabase.functions.invoke('system-cache-flush', {
+        body: {
           cache_layers: selectedLayers,
           operation_type: 'manual',
           force: false
-        })
+        }
       });
 
-      const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Flush operation failed');
-      }
+      if (error) throw error;
 
       setCurrentOperation(result);
       setOperationResults(result.results || []);
