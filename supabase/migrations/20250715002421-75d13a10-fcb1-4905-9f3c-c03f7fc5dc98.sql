@@ -1,0 +1,8 @@
+-- Rename all Lux Aeterna tables to CamerPulse Intelligence
+ALTER TABLE lux_aeterna_alerts RENAME TO camerpulse_intelligence_alerts;
+ALTER TABLE lux_aeterna_config RENAME TO camerpulse_intelligence_config;
+ALTER TABLE lux_aeterna_influencers RENAME TO camerpulse_intelligence_influencers;
+ALTER TABLE lux_aeterna_learning_logs RENAME TO camerpulse_intelligence_learning_logs;
+ALTER TABLE lux_aeterna_regional_sentiment RENAME TO camerpulse_intelligence_regional_sentiment;
+ALTER TABLE lux_aeterna_sentiment_logs RENAME TO camerpulse_intelligence_sentiment_logs;
+ALTER TABLE lux_aeterna_trending_topics RENAME TO camerpulse_intelligence_trending_topics;

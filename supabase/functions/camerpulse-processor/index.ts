@@ -102,7 +102,7 @@ async function analyzeSentimentWithAI(text: string): Promise<Partial<SentimentRe
         messages: [
           {
             role: 'system',
-            content: `You are Lux Aeterna, an AI system analyzing public sentiment in Cameroon. Analyze the following text and respond with a JSON object containing:
+            content: `You are CamerPulse Intelligence, an AI system analyzing public sentiment in Cameroon. Analyze the following text and respond with a JSON object containing:
             {
               "polarity": "positive|negative|neutral",
               "score": number between -1.0 and 1.0,
@@ -248,7 +248,7 @@ async function storeSentimentResult(
 ) {
   try {
     const { error } = await supabase
-      .from('lux_aeterna_sentiment_logs')
+      .from('camerpulse_intelligence_sentiment_logs')
       .insert({
         platform: request.platform,
         content_id: request.contentId,
@@ -289,7 +289,7 @@ async function createThreatAlert(
 ) {
   try {
     await supabase
-      .from('lux_aeterna_alerts')
+      .from('camerpulse_intelligence_alerts')
       .insert({
         alert_type: 'threat',
         severity: result.threatLevel,
@@ -315,7 +315,7 @@ async function updateLearningLogs(
 ) {
   try {
     await supabase
-      .from('lux_aeterna_learning_logs')
+      .from('camerpulse_intelligence_learning_logs')
       .insert({
         learning_type: 'pattern_detection',
         input_data: inputData,
@@ -420,15 +420,15 @@ serve(async (req) => {
       case 'get_stats': {
         // Get basic statistics
         const { data: sentimentCount } = await supabase
-          .from('lux_aeterna_sentiment_logs')
+          .from('camerpulse_intelligence_sentiment_logs')
           .select('*', { count: 'exact', head: true });
 
         const { data: alertCount } = await supabase
-          .from('lux_aeterna_alerts')
+          .from('camerpulse_intelligence_alerts')
           .select('*', { count: 'exact', head: true });
 
         const { data: trendingCount } = await supabase
-          .from('lux_aeterna_trending_topics')
+          .from('camerpulse_intelligence_trending_topics')
           .select('*', { count: 'exact', head: true });
 
         return new Response(JSON.stringify({
@@ -452,7 +452,7 @@ serve(async (req) => {
     }
 
   } catch (error) {
-    console.error('Error in lux-aeterna-processor:', error);
+    console.error('Error in camerpulse-processor:', error);
     return new Response(JSON.stringify({ 
       error: error.message,
       success: false 

@@ -127,7 +127,7 @@ async function searchTwitter(query: string, maxResults: number = 100): Promise<T
 async function processTweetForSentiment(tweet: TwitterPost) {
   try {
     // Call the sentiment analysis function
-    const response = await supabase.functions.invoke('lux-aeterna-processor', {
+    const response = await supabase.functions.invoke('camerpulse-processor', {
       body: {
         action: 'analyze_sentiment',
         data: {
@@ -212,7 +212,7 @@ async function updateTrendingTopics(tweets: TwitterPost[]) {
 
         // Upsert trending topic
         await supabase
-          .from('lux_aeterna_trending_topics')
+          .from('camerpulse_intelligence_trending_topics')
           .upsert({
             topic_text: `#${hashtag}`,
             category: category,
@@ -325,7 +325,7 @@ serve(async (req) => {
     }
 
   } catch (error) {
-    console.error('Error in lux-aeterna-twitter:', error);
+    console.error('Error in camerpulse-twitter:', error);
     return new Response(JSON.stringify({ 
       error: error.message,
       success: false 

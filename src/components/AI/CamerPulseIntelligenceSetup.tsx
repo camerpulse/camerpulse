@@ -13,7 +13,7 @@ interface APIKeyStatus {
   setupUrl?: string;
 }
 
-const LuxAeternaSetup = () => {
+const CamerPulseIntelligenceSetup = () => {
   const [apiKeys] = useState<APIKeyStatus[]>([
     {
       name: 'OPENAI_API_KEY',
@@ -62,11 +62,11 @@ const LuxAeternaSetup = () => {
         <div className="flex items-center justify-center space-x-3">
           <Brain className="h-12 w-12 text-primary animate-pulse" />
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-            LUX AETERNA SETUP
+            CAMERPULSE INTELLIGENCE SETUP
           </h1>
         </div>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Configure your AI-powered sentiment analysis system with the required API keys to begin monitoring public sentiment across Cameroon.
+          Configure your civic-grade national sentiment and election intelligence system with the required API keys to begin monitoring public opinion across Cameroon.
         </p>
       </div>
 
@@ -102,7 +102,7 @@ const LuxAeternaSetup = () => {
           <CheckCircle className="h-4 w-4 text-green-600" />
           <AlertDescription>
             <strong className="text-green-800">Ready to Deploy!</strong> All required API keys are configured. 
-            Lux Aeterna can now begin monitoring and analyzing public sentiment.
+            CamerPulse Intelligence can now begin monitoring and analyzing public sentiment.
           </AlertDescription>
         </Alert>
       ) : (
@@ -170,7 +170,7 @@ const LuxAeternaSetup = () => {
         <CardHeader>
           <CardTitle>Setup Instructions</CardTitle>
           <CardDescription>
-            Follow these steps to complete the Lux Aeterna configuration
+            Follow these steps to complete the CamerPulse Intelligence configuration
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -190,7 +190,7 @@ const LuxAeternaSetup = () => {
             <div className="border-l-4 border-primary pl-4">
               <h4 className="font-semibold">Step 3: Deploy & Monitor</h4>
               <p className="text-sm text-muted-foreground">
-                Once configured, Lux Aeterna will automatically begin monitoring and analyzing sentiment data.
+                Once configured, CamerPulse Intelligence will automatically begin monitoring and analyzing sentiment data.
               </p>
             </div>
           </div>
@@ -202,7 +202,7 @@ const LuxAeternaSetup = () => {
         {allRequiredConfigured ? (
           <Button size="lg" className="bg-gradient-to-r from-primary to-secondary">
             <Brain className="h-5 w-5 mr-2" />
-            Launch Lux Aeterna Dashboard
+            Launch CamerPulse Intelligence Dashboard
           </Button>
         ) : (
           <Button variant="outline" size="lg" disabled>
@@ -214,4 +214,4 @@ const LuxAeternaSetup = () => {
   );
 };
 
-export default LuxAeternaSetup;
+export default CamerPulseIntelligenceSetup;

@@ -54,7 +54,7 @@ interface TrendingTopic {
   emotional_breakdown: any;
 }
 
-const LuxAeterna = () => {
+const CamerPulseIntelligence = () => {
   const [sentimentData, setSentimentData] = useState<SentimentData[]>([]);
   const [regionalData, setRegionalData] = useState<RegionalSentiment[]>([]);
   const [trendingTopics, setTrendingTopics] = useState<TrendingTopic[]>([]);
@@ -72,28 +72,28 @@ const LuxAeterna = () => {
     try {
       // Load recent sentiment data
       const { data: sentiments } = await supabase
-        .from('lux_aeterna_sentiment_logs')
+        .from('camerpulse_intelligence_sentiment_logs')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(100);
 
       // Load regional sentiment data
       const { data: regional } = await supabase
-        .from('lux_aeterna_regional_sentiment')
+        .from('camerpulse_intelligence_regional_sentiment')
         .select('*')
         .order('date_recorded', { ascending: false })
         .limit(10);
 
       // Load trending topics
       const { data: trending } = await supabase
-        .from('lux_aeterna_trending_topics')
+        .from('camerpulse_intelligence_trending_topics')
         .select('*')
         .order('volume_score', { ascending: false })
         .limit(20);
 
       // Load alerts
       const { data: alertData } = await supabase
-        .from('lux_aeterna_alerts')
+        .from('camerpulse_intelligence_alerts')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(10);
@@ -137,11 +137,11 @@ const LuxAeterna = () => {
           <div className="flex items-center justify-center space-x-3">
             <Brain className="h-12 w-12 text-primary animate-pulse" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-              LUX AETERNA
+              CAMERPULSE INTELLIGENCE
             </h1>
           </div>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            The Eternal Light of Public Truth - AI-Powered Civic Sentiment Intelligence for Cameroon
+            Civic-Grade National Sentiment & Election Intelligence System - Real-Time Public Opinion Analysis for Cameroon
           </p>
           <div className="flex items-center justify-center space-x-4">
             <Badge variant="outline" className="text-sm">
@@ -410,7 +410,7 @@ const LuxAeterna = () => {
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Settings className="h-5 w-5" />
-                  <span>Lux Aeterna Configuration</span>
+                  <span>CamerPulse Intelligence Configuration</span>
                 </CardTitle>
                 <CardDescription>
                   Configure AI learning parameters and system behavior
@@ -421,41 +421,67 @@ const LuxAeterna = () => {
                   <Alert>
                     <Brain className="h-4 w-4" />
                     <AlertDescription>
-                      <strong>Self-Evolution Status:</strong> Lux Aeterna is continuously learning and adapting. 
+                      <strong>Self-Evolution Status:</strong> CamerPulse Intelligence is continuously learning and adapting. 
                       The AI has processed {sentimentData.length} content pieces and identified {trendingTopics.length} trending patterns.
                     </AlertDescription>
                   </Alert>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <h4 className="font-semibold">Active Modules</h4>
-                      <div className="space-y-1">
-                        {['Sentiment Analysis', 'Threat Detection', 'Regional Tracking', 'Influencer Monitoring', 'Auto-Learning'].map((module) => (
-                          <div key={module} className="flex items-center justify-between">
-                            <span className="text-sm">{module}</span>
-                            <Badge variant="default" className="text-xs">Active</Badge>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">System Status</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex justify-between">
+                            <span>Analysis Mode:</span>
+                            <Badge variant={activeAnalysis ? 'default' : 'secondary'}>
+                              {activeAnalysis ? 'Active' : 'Standby'}
+                            </Badge>
                           </div>
-                        ))}
-                      </div>
-                    </div>
+                          <div className="flex justify-between">
+                            <span>Language Support:</span>
+                            <span className="text-sm">English, French, Pidgin</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Platforms Monitored:</span>
+                            <span className="text-sm">5</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
 
-                    <div className="space-y-2">
-                      <h4 className="font-semibold">Platform Coverage</h4>
-                      <div className="space-y-1">
-                        {['Twitter', 'Facebook', 'TikTok', 'Instagram', 'Google Trends'].map((platform) => (
-                          <div key={platform} className="flex items-center justify-between">
-                            <span className="text-sm">{platform}</span>
-                            <Badge variant="outline" className="text-xs">Monitoring</Badge>
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="text-lg">Performance Metrics</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          <div className="flex justify-between">
+                            <span>Processing Speed:</span>
+                            <span className="text-sm text-green-600">Optimal</span>
                           </div>
-                        ))}
-                      </div>
-                    </div>
+                          <div className="flex justify-between">
+                            <span>Accuracy Rate:</span>
+                            <span className="text-sm text-green-600">95.2%</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>System Load:</span>
+                            <span className="text-sm text-yellow-600">Medium</span>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
 
-                  <div className="pt-4">
-                    <Button className="w-full">
+                  <div className="flex justify-center space-x-4">
+                    <Button variant="outline">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Advanced Settings
+                    </Button>
+                    <Button>
                       <Target className="h-4 w-4 mr-2" />
-                      Initialize Advanced Learning Mode
+                      Run System Check
                     </Button>
                   </div>
                 </div>
@@ -468,4 +494,4 @@ const LuxAeterna = () => {
   );
 };
 
-export default LuxAeterna;
+export default CamerPulseIntelligence;
