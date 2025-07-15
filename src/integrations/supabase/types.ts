@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      activity_annotations: {
+        Row: {
+          activity_id: string
+          admin_id: string
+          annotation_tag: string | null
+          comment_text: string
+          created_at: string
+          created_by_name: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          admin_id: string
+          annotation_tag?: string | null
+          comment_text: string
+          created_at?: string
+          created_by_name: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          admin_id?: string
+          annotation_tag?: string | null
+          comment_text?: string
+          created_at?: string
+          created_by_name?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "activity_annotations_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "camerpulse_activity_timeline"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agency_action_logs: {
         Row: {
           action_description: string
