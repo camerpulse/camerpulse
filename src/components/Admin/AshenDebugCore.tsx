@@ -14,6 +14,7 @@ import BrowserEmulationLayer from "./BrowserEmulationLayer";
 import PluginWatchdog from "./PluginWatchdog";
 import SelfLearningEngine from "./SelfLearningEngine";
 import BatchFixManager from "./BatchFixManager";
+import PatchDeploymentPipeline from "./PatchDeploymentPipeline";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AshenAlertSystem } from "./AshenAlertSystem";
@@ -429,13 +430,13 @@ export default function AshenDebugCore() {
           <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
           <TabsTrigger value="self-learning">Self-Learning</TabsTrigger>
           <TabsTrigger value="batch-fix">Batch Fix</TabsTrigger>
+          <TabsTrigger value="patch-deploy">Patch Deploy</TabsTrigger>
           <TabsTrigger value="ui-inspector">UI Inspector</TabsTrigger>
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="human-simulation">Human Simulation</TabsTrigger>
           <TabsTrigger value="browser-emulation">Browser Emulation</TabsTrigger>
           <TabsTrigger value="plugin-watchdog">Plugin Watchdog</TabsTrigger>
-          <TabsTrigger value="monitor">System Monitor</TabsTrigger>
         </TabsList>
 
         <TabsContent value="error-dashboard" className="space-y-4">
@@ -456,6 +457,9 @@ export default function AshenDebugCore() {
 
         <TabsContent value="batch-fix" className="space-y-4">
           <BatchFixManager />
+        </TabsContent>
+        <TabsContent value="patch-deploy" className="space-y-4">
+          <PatchDeploymentPipeline />
         </TabsContent>
         
         <TabsContent value="ui-inspector" className="space-y-4">
