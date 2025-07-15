@@ -68,7 +68,8 @@ const App = () => {
               <Route path="/pulse" element={<PulseFeed />} />
               <Route path="/politicians" element={<Politicians />} />
               <Route path="/security" element={<Security />} />
-              <Route path="/marketplace" element={<Marketplace />} />
+<Route path="/marketplace" element={<Marketplace />} />
+              <Route path="/polls" element={<Polls />} />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/donate" element={<Donations />} />
               <Route path="/social" element={<Social />} />
