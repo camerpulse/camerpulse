@@ -26,6 +26,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { ElectionSentimentTracker } from '@/components/AI/ElectionSentimentTracker';
 import RegionalSentimentHeatmap from '@/components/AI/RegionalSentimentHeatmap';
 import DiasporaEcho from '@/components/AI/DiasporaEcho';
+import EmotionalSpotlight from '@/components/AI/EmotionalSpotlight';
 
 interface SentimentData {
   id: string;
@@ -213,11 +214,12 @@ const CamerPulseIntelligence = () => {
 
         {/* Main Dashboard */}
         <Tabs defaultValue="sentiment" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-8">
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
             <TabsTrigger value="election">Election Tracker</TabsTrigger>
             <TabsTrigger value="regional">Regional Insights</TabsTrigger>
             <TabsTrigger value="diaspora">Diaspora Echo</TabsTrigger>
+            <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
             <TabsTrigger value="alerts">Threat Monitoring</TabsTrigger>
             <TabsTrigger value="config">AI Settings</TabsTrigger>
@@ -288,6 +290,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="diaspora" className="space-y-4">
             <DiasporaEcho />
+          </TabsContent>
+
+          <TabsContent value="emotions" className="space-y-4">
+            <EmotionalSpotlight />
           </TabsContent>
 
           <TabsContent value="trending" className="space-y-4">
