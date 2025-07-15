@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap } from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -266,9 +266,10 @@ export default function AshenDebugCore() {
 
       {/* Main Dashboard */}
       <Tabs defaultValue="errors" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="errors">Error Logs</TabsTrigger>
           <TabsTrigger value="analysis">Code Analysis</TabsTrigger>
+          <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="monitor">System Monitor</TabsTrigger>
         </TabsList>
@@ -317,6 +318,34 @@ export default function AshenDebugCore() {
                     No errors logged. System appears healthy.
                   </div>
                 )}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="code-health" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <FileCode className="h-5 w-5" />
+                <span>Code Health Scanner</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8">
+                <FileCode className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-lg font-medium mb-2">AST Code Scanner</h3>
+                <p className="text-muted-foreground mb-4">
+                  Deep code analysis using Abstract Syntax Tree parsing
+                </p>
+                <Button
+                  onClick={() => runAnalysis('analyze')}
+                  disabled={isAnalyzing}
+                  className="space-x-2"
+                >
+                  <FileCode className="h-4 w-4" />
+                  <span>Run Code Health Scan</span>
+                </Button>
               </div>
             </CardContent>
           </Card>

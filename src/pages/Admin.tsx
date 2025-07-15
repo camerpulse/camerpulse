@@ -64,7 +64,8 @@ import {
   Unlock,
   Monitor,
   Building2,
-  Star
+  Star,
+  FileCode
 } from "lucide-react";
 import PartyDirectorySync from "@/components/AI/PartyDirectorySync";
 import MinisterDirectorySync from "@/components/AI/MinisterDirectorySync";
@@ -81,6 +82,7 @@ import TermOfOfficeValidator from "@/components/AI/TermOfOfficeValidator";
 import GovWebsiteScraper from "@/components/AI/GovWebsiteScraper";
 import { SystemHealthCheck } from "@/components/Admin/SystemHealthCheck";
 import AshenDebugCore from "@/components/Admin/AshenDebugCore";
+import CodeHealthLog from "@/components/Admin/CodeHealthLog";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -268,6 +270,10 @@ const Admin = () => {
                  <TabsTrigger value="ashen-debug" className="flex items-center gap-2">
                    <Bot className="h-4 w-4" />
                    Ashen Debug
+                 </TabsTrigger>
+                 <TabsTrigger value="code-health" className="flex items-center gap-2">
+                   <FileCode className="h-4 w-4" />
+                   Code Health
                  </TabsTrigger>
               </TabsList>
             </ScrollArea>
@@ -1067,6 +1073,11 @@ const Admin = () => {
             {/* 18. ASHEN DEBUG CORE */}
             <TabsContent value="ashen-debug">
               <AshenDebugCore />
+            </TabsContent>
+
+            {/* 19. CODE HEALTH LOG */}
+            <TabsContent value="code-health">
+              <CodeHealthLog />
             </TabsContent>
           </Tabs>
         </div>
