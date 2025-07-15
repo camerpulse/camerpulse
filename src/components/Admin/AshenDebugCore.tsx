@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode } from "lucide-react";
+import ErrorDashboard from "./ErrorDashboard";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -265,9 +266,9 @@ export default function AshenDebugCore() {
       </Card>
 
       {/* Main Dashboard */}
-      <Tabs defaultValue="errors" className="space-y-4">
+      <Tabs defaultValue="error-dashboard" className="space-y-4">
         <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="errors">Error Logs</TabsTrigger>
+          <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
           <TabsTrigger value="analysis">Code Analysis</TabsTrigger>
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
@@ -275,53 +276,8 @@ export default function AshenDebugCore() {
           <TabsTrigger value="monitor">System Monitor</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="errors" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Error Logs</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {errorLogs.map((error) => (
-                  <div key={error.id} className="border rounded-lg p-4 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <Badge variant={getSeverityColor(error.severity)}>
-                          {error.severity}
-                        </Badge>
-                        <span className="font-medium">{error.component_path}</span>
-                        <Badge variant="outline">{error.error_type}</Badge>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm text-muted-foreground">
-                          Confidence: {Math.round(error.confidence_score * 100)}%
-                        </span>
-                        {error.status === 'open' && (
-                          <Button
-                            size="sm"
-                            onClick={() => resolveError(error.id)}
-                          >
-                            Resolve
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                    <p className="text-sm text-muted-foreground">{error.error_message}</p>
-                    {error.suggested_fix && (
-                      <div className="bg-muted p-2 rounded text-sm">
-                        <strong>Suggested Fix:</strong> {error.suggested_fix}
-                      </div>
-                    )}
-                  </div>
-                ))}
-                {errorLogs.length === 0 && (
-                  <div className="text-center py-8 text-muted-foreground">
-                    No errors logged. System appears healthy.
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="error-dashboard" className="space-y-4">
+          <ErrorDashboard />
         </TabsContent>
 
         <TabsContent value="code-health" className="space-y-4">
