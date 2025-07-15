@@ -5081,6 +5081,63 @@ export type Database = {
           },
         ]
       }
+      ui_bug_logs: {
+        Row: {
+          component_path: string
+          created_at: string
+          element_selector: string | null
+          id: string
+          issue_description: string
+          issue_type: string
+          metadata: Json | null
+          page_name: string
+          resolved_at: string | null
+          resolved_by: string | null
+          screen_size: string
+          screenshot_url: string | null
+          severity: string
+          status: string
+          suggested_fix: string | null
+          updated_at: string
+        }
+        Insert: {
+          component_path: string
+          created_at?: string
+          element_selector?: string | null
+          id?: string
+          issue_description: string
+          issue_type: string
+          metadata?: Json | null
+          page_name: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screen_size: string
+          screenshot_url?: string | null
+          severity?: string
+          status?: string
+          suggested_fix?: string | null
+          updated_at?: string
+        }
+        Update: {
+          component_path?: string
+          created_at?: string
+          element_selector?: string | null
+          id?: string
+          issue_description?: string
+          issue_type?: string
+          metadata?: Json | null
+          page_name?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screen_size?: string
+          screenshot_url?: string | null
+          severity?: string
+          status?: string
+          suggested_fix?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_2fa: {
         Row: {
           backup_codes: string[] | null

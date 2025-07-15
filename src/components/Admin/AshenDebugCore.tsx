@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode } from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode, Monitor } from "lucide-react";
 import ErrorDashboard from "./ErrorDashboard";
 import HealingHistory from "./HealingHistory";
+import { UIBugLogs } from "./UIBugLogs";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -156,6 +157,25 @@ export default function AshenDebugCore() {
     }
   };
 
+  const runVisualInspection = async () => {
+    setIsAnalyzing(true);
+    try {
+      const response = await supabase.functions.invoke('ui-visual-inspector');
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      toast.success(`UI inspection completed - found ${response.data.issues_found} issues`);
+      loadData(); // Refresh data
+    } catch (error) {
+      console.error('Error running UI visual inspection:', error);
+      toast.error('Failed to run UI visual inspection');
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
   const resolveError = async (errorId: string) => {
     try {
       await supabase
@@ -226,7 +246,7 @@ export default function AshenDebugCore() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
             <Button
               onClick={() => runAnalysis('analyze')}
               disabled={isAnalyzing}
@@ -234,6 +254,15 @@ export default function AshenDebugCore() {
             >
               <Eye className="h-6 w-6" />
               <span>Analyze Code</span>
+            </Button>
+            <Button
+              onClick={() => runVisualInspection()}
+              disabled={isAnalyzing}
+              variant="secondary"
+              className="h-20 flex-col space-y-2"
+            >
+              <Monitor className="h-6 w-6" />
+              <span>UI Inspector</span>
             </Button>
             <Button
               onClick={() => runAnalysis('fix')}
@@ -268,9 +297,10 @@ export default function AshenDebugCore() {
 
       {/* Main Dashboard */}
       <Tabs defaultValue="error-dashboard" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
           <TabsTrigger value="healing-history">Healing History</TabsTrigger>
+          <TabsTrigger value="ui-inspector">UI Inspector</TabsTrigger>
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="ux-simulation">UX Simulation</TabsTrigger>
@@ -284,7 +314,10 @@ export default function AshenDebugCore() {
         <TabsContent value="healing-history" className="space-y-4">
           <HealingHistory />
         </TabsContent>
-
+        
+        <TabsContent value="ui-inspector" className="space-y-4">
+          <UIBugLogs />
+        </TabsContent>
         <TabsContent value="code-health" className="space-y-4">
           <Card>
             <CardHeader>
