@@ -1202,6 +1202,344 @@ export type Database = {
         }
         Relationships: []
       }
+      election_calendars: {
+        Row: {
+          affected_regions: string[] | null
+          campaign_end_date: string | null
+          campaign_start_date: string | null
+          created_at: string | null
+          description: string | null
+          election_date: string
+          election_type: string
+          id: string
+          official_source_url: string | null
+          registration_deadline: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          affected_regions?: string[] | null
+          campaign_end_date?: string | null
+          campaign_start_date?: string | null
+          created_at?: string | null
+          description?: string | null
+          election_date: string
+          election_type: string
+          id?: string
+          official_source_url?: string | null
+          registration_deadline?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          affected_regions?: string[] | null
+          campaign_end_date?: string | null
+          campaign_start_date?: string | null
+          created_at?: string | null
+          description?: string | null
+          election_date?: string
+          election_type?: string
+          id?: string
+          official_source_url?: string | null
+          registration_deadline?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      election_disinformation_alerts: {
+        Row: {
+          amplification_indicators: Json | null
+          author_handle: string | null
+          content_id: string | null
+          content_text: string
+          content_type: string | null
+          counter_narrative_deployed: boolean | null
+          created_at: string | null
+          credibility_score: number | null
+          disinformation_category: string
+          election_calendar_id: string | null
+          emotional_manipulation_detected: boolean | null
+          engagement_metrics: Json | null
+          estimated_reach: number | null
+          fact_check_sources: string[] | null
+          fact_check_status: string | null
+          id: string
+          platform: string
+          regions_affected: string[] | null
+          takedown_requested: boolean | null
+          takedown_status: string | null
+          target_candidate: string | null
+          target_party: string | null
+          updated_at: string | null
+          virality_score: number | null
+        }
+        Insert: {
+          amplification_indicators?: Json | null
+          author_handle?: string | null
+          content_id?: string | null
+          content_text: string
+          content_type?: string | null
+          counter_narrative_deployed?: boolean | null
+          created_at?: string | null
+          credibility_score?: number | null
+          disinformation_category: string
+          election_calendar_id?: string | null
+          emotional_manipulation_detected?: boolean | null
+          engagement_metrics?: Json | null
+          estimated_reach?: number | null
+          fact_check_sources?: string[] | null
+          fact_check_status?: string | null
+          id?: string
+          platform: string
+          regions_affected?: string[] | null
+          takedown_requested?: boolean | null
+          takedown_status?: string | null
+          target_candidate?: string | null
+          target_party?: string | null
+          updated_at?: string | null
+          virality_score?: number | null
+        }
+        Update: {
+          amplification_indicators?: Json | null
+          author_handle?: string | null
+          content_id?: string | null
+          content_text?: string
+          content_type?: string | null
+          counter_narrative_deployed?: boolean | null
+          created_at?: string | null
+          credibility_score?: number | null
+          disinformation_category?: string
+          election_calendar_id?: string | null
+          emotional_manipulation_detected?: boolean | null
+          engagement_metrics?: Json | null
+          estimated_reach?: number | null
+          fact_check_sources?: string[] | null
+          fact_check_status?: string | null
+          id?: string
+          platform?: string
+          regions_affected?: string[] | null
+          takedown_requested?: boolean | null
+          takedown_status?: string | null
+          target_candidate?: string | null
+          target_party?: string | null
+          updated_at?: string | null
+          virality_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "election_disinformation_alerts_election_calendar_id_fkey"
+            columns: ["election_calendar_id"]
+            isOneToOne: false
+            referencedRelation: "election_calendars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      election_interference_alerts: {
+        Row: {
+          action_taken: string | null
+          affected_regions: string[] | null
+          alert_type: string
+          confidence_score: number | null
+          created_at: string | null
+          description: string
+          election_calendar_id: string | null
+          escalation_status: string | null
+          evidence_urls: string[] | null
+          id: string
+          phase: string
+          related_content_ids: string[] | null
+          resolved_at: string | null
+          responsible_agency: string | null
+          sentiment_impact_data: Json | null
+          severity: string | null
+          source_type: string | null
+          threat_indicators: Json | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          affected_regions?: string[] | null
+          alert_type: string
+          confidence_score?: number | null
+          created_at?: string | null
+          description: string
+          election_calendar_id?: string | null
+          escalation_status?: string | null
+          evidence_urls?: string[] | null
+          id?: string
+          phase: string
+          related_content_ids?: string[] | null
+          resolved_at?: string | null
+          responsible_agency?: string | null
+          sentiment_impact_data?: Json | null
+          severity?: string | null
+          source_type?: string | null
+          threat_indicators?: Json | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          affected_regions?: string[] | null
+          alert_type?: string
+          confidence_score?: number | null
+          created_at?: string | null
+          description?: string
+          election_calendar_id?: string | null
+          escalation_status?: string | null
+          evidence_urls?: string[] | null
+          id?: string
+          phase?: string
+          related_content_ids?: string[] | null
+          resolved_at?: string | null
+          responsible_agency?: string | null
+          sentiment_impact_data?: Json | null
+          severity?: string | null
+          source_type?: string | null
+          threat_indicators?: Json | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "election_interference_alerts_election_calendar_id_fkey"
+            columns: ["election_calendar_id"]
+            isOneToOne: false
+            referencedRelation: "election_calendars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      election_phase_configs: {
+        Row: {
+          alert_thresholds: Json | null
+          automated_responses: Json | null
+          created_at: string | null
+          election_calendar_id: string | null
+          escalation_rules: Json | null
+          id: string
+          is_active: boolean | null
+          monitoring_intensity: string | null
+          monitoring_keywords: string[] | null
+          phase: string
+          sensitive_regions: string[] | null
+          special_instructions: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          alert_thresholds?: Json | null
+          automated_responses?: Json | null
+          created_at?: string | null
+          election_calendar_id?: string | null
+          escalation_rules?: Json | null
+          id?: string
+          is_active?: boolean | null
+          monitoring_intensity?: string | null
+          monitoring_keywords?: string[] | null
+          phase: string
+          sensitive_regions?: string[] | null
+          special_instructions?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          alert_thresholds?: Json | null
+          automated_responses?: Json | null
+          created_at?: string | null
+          election_calendar_id?: string | null
+          escalation_rules?: Json | null
+          id?: string
+          is_active?: boolean | null
+          monitoring_intensity?: string | null
+          monitoring_keywords?: string[] | null
+          phase?: string
+          sensitive_regions?: string[] | null
+          special_instructions?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "election_phase_configs_election_calendar_id_fkey"
+            columns: ["election_calendar_id"]
+            isOneToOne: false
+            referencedRelation: "election_calendars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      election_threat_index: {
+        Row: {
+          contributing_factors: Json | null
+          created_at: string | null
+          date_recorded: string | null
+          disinformation_score: number | null
+          division: string | null
+          election_calendar_id: string | null
+          escalation_triggers: string[] | null
+          id: string
+          last_incident_date: string | null
+          network_interference_score: number | null
+          overall_threat_score: number | null
+          recommended_actions: string[] | null
+          region: string
+          sentiment_volatility_score: number | null
+          suppression_risk_score: number | null
+          threat_level: string | null
+          updated_at: string | null
+          violence_risk_score: number | null
+        }
+        Insert: {
+          contributing_factors?: Json | null
+          created_at?: string | null
+          date_recorded?: string | null
+          disinformation_score?: number | null
+          division?: string | null
+          election_calendar_id?: string | null
+          escalation_triggers?: string[] | null
+          id?: string
+          last_incident_date?: string | null
+          network_interference_score?: number | null
+          overall_threat_score?: number | null
+          recommended_actions?: string[] | null
+          region: string
+          sentiment_volatility_score?: number | null
+          suppression_risk_score?: number | null
+          threat_level?: string | null
+          updated_at?: string | null
+          violence_risk_score?: number | null
+        }
+        Update: {
+          contributing_factors?: Json | null
+          created_at?: string | null
+          date_recorded?: string | null
+          disinformation_score?: number | null
+          division?: string | null
+          election_calendar_id?: string | null
+          escalation_triggers?: string[] | null
+          id?: string
+          last_incident_date?: string | null
+          network_interference_score?: number | null
+          overall_threat_score?: number | null
+          recommended_actions?: string[] | null
+          region?: string
+          sentiment_volatility_score?: number | null
+          suppression_risk_score?: number | null
+          threat_level?: string | null
+          updated_at?: string | null
+          violence_risk_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "election_threat_index_election_calendar_id_fkey"
+            columns: ["election_calendar_id"]
+            isOneToOne: false
+            referencedRelation: "election_calendars"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       encrypted_messages: {
         Row: {
           created_at: string | null
@@ -3428,6 +3766,86 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      voter_suppression_reports: {
+        Row: {
+          coordinates: Json | null
+          created_at: string | null
+          description: string
+          election_calendar_id: string | null
+          estimated_affected_voters: number | null
+          evidence_urls: string[] | null
+          id: string
+          incident_datetime: string
+          location_city: string | null
+          location_region: string
+          report_type: string
+          reported_at: string | null
+          reporter_contact: string | null
+          reporter_type: string | null
+          resolution_status: string | null
+          response_actions: string[] | null
+          severity_level: string | null
+          title: string
+          updated_at: string | null
+          verification_status: string | null
+          witness_reports: string[] | null
+        }
+        Insert: {
+          coordinates?: Json | null
+          created_at?: string | null
+          description: string
+          election_calendar_id?: string | null
+          estimated_affected_voters?: number | null
+          evidence_urls?: string[] | null
+          id?: string
+          incident_datetime: string
+          location_city?: string | null
+          location_region: string
+          report_type: string
+          reported_at?: string | null
+          reporter_contact?: string | null
+          reporter_type?: string | null
+          resolution_status?: string | null
+          response_actions?: string[] | null
+          severity_level?: string | null
+          title: string
+          updated_at?: string | null
+          verification_status?: string | null
+          witness_reports?: string[] | null
+        }
+        Update: {
+          coordinates?: Json | null
+          created_at?: string | null
+          description?: string
+          election_calendar_id?: string | null
+          estimated_affected_voters?: number | null
+          evidence_urls?: string[] | null
+          id?: string
+          incident_datetime?: string
+          location_city?: string | null
+          location_region?: string
+          report_type?: string
+          reported_at?: string | null
+          reporter_contact?: string | null
+          reporter_type?: string | null
+          resolution_status?: string | null
+          response_actions?: string[] | null
+          severity_level?: string | null
+          title?: string
+          updated_at?: string | null
+          verification_status?: string | null
+          witness_reports?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voter_suppression_reports_election_calendar_id_fkey"
+            columns: ["election_calendar_id"]
+            isOneToOne: false
+            referencedRelation: "election_calendars"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {

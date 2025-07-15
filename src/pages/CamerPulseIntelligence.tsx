@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ElectionSentimentTracker } from '@/components/AI/ElectionSentimentTracker';
+import { ElectionInterferenceMonitor } from '@/components/AI/ElectionInterferenceMonitor';
 import RegionalSentimentHeatmap from '@/components/AI/RegionalSentimentHeatmap';
 import DiasporaEcho from '@/components/AI/DiasporaEcho';
 import EmotionalSpotlight from '@/components/AI/EmotionalSpotlight';
@@ -284,6 +285,7 @@ const CamerPulseIntelligence = () => {
               <TabsTrigger value="narrative" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📖 Narrative</TabsTrigger>
               <TabsTrigger value="intelligence" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🔍 Intelligence</TabsTrigger>
               <TabsTrigger value="alerts" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚠️ Alerts</TabsTrigger>
+              <TabsTrigger value="interference" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🛡️ Interference</TabsTrigger>
               <TabsTrigger value="config" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚙️ Config</TabsTrigger>
             </TabsList>
           </div>
@@ -449,6 +451,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="alerts" className="space-y-4">
             <CivicAlertSystem />
+          </TabsContent>
+
+          <TabsContent value="interference" className="space-y-4">
+            <ElectionInterferenceMonitor />
           </TabsContent>
 
           <TabsContent value="config" className="space-y-4">
