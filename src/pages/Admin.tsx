@@ -75,6 +75,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TermOfOfficeValidator from "@/components/AI/TermOfOfficeValidator";
 import GovWebsiteScraper from "@/components/AI/GovWebsiteScraper";
+import { SystemDiagnostics } from "@/components/Admin/SystemDiagnostics";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -186,7 +187,7 @@ const Admin = () => {
 
           <Tabs value={selectedTab} onValueChange={setSelectedTab}>
             <ScrollArea className="w-full">
-              <TabsList className="mb-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-1 h-auto p-1">
+              <TabsList className="mb-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-9 gap-1 h-auto p-1">
                 <TabsTrigger value="overview" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
                   Overview
@@ -194,6 +195,10 @@ const Admin = () => {
                 <TabsTrigger value="security" className="flex items-center gap-2">
                   <Shield className="h-4 w-4" />
                   Security
+                </TabsTrigger>
+                <TabsTrigger value="diagnostics" className="flex items-center gap-2">
+                  <Activity className="h-4 w-4" />
+                  System Health
                 </TabsTrigger>
                 <TabsTrigger value="users" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
@@ -753,6 +758,10 @@ const Admin = () => {
               </div>
             </TabsContent>
 
+            <TabsContent value="diagnostics">
+              <SystemDiagnostics />
+            </TabsContent>
+
             {/* 9. FINANCE MANAGEMENT */}
             <TabsContent value="finance">
               <div className="space-y-6">
@@ -996,6 +1005,13 @@ const Admin = () => {
             <TabsContent value="civic-control">
               <div className="space-y-6">
                 <CivicViewControlPanel />
+              </div>
+            </TabsContent>
+
+            {/* 15. SYSTEM DIAGNOSTICS */}
+            <TabsContent value="diagnostics">
+              <div className="space-y-6">
+                <SystemDiagnostics />
               </div>
             </TabsContent>
           </Tabs>
