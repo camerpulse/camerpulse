@@ -78,13 +78,13 @@ export const Header = () => {
               <Link to="/marketplace">Marketplace</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/civic-portal">Civic Portal</Link>
+              <Link to="/civic-portal">🌍 Civic Portal</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/news">News</Link>
+              <Link to="/news">📰 News</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/camerpulse-intelligence">Intelligence</Link>
+              <Link to="/camerpulse-intelligence">🧠 Pan-African Intel</Link>
             </Button>
           </nav>
 

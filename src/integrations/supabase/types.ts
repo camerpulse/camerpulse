@@ -559,6 +559,113 @@ export type Database = {
         }
         Relationships: []
       }
+      country_administrative_divisions: {
+        Row: {
+          country_code: string
+          created_at: string
+          division_code: string | null
+          division_level: number
+          division_name: string
+          division_name_local: string | null
+          division_type: string
+          id: string
+          is_major_city: boolean | null
+          latitude: number | null
+          longitude: number | null
+          parent_division_id: string | null
+          population: number | null
+          updated_at: string
+        }
+        Insert: {
+          country_code: string
+          created_at?: string
+          division_code?: string | null
+          division_level?: number
+          division_name: string
+          division_name_local?: string | null
+          division_type: string
+          id?: string
+          is_major_city?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          parent_division_id?: string | null
+          population?: number | null
+          updated_at?: string
+        }
+        Update: {
+          country_code?: string
+          created_at?: string
+          division_code?: string | null
+          division_level?: number
+          division_name?: string
+          division_name_local?: string | null
+          division_type?: string
+          id?: string
+          is_major_city?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          parent_division_id?: string | null
+          population?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "country_administrative_divisions_country_code_fkey"
+            columns: ["country_code"]
+            isOneToOne: false
+            referencedRelation: "pan_africa_countries"
+            referencedColumns: ["country_code"]
+          },
+          {
+            foreignKeyName: "country_administrative_divisions_parent_division_id_fkey"
+            columns: ["parent_division_id"]
+            isOneToOne: false
+            referencedRelation: "country_administrative_divisions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      country_civic_config: {
+        Row: {
+          config_key: string
+          config_type: string
+          config_value: Json
+          country_code: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          config_key: string
+          config_type: string
+          config_value: Json
+          country_code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          config_key?: string
+          config_type?: string
+          config_value?: Json
+          country_code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "country_civic_config_country_code_fkey"
+            columns: ["country_code"]
+            isOneToOne: false
+            referencedRelation: "pan_africa_countries"
+            referencedColumns: ["country_code"]
+          },
+        ]
+      }
       donations: {
         Row: {
           amount: number
@@ -894,6 +1001,278 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "marketplace_vendors"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      pan_africa_countries: {
+        Row: {
+          capital_city: string | null
+          continent: string | null
+          country_code: string
+          country_name: string
+          country_name_local: string | null
+          created_at: string
+          currency_code: string
+          flag_emoji: string
+          flag_url: string | null
+          id: string
+          is_active: boolean | null
+          population: number | null
+          primary_language: string
+          region: string | null
+          supported_languages: string[] | null
+          time_zone: string | null
+          updated_at: string
+        }
+        Insert: {
+          capital_city?: string | null
+          continent?: string | null
+          country_code: string
+          country_name: string
+          country_name_local?: string | null
+          created_at?: string
+          currency_code?: string
+          flag_emoji: string
+          flag_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          population?: number | null
+          primary_language?: string
+          region?: string | null
+          supported_languages?: string[] | null
+          time_zone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          capital_city?: string | null
+          continent?: string | null
+          country_code?: string
+          country_name?: string
+          country_name_local?: string | null
+          created_at?: string
+          currency_code?: string
+          flag_emoji?: string
+          flag_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          population?: number | null
+          primary_language?: string
+          region?: string | null
+          supported_languages?: string[] | null
+          time_zone?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      pan_africa_cross_country_analytics: {
+        Row: {
+          analysis_data: Json
+          analysis_date: string
+          analysis_type: string
+          countries_compared: string[]
+          created_at: string
+          id: string
+          insights: Json | null
+        }
+        Insert: {
+          analysis_data: Json
+          analysis_date?: string
+          analysis_type: string
+          countries_compared: string[]
+          created_at?: string
+          id?: string
+          insights?: Json | null
+        }
+        Update: {
+          analysis_data?: Json
+          analysis_date?: string
+          analysis_type?: string
+          countries_compared?: string[]
+          created_at?: string
+          id?: string
+          insights?: Json | null
+        }
+        Relationships: []
+      }
+      pan_africa_sentiment_logs: {
+        Row: {
+          administrative_division_id: string | null
+          audio_emotion_analysis: Json | null
+          audio_transcript: string | null
+          author_handle: string | null
+          author_influence_score: number | null
+          confidence_score: number | null
+          content_category: string[] | null
+          content_id: string | null
+          content_text: string
+          coordinates: Json | null
+          country_code: string
+          created_at: string
+          emotional_tone: string[] | null
+          engagement_metrics: Json | null
+          facial_emotion_scores: Json | null
+          flagged_for_review: boolean | null
+          hashtags: string[] | null
+          id: string
+          keywords_detected: string[] | null
+          language_detected: string | null
+          media_metadata: Json | null
+          media_type: string | null
+          media_url: string | null
+          mentions: string[] | null
+          multimodal_confidence: number | null
+          platform: string
+          processed_at: string | null
+          sentiment_polarity: string
+          sentiment_score: number | null
+          threat_level: string | null
+          visual_emotions: Json | null
+        }
+        Insert: {
+          administrative_division_id?: string | null
+          audio_emotion_analysis?: Json | null
+          audio_transcript?: string | null
+          author_handle?: string | null
+          author_influence_score?: number | null
+          confidence_score?: number | null
+          content_category?: string[] | null
+          content_id?: string | null
+          content_text: string
+          coordinates?: Json | null
+          country_code: string
+          created_at?: string
+          emotional_tone?: string[] | null
+          engagement_metrics?: Json | null
+          facial_emotion_scores?: Json | null
+          flagged_for_review?: boolean | null
+          hashtags?: string[] | null
+          id?: string
+          keywords_detected?: string[] | null
+          language_detected?: string | null
+          media_metadata?: Json | null
+          media_type?: string | null
+          media_url?: string | null
+          mentions?: string[] | null
+          multimodal_confidence?: number | null
+          platform: string
+          processed_at?: string | null
+          sentiment_polarity: string
+          sentiment_score?: number | null
+          threat_level?: string | null
+          visual_emotions?: Json | null
+        }
+        Update: {
+          administrative_division_id?: string | null
+          audio_emotion_analysis?: Json | null
+          audio_transcript?: string | null
+          author_handle?: string | null
+          author_influence_score?: number | null
+          confidence_score?: number | null
+          content_category?: string[] | null
+          content_id?: string | null
+          content_text?: string
+          coordinates?: Json | null
+          country_code?: string
+          created_at?: string
+          emotional_tone?: string[] | null
+          engagement_metrics?: Json | null
+          facial_emotion_scores?: Json | null
+          flagged_for_review?: boolean | null
+          hashtags?: string[] | null
+          id?: string
+          keywords_detected?: string[] | null
+          language_detected?: string | null
+          media_metadata?: Json | null
+          media_type?: string | null
+          media_url?: string | null
+          mentions?: string[] | null
+          multimodal_confidence?: number | null
+          platform?: string
+          processed_at?: string | null
+          sentiment_polarity?: string
+          sentiment_score?: number | null
+          threat_level?: string | null
+          visual_emotions?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pan_africa_sentiment_logs_administrative_division_id_fkey"
+            columns: ["administrative_division_id"]
+            isOneToOne: false
+            referencedRelation: "country_administrative_divisions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pan_africa_sentiment_logs_country_code_fkey"
+            columns: ["country_code"]
+            isOneToOne: false
+            referencedRelation: "pan_africa_countries"
+            referencedColumns: ["country_code"]
+          },
+        ]
+      }
+      pan_africa_trending_topics: {
+        Row: {
+          category: string | null
+          country_code: string
+          emotional_breakdown: Json | null
+          first_detected_at: string
+          growth_rate: number | null
+          id: string
+          influencer_mentions: string[] | null
+          last_updated_at: string | null
+          platform_breakdown: Json | null
+          regional_breakdown: Json | null
+          related_hashtags: string[] | null
+          sentiment_score: number | null
+          threat_indicators: boolean | null
+          topic_text: string
+          trend_status: string | null
+          volume_score: number | null
+        }
+        Insert: {
+          category?: string | null
+          country_code: string
+          emotional_breakdown?: Json | null
+          first_detected_at?: string
+          growth_rate?: number | null
+          id?: string
+          influencer_mentions?: string[] | null
+          last_updated_at?: string | null
+          platform_breakdown?: Json | null
+          regional_breakdown?: Json | null
+          related_hashtags?: string[] | null
+          sentiment_score?: number | null
+          threat_indicators?: boolean | null
+          topic_text: string
+          trend_status?: string | null
+          volume_score?: number | null
+        }
+        Update: {
+          category?: string | null
+          country_code?: string
+          emotional_breakdown?: Json | null
+          first_detected_at?: string
+          growth_rate?: number | null
+          id?: string
+          influencer_mentions?: string[] | null
+          last_updated_at?: string | null
+          platform_breakdown?: Json | null
+          regional_breakdown?: Json | null
+          related_hashtags?: string[] | null
+          sentiment_score?: number | null
+          threat_indicators?: boolean | null
+          topic_text?: string
+          trend_status?: string | null
+          volume_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pan_africa_trending_topics_country_code_fkey"
+            columns: ["country_code"]
+            isOneToOne: false
+            referencedRelation: "pan_africa_countries"
+            referencedColumns: ["country_code"]
           },
         ]
       }
