@@ -559,6 +559,75 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_service_events: {
+        Row: {
+          affected_population: number | null
+          city_town: string | null
+          coordinates: Json | null
+          country_code: string
+          created_at: string
+          data_source: string
+          end_date: string | null
+          event_category: string
+          event_description: string | null
+          event_title: string
+          event_type: string
+          id: string
+          impact_areas: string[] | null
+          is_active: boolean
+          metadata: Json | null
+          region: string
+          severity: string
+          source_url: string | null
+          start_date: string
+          updated_at: string
+        }
+        Insert: {
+          affected_population?: number | null
+          city_town?: string | null
+          coordinates?: Json | null
+          country_code?: string
+          created_at?: string
+          data_source?: string
+          end_date?: string | null
+          event_category: string
+          event_description?: string | null
+          event_title: string
+          event_type: string
+          id?: string
+          impact_areas?: string[] | null
+          is_active?: boolean
+          metadata?: Json | null
+          region: string
+          severity?: string
+          source_url?: string | null
+          start_date?: string
+          updated_at?: string
+        }
+        Update: {
+          affected_population?: number | null
+          city_town?: string | null
+          coordinates?: Json | null
+          country_code?: string
+          created_at?: string
+          data_source?: string
+          end_date?: string | null
+          event_category?: string
+          event_description?: string | null
+          event_title?: string
+          event_type?: string
+          id?: string
+          impact_areas?: string[] | null
+          is_active?: boolean
+          metadata?: Json | null
+          region?: string
+          severity?: string
+          source_url?: string | null
+          start_date?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       country_administrative_divisions: {
         Row: {
           country_code: string
@@ -2361,6 +2430,56 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      service_emotion_correlations: {
+        Row: {
+          analysis_confidence: number
+          correlation_strength: number
+          created_at: string
+          date_analyzed: string
+          emotion_intensity: number
+          emotion_type: string
+          id: string
+          insights: Json | null
+          region: string
+          sentiment_volume: number
+          service_event_id: string
+        }
+        Insert: {
+          analysis_confidence?: number
+          correlation_strength?: number
+          created_at?: string
+          date_analyzed?: string
+          emotion_intensity?: number
+          emotion_type: string
+          id?: string
+          insights?: Json | null
+          region: string
+          sentiment_volume?: number
+          service_event_id: string
+        }
+        Update: {
+          analysis_confidence?: number
+          correlation_strength?: number
+          created_at?: string
+          date_analyzed?: string
+          emotion_intensity?: number
+          emotion_type?: string
+          id?: string
+          insights?: Json | null
+          region?: string
+          sentiment_volume?: number
+          service_event_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "service_emotion_correlations_service_event_id_fkey"
+            columns: ["service_event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_service_events"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_2fa: {
         Row: {

@@ -44,6 +44,7 @@ import CivicPersonaEngine from '@/components/AI/CivicPersonaEngine';
 import IssueEmotionTracker from '@/components/AI/IssueEmotionTracker';
 import CivicPredictorAI from '@/components/AI/CivicPredictorAI';
 import PanAfricaModule from '@/components/AI/PanAfricaModule';
+import CivicServiceDataPanel from '@/components/AI/CivicServiceDataPanel';
 
 interface SentimentData {
   id: string;
@@ -233,6 +234,7 @@ const CamerPulseIntelligence = () => {
         <Tabs defaultValue="pan-africa" className="space-y-4">
           <TabsList className="grid w-full grid-cols-12">
             <TabsTrigger value="pan-africa">🌍 Pan-Africa</TabsTrigger>
+            <TabsTrigger value="serviceData">🏥 Service Data</TabsTrigger>
             <TabsTrigger value="civic">Civic Feed</TabsTrigger>
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
             <TabsTrigger value="election">Election Tracker</TabsTrigger>
@@ -259,6 +261,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="pan-africa" className="space-y-4">
             <PanAfricaModule />
+          </TabsContent>
+
+          <TabsContent value="serviceData" className="space-y-4">
+            <CivicServiceDataPanel />
           </TabsContent>
 
           <TabsContent value="civic" className="space-y-4">
