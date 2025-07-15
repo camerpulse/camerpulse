@@ -14,6 +14,156 @@ export type Database = {
   }
   public: {
     Tables: {
+      agency_action_logs: {
+        Row: {
+          action_description: string
+          action_type: string
+          agency_id: string
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          target_id: string | null
+          target_resource: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action_description: string
+          action_type: string
+          agency_id: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_resource?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action_description?: string
+          action_type?: string
+          agency_id?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_resource?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_action_logs_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "government_agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_alert_routing: {
+        Row: {
+          agency_id: string
+          alert_type: string
+          created_at: string
+          id: string
+          is_active: boolean
+          min_severity_level: string
+          notification_channels: string[]
+          regions: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          agency_id: string
+          alert_type: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          min_severity_level?: string
+          notification_channels?: string[]
+          regions?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          agency_id?: string
+          alert_type?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          min_severity_level?: string
+          notification_channels?: string[]
+          regions?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_alert_routing_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "government_agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agency_responses: {
+        Row: {
+          agency_id: string
+          alert_reference_id: string | null
+          attachments: string[] | null
+          content: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          response_type: string
+          title: string
+          updated_at: string
+          user_id: string
+          verified_status: string
+          visibility: string
+        }
+        Insert: {
+          agency_id: string
+          alert_reference_id?: string | null
+          attachments?: string[] | null
+          content: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          response_type: string
+          title: string
+          updated_at?: string
+          user_id: string
+          verified_status?: string
+          visibility?: string
+        }
+        Update: {
+          agency_id?: string
+          alert_reference_id?: string | null
+          attachments?: string[] | null
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          response_type?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+          verified_status?: string
+          visibility?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_responses_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "government_agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       approval_ratings: {
         Row: {
           comment: string | null
@@ -854,6 +1004,110 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      government_agencies: {
+        Row: {
+          agency_code: string
+          agency_name: string
+          api_key_hash: string | null
+          approved_at: string | null
+          approved_by: string | null
+          category: string
+          contact_email: string
+          contact_person_name: string
+          created_at: string
+          id: string
+          is_active: boolean
+          is_verified: boolean
+          phone_number: string | null
+          regions_access: string[] | null
+          role_type: string
+          security_clearance: string
+          two_fa_enabled: boolean
+          updated_at: string
+        }
+        Insert: {
+          agency_code: string
+          agency_name: string
+          api_key_hash?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          category: string
+          contact_email: string
+          contact_person_name: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          phone_number?: string | null
+          regions_access?: string[] | null
+          role_type?: string
+          security_clearance?: string
+          two_fa_enabled?: boolean
+          updated_at?: string
+        }
+        Update: {
+          agency_code?: string
+          agency_name?: string
+          api_key_hash?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          category?: string
+          contact_email?: string
+          contact_person_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          phone_number?: string | null
+          regions_access?: string[] | null
+          role_type?: string
+          security_clearance?: string
+          two_fa_enabled?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      government_agency_users: {
+        Row: {
+          access_level: string
+          agency_id: string
+          created_at: string
+          id: string
+          is_primary_contact: boolean
+          role_in_agency: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_level?: string
+          agency_id: string
+          created_at?: string
+          id?: string
+          is_primary_contact?: boolean
+          role_in_agency?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_level?: string
+          agency_id?: string
+          created_at?: string
+          id?: string
+          is_primary_contact?: boolean
+          role_in_agency?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "government_agency_users_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "government_agencies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       marketplace_products: {
         Row: {

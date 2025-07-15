@@ -48,6 +48,7 @@ import CivicServiceDataPanel from '@/components/AI/CivicServiceDataPanel';
 import CrossCountryAnalytics from '@/components/AI/CrossCountryAnalytics';
 import { CivicVoiceAgent } from '@/components/AI/CivicVoiceAgent';
 import { CivicAlertBot } from '@/components/AI/CivicAlertBot';
+import GovSyncPanel from '@/components/AI/GovSyncPanel';
 
 interface SentimentData {
   id: string;
@@ -241,13 +242,13 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="serviceData">🏥 Service Data</TabsTrigger>
             <TabsTrigger value="voice">🎙️ Voice Agent</TabsTrigger>
             <TabsTrigger value="alert-bot">🤖 Alert Bot</TabsTrigger>
+            <TabsTrigger value="gov-sync">🏛️ Gov Sync</TabsTrigger>
             <TabsTrigger value="civic">Civic Feed</TabsTrigger>
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
             <TabsTrigger value="election">Election Tracker</TabsTrigger>
             <TabsTrigger value="regional">Regional Insights</TabsTrigger>
             <TabsTrigger value="local">Local Mapper</TabsTrigger>
             <TabsTrigger value="simulation">Civic Simulation</TabsTrigger>
-            <TabsTrigger value="predictor">Unrest Predictor</TabsTrigger>
             <TabsTrigger value="disinfoShield">DisinfoShield AI</TabsTrigger>
             <TabsTrigger value="personas">Civic Personas</TabsTrigger>
             <TabsTrigger value="issueTracker">Issue Tracker</TabsTrigger>
@@ -283,6 +284,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="alert-bot" className="space-y-4">
             <CivicAlertBot />
+          </TabsContent>
+
+          <TabsContent value="gov-sync" className="space-y-4">
+            <GovSyncPanel />
           </TabsContent>
 
           <TabsContent value="civic" className="space-y-4">
