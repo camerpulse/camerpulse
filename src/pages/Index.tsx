@@ -1,11 +1,11 @@
 import React from 'react';
-import { HeroSection } from "@/components/Homepage/HeroSection";
+import { ThemeAwareHero } from "@/components/Homepage/ThemeAwareHero";
 import { AppLayout } from "@/components/Layout/AppLayout";
 
 const Index = () => {
   return (
     <AppLayout>
-      <HeroSection />
+      <ThemeAwareHero />
     </AppLayout>
   );
 };

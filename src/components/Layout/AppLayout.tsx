@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Header } from './Header';
+import { ThemeAwareHeader } from './ThemeAwareHeader';
 import { MobileNavigation } from './MobileNavigation';
 import { PWAInstallPrompt } from './PWAInstallPrompt';
 
@@ -11,7 +11,7 @@ interface AppLayoutProps {
 export const AppLayout = ({ children, showMobileNav = true }: AppLayoutProps) => {
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <ThemeAwareHeader />
       
       <main className="flex-1">
         {children}
