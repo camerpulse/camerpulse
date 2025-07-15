@@ -66,6 +66,7 @@ import PartyDirectorySync from "@/components/AI/PartyDirectorySync";
 import MinisterDirectorySync from "@/components/AI/MinisterDirectorySync";
 import SenateDirectorySync from "@/components/AI/SenateDirectorySync";
 import { MPDirectorySync } from "@/components/AI/MPDirectorySync";
+import { PartyAffiliationResolver } from "@/components/AI/PartyAffiliationResolver";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -465,12 +466,13 @@ const Admin = () => {
                   </CardHeader>
                   <CardContent>
                      <Tabs defaultValue="politicians" className="w-full">
-                       <TabsList className="grid w-full grid-cols-6">
+                       <TabsList className="grid w-full grid-cols-7">
                          <TabsTrigger value="politicians">Politicians</TabsTrigger>
                          <TabsTrigger value="ministers">Ministers</TabsTrigger>
                          <TabsTrigger value="senators">Senators</TabsTrigger>
                          <TabsTrigger value="mps">MPs</TabsTrigger>
                          <TabsTrigger value="parties">Parties</TabsTrigger>
+                         <TabsTrigger value="affiliations">Party Links</TabsTrigger>
                          <TabsTrigger value="party-sync">MINAT Sync</TabsTrigger>
                        </TabsList>
                       
@@ -488,6 +490,10 @@ const Admin = () => {
                        
                        <TabsContent value="mps" className="space-y-4">
                          <MPDirectorySync />
+                       </TabsContent>
+                       
+                       <TabsContent value="affiliations" className="space-y-4">
+                         <PartyAffiliationResolver />
                        </TabsContent>
                        
                        <TabsContent value="parties" className="space-y-4">
