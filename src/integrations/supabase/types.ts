@@ -532,6 +532,104 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_build_logs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          duration_ms: number | null
+          error_details: string | null
+          id: string
+          output_data: Json | null
+          request_id: string
+          started_at: string | null
+          status: string
+          step_name: string
+          step_order: number
+          step_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error_details?: string | null
+          id?: string
+          output_data?: Json | null
+          request_id: string
+          started_at?: string | null
+          status?: string
+          step_name: string
+          step_order: number
+          step_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          error_details?: string | null
+          id?: string
+          output_data?: Json | null
+          request_id?: string
+          started_at?: string | null
+          status?: string
+          step_name?: string
+          step_order?: number
+          step_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_ashen_logs_request"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_dev_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_civic_memory: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          last_used: string | null
+          pattern_data: Json
+          pattern_description: string | null
+          pattern_name: string
+          pattern_type: string
+          success_rate: number
+          tags: string[] | null
+          updated_at: string
+          usage_count: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_used?: string | null
+          pattern_data: Json
+          pattern_description?: string | null
+          pattern_name: string
+          pattern_type: string
+          success_rate?: number
+          tags?: string[] | null
+          updated_at?: string
+          usage_count?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_used?: string | null
+          pattern_data?: Json
+          pattern_description?: string | null
+          pattern_name?: string
+          pattern_type?: string
+          success_rate?: number
+          tags?: string[] | null
+          updated_at?: string
+          usage_count?: number
+        }
+        Relationships: []
+      }
       ashen_code_analysis: {
         Row: {
           analysis_type: string
@@ -624,6 +722,66 @@ export type Database = {
           },
         ]
       }
+      ashen_dev_requests: {
+        Row: {
+          build_duration_seconds: number | null
+          build_mode: string
+          completed_at: string | null
+          created_at: string
+          created_by: string
+          error_message: string | null
+          estimated_complexity: number | null
+          id: string
+          metadata: Json
+          preview_before_build: boolean
+          priority_level: number
+          request_prompt: string
+          request_type: string
+          started_at: string | null
+          status: string
+          target_users: string[]
+          use_civic_memory: boolean
+        }
+        Insert: {
+          build_duration_seconds?: number | null
+          build_mode?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by: string
+          error_message?: string | null
+          estimated_complexity?: number | null
+          id?: string
+          metadata?: Json
+          preview_before_build?: boolean
+          priority_level?: number
+          request_prompt: string
+          request_type?: string
+          started_at?: string | null
+          status?: string
+          target_users?: string[]
+          use_civic_memory?: boolean
+        }
+        Update: {
+          build_duration_seconds?: number | null
+          build_mode?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string
+          error_message?: string | null
+          estimated_complexity?: number | null
+          id?: string
+          metadata?: Json
+          preview_before_build?: boolean
+          priority_level?: number
+          request_prompt?: string
+          request_type?: string
+          started_at?: string | null
+          status?: string
+          target_users?: string[]
+          use_civic_memory?: boolean
+        }
+        Relationships: []
+      }
       ashen_error_logs: {
         Row: {
           component_path: string
@@ -675,6 +833,50 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_feature_dependencies: {
+        Row: {
+          created_at: string
+          dependency_type: string
+          depends_on_component: string | null
+          depends_on_function: string | null
+          depends_on_table: string | null
+          id: string
+          is_critical: boolean
+          request_id: string
+          validation_status: string | null
+        }
+        Insert: {
+          created_at?: string
+          dependency_type: string
+          depends_on_component?: string | null
+          depends_on_function?: string | null
+          depends_on_table?: string | null
+          id?: string
+          is_critical?: boolean
+          request_id: string
+          validation_status?: string | null
+        }
+        Update: {
+          created_at?: string
+          dependency_type?: string
+          depends_on_component?: string | null
+          depends_on_function?: string | null
+          depends_on_table?: string | null
+          id?: string
+          is_critical?: boolean
+          request_id?: string
+          validation_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_ashen_dependencies_request"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_dev_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_fix_trust_metrics: {
         Row: {
           auto_confirmations: number | null
@@ -719,6 +921,68 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      ashen_generated_artifacts: {
+        Row: {
+          applied_at: string | null
+          artifact_name: string
+          artifact_type: string
+          created_at: string
+          dependencies: string[] | null
+          file_path: string | null
+          generated_code: string | null
+          id: string
+          is_applied: boolean
+          linked_modules: string[] | null
+          metadata: Json
+          request_id: string
+          revert_reason: string | null
+          reverted_at: string | null
+          schema_definition: Json | null
+        }
+        Insert: {
+          applied_at?: string | null
+          artifact_name: string
+          artifact_type: string
+          created_at?: string
+          dependencies?: string[] | null
+          file_path?: string | null
+          generated_code?: string | null
+          id?: string
+          is_applied?: boolean
+          linked_modules?: string[] | null
+          metadata?: Json
+          request_id: string
+          revert_reason?: string | null
+          reverted_at?: string | null
+          schema_definition?: Json | null
+        }
+        Update: {
+          applied_at?: string | null
+          artifact_name?: string
+          artifact_type?: string
+          created_at?: string
+          dependencies?: string[] | null
+          file_path?: string | null
+          generated_code?: string | null
+          id?: string
+          is_applied?: boolean
+          linked_modules?: string[] | null
+          metadata?: Json
+          request_id?: string
+          revert_reason?: string | null
+          reverted_at?: string | null
+          schema_definition?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_ashen_artifacts_request"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_dev_requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ashen_generated_plugins: {
         Row: {
@@ -7679,6 +7943,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analyze_dev_request: {
+        Args: {
+          p_request_id: string
+          p_prompt: string
+          p_request_type?: string
+        }
+        Returns: Json
+      }
       analyze_plugin_similarity: {
         Args: { p_request_text: string; p_plugin_name?: string }
         Returns: Json
