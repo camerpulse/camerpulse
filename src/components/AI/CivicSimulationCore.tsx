@@ -26,7 +26,7 @@ import {
   Users,
   Heart,
   Calculator,
-  GitCompare
+  ArrowLeftRight
 } from 'lucide-react';
 import {
   AreaChart,
@@ -390,7 +390,7 @@ export const CivicSimulationCore = () => {
             onClick={() => setComparisonMode(!comparisonMode)}
             className="flex items-center gap-2"
           >
-            <GitCompare className="h-4 w-4" />
+            <ArrowLeftRight className="h-4 w-4" />
             {comparisonMode ? 'Exit Compare' : 'Compare Scenarios'}
           </Button>
         </div>
@@ -818,7 +818,7 @@ export const CivicSimulationCore = () => {
           <Card>
             <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <GitCompare className="h-5 w-5" />
+              <ArrowLeftRight className="h-5 w-5" />
               Scenario Comparison
             </CardTitle>
               <CardDescription>
