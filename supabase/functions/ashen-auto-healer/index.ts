@@ -190,7 +190,7 @@ async function processError(error: ErrorLog, supabase: any): Promise<HealingAtte
   };
 
   // Determine fix strategy based on error type
-  const fixStrategy = determineFix Strategy(error);
+  const fixStrategy = determineFixStrategy(error);
   
   if (fixStrategy.canAutoFix) {
     try {
@@ -221,7 +221,7 @@ async function processError(error: ErrorLog, supabase: any): Promise<HealingAtte
   return healingAttempt;
 }
 
-function determineFix Strategy(error: ErrorLog) {
+function determineFixStrategy(error: ErrorLog) {
   const errorType = error.error_type.toLowerCase();
   const errorMessage = error.error_message.toLowerCase();
   
