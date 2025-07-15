@@ -552,10 +552,10 @@ export const PromiseTracker: React.FC = () => {
                             <span>🏛️ {promise.party_name}</span>
                           )}
                           {promise.date_made && (
-                            <span>📅 {new Date(promise.date_made).toLocaleDateString('fr-FR')}</span>
+                            <span>📅 {new Date(promise.date_made).toLocaleDateString('en-US')}</span>
                           )}
                           {promise.expected_delivery_date && (
-                            <span>⏰ Attendu: {new Date(promise.expected_delivery_date).toLocaleDateString('fr-FR')}</span>
+                            <span>⏰ Expected: {new Date(promise.expected_delivery_date).toLocaleDateString('en-US')}</span>
                           )}
                           {promise.regions_targeted && promise.regions_targeted.length > 0 && (
                             <span>📍 {promise.regions_targeted.join(', ')}</span>

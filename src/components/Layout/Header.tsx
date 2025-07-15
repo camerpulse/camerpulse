@@ -95,7 +95,7 @@ export const Header = () => {
           <div className="flex items-center space-x-2">
             {/* Language & Theme Toggles */}
             <div className="hidden sm:flex items-center gap-1">
-              <LanguageToggle />
+              <LanguageToggle disabled={true} />
               <DarkModeToggle size="sm" className="text-white hover:bg-white/10" />
             </div>
 
@@ -201,7 +201,7 @@ export const Header = () => {
 
             {/* Mobile Language Toggle */}
             <div className="mt-4 pt-4 border-t border-white/20 flex justify-between items-center">
-              <LanguageToggle />
+              <LanguageToggle disabled={true} />
               <DarkModeToggle size="sm" className="text-white hover:bg-white/10" />
             </div>
           </nav>

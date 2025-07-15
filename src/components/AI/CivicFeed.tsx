@@ -36,7 +36,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
+// import { fr } from 'date-fns/locale'; // Disabled - English only
 
 interface CivicPost {
   id: string;
@@ -503,7 +503,7 @@ export const CivicFeed: React.FC = () => {
                               <Clock className="h-3 w-3" />
                               {formatDistanceToNow(new Date(post.created_at), { 
                                 addSuffix: true, 
-                                locale: fr 
+                                // locale: fr // Disabled - English only 
                               })}
                             </div>
                             

@@ -409,7 +409,7 @@ export const ElectionInterferenceMonitor: React.FC = () => {
                     <div>
                       <h3 className="font-semibold">{election.election_type} Election</h3>
                       <p className="text-sm text-muted-foreground">
-                        {new Date(election.election_date).toLocaleDateString('fr-FR')}
+                        {new Date(election.election_date).toLocaleDateString('en-US')}
                       </p>
                       {election.description && (
                         <p className="text-sm text-muted-foreground mt-1">{election.description}</p>
@@ -481,7 +481,7 @@ export const ElectionInterferenceMonitor: React.FC = () => {
                             <h3 className="font-semibold text-foreground">{alert.title}</h3>
                             <p className="text-sm text-muted-foreground mt-1">{alert.description}</p>
                             <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                              <span>📅 {new Date(alert.created_at).toLocaleDateString('fr-FR')}</span>
+                              <span>📅 {new Date(alert.created_at).toLocaleDateString('en-US')}</span>
                               {alert.affected_regions && alert.affected_regions.length > 0 && (
                                 <span>📍 {alert.affected_regions.join(', ')}</span>
                               )}
@@ -615,7 +615,7 @@ export const ElectionInterferenceMonitor: React.FC = () => {
                         {alert.credibility_score && (
                           <span>🔍 Credibility: {(alert.credibility_score * 100).toFixed(0)}%</span>
                         )}
-                        <span>📅 {new Date(alert.created_at).toLocaleDateString('fr-FR')}</span>
+                        <span>📅 {new Date(alert.created_at).toLocaleDateString('en-US')}</span>
                       </div>
                     </div>
                   ))
@@ -668,7 +668,7 @@ export const ElectionInterferenceMonitor: React.FC = () => {
                         {report.estimated_affected_voters && (
                           <span>👥 {report.estimated_affected_voters.toLocaleString()} voters affected</span>
                         )}
-                        <span>📅 {new Date(report.incident_datetime).toLocaleDateString('fr-FR')}</span>
+                        <span>📅 {new Date(report.incident_datetime).toLocaleDateString('en-US')}</span>
                       </div>
                     </div>
                   ))

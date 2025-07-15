@@ -177,8 +177,8 @@ const Security = () => {
   const generatePGPKeyPair = async () => {
     if (!pgpKeyName || !pgpPassphrase || !profile?.display_name) {
       toast({
-        title: "Champs requis",
-        description: "Veuillez remplir tous les champs",
+        title: "Required Fields",
+        description: "Please fill in all required fields",
         variant: "destructive"
       });
       return;
@@ -206,14 +206,14 @@ const Security = () => {
       setPgpPassphrase('');
 
       toast({
-        title: "Clé PGP générée",
-        description: "Votre paire de clés PGP a été créée avec succès"
+        title: "PGP Key Generated",
+        description: "Your PGP key pair has been successfully created"
       });
     } catch (error) {
       console.error('Error generating PGP key:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de générer la clé PGP",
+        title: "Error",
+        description: "Unable to generate PGP key",
         variant: "destructive"
       });
     } finally {
@@ -227,14 +227,14 @@ const Security = () => {
       await fetchPGPKeys();
       
       toast({
-        title: "Clé supprimée",
-        description: "La clé PGP a été supprimée"
+        title: "Key Deleted",
+        description: "PGP key has been deleted"
       });
     } catch (error) {
       console.error('Error deleting PGP key:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de supprimer la clé",
+        title: "Error",
+        description: "Unable to delete key",
         variant: "destructive"
       });
     }
@@ -252,8 +252,8 @@ const Security = () => {
     } catch (error) {
       console.error('Error setting primary key:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de définir la clé principale",
+        title: "Error",
+        description: "Unable to set primary key",
         variant: "destructive"
       });
     }
@@ -262,8 +262,8 @@ const Security = () => {
   const encryptMessageWithPGP = async () => {
     if (!encryptMessage || !selectedRecipientKey) {
       toast({
-        title: "Champs requis",
-        description: "Veuillez saisir un message et sélectionner une clé",
+        title: "Required Fields",
+        description: "Please enter a message and select a key",
         variant: "destructive"
       });
       return;
@@ -281,8 +281,8 @@ const Security = () => {
     } catch (error) {
       console.error('Error encrypting message:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de chiffrer le message",
+        title: "Error",
+        description: "Unable to encrypt message",
         variant: "destructive"
       });
     }
@@ -291,8 +291,8 @@ const Security = () => {
   const decryptMessageWithPGP = async () => {
     if (!decryptMessage || !pgpPassphrase) {
       toast({
-        title: "Champs requis",
-        description: "Veuillez saisir le message chiffré et votre phrase de passe",
+        title: "Required Fields",
+        description: "Please enter the encrypted message and your passphrase",
         variant: "destructive"
       });
       return;
@@ -324,8 +324,8 @@ const Security = () => {
     } catch (error) {
       console.error('Error decrypting message:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de déchiffrer le message",
+        title: "Error",
+        description: "Unable to decrypt message",
         variant: "destructive"
       });
     }
@@ -389,8 +389,8 @@ const Security = () => {
     } catch (error) {
       console.error('Error enabling 2FA:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible d'activer la 2FA",
+        title: "Error",
+        description: "Unable to enable 2FA",
         variant: "destructive"
       });
     } finally {
@@ -466,12 +466,12 @@ const Security = () => {
 
   const getEventTypeLabel = (eventType: string) => {
     const labels = {
-      'login_success': 'Connexion réussie',
-      'login_failed': 'Échec de connexion',
-      'logout': 'Déconnexion',
-      'password_change': 'Changement de mot de passe',
-      '2fa_enabled': '2FA activé',
-      '2fa_disabled': '2FA désactivé',
+      'login_success': 'Successful Login',
+      'login_failed': 'Failed Login',
+      'logout': 'Logout',
+      'password_change': 'Password Change',
+      '2fa_enabled': '2FA Enabled',
+      '2fa_disabled': '2FA Disabled',
       '2fa_success': '2FA réussi',
       '2fa_failed': '2FA échoué',
       'device_registered': 'Nouvel appareil',
@@ -495,8 +495,8 @@ const Security = () => {
         <div className="min-h-screen bg-gradient-cameroon flex items-center justify-center p-4">
           <Card className="w-full max-w-md text-center">
             <CardContent className="pt-6">
-              <h2 className="text-xl font-bold mb-4">Connexion requise</h2>
-              <Button onClick={() => window.location.href = '/auth'}>Se connecter</Button>
+              <h2 className="text-xl font-bold mb-4">Login Required</h2>
+              <Button onClick={() => window.location.href = '/auth'}>Sign In</Button>
             </CardContent>
           </Card>
         </div>
@@ -511,9 +511,9 @@ const Security = () => {
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-cameroon-primary mb-2 flex items-center gap-2">
               <Shield className="w-8 h-8" />
-              Sécurité & Confidentialité
+              Security & Privacy
             </h1>
-            <p className="text-gray-600">Gérez vos paramètres de sécurité et protégez votre compte</p>
+            <p className="text-gray-600">Manage your security settings and protect your account</p>
           </div>
 
           <Tabs defaultValue="2fa" className="space-y-6">
@@ -667,11 +667,11 @@ const Security = () => {
                               <p className="font-medium">{device.device_name}</p>
                               <p className="text-sm text-gray-500">
                                 IP: {device.ip_address} • 
-                                Dernière activité: {new Date(device.last_seen_at).toLocaleDateString('fr-FR')}
+                                Last Activity: {new Date(device.last_seen_at).toLocaleDateString('en-US')}
                               </p>
                               {device.is_trusted && (
                                 <Badge variant="outline" className="border-green-500 text-green-600 mt-1">
-                                  Appareil de confiance
+                                  Trusted Device
                                 </Badge>
                               )}
                             </div>
@@ -698,7 +698,7 @@ const Security = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Settings className="w-5 h-5" />
-                    Activité de Sécurité
+                    Security Activity
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -817,10 +817,10 @@ const Security = () => {
                                 </div>
                               </div>
                               <p className="text-sm text-gray-500 font-mono">
-                                Empreinte: {key.key_fingerprint}
+                                Fingerprint: {key.key_fingerprint}
                               </p>
                               <p className="text-xs text-gray-400">
-                                Créée le {new Date(key.created_at).toLocaleDateString('fr-FR')}
+                                Created on {new Date(key.created_at).toLocaleDateString('en-US')}
                               </p>
                             </div>
                           ))}

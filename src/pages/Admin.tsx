@@ -9,6 +9,7 @@ import { CivicAlertBot } from "@/components/AI/CivicAlertBot";
 import { DailyReportGenerator } from "@/components/AI/DailyReportGenerator";
 import { CivicAlertSystem } from "@/components/Security/CivicAlertSystem";
 import { RoleControlSystem } from "@/components/Security/RoleControlSystem";
+import { LocalizationSettings } from "@/components/Admin/LocalizationSettings";
 import { CacheManagementDashboard } from "@/components/Admin/CacheManagementDashboard";
 import { CacheStatusMonitor } from "@/components/Admin/CacheStatusMonitor";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -58,6 +59,7 @@ import {
   Filter,
   RefreshCw,
   UserCheck,
+  Languages,
   Ban,
   Unlock,
   Monitor,
@@ -248,6 +250,10 @@ const Admin = () => {
                 <TabsTrigger value="civic-control" className="flex items-center gap-2">
                   <Eye className="h-4 w-4" />
                   Portal Control
+                </TabsTrigger>
+                <TabsTrigger value="localization" className="flex items-center gap-2">
+                  <Languages className="h-4 w-4" />
+                  Localization
                 </TabsTrigger>
                 <TabsTrigger value="cache-management" className="flex items-center gap-2">
                   <Database className="h-4 w-4" />
@@ -1005,7 +1011,14 @@ const Admin = () => {
               </div>
             </TabsContent>
 
-            {/* 15. CACHE MANAGEMENT */}
+            {/* 15. LOCALIZATION SETTINGS */}
+            <TabsContent value="localization">
+              <div className="space-y-6">
+                <LocalizationSettings />
+              </div>
+            </TabsContent>
+
+            {/* 16. CACHE MANAGEMENT */}
             <TabsContent value="cache-management">
               <div className="space-y-6">
                 <Card>

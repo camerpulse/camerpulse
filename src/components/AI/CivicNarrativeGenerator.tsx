@@ -569,7 +569,7 @@ export const CivicNarrativeGenerator: React.FC = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="english">English</SelectItem>
-                      <SelectItem value="french">Français</SelectItem>
+                      <SelectItem value="french" disabled>Français (Disabled)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

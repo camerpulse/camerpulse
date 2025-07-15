@@ -168,7 +168,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString('fr-FR');
+    return new Date(dateString).toLocaleDateString('en-US');
   };
 
   const calculateAge = (birthDate?: string) => {
