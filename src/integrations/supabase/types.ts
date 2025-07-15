@@ -709,6 +709,287 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_event_templates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          default_duration_hours: number | null
+          default_severity: string
+          event_category: string
+          event_type: string
+          expected_emotions: string[] | null
+          id: string
+          is_active: boolean | null
+          template_description: string | null
+          template_metadata: Json | null
+          template_name: string
+          typical_regions: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          default_duration_hours?: number | null
+          default_severity?: string
+          event_category: string
+          event_type: string
+          expected_emotions?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          template_description?: string | null
+          template_metadata?: Json | null
+          template_name: string
+          typical_regions?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          default_duration_hours?: number | null
+          default_severity?: string
+          event_category?: string
+          event_type?: string
+          expected_emotions?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          template_description?: string | null
+          template_metadata?: Json | null
+          template_name?: string
+          typical_regions?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_fusion_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          affected_regions: string[] | null
+          alert_message: string
+          alert_severity: string
+          alert_title: string
+          alert_type: string
+          auto_generated: boolean | null
+          baseline_comparison: number | null
+          civic_event_id: string
+          correlation_id: string | null
+          created_at: string
+          id: string
+          metadata: Json | null
+          recommended_actions: string[] | null
+          resolved: boolean | null
+          resolved_at: string | null
+          threshold_exceeded: number | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_regions?: string[] | null
+          alert_message: string
+          alert_severity: string
+          alert_title: string
+          alert_type: string
+          auto_generated?: boolean | null
+          baseline_comparison?: number | null
+          civic_event_id: string
+          correlation_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          recommended_actions?: string[] | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          threshold_exceeded?: number | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_regions?: string[] | null
+          alert_message?: string
+          alert_severity?: string
+          alert_title?: string
+          alert_type?: string
+          auto_generated?: boolean | null
+          baseline_comparison?: number | null
+          civic_event_id?: string
+          correlation_id?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          recommended_actions?: string[] | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          threshold_exceeded?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_fusion_alerts_civic_event_id_fkey"
+            columns: ["civic_event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_fusion_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "civic_fusion_alerts_correlation_id_fkey"
+            columns: ["correlation_id"]
+            isOneToOne: false
+            referencedRelation: "civic_fusion_correlations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_fusion_correlations: {
+        Row: {
+          analysis_date: string
+          analysis_insights: Json | null
+          anomaly_detected: boolean | null
+          anomaly_severity: string | null
+          baseline_emotion_score: number | null
+          civic_event_id: string
+          compared_to_historical: boolean | null
+          confidence_score: number
+          correlation_strength: number
+          correlation_timeframe: string
+          created_at: string
+          dominant_emotion: string
+          emotion_shift_intensity: number
+          emotion_timeline: Json | null
+          historical_baseline: number | null
+          id: string
+          key_phrases: string[] | null
+          peak_emotion_score: number | null
+          platforms_analyzed: string[] | null
+          regions_analyzed: string[] | null
+          sentiment_volume: number | null
+          trending_hashtags: string[] | null
+        }
+        Insert: {
+          analysis_date?: string
+          analysis_insights?: Json | null
+          anomaly_detected?: boolean | null
+          anomaly_severity?: string | null
+          baseline_emotion_score?: number | null
+          civic_event_id: string
+          compared_to_historical?: boolean | null
+          confidence_score?: number
+          correlation_strength?: number
+          correlation_timeframe?: string
+          created_at?: string
+          dominant_emotion: string
+          emotion_shift_intensity?: number
+          emotion_timeline?: Json | null
+          historical_baseline?: number | null
+          id?: string
+          key_phrases?: string[] | null
+          peak_emotion_score?: number | null
+          platforms_analyzed?: string[] | null
+          regions_analyzed?: string[] | null
+          sentiment_volume?: number | null
+          trending_hashtags?: string[] | null
+        }
+        Update: {
+          analysis_date?: string
+          analysis_insights?: Json | null
+          anomaly_detected?: boolean | null
+          anomaly_severity?: string | null
+          baseline_emotion_score?: number | null
+          civic_event_id?: string
+          compared_to_historical?: boolean | null
+          confidence_score?: number
+          correlation_strength?: number
+          correlation_timeframe?: string
+          created_at?: string
+          dominant_emotion?: string
+          emotion_shift_intensity?: number
+          emotion_timeline?: Json | null
+          historical_baseline?: number | null
+          id?: string
+          key_phrases?: string[] | null
+          peak_emotion_score?: number | null
+          platforms_analyzed?: string[] | null
+          regions_analyzed?: string[] | null
+          sentiment_volume?: number | null
+          trending_hashtags?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_fusion_correlations_civic_event_id_fkey"
+            columns: ["civic_event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_fusion_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_fusion_events: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          event_category: string
+          event_date: string
+          event_description: string | null
+          event_duration_hours: number | null
+          event_title: string
+          event_type: string
+          government_level: string
+          id: string
+          metadata: Json | null
+          participants: string[] | null
+          regions_affected: string[] | null
+          severity_level: string
+          source_type: string
+          source_url: string | null
+          tags: string[] | null
+          updated_at: string
+          verification_status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          event_category: string
+          event_date: string
+          event_description?: string | null
+          event_duration_hours?: number | null
+          event_title: string
+          event_type: string
+          government_level?: string
+          id?: string
+          metadata?: Json | null
+          participants?: string[] | null
+          regions_affected?: string[] | null
+          severity_level?: string
+          source_type?: string
+          source_url?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          verification_status?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          event_category?: string
+          event_date?: string
+          event_description?: string | null
+          event_duration_hours?: number | null
+          event_title?: string
+          event_type?: string
+          government_level?: string
+          id?: string
+          metadata?: Json | null
+          participants?: string[] | null
+          regions_affected?: string[] | null
+          severity_level?: string
+          source_type?: string
+          source_url?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          verification_status?: string
+        }
+        Relationships: []
+      }
       civic_service_events: {
         Row: {
           affected_population: number | null
