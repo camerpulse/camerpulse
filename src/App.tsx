@@ -28,7 +28,6 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
-import { useRealtimeNotifications } from "./hooks/useRealtimeNotifications";
 import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
 
 const queryClient = new QueryClient();
@@ -48,9 +47,6 @@ const App = () => {
       });
     }
   }, []);
-
-  // Initialize real-time notifications
-  useRealtimeNotifications();
 
   return (
     <QueryClientProvider client={queryClient}>
