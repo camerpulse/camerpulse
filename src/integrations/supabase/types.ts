@@ -2262,6 +2262,48 @@ export type Database = {
           },
         ]
       }
+      image_verification_logs: {
+        Row: {
+          action_type: string
+          admin_notes: string | null
+          confidence_change: number | null
+          created_at: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          metadata: Json | null
+          new_status: string | null
+          old_status: string | null
+          performed_by: string | null
+        }
+        Insert: {
+          action_type: string
+          admin_notes?: string | null
+          confidence_change?: number | null
+          created_at?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          metadata?: Json | null
+          new_status?: string | null
+          old_status?: string | null
+          performed_by?: string | null
+        }
+        Update: {
+          action_type?: string
+          admin_notes?: string | null
+          confidence_change?: number | null
+          created_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          metadata?: Json | null
+          new_status?: string | null
+          old_status?: string | null
+          performed_by?: string | null
+        }
+        Relationships: []
+      }
       institutional_trust_scores: {
         Row: {
           content_volume: number | null
@@ -2977,6 +3019,62 @@ export type Database = {
           },
         ]
       }
+      party_logo_verifications: {
+        Row: {
+          admin_notes: string | null
+          admin_reviewed: boolean | null
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          logo_url: string | null
+          party_id: string
+          source_type: string | null
+          source_url: string | null
+          updated_at: string | null
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          admin_reviewed?: boolean | null
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          logo_url?: string | null
+          party_id: string
+          source_type?: string | null
+          source_url?: string | null
+          updated_at?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          admin_reviewed?: boolean | null
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          logo_url?: string | null
+          party_id?: string
+          source_type?: string | null
+          source_url?: string | null
+          updated_at?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "party_logo_verifications_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       party_promises: {
         Row: {
           broken_promise_alert_sent: boolean | null
@@ -3251,7 +3349,10 @@ export type Database = {
           is_claimable: boolean | null
           is_claimed: boolean | null
           key_milestones: Json | null
+          logo_confidence_score: number | null
+          logo_last_verified: string | null
           logo_url: string | null
+          logo_verified: boolean | null
           mayors_count: number | null
           media_gallery: string[] | null
           mission: string | null
@@ -3304,7 +3405,10 @@ export type Database = {
           is_claimable?: boolean | null
           is_claimed?: boolean | null
           key_milestones?: Json | null
+          logo_confidence_score?: number | null
+          logo_last_verified?: string | null
           logo_url?: string | null
+          logo_verified?: boolean | null
           mayors_count?: number | null
           media_gallery?: string[] | null
           mission?: string | null
@@ -3357,7 +3461,10 @@ export type Database = {
           is_claimable?: boolean | null
           is_claimed?: boolean | null
           key_milestones?: Json | null
+          logo_confidence_score?: number | null
+          logo_last_verified?: string | null
           logo_url?: string | null
+          logo_verified?: boolean | null
           mayors_count?: number | null
           media_gallery?: string[] | null
           mission?: string | null
@@ -3565,6 +3672,68 @@ export type Database = {
           },
         ]
       }
+      politician_image_verifications: {
+        Row: {
+          admin_notes: string | null
+          admin_reviewed: boolean | null
+          confidence_score: number | null
+          created_at: string | null
+          flagged_by_users: string[] | null
+          id: string
+          image_url: string | null
+          politician_id: string
+          source_type: string | null
+          source_url: string | null
+          updated_at: string | null
+          verification_method: string | null
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          admin_reviewed?: boolean | null
+          confidence_score?: number | null
+          created_at?: string | null
+          flagged_by_users?: string[] | null
+          id?: string
+          image_url?: string | null
+          politician_id: string
+          source_type?: string | null
+          source_url?: string | null
+          updated_at?: string | null
+          verification_method?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          admin_reviewed?: boolean | null
+          confidence_score?: number | null
+          created_at?: string | null
+          flagged_by_users?: string[] | null
+          id?: string
+          image_url?: string | null
+          politician_id?: string
+          source_type?: string | null
+          source_url?: string | null
+          updated_at?: string | null
+          verification_method?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "politician_image_verifications_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       politician_promises: {
         Row: {
           broken_promise_alert_sent: boolean | null
@@ -3669,6 +3838,10 @@ export type Database = {
           former_roles: string[] | null
           gender: string | null
           id: string
+          image_confidence_score: number | null
+          image_last_verified: string | null
+          image_verification_id: string | null
+          image_verified: boolean | null
           integrity_rating: number | null
           is_archived: boolean | null
           is_claimable: boolean | null
@@ -3720,6 +3893,10 @@ export type Database = {
           former_roles?: string[] | null
           gender?: string | null
           id?: string
+          image_confidence_score?: number | null
+          image_last_verified?: string | null
+          image_verification_id?: string | null
+          image_verified?: boolean | null
           integrity_rating?: number | null
           is_archived?: boolean | null
           is_claimable?: boolean | null
@@ -3771,6 +3948,10 @@ export type Database = {
           former_roles?: string[] | null
           gender?: string | null
           id?: string
+          image_confidence_score?: number | null
+          image_last_verified?: string | null
+          image_verification_id?: string | null
+          image_verified?: boolean | null
           integrity_rating?: number | null
           is_archived?: boolean | null
           is_claimable?: boolean | null
@@ -3802,6 +3983,13 @@ export type Database = {
             columns: ["political_party_id"]
             isOneToOne: false
             referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "politicians_image_verification_id_fkey"
+            columns: ["image_verification_id"]
+            isOneToOne: false
+            referencedRelation: "politician_image_verifications"
             referencedColumns: ["id"]
           },
         ]
@@ -4688,6 +4876,12 @@ export type Database = {
         | "international_org"
         | "academic"
         | "unknown"
+      verification_status_enum:
+        | "pending"
+        | "verified"
+        | "rejected"
+        | "flagged"
+        | "missing"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4856,6 +5050,13 @@ export const Constants = {
         "international_org",
         "academic",
         "unknown",
+      ],
+      verification_status_enum: [
+        "pending",
+        "verified",
+        "rejected",
+        "flagged",
+        "missing",
       ],
     },
   },
