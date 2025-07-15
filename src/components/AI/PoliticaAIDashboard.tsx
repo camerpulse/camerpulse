@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bot, Activity, CheckCircle, AlertTriangle, Clock, RefreshCw } from "lucide-react";
 import { VerificationBadge } from "./VerificationBadge";
 import { BulkImportButton } from "./BulkImportButton";
+import DailyReportGenerator from "./DailyReportGenerator";
 import { useToast } from "@/hooks/use-toast";
 
 interface AIStats {
@@ -366,19 +368,7 @@ export const PoliticaAIDashboard = () => {
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>AI Reports</CardTitle>
-              <CardDescription>
-                Generated reports and analysis
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Report generation feature coming soon...
-              </p>
-            </CardContent>
-          </Card>
+          <DailyReportGenerator />
         </TabsContent>
       </Tabs>
     </div>
