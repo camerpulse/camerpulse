@@ -203,29 +203,29 @@ export const ThemeAwareHero = () => {
           <h1 className={themeContent.headline.className}>
             {currentTheme.id === 'lux-aeterna' ? (
               <>
-                <span className="text-gradient-patriotic">
+                <span className="text-cm-green bg-transparent animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
                   {themeContent.headline.line1}
                 </span>
                 <br />
-                <span className="text-gradient-patriotic">
+                <span className="text-cm-red bg-transparent animate-fade-in opacity-0" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
                   {themeContent.headline.line2}
                 </span>
                 <br />
-                <span className="text-accent animate-patriotic-pulse">
+                <span className="text-cm-yellow bg-transparent animate-fade-in opacity-0 animate-patriotic-pulse" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
                   {themeContent.headline.line3}
                 </span>
               </>
             ) : (
               <>
-                <span className="bg-gradient-civic bg-clip-text text-transparent">
+                <span className="text-cm-green bg-transparent animate-fade-in opacity-0 hover-scale" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
                   {themeContent.headline.line1}
                 </span>
                 <br />
-                <span className="bg-gradient-pulse bg-clip-text text-transparent">
+                <span className="text-cm-red bg-transparent animate-fade-in opacity-0 hover-scale" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
                   {themeContent.headline.line2}
                 </span>
                 <br />
-                <span className="text-accent">
+                <span className="text-cm-yellow bg-transparent animate-fade-in opacity-0 hover-scale" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
                   {themeContent.headline.line3}
                 </span>
               </>

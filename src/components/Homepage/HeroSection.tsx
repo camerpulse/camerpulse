@@ -65,18 +65,17 @@ export const HeroSection = () => {
             CamerPulse — Tracking the Heartbeat of Cameroon 🇨🇲
           </Badge>
 
-          {/* Main Headline */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6 leading-tight">
-            <span className="bg-gradient-civic bg-clip-text text-transparent">
+            <span className="text-cm-green bg-transparent animate-fade-in opacity-0" style={{ animationDelay: '0.2s', animationFillMode: 'forwards' }}>
               Your Voice.
             </span>
             <br />
-            <span className="bg-gradient-pulse bg-clip-text text-transparent">
+            <span className="text-cm-red bg-transparent animate-fade-in opacity-0" style={{ animationDelay: '0.6s', animationFillMode: 'forwards' }}>
               Your Power.
             </span>
             <br />
-            <span className="text-accent">
-              Your Marketplace.
+            <span className="text-cm-yellow bg-transparent animate-fade-in opacity-0" style={{ animationDelay: '1.0s', animationFillMode: 'forwards' }}>
+              Your Future.
             </span>
           </h1>
 
