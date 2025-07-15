@@ -147,6 +147,10 @@ export default {
 					'50%': { strokeDasharray: '50, 100' },
 					'100%': { strokeDasharray: '100, 100' }
 				},
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
 				'fade-in-up': {
 					'0%': { opacity: '0', transform: 'translateY(20px)' },
 					'100%': { opacity: '1', transform: 'translateY(0)' }
@@ -184,6 +188,7 @@ export default {
 				'heartbeat': 'heartbeat 2s infinite',
 				'pulse-heartbeat': 'pulse-heartbeat 2s infinite',
 				'heartbeat-line': 'heartbeat-line 3s infinite',
+				'fade-in': 'fade-in 0.6s ease-out',
 				'fade-in-up': 'fade-in-up 0.6s ease-out',
 				'press': 'press 0.1s ease-out',
 				'slide-shine': 'slide-shine 2s infinite',

@@ -38,8 +38,11 @@
     
     /* Cameroon Specific */
     --cm-green: 142 69% 32%;         /* Cameroon green */
+    --cm-green-light: 142 69% 45%;   /* Lighter Cameroon green */
     --cm-yellow: 46 100% 50%;        /* Cameroon yellow */
+    --cm-yellow-light: 46 100% 65%;  /* Lighter Cameroon yellow */
     --cm-red: 0 84% 54%;             /* Cameroon red */
+    --cm-red-light: 0 84% 65%;       /* Lighter Cameroon red */
     
     /* Gradients */
     --gradient-civic: linear-gradient(135deg, hsl(var(--cm-green)), hsl(var(--cm-green)) 60%, hsl(var(--cm-yellow)) 100%);
