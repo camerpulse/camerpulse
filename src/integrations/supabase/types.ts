@@ -551,6 +551,201 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_security_breaches: {
+        Row: {
+          breach_name: string
+          breach_type: string
+          created_at: string
+          current_risk_level: string | null
+          exploit_method: string
+          fix_suggestions: Json | null
+          id: string
+          last_replayed_at: string | null
+          original_date: string | null
+          patch_status: string | null
+          replay_details: Json | null
+          replay_result: string
+          target_module: string
+        }
+        Insert: {
+          breach_name: string
+          breach_type: string
+          created_at?: string
+          current_risk_level?: string | null
+          exploit_method: string
+          fix_suggestions?: Json | null
+          id?: string
+          last_replayed_at?: string | null
+          original_date?: string | null
+          patch_status?: string | null
+          replay_details?: Json | null
+          replay_result?: string
+          target_module: string
+        }
+        Update: {
+          breach_name?: string
+          breach_type?: string
+          created_at?: string
+          current_risk_level?: string | null
+          exploit_method?: string
+          fix_suggestions?: Json | null
+          id?: string
+          last_replayed_at?: string | null
+          original_date?: string | null
+          patch_status?: string | null
+          replay_details?: Json | null
+          replay_result?: string
+          target_module?: string
+        }
+        Relationships: []
+      }
+      ashen_security_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          description: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      ashen_security_logs: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          affected_files: string[] | null
+          attack_vector: string
+          created_at: string
+          detection_method: string
+          exploit_details: Json | null
+          exploit_risk_score: number
+          id: string
+          module_name: string
+          patch_applied: boolean | null
+          patch_available: boolean | null
+          patch_details: Json | null
+          patched_at: string | null
+          remediation_steps: string[] | null
+          severity: string
+          status: string
+          vulnerability_type: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_files?: string[] | null
+          attack_vector: string
+          created_at?: string
+          detection_method: string
+          exploit_details?: Json | null
+          exploit_risk_score?: number
+          id?: string
+          module_name: string
+          patch_applied?: boolean | null
+          patch_available?: boolean | null
+          patch_details?: Json | null
+          patched_at?: string | null
+          remediation_steps?: string[] | null
+          severity?: string
+          status?: string
+          vulnerability_type: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_files?: string[] | null
+          attack_vector?: string
+          created_at?: string
+          detection_method?: string
+          exploit_details?: Json | null
+          exploit_risk_score?: number
+          id?: string
+          module_name?: string
+          patch_applied?: boolean | null
+          patch_available?: boolean | null
+          patch_details?: Json | null
+          patched_at?: string | null
+          remediation_steps?: string[] | null
+          severity?: string
+          status?: string
+          vulnerability_type?: string
+        }
+        Relationships: []
+      }
+      ashen_security_tests: {
+        Row: {
+          attack_vector: string
+          created_at: string
+          executed_at: string | null
+          exploit_risk_score: number | null
+          id: string
+          metadata: Json | null
+          patch_applied: boolean | null
+          patch_details: Json | null
+          patch_suggested: boolean | null
+          target_endpoint: string
+          test_name: string
+          test_payload: string | null
+          test_result: string
+          test_type: string
+          vulnerability_found: boolean | null
+        }
+        Insert: {
+          attack_vector: string
+          created_at?: string
+          executed_at?: string | null
+          exploit_risk_score?: number | null
+          id?: string
+          metadata?: Json | null
+          patch_applied?: boolean | null
+          patch_details?: Json | null
+          patch_suggested?: boolean | null
+          target_endpoint: string
+          test_name: string
+          test_payload?: string | null
+          test_result?: string
+          test_type: string
+          vulnerability_found?: boolean | null
+        }
+        Update: {
+          attack_vector?: string
+          created_at?: string
+          executed_at?: string | null
+          exploit_risk_score?: number | null
+          id?: string
+          metadata?: Json | null
+          patch_applied?: boolean | null
+          patch_details?: Json | null
+          patch_suggested?: boolean | null
+          target_endpoint?: string
+          test_name?: string
+          test_payload?: string | null
+          test_result?: string
+          test_type?: string
+          vulnerability_found?: boolean | null
+        }
+        Relationships: []
+      }
       cache_flush_operations: {
         Row: {
           cache_layers: string[]

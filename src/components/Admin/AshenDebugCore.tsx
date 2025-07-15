@@ -13,6 +13,7 @@ import HumanSimulationEngine from "./HumanSimulationEngine";
 import BrowserEmulationLayer from "./BrowserEmulationLayer";
 import PluginWatchdog from "./PluginWatchdog";
 import SelfLearningEngine from "./SelfLearningEngine";
+import { AshenSecurityPanel } from "./AshenSecurityPanel";
 import BatchFixManager from "./BatchFixManager";
 import PatchDeploymentPipeline from "./PatchDeploymentPipeline";
 import CamerPulseWatchdogPanel from "./CamerPulseWatchdogPanel";
@@ -427,9 +428,9 @@ export default function AshenDebugCore() {
       <Tabs defaultValue="error-dashboard" className="space-y-4">
         <TabsList className="grid w-full grid-cols-12">
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
           <TabsTrigger value="healing-history">Healing History</TabsTrigger>
           <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
-          <TabsTrigger value="self-learning">Self-Learning</TabsTrigger>
           <TabsTrigger value="batch-fix">Batch Fix</TabsTrigger>
           <TabsTrigger value="patch-deploy">Patch Deploy</TabsTrigger>
           <TabsTrigger value="camerpulse-watchdog">CamerPulse</TabsTrigger>
@@ -442,6 +443,10 @@ export default function AshenDebugCore() {
 
         <TabsContent value="error-dashboard" className="space-y-4">
           <ErrorDashboard />
+        </TabsContent>
+        
+        <TabsContent value="security" className="space-y-4">
+          <AshenSecurityPanel />
         </TabsContent>
         
         <TabsContent value="healing-history" className="space-y-4">
