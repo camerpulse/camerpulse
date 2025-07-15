@@ -1728,6 +1728,92 @@ export type Database = {
           },
         ]
       }
+      institutional_trust_scores: {
+        Row: {
+          content_volume: number | null
+          created_at: string
+          date_recorded: string
+          id: string
+          institution_id: string
+          keyword_score: number | null
+          metadata: Json | null
+          overall_trust_score: number
+          region: string | null
+          sentiment_based_score: number | null
+          updated_at: string
+          user_feedback_score: number | null
+        }
+        Insert: {
+          content_volume?: number | null
+          created_at?: string
+          date_recorded?: string
+          id?: string
+          institution_id: string
+          keyword_score?: number | null
+          metadata?: Json | null
+          overall_trust_score?: number
+          region?: string | null
+          sentiment_based_score?: number | null
+          updated_at?: string
+          user_feedback_score?: number | null
+        }
+        Update: {
+          content_volume?: number | null
+          created_at?: string
+          date_recorded?: string
+          id?: string
+          institution_id?: string
+          keyword_score?: number | null
+          metadata?: Json | null
+          overall_trust_score?: number
+          region?: string | null
+          sentiment_based_score?: number | null
+          updated_at?: string
+          user_feedback_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "institutional_trust_scores_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      institutions: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          is_active: boolean
+          name: string
+          region: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          is_active?: boolean
+          name: string
+          region?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          institution_type?: Database["public"]["Enums"]["institution_type"]
+          is_active?: boolean
+          name?: string
+          region?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       marketplace_products: {
         Row: {
           category: string | null
@@ -3632,6 +3718,59 @@ export type Database = {
           },
         ]
       }
+      trust_events: {
+        Row: {
+          created_at: string
+          event_date: string
+          event_description: string | null
+          event_title: string
+          event_type: string
+          id: string
+          institution_id: string
+          metadata: Json | null
+          regions_affected: string[] | null
+          source_url: string | null
+          trust_impact_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_date: string
+          event_description?: string | null
+          event_title: string
+          event_type: string
+          id?: string
+          institution_id: string
+          metadata?: Json | null
+          regions_affected?: string[] | null
+          source_url?: string | null
+          trust_impact_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_date?: string
+          event_description?: string | null
+          event_title?: string
+          event_type?: string
+          id?: string
+          institution_id?: string
+          metadata?: Json | null
+          regions_affected?: string[] | null
+          source_url?: string | null
+          trust_impact_score?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trust_events_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_2fa: {
         Row: {
           backup_codes: string[] | null
@@ -3767,6 +3906,50 @@ export type Database = {
         }
         Relationships: []
       }
+      user_trust_feedback: {
+        Row: {
+          comment: string | null
+          created_at: string
+          feedback_type: string | null
+          id: string
+          institution_id: string
+          region: string | null
+          trust_rating: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          feedback_type?: string | null
+          id?: string
+          institution_id: string
+          region?: string | null
+          trust_rating: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          feedback_type?: string | null
+          id?: string
+          institution_id?: string
+          region?: string | null
+          trust_rating?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_trust_feedback_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       voter_suppression_reports: {
         Row: {
           coordinates: Json | null
@@ -3899,6 +4082,16 @@ export type Database = {
         | "verified_politician"
         | "verified_vendor"
         | "user"
+      institution_type:
+        | "presidency"
+        | "parliament"
+        | "judiciary"
+        | "police"
+        | "electoral_commission"
+        | "state_media"
+        | "public_health"
+        | "education_ministry"
+        | "local_councils"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4032,6 +4225,17 @@ export const Constants = {
         "verified_politician",
         "verified_vendor",
         "user",
+      ],
+      institution_type: [
+        "presidency",
+        "parliament",
+        "judiciary",
+        "police",
+        "electoral_commission",
+        "state_media",
+        "public_health",
+        "education_ministry",
+        "local_councils",
       ],
     },
   },
