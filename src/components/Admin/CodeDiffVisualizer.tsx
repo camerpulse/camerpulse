@@ -70,7 +70,11 @@ export function CodeDiffVisualizer() {
       setPatches(data || []);
     } catch (error) {
       console.error('Error loading patches:', error);
-      toast.error('Failed to load patch history');
+      toast({
+        title: "Error",
+        description: "Failed to load patch history",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -121,10 +125,17 @@ export function CodeDiffVisualizer() {
   const handleRevert = async (patchId: string) => {
     try {
       // This would call an edge function to revert the patch
-      toast.success('Patch reverted successfully');
+      toast({
+        title: "Success",
+        description: "Patch reverted successfully",
+      });
       loadPatches();
     } catch (error) {
-      toast.error('Failed to revert patch');
+      toast({
+        title: "Error",
+        description: "Failed to revert patch",
+        variant: "destructive",
+      });
     }
   };
 
@@ -136,10 +147,17 @@ export function CodeDiffVisualizer() {
         .eq('id', patchId);
 
       if (error) throw error;
-      toast.success('Patch approved');
+      toast({
+        title: "Success", 
+        description: "Patch approved",
+      });
       loadPatches();
     } catch (error) {
-      toast.error('Failed to approve patch');
+      toast({
+        title: "Error",
+        description: "Failed to approve patch", 
+        variant: "destructive",
+      });
     }
   };
 
