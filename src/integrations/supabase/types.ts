@@ -1189,6 +1189,153 @@ export type Database = {
         }
         Relationships: []
       }
+      camerpulse_module_registry: {
+        Row: {
+          component_type: string
+          created_at: string
+          error_count: number | null
+          file_path: string
+          health_status: string
+          id: string
+          last_error_at: string | null
+          last_health_check: string | null
+          metadata: Json | null
+          module_id: string
+          module_name: string
+          monitoring_enabled: boolean | null
+          route_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          component_type?: string
+          created_at?: string
+          error_count?: number | null
+          file_path: string
+          health_status?: string
+          id?: string
+          last_error_at?: string | null
+          last_health_check?: string | null
+          metadata?: Json | null
+          module_id: string
+          module_name: string
+          monitoring_enabled?: boolean | null
+          route_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          component_type?: string
+          created_at?: string
+          error_count?: number | null
+          file_path?: string
+          health_status?: string
+          id?: string
+          last_error_at?: string | null
+          last_health_check?: string | null
+          metadata?: Json | null
+          module_id?: string
+          module_name?: string
+          monitoring_enabled?: boolean | null
+          route_path?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      camerpulse_simulation_tests: {
+        Row: {
+          created_at: string
+          error_details: Json | null
+          executed_at: string | null
+          execution_time_ms: number | null
+          id: string
+          scheduled: boolean | null
+          screenshot_url: string | null
+          success_metrics: Json | null
+          target_module: string
+          test_name: string
+          test_result: string
+          test_scenario: Json
+          test_type: string
+        }
+        Insert: {
+          created_at?: string
+          error_details?: Json | null
+          executed_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          scheduled?: boolean | null
+          screenshot_url?: string | null
+          success_metrics?: Json | null
+          target_module: string
+          test_name: string
+          test_result?: string
+          test_scenario: Json
+          test_type: string
+        }
+        Update: {
+          created_at?: string
+          error_details?: Json | null
+          executed_at?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          scheduled?: boolean | null
+          screenshot_url?: string | null
+          success_metrics?: Json | null
+          target_module?: string
+          test_name?: string
+          test_result?: string
+          test_scenario?: Json
+          test_type?: string
+        }
+        Relationships: []
+      }
+      camerpulse_watchdog_logs: {
+        Row: {
+          admin_notified: boolean | null
+          auto_repaired: boolean | null
+          created_at: string
+          error_details: Json | null
+          event_message: string
+          event_type: string
+          fix_attempted: boolean | null
+          fix_confidence_score: number | null
+          fix_success: boolean | null
+          id: string
+          metadata: Json | null
+          module_id: string
+          severity: string
+        }
+        Insert: {
+          admin_notified?: boolean | null
+          auto_repaired?: boolean | null
+          created_at?: string
+          error_details?: Json | null
+          event_message: string
+          event_type: string
+          fix_attempted?: boolean | null
+          fix_confidence_score?: number | null
+          fix_success?: boolean | null
+          id?: string
+          metadata?: Json | null
+          module_id: string
+          severity?: string
+        }
+        Update: {
+          admin_notified?: boolean | null
+          auto_repaired?: boolean | null
+          created_at?: string
+          error_details?: Json | null
+          event_message?: string
+          event_type?: string
+          fix_attempted?: boolean | null
+          fix_confidence_score?: number | null
+          fix_success?: boolean | null
+          id?: string
+          metadata?: Json | null
+          module_id?: string
+          severity?: string
+        }
+        Relationships: []
+      }
       civic_content_monitoring: {
         Row: {
           ai_analysis: Json | null
