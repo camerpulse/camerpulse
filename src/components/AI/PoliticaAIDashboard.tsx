@@ -9,6 +9,7 @@ import { Bot, Activity, CheckCircle, AlertTriangle, Clock, RefreshCw } from "luc
 import { VerificationBadge } from "./VerificationBadge";
 import { BulkImportButton } from "./BulkImportButton";
 import DailyReportGenerator from "./DailyReportGenerator";
+import SignalIntelligenceCore from "./SignalIntelligenceCore";
 import { useToast } from "@/hooks/use-toast";
 
 interface AIStats {
@@ -217,6 +218,7 @@ export const PoliticaAIDashboard = () => {
         <TabsList>
           <TabsTrigger value="activity">Recent Activity</TabsTrigger>
           <TabsTrigger value="config">Configuration</TabsTrigger>
+          <TabsTrigger value="intelligence">Signal Intelligence</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
         </TabsList>
 
@@ -365,6 +367,10 @@ export const PoliticaAIDashboard = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="intelligence" className="space-y-4">
+          <SignalIntelligenceCore />
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-4">
