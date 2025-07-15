@@ -20,10 +20,13 @@ import {
   Clock,
   Smartphone,
   Wifi,
-  Signal
+  Signal,
+  Lock,
+  Info
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useModuleVisibility } from '@/hooks/useModuleVisibility';
 
 interface CivicReport {
   location: string;
@@ -57,6 +60,7 @@ const CivicPublicPortal = () => {
   const [trendingIssues, setTrendingIssues] = useState<TrendingIssue[]>([]);
   const [regionalMoods, setRegionalMoods] = useState<RegionalMood[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userRegion, setUserRegion] = useState<string>('');
   const [report, setReport] = useState<CivicReport>({
     location: '',
     issue: '',
@@ -65,56 +69,71 @@ const CivicPublicPortal = () => {
     isAnonymous: true
   });
   const { toast } = useToast();
+  
+  // Use visibility controls
+  const { isModuleVisible, getRestrictedMessage, userRole, loading: visibilityLoading } = useModuleVisibility(userRegion);
 
   useEffect(() => {
-    loadPublicData();
-    const interval = setInterval(loadPublicData, 60000);
-    return () => clearInterval(interval);
-  }, []);
+    if (!visibilityLoading) {
+      loadPublicData();
+      const interval = setInterval(loadPublicData, 60000);
+      return () => clearInterval(interval);
+    }
+  }, [visibilityLoading]);
 
   const loadPublicData = async () => {
+    // Only load data for modules that are visible to the current user
     try {
-      const { data: sentiments } = await supabase
-        .from('camerpulse_intelligence_sentiment_logs')
-        .select('sentiment_score, region_detected')
-        .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
+      // Only load trending topics if module is visible
+      if (isModuleVisible('trending_topics')) {
+        const { data: sentiments } = await supabase
+          .from('camerpulse_intelligence_sentiment_logs')
+          .select('sentiment_score, region_detected')
+          .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString());
 
-      const { data: regional } = await supabase
-        .from('camerpulse_intelligence_regional_sentiment')
-        .select('*')
-        .gte('date_recorded', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
-
-      const { data: trending } = await supabase
-        .from('camerpulse_intelligence_trending_topics')
-        .select('topic_text, emotional_breakdown, volume_score')
-        .order('volume_score', { ascending: false })
-        .limit(5);
-
-      if (sentiments && sentiments.length > 0) {
-        const nationalAvg = sentiments.reduce((acc, s) => acc + (s.sentiment_score || 0), 0) / sentiments.length;
-        setNationalSentiment(nationalAvg);
-        setDiasporaSentiment(nationalAvg + 0.1);
+        if (sentiments && sentiments.length > 0) {
+          const nationalAvg = sentiments.reduce((acc, s) => acc + (s.sentiment_score || 0), 0) / sentiments.length;
+          setNationalSentiment(nationalAvg);
+          setDiasporaSentiment(nationalAvg + 0.1);
+        }
       }
 
-      if (trending) {
-        const issues = trending.map(t => ({
-          issue: t.topic_text,
-          emotionBreakdown: typeof t.emotional_breakdown === 'object' && t.emotional_breakdown !== null ? 
-            t.emotional_breakdown as { anger: number; hope: number; sadness: number; fear: number; } : 
-            { anger: 20, hope: 30, sadness: 25, fear: 25 },
-          volume: t.volume_score || 0
-        }));
-        setTrendingIssues(issues);
+      // Only load regional data if module is visible  
+      if (isModuleVisible('regional_sentiment')) {
+        const { data: regional } = await supabase
+          .from('camerpulse_intelligence_regional_sentiment')
+          .select('*')
+          .gte('date_recorded', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString());
+
+        if (regional) {
+          const moods = regional.map(r => ({
+            region: r.region,
+            sentiment: r.overall_sentiment || 0,
+            dangerLevel: r.threat_level || 'low',
+            topIssues: r.top_concerns || []
+          }));
+          setRegionalMoods(moods);
+        }
       }
 
-      if (regional) {
-        const moods = regional.map(r => ({
-          region: r.region,
-          sentiment: r.overall_sentiment || 0,
-          dangerLevel: r.threat_level || 'low',
-          topIssues: r.top_concerns || []
-        }));
-        setRegionalMoods(moods);
+      // Only load trending topics if module is visible
+      if (isModuleVisible('trending_topics')) {
+        const { data: trending } = await supabase
+          .from('camerpulse_intelligence_trending_topics')
+          .select('topic_text, emotional_breakdown, volume_score')
+          .order('volume_score', { ascending: false })
+          .limit(5);
+
+        if (trending) {
+          const issues = trending.map(t => ({
+            issue: t.topic_text,
+            emotionBreakdown: typeof t.emotional_breakdown === 'object' && t.emotional_breakdown !== null ? 
+              t.emotional_breakdown as { anger: number; hope: number; sadness: number; fear: number; } : 
+              { anger: 20, hope: 30, sadness: 25, fear: 25 },
+            volume: t.volume_score || 0
+          }));
+          setTrendingIssues(issues);
+        }
       }
 
     } catch (error) {
@@ -332,13 +351,21 @@ const CivicPublicPortal = () => {
           </div>
 
           <TabsContent value="issues" className="space-y-4">
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
-                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span>Top 5 Civic Issues</span>
-                </CardTitle>
-              </CardHeader>
+            {!isModuleVisible('trending_topics') ? (
+              <Alert className="border-l-4 border-l-orange-500 bg-orange-50 dark:bg-orange-950">
+                <Lock className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  <strong>Restricted Content:</strong> {getRestrictedMessage('trending_topics')}
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <Card>
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                    <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span>Top 5 Civic Issues</span>
+                  </CardTitle>
+                </CardHeader>
               <CardContent className="pt-0">
                 <div className="space-y-3 sm:space-y-4">
                   {trendingIssues.map((issue, idx) => (
@@ -374,16 +401,25 @@ const CivicPublicPortal = () => {
                 </div>
               </CardContent>
             </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="regions" className="space-y-4">
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
-                  <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span>Regional Safety & Mood</span>
-                </CardTitle>
-              </CardHeader>
+            {!isModuleVisible('regional_sentiment') ? (
+              <Alert className="border-l-4 border-l-orange-500 bg-orange-50 dark:bg-orange-950">
+                <Lock className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  <strong>Restricted Content:</strong> {getRestrictedMessage('regional_sentiment')}
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <Card>
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                    <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span>Regional Safety & Mood</span>
+                  </CardTitle>
+                </CardHeader>
               <CardContent className="pt-0">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {regionalMoods.map((mood, idx) => (
@@ -420,19 +456,28 @@ const CivicPublicPortal = () => {
                 </div>
               </CardContent>
             </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="report" className="space-y-4">
-            <Card>
-              <CardHeader className="pb-4">
-                <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
-                  <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
-                  <span>Submit Civic Report</span>
-                </CardTitle>
-                <p className="text-xs sm:text-sm text-muted-foreground mt-2">
-                  Share your observations, concerns, or civic issues anonymously. All reports are reviewed before publication.
-                </p>
-              </CardHeader>
+            {!isModuleVisible('civic_reports') ? (
+              <Alert className="border-l-4 border-l-orange-500 bg-orange-50 dark:bg-orange-950">
+                <Lock className="h-4 w-4" />
+                <AlertDescription className="text-sm">
+                  <strong>Restricted Content:</strong> {getRestrictedMessage('civic_reports')}
+                </AlertDescription>
+              </Alert>
+            ) : (
+              <Card>
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                    <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <span>Submit Civic Report</span>
+                  </CardTitle>
+                  <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+                    Share your observations, concerns, or civic issues anonymously. All reports are reviewed before publication.
+                  </p>
+                </CardHeader>
               <CardContent className="pt-0">
                 <MobileForm className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -524,6 +569,7 @@ const CivicPublicPortal = () => {
                 </MobileForm>
               </CardContent>
             </Card>
+            )}
           </TabsContent>
 
           <TabsContent value="alerts" className="space-y-4">

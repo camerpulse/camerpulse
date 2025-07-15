@@ -1449,6 +1449,45 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_module_visibility: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          custom_settings: Json | null
+          enabled_for_roles: string[] | null
+          id: string
+          is_public_visible: boolean
+          module_description: string | null
+          module_name: string
+          region_restrictions: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          custom_settings?: Json | null
+          enabled_for_roles?: string[] | null
+          id?: string
+          is_public_visible?: boolean
+          module_description?: string | null
+          module_name: string
+          region_restrictions?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          custom_settings?: Json | null
+          enabled_for_roles?: string[] | null
+          id?: string
+          is_public_visible?: boolean
+          module_description?: string | null
+          module_name?: string
+          region_restrictions?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       civic_service_events: {
         Row: {
           affected_population: number | null
@@ -1515,6 +1554,42 @@ export type Database = {
           source_url?: string | null
           start_date?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_visibility_audit: {
+        Row: {
+          action_type: string
+          affected_regions: string[] | null
+          change_reason: string | null
+          changed_by: string | null
+          created_at: string
+          id: string
+          module_name: string
+          new_state: Json | null
+          previous_state: Json | null
+        }
+        Insert: {
+          action_type: string
+          affected_regions?: string[] | null
+          change_reason?: string | null
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          module_name: string
+          new_state?: Json | null
+          previous_state?: Json | null
+        }
+        Update: {
+          action_type?: string
+          affected_regions?: string[] | null
+          change_reason?: string | null
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          module_name?: string
+          new_state?: Json | null
+          previous_state?: Json | null
         }
         Relationships: []
       }
@@ -4497,6 +4572,14 @@ export type Database = {
       generate_vendor_id: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_module_visibility: {
+        Args: { p_user_role?: string; p_region?: string }
+        Returns: {
+          module_name: string
+          is_visible: boolean
+          custom_settings: Json
+        }[]
       }
       get_pan_africa_config: {
         Args: { p_config_key?: string }

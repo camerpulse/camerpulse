@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ThemeManagement } from "@/components/Theme/ThemeManagement";
 import PanAfricaAdminPanel from "@/components/AI/PanAfricaAdminPanel";
+import CivicViewControlPanel from "@/components/AI/CivicViewControlPanel";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -377,6 +378,10 @@ const Admin = () => {
                 <TabsTrigger value="pan-africa" className="flex items-center gap-2">
                   <Globe className="h-4 w-4" />
                   Pan-Africa
+                </TabsTrigger>
+                <TabsTrigger value="civic-control" className="flex items-center gap-2">
+                  <Monitor className="h-4 w-4" />
+                  Civic Portal Control
                 </TabsTrigger>
               </TabsList>
             </ScrollArea>
@@ -1747,6 +1752,11 @@ const Admin = () => {
             {/* PAN-AFRICA CONTROLS */}
             <TabsContent value="pan-africa">
               <PanAfricaAdminPanel />
+            </TabsContent>
+
+            {/* CIVIC PORTAL CONTROL */}
+            <TabsContent value="civic-control">
+              <CivicViewControlPanel />
             </TabsContent>
           </Tabs>
         </div>
