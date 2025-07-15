@@ -52,6 +52,57 @@ export type Database = {
           },
         ]
       }
+      cameroon_locations: {
+        Row: {
+          alternative_names: string[] | null
+          city_town: string
+          created_at: string | null
+          division: string | null
+          id: string
+          is_major_city: boolean | null
+          latitude: number | null
+          locality: string | null
+          longitude: number | null
+          population: number | null
+          region: string
+          region_code: string | null
+          subdivision: string | null
+          urban_rural: string | null
+        }
+        Insert: {
+          alternative_names?: string[] | null
+          city_town: string
+          created_at?: string | null
+          division?: string | null
+          id?: string
+          is_major_city?: boolean | null
+          latitude?: number | null
+          locality?: string | null
+          longitude?: number | null
+          population?: number | null
+          region: string
+          region_code?: string | null
+          subdivision?: string | null
+          urban_rural?: string | null
+        }
+        Update: {
+          alternative_names?: string[] | null
+          city_town?: string
+          created_at?: string | null
+          division?: string | null
+          id?: string
+          is_major_city?: boolean | null
+          latitude?: number | null
+          locality?: string | null
+          longitude?: number | null
+          population?: number | null
+          region?: string
+          region_code?: string | null
+          subdivision?: string | null
+          urban_rural?: string | null
+        }
+        Relationships: []
+      }
       camerpulse_intelligence_alerts: {
         Row: {
           acknowledged: boolean | null
@@ -226,6 +277,81 @@ export type Database = {
         }
         Relationships: []
       }
+      camerpulse_intelligence_local_sentiment: {
+        Row: {
+          city_town: string
+          content_volume: number | null
+          created_at: string | null
+          date_recorded: string
+          division: string | null
+          dominant_emotions: string[] | null
+          id: string
+          is_major_city: boolean | null
+          latitude: number | null
+          locality: string | null
+          longitude: number | null
+          notable_events: string[] | null
+          overall_sentiment: number | null
+          population_estimate: number | null
+          region: string
+          sentiment_breakdown: Json | null
+          subdivision: string | null
+          threat_level: string | null
+          top_concerns: string[] | null
+          trending_hashtags: string[] | null
+          updated_at: string | null
+          urban_rural: string | null
+        }
+        Insert: {
+          city_town: string
+          content_volume?: number | null
+          created_at?: string | null
+          date_recorded?: string
+          division?: string | null
+          dominant_emotions?: string[] | null
+          id?: string
+          is_major_city?: boolean | null
+          latitude?: number | null
+          locality?: string | null
+          longitude?: number | null
+          notable_events?: string[] | null
+          overall_sentiment?: number | null
+          population_estimate?: number | null
+          region: string
+          sentiment_breakdown?: Json | null
+          subdivision?: string | null
+          threat_level?: string | null
+          top_concerns?: string[] | null
+          trending_hashtags?: string[] | null
+          updated_at?: string | null
+          urban_rural?: string | null
+        }
+        Update: {
+          city_town?: string
+          content_volume?: number | null
+          created_at?: string | null
+          date_recorded?: string
+          division?: string | null
+          dominant_emotions?: string[] | null
+          id?: string
+          is_major_city?: boolean | null
+          latitude?: number | null
+          locality?: string | null
+          longitude?: number | null
+          notable_events?: string[] | null
+          overall_sentiment?: number | null
+          population_estimate?: number | null
+          region?: string
+          sentiment_breakdown?: Json | null
+          subdivision?: string | null
+          threat_level?: string | null
+          top_concerns?: string[] | null
+          trending_hashtags?: string[] | null
+          updated_at?: string | null
+          urban_rural?: string | null
+        }
+        Relationships: []
+      }
       camerpulse_intelligence_regional_sentiment: {
         Row: {
           content_volume: number | null
@@ -277,10 +403,12 @@ export type Database = {
           audio_transcript: string | null
           author_handle: string | null
           author_influence_score: number | null
+          city_detected: string | null
           confidence_score: number | null
           content_category: string[] | null
           content_id: string | null
           content_text: string
+          coordinates: Json | null
           created_at: string
           emotional_tone: string[] | null
           engagement_metrics: Json | null
@@ -290,6 +418,7 @@ export type Database = {
           id: string
           keywords_detected: string[] | null
           language_detected: string | null
+          locality_detected: string | null
           media_metadata: Json | null
           media_type: string | null
           media_url: string | null
@@ -300,6 +429,7 @@ export type Database = {
           region_detected: string | null
           sentiment_polarity: string
           sentiment_score: number | null
+          subdivision_detected: string | null
           threat_level: string | null
           visual_emotions: Json | null
         }
@@ -308,10 +438,12 @@ export type Database = {
           audio_transcript?: string | null
           author_handle?: string | null
           author_influence_score?: number | null
+          city_detected?: string | null
           confidence_score?: number | null
           content_category?: string[] | null
           content_id?: string | null
           content_text: string
+          coordinates?: Json | null
           created_at?: string
           emotional_tone?: string[] | null
           engagement_metrics?: Json | null
@@ -321,6 +453,7 @@ export type Database = {
           id?: string
           keywords_detected?: string[] | null
           language_detected?: string | null
+          locality_detected?: string | null
           media_metadata?: Json | null
           media_type?: string | null
           media_url?: string | null
@@ -331,6 +464,7 @@ export type Database = {
           region_detected?: string | null
           sentiment_polarity: string
           sentiment_score?: number | null
+          subdivision_detected?: string | null
           threat_level?: string | null
           visual_emotions?: Json | null
         }
@@ -339,10 +473,12 @@ export type Database = {
           audio_transcript?: string | null
           author_handle?: string | null
           author_influence_score?: number | null
+          city_detected?: string | null
           confidence_score?: number | null
           content_category?: string[] | null
           content_id?: string | null
           content_text?: string
+          coordinates?: Json | null
           created_at?: string
           emotional_tone?: string[] | null
           engagement_metrics?: Json | null
@@ -352,6 +488,7 @@ export type Database = {
           id?: string
           keywords_detected?: string[] | null
           language_detected?: string | null
+          locality_detected?: string | null
           media_metadata?: Json | null
           media_type?: string | null
           media_url?: string | null
@@ -362,6 +499,7 @@ export type Database = {
           region_detected?: string | null
           sentiment_polarity?: string
           sentiment_score?: number | null
+          subdivision_detected?: string | null
           threat_level?: string | null
           visual_emotions?: Json | null
         }
