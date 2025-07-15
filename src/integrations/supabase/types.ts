@@ -314,6 +314,182 @@ export type Database = {
           },
         ]
       }
+      ashen_autonomous_blacklist: {
+        Row: {
+          added_by: string
+          blacklist_type: string
+          blacklist_value: string
+          created_at: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          added_by: string
+          blacklist_type: string
+          blacklist_value: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          added_by?: string
+          blacklist_type?: string
+          blacklist_value?: string
+          created_at?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      ashen_autonomous_config: {
+        Row: {
+          auto_approve_safe_fixes: boolean
+          config_key: string
+          config_value: Json
+          created_at: string
+          id: string
+          is_enabled: boolean
+          notify_on_human_approval_needed: boolean
+          risk_threshold: number
+          scan_frequency_minutes: number
+          updated_at: string
+        }
+        Insert: {
+          auto_approve_safe_fixes?: boolean
+          config_key: string
+          config_value?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          notify_on_human_approval_needed?: boolean
+          risk_threshold?: number
+          scan_frequency_minutes?: number
+          updated_at?: string
+        }
+        Update: {
+          auto_approve_safe_fixes?: boolean
+          config_key?: string
+          config_value?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          notify_on_human_approval_needed?: boolean
+          risk_threshold?: number
+          scan_frequency_minutes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ashen_autonomous_operations: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          execution_time_ms: number | null
+          fix_applied: boolean
+          human_approval_required: boolean
+          id: string
+          operation_details: Json
+          operation_type: string
+          reverted_at: string | null
+          risk_score: number
+          snapshot_created_before: string | null
+          status: string
+          target_module: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          execution_time_ms?: number | null
+          fix_applied?: boolean
+          human_approval_required?: boolean
+          id?: string
+          operation_details?: Json
+          operation_type: string
+          reverted_at?: string | null
+          risk_score?: number
+          snapshot_created_before?: string | null
+          status?: string
+          target_module?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          execution_time_ms?: number | null
+          fix_applied?: boolean
+          human_approval_required?: boolean
+          id?: string
+          operation_details?: Json
+          operation_type?: string
+          reverted_at?: string | null
+          risk_score?: number
+          snapshot_created_before?: string | null
+          status?: string
+          target_module?: string | null
+        }
+        Relationships: []
+      }
+      ashen_autonomous_scan_results: {
+        Row: {
+          can_auto_fix: boolean
+          created_at: string
+          fix_confidence: number
+          id: string
+          issue_description: string | null
+          issue_detected: boolean
+          issue_severity: string
+          operation_id: string | null
+          scan_metadata: Json
+          scan_type: string
+          suggested_fix: string | null
+          target_path: string | null
+        }
+        Insert: {
+          can_auto_fix?: boolean
+          created_at?: string
+          fix_confidence?: number
+          id?: string
+          issue_description?: string | null
+          issue_detected?: boolean
+          issue_severity?: string
+          operation_id?: string | null
+          scan_metadata?: Json
+          scan_type: string
+          suggested_fix?: string | null
+          target_path?: string | null
+        }
+        Update: {
+          can_auto_fix?: boolean
+          created_at?: string
+          fix_confidence?: number
+          id?: string
+          issue_description?: string | null
+          issue_detected?: boolean
+          issue_severity?: string
+          operation_id?: string | null
+          scan_metadata?: Json
+          scan_type?: string
+          suggested_fix?: string | null
+          target_path?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_autonomous_scan_operation"
+            columns: ["operation_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_autonomous_operations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_behavior_tests: {
         Row: {
           created_at: string
@@ -7547,6 +7723,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      get_autonomous_config: {
+        Args: { p_config_key?: string }
+        Returns: Json
+      }
       get_module_visibility: {
         Args: { p_user_role?: string; p_region?: string }
         Returns: {
@@ -7592,6 +7772,16 @@ export type Database = {
           p_original_code: string
           p_fixed_code: string
           p_problem_description: string
+        }
+        Returns: string
+      }
+      log_autonomous_operation: {
+        Args: {
+          p_operation_type: string
+          p_target_module?: string
+          p_risk_score?: number
+          p_operation_details?: Json
+          p_human_approval_required?: boolean
         }
         Returns: string
       }

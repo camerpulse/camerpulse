@@ -26,6 +26,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CodeDiffVisualizer } from './CodeDiffVisualizer';
 import { NaturalLanguagePluginBuilder } from './NaturalLanguagePluginBuilder';
 import { EmergencyRevertSystem } from './EmergencyRevertSystem';
+import ZeroInputMode from './ZeroInputMode';
 
 interface ErrorLog {
   id: string;
@@ -432,6 +433,7 @@ export default function AshenDebugCore() {
       <Tabs defaultValue="error-dashboard" className="space-y-4">
         <TabsList className="grid w-full grid-cols-12 gap-1">
           <TabsTrigger value="error-dashboard" className="text-xs">Error Dashboard</TabsTrigger>
+          <TabsTrigger value="zero-input-mode" className="text-xs">Zero Input Mode</TabsTrigger>
           <TabsTrigger value="security" className="text-xs">Security</TabsTrigger>
           <TabsTrigger value="patch-intelligence" className="text-xs">Patch Intelligence</TabsTrigger>
           <TabsTrigger value="healing-history" className="text-xs">Healing History</TabsTrigger>
@@ -441,12 +443,15 @@ export default function AshenDebugCore() {
           <TabsTrigger value="camerpulse-watchdog" className="text-xs">CamerPulse</TabsTrigger>
           <TabsTrigger value="plugin-watchdog" className="text-xs">Plugin Watchdog</TabsTrigger>
           <TabsTrigger value="ui-inspector" className="text-xs">UI Inspector</TabsTrigger>
-          <TabsTrigger value="code-diff" className="text-xs">Code Diff</TabsTrigger>
           <TabsTrigger value="emergency-revert" className="text-xs">Emergency Revert</TabsTrigger>
         </TabsList>
 
         <TabsContent value="error-dashboard" className="space-y-4">
           <ErrorDashboard />
+        </TabsContent>
+        
+        <TabsContent value="zero-input-mode" className="space-y-4">
+          <ZeroInputMode />
         </TabsContent>
         
         <TabsContent value="security" className="space-y-4">
