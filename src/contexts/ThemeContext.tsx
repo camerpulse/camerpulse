@@ -113,6 +113,7 @@ interface ThemeContextType {
   availableThemes: ThemeConfig[]
   switchTheme: (themeId: string) => Promise<void>
   isLoading: boolean
+  canManageThemes: boolean
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
@@ -133,9 +134,11 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme)
   const [availableThemes] = useState<ThemeConfig[]>([defaultTheme, emergence2035Theme, luxAeternaTheme])
   const [isLoading, setIsLoading] = useState(true)
+  const [canManageThemes, setCanManageThemes] = useState(false)
 
   useEffect(() => {
     loadActiveTheme()
+    checkAdminStatus()
   }, [])
 
   useEffect(() => {
@@ -173,22 +176,56 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     }
   }
 
+  const checkAdminStatus = async () => {
+    try {
+      const { data: user } = await supabase.auth.getUser()
+      if (!user.user) {
+        setCanManageThemes(false)
+        return
+      }
+
+      const { data: userRoles } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.user.id)
+        .eq('role', 'admin')
+        .maybeSingle()
+
+      setCanManageThemes(!!userRoles)
+    } catch (error) {
+      console.error('Error checking admin status:', error)
+      setCanManageThemes(false)
+    }
+  }
+
   const switchTheme = async (themeId: string) => {
     try {
+      // Check if user is admin
+      const { data: userRoles, error: roleError } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', (await supabase.auth.getUser()).data.user?.id)
+        .eq('role', 'admin')
+        .maybeSingle()
+
+      if (roleError || !userRoles) {
+        throw new Error('Only administrators can change platform themes')
+      }
+
       const newTheme = availableThemes.find(t => t.id === themeId)
       if (!newTheme) return
 
-      // Update database
+      // Update platform-wide theme setting
       await supabase
         .from('politica_ai_config')
         .upsert({
           config_key: 'active_theme',
           config_value: themeId,
-          description: `Active theme: ${newTheme.name}`,
+          description: `Platform theme: ${newTheme.name}`,
           is_active: true
         })
 
-      // Update local state
+      // Update local state for immediate feedback
       setCurrentTheme({ ...newTheme, isActive: true })
       
     } catch (error) {
@@ -245,7 +282,8 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     currentTheme,
     availableThemes,
     switchTheme,
-    isLoading
+    isLoading,
+    canManageThemes
   }
 
   return (
