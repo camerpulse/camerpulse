@@ -30,6 +30,7 @@ import DiasporaEcho from '@/components/AI/DiasporaEcho';
 import EmotionalSpotlight from '@/components/AI/EmotionalSpotlight';
 import TrendRadar from '@/components/AI/TrendRadar';
 import { CivicFeed } from '@/components/AI/CivicFeed';
+import { CivicMemoryEngine } from '@/components/AI/CivicMemoryEngine';
 
 interface SentimentData {
   id: string;
@@ -217,7 +218,7 @@ const CamerPulseIntelligence = () => {
 
         {/* Main Dashboard */}
         <Tabs defaultValue="civic" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-9">
+          <TabsList className="grid w-full grid-cols-10">
             <TabsTrigger value="civic">Civic Feed</TabsTrigger>
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
             <TabsTrigger value="election">Election Tracker</TabsTrigger>
@@ -225,6 +226,7 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="diaspora">Diaspora Echo</TabsTrigger>
             <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
+            <TabsTrigger value="memory">Civic Memory</TabsTrigger>
             <TabsTrigger value="alerts">Threat Monitoring</TabsTrigger>
             <TabsTrigger value="config">AI Settings</TabsTrigger>
           </TabsList>
@@ -306,6 +308,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="trending" className="space-y-4">
             <TrendRadar />
+          </TabsContent>
+
+          <TabsContent value="memory" className="space-y-4">
+            <CivicMemoryEngine />
           </TabsContent>
 
           <TabsContent value="alerts" className="space-y-4">
