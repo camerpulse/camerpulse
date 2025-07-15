@@ -291,6 +291,28 @@ export const useAshenDebugCore = () => {
     }
   }, [status.emergency_fixes_in_last_hour, checkEmergencyAlert, isLoading]);
 
+  // Plugin detection helper
+  const scanForPlugins = async () => {
+    try {
+      // This would scan filesystem for known plugin patterns
+      // For now, return detected plugins from component paths
+      const detectedPlugins = [
+        'CivicImportCore',
+        'Politicians Module', 
+        'Promise Tracker',
+        'Polls System',
+        'Sentiment Analysis',
+        'Public Feedback',
+        'Officials Directory'
+      ];
+      
+      return detectedPlugins;
+    } catch (error) {
+      console.error('Plugin scan failed:', error);
+      return [];
+    }
+  };
+
   return {
     config,
     status,
@@ -300,6 +322,7 @@ export const useAshenDebugCore = () => {
     runMonitoringService,
     runBackgroundHealing,
     checkEmergencyAlert,
+    scanForPlugins,
     refreshData: loadData
   };
 };

@@ -4,13 +4,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode, Monitor, Clock, Shield, Wrench, Target } from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode, Monitor, Clock, Shield, Wrench, Target, Puzzle } from "lucide-react";
 import ErrorDashboard from "./ErrorDashboard";
 import HealingHistory from "./HealingHistory";
 import { UIBugLogs } from "./UIBugLogs";
 import { LearningEngine } from "./LearningEngine";
 import HumanSimulationEngine from "./HumanSimulationEngine";
 import BrowserEmulationLayer from "./BrowserEmulationLayer";
+import PluginWatchdog from "./PluginWatchdog";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AshenAlertSystem } from "./AshenAlertSystem";
@@ -420,7 +421,7 @@ export default function AshenDebugCore() {
 
       {/* Main Dashboard */}
       <Tabs defaultValue="error-dashboard" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-11">
+        <TabsList className="grid w-full grid-cols-12">
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
           <TabsTrigger value="healing-history">Healing History</TabsTrigger>
           <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
@@ -429,6 +430,7 @@ export default function AshenDebugCore() {
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="human-simulation">Human Simulation</TabsTrigger>
           <TabsTrigger value="browser-emulation">Browser Emulation</TabsTrigger>
+          <TabsTrigger value="plugin-watchdog">Plugin Watchdog</TabsTrigger>
           <TabsTrigger value="ux-simulation">UX Simulation</TabsTrigger>
           <TabsTrigger value="alert-system">Alert System</TabsTrigger>
           <TabsTrigger value="monitor">System Monitor</TabsTrigger>
@@ -522,6 +524,10 @@ export default function AshenDebugCore() {
 
         <TabsContent value="browser-emulation" className="space-y-4">
           <BrowserEmulationLayer />
+        </TabsContent>
+
+        <TabsContent value="plugin-watchdog" className="space-y-4">
+          <PluginWatchdog />
         </TabsContent>
 
         <TabsContent value="tests" className="space-y-4">
