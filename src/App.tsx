@@ -25,6 +25,8 @@ import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
+import { PanAfricaProvider } from "./contexts/PanAfricaContext";
+import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
 
 const queryClient = new QueryClient();
 
@@ -48,8 +50,9 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <MobileProvider>
-          <AuthProvider>
-            <TooltipProvider>
+          <PanAfricaProvider>
+            <AuthProvider>
+              <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -68,7 +71,16 @@ const App = () => {
               <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/politica-ai" element={<PoliticaAI />} />
-              <Route path="/camerpulse-intelligence" element={<CamerPulseIntelligence />} />
+              <Route path="/camerpulse-intelligence" element={
+                <DynamicCountryRouter>
+                  <CamerPulseIntelligence />
+                </DynamicCountryRouter>
+              } />
+              <Route path="/camerpulse/:countryCode" element={
+                <DynamicCountryRouter>
+                  <CamerPulseIntelligence />
+                </DynamicCountryRouter>
+              } />
               <Route path="/civic-portal" element={<CivicPublicPortal />} />
               <Route path="/marketplace/order-success" element={<OrderSuccess />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
@@ -77,8 +89,9 @@ const App = () => {
           </BrowserRouter>
         </TooltipProvider>
       </AuthProvider>
-    </MobileProvider>
-  </ThemeProvider>
+    </PanAfricaProvider>
+  </MobileProvider>
+</ThemeProvider>
 </QueryClientProvider>
   );
 };

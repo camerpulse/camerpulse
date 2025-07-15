@@ -45,6 +45,7 @@ import IssueEmotionTracker from '@/components/AI/IssueEmotionTracker';
 import CivicPredictorAI from '@/components/AI/CivicPredictorAI';
 import PanAfricaModule from '@/components/AI/PanAfricaModule';
 import CivicServiceDataPanel from '@/components/AI/CivicServiceDataPanel';
+import CrossCountryAnalytics from '@/components/AI/CrossCountryAnalytics';
 
 interface SentimentData {
   id: string;
@@ -234,6 +235,7 @@ const CamerPulseIntelligence = () => {
         <Tabs defaultValue="pan-africa" className="space-y-4">
           <TabsList className="grid w-full grid-cols-12">
             <TabsTrigger value="pan-africa">🌍 Pan-Africa</TabsTrigger>
+            <TabsTrigger value="cross-analytics">🔄 Cross-Border</TabsTrigger>
             <TabsTrigger value="serviceData">🏥 Service Data</TabsTrigger>
             <TabsTrigger value="civic">Civic Feed</TabsTrigger>
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
@@ -261,6 +263,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="pan-africa" className="space-y-4">
             <PanAfricaModule />
+          </TabsContent>
+
+          <TabsContent value="cross-analytics" className="space-y-4">
+            <CrossCountryAnalytics />
           </TabsContent>
 
           <TabsContent value="serviceData" className="space-y-4">

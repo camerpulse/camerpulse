@@ -1073,6 +1073,39 @@ export type Database = {
           },
         ]
       }
+      pan_africa_config: {
+        Row: {
+          config_key: string
+          config_type: string
+          config_value: Json
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          config_key: string
+          config_type?: string
+          config_value?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          config_key?: string
+          config_type?: string
+          config_value?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       pan_africa_countries: {
         Row: {
           capital_city: string | null
@@ -2624,6 +2657,10 @@ export type Database = {
       generate_vendor_id: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_pan_africa_config: {
+        Args: { p_config_key?: string }
+        Returns: Json
       }
       has_role: {
         Args: {
