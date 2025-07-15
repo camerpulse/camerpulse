@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { RoleControlSystem } from '@/components/Security/RoleControlSystem';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { PGPService, PGPKey } from '@/services/pgpService';
@@ -516,11 +517,12 @@ const Security = () => {
           </div>
 
           <Tabs defaultValue="2fa" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="2fa">2FA</TabsTrigger>
               <TabsTrigger value="devices">Appareils</TabsTrigger>
               <TabsTrigger value="logs">Activité</TabsTrigger>
               <TabsTrigger value="encryption">Chiffrement</TabsTrigger>
+              <TabsTrigger value="roles">Roles</TabsTrigger>
             </TabsList>
 
             {/* 2FA Tab */}
@@ -933,6 +935,10 @@ const Security = () => {
                   </div>
                 </CardContent>
               </Card>
+            </TabsContent>
+
+            <TabsContent value="roles">
+              <RoleControlSystem />
             </TabsContent>
           </Tabs>
         </div>

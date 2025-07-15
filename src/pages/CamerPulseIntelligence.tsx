@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { CivicAlertSystem } from '@/components/Security/CivicAlertSystem';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -308,47 +309,7 @@ const CamerPulseIntelligence = () => {
           </TabsContent>
 
           <TabsContent value="alerts" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Shield className="h-5 w-5" />
-                  <span>Active Threat Monitoring</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {alerts.length === 0 ? (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Shield className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                      <p>No active alerts. All systems monitoring normally.</p>
-                    </div>
-                  ) : (
-                    alerts.map((alert, idx) => (
-                      <Alert key={idx} className={alert.severity === 'critical' ? 'border-red-500' : ''}>
-                        <AlertTriangle className="h-4 w-4" />
-                        <AlertDescription>
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between">
-                              <strong>{alert.title}</strong>
-                              <Badge className={getThreatLevelColor(alert.severity)}>
-                                {alert.severity}
-                              </Badge>
-                            </div>
-                            <p>{alert.description}</p>
-                            {alert.affected_regions?.length > 0 && (
-                              <div>
-                                <span className="text-sm font-medium">Affected Regions: </span>
-                                {alert.affected_regions.join(', ')}
-                              </div>
-                            )}
-                          </div>
-                        </AlertDescription>
-                      </Alert>
-                    ))
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+            <CivicAlertSystem />
           </TabsContent>
 
           <TabsContent value="config" className="space-y-4">
