@@ -34,6 +34,11 @@ interface PoliticianProps {
   // AI Verification
   aiVerificationStatus?: "verified" | "unverified" | "disputed" | "pending";
   aiVerificationScore?: number;
+  // Term Status
+  termStatus?: 'active' | 'expired' | 'deceased' | 'unknown';
+  isCurrentlyInOffice?: boolean;
+  termStartDate?: string;
+  termEndDate?: string;
 }
 
 export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) => {
@@ -72,6 +77,25 @@ export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) 
                 <Badge className="bg-cm-yellow text-cm-yellow-foreground px-2 py-1">
                   <Shield className="w-3 h-3 mr-1" />
                   Verified
+                </Badge>
+              )}
+              {politician.termStatus && politician.isCurrentlyInOffice !== undefined && (
+                <Badge 
+                  variant={
+                    politician.termStatus === 'active' && politician.isCurrentlyInOffice 
+                      ? "default" 
+                      : politician.termStatus === 'expired' 
+                        ? "secondary" 
+                        : politician.termStatus === 'deceased'
+                          ? "destructive"
+                          : "outline"
+                  }
+                  className="px-2 py-1"
+                >
+                  {politician.termStatus === 'active' && politician.isCurrentlyInOffice && "In Office"}
+                  {politician.termStatus === 'expired' && "Former Official"}
+                  {politician.termStatus === 'deceased' && "Deceased"}
+                  {politician.termStatus === 'unknown' && "Status Unknown"}
                 </Badge>
               )}
               {politician.aiVerificationStatus && (

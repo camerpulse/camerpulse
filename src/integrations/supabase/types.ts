@@ -3953,8 +3953,11 @@ export type Database = {
           is_archived: boolean | null
           is_claimable: boolean | null
           is_claimed: boolean | null
+          is_currently_in_office: boolean | null
+          last_term_validation: string | null
           level_of_office: string | null
           name: string
+          office_history: Json | null
           party: string | null
           performance_score: number | null
           political_party_id: string | null
@@ -3966,6 +3969,7 @@ export type Database = {
           role_title: string | null
           term_end_date: string | null
           term_start_date: string | null
+          term_status: string | null
           timeline_events: Json | null
           timeline_roles: Json | null
           transparency_rating: number | null
@@ -4008,8 +4012,11 @@ export type Database = {
           is_archived?: boolean | null
           is_claimable?: boolean | null
           is_claimed?: boolean | null
+          is_currently_in_office?: boolean | null
+          last_term_validation?: string | null
           level_of_office?: string | null
           name: string
+          office_history?: Json | null
           party?: string | null
           performance_score?: number | null
           political_party_id?: string | null
@@ -4021,6 +4028,7 @@ export type Database = {
           role_title?: string | null
           term_end_date?: string | null
           term_start_date?: string | null
+          term_status?: string | null
           timeline_events?: Json | null
           timeline_roles?: Json | null
           transparency_rating?: number | null
@@ -4063,8 +4071,11 @@ export type Database = {
           is_archived?: boolean | null
           is_claimable?: boolean | null
           is_claimed?: boolean | null
+          is_currently_in_office?: boolean | null
+          last_term_validation?: string | null
           level_of_office?: string | null
           name?: string
+          office_history?: Json | null
           party?: string | null
           performance_score?: number | null
           political_party_id?: string | null
@@ -4076,6 +4087,7 @@ export type Database = {
           role_title?: string | null
           term_end_date?: string | null
           term_start_date?: string | null
+          term_status?: string | null
           timeline_events?: Json | null
           timeline_roles?: Json | null
           transparency_rating?: number | null
@@ -4946,9 +4958,27 @@ export type Database = {
         Args: { "": string }
         Returns: string[]
       }
+      update_politician_term_status: {
+        Args: {
+          p_politician_id: string
+          p_new_status: string
+          p_reason?: string
+        }
+        Returns: boolean
+      }
       validate_password_strength: {
         Args: { password: string }
         Returns: Json
+      }
+      validate_politician_terms: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          politician_id: string
+          name: string
+          current_status: string
+          needs_update: boolean
+          days_since_term_end: number
+        }[]
       }
     }
     Enums: {

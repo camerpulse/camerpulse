@@ -73,6 +73,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import TermOfOfficeValidator from "@/components/AI/TermOfOfficeValidator";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -200,6 +201,10 @@ const Admin = () => {
                 <TabsTrigger value="politicians" className="flex items-center gap-2">
                   <UserCheck className="h-4 w-4" />
                   Politicians
+                </TabsTrigger>
+                <TabsTrigger value="term-validation" className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  Term Validation
                 </TabsTrigger>
                 <TabsTrigger value="marketplace" className="flex items-center gap-2">
                   <ShoppingBag className="h-4 w-4" />
@@ -566,6 +571,13 @@ const Admin = () => {
                     </Tabs>
                   </CardContent>
                 </Card>
+              </div>
+            </TabsContent>
+
+            {/* TERM VALIDATION */}
+            <TabsContent value="term-validation">
+              <div className="space-y-6">
+                <TermOfOfficeValidator />
               </div>
             </TabsContent>
 
