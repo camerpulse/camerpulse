@@ -24,6 +24,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { ElectionSentimentTracker } from '@/components/AI/ElectionSentimentTracker';
+import RegionalSentimentHeatmap from '@/components/AI/RegionalSentimentHeatmap';
 
 interface SentimentData {
   id: string;
@@ -280,49 +281,7 @@ const CamerPulseIntelligence = () => {
           </TabsContent>
 
           <TabsContent value="regional" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {regionalData.map((region, idx) => (
-                <Card key={idx}>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <MapPin className="h-4 w-4" />
-                      <span>{region.region}</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span>Overall Sentiment</span>
-                        <span className={`font-bold ${getSentimentColor(region.overall_sentiment)}`}>
-                          {region.overall_sentiment?.toFixed(2)}
-                        </span>
-                      </div>
-                      <Progress value={(region.overall_sentiment + 1) * 50} />
-                      
-                      <div>
-                        <span className="text-sm font-medium">Dominant Emotions:</span>
-                        <div className="flex flex-wrap gap-1 mt-1">
-                          {region.dominant_emotions?.slice(0, 3).map((emotion, i) => (
-                            <Badge key={i} variant="outline" className="text-xs">
-                              {emotion}
-                            </Badge>
-                          ))}
-                        </div>
-                      </div>
-
-                      {region.threat_level !== 'none' && (
-                        <Alert>
-                          <AlertTriangle className="h-4 w-4" />
-                          <AlertDescription>
-                            Threat Level: <strong>{region.threat_level}</strong>
-                          </AlertDescription>
-                        </Alert>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+            <RegionalSentimentHeatmap />
           </TabsContent>
 
           <TabsContent value="trending" className="space-y-4">
