@@ -18,7 +18,6 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
 
 interface UserProfileProps {
   userId: string;
@@ -83,8 +82,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, isOpen, onClos
     } catch (error) {
       console.error('Error fetching profile:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger le profil utilisateur",
+        title: "Error",
+        description: "Failed to load user profile",
         variant: "destructive"
       });
     }
@@ -167,11 +166,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, isOpen, onClos
                   <div>
                     <div className="flex items-center gap-2">
                       <h2 className="text-xl font-bold">{profile.display_name || profile.username}</h2>
-                      {profile.verified && (
-                        <Badge variant="outline" className="border-blue-500 text-blue-600">
-                          Vérifié
-                        </Badge>
-                      )}
+                       {profile.verified && (
+                         <Badge variant="outline" className="border-blue-500 text-blue-600">
+                           Verified
+                         </Badge>
+                       )}
                       {profile.is_diaspora && (
                         <Badge variant="outline" className="border-primary text-primary">
                           <Globe className="w-3 h-3 mr-1" />
@@ -191,19 +190,19 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, isOpen, onClos
                     )}
                     <div className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" />
-                      <span>Rejoint {formatDistanceToNow(new Date(profile.created_at), { locale: fr })}</span>
+                      <span>Joined {formatDistanceToNow(new Date(profile.created_at), { addSuffix: true })}</span>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-6 text-sm">
                     <div className="flex items-center gap-1">
                       <Users className="w-4 h-4" />
-                      <span className="font-semibold">{followStats.followers_count}</span>
-                      <span className="text-muted-foreground">abonnés</span>
+                       <span className="font-semibold">{followStats.followers_count}</span>
+                       <span className="text-muted-foreground">followers</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <span className="font-semibold">{followStats.following_count}</span>
-                      <span className="text-muted-foreground">abonnements</span>
+                       <span className="font-semibold">{followStats.following_count}</span>
+                       <span className="text-muted-foreground">following</span>
                     </div>
                   </div>
                 </div>
@@ -225,8 +224,8 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, isOpen, onClos
         <CardContent className="overflow-y-auto max-h-96">
           <Tabs defaultValue="posts" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="posts">Publications</TabsTrigger>
-              <TabsTrigger value="activity">Activité</TabsTrigger>
+               <TabsTrigger value="posts">Posts</TabsTrigger>
+               <TabsTrigger value="activity">Activity</TabsTrigger>
             </TabsList>
             
             <TabsContent value="posts" className="space-y-4 mt-4">
@@ -242,7 +241,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, isOpen, onClos
               ) : posts.length === 0 ? (
                 <div className="text-center py-8 text-muted-foreground">
                   <MessageCircle className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                  <p>Aucune publication</p>
+                  <p>No posts yet</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -282,12 +281,11 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, isOpen, onClos
                               {post.sentiment_label}
                             </Badge>
                           )}
-                          <span>
-                            {formatDistanceToNow(new Date(post.created_at), { 
-                              addSuffix: true, 
-                              locale: fr 
-                            })}
-                          </span>
+                           <span>
+                             {formatDistanceToNow(new Date(post.created_at), { 
+                               addSuffix: true
+                             })}
+                           </span>
                         </div>
                       </div>
                     </div>
@@ -299,7 +297,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, isOpen, onClos
             <TabsContent value="activity" className="space-y-4 mt-4">
               <div className="text-center py-8 text-muted-foreground">
                 <TrendingUp className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>Activité récente à venir</p>
+                <p>Recent activity coming soon</p>
               </div>
             </TabsContent>
           </Tabs>

@@ -85,12 +85,12 @@ const OrderSuccess = () => {
     verifyPayment();
   }, [sessionId, toast]);
 
-  const formatPrice = (amount: number, currency: string) => {
-    return new Intl.NumberFormat('fr-CM', {
-      style: 'currency',
-      currency: currency === 'XAF' ? 'XAF' : currency
-    }).format(amount / 100); // Convert from cents
-  };
+   const formatPrice = (amount: number, currency: string) => {
+     return new Intl.NumberFormat('en-US', {
+       style: 'currency',
+       currency: currency === 'XAF' ? 'XAF' : currency
+     }).format(amount / 100); // Convert from cents
+   };
 
   if (isLoading) {
     return (

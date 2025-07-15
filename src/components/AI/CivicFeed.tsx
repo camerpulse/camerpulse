@@ -104,20 +104,20 @@ const regions = [
   'Diaspora - Allemagne'
 ];
 
-const topics = [
-  'Tous les sujets',
-  'Politique',
-  'Économie',
-  'Sécurité',
-  'Santé',
-  'Éducation',
-  'Infrastructure',
-  'Corruption',
-  'Élections',
-  'Société',
-  'Sport',
-  'Culture'
-];
+ const topics = [
+   'All Topics',
+   'Politics',
+   'Economy',
+   'Security',
+   'Health',
+   'Education',
+   'Infrastructure',
+   'Corruption',
+   'Elections',
+   'Society',
+   'Sports',
+   'Culture'
+ ];
 
 export const CivicFeed: React.FC = () => {
   const [posts, setPosts] = useState<CivicPost[]>([]);
@@ -182,20 +182,20 @@ export const CivicFeed: React.FC = () => {
       }
 
       // Apply topic filter through keywords
-      if (selectedTopic !== 'Tous les sujets') {
-        const topicKeywords = {
-          'Politique': ['politique', 'gouvernement', 'ministre', 'président'],
-          'Économie': ['économie', 'business', 'travail', 'emploi'],
-          'Sécurité': ['sécurité', 'police', 'criminalité', 'violence'],
-          'Santé': ['santé', 'hôpital', 'médecin', 'maladie'],
-          'Éducation': ['école', 'université', 'éducation', 'étudiant'],
-          'Infrastructure': ['route', 'électricité', 'eau', 'transport'],
-          'Corruption': ['corruption', 'détournement', 'scandale'],
-          'Élections': ['élection', 'vote', 'campagne', 'candidat'],
-          'Société': ['société', 'communauté', 'famille'],
-          'Sport': ['sport', 'football', 'basketball'],
-          'Culture': ['culture', 'musique', 'art', 'tradition']
-        };
+       if (selectedTopic !== 'All Topics') {
+         const topicKeywords = {
+           'Politics': ['politics', 'government', 'minister', 'president'],
+           'Economy': ['economy', 'business', 'work', 'employment'],
+           'Security': ['security', 'police', 'crime', 'violence'],
+           'Health': ['health', 'hospital', 'doctor', 'disease'],
+           'Education': ['school', 'university', 'education', 'student'],
+           'Infrastructure': ['road', 'electricity', 'water', 'transport'],
+           'Corruption': ['corruption', 'embezzlement', 'scandal'],
+           'Elections': ['election', 'vote', 'campaign', 'candidate'],
+           'Society': ['society', 'community', 'family'],
+           'Sports': ['sport', 'football', 'basketball'],
+           'Culture': ['culture', 'music', 'art', 'tradition']
+         };
         
         const keywords = topicKeywords[selectedTopic as keyof typeof topicKeywords] || [];
         if (keywords.length > 0) {

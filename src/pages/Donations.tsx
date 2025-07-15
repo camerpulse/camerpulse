@@ -151,12 +151,12 @@ const Donations = () => {
     }
   };
 
-  const formatAmount = (amount: number, currency: string) => {
-    return new Intl.NumberFormat('fr-CM', {
-      style: 'currency',
-      currency: currency === 'XAF' ? 'XAF' : currency
-    }).format(amount);
-  };
+   const formatAmount = (amount: number, currency: string) => {
+     return new Intl.NumberFormat('en-US', {
+       style: 'currency',
+       currency: currency === 'XAF' ? 'XAF' : currency
+     }).format(amount);
+   };
 
   const progressPercentage = Math.min((currentAmount / fundraisingGoal) * 100, 100);
 

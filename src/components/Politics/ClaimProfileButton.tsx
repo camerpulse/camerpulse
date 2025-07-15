@@ -26,7 +26,7 @@ export const ClaimProfileButton = ({
   const claimFee = type === 'politician' ? 500000 : 1000000;
   
   const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
+    return new Intl.NumberFormat('en-US').format(amount) + ' FCFA';
   };
 
   if (isClaimed) {

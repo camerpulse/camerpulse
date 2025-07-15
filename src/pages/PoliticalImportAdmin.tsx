@@ -187,9 +187,9 @@ const PoliticalImportAdmin = () => {
     }
   };
 
-  const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
-  };
+   const formatAmount = (amount: number) => {
+     return new Intl.NumberFormat('en-US').format(amount) + ' FCFA';
+   };
 
   const pendingClaims = claimRequests?.filter(c => c.status === 'pending') || [];
   const processedClaims = claimRequests?.filter(c => c.status !== 'pending') || [];

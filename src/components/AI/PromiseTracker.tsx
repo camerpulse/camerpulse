@@ -279,20 +279,20 @@ export const PromiseTracker: React.FC = () => {
     }
   };
 
-  const getStatusText = (status?: string | null) => {
-    switch (status) {
-      case 'fulfilled':
-        return 'Tenue';
-      case 'unfulfilled':
-        return 'Non tenue';
-      case 'in_progress':
-        return 'En cours';
-      case 'no_effort':
-        return 'Aucun effort';
-      default:
-        return 'Inconnu';
-    }
-  };
+   const getStatusText = (status?: string | null) => {
+     switch (status) {
+       case 'fulfilled':
+         return 'Fulfilled';
+       case 'unfulfilled':
+         return 'Unfulfilled';
+       case 'in_progress':
+         return 'In Progress';
+       case 'no_effort':
+         return 'No Effort';
+       default:
+         return 'Unknown';
+     }
+   };
 
   const getVerificationBadge = (status?: string) => {
     switch (status) {
@@ -349,19 +349,19 @@ export const PromiseTracker: React.FC = () => {
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-blue-600">{stats.in_progress}</div>
-              <div className="text-sm text-muted-foreground">En cours</div>
+              <div className="text-sm text-muted-foreground">In Progress</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-red-600">{stats.unfulfilled}</div>
-              <div className="text-sm text-muted-foreground">Non tenues</div>
+              <div className="text-sm text-muted-foreground">Unfulfilled</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-gray-600">{stats.no_effort}</div>
-              <div className="text-sm text-muted-foreground">Aucun effort</div>
+              <div className="text-sm text-muted-foreground">No Effort</div>
             </CardContent>
           </Card>
           <Card>
@@ -423,20 +423,20 @@ export const PromiseTracker: React.FC = () => {
             
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger>
-                <SelectValue placeholder="Statut" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Tous les statuts</SelectItem>
-                <SelectItem value="fulfilled">Tenues</SelectItem>
-                <SelectItem value="in_progress">En cours</SelectItem>
-                <SelectItem value="unfulfilled">Non tenues</SelectItem>
-                <SelectItem value="no_effort">Aucun effort</SelectItem>
+                 <SelectValue placeholder="Status" />
+               </SelectTrigger>
+               <SelectContent>
+                 <SelectItem value="all">All Statuses</SelectItem>
+                 <SelectItem value="fulfilled">Fulfilled</SelectItem>
+                 <SelectItem value="in_progress">In Progress</SelectItem>
+                 <SelectItem value="unfulfilled">Unfulfilled</SelectItem>
+                 <SelectItem value="no_effort">No Effort</SelectItem>
               </SelectContent>
             </Select>
 
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger>
-                <SelectValue placeholder="Catégorie" />
+                <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Toutes les catégories</SelectItem>

@@ -38,7 +38,7 @@ export const ClaimProfileModal = ({
   });
 
   const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat('fr-FR').format(amount) + ' FCFA';
+    return new Intl.NumberFormat('en-US').format(amount) + ' FCFA';
   };
 
   const handleFileUpload = (field: string, file: File) => {

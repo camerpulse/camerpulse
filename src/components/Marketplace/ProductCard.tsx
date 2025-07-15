@@ -42,7 +42,7 @@ export const ProductCard = ({ product }: { product: Product }) => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const formatPrice = (price: number, currency = 'XAF') => {
-    return new Intl.NumberFormat('fr-CM', {
+    return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: currency === 'XAF' ? 'XAF' : currency
     }).format(price);
