@@ -44,7 +44,7 @@ export const LuxAeternaEffects: React.FC<LuxAeternaEffectsProps> = ({ children }
     updateTimeOfDay()
     checkNationalEvents()
 
-    const interval = setInterval(updateTimeOfDay, 60000) // Check every minute
+    const interval = setInterval(updateTimeOfDay, 300000) // Check every 5 minutes for better performance
     return () => clearInterval(interval)
   }, [currentTheme.id])
 

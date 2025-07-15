@@ -44,7 +44,7 @@ export const LuxAeternaParticles: React.FC = () => {
     })
 
     const initParticles = () => {
-      particlesRef.current = Array.from({ length: 50 }, createParticle)
+      particlesRef.current = Array.from({ length: 30 }, createParticle) // Reduced from 50 to 30
     }
 
     const updateParticles = () => {

@@ -19,8 +19,11 @@ import {
   Cloud,
   Sun,
   CloudRain,
-  Wind
+  Wind,
+  Zap,
+  Sparkles
 } from 'lucide-react'
+import { useLocalStorage } from '@/hooks/useLocalStorage'
 
 export const LuxAeternaControlPanel: React.FC = () => {
   const { currentTheme } = useTheme()
@@ -48,6 +51,12 @@ export const LuxAeternaControlPanel: React.FC = () => {
     highContrast: false,
     reducedMotion: false,
     enhancedFocus: false
+  })
+
+  const [performance, setPerformance] = useLocalStorage('lux-performance', {
+    particles: true,
+    animations: true,
+    fastMode: false
   })
 
   useEffect(() => {
@@ -271,6 +280,60 @@ export const LuxAeternaControlPanel: React.FC = () => {
                   />
                 </div>
               </div>
+            </div>
+
+            {/* Performance Controls */}
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium flex items-center gap-2">
+                <Zap className="h-4 w-4" />
+                Performance
+              </h4>
+              
+              <div className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs">Fast Mode</span>
+                  <Switch
+                    checked={performance.fastMode}
+                    onCheckedChange={(checked) => 
+                      setPerformance(prev => ({ 
+                        ...prev, 
+                        fastMode: checked,
+                        particles: !checked,
+                        animations: !checked
+                      }))
+                    }
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs">Floating Particles</span>
+                  <Switch
+                    checked={performance.particles && !performance.fastMode}
+                    disabled={performance.fastMode}
+                    onCheckedChange={(checked) => 
+                      setPerformance(prev => ({ ...prev, particles: checked }))
+                    }
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <span className="text-xs">Smooth Animations</span>
+                  <Switch
+                    checked={performance.animations && !performance.fastMode}
+                    disabled={performance.fastMode}
+                    onCheckedChange={(checked) => 
+                      setPerformance(prev => ({ ...prev, animations: checked }))
+                    }
+                  />
+                </div>
+              </div>
+              
+              {performance.fastMode && (
+                <div className="text-xs text-green-600 flex items-center gap-1">
+                  <Zap className="h-3 w-3" />
+                  Optimized for speed
+                </div>
+              )}
             </div>
 
             {/* Quick Commands */}
