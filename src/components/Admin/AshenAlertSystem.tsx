@@ -79,13 +79,22 @@ export function AshenAlertSystem() {
 
       if (data) {
         const configMap = data.reduce((acc, item) => {
-          acc[item.config_key] = item.config_value;
+          // Handle JSONB values - they might be strings or actual values
+          let value = item.config_value;
+          if (typeof value === 'string') {
+            try {
+              value = JSON.parse(value);
+            } catch {
+              // If parsing fails, use the string value
+            }
+          }
+          acc[item.config_key] = value;
           return acc;
         }, {} as Record<string, any>);
 
         setConfig({
-          enabled: configMap.alerts_enabled === 'true',
-          sound_enabled: configMap.alerts_sound_enabled === 'true',
+          enabled: configMap.alerts_enabled === 'true' || configMap.alerts_enabled === true,
+          sound_enabled: configMap.alerts_sound_enabled === 'true' || configMap.alerts_sound_enabled === true,
           silence_duration: parseInt(configMap.alerts_silence_duration) || 60,
           priority_filter: configMap.alerts_priority_filter || 'all'
         });
@@ -219,11 +228,14 @@ export function AshenAlertSystem() {
     const configKey = `alerts_${key}`;
     
     try {
+      // Store as JSON string
+      const jsonValue = JSON.stringify(value);
+      
       await supabase
         .from('ashen_monitoring_config')
         .upsert({
           config_key: configKey,
-          config_value: value.toString(),
+          config_value: jsonValue,
           updated_at: new Date().toISOString()
         });
 
