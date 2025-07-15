@@ -83,6 +83,7 @@ import GovWebsiteScraper from "@/components/AI/GovWebsiteScraper";
 import { SystemHealthCheck } from "@/components/Admin/SystemHealthCheck";
 import AshenDebugCore from "@/components/Admin/AshenDebugCore";
 import CodeHealthLog from "@/components/Admin/CodeHealthLog";
+import UXSimulationLog from "@/components/Admin/UXSimulationLog";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -271,10 +272,14 @@ const Admin = () => {
                    <Bot className="h-4 w-4" />
                    Ashen Debug
                  </TabsTrigger>
-                 <TabsTrigger value="code-health" className="flex items-center gap-2">
-                   <FileCode className="h-4 w-4" />
-                   Code Health
-                 </TabsTrigger>
+                  <TabsTrigger value="code-health" className="flex items-center gap-2">
+                    <FileCode className="h-4 w-4" />
+                    Code Health
+                  </TabsTrigger>
+                  <TabsTrigger value="ux-simulation" className="flex items-center gap-2">
+                    <Activity className="h-4 w-4" />
+                    UX Simulation
+                  </TabsTrigger>
               </TabsList>
             </ScrollArea>
 
@@ -1078,6 +1083,11 @@ const Admin = () => {
             {/* 19. CODE HEALTH LOG */}
             <TabsContent value="code-health">
               <CodeHealthLog />
+            </TabsContent>
+
+            {/* 20. UX SIMULATION LOG */}
+            <TabsContent value="ux-simulation">
+              <UXSimulationLog />
             </TabsContent>
           </Tabs>
         </div>
