@@ -79,6 +79,7 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TermOfOfficeValidator from "@/components/AI/TermOfOfficeValidator";
 import GovWebsiteScraper from "@/components/AI/GovWebsiteScraper";
+import { SystemHealthCheck } from "@/components/Admin/SystemHealthCheck";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -255,10 +256,14 @@ const Admin = () => {
                   <Languages className="h-4 w-4" />
                   Localization
                 </TabsTrigger>
-                <TabsTrigger value="cache-management" className="flex items-center gap-2">
-                  <Database className="h-4 w-4" />
-                  Cache Management
-                </TabsTrigger>
+                 <TabsTrigger value="cache-management" className="flex items-center gap-2">
+                   <Database className="h-4 w-4" />
+                   Cache Management
+                 </TabsTrigger>
+                 <TabsTrigger value="system-health" className="flex items-center gap-2">
+                   <Activity className="h-4 w-4" />
+                   System Health
+                 </TabsTrigger>
               </TabsList>
             </ScrollArea>
 
@@ -1044,6 +1049,13 @@ const Admin = () => {
                     <CacheManagementDashboard />
                   </CardContent>
                 </Card>
+              </div>
+            </TabsContent>
+
+            {/* 17. SYSTEM HEALTH CHECK */}
+            <TabsContent value="system-health">
+              <div className="space-y-6">
+                <SystemHealthCheck />
               </div>
             </TabsContent>
           </Tabs>
