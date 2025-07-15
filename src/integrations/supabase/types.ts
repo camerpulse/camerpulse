@@ -443,6 +443,51 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_fix_trust_metrics: {
+        Row: {
+          auto_confirmations: number | null
+          created_at: string
+          current_trust_score: number | null
+          fix_type: string
+          id: string
+          last_calculated: string | null
+          manual_overrides: number | null
+          rollbacks: number | null
+          successful_fixes: number | null
+          total_attempts: number | null
+          trend_direction: string | null
+          updated_at: string
+        }
+        Insert: {
+          auto_confirmations?: number | null
+          created_at?: string
+          current_trust_score?: number | null
+          fix_type: string
+          id?: string
+          last_calculated?: string | null
+          manual_overrides?: number | null
+          rollbacks?: number | null
+          successful_fixes?: number | null
+          total_attempts?: number | null
+          trend_direction?: string | null
+          updated_at?: string
+        }
+        Update: {
+          auto_confirmations?: number | null
+          created_at?: string
+          current_trust_score?: number | null
+          fix_type?: string
+          id?: string
+          last_calculated?: string | null
+          manual_overrides?: number | null
+          rollbacks?: number | null
+          successful_fixes?: number | null
+          total_attempts?: number | null
+          trend_direction?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ashen_learning_insights: {
         Row: {
           applicable_contexts: Json | null
@@ -548,6 +593,105 @@ export type Database = {
           is_active?: boolean | null
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      ashen_patch_history: {
+        Row: {
+          admin_feedback: string | null
+          admin_response_time_seconds: number | null
+          applied_by: string | null
+          created_at: string
+          file_path: string
+          fix_trust_score: number | null
+          id: string
+          original_code: string | null
+          outcome: string
+          patch_id: string
+          patch_reasoning: string | null
+          patch_type: string
+          patched_code: string | null
+          rollback_reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          admin_feedback?: string | null
+          admin_response_time_seconds?: number | null
+          applied_by?: string | null
+          created_at?: string
+          file_path: string
+          fix_trust_score?: number | null
+          id?: string
+          original_code?: string | null
+          outcome?: string
+          patch_id: string
+          patch_reasoning?: string | null
+          patch_type: string
+          patched_code?: string | null
+          rollback_reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          admin_feedback?: string | null
+          admin_response_time_seconds?: number | null
+          applied_by?: string | null
+          created_at?: string
+          file_path?: string
+          fix_trust_score?: number | null
+          id?: string
+          original_code?: string | null
+          outcome?: string
+          patch_id?: string
+          patch_reasoning?: string | null
+          patch_type?: string
+          patched_code?: string | null
+          rollback_reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ashen_personal_patch_index: {
+        Row: {
+          admin_approved: boolean | null
+          avg_response_time_seconds: number | null
+          created_at: string
+          id: string
+          last_used: string | null
+          pattern_name: string
+          problem_signature: string
+          solution_template: string
+          stability_score: number | null
+          success_rate: number | null
+          updated_at: string
+          usage_count: number | null
+        }
+        Insert: {
+          admin_approved?: boolean | null
+          avg_response_time_seconds?: number | null
+          created_at?: string
+          id?: string
+          last_used?: string | null
+          pattern_name: string
+          problem_signature: string
+          solution_template: string
+          stability_score?: number | null
+          success_rate?: number | null
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Update: {
+          admin_approved?: boolean | null
+          avg_response_time_seconds?: number | null
+          created_at?: string
+          id?: string
+          last_used?: string | null
+          pattern_name?: string
+          problem_signature?: string
+          solution_template?: string
+          stability_score?: number | null
+          success_rate?: number | null
+          updated_at?: string
+          usage_count?: number | null
         }
         Relationships: []
       }
@@ -743,6 +887,84 @@ export type Database = {
           test_result?: string
           test_type?: string
           vulnerability_found?: boolean | null
+        }
+        Relationships: []
+      }
+      ashen_style_patterns: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          last_observed: string | null
+          pattern_category: string
+          pattern_description: string
+          pattern_example: Json | null
+          updated_at: string
+          usage_frequency: number | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_observed?: string | null
+          pattern_category: string
+          pattern_description: string
+          pattern_example?: Json | null
+          updated_at?: string
+          usage_frequency?: number | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_observed?: string | null
+          pattern_category?: string
+          pattern_description?: string
+          pattern_example?: Json | null
+          updated_at?: string
+          usage_frequency?: number | null
+        }
+        Relationships: []
+      }
+      ashen_unstable_patterns: {
+        Row: {
+          admin_notes: string | null
+          blocked_until: string | null
+          created_at: string
+          failure_count: number | null
+          id: string
+          is_permanently_blocked: boolean | null
+          last_failure: string | null
+          pattern_description: string | null
+          pattern_signature: string
+          rollback_count: number | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          blocked_until?: string | null
+          created_at?: string
+          failure_count?: number | null
+          id?: string
+          is_permanently_blocked?: boolean | null
+          last_failure?: string | null
+          pattern_description?: string | null
+          pattern_signature: string
+          rollback_count?: number | null
+        }
+        Update: {
+          admin_notes?: string | null
+          blocked_until?: string | null
+          created_at?: string
+          failure_count?: number | null
+          id?: string
+          is_permanently_blocked?: boolean | null
+          last_failure?: string | null
+          pattern_description?: string | null
+          pattern_signature?: string
+          rollback_count?: number | null
         }
         Relationships: []
       }
@@ -6329,6 +6551,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_fix_trust_score: {
+        Args: { p_fix_type: string }
+        Returns: number
+      }
       calculate_plugin_risk_score: {
         Args: { p_plugin_id: string }
         Returns: number
@@ -6382,6 +6608,15 @@ export type Database = {
           _role: Database["public"]["Enums"]["app_role"]
         }
         Returns: boolean
+      }
+      learn_from_manual_fix: {
+        Args: {
+          p_file_path: string
+          p_original_code: string
+          p_fixed_code: string
+          p_problem_description: string
+        }
+        Returns: string
       }
       log_security_event: {
         Args: {

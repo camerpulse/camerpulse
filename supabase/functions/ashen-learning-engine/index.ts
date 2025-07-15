@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
@@ -6,488 +5,425 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface LearningRequest {
-  action: 'train' | 'analyze' | 'predict' | 'feedback';
-  data?: any;
-  pattern_type?: string;
-  context?: any;
+interface PatchFeedback {
+  patchId: string;
+  outcome: 'accepted' | 'edited' | 'rolled_back';
+  adminFeedback?: string;
+  responseTimeSeconds?: number;
+  rollbackReason?: string;
 }
 
-interface LearningPattern {
-  pattern_name: string;
-  confidence_score: number;
-  learned_rules: any;
-  applicable_contexts: any;
-  success_rate: number;
-  usage_frequency: number;
+interface ManualFixTraining {
+  filePath: string;
+  originalCode: string;
+  fixedCode: string;
+  problemDescription: string;
 }
 
-serve(async (req) => {
+interface StylePattern {
+  category: 'naming' | 'indentation' | 'commenting' | 'data_flow' | 'structure';
+  description: string;
+  example: any;
+  confidenceScore: number;
+}
+
+Deno.serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+    );
 
-    const { action, data, pattern_type, context }: LearningRequest = await req.json();
+    const { action, ...data } = await req.json();
 
-    console.log(`🧠 Ashen Learning Engine: ${action} request received`);
-
-    // Check if learning engine is enabled
-    const { data: config } = await supabase
-      .from('ashen_monitoring_config')
-      .select('config_value')
-      .eq('config_key', 'learning_engine_enabled')
-      .single();
-
-    if (!config || config.config_value !== 'true') {
-      return new Response(JSON.stringify({ 
-        error: 'Learning engine is disabled',
-        action: action,
-        success: false
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    let result;
     switch (action) {
-      case 'train':
-        result = await trainFromHistory(supabase);
-        break;
-      case 'analyze':
-        result = await analyzePatterns(supabase, pattern_type);
-        break;
-      case 'predict':
-        result = await predictFix(supabase, data, context);
-        break;
-      case 'feedback':
-        result = await processFeedback(supabase, data);
-        break;
+      case 'record_patch_feedback':
+        return await recordPatchFeedback(supabase, data);
+      case 'learn_from_manual_fix':
+        return await learnFromManualFix(supabase, data);
+      case 'analyze_code_style':
+        return await analyzeCodeStyle(supabase, data);
+      case 'get_learning_insights':
+        return await getLearningInsights(supabase);
+      case 'calculate_trust_scores':
+        return await calculateTrustScores(supabase);
+      case 'get_recommended_patterns':
+        return await getRecommendedPatterns(supabase, data);
+      case 'block_unstable_pattern':
+        return await blockUnstablePattern(supabase, data);
+      case 'reset_learning_memory':
+        return await resetLearningMemory(supabase);
       default:
-        throw new Error(`Unknown action: ${action}`);
+        return new Response(
+          JSON.stringify({ error: 'Invalid action' }),
+          { status: 400, headers: corsHeaders }
+        );
     }
-
-    // Update last training run timestamp
-    if (action === 'train') {
-      await updateLastTrainingRun(supabase);
-    }
-
-    return new Response(JSON.stringify(result), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-
   } catch (error) {
-    console.error('💥 Learning Engine error:', error);
-    return new Response(JSON.stringify({ 
-      error: error.message,
-      success: false 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    console.error('Error in ashen-learning-engine:', error);
+    return new Response(
+      JSON.stringify({ error: error.message }),
+      { status: 500, headers: corsHeaders }
+    );
   }
 });
 
-async function trainFromHistory(supabase: any) {
-  console.log('🎓 Training from historical data...');
+async function recordPatchFeedback(supabase: any, data: PatchFeedback) {
+  const { patchId, outcome, adminFeedback, responseTimeSeconds, rollbackReason } = data;
 
-  // Get healing history with admin feedback
-  const { data: healingHistory } = await supabase
-    .from('ashen_auto_healing_history')
-    .select('*')
-    .not('admin_feedback', 'is', null)
-    .order('created_at', { ascending: false })
-    .limit(500);
+  // Update patch history
+  const { error: updateError } = await supabase
+    .from('ashen_patch_history')
+    .update({
+      outcome,
+      admin_feedback: adminFeedback,
+      admin_response_time_seconds: responseTimeSeconds,
+      rollback_reason: rollbackReason,
+      updated_at: new Date().toISOString()
+    })
+    .eq('patch_id', patchId);
 
-  if (!healingHistory || healingHistory.length === 0) {
-    return {
-      message: 'No training data available',
-      patterns_learned: 0,
-      success: true
-    };
+  if (updateError) {
+    throw new Error(`Failed to update patch feedback: ${updateError.message}`);
   }
 
-  const patterns = await extractPatterns(healingHistory);
-  const savedPatterns = await saveLearnedPatterns(supabase, patterns);
+  // Get patch details for further analysis
+  const { data: patchData, error: fetchError } = await supabase
+    .from('ashen_patch_history')
+    .select('*')
+    .eq('patch_id', patchId)
+    .single();
 
-  return {
-    message: 'Training completed successfully',
-    patterns_learned: savedPatterns.length,
-    training_data_points: healingHistory.length,
-    success: true
-  };
+  if (fetchError) {
+    throw new Error(`Failed to fetch patch data: ${fetchError.message}`);
+  }
+
+  // Check if this pattern has failed multiple times
+  if (outcome === 'rolled_back') {
+    await checkForUnstablePattern(supabase, patchData);
+  }
+
+  // Update trust scores
+  await updateTrustScore(supabase, patchData.patch_type);
+
+  return new Response(
+    JSON.stringify({ success: true, message: 'Patch feedback recorded' }),
+    { headers: corsHeaders }
+  );
 }
 
-async function extractPatterns(healingHistory: any[]) {
-  const patterns: LearningPattern[] = [];
+async function checkForUnstablePattern(supabase: any, patchData: any) {
+  const patternSignature = generatePatternSignature(patchData);
+  
+  // Check existing unstable patterns
+  const { data: existingPattern } = await supabase
+    .from('ashen_unstable_patterns')
+    .select('*')
+    .eq('pattern_signature', patternSignature)
+    .single();
 
-  // Group by fix types and analyze success patterns
-  const fixTypes = healingHistory.reduce((acc, entry) => {
-    const fixMethod = entry.fix_method || 'unknown';
-    if (!acc[fixMethod]) acc[fixMethod] = [];
-    acc[fixMethod].push(entry);
-    return acc;
-  }, {});
+  if (existingPattern) {
+    // Increment failure count
+    await supabase
+      .from('ashen_unstable_patterns')
+      .update({
+        failure_count: existingPattern.failure_count + 1,
+        rollback_count: existingPattern.rollback_count + 1,
+        last_failure: new Date().toISOString()
+      })
+      .eq('id', existingPattern.id);
 
-  // Analyze coding style patterns
-  const approvedFixes = healingHistory.filter(h => h.admin_feedback === 'approved');
-  if (approvedFixes.length >= 3) {
-    const codingStylePattern = analyzeCodingStylePatterns(approvedFixes);
-    if (codingStylePattern) {
-      patterns.push(codingStylePattern);
+    // Block pattern if it has failed too many times
+    if (existingPattern.rollback_count >= 2) {
+      await supabase
+        .from('ashen_unstable_patterns')
+        .update({
+          blocked_until: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // Block for 1 week
+          admin_notes: 'Auto-blocked due to repeated rollbacks'
+        })
+        .eq('id', existingPattern.id);
     }
+  } else {
+    // Create new unstable pattern entry
+    await supabase
+      .from('ashen_unstable_patterns')
+      .insert({
+        pattern_signature: patternSignature,
+        pattern_description: `${patchData.patch_type} fix in ${patchData.file_path}`,
+        failure_count: 1,
+        rollback_count: 1
+      });
+  }
+}
+
+function generatePatternSignature(patchData: any): string {
+  return `${patchData.patch_type}_${patchData.file_path}_${patchData.patch_reasoning?.substring(0, 50) || ''}`;
+}
+
+async function updateTrustScore(supabase: any, fixType: string) {
+  const { data, error } = await supabase.rpc('calculate_fix_trust_score', {
+    p_fix_type: fixType
+  });
+
+  if (error) {
+    console.error('Error calculating trust score:', error);
   }
 
-  // Analyze UI fix patterns
-  const uiFixes = approvedFixes.filter(h => 
-    h.fix_description && (
-      h.fix_description.includes('responsive') ||
-      h.fix_description.includes('mobile') ||
-      h.fix_description.includes('overflow') ||
-      h.fix_description.includes('grid')
-    )
-  );
+  return data;
+}
 
-  if (uiFixes.length >= 2) {
-    const uiPattern = analyzeUIPatterns(uiFixes);
-    if (uiPattern) {
-      patterns.push(uiPattern);
-    }
+async function learnFromManualFix(supabase: any, data: ManualFixTraining) {
+  const { filePath, originalCode, fixedCode, problemDescription } = data;
+
+  // Call the database function to learn from manual fix
+  const { data: patternId, error } = await supabase.rpc('learn_from_manual_fix', {
+    p_file_path: filePath,
+    p_original_code: originalCode,
+    p_fixed_code: fixedCode,
+    p_problem_description: problemDescription
+  });
+
+  if (error) {
+    throw new Error(`Failed to learn from manual fix: ${error.message}`);
   }
 
-  // Analyze component structure patterns
-  const componentFixes = approvedFixes.filter(h => 
-    h.files_modified && h.files_modified.some((file: string) => 
-      file.includes('components/') || file.includes('hooks/')
-    )
-  );
+  // Analyze code style from the manual fix
+  await analyzeCodeStyleFromFix(supabase, fixedCode, filePath);
 
-  if (componentFixes.length >= 2) {
-    const componentPattern = analyzeComponentPatterns(componentFixes);
-    if (componentPattern) {
-      patterns.push(componentPattern);
+  return new Response(
+    JSON.stringify({ success: true, patternId, message: 'Manual fix learned successfully' }),
+    { headers: corsHeaders }
+  );
+}
+
+async function analyzeCodeStyleFromFix(supabase: any, code: string, filePath: string) {
+  const stylePatterns = extractStylePatterns(code, filePath);
+  
+  for (const pattern of stylePatterns) {
+    // Check if pattern already exists
+    const { data: existing } = await supabase
+      .from('ashen_style_patterns')
+      .select('*')
+      .eq('pattern_category', pattern.category)
+      .eq('pattern_description', pattern.description)
+      .single();
+
+    if (existing) {
+      // Update frequency and confidence
+      await supabase
+        .from('ashen_style_patterns')
+        .update({
+          usage_frequency: existing.usage_frequency + 1,
+          confidence_score: Math.min(100, existing.confidence_score + 2),
+          last_observed: new Date().toISOString()
+        })
+        .eq('id', existing.id);
+    } else {
+      // Insert new pattern
+      await supabase
+        .from('ashen_style_patterns')
+        .insert({
+          pattern_category: pattern.category,
+          pattern_description: pattern.description,
+          pattern_example: pattern.example,
+          confidence_score: pattern.confidenceScore,
+          usage_frequency: 1
+        });
     }
+  }
+}
+
+function extractStylePatterns(code: string, filePath: string): StylePattern[] {
+  const patterns: StylePattern[] = [];
+  
+  // Analyze naming conventions
+  const functionNames = code.match(/(?:function|const)\s+([a-zA-Z_$][a-zA-Z0-9_$]*)/g);
+  if (functionNames) {
+    const namingStyle = detectNamingStyle(functionNames);
+    patterns.push({
+      category: 'naming',
+      description: `Prefers ${namingStyle} naming convention`,
+      example: { sample: functionNames[0], style: namingStyle },
+      confidenceScore: 10
+    });
+  }
+
+  // Analyze indentation
+  const indentationMatch = code.match(/^(\s+)/m);
+  if (indentationMatch) {
+    const indentType = indentationMatch[1].includes('\t') ? 'tabs' : 'spaces';
+    const indentSize = indentType === 'spaces' ? indentationMatch[1].length : 1;
+    patterns.push({
+      category: 'indentation',
+      description: `Uses ${indentType}${indentType === 'spaces' ? ` (${indentSize})` : ''} for indentation`,
+      example: { type: indentType, size: indentSize },
+      confidenceScore: 15
+    });
+  }
+
+  // Analyze commenting style
+  const comments = code.match(/\/\/.*|\/\*[\s\S]*?\*\//g);
+  if (comments) {
+    const commentStyle = detectCommentStyle(comments);
+    patterns.push({
+      category: 'commenting',
+      description: `Prefers ${commentStyle} comment style`,
+      example: { samples: comments.slice(0, 3), style: commentStyle },
+      confidenceScore: 8
+    });
   }
 
   return patterns;
 }
 
-function analyzeCodingStylePatterns(fixes: any[]): LearningPattern | null {
-  const commonImports = [];
-  const commonStructures = [];
+function detectNamingStyle(names: string[]): string {
+  const camelCaseCount = names.filter(name => /[a-z][A-Z]/.test(name)).length;
+  const snakeCaseCount = names.filter(name => /_/.test(name)).length;
   
-  for (const fix of fixes) {
-    if (fix.fix_description) {
-      // Extract common import patterns
-      if (fix.fix_description.includes('import')) {
-        const importMatch = fix.fix_description.match(/import.*from ['"]([^'"]+)['"]/g);
-        if (importMatch) {
-          commonImports.push(...importMatch);
-        }
-      }
-      
-      // Extract common structural patterns
-      if (fix.fix_description.includes('component') || fix.fix_description.includes('hook')) {
-        commonStructures.push(fix.fix_description);
-      }
-    }
-  }
-
-  if (commonImports.length === 0 && commonStructures.length === 0) {
-    return null;
-  }
-
-  return {
-    pattern_name: 'CamerPulse Coding Style Preference',
-    confidence_score: Math.min(0.95, 0.6 + (fixes.length * 0.05)),
-    learned_rules: {
-      import_patterns: [...new Set(commonImports)],
-      structure_patterns: [...new Set(commonStructures)],
-      preferred_practices: extractPreferredPractices(fixes)
-    },
-    applicable_contexts: {
-      file_types: ['tsx', 'ts'],
-      project_context: 'camerpulse',
-      admin_approved: true
-    },
-    success_rate: fixes.length / (fixes.length + 1), // Avoid division by zero
-    usage_frequency: fixes.length
-  };
+  if (camelCaseCount > snakeCaseCount) return 'camelCase';
+  if (snakeCaseCount > camelCaseCount) return 'snake_case';
+  return 'mixed';
 }
 
-function analyzeUIPatterns(fixes: any[]): LearningPattern | null {
-  const responsiveClasses = [];
-  const layoutFixes = [];
+function detectCommentStyle(comments: string[]): string {
+  const singleLineCount = comments.filter(c => c.startsWith('//')).length;
+  const blockCommentCount = comments.filter(c => c.startsWith('/*')).length;
   
-  for (const fix of fixes) {
-    if (fix.fix_description) {
-      // Extract responsive classes
-      const classMatches = fix.fix_description.match(/[\w-]+:[\w-]+/g);
-      if (classMatches) {
-        responsiveClasses.push(...classMatches);
-      }
-      
-      // Extract layout fixes
-      if (fix.fix_description.includes('grid') || fix.fix_description.includes('flex')) {
-        layoutFixes.push(fix.fix_description);
-      }
-    }
+  if (singleLineCount > blockCommentCount) return 'single-line';
+  if (blockCommentCount > singleLineCount) return 'block';
+  return 'mixed';
+}
+
+async function analyzeCodeStyle(supabase: any, data: any) {
+  const { code, filePath } = data;
+  await analyzeCodeStyleFromFix(supabase, code, filePath);
+  
+  return new Response(
+    JSON.stringify({ success: true, message: 'Code style analyzed' }),
+    { headers: corsHeaders }
+  );
+}
+
+async function getLearningInsights(supabase: any) {
+  // Get various learning metrics
+  const [
+    patchHistoryResult,
+    stylePatternResult,
+    trustMetricsResult,
+    personalPatchResult,
+    unstablePatternsResult
+  ] = await Promise.all([
+    supabase.from('ashen_patch_history').select('*').order('created_at', { ascending: false }).limit(50),
+    supabase.from('ashen_style_patterns').select('*').order('confidence_score', { ascending: false }),
+    supabase.from('ashen_fix_trust_metrics').select('*').order('current_trust_score', { ascending: false }),
+    supabase.from('ashen_personal_patch_index').select('*').order('success_rate', { ascending: false }),
+    supabase.from('ashen_unstable_patterns').select('*').order('rollback_count', { ascending: false })
+  ]);
+
+  return new Response(
+    JSON.stringify({
+      patchHistory: patchHistoryResult.data || [],
+      stylePatterns: stylePatternResult.data || [],
+      trustMetrics: trustMetricsResult.data || [],
+      personalPatches: personalPatchResult.data || [],
+      unstablePatterns: unstablePatternsResult.data || []
+    }),
+    { headers: corsHeaders }
+  );
+}
+
+async function calculateTrustScores(supabase: any) {
+  // Get all distinct patch types
+  const { data: patchTypes } = await supabase
+    .from('ashen_patch_history')
+    .select('patch_type')
+    .distinct();
+
+  if (!patchTypes) {
+    return new Response(
+      JSON.stringify({ error: 'No patch types found' }),
+      { status: 404, headers: corsHeaders }
+    );
   }
 
-  return {
-    pattern_name: 'CamerPulse Responsive Layout Strategy',
-    confidence_score: Math.min(0.92, 0.7 + (fixes.length * 0.04)),
-    learned_rules: {
-      responsive_classes: [...new Set(responsiveClasses)],
-      layout_strategies: [...new Set(layoutFixes)],
-      mobile_first: true,
-      breakpoint_preferences: ['sm:', 'md:', 'lg:', 'xl:']
-    },
-    applicable_contexts: {
-      issue_types: ['mobile_break', 'overflow', 'responsive'],
-      screen_sizes: ['320px', '768px', '1440px']
-    },
-    success_rate: fixes.length / (fixes.length + 1),
-    usage_frequency: fixes.length
-  };
-}
-
-function analyzeComponentPatterns(fixes: any[]): LearningPattern | null {
-  const componentTypes = [];
-  const structurePatterns = [];
-  
-  for (const fix of fixes) {
-    if (fix.files_modified) {
-      for (const file of fix.files_modified) {
-        if (file.includes('components/')) {
-          const componentType = file.split('/').pop()?.replace('.tsx', '');
-          if (componentType) {
-            componentTypes.push(componentType);
-          }
-        }
-      }
-    }
-    
-    if (fix.fix_description && (fix.fix_description.includes('Card') || fix.fix_description.includes('Button'))) {
-      structurePatterns.push(fix.fix_description);
-    }
+  const results = [];
+  for (const { patch_type } of patchTypes) {
+    const score = await updateTrustScore(supabase, patch_type);
+    results.push({ patch_type, trust_score: score });
   }
 
-  return {
-    pattern_name: 'CamerPulse Component Architecture',
-    confidence_score: Math.min(0.88, 0.65 + (fixes.length * 0.05)),
-    learned_rules: {
-      component_types: [...new Set(componentTypes)],
-      structure_patterns: [...new Set(structurePatterns)],
-      naming_convention: 'PascalCase',
-      preferred_ui_library: 'shadcn'
-    },
-    applicable_contexts: {
-      directories: ['src/components/', 'src/hooks/'],
-      file_types: ['tsx', 'ts']
-    },
-    success_rate: fixes.length / (fixes.length + 1),
-    usage_frequency: fixes.length
-  };
+  return new Response(
+    JSON.stringify({ success: true, trust_scores: results }),
+    { headers: corsHeaders }
+  );
 }
 
-function extractPreferredPractices(fixes: any[]) {
-  const practices = [];
+async function getRecommendedPatterns(supabase: any, data: any) {
+  const { problemType, filePath } = data;
   
-  for (const fix of fixes) {
-    if (fix.fix_description) {
-      if (fix.fix_description.includes('toast')) {
-        practices.push('use_toast_for_notifications');
-      }
-      if (fix.fix_description.includes('query')) {
-        practices.push('use_react_query_for_data_fetching');
-      }
-      if (fix.fix_description.includes('semantic')) {
-        practices.push('use_semantic_color_tokens');
-      }
-    }
-  }
-  
-  return [...new Set(practices)];
-}
-
-async function saveLearnedPatterns(supabase: any, patterns: LearningPattern[]) {
-  const savedPatterns = [];
-  
-  for (const pattern of patterns) {
-    try {
-      // Check if pattern already exists
-      const { data: existing } = await supabase
-        .from('ashen_learning_insights')
-        .select('id, confidence_score, usage_frequency')
-        .eq('pattern_name', pattern.pattern_name)
-        .single();
-
-      if (existing) {
-        // Update existing pattern
-        const newConfidence = Math.min(0.95, (existing.confidence_score + pattern.confidence_score) / 2);
-        const newFrequency = existing.usage_frequency + pattern.usage_frequency;
-        
-        await supabase
-          .from('ashen_learning_insights')
-          .update({
-            confidence_score: newConfidence,
-            usage_frequency: newFrequency,
-            success_rate: pattern.success_rate,
-            learned_rules: pattern.learned_rules,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', existing.id);
-          
-        savedPatterns.push({ ...pattern, updated: true });
-      } else {
-        // Insert new pattern
-        const { data: newPattern } = await supabase
-          .from('ashen_learning_insights')
-          .insert([{
-            insight_type: determineInsightType(pattern.pattern_name),
-            pattern_name: pattern.pattern_name,
-            pattern_description: `Learned from ${pattern.usage_frequency} successful fixes`,
-            confidence_score: pattern.confidence_score,
-            usage_frequency: pattern.usage_frequency,
-            success_rate: pattern.success_rate,
-            learned_rules: pattern.learned_rules,
-            applicable_contexts: pattern.applicable_contexts
-          }])
-          .select()
-          .single();
-          
-        if (newPattern) {
-          savedPatterns.push({ ...pattern, created: true });
-        }
-      }
-    } catch (error) {
-      console.error('Error saving pattern:', pattern.pattern_name, error);
-    }
-  }
-  
-  return savedPatterns;
-}
-
-function determineInsightType(patternName: string): string {
-  if (patternName.includes('Coding Style')) return 'coding_style';
-  if (patternName.includes('Layout') || patternName.includes('Responsive')) return 'ui_pattern';
-  if (patternName.includes('Component') || patternName.includes('Architecture')) return 'component_structure';
-  return 'fix_strategy';
-}
-
-async function analyzePatterns(supabase: any, patternType?: string) {
-  let query = supabase
-    .from('ashen_learning_insights')
-    .select('*')
-    .eq('is_active', true)
-    .order('confidence_score', { ascending: false });
-
-  if (patternType) {
-    query = query.eq('insight_type', patternType);
-  }
-
-  const { data: patterns } = await query;
-
-  return {
-    patterns: patterns || [],
-    total_patterns: patterns?.length || 0,
-    high_confidence_patterns: patterns?.filter(p => p.confidence_score > 0.8).length || 0,
-    success: true
-  };
-}
-
-async function predictFix(supabase: any, issueData: any, context: any) {
-  // Get relevant patterns based on context
+  // Get high-success patterns for this problem type
   const { data: patterns } = await supabase
-    .from('ashen_learning_insights')
+    .from('ashen_personal_patch_index')
     .select('*')
-    .eq('is_active', true)
-    .gte('confidence_score', 0.7)
-    .order('confidence_score', { ascending: false });
+    .eq('problem_signature', problemType)
+    .gte('success_rate', 0.7)
+    .order('success_rate', { ascending: false })
+    .limit(5);
 
-  const relevantPatterns = patterns?.filter(pattern => {
-    return matchesContext(pattern.applicable_contexts, context);
-  }) || [];
+  return new Response(
+    JSON.stringify({ patterns: patterns || [] }),
+    { headers: corsHeaders }
+  );
+}
 
-  const predictions = relevantPatterns.map(pattern => ({
-    pattern_name: pattern.pattern_name,
-    confidence: pattern.confidence_score,
-    suggested_fix: generateFixFromPattern(pattern, issueData),
-    reasoning: `Based on ${pattern.usage_frequency} similar cases with ${Math.round(pattern.success_rate * 100)}% success rate`
-  }));
-
-  return {
-    predictions,
-    total_matches: predictions.length,
-    highest_confidence: predictions[0]?.confidence || 0,
-    success: true
+async function blockUnstablePattern(supabase: any, data: any) {
+  const { patternSignature, reason, permanently = false } = data;
+  
+  const updateData: any = {
+    blocked_until: permanently ? null : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+    is_permanently_blocked: permanently,
+    admin_notes: reason
   };
-}
 
-function matchesContext(patternContext: any, issueContext: any): boolean {
-  if (!patternContext || !issueContext) return false;
-  
-  // Check file types
-  if (patternContext.file_types && issueContext.file_path) {
-    const fileExt = issueContext.file_path.split('.').pop();
-    if (!patternContext.file_types.includes(fileExt)) return false;
-  }
-  
-  // Check issue types
-  if (patternContext.issue_types && issueContext.issue_type) {
-    if (!patternContext.issue_types.includes(issueContext.issue_type)) return false;
-  }
-  
-  return true;
-}
-
-function generateFixFromPattern(pattern: any, issueData: any): string {
-  const rules = pattern.learned_rules;
-  
-  if (pattern.insight_type === 'ui_pattern' && rules.responsive_classes) {
-    return `Apply responsive design: ${rules.responsive_classes.slice(0, 3).join(', ')}`;
-  }
-  
-  if (pattern.insight_type === 'coding_style' && rules.import_patterns) {
-    return `Follow CamerPulse import structure: ${rules.import_patterns[0] || 'organized imports'}`;
-  }
-  
-  return `Apply learned pattern: ${pattern.pattern_name}`;
-}
-
-async function processFeedback(supabase: any, feedbackData: any) {
-  const { healing_id, feedback, reason, admin_id } = feedbackData;
-  
-  // Update healing history with admin feedback
   const { error } = await supabase
-    .from('ashen_auto_healing_history')
-    .update({
-      admin_feedback: feedback,
-      admin_feedback_reason: reason,
-      admin_id: admin_id,
-      learning_weight: feedback === 'approved' ? 1.5 : feedback === 'rejected' ? 0.5 : 1.0
-    })
-    .eq('id', healing_id);
+    .from('ashen_unstable_patterns')
+    .upsert({
+      pattern_signature: patternSignature,
+      pattern_description: reason,
+      ...updateData
+    });
 
   if (error) {
-    throw error;
+    throw new Error(`Failed to block pattern: ${error.message}`);
   }
 
-  return {
-    message: 'Feedback processed successfully',
-    feedback_applied: feedback,
-    success: true
-  };
+  return new Response(
+    JSON.stringify({ success: true, message: 'Pattern blocked successfully' }),
+    { headers: corsHeaders }
+  );
 }
 
-async function updateLastTrainingRun(supabase: any) {
-  await supabase
-    .from('ashen_monitoring_config')
-    .update({ config_value: `"${new Date().toISOString()}"` })
-    .eq('config_key', 'learning_last_training_run');
+async function resetLearningMemory(supabase: any) {
+  // Clear all learning data (use with caution)
+  const tables = [
+    'ashen_patch_history',
+    'ashen_style_patterns', 
+    'ashen_personal_patch_index',
+    'ashen_unstable_patterns',
+    'ashen_fix_trust_metrics'
+  ];
+
+  for (const table of tables) {
+    await supabase.from(table).delete().neq('id', '00000000-0000-0000-0000-000000000000');
+  }
+
+  return new Response(
+    JSON.stringify({ success: true, message: 'Learning memory reset successfully' }),
+    { headers: corsHeaders }
+  );
 }

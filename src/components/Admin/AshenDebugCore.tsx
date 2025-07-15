@@ -17,6 +17,7 @@ import { AshenSecurityPanel } from "./AshenSecurityPanel";
 import BatchFixManager from "./BatchFixManager";
 import PatchDeploymentPipeline from "./PatchDeploymentPipeline";
 import CamerPulseWatchdogPanel from "./CamerPulseWatchdogPanel";
+import { PatchIntelligencePanel } from "./PatchIntelligencePanel";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AshenAlertSystem } from "./AshenAlertSystem";
@@ -429,6 +430,7 @@ export default function AshenDebugCore() {
         <TabsList className="grid w-full grid-cols-12">
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
+          <TabsTrigger value="patch-intelligence">Patch Intelligence</TabsTrigger>
           <TabsTrigger value="healing-history">Healing History</TabsTrigger>
           <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
           <TabsTrigger value="batch-fix">Batch Fix</TabsTrigger>
@@ -438,7 +440,6 @@ export default function AshenDebugCore() {
           <TabsTrigger value="ui-inspector">UI Inspector</TabsTrigger>
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
-          <TabsTrigger value="human-simulation">Human Simulation</TabsTrigger>
         </TabsList>
 
         <TabsContent value="error-dashboard" className="space-y-4">
@@ -447,6 +448,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="security" className="space-y-4">
           <AshenSecurityPanel />
+        </TabsContent>
+        
+        <TabsContent value="patch-intelligence" className="space-y-4">
+          <PatchIntelligencePanel />
         </TabsContent>
         
         <TabsContent value="healing-history" className="space-y-4">
