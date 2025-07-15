@@ -42,6 +42,7 @@ import { CivicSimulationCore } from '@/components/AI/CivicSimulationCore';
 import { DisinfoShieldAI } from '@/components/AI/DisinfoShieldAI';
 import CivicPersonaEngine from '@/components/AI/CivicPersonaEngine';
 import IssueEmotionTracker from '@/components/AI/IssueEmotionTracker';
+import CivicPredictorAI from '@/components/AI/CivicPredictorAI';
 
 interface SentimentData {
   id: string;
@@ -236,6 +237,7 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="regional">Regional Insights</TabsTrigger>
             <TabsTrigger value="local">Local Mapper</TabsTrigger>
             <TabsTrigger value="simulation">Civic Simulation</TabsTrigger>
+            <TabsTrigger value="predictor">Unrest Predictor</TabsTrigger>
             <TabsTrigger value="disinfoShield">DisinfoShield AI</TabsTrigger>
             <TabsTrigger value="personas">Civic Personas</TabsTrigger>
             <TabsTrigger value="issueTracker">Issue Tracker</TabsTrigger>
@@ -326,6 +328,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="simulation" className="space-y-4">
             <CivicSimulationCore />
+          </TabsContent>
+
+          <TabsContent value="predictor" className="space-y-4">
+            <CivicPredictorAI />
           </TabsContent>
 
           <TabsContent value="disinfoShield" className="space-y-4">
