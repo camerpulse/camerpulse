@@ -23,6 +23,7 @@ import {
   Settings
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { ElectionSentimentTracker } from '@/components/AI/ElectionSentimentTracker';
 
 interface SentimentData {
   id: string;
@@ -210,8 +211,9 @@ const CamerPulseIntelligence = () => {
 
         {/* Main Dashboard */}
         <Tabs defaultValue="sentiment" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
+            <TabsTrigger value="election">Election Tracker</TabsTrigger>
             <TabsTrigger value="regional">Regional Insights</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
             <TabsTrigger value="alerts">Threat Monitoring</TabsTrigger>
@@ -271,6 +273,10 @@ const CamerPulseIntelligence = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="election" className="space-y-4">
+            <ElectionSentimentTracker />
           </TabsContent>
 
           <TabsContent value="regional" className="space-y-4">
