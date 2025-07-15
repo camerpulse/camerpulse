@@ -2,25 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { 
   Globe, 
-  MapPin, 
-  TrendingUp, 
+  Map, 
   BarChart3, 
-  Users, 
-  Flag,
+  TrendingUp, 
+  Flag, 
+  Users,
+  AlertTriangle,
+  ArrowUpDown,
+  MapPin,
   Languages,
   Zap,
-  ArrowUpDown,
-  AlertTriangle,
-  Activity,
-  Radar,
-  Settings,
-  RefreshCw
+  Eye,
+  Activity
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -38,83 +37,221 @@ interface Country {
   is_active: boolean;
 }
 
-interface AdministrativeDivision {
-  id: string;
+interface CountryComparison {
   country_code: string;
-  division_type: string;
-  division_name: string;
-  division_code: string;
-}
-
-interface CountryConfig {
-  config_type: string;
-  config_key: string;
-  config_value: any;
-}
-
-interface CountrySentiment {
-  country_code: string;
+  country_name: string;
+  flag_emoji: string;
   sentiment_score: number;
-  volume: number;
+  top_issues: string[];
   threat_level: string;
-  top_emotions: string[];
+  volume: number;
 }
 
-interface CrossCountryComparison {
-  country_a: string;
-  country_b: string;
-  sentiment_diff: number;
-  common_issues: string[];
-  unique_issues_a: string[];
-  unique_issues_b: string[];
+interface CrossCountryAnalytics {
+  analysis_type: string;
+  countries_compared: string[];
+  analysis_data: any;
+  insights: any;
+  analysis_date: string;
 }
 
 const PanAfricaModule = () => {
-  const [selectedCountry, setSelectedCountry] = useState<string>('CM');
   const [countries, setCountries] = useState<Country[]>([]);
-  const [divisions, setDivisions] = useState<AdministrativeDivision[]>([]);
-  const [countryConfig, setCountryConfig] = useState<CountryConfig[]>([]);
-  const [countrySentiments, setCountrySentiments] = useState<CountrySentiment[]>([]);
-  const [crossCountryComparisons, setCrossCountryComparisons] = useState<CrossCountryComparison[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  const [selectedCountry, setSelectedCountry] = useState<string>('CM');
+  const [countryComparisons, setCountryComparisons] = useState<CountryComparison[]>([]);
+  const [crossCountryAnalytics, setCrossCountryAnalytics] = useState<CrossCountryAnalytics[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     loadPanAfricaData();
-    const interval = setInterval(loadPanAfricaData, 300000); // Refresh every 5 minutes
-    return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    if (selectedCountry) {
-      loadCountrySpecificData(selectedCountry);
-    }
-  }, [selectedCountry]);
-
   const loadPanAfricaData = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-
-      // Load countries
-      const { data: countriesData } = await supabase
+      // Load countries from the database
+      const { data: countryData } = await supabase
         .from('pan_africa_countries')
         .select('*')
         .eq('is_active', true)
         .order('country_name');
 
-      if (countriesData) {
-        setCountries(countriesData);
+      if (countryData && countryData.length > 0) {
+        setCountries(countryData as Country[]);
+      } else {
+        // Fallback to mock data if no countries in database
+        const mockCountries: Country[] = [
+          {
+            country_code: 'CM',
+            country_name: 'Cameroon',
+            country_name_local: 'Cameroun',
+            flag_emoji: '🇨🇲',
+            primary_language: 'fr',
+            supported_languages: ['fr', 'en'],
+            currency_code: 'XAF',
+            region: 'Central Africa',
+            capital_city: 'Yaoundé',
+            is_active: true
+          },
+          {
+            country_code: 'NG',
+            country_name: 'Nigeria',
+            country_name_local: 'Nigeria',
+            flag_emoji: '🇳🇬',
+            primary_language: 'en',
+            supported_languages: ['en', 'ha', 'yo', 'ig'],
+            currency_code: 'NGN',
+            region: 'West Africa',
+            capital_city: 'Abuja',
+            is_active: true
+          },
+          {
+            country_code: 'GH',
+            country_name: 'Ghana',
+            country_name_local: 'Ghana',
+            flag_emoji: '🇬🇭',
+            primary_language: 'en',
+            supported_languages: ['en', 'tw', 'ha'],
+            currency_code: 'GHS',
+            region: 'West Africa',
+            capital_city: 'Accra',
+            is_active: true
+          },
+          {
+            country_code: 'KE',
+            country_name: 'Kenya',
+            country_name_local: 'Kenya',
+            flag_emoji: '🇰🇪',
+            primary_language: 'sw',
+            supported_languages: ['sw', 'en'],
+            currency_code: 'KES',
+            region: 'East Africa',
+            capital_city: 'Nairobi',
+            is_active: true
+          },
+          {
+            country_code: 'ZA',
+            country_name: 'South Africa',
+            country_name_local: 'South Africa',
+            flag_emoji: '🇿🇦',
+            primary_language: 'en',
+            supported_languages: ['af', 'en', 'zu', 'xh'],
+            currency_code: 'ZAR',
+            region: 'Southern Africa',
+            capital_city: 'Cape Town',
+            is_active: true
+          },
+          {
+            country_code: 'EG',
+            country_name: 'Egypt',
+            country_name_local: 'مصر',
+            flag_emoji: '🇪🇬',
+            primary_language: 'ar',
+            supported_languages: ['ar', 'en'],
+            currency_code: 'EGP',
+            region: 'North Africa',
+            capital_city: 'Cairo',
+            is_active: true
+          }
+        ];
+        setCountries(mockCountries);
       }
 
-      // Load cross-country sentiment data (mock for now)
-      generateMockSentimentData(countriesData || []);
+      // Load cross-country analytics
+      const { data: analyticsData } = await supabase
+        .from('pan_africa_cross_country_analytics')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      // Generate mock comparison data based on available countries
+      const mockComparisons: CountryComparison[] = [
+        {
+          country_code: 'CM',
+          country_name: 'Cameroon',
+          flag_emoji: '🇨🇲',
+          sentiment_score: 0.2,
+          top_issues: ['Education', 'Anglophone Crisis', 'Security'],
+          threat_level: 'medium',
+          volume: 1250
+        },
+        {
+          country_code: 'NG',
+          country_name: 'Nigeria',
+          flag_emoji: '🇳🇬',
+          sentiment_score: -0.1,
+          top_issues: ['Security', 'Fuel Subsidy', 'Elections'],
+          threat_level: 'high',
+          volume: 4500
+        },
+        {
+          country_code: 'GH',
+          country_name: 'Ghana',
+          flag_emoji: '🇬🇭',
+          sentiment_score: 0.4,
+          top_issues: ['Economy', 'Dumsor', 'Education'],
+          threat_level: 'low',
+          volume: 800
+        },
+        {
+          country_code: 'KE',
+          country_name: 'Kenya',
+          flag_emoji: '🇰🇪',
+          sentiment_score: 0.1,
+          top_issues: ['Economy', 'Healthcare', 'Elections'],
+          threat_level: 'medium',
+          volume: 2100
+        },
+        {
+          country_code: 'ZA',
+          country_name: 'South Africa',
+          flag_emoji: '🇿🇦',
+          sentiment_score: -0.2,
+          top_issues: ['Economy', 'Crime', 'Loadshedding'],
+          threat_level: 'medium',
+          volume: 3200
+        },
+        {
+          country_code: 'EG',
+          country_name: 'Egypt',
+          flag_emoji: '🇪🇬',
+          sentiment_score: 0.05,
+          top_issues: ['Economy', 'Infrastructure', 'Security'],
+          threat_level: 'medium',
+          volume: 1800
+        }
+      ];
+
+      setCountryComparisons(mockComparisons);
+
+      // Mock cross-country analytics
+      const mockAnalytics: CrossCountryAnalytics[] = [
+        {
+          analysis_type: 'sentiment_comparison',
+          countries_compared: ['CM', 'NG', 'GH', 'KE', 'ZA', 'EG'],
+          analysis_data: {
+            avg_sentiment: 0.08,
+            most_positive: 'GH',
+            most_negative: 'ZA',
+            trending_up: ['CM', 'KE'],
+            trending_down: ['NG']
+          },
+          insights: {
+            regional_patterns: 'West Africa showing mixed signals with Ghana leading positive sentiment',
+            risk_factors: 'Nigeria and South Africa showing sustained negative sentiment patterns'
+          },
+          analysis_date: new Date().toISOString().split('T')[0]
+        }
+      ];
+
+      setCrossCountryAnalytics(analyticsData && analyticsData.length > 0 ? analyticsData : mockAnalytics);
 
     } catch (error) {
       console.error('Error loading Pan-Africa data:', error);
       toast({
-        title: "Data Loading Failed",
-        description: "Could not load Pan-African intelligence data.",
+        title: "Data Loading Error",
+        description: "Failed to load Pan-African data. Using demo data.",
         variant: "destructive"
       });
     } finally {
@@ -122,512 +259,172 @@ const PanAfricaModule = () => {
     }
   };
 
-  const loadCountrySpecificData = async (countryCode: string) => {
-    try {
-      // Load administrative divisions
-      const { data: divisionsData } = await supabase
-        .from('country_administrative_divisions')
-        .select('*')
-        .eq('country_code', countryCode)
-        .order('division_name');
-
-      // Load country configuration
-      const { data: configData } = await supabase
-        .from('country_civic_config')
-        .select('*')
-        .eq('country_code', countryCode);
-
-      if (divisionsData) setDivisions(divisionsData);
-      if (configData) setCountryConfig(configData);
-
-    } catch (error) {
-      console.error('Error loading country-specific data:', error);
-    }
-  };
-
-  const generateMockSentimentData = (countriesData: Country[]) => {
-    const mockSentiments = countriesData.map(country => ({
-      country_code: country.country_code,
-      sentiment_score: Math.random() * 2 - 1, // -1 to 1
-      volume: Math.floor(Math.random() * 10000),
-      threat_level: ['low', 'medium', 'high'][Math.floor(Math.random() * 3)],
-      top_emotions: ['hope', 'concern', 'anger', 'optimism'].slice(0, Math.floor(Math.random() * 3) + 1)
-    }));
-    setCountrySentiments(mockSentiments);
-
-    // Generate cross-country comparisons
-    const comparisons: CrossCountryComparison[] = [];
-    for (let i = 0; i < Math.min(5, countriesData.length - 1); i++) {
-      const countryA = countriesData[i];
-      const countryB = countriesData[i + 1];
-      if (countryA && countryB) {
-        comparisons.push({
-          country_a: countryA.country_code,
-          country_b: countryB.country_code,
-          sentiment_diff: Math.random() * 1 - 0.5,
-          common_issues: ['Education', 'Healthcare', 'Economy'],
-          unique_issues_a: ['Anglophone Crisis'],
-          unique_issues_b: ['Power Supply']
-        });
-      }
-    }
-    setCrossCountryComparisons(comparisons);
-  };
-
-  const getCurrentCountry = () => countries.find(c => c.country_code === selectedCountry);
-  const currentCountry = getCurrentCountry();
-
   const getSentimentColor = (score: number) => {
-    if (score > 0.3) return 'text-success';
-    if (score > -0.3) return 'text-warning';
+    if (score > 0.2) return 'text-success';
+    if (score > -0.2) return 'text-warning';
     return 'text-destructive';
+  };
+
+  const getSentimentLabel = (score: number) => {
+    if (score > 0.2) return 'Positive';
+    if (score > -0.2) return 'Neutral';
+    return 'Negative';
   };
 
   const getThreatColor = (level: string) => {
     switch (level) {
-      case 'high': return 'bg-destructive';
-      case 'medium': return 'bg-warning';
-      case 'low': return 'bg-success';
-      default: return 'bg-muted';
+      case 'low': return 'bg-success text-success-foreground';
+      case 'medium': return 'bg-warning text-warning-foreground';
+      case 'high': return 'bg-destructive text-destructive-foreground';
+      default: return 'bg-muted text-muted-foreground';
     }
   };
 
-  const getRegionColor = (region: string) => {
-    const colors = {
-      'West Africa': 'bg-blue-500',
-      'Central Africa': 'bg-green-500',
-      'East Africa': 'bg-purple-500',
-      'Southern Africa': 'bg-orange-500',
-      'North Africa': 'bg-red-500'
-    };
-    return colors[region as keyof typeof colors] || 'bg-gray-500';
-  };
+  const selectedCountryData = countries.find(c => c.country_code === selectedCountry);
 
-  const getCivicIssues = () => {
-    const config = countryConfig.find(c => c.config_key === 'primary_issues');
-    return config ? config.config_value : [];
-  };
-
-  const getPoliticalParties = () => {
-    const config = countryConfig.find(c => c.config_key === 'major_parties');
-    return config ? config.config_value : [];
-  };
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center space-y-2">
+          <Activity className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <p className="text-muted-foreground">Loading Pan-African Intelligence...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
-      {/* Pan-African Header */}
-      <div className="bg-gradient-to-r from-primary to-secondary text-primary-foreground p-6 rounded-lg">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
+      {/* Header with Country Selector */}
+      <div className="bg-gradient-to-r from-primary to-secondary text-primary-foreground rounded-lg p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
+          <div className="flex items-center space-x-3">
             <Globe className="h-8 w-8" />
             <div>
               <h1 className="text-2xl font-bold">Pan-African Civic Intelligence</h1>
-              <p className="opacity-90">Continental sentiment and civic monitoring across {countries.length} African countries</p>
+              <p className="text-primary-foreground/90">Multi-country sentiment & civic monitoring</p>
             </div>
           </div>
+          
           <div className="flex items-center space-x-3">
-            <Badge variant="outline" className="text-primary-foreground border-primary-foreground/50">
-              <Activity className="h-3 w-3 mr-1" />
-              Live Intelligence
-            </Badge>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={loadPanAfricaData}
-              disabled={isLoading}
-              className="text-primary-foreground border-primary-foreground/50 hover:bg-primary-foreground/10"
-            >
-              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
-              Refresh
-            </Button>
+            <div className="text-right">
+              <p className="text-sm text-primary-foreground/90">Active Country</p>
+              <p className="text-lg font-semibold">
+                {selectedCountryData?.flag_emoji} {selectedCountryData?.country_name}
+              </p>
+            </div>
+            <Select value={selectedCountry} onValueChange={setSelectedCountry}>
+              <SelectTrigger className="w-48 bg-white/10 border-white/20 text-primary-foreground">
+                <SelectValue placeholder="Select Country" />
+              </SelectTrigger>
+              <SelectContent>
+                {countries.map((country) => (
+                  <SelectItem key={country.country_code} value={country.country_code}>
+                    <div className="flex items-center space-x-2">
+                      <span className="text-lg">{country.flag_emoji}</span>
+                      <span>{country.country_name}</span>
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
       </div>
 
-      {/* Country Selector */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2">
-            <Flag className="h-5 w-5" />
-            <span>Country Selection</span>
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm font-medium mb-2 block">Select Country</label>
-              <Select value={selectedCountry} onValueChange={setSelectedCountry}>
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Choose a country" />
-                </SelectTrigger>
-                <SelectContent>
-                  {countries.map((country) => (
-                    <SelectItem key={country.country_code} value={country.country_code}>
-                      <div className="flex items-center space-x-2">
-                        <span>{country.flag_emoji}</span>
-                        <span>{country.country_name}</span>
-                        <Badge variant="outline" className="ml-2">
-                          {country.region}
-                        </Badge>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            {currentCountry && (
-              <div className="space-y-2">
-                <div className="text-sm text-muted-foreground">Current Selection</div>
-                <div className="flex items-center space-x-3 p-3 border rounded-lg">
-                  <span className="text-2xl">{currentCountry.flag_emoji}</span>
-                  <div>
-                    <div className="font-semibold">{currentCountry.country_name}</div>
-                    <div className="text-sm text-muted-foreground">
-                      {currentCountry.capital_city} • {currentCountry.currency_code}
-                    </div>
-                  </div>
-                  <Badge className={getRegionColor(currentCountry.region)}>
-                    {currentCountry.region}
-                  </Badge>
-                </div>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Main Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-5">
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="overview">Continental Overview</TabsTrigger>
-          <TabsTrigger value="country">Country Details</TabsTrigger>
-          <TabsTrigger value="comparison">Cross-Country</TabsTrigger>
-          <TabsTrigger value="heatmap">Africa Heatmap</TabsTrigger>
-          <TabsTrigger value="config">Configuration</TabsTrigger>
+          <TabsTrigger value="comparison">Country Comparison</TabsTrigger>
+          <TabsTrigger value="analytics">Cross-Border Analytics</TabsTrigger>
+          <TabsTrigger value="config">Regional Config</TabsTrigger>
         </TabsList>
 
-        {/* Continental Overview */}
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <TabsContent value="overview" className="space-y-4">
+          {/* Continental Sentiment Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-2">
-                  <Globe className="h-8 w-8 text-primary" />
-                  <div>
-                    <div className="text-2xl font-bold">{countries.length}</div>
-                    <div className="text-sm text-muted-foreground">Active Countries</div>
-                  </div>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Globe className="h-5 w-5" />
+                  <span>Active Countries</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-primary mb-2">
+                  {countries.filter(c => c.is_active).length}
                 </div>
+                <p className="text-sm text-muted-foreground">
+                  Across 6 African regions
+                </p>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-2">
-                  <BarChart3 className="h-8 w-8 text-success" />
-                  <div>
-                    <div className="text-2xl font-bold">
-                      {countrySentiments.filter(s => s.sentiment_score > 0).length}
-                    </div>
-                    <div className="text-sm text-muted-foreground">Positive Sentiment</div>
-                  </div>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Activity className="h-5 w-5" />
+                  <span>Continental Pulse</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-warning mb-2">
+                  Mixed
                 </div>
+                <p className="text-sm text-muted-foreground">
+                  Avg: +0.08 sentiment score
+                </p>
               </CardContent>
             </Card>
 
             <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-2">
-                  <AlertTriangle className="h-8 w-8 text-warning" />
-                  <div>
-                    <div className="text-2xl font-bold">
-                      {countrySentiments.filter(s => s.threat_level === 'high').length}
-                    </div>
-                    <div className="text-sm text-muted-foreground">High Alert Countries</div>
-                  </div>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <TrendingUp className="h-5 w-5" />
+                  <span>Daily Volume</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold text-primary mb-2">
+                  13.7K
                 </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-2">
-                  <Activity className="h-8 w-8 text-primary" />
-                  <div>
-                    <div className="text-2xl font-bold">
-                      {countrySentiments.reduce((sum, s) => sum + s.volume, 0).toLocaleString()}
-                    </div>
-                    <div className="text-sm text-muted-foreground">Total Data Points</div>
-                  </div>
-                </div>
+                <p className="text-sm text-muted-foreground">
+                  Civic reports today
+                </p>
               </CardContent>
             </Card>
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Regional Sentiment Distribution</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {['West Africa', 'Central Africa', 'East Africa', 'Southern Africa', 'North Africa'].map((region) => {
-                  const regionCountries = countries.filter(c => c.region === region);
-                  const regionSentiments = countrySentiments.filter(s => 
-                    regionCountries.some(c => c.country_code === s.country_code)
-                  );
-                  const avgSentiment = regionSentiments.length > 0 
-                    ? regionSentiments.reduce((sum, s) => sum + s.sentiment_score, 0) / regionSentiments.length 
-                    : 0;
-
-                  return (
-                    <div key={region} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          <div className={`w-3 h-3 rounded-full ${getRegionColor(region)}`} />
-                          <span className="font-medium">{region}</span>
-                          <Badge variant="outline">{regionCountries.length} countries</Badge>
-                        </div>
-                        <div className={`font-semibold ${getSentimentColor(avgSentiment)}`}>
-                          {avgSentiment > 0 ? 'Positive' : avgSentiment < -0.3 ? 'Negative' : 'Neutral'}
-                        </div>
-                      </div>
-                      <Progress value={(avgSentiment + 1) * 50} className="h-2" />
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Country Details */}
-        <TabsContent value="country" className="space-y-6">
-          {currentCountry && (
-            <>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <span className="text-2xl">{currentCountry.flag_emoji}</span>
-                    <span>{currentCountry.country_name} Intelligence Profile</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div>
-                      <h4 className="font-semibold mb-2">Country Information</h4>
-                      <div className="space-y-1 text-sm">
-                        <div><strong>Capital:</strong> {currentCountry.capital_city}</div>
-                        <div><strong>Currency:</strong> {currentCountry.currency_code}</div>
-                        <div><strong>Languages:</strong> {currentCountry.supported_languages.join(', ')}</div>
-                        <div><strong>Region:</strong> {currentCountry.region}</div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-2">Administrative Divisions</h4>
-                      <div className="space-y-1">
-                        <div className="text-sm text-muted-foreground">
-                          {divisions.length} {divisions[0]?.division_type || 'divisions'}
-                        </div>
-                        <div className="flex flex-wrap gap-1">
-                          {divisions.slice(0, 6).map((div) => (
-                            <Badge key={div.id} variant="outline" className="text-xs">
-                              {div.division_name}
-                            </Badge>
-                          ))}
-                          {divisions.length > 6 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{divisions.length - 6} more
-                            </Badge>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <h4 className="font-semibold mb-2">Current Sentiment</h4>
-                      {(() => {
-                        const sentiment = countrySentiments.find(s => s.country_code === selectedCountry);
-                        if (sentiment) {
-                          return (
-                            <div className="space-y-2">
-                              <div className={`text-lg font-semibold ${getSentimentColor(sentiment.sentiment_score)}`}>
-                                {sentiment.sentiment_score > 0.3 ? 'Positive' : 
-                                 sentiment.sentiment_score < -0.3 ? 'Negative' : 'Neutral'}
-                              </div>
-                              <Progress value={(sentiment.sentiment_score + 1) * 50} className="h-2" />
-                              <Badge className={getThreatColor(sentiment.threat_level)}>
-                                {sentiment.threat_level.toUpperCase()} Threat
-                              </Badge>
-                            </div>
-                          );
-                        }
-                        return <div className="text-sm text-muted-foreground">No data available</div>;
-                      })()}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Primary Civic Issues</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {getCivicIssues().map((issue: string, idx: number) => (
-                        <Badge key={idx} variant="secondary">
-                          {issue}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Major Political Parties</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-2">
-                      {getPoliticalParties().map((party: string, idx: number) => (
-                        <Badge key={idx} variant="outline">
-                          {party}
-                        </Badge>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </>
-          )}
-        </TabsContent>
-
-        {/* Cross-Country Comparison */}
-        <TabsContent value="comparison" className="space-y-6">
+          {/* Regional Breakdown */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <ArrowUpDown className="h-5 w-5" />
-                <span>Cross-Country Sentiment Analysis</span>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {crossCountryComparisons.map((comparison, idx) => {
-                  const countryA = countries.find(c => c.country_code === comparison.country_a);
-                  const countryB = countries.find(c => c.country_code === comparison.country_b);
-                  if (!countryA || !countryB) return null;
-
-                  return (
-                    <div key={idx} className="border rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center space-x-4">
-                          <div className="flex items-center space-x-2">
-                            <span>{countryA.flag_emoji}</span>
-                            <span className="font-medium">{countryA.country_name}</span>
-                          </div>
-                          <ArrowUpDown className="h-4 w-4 text-muted-foreground" />
-                          <div className="flex items-center space-x-2">
-                            <span>{countryB.flag_emoji}</span>
-                            <span className="font-medium">{countryB.country_name}</span>
-                          </div>
-                        </div>
-                        <Badge 
-                          variant={Math.abs(comparison.sentiment_diff) > 0.3 ? "destructive" : "secondary"}
-                        >
-                          {Math.abs(comparison.sentiment_diff) > 0.3 ? 'High Divergence' : 'Similar Sentiment'}
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                        <div>
-                          <h5 className="font-medium mb-1">Common Issues</h5>
-                          <div className="flex flex-wrap gap-1">
-                            {comparison.common_issues.map((issue, issueIdx) => (
-                              <Badge key={issueIdx} variant="outline" className="text-xs">
-                                {issue}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <h5 className="font-medium mb-1">{countryA.country_name} Specific</h5>
-                          <div className="flex flex-wrap gap-1">
-                            {comparison.unique_issues_a.map((issue, issueIdx) => (
-                              <Badge key={issueIdx} variant="secondary" className="text-xs">
-                                {issue}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        <div>
-                          <h5 className="font-medium mb-1">{countryB.country_name} Specific</h5>
-                          <div className="flex flex-wrap gap-1">
-                            {comparison.unique_issues_b.map((issue, issueIdx) => (
-                              <Badge key={issueIdx} variant="secondary" className="text-xs">
-                                {issue}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Africa Heatmap */}
-        <TabsContent value="heatmap" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Radar className="h-5 w-5" />
-                <span>Continental Sentiment Heatmap</span>
+                <Map className="h-5 w-5" />
+                <span>Regional Sentiment Heatmap</span>
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {countries.map((country) => {
-                  const sentiment = countrySentiments.find(s => s.country_code === country.country_code);
+                {['West Africa', 'Central Africa', 'East Africa', 'Southern Africa', 'North Africa'].map((region) => {
+                  const regionCountries = countries.filter(c => c.region === region);
+                  const avgSentiment = countryComparisons
+                    .filter(c => regionCountries.some(rc => rc.country_code === c.country_code))
+                    .reduce((acc, c) => acc + c.sentiment_score, 0) / regionCountries.length || 0;
+                  
                   return (
-                    <div 
-                      key={country.country_code}
-                      className={`p-4 rounded-lg border-2 transition-all duration-200 hover:shadow-md cursor-pointer ${
-                        selectedCountry === country.country_code ? 'border-primary bg-primary/5' : 'border-border'
-                      }`}
-                      onClick={() => setSelectedCountry(country.country_code)}
-                    >
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          <span className="text-lg">{country.flag_emoji}</span>
-                          <span className="font-medium text-sm">{country.country_name}</span>
-                        </div>
-                        {sentiment && (
-                          <Badge className={getThreatColor(sentiment.threat_level)} variant="secondary">
-                            {sentiment.threat_level}
-                          </Badge>
-                        )}
+                    <div key={region} className="border rounded-lg p-4">
+                      <h3 className="font-semibold mb-2">{region}</h3>
+                      <div className={`text-xl font-bold mb-2 ${getSentimentColor(avgSentiment)}`}>
+                        {getSentimentLabel(avgSentiment)}
                       </div>
-                      
-                      {sentiment && (
-                        <div className="space-y-2">
-                          <div className={`text-xs font-medium ${getSentimentColor(sentiment.sentiment_score)}`}>
-                            {sentiment.sentiment_score > 0.3 ? 'Positive' : 
-                             sentiment.sentiment_score < -0.3 ? 'Negative' : 'Neutral'}
-                          </div>
-                          <Progress value={(sentiment.sentiment_score + 1) * 50} className="h-1" />
-                          <div className="text-xs text-muted-foreground">
-                            {sentiment.volume.toLocaleString()} data points
-                          </div>
-                        </div>
-                      )}
+                      <Progress value={(avgSentiment + 1) * 50} className="mb-2 h-2" />
+                      <div className="flex flex-wrap gap-1">
+                        {regionCountries.map(country => (
+                          <span key={country.country_code} className="text-lg">
+                            {country.flag_emoji}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   );
                 })}
@@ -636,63 +433,217 @@ const PanAfricaModule = () => {
           </Card>
         </TabsContent>
 
-        {/* Configuration */}
-        <TabsContent value="config" className="space-y-6">
-          <Alert>
-            <Settings className="h-4 w-4" />
-            <AlertDescription>
-              <strong>Pan-African Configuration:</strong> This module automatically adapts to each country's 
-              unique administrative structure, languages, political parties, and civic issues. All data is 
-              separated by country to ensure accurate regional intelligence.
-            </AlertDescription>
-          </Alert>
+        <TabsContent value="comparison" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <ArrowUpDown className="h-5 w-5" />
+                <span>Country-by-Country Comparison</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {countryComparisons.map((country) => (
+                  <div key={country.country_code} className="border rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-3xl">{country.flag_emoji}</span>
+                        <div>
+                          <h3 className="font-bold text-lg">{country.country_name}</h3>
+                          <p className="text-sm text-muted-foreground">Volume: {country.volume} reports</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <Badge className={getThreatColor(country.threat_level)}>
+                          {country.threat_level.charAt(0).toUpperCase() + country.threat_level.slice(1)} Risk
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm font-medium mb-2">Sentiment</p>
+                        <div className={`text-2xl font-bold ${getSentimentColor(country.sentiment_score)}`}>
+                          {getSentimentLabel(country.sentiment_score)}
+                        </div>
+                        <Progress value={(country.sentiment_score + 1) * 50} className="mt-2 h-2" />
+                      </div>
+                      
+                      <div>
+                        <p className="text-sm font-medium mb-2">Top Issues</p>
+                        <div className="flex flex-wrap gap-1">
+                          {country.top_issues.map((issue, idx) => (
+                            <Badge key={idx} variant="outline" className="text-xs">
+                              {issue}
+                            </Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Supported Features</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex items-center space-x-2">
-                    <Languages className="h-4 w-4 text-success" />
-                    <span className="text-sm">Multi-language sentiment detection</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <MapPin className="h-4 w-4 text-success" />
-                    <span className="text-sm">Country-specific administrative divisions</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <BarChart3 className="h-4 w-4 text-success" />
-                    <span className="text-sm">Regional sentiment aggregation</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Zap className="h-4 w-4 text-success" />
-                    <span className="text-sm">Real-time cross-country comparisons</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Globe className="h-4 w-4 text-success" />
-                    <span className="text-sm">Continental heatmap visualization</span>
+        <TabsContent value="analytics" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <BarChart3 className="h-5 w-5" />
+                <span>Cross-Border Intelligence</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {crossCountryAnalytics.map((analytics, idx) => (
+                <div key={idx} className="space-y-4">
+                  <Alert>
+                    <Eye className="h-4 w-4" />
+                    <AlertDescription>
+                      <div className="space-y-2">
+                        <h4 className="font-semibold">Continental Sentiment Analysis</h4>
+                        <p className="text-sm">{analytics.insights.regional_patterns}</p>
+                        <div className="text-xs text-muted-foreground">
+                          Risk Factors: {analytics.insights.risk_factors}
+                        </div>
+                      </div>
+                    </AlertDescription>
+                  </Alert>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base">Most Positive</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-center">
+                          <span className="text-2xl">🇬🇭</span>
+                          <p className="font-semibold">Ghana</p>
+                          <p className="text-sm text-success">+0.4 sentiment</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base">Most Negative</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-center">
+                          <span className="text-2xl">🇿🇦</span>
+                          <p className="font-semibold">South Africa</p>
+                          <p className="text-sm text-destructive">-0.2 sentiment</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-base">Trending Up</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-center space-y-1">
+                          <div>🇨🇲 🇰🇪</div>
+                          <p className="text-sm font-semibold">Cameroon & Kenya</p>
+                          <p className="text-xs text-success">+12% this week</p>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              ))}
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Data Sources</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  <div><strong>Sentiment Analysis:</strong> Multi-platform social media monitoring</div>
-                  <div><strong>Administrative Data:</strong> Official government divisions</div>
-                  <div><strong>Political Intelligence:</strong> Party configurations and civic issues</div>
-                  <div><strong>Language Processing:</strong> Country-specific slang and terminology</div>
-                  <div><strong>Cross-Border Analytics:</strong> Regional comparison algorithms</div>
+        <TabsContent value="config" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center space-x-2">
+                <Flag className="h-5 w-5" />
+                <span>Country Configuration</span>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {selectedCountryData && (
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <span className="text-6xl">{selectedCountryData.flag_emoji}</span>
+                    <div>
+                      <h2 className="text-2xl font-bold">{selectedCountryData.country_name}</h2>
+                      <p className="text-lg text-muted-foreground">{selectedCountryData.country_name_local}</p>
+                      <p className="text-sm text-muted-foreground">{selectedCountryData.region}</p>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="font-semibold mb-2 flex items-center">
+                          <MapPin className="h-4 w-4 mr-2" />
+                          Geographic Details
+                        </h3>
+                        <div className="space-y-1 text-sm">
+                          <p><span className="font-medium">Capital:</span> {selectedCountryData.capital_city}</p>
+                          <p><span className="font-medium">Region:</span> {selectedCountryData.region}</p>
+                          <p><span className="font-medium">Currency:</span> {selectedCountryData.currency_code}</p>
+                        </div>
+                      </div>
+
+                      <div>
+                        <h3 className="font-semibold mb-2 flex items-center">
+                          <Languages className="h-4 w-4 mr-2" />
+                          Language Configuration
+                        </h3>
+                        <div className="space-y-1 text-sm">
+                          <p><span className="font-medium">Primary:</span> {selectedCountryData.primary_language.toUpperCase()}</p>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {selectedCountryData.supported_languages.map((lang, idx) => (
+                              <Badge key={idx} variant="outline" className="text-xs">
+                                {lang.toUpperCase()}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4">
+                      <div>
+                        <h3 className="font-semibold mb-2 flex items-center">
+                          <Zap className="h-4 w-4 mr-2" />
+                          System Status
+                        </h3>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm">Data Collection</span>
+                            <Badge className="bg-success text-success-foreground">Active</Badge>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm">Sentiment Analysis</span>
+                            <Badge className="bg-success text-success-foreground">Online</Badge>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm">Civic Intelligence</span>
+                            <Badge className="bg-warning text-warning-foreground">Beta</Badge>
+                          </div>
+                        </div>
+                      </div>
+
+                      <Alert>
+                        <AlertTriangle className="h-4 w-4" />
+                        <AlertDescription className="text-sm">
+                          <strong>Demo Mode:</strong> This is a demonstration of Pan-African capabilities. 
+                          Full deployment requires country-specific data setup and API integrations.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              )}
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
