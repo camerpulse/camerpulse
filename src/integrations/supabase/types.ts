@@ -544,6 +544,83 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_generated_plugins: {
+        Row: {
+          configuration: Json | null
+          created_at: string
+          created_by: string | null
+          files_created: Json | null
+          functions_created: string[] | null
+          id: string
+          is_rollback_available: boolean | null
+          permissions: Json | null
+          plugin_description: string | null
+          plugin_name: string
+          plugin_type: string
+          request_id: string | null
+          rollback_data: Json | null
+          rollback_timestamp: string | null
+          routes_created: string[] | null
+          status: string
+          tables_created: string[] | null
+          updated_at: string
+          usage_stats: Json | null
+          version: string | null
+        }
+        Insert: {
+          configuration?: Json | null
+          created_at?: string
+          created_by?: string | null
+          files_created?: Json | null
+          functions_created?: string[] | null
+          id?: string
+          is_rollback_available?: boolean | null
+          permissions?: Json | null
+          plugin_description?: string | null
+          plugin_name: string
+          plugin_type?: string
+          request_id?: string | null
+          rollback_data?: Json | null
+          rollback_timestamp?: string | null
+          routes_created?: string[] | null
+          status?: string
+          tables_created?: string[] | null
+          updated_at?: string
+          usage_stats?: Json | null
+          version?: string | null
+        }
+        Update: {
+          configuration?: Json | null
+          created_at?: string
+          created_by?: string | null
+          files_created?: Json | null
+          functions_created?: string[] | null
+          id?: string
+          is_rollback_available?: boolean | null
+          permissions?: Json | null
+          plugin_description?: string | null
+          plugin_name?: string
+          plugin_type?: string
+          request_id?: string | null
+          rollback_data?: Json | null
+          rollback_timestamp?: string | null
+          routes_created?: string[] | null
+          status?: string
+          tables_created?: string[] | null
+          updated_at?: string
+          usage_stats?: Json | null
+          version?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_generated_plugins_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_plugin_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_learning_insights: {
         Row: {
           applicable_contexts: Json | null
@@ -748,6 +825,116 @@ export type Database = {
           success_rate?: number | null
           updated_at?: string
           usage_count?: number | null
+        }
+        Relationships: []
+      }
+      ashen_plugin_generation_steps: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          file_path: string | null
+          generated_code: string | null
+          id: string
+          request_id: string | null
+          started_at: string | null
+          status: string
+          step_name: string
+          step_order: number
+          step_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          file_path?: string | null
+          generated_code?: string | null
+          id?: string
+          request_id?: string | null
+          started_at?: string | null
+          status?: string
+          step_name: string
+          step_order: number
+          step_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          file_path?: string | null
+          generated_code?: string | null
+          id?: string
+          request_id?: string | null
+          started_at?: string | null
+          status?: string
+          step_name?: string
+          step_order?: number
+          step_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_plugin_generation_steps_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_plugin_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_plugin_requests: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          error_details: string | null
+          estimated_complexity: number | null
+          files_to_create: string[] | null
+          functions_to_create: string[] | null
+          generation_logs: Json | null
+          id: string
+          parsed_requirements: Json
+          plugin_name: string | null
+          request_text: string
+          similarity_check_results: Json | null
+          status: string
+          tables_to_create: string[] | null
+          target_roles: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          error_details?: string | null
+          estimated_complexity?: number | null
+          files_to_create?: string[] | null
+          functions_to_create?: string[] | null
+          generation_logs?: Json | null
+          id?: string
+          parsed_requirements?: Json
+          plugin_name?: string | null
+          request_text: string
+          similarity_check_results?: Json | null
+          status?: string
+          tables_to_create?: string[] | null
+          target_roles?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          error_details?: string | null
+          estimated_complexity?: number | null
+          files_to_create?: string[] | null
+          functions_to_create?: string[] | null
+          generation_logs?: Json | null
+          id?: string
+          parsed_requirements?: Json
+          plugin_name?: string | null
+          request_text?: string
+          similarity_check_results?: Json | null
+          status?: string
+          tables_to_create?: string[] | null
+          target_roles?: string[] | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -7046,6 +7233,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analyze_plugin_similarity: {
+        Args: { p_request_text: string; p_plugin_name?: string }
+        Returns: Json
+      }
       analyze_prompt_before_execution: {
         Args: { p_prompt_content: string; p_prompt_title?: string }
         Returns: Json
@@ -7174,6 +7365,14 @@ export type Database = {
       show_trgm: {
         Args: { "": string }
         Returns: string[]
+      }
+      update_plugin_request_status: {
+        Args: {
+          p_request_id: string
+          p_status: string
+          p_error_details?: string
+        }
+        Returns: boolean
       }
       update_politician_term_status: {
         Args: {

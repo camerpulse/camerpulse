@@ -23,6 +23,8 @@ import { toast } from "sonner";
 import { AshenAlertSystem } from "./AshenAlertSystem";
 import { useAshenDebugCore } from "@/hooks/useAshenDebugCore";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CodeDiffVisualizer } from './CodeDiffVisualizer';
+import { NaturalLanguagePluginBuilder } from './NaturalLanguagePluginBuilder';
 
 interface ErrorLog {
   id: string;
@@ -427,19 +429,19 @@ export default function AshenDebugCore() {
 
       {/* Main Dashboard */}
       <Tabs defaultValue="error-dashboard" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-12">
-          <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
-          <TabsTrigger value="security">Security</TabsTrigger>
-          <TabsTrigger value="patch-intelligence">Patch Intelligence</TabsTrigger>
-          <TabsTrigger value="healing-history">Healing History</TabsTrigger>
-          <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
-          <TabsTrigger value="batch-fix">Batch Fix</TabsTrigger>
-          <TabsTrigger value="patch-deploy">Patch Deploy</TabsTrigger>
-          <TabsTrigger value="camerpulse-watchdog">CamerPulse</TabsTrigger>
-          <TabsTrigger value="plugin-watchdog">Plugin Watchdog</TabsTrigger>
-          <TabsTrigger value="ui-inspector">UI Inspector</TabsTrigger>
-          <TabsTrigger value="code-health">Code Health</TabsTrigger>
-          <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-12 gap-1">
+          <TabsTrigger value="error-dashboard" className="text-xs">Error Dashboard</TabsTrigger>
+          <TabsTrigger value="security" className="text-xs">Security</TabsTrigger>
+          <TabsTrigger value="patch-intelligence" className="text-xs">Patch Intelligence</TabsTrigger>
+          <TabsTrigger value="healing-history" className="text-xs">Healing History</TabsTrigger>
+          <TabsTrigger value="learning-engine" className="text-xs">Learning Engine</TabsTrigger>
+          <TabsTrigger value="batch-fix" className="text-xs">Batch Fix</TabsTrigger>
+          <TabsTrigger value="patch-deploy" className="text-xs">Patch Deploy</TabsTrigger>
+          <TabsTrigger value="camerpulse-watchdog" className="text-xs">CamerPulse</TabsTrigger>
+          <TabsTrigger value="plugin-watchdog" className="text-xs">Plugin Watchdog</TabsTrigger>
+          <TabsTrigger value="ui-inspector" className="text-xs">UI Inspector</TabsTrigger>
+          <TabsTrigger value="code-diff" className="text-xs">Code Diff</TabsTrigger>
+          <TabsTrigger value="plugin-builder" className="text-xs">Plugin Builder</TabsTrigger>
         </TabsList>
 
         <TabsContent value="error-dashboard" className="space-y-4">
@@ -487,6 +489,14 @@ export default function AshenDebugCore() {
         
         <TabsContent value="alert-system" className="space-y-4">
           <AshenAlertSystem />
+        </TabsContent>
+        
+        <TabsContent value="code-diff" className="space-y-4">
+          <CodeDiffVisualizer />
+        </TabsContent>
+        
+        <TabsContent value="plugin-builder" className="space-y-4">
+          <NaturalLanguagePluginBuilder />
         </TabsContent>
         <TabsContent value="code-health" className="space-y-4">
           <Card>
