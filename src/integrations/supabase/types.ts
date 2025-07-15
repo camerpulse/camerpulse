@@ -1061,6 +1061,273 @@ export type Database = {
           },
         ]
       }
+      ashen_jr_agents: {
+        Row: {
+          accuracy_rating: number | null
+          agent_goal: string
+          agent_name: string
+          agent_scope: Json
+          created_at: string
+          created_by: string | null
+          feedback_loop_enabled: boolean | null
+          id: string
+          knowledge_sources: string[]
+          last_active: string | null
+          memory_size: number | null
+          personality: string
+          public_interaction_enabled: boolean | null
+          status: string
+          system_prompt: string | null
+          training_prompt: string | null
+          updated_at: string
+        }
+        Insert: {
+          accuracy_rating?: number | null
+          agent_goal: string
+          agent_name: string
+          agent_scope?: Json
+          created_at?: string
+          created_by?: string | null
+          feedback_loop_enabled?: boolean | null
+          id?: string
+          knowledge_sources?: string[]
+          last_active?: string | null
+          memory_size?: number | null
+          personality?: string
+          public_interaction_enabled?: boolean | null
+          status?: string
+          system_prompt?: string | null
+          training_prompt?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accuracy_rating?: number | null
+          agent_goal?: string
+          agent_name?: string
+          agent_scope?: Json
+          created_at?: string
+          created_by?: string | null
+          feedback_loop_enabled?: boolean | null
+          id?: string
+          knowledge_sources?: string[]
+          last_active?: string | null
+          memory_size?: number | null
+          personality?: string
+          public_interaction_enabled?: boolean | null
+          status?: string
+          system_prompt?: string | null
+          training_prompt?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      ashen_jr_interactions: {
+        Row: {
+          agent_id: string
+          agent_response: string
+          context_data: Json | null
+          created_at: string
+          feedback_comment: string | null
+          feedback_rating: number | null
+          id: string
+          interaction_type: string
+          response_accuracy: number | null
+          source_channel: string | null
+          user_id: string | null
+          user_message: string
+        }
+        Insert: {
+          agent_id: string
+          agent_response: string
+          context_data?: Json | null
+          created_at?: string
+          feedback_comment?: string | null
+          feedback_rating?: number | null
+          id?: string
+          interaction_type?: string
+          response_accuracy?: number | null
+          source_channel?: string | null
+          user_id?: string | null
+          user_message: string
+        }
+        Update: {
+          agent_id?: string
+          agent_response?: string
+          context_data?: Json | null
+          created_at?: string
+          feedback_comment?: string | null
+          feedback_rating?: number | null
+          id?: string
+          interaction_type?: string
+          response_accuracy?: number | null
+          source_channel?: string | null
+          user_id?: string | null
+          user_message?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_jr_interactions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_jr_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_jr_knowledge: {
+        Row: {
+          agent_id: string
+          confidence_score: number | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          knowledge_data: Json
+          knowledge_type: string
+          learned_from_interaction_id: string | null
+          source_reference: string | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          knowledge_data: Json
+          knowledge_type: string
+          learned_from_interaction_id?: string | null
+          source_reference?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          confidence_score?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          knowledge_data?: Json
+          knowledge_type?: string
+          learned_from_interaction_id?: string | null
+          source_reference?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_jr_knowledge_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_jr_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ashen_jr_knowledge_learned_from_interaction_id_fkey"
+            columns: ["learned_from_interaction_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_jr_interactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_jr_performance: {
+        Row: {
+          accuracy_score: number | null
+          agent_id: string
+          created_at: string
+          feedback_score: number | null
+          id: string
+          interactions_count: number | null
+          knowledge_gaps: Json | null
+          metric_date: string
+          response_time_avg_ms: number | null
+          suggested_improvements: Json | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          agent_id: string
+          created_at?: string
+          feedback_score?: number | null
+          id?: string
+          interactions_count?: number | null
+          knowledge_gaps?: Json | null
+          metric_date?: string
+          response_time_avg_ms?: number | null
+          suggested_improvements?: Json | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          agent_id?: string
+          created_at?: string
+          feedback_score?: number | null
+          id?: string
+          interactions_count?: number | null
+          knowledge_gaps?: Json | null
+          metric_date?: string
+          response_time_avg_ms?: number | null
+          suggested_improvements?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_jr_performance_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_jr_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_jr_training_sessions: {
+        Row: {
+          agent_id: string
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          performance_metrics: Json | null
+          started_at: string | null
+          status: string
+          training_data: Json
+          training_duration_minutes: number | null
+          training_prompt: string | null
+          training_type: string
+        }
+        Insert: {
+          agent_id: string
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          performance_metrics?: Json | null
+          started_at?: string | null
+          status?: string
+          training_data?: Json
+          training_duration_minutes?: number | null
+          training_prompt?: string | null
+          training_type?: string
+        }
+        Update: {
+          agent_id?: string
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          performance_metrics?: Json | null
+          started_at?: string | null
+          status?: string
+          training_data?: Json
+          training_duration_minutes?: number | null
+          training_prompt?: string | null
+          training_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_jr_training_sessions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_jr_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_learning_insights: {
         Row: {
           applicable_contexts: Json | null
@@ -8303,6 +8570,10 @@ export type Database = {
         Args: { p_prompt_content: string; p_prompt_title?: string }
         Returns: Json
       }
+      calculate_agent_performance: {
+        Args: { p_agent_id: string; p_date?: string }
+        Returns: Json
+      }
       calculate_fix_trust_score: {
         Args: { p_fix_type: string }
         Returns: number
@@ -8342,6 +8613,16 @@ export type Database = {
       generate_vendor_id: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_agent_suggestions: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          agent_id: string
+          agent_name: string
+          suggestion_type: string
+          suggestion_message: string
+          priority: number
+        }[]
       }
       get_autonomous_config: {
         Args: { p_config_key?: string }
