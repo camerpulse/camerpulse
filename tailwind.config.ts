@@ -82,15 +82,15 @@ export default {
 				// Cameroonian Flag Colors
 				'cm-green': {
 					DEFAULT: 'hsl(var(--cm-green))',
-					light: 'hsl(var(--cm-green-light))'
+					light: 'hsl(142 69% 45%)'
 				},
 				'cm-red': {
 					DEFAULT: 'hsl(var(--cm-red))',
-					light: 'hsl(var(--cm-red-light))'
+					light: 'hsl(0 84% 60%)'
 				},
 				'cm-yellow': {
 					DEFAULT: 'hsl(var(--cm-yellow))',
-					light: 'hsl(var(--cm-yellow-light))'
+					light: 'hsl(46 100% 60%)'
 				}
 			},
 			backgroundImage: {
