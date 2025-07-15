@@ -156,39 +156,58 @@ const CamerPulseIntelligence = () => {
     ? sentimentData.reduce((acc, item) => acc + (item.sentiment_score || 0), 0) / sentimentData.length
     : 0;
 
+  if (isLoading) {
+    return (
+      <AppLayout>
+        <div className="container mx-auto px-4 py-6 space-y-6">
+          <div className="text-center space-y-4">
+            <div className="h-8 bg-muted animate-pulse rounded-lg mx-auto w-64"></div>
+            <div className="h-4 bg-muted animate-pulse rounded mx-auto w-96"></div>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-32 bg-muted animate-pulse rounded-xl"></div>
+            ))}
+          </div>
+          <div className="h-96 bg-muted animate-pulse rounded-xl"></div>
+        </div>
+      </AppLayout>
+    );
+  }
+
   return (
     <AppLayout>
-      <div className="container mx-auto px-4 py-8 space-y-6">
+      <div className="container mx-auto px-4 py-6 space-y-6">
         {/* Header */}
         <div className="text-center space-y-4">
-          <div className="flex items-center justify-center space-x-3">
-            <Brain className="h-12 w-12 text-primary animate-pulse" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Brain className="h-10 w-10 sm:h-12 sm:w-12 text-primary animate-pulse" />
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               CAMERPULSE INTELLIGENCE
             </h1>
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-4">
             Civic-Grade National Sentiment & Election Intelligence System - Real-Time Public Opinion Analysis for Cameroon
           </p>
-          <div className="flex items-center justify-center space-x-4">
-            <Badge variant="outline" className="text-sm">
+          <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+            <Badge variant="outline" className="text-xs sm:text-sm">
               <Zap className="h-3 w-3 mr-1" />
               {activeAnalysis ? 'Active' : 'Standby'}
             </Badge>
-            <Badge variant="outline" className="text-sm">
+            <Badge variant="outline" className="text-xs sm:text-sm">
               <Globe className="h-3 w-3 mr-1" />
-              Multi-Platform Analysis
+              Multi-Platform
             </Badge>
-            <Badge variant="outline" className="text-sm">
+            <Badge variant="outline" className="text-xs sm:text-sm">
               <Heart className="h-3 w-3 mr-1" />
-              Born July 12, 2025
+              July 12, 2025
             </Badge>
           </div>
         </div>
 
         {/* Key Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Overall Sentiment</CardTitle>
               <BarChart3 className="h-4 w-4 text-muted-foreground" />
@@ -201,7 +220,7 @@ const CamerPulseIntelligence = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Content Analyzed</CardTitle>
               <MessageSquare className="h-4 w-4 text-muted-foreground" />
@@ -212,7 +231,7 @@ const CamerPulseIntelligence = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Active Alerts</CardTitle>
               <AlertTriangle className="h-4 w-4 text-muted-foreground" />
@@ -223,7 +242,7 @@ const CamerPulseIntelligence = () => {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="hover:shadow-md transition-shadow">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Trending Topics</CardTitle>
               <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -237,35 +256,37 @@ const CamerPulseIntelligence = () => {
 
         {/* Main Dashboard */}
         <Tabs defaultValue="pan-africa" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-12">
-            <TabsTrigger value="pan-africa">🌍 Pan-Africa</TabsTrigger>
-            <TabsTrigger value="cross-analytics">🔄 Cross-Border</TabsTrigger>
-            <TabsTrigger value="serviceData">🏥 Service Data</TabsTrigger>
-            <TabsTrigger value="voice">🎙️ Voice Agent</TabsTrigger>
-            <TabsTrigger value="alert-bot">🤖 Alert Bot</TabsTrigger>
-            <TabsTrigger value="gov-sync">🏛️ Gov Sync</TabsTrigger>
-            <TabsTrigger value="fusion">⚡ Fusion Core</TabsTrigger>
-            <TabsTrigger value="civic">Civic Feed</TabsTrigger>
-            <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
-            <TabsTrigger value="election">Election Tracker</TabsTrigger>
-            <TabsTrigger value="regional">Regional Insights</TabsTrigger>
-            <TabsTrigger value="local">Local Mapper</TabsTrigger>
-            <TabsTrigger value="disinfoShield">DisinfoShield AI</TabsTrigger>
-            <TabsTrigger value="personas">Civic Personas</TabsTrigger>
-            <TabsTrigger value="issueTracker">Issue Tracker</TabsTrigger>
-            <TabsTrigger value="diaspora">Diaspora Echo</TabsTrigger>
-            <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
-            <TabsTrigger value="trending">Trending Topics</TabsTrigger>
-            <TabsTrigger value="memory">Civic Memory</TabsTrigger>
-            <TabsTrigger value="whatsapp">WhatsApp Reports</TabsTrigger>
-            <TabsTrigger value="multimodal">Multimodal Processor</TabsTrigger>
-            <TabsTrigger value="refresh">Autonomous Refresh</TabsTrigger>
-            <TabsTrigger value="learning">Learning Loop</TabsTrigger>
-            <TabsTrigger value="narrative">Narrative Generator</TabsTrigger>
-            <TabsTrigger value="intelligence">Signal Intelligence</TabsTrigger>
-            <TabsTrigger value="alerts">Threat Monitoring</TabsTrigger>
-            <TabsTrigger value="config">AI Settings</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto pb-2">
+            <TabsList className="inline-flex w-max min-w-full p-1 gap-1">
+              <TabsTrigger value="pan-africa" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🌍 Pan-Africa</TabsTrigger>
+              <TabsTrigger value="cross-analytics" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🔄 Cross-Border</TabsTrigger>
+              <TabsTrigger value="serviceData" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🏥 Service Data</TabsTrigger>
+              <TabsTrigger value="voice" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🎙️ Voice Agent</TabsTrigger>
+              <TabsTrigger value="alert-bot" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🤖 Alert Bot</TabsTrigger>
+              <TabsTrigger value="gov-sync" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🏛️ Gov Sync</TabsTrigger>
+              <TabsTrigger value="fusion" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚡ Fusion Core</TabsTrigger>
+              <TabsTrigger value="civic" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📰 Civic Feed</TabsTrigger>
+              <TabsTrigger value="sentiment" className="whitespace-nowrap min-h-[48px] px-3 text-sm">💭 Sentiment</TabsTrigger>
+              <TabsTrigger value="election" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🗳️ Election</TabsTrigger>
+              <TabsTrigger value="regional" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🗺️ Regional</TabsTrigger>
+              <TabsTrigger value="local" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📍 Local</TabsTrigger>
+              <TabsTrigger value="disinfoShield" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🛡️ Disinfo Shield</TabsTrigger>
+              <TabsTrigger value="personas" className="whitespace-nowrap min-h-[48px] px-3 text-sm">👥 Personas</TabsTrigger>
+              <TabsTrigger value="issueTracker" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📊 Issues</TabsTrigger>
+              <TabsTrigger value="diaspora" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🌐 Diaspora</TabsTrigger>
+              <TabsTrigger value="emotions" className="whitespace-nowrap min-h-[48px] px-3 text-sm">😊 Emotions</TabsTrigger>
+              <TabsTrigger value="trending" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📈 Trending</TabsTrigger>
+              <TabsTrigger value="memory" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🧠 Memory</TabsTrigger>
+              <TabsTrigger value="whatsapp" className="whitespace-nowrap min-h-[48px] px-3 text-sm">💬 WhatsApp</TabsTrigger>
+              <TabsTrigger value="multimodal" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🎯 Multimodal</TabsTrigger>
+              <TabsTrigger value="refresh" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🔄 Refresh</TabsTrigger>
+              <TabsTrigger value="learning" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📚 Learning</TabsTrigger>
+              <TabsTrigger value="narrative" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📖 Narrative</TabsTrigger>
+              <TabsTrigger value="intelligence" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🔍 Intelligence</TabsTrigger>
+              <TabsTrigger value="alerts" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚠️ Alerts</TabsTrigger>
+              <TabsTrigger value="config" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚙️ Config</TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="pan-africa" className="space-y-4">
             <PanAfricaModule />
