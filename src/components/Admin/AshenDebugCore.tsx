@@ -11,6 +11,7 @@ import { UIBugLogs } from "./UIBugLogs";
 import { LearningEngine } from "./LearningEngine";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { AshenAlertSystem } from "./AshenAlertSystem";
 
 interface ErrorLog {
   id: string;
@@ -328,7 +329,7 @@ export default function AshenDebugCore() {
 
       {/* Main Dashboard */}
       <Tabs defaultValue="error-dashboard" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-8">
+        <TabsList className="grid w-full grid-cols-9">
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
           <TabsTrigger value="healing-history">Healing History</TabsTrigger>
           <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
@@ -336,6 +337,7 @@ export default function AshenDebugCore() {
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="ux-simulation">UX Simulation</TabsTrigger>
+          <TabsTrigger value="alert-system">Alert System</TabsTrigger>
           <TabsTrigger value="monitor">System Monitor</TabsTrigger>
         </TabsList>
 
@@ -353,6 +355,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="ui-inspector" className="space-y-4">
           <UIBugLogs />
+        </TabsContent>
+        
+        <TabsContent value="alert-system" className="space-y-4">
+          <AshenAlertSystem />
         </TabsContent>
         <TabsContent value="code-health" className="space-y-4">
           <Card>
