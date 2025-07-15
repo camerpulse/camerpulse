@@ -4123,6 +4123,324 @@ export type Database = {
         }
         Relationships: []
       }
+      plugin_conflicts: {
+        Row: {
+          affected_resources: string[] | null
+          auto_resolvable: boolean | null
+          conflict_description: string
+          conflict_severity: string
+          conflict_type: string
+          created_at: string
+          detected_at: string
+          id: string
+          plugin_a_id: string
+          plugin_b_id: string
+          resolution_notes: string | null
+          resolution_suggestion: string | null
+          resolved_at: string | null
+        }
+        Insert: {
+          affected_resources?: string[] | null
+          auto_resolvable?: boolean | null
+          conflict_description: string
+          conflict_severity?: string
+          conflict_type: string
+          created_at?: string
+          detected_at?: string
+          id?: string
+          plugin_a_id: string
+          plugin_b_id: string
+          resolution_notes?: string | null
+          resolution_suggestion?: string | null
+          resolved_at?: string | null
+        }
+        Update: {
+          affected_resources?: string[] | null
+          auto_resolvable?: boolean | null
+          conflict_description?: string
+          conflict_severity?: string
+          conflict_type?: string
+          created_at?: string
+          detected_at?: string
+          id?: string
+          plugin_a_id?: string
+          plugin_b_id?: string
+          resolution_notes?: string | null
+          resolution_suggestion?: string | null
+          resolved_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_conflicts_plugin_a_id_fkey"
+            columns: ["plugin_a_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "plugin_conflicts_plugin_b_id_fkey"
+            columns: ["plugin_b_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plugin_installation_guards: {
+        Row: {
+          admin_override_by: string | null
+          admin_override_reason: string | null
+          admin_override_required: boolean | null
+          block_reason: string | null
+          created_at: string
+          id: string
+          installation_blocked: boolean | null
+          plugin_id: string
+          post_install_verification: Json | null
+          pre_install_checks: Json | null
+          rollback_plan: Json | null
+          updated_at: string
+        }
+        Insert: {
+          admin_override_by?: string | null
+          admin_override_reason?: string | null
+          admin_override_required?: boolean | null
+          block_reason?: string | null
+          created_at?: string
+          id?: string
+          installation_blocked?: boolean | null
+          plugin_id: string
+          post_install_verification?: Json | null
+          pre_install_checks?: Json | null
+          rollback_plan?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          admin_override_by?: string | null
+          admin_override_reason?: string | null
+          admin_override_required?: boolean | null
+          block_reason?: string | null
+          created_at?: string
+          id?: string
+          installation_blocked?: boolean | null
+          plugin_id?: string
+          post_install_verification?: Json | null
+          pre_install_checks?: Json | null
+          rollback_plan?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_installation_guards_plugin_id_fkey"
+            columns: ["plugin_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plugin_registry: {
+        Row: {
+          api_endpoints: string[] | null
+          component_overrides: string[] | null
+          created_at: string
+          css_overrides: string[] | null
+          database_migrations: string[] | null
+          dependencies_used: Json | null
+          file_paths: string[]
+          global_variables: string[] | null
+          id: string
+          install_date: string
+          last_updated: string
+          metadata: Json | null
+          plugin_author: string | null
+          plugin_name: string
+          plugin_risk_score: number | null
+          plugin_status: string
+          plugin_type: string
+          plugin_version: string
+          routes_introduced: string[] | null
+        }
+        Insert: {
+          api_endpoints?: string[] | null
+          component_overrides?: string[] | null
+          created_at?: string
+          css_overrides?: string[] | null
+          database_migrations?: string[] | null
+          dependencies_used?: Json | null
+          file_paths?: string[]
+          global_variables?: string[] | null
+          id?: string
+          install_date?: string
+          last_updated?: string
+          metadata?: Json | null
+          plugin_author?: string | null
+          plugin_name: string
+          plugin_risk_score?: number | null
+          plugin_status?: string
+          plugin_type?: string
+          plugin_version: string
+          routes_introduced?: string[] | null
+        }
+        Update: {
+          api_endpoints?: string[] | null
+          component_overrides?: string[] | null
+          created_at?: string
+          css_overrides?: string[] | null
+          database_migrations?: string[] | null
+          dependencies_used?: Json | null
+          file_paths?: string[]
+          global_variables?: string[] | null
+          id?: string
+          install_date?: string
+          last_updated?: string
+          metadata?: Json | null
+          plugin_author?: string | null
+          plugin_name?: string
+          plugin_risk_score?: number | null
+          plugin_status?: string
+          plugin_type?: string
+          plugin_version?: string
+          routes_introduced?: string[] | null
+        }
+        Relationships: []
+      }
+      plugin_risk_assessments: {
+        Row: {
+          assessed_by: string | null
+          assessment_notes: string | null
+          assessment_version: number
+          compatibility_score: number | null
+          created_at: string
+          id: string
+          overall_risk_score: number | null
+          performance_score: number | null
+          plugin_id: string
+          recommendations: Json | null
+          risk_factors: Json | null
+          security_score: number | null
+          stability_score: number | null
+        }
+        Insert: {
+          assessed_by?: string | null
+          assessment_notes?: string | null
+          assessment_version?: number
+          compatibility_score?: number | null
+          created_at?: string
+          id?: string
+          overall_risk_score?: number | null
+          performance_score?: number | null
+          plugin_id: string
+          recommendations?: Json | null
+          risk_factors?: Json | null
+          security_score?: number | null
+          stability_score?: number | null
+        }
+        Update: {
+          assessed_by?: string | null
+          assessment_notes?: string | null
+          assessment_version?: number
+          compatibility_score?: number | null
+          created_at?: string
+          id?: string
+          overall_risk_score?: number | null
+          performance_score?: number | null
+          plugin_id?: string
+          recommendations?: Json | null
+          risk_factors?: Json | null
+          security_score?: number | null
+          stability_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_risk_assessments_plugin_id_fkey"
+            columns: ["plugin_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plugin_stress_tests: {
+        Row: {
+          cpu_usage_percent: number | null
+          crash_detected: boolean | null
+          created_at: string
+          device_type: string
+          error_count: number | null
+          error_logs: Json | null
+          executed_at: string
+          id: string
+          memory_leak_detected: boolean | null
+          memory_usage_mb: number | null
+          network_condition: string
+          performance_score: number | null
+          plugin_id: string
+          render_time_ms: number | null
+          screen_resolution: string
+          screenshot_url: string | null
+          test_details: Json | null
+          test_duration_ms: number | null
+          test_result: string
+          test_scenario: string
+          test_type: string
+        }
+        Insert: {
+          cpu_usage_percent?: number | null
+          crash_detected?: boolean | null
+          created_at?: string
+          device_type?: string
+          error_count?: number | null
+          error_logs?: Json | null
+          executed_at?: string
+          id?: string
+          memory_leak_detected?: boolean | null
+          memory_usage_mb?: number | null
+          network_condition?: string
+          performance_score?: number | null
+          plugin_id: string
+          render_time_ms?: number | null
+          screen_resolution?: string
+          screenshot_url?: string | null
+          test_details?: Json | null
+          test_duration_ms?: number | null
+          test_result?: string
+          test_scenario: string
+          test_type: string
+        }
+        Update: {
+          cpu_usage_percent?: number | null
+          crash_detected?: boolean | null
+          created_at?: string
+          device_type?: string
+          error_count?: number | null
+          error_logs?: Json | null
+          executed_at?: string
+          id?: string
+          memory_leak_detected?: boolean | null
+          memory_usage_mb?: number | null
+          network_condition?: string
+          performance_score?: number | null
+          plugin_id?: string
+          render_time_ms?: number | null
+          screen_resolution?: string
+          screenshot_url?: string | null
+          test_details?: Json | null
+          test_duration_ms?: number | null
+          test_result?: string
+          test_scenario?: string
+          test_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_stress_tests_plugin_id_fkey"
+            columns: ["plugin_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       politica_ai_config: {
         Row: {
           config_key: string
@@ -5816,6 +6134,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_plugin_risk_score: {
+        Args: { p_plugin_id: string }
+        Returns: number
+      }
       detect_official_changes: {
         Args: Record<PropertyKey, never>
         Returns: {

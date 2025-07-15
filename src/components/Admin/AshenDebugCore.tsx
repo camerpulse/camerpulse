@@ -432,12 +432,12 @@ export default function AshenDebugCore() {
           <TabsTrigger value="self-learning">Self-Learning</TabsTrigger>
           <TabsTrigger value="batch-fix">Batch Fix</TabsTrigger>
           <TabsTrigger value="patch-deploy">Patch Deploy</TabsTrigger>
-          <TabsTrigger value="camerpulse-watchdog">CamerPulse Watchdog</TabsTrigger>
+          <TabsTrigger value="camerpulse-watchdog">CamerPulse</TabsTrigger>
+          <TabsTrigger value="plugin-watchdog">Plugin Watchdog</TabsTrigger>
           <TabsTrigger value="ui-inspector">UI Inspector</TabsTrigger>
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="human-simulation">Human Simulation</TabsTrigger>
-          <TabsTrigger value="browser-emulation">Browser Emulation</TabsTrigger>
         </TabsList>
 
         <TabsContent value="error-dashboard" className="space-y-4">
@@ -465,6 +465,10 @@ export default function AshenDebugCore() {
 
         <TabsContent value="camerpulse-watchdog" className="space-y-4">
           <CamerPulseWatchdogPanel />
+        </TabsContent>
+
+        <TabsContent value="plugin-watchdog" className="space-y-4">
+          <PluginWatchdog />
         </TabsContent>
         
         <TabsContent value="ui-inspector" className="space-y-4">
