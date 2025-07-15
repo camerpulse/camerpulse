@@ -14,6 +14,7 @@ import {
   Star, TrendingUp, Award, Target, Eye, FileText, 
   MessageSquare, ThumbsUp, Building2, CheckCircle, XCircle, Clock
 } from "lucide-react";
+import { PartyEmbed } from "@/components/AI/OfficialEmbedEngine";
 
 interface PoliticalParty {
   id: string;
@@ -346,6 +347,19 @@ const PoliticalPartyDetail = () => {
                     <p className="text-sm text-muted-foreground">Failed</p>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Party Officials */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5" />
+                  Party Officials
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <PartyEmbed partyId={party.id} />
               </CardContent>
             </Card>
 
