@@ -2019,6 +2019,83 @@ export type Database = {
           },
         ]
       }
+      party_promises: {
+        Row: {
+          broken_promise_alert_sent: boolean | null
+          created_at: string | null
+          date_made: string | null
+          date_updated: string | null
+          description: string | null
+          evidence_url: string | null
+          expected_delivery_date: string | null
+          id: string
+          party_id: string
+          priority_level: string | null
+          promise_text: string
+          public_interest_score: number | null
+          regions_targeted: string[] | null
+          source_type: string | null
+          status: string | null
+          topic_category: string | null
+          updated_at: string | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          broken_promise_alert_sent?: boolean | null
+          created_at?: string | null
+          date_made?: string | null
+          date_updated?: string | null
+          description?: string | null
+          evidence_url?: string | null
+          expected_delivery_date?: string | null
+          id?: string
+          party_id: string
+          priority_level?: string | null
+          promise_text: string
+          public_interest_score?: number | null
+          regions_targeted?: string[] | null
+          source_type?: string | null
+          status?: string | null
+          topic_category?: string | null
+          updated_at?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          broken_promise_alert_sent?: boolean | null
+          created_at?: string | null
+          date_made?: string | null
+          date_updated?: string | null
+          description?: string | null
+          evidence_url?: string | null
+          expected_delivery_date?: string | null
+          id?: string
+          party_id?: string
+          priority_level?: string | null
+          promise_text?: string
+          public_interest_score?: number | null
+          regions_targeted?: string[] | null
+          source_type?: string | null
+          status?: string | null
+          topic_category?: string | null
+          updated_at?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "party_promises_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       party_ratings: {
         Row: {
           approval_rating: number | null
@@ -2532,40 +2609,70 @@ export type Database = {
       }
       politician_promises: {
         Row: {
+          broken_promise_alert_sent: boolean | null
           created_at: string | null
           date_made: string | null
           date_updated: string | null
           description: string | null
           evidence_url: string | null
+          expected_delivery_date: string | null
           id: string
           politician_id: string
+          priority_level: string | null
           promise_text: string
+          public_interest_score: number | null
+          regions_targeted: string[] | null
+          source_type: string | null
           status: string | null
+          topic_category: string | null
           updated_at: string | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
         }
         Insert: {
+          broken_promise_alert_sent?: boolean | null
           created_at?: string | null
           date_made?: string | null
           date_updated?: string | null
           description?: string | null
           evidence_url?: string | null
+          expected_delivery_date?: string | null
           id?: string
           politician_id: string
+          priority_level?: string | null
           promise_text: string
+          public_interest_score?: number | null
+          regions_targeted?: string[] | null
+          source_type?: string | null
           status?: string | null
+          topic_category?: string | null
           updated_at?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Update: {
+          broken_promise_alert_sent?: boolean | null
           created_at?: string | null
           date_made?: string | null
           date_updated?: string | null
           description?: string | null
           evidence_url?: string | null
+          expected_delivery_date?: string | null
           id?: string
           politician_id?: string
+          priority_level?: string | null
           promise_text?: string
+          public_interest_score?: number | null
+          regions_targeted?: string[] | null
+          source_type?: string | null
           status?: string | null
+          topic_category?: string | null
           updated_at?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Relationships: [
           {
@@ -2848,6 +2955,144 @@ export type Database = {
           user_id?: string
           username?: string
           verified?: boolean | null
+        }
+        Relationships: []
+      }
+      promise_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          affected_regions: string[] | null
+          alert_message: string
+          alert_severity: string | null
+          alert_type: string
+          auto_generated: boolean | null
+          created_at: string | null
+          id: string
+          promise_id: string
+          promise_type: string
+          sentiment_data: Json | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_regions?: string[] | null
+          alert_message: string
+          alert_severity?: string | null
+          alert_type: string
+          auto_generated?: boolean | null
+          created_at?: string | null
+          id?: string
+          promise_id: string
+          promise_type: string
+          sentiment_data?: Json | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_regions?: string[] | null
+          alert_message?: string
+          alert_severity?: string | null
+          alert_type?: string
+          auto_generated?: boolean | null
+          created_at?: string | null
+          id?: string
+          promise_id?: string
+          promise_type?: string
+          sentiment_data?: Json | null
+        }
+        Relationships: []
+      }
+      promise_public_votes: {
+        Row: {
+          confidence_level: number | null
+          created_at: string | null
+          evidence_provided: string | null
+          id: string
+          promise_id: string
+          promise_type: string
+          updated_at: string | null
+          user_id: string
+          vote_comment: string | null
+          vote_status: string
+        }
+        Insert: {
+          confidence_level?: number | null
+          created_at?: string | null
+          evidence_provided?: string | null
+          id?: string
+          promise_id: string
+          promise_type: string
+          updated_at?: string | null
+          user_id: string
+          vote_comment?: string | null
+          vote_status: string
+        }
+        Update: {
+          confidence_level?: number | null
+          created_at?: string | null
+          evidence_provided?: string | null
+          id?: string
+          promise_id?: string
+          promise_type?: string
+          updated_at?: string | null
+          user_id?: string
+          vote_comment?: string | null
+          vote_status?: string
+        }
+        Relationships: []
+      }
+      promise_sentiment_correlations: {
+        Row: {
+          affected_regions: string[] | null
+          analysis_metadata: Json | null
+          baseline_sentiment: number | null
+          confidence_score: number | null
+          correlation_date: string | null
+          correlation_strength: number | null
+          created_at: string | null
+          dominant_emotion: string | null
+          id: string
+          post_event_sentiment: number | null
+          promise_id: string | null
+          promise_type: string
+          related_sentiment_log_ids: string[] | null
+          sentiment_shift_intensity: number | null
+        }
+        Insert: {
+          affected_regions?: string[] | null
+          analysis_metadata?: Json | null
+          baseline_sentiment?: number | null
+          confidence_score?: number | null
+          correlation_date?: string | null
+          correlation_strength?: number | null
+          created_at?: string | null
+          dominant_emotion?: string | null
+          id?: string
+          post_event_sentiment?: number | null
+          promise_id?: string | null
+          promise_type: string
+          related_sentiment_log_ids?: string[] | null
+          sentiment_shift_intensity?: number | null
+        }
+        Update: {
+          affected_regions?: string[] | null
+          analysis_metadata?: Json | null
+          baseline_sentiment?: number | null
+          confidence_score?: number | null
+          correlation_date?: string | null
+          correlation_strength?: number | null
+          created_at?: string | null
+          dominant_emotion?: string | null
+          id?: string
+          post_event_sentiment?: number | null
+          promise_id?: string | null
+          promise_type?: string
+          related_sentiment_log_ids?: string[] | null
+          sentiment_shift_intensity?: number | null
         }
         Relationships: []
       }

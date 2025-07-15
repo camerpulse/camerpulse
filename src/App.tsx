@@ -20,6 +20,7 @@ import PoliticalPartyDetail from "./pages/PoliticalPartyDetail";
 import PoliticaAI from "./pages/PoliticaAI";
 import CamerPulseIntelligence from "./pages/CamerPulseIntelligence";
 import CivicPublicPortal from "./pages/CivicPublicPortal";
+import Promises from "./pages/Promises";
 import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -82,6 +83,7 @@ const App = () => {
                 </DynamicCountryRouter>
               } />
               <Route path="/civic-portal" element={<CivicPublicPortal />} />
+              <Route path="/promises" element={<Promises />} />
               <Route path="/marketplace/order-success" element={<OrderSuccess />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
