@@ -28,6 +28,7 @@ import RegionalSentimentHeatmap from '@/components/AI/RegionalSentimentHeatmap';
 import DiasporaEcho from '@/components/AI/DiasporaEcho';
 import EmotionalSpotlight from '@/components/AI/EmotionalSpotlight';
 import TrendRadar from '@/components/AI/TrendRadar';
+import { CivicFeed } from '@/components/AI/CivicFeed';
 
 interface SentimentData {
   id: string;
@@ -214,8 +215,9 @@ const CamerPulseIntelligence = () => {
         </div>
 
         {/* Main Dashboard */}
-        <Tabs defaultValue="sentiment" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-8">
+        <Tabs defaultValue="civic" className="space-y-4">
+          <TabsList className="grid w-full grid-cols-9">
+            <TabsTrigger value="civic">Civic Feed</TabsTrigger>
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
             <TabsTrigger value="election">Election Tracker</TabsTrigger>
             <TabsTrigger value="regional">Regional Insights</TabsTrigger>
@@ -225,6 +227,10 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="alerts">Threat Monitoring</TabsTrigger>
             <TabsTrigger value="config">AI Settings</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="civic" className="space-y-4">
+            <CivicFeed />
+          </TabsContent>
 
           <TabsContent value="sentiment" className="space-y-4">
             <Card>
