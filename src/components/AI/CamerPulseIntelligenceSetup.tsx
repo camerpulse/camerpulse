@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -14,7 +15,7 @@ interface APIKeyStatus {
 }
 
 const CamerPulseIntelligenceSetup = () => {
-  const [apiKeys] = useState<APIKeyStatus[]>([
+  const [apiKeys, setApiKeys] = useState<APIKeyStatus[]>([
     {
       name: 'OPENAI_API_KEY',
       required: true,
@@ -51,6 +52,30 @@ const CamerPulseIntelligenceSetup = () => {
       setupUrl: 'https://docs.perplexity.ai/docs/getting-started'
     }
   ]);
+
+  // Check API key status on mount
+  React.useEffect(() => {
+    const checkAPIStatus = async () => {
+      try {
+        const { data } = await supabase.functions.invoke('camerpulse-social-apis', {
+          body: { action: 'platform_status' }
+        });
+        
+        if (data?.success) {
+          setApiKeys(prevKeys => 
+            prevKeys.map(key => ({
+              ...key,
+              configured: data.status[key.name.toLowerCase().replace('_', '_')] || false
+            }))
+          );
+        }
+      } catch (error) {
+        console.error('Error checking API status:', error);
+      }
+    };
+
+    checkAPIStatus();
+  }, []);
 
   const requiredKeys = apiKeys.filter(key => key.required);
   const configuredRequired = requiredKeys.filter(key => key.configured).length;
