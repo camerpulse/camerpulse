@@ -64,6 +64,7 @@ import {
 } from "lucide-react";
 import PartyDirectorySync from "@/components/AI/PartyDirectorySync";
 import MinisterDirectorySync from "@/components/AI/MinisterDirectorySync";
+import SenateDirectorySync from "@/components/AI/SenateDirectorySync";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -463,9 +464,10 @@ const Admin = () => {
                   </CardHeader>
                   <CardContent>
                     <Tabs defaultValue="politicians" className="w-full">
-                      <TabsList className="grid w-full grid-cols-4">
+                      <TabsList className="grid w-full grid-cols-5">
                         <TabsTrigger value="politicians">Politicians</TabsTrigger>
                         <TabsTrigger value="ministers">Ministers</TabsTrigger>
+                        <TabsTrigger value="senators">Senators</TabsTrigger>
                         <TabsTrigger value="parties">Parties</TabsTrigger>
                         <TabsTrigger value="party-sync">MINAT Sync</TabsTrigger>
                       </TabsList>
@@ -476,6 +478,10 @@ const Admin = () => {
                       
                       <TabsContent value="ministers" className="space-y-4">
                         <MinisterDirectorySync />
+                      </TabsContent>
+                      
+                      <TabsContent value="senators" className="space-y-4">
+                        <SenateDirectorySync />
                       </TabsContent>
                       
                       <TabsContent value="parties" className="space-y-4">
