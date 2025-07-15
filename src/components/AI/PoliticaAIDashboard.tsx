@@ -10,6 +10,7 @@ import { VerificationBadge } from "./VerificationBadge";
 import { BulkImportButton } from "./BulkImportButton";
 import { CivicNarrativeGenerator } from "./CivicNarrativeGenerator";
 import { AutonomousRefreshEngine } from "./AutonomousRefreshEngine";
+import { FeedbackLearningLoop } from "./FeedbackLearningLoop";
 import SignalIntelligenceCore from "./SignalIntelligenceCore";
 import { useToast } from "@/hooks/use-toast";
 
@@ -221,6 +222,7 @@ export const PoliticaAIDashboard = () => {
           <TabsTrigger value="config">Configuration</TabsTrigger>
           <TabsTrigger value="intelligence">Signal Intelligence</TabsTrigger>
           <TabsTrigger value="refresh">Autonomous Refresh</TabsTrigger>
+          <TabsTrigger value="learning">Learning Loop</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
         </TabsList>
 
@@ -377,6 +379,10 @@ export const PoliticaAIDashboard = () => {
 
         <TabsContent value="refresh" className="space-y-4">
           <AutonomousRefreshEngine />
+        </TabsContent>
+
+        <TabsContent value="learning" className="space-y-4">
+          <FeedbackLearningLoop />
         </TabsContent>
 
         <TabsContent value="reports" className="space-y-4">
