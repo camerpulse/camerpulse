@@ -36,6 +36,7 @@ import { FeedbackLearningLoop } from '@/components/AI/FeedbackLearningLoop';
 import { CivicNarrativeGenerator } from '@/components/AI/CivicNarrativeGenerator';
 import SignalIntelligenceCore from '@/components/AI/SignalIntelligenceCore';
 import { MultimodalEmotionProcessor } from '@/components/AI/MultimodalEmotionProcessor';
+import CivicWhatsAppBridge from '@/components/AI/CivicWhatsAppBridge';
 
 interface SentimentData {
   id: string;
@@ -223,7 +224,7 @@ const CamerPulseIntelligence = () => {
 
         {/* Main Dashboard */}
         <Tabs defaultValue="civic" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-10">
+          <TabsList className="grid w-full grid-cols-11">
             <TabsTrigger value="civic">Civic Feed</TabsTrigger>
             <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
             <TabsTrigger value="election">Election Tracker</TabsTrigger>
@@ -232,6 +233,7 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
             <TabsTrigger value="memory">Civic Memory</TabsTrigger>
+            <TabsTrigger value="whatsapp">WhatsApp Reports</TabsTrigger>
             <TabsTrigger value="multimodal">Multimodal Processor</TabsTrigger>
             <TabsTrigger value="refresh">Autonomous Refresh</TabsTrigger>
             <TabsTrigger value="learning">Learning Loop</TabsTrigger>
@@ -322,6 +324,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="memory" className="space-y-4">
             <CivicMemoryEngine />
+          </TabsContent>
+
+          <TabsContent value="whatsapp" className="space-y-4">
+            <CivicWhatsAppBridge />
           </TabsContent>
 
           <TabsContent value="multimodal" className="space-y-4">
