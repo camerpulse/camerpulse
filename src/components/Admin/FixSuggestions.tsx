@@ -33,13 +33,13 @@ export default function FixSuggestions() {
   const loadSuggestions = async () => {
     setIsLoading(true);
     try {
-      const { data, error } = await supabase
-        .from('ashen_fix_suggestions')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Use edge function to fetch suggestions until table types are available
+      const { data, error } = await supabase.functions.invoke('ashen-fix-suggestion-engine', {
+        body: { action: 'get_suggestions' }
+      });
 
       if (error) throw error;
-      setSuggestions(data || []);
+      setSuggestions(data.suggestions || []);
     } catch (error) {
       console.error('Error loading suggestions:', error);
       toast.error('Failed to load fix suggestions');
@@ -108,10 +108,12 @@ export default function FixSuggestions() {
 
   const markAsReviewed = async (suggestionId: string) => {
     try {
-      const { error } = await supabase
-        .from('ashen_fix_suggestions')
-        .update({ status: 'reviewed' })
-        .eq('id', suggestionId);
+      const { error } = await supabase.functions.invoke('ashen-fix-suggestion-engine', {
+        body: { 
+          action: 'mark_reviewed', 
+          issue_id: suggestionId 
+        }
+      });
 
       if (error) throw error;
       
