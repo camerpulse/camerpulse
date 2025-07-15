@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode } from "lucide-react";
 import ErrorDashboard from "./ErrorDashboard";
+import HealingHistory from "./HealingHistory";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -269,7 +270,7 @@ export default function AshenDebugCore() {
       <Tabs defaultValue="error-dashboard" className="space-y-4">
         <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
-          <TabsTrigger value="analysis">Code Analysis</TabsTrigger>
+          <TabsTrigger value="healing-history">Healing History</TabsTrigger>
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="ux-simulation">UX Simulation</TabsTrigger>
@@ -278,6 +279,10 @@ export default function AshenDebugCore() {
 
         <TabsContent value="error-dashboard" className="space-y-4">
           <ErrorDashboard />
+        </TabsContent>
+        
+        <TabsContent value="healing-history" className="space-y-4">
+          <HealingHistory />
         </TabsContent>
 
         <TabsContent value="code-health" className="space-y-4">

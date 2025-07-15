@@ -202,6 +202,65 @@ export type Database = {
           },
         ]
       }
+      ashen_auto_healing_history: {
+        Row: {
+          applied_by: string
+          backup_created: boolean | null
+          code_changes: Json | null
+          created_at: string
+          error_id: string | null
+          error_message: string | null
+          files_modified: string[] | null
+          fix_applied: boolean
+          fix_confidence: number
+          fix_description: string | null
+          fix_method: string
+          id: string
+          result_status: string
+          rollback_info: Json | null
+        }
+        Insert: {
+          applied_by?: string
+          backup_created?: boolean | null
+          code_changes?: Json | null
+          created_at?: string
+          error_id?: string | null
+          error_message?: string | null
+          files_modified?: string[] | null
+          fix_applied?: boolean
+          fix_confidence: number
+          fix_description?: string | null
+          fix_method: string
+          id?: string
+          result_status?: string
+          rollback_info?: Json | null
+        }
+        Update: {
+          applied_by?: string
+          backup_created?: boolean | null
+          code_changes?: Json | null
+          created_at?: string
+          error_id?: string | null
+          error_message?: string | null
+          files_modified?: string[] | null
+          fix_applied?: boolean
+          fix_confidence?: number
+          fix_description?: string | null
+          fix_method?: string
+          id?: string
+          result_status?: string
+          rollback_info?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_auto_healing_history_error_id_fkey"
+            columns: ["error_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_error_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_behavior_tests: {
         Row: {
           created_at: string
