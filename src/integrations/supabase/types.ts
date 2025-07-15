@@ -709,6 +709,369 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_content_monitoring: {
+        Row: {
+          ai_analysis: Json | null
+          author: string | null
+          content_preview: string | null
+          created_at: string
+          credibility_score: number | null
+          id: string
+          importance_score: number | null
+          mentions_entities: string[] | null
+          metadata: Json | null
+          processed: boolean | null
+          publication: string | null
+          published_at: string | null
+          sentiment_score: number | null
+          source_type: Database["public"]["Enums"]["source_type"] | null
+          source_url: string
+          title: string
+          topic_categories: string[] | null
+        }
+        Insert: {
+          ai_analysis?: Json | null
+          author?: string | null
+          content_preview?: string | null
+          created_at?: string
+          credibility_score?: number | null
+          id?: string
+          importance_score?: number | null
+          mentions_entities?: string[] | null
+          metadata?: Json | null
+          processed?: boolean | null
+          publication?: string | null
+          published_at?: string | null
+          sentiment_score?: number | null
+          source_type?: Database["public"]["Enums"]["source_type"] | null
+          source_url: string
+          title: string
+          topic_categories?: string[] | null
+        }
+        Update: {
+          ai_analysis?: Json | null
+          author?: string | null
+          content_preview?: string | null
+          created_at?: string
+          credibility_score?: number | null
+          id?: string
+          importance_score?: number | null
+          mentions_entities?: string[] | null
+          metadata?: Json | null
+          processed?: boolean | null
+          publication?: string | null
+          published_at?: string | null
+          sentiment_score?: number | null
+          source_type?: Database["public"]["Enums"]["source_type"] | null
+          source_url?: string
+          title?: string
+          topic_categories?: string[] | null
+        }
+        Relationships: []
+      }
+      civic_crawl_data: {
+        Row: {
+          content_hash: string | null
+          created_at: string
+          entities_extracted: string[] | null
+          extracted_data: Json | null
+          id: string
+          page_title: string | null
+          processed: boolean | null
+          processing_errors: string[] | null
+          raw_content: string | null
+          session_id: string
+          source_url: string
+        }
+        Insert: {
+          content_hash?: string | null
+          created_at?: string
+          entities_extracted?: string[] | null
+          extracted_data?: Json | null
+          id?: string
+          page_title?: string | null
+          processed?: boolean | null
+          processing_errors?: string[] | null
+          raw_content?: string | null
+          session_id: string
+          source_url: string
+        }
+        Update: {
+          content_hash?: string | null
+          created_at?: string
+          entities_extracted?: string[] | null
+          extracted_data?: Json | null
+          id?: string
+          page_title?: string | null
+          processed?: boolean | null
+          processing_errors?: string[] | null
+          raw_content?: string | null
+          session_id?: string
+          source_url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_crawl_data_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "civic_crawl_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_crawl_sessions: {
+        Row: {
+          completed_at: string | null
+          crawler_version: string | null
+          created_at: string
+          duration_seconds: number | null
+          entities_created: number | null
+          entities_found: number | null
+          entities_updated: number | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          pages_crawled: number | null
+          source_id: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["crawl_status"]
+          warnings: string[] | null
+        }
+        Insert: {
+          completed_at?: string | null
+          crawler_version?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          entities_created?: number | null
+          entities_found?: number | null
+          entities_updated?: number | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          pages_crawled?: number | null
+          source_id: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["crawl_status"]
+          warnings?: string[] | null
+        }
+        Update: {
+          completed_at?: string | null
+          crawler_version?: string | null
+          created_at?: string
+          duration_seconds?: number | null
+          entities_created?: number | null
+          entities_found?: number | null
+          entities_updated?: number | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          pages_crawled?: number | null
+          source_id?: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["crawl_status"]
+          warnings?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_crawl_sessions_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "civic_crawl_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_crawl_sources: {
+        Row: {
+          auth_config: Json | null
+          avg_crawl_duration_seconds: number | null
+          base_url: string
+          content_filters: Json | null
+          crawl_frequency_hours: number | null
+          crawl_selectors: Json | null
+          created_at: string
+          entity_extraction_rules: Json | null
+          id: string
+          is_active: boolean | null
+          last_crawl_at: string | null
+          last_successful_crawl_at: string | null
+          max_pages_per_crawl: number | null
+          rate_limit_seconds: number | null
+          requires_auth: boolean | null
+          source_name: string
+          source_type: Database["public"]["Enums"]["source_type"]
+          total_crawls: number | null
+          total_entities_found: number | null
+          updated_at: string
+        }
+        Insert: {
+          auth_config?: Json | null
+          avg_crawl_duration_seconds?: number | null
+          base_url: string
+          content_filters?: Json | null
+          crawl_frequency_hours?: number | null
+          crawl_selectors?: Json | null
+          created_at?: string
+          entity_extraction_rules?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_crawl_at?: string | null
+          last_successful_crawl_at?: string | null
+          max_pages_per_crawl?: number | null
+          rate_limit_seconds?: number | null
+          requires_auth?: boolean | null
+          source_name: string
+          source_type: Database["public"]["Enums"]["source_type"]
+          total_crawls?: number | null
+          total_entities_found?: number | null
+          updated_at?: string
+        }
+        Update: {
+          auth_config?: Json | null
+          avg_crawl_duration_seconds?: number | null
+          base_url?: string
+          content_filters?: Json | null
+          crawl_frequency_hours?: number | null
+          crawl_selectors?: Json | null
+          created_at?: string
+          entity_extraction_rules?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_crawl_at?: string | null
+          last_successful_crawl_at?: string | null
+          max_pages_per_crawl?: number | null
+          rate_limit_seconds?: number | null
+          requires_auth?: boolean | null
+          source_name?: string
+          source_type?: Database["public"]["Enums"]["source_type"]
+          total_crawls?: number | null
+          total_entities_found?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_entity_relationships: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          end_date: string | null
+          from_entity_id: string
+          id: string
+          is_current: boolean | null
+          metadata: Json | null
+          relationship_type: string
+          source_url: string | null
+          start_date: string | null
+          to_entity_id: string
+          updated_at: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          end_date?: string | null
+          from_entity_id: string
+          id?: string
+          is_current?: boolean | null
+          metadata?: Json | null
+          relationship_type: string
+          source_url?: string | null
+          start_date?: string | null
+          to_entity_id: string
+          updated_at?: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          end_date?: string | null
+          from_entity_id?: string
+          id?: string
+          is_current?: boolean | null
+          metadata?: Json | null
+          relationship_type?: string
+          source_url?: string | null
+          start_date?: string | null
+          to_entity_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_entity_relationships_from_entity_id_fkey"
+            columns: ["from_entity_id"]
+            isOneToOne: false
+            referencedRelation: "civic_knowledge_entities"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "civic_entity_relationships_to_entity_id_fkey"
+            columns: ["to_entity_id"]
+            isOneToOne: false
+            referencedRelation: "civic_knowledge_entities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_entity_verifications: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          entity_id: string
+          field_name: string
+          id: string
+          metadata: Json | null
+          previous_value: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          verification_method: string | null
+          verification_source: string
+          verified_at: string
+          verified_by: string | null
+          verified_value: string | null
+        }
+        Insert: {
+          confidence_score: number
+          created_at?: string
+          entity_id: string
+          field_name: string
+          id?: string
+          metadata?: Json | null
+          previous_value?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          verification_method?: string | null
+          verification_source: string
+          verified_at?: string
+          verified_by?: string | null
+          verified_value?: string | null
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          entity_id?: string
+          field_name?: string
+          id?: string
+          metadata?: Json | null
+          previous_value?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          verification_method?: string | null
+          verification_source?: string
+          verified_at?: string
+          verified_by?: string | null
+          verified_value?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_entity_verifications_entity_id_fkey"
+            columns: ["entity_id"]
+            isOneToOne: false
+            referencedRelation: "civic_knowledge_entities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       civic_event_templates: {
         Row: {
           created_at: string
@@ -987,6 +1350,102 @@ export type Database = {
           tags?: string[] | null
           updated_at?: string
           verification_status?: string
+        }
+        Relationships: []
+      }
+      civic_knowledge_entities: {
+        Row: {
+          aliases: string[] | null
+          auto_imported: boolean | null
+          canonical_name: string
+          confidence_score: number | null
+          created_at: string
+          description: string | null
+          dissolution_date: string | null
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          establishment_date: string | null
+          facebook_page: string | null
+          headquarters_address: string | null
+          id: string
+          instagram_handle: string | null
+          last_verified_at: string | null
+          linkedin_profile: string | null
+          metadata: Json | null
+          name: string
+          official_email: string | null
+          official_phone: string | null
+          official_website: string | null
+          primary_source_url: string | null
+          region: string | null
+          registration_number: string | null
+          source_type: Database["public"]["Enums"]["source_type"] | null
+          status: string | null
+          twitter_handle: string | null
+          updated_at: string
+          verification_status: string | null
+          youtube_channel: string | null
+        }
+        Insert: {
+          aliases?: string[] | null
+          auto_imported?: boolean | null
+          canonical_name: string
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          dissolution_date?: string | null
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          establishment_date?: string | null
+          facebook_page?: string | null
+          headquarters_address?: string | null
+          id?: string
+          instagram_handle?: string | null
+          last_verified_at?: string | null
+          linkedin_profile?: string | null
+          metadata?: Json | null
+          name: string
+          official_email?: string | null
+          official_phone?: string | null
+          official_website?: string | null
+          primary_source_url?: string | null
+          region?: string | null
+          registration_number?: string | null
+          source_type?: Database["public"]["Enums"]["source_type"] | null
+          status?: string | null
+          twitter_handle?: string | null
+          updated_at?: string
+          verification_status?: string | null
+          youtube_channel?: string | null
+        }
+        Update: {
+          aliases?: string[] | null
+          auto_imported?: boolean | null
+          canonical_name?: string
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          dissolution_date?: string | null
+          entity_type?: Database["public"]["Enums"]["civic_entity_type"]
+          establishment_date?: string | null
+          facebook_page?: string | null
+          headquarters_address?: string | null
+          id?: string
+          instagram_handle?: string | null
+          last_verified_at?: string | null
+          linkedin_profile?: string | null
+          metadata?: Json | null
+          name?: string
+          official_email?: string | null
+          official_phone?: string | null
+          official_website?: string | null
+          primary_source_url?: string | null
+          region?: string | null
+          registration_number?: string | null
+          source_type?: Database["public"]["Enums"]["source_type"] | null
+          status?: string | null
+          twitter_handle?: string | null
+          updated_at?: string
+          verification_status?: string | null
+          youtube_channel?: string | null
         }
         Relationships: []
       }
@@ -4043,6 +4502,26 @@ export type Database = {
         Args: { p_config_key?: string }
         Returns: Json
       }
+      gtrgm_compress: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_decompress: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_in: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
+      gtrgm_options: {
+        Args: { "": unknown }
+        Returns: undefined
+      }
+      gtrgm_out: {
+        Args: { "": unknown }
+        Returns: unknown
+      }
       has_role: {
         Args: {
           _user_id: string
@@ -4070,6 +4549,18 @@ export type Database = {
         }
         Returns: string
       }
+      set_limit: {
+        Args: { "": number }
+        Returns: number
+      }
+      show_limit: {
+        Args: Record<PropertyKey, never>
+        Returns: number
+      }
+      show_trgm: {
+        Args: { "": string }
+        Returns: string[]
+      }
       validate_password_strength: {
         Args: { password: string }
         Returns: Json
@@ -4082,6 +4573,17 @@ export type Database = {
         | "verified_politician"
         | "verified_vendor"
         | "user"
+      civic_entity_type:
+        | "politician"
+        | "ministry"
+        | "government_agency"
+        | "political_party"
+        | "civil_society_org"
+        | "media_outlet"
+        | "election_event"
+        | "policy_document"
+        | "government_statement"
+      crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
       institution_type:
         | "presidency"
         | "parliament"
@@ -4092,6 +4594,17 @@ export type Database = {
         | "public_health"
         | "education_ministry"
         | "local_councils"
+      source_type:
+        | "government_official"
+        | "parliamentary"
+        | "electoral_commission"
+        | "state_media"
+        | "independent_media"
+        | "social_media_verified"
+        | "civil_society"
+        | "international_org"
+        | "academic"
+        | "unknown"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -4226,6 +4739,18 @@ export const Constants = {
         "verified_vendor",
         "user",
       ],
+      civic_entity_type: [
+        "politician",
+        "ministry",
+        "government_agency",
+        "political_party",
+        "civil_society_org",
+        "media_outlet",
+        "election_event",
+        "policy_document",
+        "government_statement",
+      ],
+      crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
       institution_type: [
         "presidency",
         "parliament",
@@ -4236,6 +4761,18 @@ export const Constants = {
         "public_health",
         "education_ministry",
         "local_councils",
+      ],
+      source_type: [
+        "government_official",
+        "parliamentary",
+        "electoral_commission",
+        "state_media",
+        "independent_media",
+        "social_media_verified",
+        "civil_society",
+        "international_org",
+        "academic",
+        "unknown",
       ],
     },
   },

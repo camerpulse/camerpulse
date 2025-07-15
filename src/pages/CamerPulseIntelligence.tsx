@@ -52,6 +52,7 @@ import { CivicAlertBot } from '@/components/AI/CivicAlertBot';
 import CivicFusionCore from '@/components/AI/CivicFusionCore';
 import GovSyncPanel from '@/components/AI/GovSyncPanel';
 import CivicTrustIndex from '@/components/AI/CivicTrustIndex';
+import RedRoomPanel from '@/components/AI/RedRoomPanel';
 
 interface SentimentData {
   id: string;
