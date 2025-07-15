@@ -39,6 +39,7 @@ import { MultimodalEmotionProcessor } from '@/components/AI/MultimodalEmotionPro
 import CivicWhatsAppBridge from '@/components/AI/CivicWhatsAppBridge';
 import LocalSentimentMapper from '@/components/AI/LocalSentimentMapper';
 import { CivicSimulationCore } from '@/components/AI/CivicSimulationCore';
+import { DisinfoShieldAI } from '@/components/AI/DisinfoShieldAI';
 
 interface SentimentData {
   id: string;
@@ -233,6 +234,7 @@ const CamerPulseIntelligence = () => {
             <TabsTrigger value="regional">Regional Insights</TabsTrigger>
             <TabsTrigger value="local">Local Mapper</TabsTrigger>
             <TabsTrigger value="simulation">Civic Simulation</TabsTrigger>
+            <TabsTrigger value="disinfoShield">DisinfoShield AI</TabsTrigger>
             <TabsTrigger value="diaspora">Diaspora Echo</TabsTrigger>
             <TabsTrigger value="emotions">Emotional Spotlight</TabsTrigger>
             <TabsTrigger value="trending">Trending Topics</TabsTrigger>
@@ -320,6 +322,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="simulation" className="space-y-4">
             <CivicSimulationCore />
+          </TabsContent>
+
+          <TabsContent value="disinfoShield" className="space-y-4">
+            <DisinfoShieldAI />
           </TabsContent>
 
           <TabsContent value="diaspora" className="space-y-4">
