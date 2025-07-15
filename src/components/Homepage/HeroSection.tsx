@@ -10,8 +10,10 @@ import {
   Globe,
   Star,
   Heart,
-  Zap
+  Zap,
+  Brain
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const HeroSection = () => {
   const features = [
@@ -91,17 +93,23 @@ export const HeroSection = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-            <Button size="lg" className="bg-gradient-primary hover:shadow-green transition-all duration-300 px-8 py-3">
-              <Zap className="w-5 h-5 mr-2" />
-              Start Pulsing
+            <Button asChild size="lg" className="bg-gradient-primary hover:shadow-green transition-all duration-300 px-8 py-3">
+              <Link to="/pulse">
+                <Zap className="w-5 h-5 mr-2" />
+                Start Pulsing
+              </Link>
             </Button>
-            <Button variant="outline" size="lg" className="border-primary hover:bg-primary/5 px-8 py-3">
-              <Shield className="w-5 h-5 mr-2" />
-              Join as Vendor
+            <Button asChild variant="outline" size="lg" className="border-primary hover:bg-primary/5 px-8 py-3">
+              <Link to="/camerpulse-intelligence">
+                <Brain className="w-5 h-5 mr-2" />
+                Intelligence Dashboard
+              </Link>
             </Button>
-            <Button variant="ghost" size="lg" className="text-cm-red hover:bg-cm-red/10 px-8 py-3">
-              <Heart className="w-5 h-5 mr-2" />
-              Donate Now
+            <Button asChild variant="ghost" size="lg" className="text-cm-red hover:bg-cm-red/10 px-8 py-3">
+              <Link to="/donate">
+                <Heart className="w-5 h-5 mr-2" />
+                Donate Now
+              </Link>
             </Button>
           </div>
 
