@@ -50,6 +50,13 @@ const CamerPulseIntelligenceSetup = () => {
       configured: false,
       description: 'For enhanced content verification and fact-checking',
       setupUrl: 'https://docs.perplexity.ai/docs/getting-started'
+    },
+    {
+      name: 'FIRECRAWL_API_KEY',
+      required: true,
+      configured: false,
+      description: 'For scraping government websites (since they have no APIs)',
+      setupUrl: 'https://www.firecrawl.dev/app/api-keys'
     }
   ]);
 

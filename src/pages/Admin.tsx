@@ -74,6 +74,7 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import TermOfOfficeValidator from "@/components/AI/TermOfOfficeValidator";
+import GovWebsiteScraper from "@/components/AI/GovWebsiteScraper";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -578,6 +579,12 @@ const Admin = () => {
             <TabsContent value="term-validation">
               <div className="space-y-6">
                 <TermOfOfficeValidator />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="gov-scraper">
+              <div className="space-y-6">
+                <GovWebsiteScraper />
               </div>
             </TabsContent>
 
