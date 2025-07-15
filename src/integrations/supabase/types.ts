@@ -5739,6 +5739,10 @@ export type Database = {
         }
         Returns: string
       }
+      schedule_background_healing: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       set_limit: {
         Args: { "": number }
         Returns: number

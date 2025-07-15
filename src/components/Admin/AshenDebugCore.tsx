@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode, Monitor } from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle, Brain, Eye, Settings, Activity, Zap, FileCode, Monitor, Clock, Shield, Wrench, Target } from "lucide-react";
 import ErrorDashboard from "./ErrorDashboard";
 import HealingHistory from "./HealingHistory";
 import { UIBugLogs } from "./UIBugLogs";
@@ -12,6 +12,8 @@ import { LearningEngine } from "./LearningEngine";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AshenAlertSystem } from "./AshenAlertSystem";
+import { useAshenDebugCore } from "@/hooks/useAshenDebugCore";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ErrorLog {
   id: string;
@@ -53,13 +55,21 @@ export default function AshenDebugCore() {
   const [errorLogs, setErrorLogs] = useState<ErrorLog[]>([]);
   const [behaviorTests, setBehaviorTests] = useState<BehaviorTest[]>([]);
   const [codeAnalysis, setCodeAnalysis] = useState<CodeAnalysis[]>([]);
-  const [autoHealingEnabled, setAutoHealingEnabled] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [systemStatus, setSystemStatus] = useState<'healthy' | 'warning' | 'critical'>('healthy');
+  
+  // Use the enhanced Ashen Debug Core hook
+  const { 
+    config, 
+    status, 
+    isLoading, 
+    updateConfig, 
+    runAnalysis, 
+    runMonitoringService,
+    runBackgroundHealing 
+  } = useAshenDebugCore();
 
   useEffect(() => {
     loadData();
-    loadConfig();
   }, []);
 
   const loadData = async () => {
@@ -89,17 +99,7 @@ export default function AshenDebugCore() {
       if (tests) setBehaviorTests(tests);
       if (analysis) setCodeAnalysis(analysis);
 
-      // Determine system status
-      const criticalErrors = errors?.filter(e => e.severity === 'high' && e.status === 'open').length || 0;
-      const failedTests = tests?.filter(t => t.test_result === 'failed').length || 0;
-
-      if (criticalErrors > 5 || failedTests > 10) {
-        setSystemStatus('critical');
-      } else if (criticalErrors > 0 || failedTests > 5) {
-        setSystemStatus('warning');
-      } else {
-        setSystemStatus('healthy');
-      }
+      // System status is now handled by the hook
 
     } catch (error) {
       console.error('Error loading Ashen Debug data:', error);
@@ -107,53 +107,23 @@ export default function AshenDebugCore() {
     }
   };
 
-  const loadConfig = async () => {
-    try {
-      const { data } = await supabase
-        .from('ashen_monitoring_config')
-        .select('config_value')
-        .eq('config_key', 'auto_healing_enabled')
-        .single();
+  // loadConfig is now handled by the hook
 
-      if (data) {
-        setAutoHealingEnabled(data.config_value === 'true');
-      }
-    } catch (error) {
-      console.error('Error loading config:', error);
-    }
+  const toggleAutoHealing = (enabled: boolean) => {
+    updateConfig('auto_healing_enabled', enabled);
   };
 
-  const toggleAutoHealing = async (enabled: boolean) => {
-    try {
-      await supabase
-        .from('ashen_monitoring_config')
-        .update({ config_value: enabled.toString() })
-        .eq('config_key', 'auto_healing_enabled');
-
-      setAutoHealingEnabled(enabled);
-      toast.success(`Auto-healing ${enabled ? 'enabled' : 'disabled'}`);
-    } catch (error) {
-      console.error('Error updating auto-healing config:', error);
-      toast.error('Failed to update configuration');
-    }
+  const toggleBackgroundHealing = (enabled: boolean) => {
+    updateConfig('background_healing_enabled', enabled);
   };
 
-  const runAnalysis = async (action: 'analyze' | 'fix' | 'test' | 'monitor') => {
+  const runAnalysisLocal = async (action: 'analyze' | 'fix' | 'test' | 'monitor') => {
     setIsAnalyzing(true);
     try {
-      const response = await supabase.functions.invoke('ashen-debug-core', {
-        body: { action, options: { full_scan: true } }
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
-
-      toast.success(`${action} completed successfully`);
-      loadData(); // Refresh data
+      await runAnalysis(action);
+      loadData(); // Refresh local data
     } catch (error) {
       console.error(`Error running ${action}:`, error);
-      toast.error(`Failed to run ${action}`);
     } finally {
       setIsAnalyzing(false);
     }
@@ -227,7 +197,7 @@ export default function AshenDebugCore() {
   };
 
   const getStatusIcon = () => {
-    switch (systemStatus) {
+    switch (status.system_health) {
       case 'healthy': return <CheckCircle className="h-5 w-5 text-green-500" />;
       case 'warning': return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
       case 'critical': return <XCircle className="h-5 w-5 text-red-500" />;
@@ -247,18 +217,137 @@ export default function AshenDebugCore() {
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-2">
             {getStatusIcon()}
-            <span className="font-medium capitalize">{systemStatus}</span>
+            <span className="font-medium capitalize">{status.system_health}</span>
           </div>
           <div className="flex items-center space-x-2">
             <Settings className="h-4 w-4" />
             <span className="text-sm">Auto-Healing</span>
             <Switch
-              checked={autoHealingEnabled}
+              checked={config.auto_healing_enabled}
               onCheckedChange={toggleAutoHealing}
+            />
+          </div>
+          <div className="flex items-center space-x-2">
+            <Clock className="h-4 w-4" />
+            <span className="text-sm">Background</span>
+            <Switch
+              checked={config.background_healing_enabled}
+              onCheckedChange={toggleBackgroundHealing}
             />
           </div>
         </div>
       </div>
+
+      {/* Enhanced System Status Dashboard */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-3">
+              <Target className="h-8 w-8 text-primary" />
+              <div>
+                <p className="text-sm text-muted-foreground">Active Errors</p>
+                <p className="text-2xl font-bold">{status.active_errors}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-3">
+              <Wrench className="h-8 w-8 text-green-500" />
+              <div>
+                <p className="text-sm text-muted-foreground">Fixes Today</p>
+                <p className="text-2xl font-bold">{status.fixes_today}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-3">
+              <Clock className="h-8 w-8 text-orange-500" />
+              <div>
+                <p className="text-sm text-muted-foreground">Healing Queue</p>
+                <p className="text-2xl font-bold">{status.healing_queue_size}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center space-x-3">
+              <AlertTriangle className="h-8 w-8 text-red-500" />
+              <div>
+                <p className="text-sm text-muted-foreground">Emergency (1h)</p>
+                <p className="text-2xl font-bold text-red-500">{status.emergency_fixes_in_last_hour}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Configuration Panel */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Settings className="h-5 w-5" />
+            <span>Ashen Configuration</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Scan Frequency</label>
+              <Select 
+                value={config.scan_interval_hours.toString()} 
+                onValueChange={(value) => updateConfig('scan_interval_hours', parseInt(value))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="6">Every 6 hours</SelectItem>
+                  <SelectItem value="12">Every 12 hours</SelectItem>
+                  <SelectItem value="24">Every 24 hours</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Fix Type Filter</label>
+              <Select 
+                value={config.fix_type_filter} 
+                onValueChange={(value) => updateConfig('fix_type_filter', value)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Issues</SelectItem>
+                  <SelectItem value="layout">Layout Only</SelectItem>
+                  <SelectItem value="backend">Backend Only</SelectItem>
+                  <SelectItem value="security">Security Only</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Confidence Threshold</label>
+              <Select 
+                value={(config.confidence_threshold * 100).toString()} 
+                onValueChange={(value) => updateConfig('confidence_threshold', parseInt(value) / 100)}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="70">70%</SelectItem>
+                  <SelectItem value="85">85%</SelectItem>
+                  <SelectItem value="95">95%</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Quick Actions */}
       <Card>
@@ -271,7 +360,7 @@ export default function AshenDebugCore() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             <Button
-              onClick={() => runAnalysis('analyze')}
+              onClick={() => runAnalysisLocal('analyze')}
               disabled={isAnalyzing}
               className="h-20 flex-col space-y-2"
             >
@@ -297,16 +386,16 @@ export default function AshenDebugCore() {
               <span>UI Inspector</span>
             </Button>
             <Button
-              onClick={() => runAnalysis('fix')}
-              disabled={isAnalyzing || !autoHealingEnabled}
+              onClick={() => runBackgroundHealing()}
+              disabled={isAnalyzing || !config.auto_healing_enabled}
               variant="secondary"
               className="h-20 flex-col space-y-2"
             >
               <Zap className="h-6 w-6" />
-              <span>Auto-Fix</span>
+              <span>Background Heal</span>
             </Button>
             <Button
-              onClick={() => runAnalysis('test')}
+              onClick={() => runAnalysisLocal('test')}
               disabled={isAnalyzing}
               variant="outline"
               className="h-20 flex-col space-y-2"
@@ -315,12 +404,12 @@ export default function AshenDebugCore() {
               <span>Run Tests</span>
             </Button>
             <Button
-              onClick={() => runAnalysis('monitor')}
+              onClick={() => runMonitoringService()}
               disabled={isAnalyzing}
               variant="outline"
               className="h-20 flex-col space-y-2"
             >
-              <Brain className="h-6 w-6" />
+              <Shield className="h-6 w-6" />
               <span>Monitor</span>
             </Button>
           </div>
@@ -376,7 +465,7 @@ export default function AshenDebugCore() {
                   Deep code analysis using Abstract Syntax Tree parsing
                 </p>
                 <Button
-                  onClick={() => runAnalysis('analyze')}
+                  onClick={() => runAnalysisLocal('analyze')}
                   disabled={isAnalyzing}
                   className="space-x-2"
                 >
@@ -477,7 +566,7 @@ export default function AshenDebugCore() {
                   AI-powered human interaction simulation across multiple devices
                 </p>
                 <Button
-                  onClick={() => runAnalysis('test')}
+                  onClick={() => runAnalysisLocal('test')}
                   disabled={isAnalyzing}
                   className="space-x-2"
                 >
@@ -490,40 +579,82 @@ export default function AshenDebugCore() {
         </TabsContent>
 
         <TabsContent value="monitor" className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">System Health</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center space-x-2">
-                  {getStatusIcon()}
-                  <span className="font-medium capitalize">{systemStatus}</span>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Open Issues</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-primary">
-                  {errorLogs.filter(e => e.status === 'open').length}
-                </div>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg">Auto-Healing</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center space-x-2">
-                  <div className={`h-3 w-3 rounded-full ${autoHealingEnabled ? 'bg-green-500' : 'bg-gray-400'}`} />
-                  <span>{autoHealingEnabled ? 'Enabled' : 'Disabled'}</span>
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className={`h-3 w-3 rounded-full ${config.auto_healing_enabled ? 'bg-green-500' : 'bg-gray-400'}`} />
+                  <span>{config.auto_healing_enabled ? 'Enabled' : 'Disabled'}</span>
                 </div>
+                <p className="text-sm text-muted-foreground">
+                  Automatic error detection and repair
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Background Healing</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className={`h-3 w-3 rounded-full ${config.background_healing_enabled ? 'bg-blue-500 animate-pulse' : 'bg-gray-400'}`} />
+                  <span>{config.background_healing_enabled ? 'Active' : 'Inactive'}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Continuous background monitoring every {config.scan_interval_hours}h
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">System Health</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-2 mb-2">
+                  {getStatusIcon()}
+                  <span className="capitalize">{status.system_health}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Overall application status
+                </p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Emergency Status</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center space-x-2 mb-2">
+                  <div className={`h-3 w-3 rounded-full ${status.emergency_fixes_in_last_hour >= config.emergency_alert_threshold ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
+                  <span>{status.emergency_fixes_in_last_hour >= config.emergency_alert_threshold ? 'Alert' : 'Normal'}</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {status.emergency_fixes_in_last_hour}/{config.emergency_alert_threshold} fixes in last hour
+                </p>
               </CardContent>
             </Card>
           </div>
+          
+          {/* Legacy Self-Healer Migration Notice */}
+          <Card className="border-blue-200 bg-blue-50">
+            <CardHeader>
+              <CardTitle className="text-lg text-blue-800">🔄 Self-Healer Migration Complete</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-blue-700 mb-2">
+                ✅ Legacy Self-Healer module has been successfully absorbed into Ashen Debug Core
+              </p>
+              <div className="text-sm text-blue-600 space-y-1">
+                <p>• All historical healing logs migrated to Activity Timeline</p>
+                <p>• Background healing now runs every {config.scan_interval_hours} hours</p>
+                <p>• Emergency alert threshold set to {config.emergency_alert_threshold} fixes per hour</p>
+                <p>• Centralized diagnostics, healing, and monitoring under Ashen</p>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
