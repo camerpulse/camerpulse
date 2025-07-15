@@ -12,6 +12,7 @@ import { LearningEngine } from "./LearningEngine";
 import HumanSimulationEngine from "./HumanSimulationEngine";
 import BrowserEmulationLayer from "./BrowserEmulationLayer";
 import PluginWatchdog from "./PluginWatchdog";
+import SelfLearningEngine from "./SelfLearningEngine";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { AshenAlertSystem } from "./AshenAlertSystem";
@@ -425,13 +426,13 @@ export default function AshenDebugCore() {
           <TabsTrigger value="error-dashboard">Error Dashboard</TabsTrigger>
           <TabsTrigger value="healing-history">Healing History</TabsTrigger>
           <TabsTrigger value="learning-engine">Learning Engine</TabsTrigger>
+          <TabsTrigger value="self-learning">Self-Learning</TabsTrigger>
           <TabsTrigger value="ui-inspector">UI Inspector</TabsTrigger>
           <TabsTrigger value="code-health">Code Health</TabsTrigger>
           <TabsTrigger value="tests">Behavior Tests</TabsTrigger>
           <TabsTrigger value="human-simulation">Human Simulation</TabsTrigger>
           <TabsTrigger value="browser-emulation">Browser Emulation</TabsTrigger>
           <TabsTrigger value="plugin-watchdog">Plugin Watchdog</TabsTrigger>
-          <TabsTrigger value="ux-simulation">UX Simulation</TabsTrigger>
           <TabsTrigger value="alert-system">Alert System</TabsTrigger>
           <TabsTrigger value="monitor">System Monitor</TabsTrigger>
         </TabsList>
@@ -446,6 +447,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="learning-engine" className="space-y-4">
           <LearningEngine />
+        </TabsContent>
+
+        <TabsContent value="self-learning" className="space-y-4">
+          <SelfLearningEngine />
         </TabsContent>
         
         <TabsContent value="ui-inspector" className="space-y-4">
