@@ -159,6 +159,23 @@ export default {
 				'slide-shine': {
 					'0%': { transform: 'translateX(-100%) skewX(12deg)' },
 					'100%': { transform: 'translateX(200%) skewX(12deg)' }
+				},
+				'eternal-glow': {
+					'0%, 100%': { boxShadow: '0 0 20px hsl(45, 95%, 60%, 0.3)' },
+					'50%': { boxShadow: '0 0 40px hsl(45, 95%, 60%, 0.6)' }
+				},
+				'patriotic-pulse': {
+					'0%': { transform: 'scale(1)', opacity: '1' },
+					'50%': { transform: 'scale(1.05)', opacity: '0.9' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
+				'hope-rise': {
+					'0%': { opacity: '0', transform: 'translateY(30px) scale(0.95)' },
+					'100%': { opacity: '1', transform: 'translateY(0) scale(1)' }
+				},
+				'golden-shimmer': {
+					'0%': { backgroundPosition: '-200% center' },
+					'100%': { backgroundPosition: '200% center' }
 				}
 			},
 			animation: {
@@ -169,7 +186,11 @@ export default {
 				'heartbeat-line': 'heartbeat-line 3s infinite',
 				'fade-in-up': 'fade-in-up 0.6s ease-out',
 				'press': 'press 0.1s ease-out',
-				'slide-shine': 'slide-shine 2s infinite'
+				'slide-shine': 'slide-shine 2s infinite',
+				'eternal-glow': 'eternal-glow 3s ease-in-out infinite',
+				'patriotic-pulse': 'patriotic-pulse 2s ease-in-out infinite',
+				'hope-rise': 'hope-rise 0.8s ease-out forwards',
+				'golden-shimmer': 'golden-shimmer 2s infinite'
 			},
 			animationDelay: {
 				'300': '300ms',

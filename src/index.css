@@ -222,6 +222,28 @@
     100% { transform: translateX(200%) skewX(-12deg); }
   }
   
+  /* Lux Aeterna Theme Animations */
+  @keyframes eternal-glow {
+    0%, 100% { box-shadow: 0 0 20px hsl(45, 95%, 60%, 0.3); }
+    50% { box-shadow: 0 0 40px hsl(45, 95%, 60%, 0.6); }
+  }
+  
+  @keyframes patriotic-pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  @keyframes hope-rise {
+    0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  
+  @keyframes golden-shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  
   .animate-heartbeat {
     animation: heartbeat 2s ease-in-out;
   }
@@ -240,6 +262,25 @@
   
   .animate-slide-shine {
     animation: slide-shine 2s ease-in-out infinite;
+  }
+  
+  /* Lux Aeterna Animations */
+  .animate-eternal-glow {
+    animation: eternal-glow 3s ease-in-out infinite;
+  }
+  
+  .animate-patriotic-pulse {
+    animation: patriotic-pulse 2s ease-in-out infinite;
+  }
+  
+  .animate-hope-rise {
+    animation: hope-rise 0.8s ease-out forwards;
+  }
+  
+  .animate-golden-shimmer {
+    background: linear-gradient(90deg, transparent, hsl(45, 95%, 60%, 0.4), transparent);
+    background-size: 200% 100%;
+    animation: golden-shimmer 2s infinite;
   }
   
   .animation-delay-300 {
@@ -320,5 +361,25 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+  }
+  
+  /* Lux Aeterna specific utilities */
+  .text-gradient-patriotic {
+    background: linear-gradient(135deg, hsl(220, 90%, 15%), hsl(45, 95%, 60%), hsl(355, 85%, 45%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .bg-gradient-patriotic {
+    background: linear-gradient(135deg, hsl(220, 90%, 15%), hsl(45, 95%, 60%), hsl(355, 85%, 45%));
+  }
+  
+  .shadow-patriotic {
+    box-shadow: 0 10px 30px -10px hsl(220, 90%, 15%, 0.3), 0 0 40px hsl(45, 95%, 60%, 0.2);
+  }
+  
+  .border-patriotic {
+    border-image: linear-gradient(135deg, hsl(220, 90%, 15%), hsl(45, 95%, 60%), hsl(355, 85%, 45%)) 1;
   }
 }

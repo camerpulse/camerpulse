@@ -82,6 +82,32 @@ const emergence2035Theme: ThemeConfig = {
   }
 }
 
+const luxAeternaTheme: ThemeConfig = {
+  id: 'lux-aeterna',
+  name: 'Lux Aeterna',
+  description: 'Eternal Light theme - A patriotic celebration of hope, unity, and the Cameroon fatherland with golden accents and noble design',
+  isActive: false,
+  colors: {
+    primary: 'hsl(var(--primary))', // Will use CSS variables
+    secondary: 'hsl(var(--secondary))',
+    accent: 'hsl(var(--accent))',
+    background: 'hsl(var(--background))',
+    card: 'hsl(var(--card))',
+    text: 'hsl(var(--foreground))'
+  },
+  fonts: {
+    heading: 'Playfair Display',
+    body: 'Inter'
+  },
+  components: {
+    showCivicBanner: true,
+    showMonumentBackground: true,
+    showHeartbeatLogo: true,
+    showPartyGrid: true,
+    partyGridColumns: { desktop: 5, mobile: 2 }
+  }
+}
+
 interface ThemeContextType {
   currentTheme: ThemeConfig
   availableThemes: ThemeConfig[]
@@ -105,7 +131,7 @@ interface ThemeProviderProps {
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme)
-  const [availableThemes] = useState<ThemeConfig[]>([defaultTheme, emergence2035Theme])
+  const [availableThemes] = useState<ThemeConfig[]>([defaultTheme, emergence2035Theme, luxAeternaTheme])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -174,14 +200,28 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const applyThemeToDocument = (theme: ThemeConfig) => {
     const root = document.documentElement
     
-    // Apply Cameroon flag colors directly to CSS variables for Emergence 2035
+    // Apply theme-specific colors
     if (theme.id === 'emergence-2035') {
+      // Cameroon flag colors for Emergence 2035
       root.style.setProperty('--primary', '12 85% 35%') // Cameroon Red
       root.style.setProperty('--secondary', '145 75% 25%') // Cameroon Green
       root.style.setProperty('--accent', '48 95% 45%') // Cameroon Yellow
       root.style.setProperty('--background', '0 0% 97%')
       root.style.setProperty('--card', '0 0% 99%')
       root.style.setProperty('--foreground', '0 0% 8%')
+    } else if (theme.id === 'lux-aeterna') {
+      // Lux Aeterna - Eternal Light theme with patriotic golden accents
+      root.style.setProperty('--primary', '220 90% 15%') // Deep patriotic blue
+      root.style.setProperty('--secondary', '45 95% 60%') // Golden hope
+      root.style.setProperty('--accent', '355 85% 45%') // Noble red
+      root.style.setProperty('--background', '45 25% 98%') // Warm ivory
+      root.style.setProperty('--card', '45 30% 99%') // Pure white with golden warmth
+      root.style.setProperty('--foreground', '220 90% 8%') // Deep patriotic text
+      
+      // Additional Lux Aeterna specific colors
+      root.style.setProperty('--primary-glow', '45 95% 70%') // Golden glow
+      root.style.setProperty('--shadow-elegant', '0 10px 30px -10px hsl(220 90% 15% / 0.3)')
+      root.style.setProperty('--gradient-patriotic', 'linear-gradient(135deg, hsl(220 90% 15%), hsl(45 95% 60%), hsl(355 85% 45%))')
     } else {
       // Default theme colors
       root.style.setProperty('--primary', '142 69% 40%')
