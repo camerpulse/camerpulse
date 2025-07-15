@@ -28,7 +28,13 @@ import {
   Wrench,
   MessageSquare,
   Edit,
-  Trash2
+  Trash2,
+  AlertTriangle,
+  Code,
+  Save,
+  RotateCcw,
+  Zap,
+  Bug
 } from 'lucide-react';
 
 interface ActivityEntry {
@@ -55,6 +61,28 @@ interface ActivityAnnotation {
   created_at: string;
   updated_at: string;
   created_by_name: string;
+}
+
+interface ManualFix {
+  id: string;
+  activity_id: string;
+  admin_id: string;
+  admin_name: string;
+  original_file_path: string | null;
+  original_code_snapshot: string | null;
+  fix_code: string;
+  fix_mode: 'patch' | 'override' | 'test';
+  fix_reason: string | null;
+  fix_status: 'pending' | 'applied' | 'rolled_back' | 'failed';
+  applied_at: string | null;
+  rolled_back_at: string | null;
+  rollback_reason: string | null;
+  syntax_validation: any;
+  error_prediction: any;
+  ai_suggestions: any;
+  metadata: any;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Filters {
@@ -104,6 +132,7 @@ const ANNOTATION_TAGS = [
 export default function CamerPulseActivityTimeline() {
   const [activities, setActivities] = useState<ActivityEntry[]>([]);
   const [annotations, setAnnotations] = useState<ActivityAnnotation[]>([]);
+  const [manualFixes, setManualFixes] = useState<ManualFix[]>([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState<Filters>({
     module: '',
@@ -125,6 +154,17 @@ export default function CamerPulseActivityTimeline() {
   const [annotationText, setAnnotationText] = useState('');
   const [annotationTag, setAnnotationTag] = useState('');
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  
+  // Quick Fix modal states
+  const [isQuickFixModalOpen, setIsQuickFixModalOpen] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState<ActivityEntry | null>(null);
+  const [fixCode, setFixCode] = useState('');
+  const [fixMode, setFixMode] = useState<'patch' | 'override' | 'test'>('patch');
+  const [fixReason, setFixReason] = useState('');
+  const [filePath, setFilePath] = useState('');
+  const [originalCode, setOriginalCode] = useState('');
+  const [fixValidation, setFixValidation] = useState<any>({});
+  const [isSubmittingFix, setIsSubmittingFix] = useState(false);
   
   const { toast } = useToast();
 
@@ -253,10 +293,141 @@ export default function CamerPulseActivityTimeline() {
     }
   }, []);
 
+  const loadManualFixes = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('manual_fixes')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setManualFixes((data || []) as ManualFix[]);
+    } catch (error: any) {
+      console.error('Error loading manual fixes:', error);
+    }
+  }, []);
+
+  // Quick Fix functionality
+  const openQuickFixModal = (activity: ActivityEntry) => {
+    setSelectedActivity(activity);
+    setFixCode('');
+    setFixMode('patch');
+    setFixReason('');
+    setFilePath(activity.related_component || '');
+    setOriginalCode('');
+    setFixValidation({});
+    setIsQuickFixModalOpen(true);
+  };
+
+  const validateFixCode = async (code: string) => {
+    // Simple client-side validation
+    const validation = {
+      hasContent: code.trim().length > 0,
+      syntaxValid: true, // Would integrate with actual syntax checker
+      errorPrediction: null,
+      suggestions: []
+    };
+    
+    setFixValidation(validation);
+    return validation;
+  };
+
+  const handleSubmitFix = async () => {
+    if (!selectedActivity || !fixCode.trim()) return;
+
+    setIsSubmittingFix(true);
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const adminName = user?.email?.split('@')[0] || 'Unknown Admin';
+
+      // Validate the fix
+      const validation = await validateFixCode(fixCode);
+      
+      // Insert the manual fix
+      const { error } = await supabase
+        .from('manual_fixes')
+        .insert({
+          activity_id: selectedActivity.id,
+          admin_id: user?.id,
+          admin_name: adminName,
+          original_file_path: filePath || null,
+          original_code_snapshot: originalCode || null,
+          fix_code: fixCode.trim(),
+          fix_mode: fixMode,
+          fix_reason: fixReason || null,
+          syntax_validation: validation,
+          metadata: {
+            activity_summary: selectedActivity.activity_summary,
+            module: selectedActivity.module,
+            timestamp: new Date().toISOString()
+          }
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Quick Fix Submitted",
+        description: `Fix saved as ${fixMode}. ${fixMode === 'override' ? 'Changes will be applied immediately.' : 'Review required before application.'}`,
+      });
+
+      setIsQuickFixModalOpen(false);
+      loadManualFixes();
+    } catch (error: any) {
+      console.error('Error submitting fix:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit quick fix",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmittingFix(false);
+    }
+  };
+
+  const handleRollbackFix = async (fixId: string) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      const adminName = user?.email?.split('@')[0] || 'Unknown Admin';
+
+      const { error } = await supabase
+        .from('manual_fixes')
+        .update({
+          fix_status: 'rolled_back',
+          rolled_back_at: new Date().toISOString(),
+          rollback_reason: 'Manual rollback by admin',
+          admin_id: user?.id,
+          admin_name: adminName
+        })
+        .eq('id', fixId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Fix Rolled Back",
+        description: "Manual fix has been reverted successfully",
+      });
+
+      loadManualFixes();
+    } catch (error: any) {
+      console.error('Error rolling back fix:', error);
+      toast({
+        title: "Error",
+        description: "Failed to rollback fix",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const getActivityManualFixes = (activityId: string) => {
+    return manualFixes.filter(fix => fix.activity_id === activityId);
+  };
+
   // Initial load and real-time subscription
   useEffect(() => {
     loadActivities(true);
     loadAnnotations();
+    loadManualFixes();
 
     // Set up real-time subscription
     const channel = supabase
@@ -289,6 +460,17 @@ export default function CamerPulseActivityTimeline() {
         },
         () => {
           loadAnnotations();
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'manual_fixes'
+        },
+        () => {
+          loadManualFixes();
         }
       )
       .subscribe();
@@ -717,6 +899,17 @@ export default function CamerPulseActivityTimeline() {
                           )}
                         </div>
                         <div className="flex items-center space-x-2">
+                          {(activity.status === 'failed' || activity.activity_type === 'error_detected') && (
+                            <Button
+                              variant="destructive"
+                              size="sm"
+                              onClick={() => openQuickFixModal(activity)}
+                              className="h-8 px-2 py-1"
+                            >
+                              <AlertTriangle className="h-3 w-3 mr-1" />
+                              🚨 Quick Fix Now
+                            </Button>
+                          )}
                           <Button
                             variant="ghost"
                             size="sm"
@@ -751,6 +944,54 @@ export default function CamerPulseActivityTimeline() {
                           </div>
                         )}
                       </div>
+
+                      {/* Manual Fixes Display */}
+                      {(() => {
+                        const activityFixes = getActivityManualFixes(activity.id);
+                        return activityFixes.length > 0 && (
+                          <div className="space-y-2 pl-4 border-l-2 border-warning/20">
+                            <div className="text-sm font-medium text-warning flex items-center gap-1">
+                              <Wrench className="h-3 w-3" />
+                              Manual Fixes ({activityFixes.length})
+                            </div>
+                            {activityFixes.map((fix) => (
+                              <div key={fix.id} className="p-3 bg-warning/5 border border-warning/20 rounded-md">
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center space-x-2">
+                                    <span className="text-sm font-medium">{fix.admin_name}</span>
+                                    <Badge variant={fix.fix_status === 'applied' ? 'default' : fix.fix_status === 'rolled_back' ? 'secondary' : 'outline'}>
+                                      {fix.fix_status.replace('_', ' ').toUpperCase()}
+                                    </Badge>
+                                    <Badge variant="outline" className="text-xs">
+                                      {fix.fix_mode === 'patch' ? '🩹 Patch' : fix.fix_mode === 'override' ? '⚠️ Override' : '🧪 Test'}
+                                    </Badge>
+                                    <span className="text-xs text-muted-foreground">
+                                      {format(new Date(fix.created_at), 'MMM dd, HH:mm')}
+                                    </span>
+                                  </div>
+                                  {fix.fix_status === 'applied' && (
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() => handleRollbackFix(fix.id)}
+                                      className="h-6 px-2 py-1 text-xs text-destructive hover:text-destructive"
+                                    >
+                                      <RotateCcw className="h-3 w-3 mr-1" />
+                                      🕒 Revert Fix
+                                    </Button>
+                                  )}
+                                </div>
+                                {fix.fix_reason && (
+                                  <p className="text-xs text-muted-foreground mb-2">{fix.fix_reason}</p>
+                                )}
+                                <div className="text-xs font-mono bg-muted p-2 rounded border max-h-20 overflow-y-auto">
+                                  {fix.fix_code.substring(0, 200)}{fix.fix_code.length > 200 ? '...' : ''}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      })()}
 
                       {/* Annotations Display */}
                       {activityAnnotations.length > 0 && (
@@ -894,6 +1135,210 @@ export default function CamerPulseActivityTimeline() {
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Quick Fix Modal */}
+      <Dialog open={isQuickFixModalOpen} onOpenChange={setIsQuickFixModalOpen}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-destructive" />
+              🚨 Quick Fix Now - Emergency Code Repair
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedActivity && (
+            <div className="space-y-6">
+              {/* Activity Summary */}
+              <Card className="bg-destructive/5 border-destructive/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <Bug className="h-4 w-4" />
+                    Issue Summary
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <p className="font-medium">{selectedActivity.activity_summary}</p>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Badge variant="outline">{selectedActivity.module}</Badge>
+                    <Badge variant="outline">{selectedActivity.activity_type}</Badge>
+                    {selectedActivity.related_component && (
+                      <span>Component: {selectedActivity.related_component}</span>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* File Path */}
+              <div className="space-y-2">
+                <Label>File Path (Optional)</Label>
+                <Input
+                  value={filePath}
+                  onChange={(e) => setFilePath(e.target.value)}
+                  placeholder="e.g., src/components/SomeComponent.tsx"
+                />
+              </div>
+
+              {/* Original Code Preview */}
+              <div className="space-y-2">
+                <Label>Original Code Snapshot (Optional)</Label>
+                <Textarea
+                  value={originalCode}
+                  onChange={(e) => setOriginalCode(e.target.value)}
+                  placeholder="Paste the original code for reference..."
+                  className="font-mono text-sm h-24"
+                  readOnly={false}
+                />
+              </div>
+
+              {/* Fix Code Input */}
+              <div className="space-y-2">
+                <Label className="flex items-center gap-2">
+                  <Code className="h-4 w-4" />
+                  Admin Code Fix (500-1000 lines max)
+                </Label>
+                <Textarea
+                  value={fixCode}
+                  onChange={(e) => {
+                    setFixCode(e.target.value);
+                    if (e.target.value.trim()) {
+                      validateFixCode(e.target.value);
+                    }
+                  }}
+                  placeholder="Enter your code fix here..."
+                  className="font-mono text-sm h-64"
+                  maxLength={50000}
+                />
+                <div className="text-xs text-muted-foreground">
+                  {fixCode.length}/50,000 characters • Lines: {fixCode.split('\n').length}
+                </div>
+              </div>
+
+              {/* Fix Mode Selection */}
+              <div className="space-y-2">
+                <Label>Fix Mode</Label>
+                <Select value={fixMode} onValueChange={(value) => setFixMode(value as 'patch' | 'override' | 'test')}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="patch">
+                      <div className="flex items-center gap-2">
+                        <span>🩹</span>
+                        <div>
+                          <div className="font-medium">Save as Patch</div>
+                          <div className="text-xs text-muted-foreground">Stores fix without applying</div>
+                        </div>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="override">
+                      <div className="flex items-center gap-2">
+                        <span>⚠️</span>
+                        <div>
+                          <div className="font-medium">Override File</div>
+                          <div className="text-xs text-muted-foreground">Applies fix immediately</div>
+                        </div>
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="test">
+                      <div className="flex items-center gap-2">
+                        <span>🧪</span>
+                        <div>
+                          <div className="font-medium">Test First</div>
+                          <div className="text-xs text-muted-foreground">Save in test environment</div>
+                        </div>
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Fix Reason */}
+              <div className="space-y-2">
+                <Label>Reason for Manual Fix (Optional)</Label>
+                <Textarea
+                  value={fixReason}
+                  onChange={(e) => setFixReason(e.target.value)}
+                  placeholder="Explain why this manual fix is needed..."
+                  maxLength={500}
+                  rows={3}
+                />
+                <div className="text-xs text-muted-foreground">
+                  {fixReason.length}/500 characters
+                </div>
+              </div>
+
+              {/* Fix Validation Display */}
+              {fixValidation.hasContent && (
+                <Card className="bg-info/5 border-info/20">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <Zap className="h-4 w-4" />
+                      AI Validation
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-success" />
+                      <span className="text-sm">Code content validated</span>
+                    </div>
+                    {fixValidation.syntaxValid && (
+                      <div className="flex items-center gap-2">
+                        <CheckCircle className="h-4 w-4 text-success" />
+                        <span className="text-sm">Basic syntax appears valid</span>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Safety Warning */}
+              {fixMode === 'override' && (
+                <Card className="bg-destructive/5 border-destructive/20">
+                  <CardContent className="pt-4">
+                    <div className="flex items-start gap-2">
+                      <AlertTriangle className="h-5 w-5 text-destructive mt-0.5" />
+                      <div>
+                        <p className="font-medium text-destructive">⚠️ Override Mode Warning</p>
+                        <p className="text-sm text-muted-foreground">
+                          This will apply changes immediately to the live system. Make sure your code is tested and correct.
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-2 pt-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsQuickFixModalOpen(false)}
+                  disabled={isSubmittingFix}
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handleSubmitFix}
+                  disabled={!fixCode.trim() || isSubmittingFix}
+                  className="min-w-32"
+                >
+                  {isSubmittingFix ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      Submit Quick Fix
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>

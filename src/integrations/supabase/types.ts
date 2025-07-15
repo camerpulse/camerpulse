@@ -2918,6 +2918,124 @@ export type Database = {
         }
         Relationships: []
       }
+      manual_fix_history: {
+        Row: {
+          action_type: string
+          admin_id: string
+          admin_name: string
+          change_details: Json | null
+          id: string
+          manual_fix_id: string
+          new_status: string | null
+          previous_status: string | null
+          timestamp: string
+        }
+        Insert: {
+          action_type: string
+          admin_id: string
+          admin_name: string
+          change_details?: Json | null
+          id?: string
+          manual_fix_id: string
+          new_status?: string | null
+          previous_status?: string | null
+          timestamp?: string
+        }
+        Update: {
+          action_type?: string
+          admin_id?: string
+          admin_name?: string
+          change_details?: Json | null
+          id?: string
+          manual_fix_id?: string
+          new_status?: string | null
+          previous_status?: string | null
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manual_fix_history_manual_fix_id_fkey"
+            columns: ["manual_fix_id"]
+            isOneToOne: false
+            referencedRelation: "manual_fixes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      manual_fixes: {
+        Row: {
+          activity_id: string
+          admin_id: string
+          admin_name: string
+          ai_suggestions: Json | null
+          applied_at: string | null
+          created_at: string
+          error_prediction: Json | null
+          fix_code: string
+          fix_mode: string
+          fix_reason: string | null
+          fix_status: string
+          id: string
+          metadata: Json | null
+          original_code_snapshot: string | null
+          original_file_path: string | null
+          rollback_reason: string | null
+          rolled_back_at: string | null
+          syntax_validation: Json | null
+          updated_at: string
+        }
+        Insert: {
+          activity_id: string
+          admin_id: string
+          admin_name: string
+          ai_suggestions?: Json | null
+          applied_at?: string | null
+          created_at?: string
+          error_prediction?: Json | null
+          fix_code: string
+          fix_mode: string
+          fix_reason?: string | null
+          fix_status?: string
+          id?: string
+          metadata?: Json | null
+          original_code_snapshot?: string | null
+          original_file_path?: string | null
+          rollback_reason?: string | null
+          rolled_back_at?: string | null
+          syntax_validation?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          activity_id?: string
+          admin_id?: string
+          admin_name?: string
+          ai_suggestions?: Json | null
+          applied_at?: string | null
+          created_at?: string
+          error_prediction?: Json | null
+          fix_code?: string
+          fix_mode?: string
+          fix_reason?: string | null
+          fix_status?: string
+          id?: string
+          metadata?: Json | null
+          original_code_snapshot?: string | null
+          original_file_path?: string | null
+          rollback_reason?: string | null
+          rolled_back_at?: string | null
+          syntax_validation?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manual_fixes_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "camerpulse_activity_timeline"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       marketplace_products: {
         Row: {
           category: string | null
