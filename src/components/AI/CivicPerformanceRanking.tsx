@@ -179,8 +179,22 @@ export const CivicPerformanceRanking: React.FC = () => {
   });
 
   const handleExportRankings = () => {
-    // TODO: Implement CSV export functionality
-    console.log('Exporting rankings...');
+    if (!categoryWinners) return;
+    
+    // Export rankings as CSV
+    const csvContent = "data:text/csv;charset=utf-8," + 
+      "Rank,Name,Category,Rating,Civic Score\n" +
+      categoryWinners.map((winner, index) => 
+        `${index + 1},${winner.official.name},${winner.category},${winner.official.average_rating?.toFixed(1) || '0.0'},${winner.official.civic_score}`
+      ).join("\n");
+    
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "civic_performance_rankings.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const refreshData = () => {

@@ -72,7 +72,7 @@ const Polls = () => {
             .from('profiles')
             .select('username, display_name, avatar_url')
             .eq('user_id', poll.creator_id)
-            .single();
+            .maybeSingle();
           
           // Ensure options is an array of strings
           const pollOptions = Array.isArray(poll.options) 
@@ -100,7 +100,7 @@ const Polls = () => {
               .select('option_index')
               .eq('poll_id', poll.id)
               .eq('user_id', user.id)
-              .single();
+              .maybeSingle();
 
             userVote = userVoteData?.option_index;
           }
@@ -152,7 +152,7 @@ const Polls = () => {
         .select('id')
         .eq('poll_id', pollId)
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (existingVote) {
         toast({

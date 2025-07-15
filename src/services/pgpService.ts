@@ -317,7 +317,7 @@ export class PGPService {
         .from('user_pgp_keys')
         .select('public_key')
         .eq('id', keyId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data.public_key;

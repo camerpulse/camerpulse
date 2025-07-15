@@ -76,7 +76,7 @@ export const UserProfile: React.FC<UserProfileProps> = ({ userId, isOpen, onClos
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       setProfile(data);

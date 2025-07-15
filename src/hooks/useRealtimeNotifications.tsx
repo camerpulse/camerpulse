@@ -81,7 +81,7 @@ export const useRealtimeNotifications = () => {
             .from('polls')
             .select('creator_id, title')
             .eq('id', response.poll_id)
-            .single();
+            .maybeSingle();
           
           if (poll?.creator_id === user.id) {
             showNotification(
