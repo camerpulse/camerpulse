@@ -392,6 +392,62 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_deduplication_analysis: {
+        Row: {
+          analysis_type: string
+          created_at: string
+          duplicate_items: Json | null
+          id: string
+          item_name: string
+          item_path: string | null
+          prompt_trace_id: string | null
+          recommendation: string | null
+          recommendation_reasoning: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          similarity_percentage: number | null
+          status: string | null
+        }
+        Insert: {
+          analysis_type: string
+          created_at?: string
+          duplicate_items?: Json | null
+          id?: string
+          item_name: string
+          item_path?: string | null
+          prompt_trace_id?: string | null
+          recommendation?: string | null
+          recommendation_reasoning?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          similarity_percentage?: number | null
+          status?: string | null
+        }
+        Update: {
+          analysis_type?: string
+          created_at?: string
+          duplicate_items?: Json | null
+          id?: string
+          item_name?: string
+          item_path?: string | null
+          prompt_trace_id?: string | null
+          recommendation?: string | null
+          recommendation_reasoning?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          similarity_percentage?: number | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_deduplication_analysis_prompt_trace_id_fkey"
+            columns: ["prompt_trace_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_prompt_trace_index"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_error_logs: {
         Row: {
           component_path: string
@@ -692,6 +748,210 @@ export type Database = {
           success_rate?: number | null
           updated_at?: string
           usage_count?: number | null
+        }
+        Relationships: []
+      }
+      ashen_prompt_chains: {
+        Row: {
+          chain_depth: number | null
+          child_prompt_id: string
+          created_at: string
+          id: string
+          parent_prompt_id: string
+          relationship_type: string
+        }
+        Insert: {
+          chain_depth?: number | null
+          child_prompt_id: string
+          created_at?: string
+          id?: string
+          parent_prompt_id: string
+          relationship_type: string
+        }
+        Update: {
+          chain_depth?: number | null
+          child_prompt_id?: string
+          created_at?: string
+          id?: string
+          parent_prompt_id?: string
+          relationship_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_prompt_chains_child_prompt_id_fkey"
+            columns: ["child_prompt_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_prompt_trace_index"
+            referencedColumns: ["prompt_id"]
+          },
+          {
+            foreignKeyName: "ashen_prompt_chains_parent_prompt_id_fkey"
+            columns: ["parent_prompt_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_prompt_trace_index"
+            referencedColumns: ["prompt_id"]
+          },
+        ]
+      }
+      ashen_prompt_knowledge_base: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          success_rate: number | null
+          tags: string[] | null
+          template_category: string
+          template_content: string
+          template_description: string | null
+          template_name: string
+          updated_at: string
+          usage_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          success_rate?: number | null
+          tags?: string[] | null
+          template_category: string
+          template_content: string
+          template_description?: string | null
+          template_name: string
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          success_rate?: number | null
+          tags?: string[] | null
+          template_category?: string
+          template_content?: string
+          template_description?: string | null
+          template_name?: string
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
+      ashen_prompt_similarity: {
+        Row: {
+          common_keywords: string[] | null
+          comparison_result: string | null
+          created_at: string
+          diff_analysis: Json | null
+          id: string
+          similarity_score: number
+          source_prompt_id: string
+          target_prompt_id: string
+        }
+        Insert: {
+          common_keywords?: string[] | null
+          comparison_result?: string | null
+          created_at?: string
+          diff_analysis?: Json | null
+          id?: string
+          similarity_score: number
+          source_prompt_id: string
+          target_prompt_id: string
+        }
+        Update: {
+          common_keywords?: string[] | null
+          comparison_result?: string | null
+          created_at?: string
+          diff_analysis?: Json | null
+          id?: string
+          similarity_score?: number
+          source_prompt_id?: string
+          target_prompt_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_prompt_similarity_source_prompt_id_fkey"
+            columns: ["source_prompt_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_prompt_trace_index"
+            referencedColumns: ["prompt_id"]
+          },
+          {
+            foreignKeyName: "ashen_prompt_similarity_target_prompt_id_fkey"
+            columns: ["target_prompt_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_prompt_trace_index"
+            referencedColumns: ["prompt_id"]
+          },
+        ]
+      }
+      ashen_prompt_trace_index: {
+        Row: {
+          created_at: string
+          execution_date: string
+          files_created: string[] | null
+          files_modified: string[] | null
+          functions_created: string[] | null
+          id: string
+          metadata: Json | null
+          modules_affected: string[] | null
+          outcome: string
+          outcome_details: string | null
+          prompt_author: string | null
+          prompt_content: string
+          prompt_id: string
+          prompt_phase: string | null
+          prompt_title: string
+          related_prompts: string[] | null
+          routes_created: string[] | null
+          similarity_score: number | null
+          tables_created: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          execution_date?: string
+          files_created?: string[] | null
+          files_modified?: string[] | null
+          functions_created?: string[] | null
+          id?: string
+          metadata?: Json | null
+          modules_affected?: string[] | null
+          outcome?: string
+          outcome_details?: string | null
+          prompt_author?: string | null
+          prompt_content: string
+          prompt_id: string
+          prompt_phase?: string | null
+          prompt_title: string
+          related_prompts?: string[] | null
+          routes_created?: string[] | null
+          similarity_score?: number | null
+          tables_created?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          execution_date?: string
+          files_created?: string[] | null
+          files_modified?: string[] | null
+          functions_created?: string[] | null
+          id?: string
+          metadata?: Json | null
+          modules_affected?: string[] | null
+          outcome?: string
+          outcome_details?: string | null
+          prompt_author?: string | null
+          prompt_content?: string
+          prompt_id?: string
+          prompt_phase?: string | null
+          prompt_title?: string
+          related_prompts?: string[] | null
+          routes_created?: string[] | null
+          similarity_score?: number | null
+          tables_created?: string[] | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -6551,12 +6811,20 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analyze_prompt_before_execution: {
+        Args: { p_prompt_content: string; p_prompt_title?: string }
+        Returns: Json
+      }
       calculate_fix_trust_score: {
         Args: { p_fix_type: string }
         Returns: number
       }
       calculate_plugin_risk_score: {
         Args: { p_plugin_id: string }
+        Returns: number
+      }
+      calculate_prompt_similarity: {
+        Args: { p_source_content: string; p_target_content: string }
         Returns: number
       }
       detect_official_changes: {
@@ -6615,6 +6883,16 @@ export type Database = {
           p_original_code: string
           p_fixed_code: string
           p_problem_description: string
+        }
+        Returns: string
+      }
+      log_prompt_execution: {
+        Args: {
+          p_prompt_content: string
+          p_prompt_title: string
+          p_prompt_phase?: string
+          p_modules_affected?: string[]
+          p_outcome?: string
         }
         Returns: string
       }
