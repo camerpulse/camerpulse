@@ -25,6 +25,7 @@ import { useAshenDebugCore } from "@/hooks/useAshenDebugCore";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CodeDiffVisualizer } from './CodeDiffVisualizer';
 import { NaturalLanguagePluginBuilder } from './NaturalLanguagePluginBuilder';
+import { EmergencyRevertSystem } from './EmergencyRevertSystem';
 
 interface ErrorLog {
   id: string;
@@ -441,7 +442,7 @@ export default function AshenDebugCore() {
           <TabsTrigger value="plugin-watchdog" className="text-xs">Plugin Watchdog</TabsTrigger>
           <TabsTrigger value="ui-inspector" className="text-xs">UI Inspector</TabsTrigger>
           <TabsTrigger value="code-diff" className="text-xs">Code Diff</TabsTrigger>
-          <TabsTrigger value="plugin-builder" className="text-xs">Plugin Builder</TabsTrigger>
+          <TabsTrigger value="emergency-revert" className="text-xs">Emergency Revert</TabsTrigger>
         </TabsList>
 
         <TabsContent value="error-dashboard" className="space-y-4">
@@ -497,6 +498,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="plugin-builder" className="space-y-4">
           <NaturalLanguagePluginBuilder />
+        </TabsContent>
+
+        <TabsContent value="emergency-revert" className="space-y-4">
+          <EmergencyRevertSystem />
         </TabsContent>
         <TabsContent value="code-health" className="space-y-4">
           <Card>

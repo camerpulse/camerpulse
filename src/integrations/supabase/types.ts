@@ -1142,6 +1142,81 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_restore_operations: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          current_step: string | null
+          errors_encountered: Json | null
+          files_restored: number | null
+          id: string
+          initiated_by: string | null
+          pre_restore_snapshot_id: string | null
+          progress_percentage: number | null
+          restore_scope: string[] | null
+          restore_type: string
+          rollback_available: boolean | null
+          safety_checks_passed: boolean | null
+          snapshot_id: string
+          started_at: string | null
+          status: string
+          tables_restored: number | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          current_step?: string | null
+          errors_encountered?: Json | null
+          files_restored?: number | null
+          id?: string
+          initiated_by?: string | null
+          pre_restore_snapshot_id?: string | null
+          progress_percentage?: number | null
+          restore_scope?: string[] | null
+          restore_type?: string
+          rollback_available?: boolean | null
+          safety_checks_passed?: boolean | null
+          snapshot_id: string
+          started_at?: string | null
+          status?: string
+          tables_restored?: number | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          current_step?: string | null
+          errors_encountered?: Json | null
+          files_restored?: number | null
+          id?: string
+          initiated_by?: string | null
+          pre_restore_snapshot_id?: string | null
+          progress_percentage?: number | null
+          restore_scope?: string[] | null
+          restore_type?: string
+          rollback_available?: boolean | null
+          safety_checks_passed?: boolean | null
+          snapshot_id?: string
+          started_at?: string | null
+          status?: string
+          tables_restored?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_restore_operations_pre_restore_snapshot_id_fkey"
+            columns: ["pre_restore_snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_system_snapshots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ashen_restore_operations_snapshot_id_fkey"
+            columns: ["snapshot_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_system_snapshots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_security_breaches: {
         Row: {
           breach_name: string
@@ -1572,6 +1647,129 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_snapshot_comparisons: {
+        Row: {
+          change_severity: string | null
+          comparison_summary: string | null
+          config_changes: Json | null
+          created_at: string
+          files_added: Json | null
+          files_deleted: Json | null
+          files_modified: Json | null
+          id: string
+          risk_assessment: Json | null
+          snapshot_a_id: string
+          snapshot_b_id: string
+          tables_added: Json | null
+          tables_deleted: Json | null
+          tables_modified: Json | null
+          total_changes: number | null
+        }
+        Insert: {
+          change_severity?: string | null
+          comparison_summary?: string | null
+          config_changes?: Json | null
+          created_at?: string
+          files_added?: Json | null
+          files_deleted?: Json | null
+          files_modified?: Json | null
+          id?: string
+          risk_assessment?: Json | null
+          snapshot_a_id: string
+          snapshot_b_id: string
+          tables_added?: Json | null
+          tables_deleted?: Json | null
+          tables_modified?: Json | null
+          total_changes?: number | null
+        }
+        Update: {
+          change_severity?: string | null
+          comparison_summary?: string | null
+          config_changes?: Json | null
+          created_at?: string
+          files_added?: Json | null
+          files_deleted?: Json | null
+          files_modified?: Json | null
+          id?: string
+          risk_assessment?: Json | null
+          snapshot_a_id?: string
+          snapshot_b_id?: string
+          tables_added?: Json | null
+          tables_deleted?: Json | null
+          tables_modified?: Json | null
+          total_changes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_snapshot_comparisons_snapshot_a_id_fkey"
+            columns: ["snapshot_a_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_system_snapshots"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ashen_snapshot_comparisons_snapshot_b_id_fkey"
+            columns: ["snapshot_b_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_system_snapshots"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_snapshot_retention_config: {
+        Row: {
+          auto_cleanup_enabled: boolean | null
+          auto_rollback_on_critical_error: boolean | null
+          auto_snapshot_enabled: boolean | null
+          auto_snapshot_frequency: string | null
+          auto_snapshot_time: string | null
+          created_at: string
+          emergency_restore_enabled: boolean | null
+          id: string
+          is_active: boolean | null
+          max_age_days: number | null
+          max_snapshots: number | null
+          policy_name: string
+          pre_patch_snapshots: boolean | null
+          pre_plugin_snapshots: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          auto_cleanup_enabled?: boolean | null
+          auto_rollback_on_critical_error?: boolean | null
+          auto_snapshot_enabled?: boolean | null
+          auto_snapshot_frequency?: string | null
+          auto_snapshot_time?: string | null
+          created_at?: string
+          emergency_restore_enabled?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          max_age_days?: number | null
+          max_snapshots?: number | null
+          policy_name: string
+          pre_patch_snapshots?: boolean | null
+          pre_plugin_snapshots?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          auto_cleanup_enabled?: boolean | null
+          auto_rollback_on_critical_error?: boolean | null
+          auto_snapshot_enabled?: boolean | null
+          auto_snapshot_frequency?: string | null
+          auto_snapshot_time?: string | null
+          created_at?: string
+          emergency_restore_enabled?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          max_age_days?: number | null
+          max_snapshots?: number | null
+          policy_name?: string
+          pre_patch_snapshots?: boolean | null
+          pre_plugin_snapshots?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ashen_style_patterns: {
         Row: {
           confidence_score: number | null
@@ -1608,6 +1806,78 @@ export type Database = {
           pattern_example?: Json | null
           updated_at?: string
           usage_frequency?: number | null
+        }
+        Relationships: []
+      }
+      ashen_system_snapshots: {
+        Row: {
+          compression_ratio: number | null
+          configuration_data: Json | null
+          created_at: string
+          created_by: string | null
+          creation_completed_at: string | null
+          creation_started_at: string | null
+          database_schema: Json | null
+          description: string | null
+          file_structure: Json | null
+          id: string
+          metadata: Json | null
+          parent_snapshot_id: string | null
+          snapshot_name: string
+          snapshot_type: string
+          status: string
+          tags: string[] | null
+          total_files: number | null
+          total_size_mb: number | null
+          triggered_by_patch_id: string | null
+          triggered_by_plugin_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          compression_ratio?: number | null
+          configuration_data?: Json | null
+          created_at?: string
+          created_by?: string | null
+          creation_completed_at?: string | null
+          creation_started_at?: string | null
+          database_schema?: Json | null
+          description?: string | null
+          file_structure?: Json | null
+          id?: string
+          metadata?: Json | null
+          parent_snapshot_id?: string | null
+          snapshot_name: string
+          snapshot_type?: string
+          status?: string
+          tags?: string[] | null
+          total_files?: number | null
+          total_size_mb?: number | null
+          triggered_by_patch_id?: string | null
+          triggered_by_plugin_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          compression_ratio?: number | null
+          configuration_data?: Json | null
+          created_at?: string
+          created_by?: string | null
+          creation_completed_at?: string | null
+          creation_started_at?: string | null
+          database_schema?: Json | null
+          description?: string | null
+          file_structure?: Json | null
+          id?: string
+          metadata?: Json | null
+          parent_snapshot_id?: string | null
+          snapshot_name?: string
+          snapshot_type?: string
+          status?: string
+          tags?: string[] | null
+          total_files?: number | null
+          total_size_mb?: number | null
+          triggered_by_patch_id?: string | null
+          triggered_by_plugin_id?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -7252,6 +7522,19 @@ export type Database = {
       calculate_prompt_similarity: {
         Args: { p_source_content: string; p_target_content: string }
         Returns: number
+      }
+      compare_snapshots: {
+        Args: { p_snapshot_a_id: string; p_snapshot_b_id: string }
+        Returns: string
+      }
+      create_system_snapshot: {
+        Args: {
+          p_snapshot_name: string
+          p_snapshot_type?: string
+          p_description?: string
+          p_tags?: string[]
+        }
+        Returns: string
       }
       detect_official_changes: {
         Args: Record<PropertyKey, never>
