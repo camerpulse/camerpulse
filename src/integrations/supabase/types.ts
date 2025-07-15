@@ -2158,6 +2158,54 @@ export type Database = {
         }
         Relationships: []
       }
+      gov_change_monitoring_config: {
+        Row: {
+          base_url: string
+          check_frequency_hours: number | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          last_check_at: string | null
+          last_successful_check_at: string | null
+          monitoring_rules: Json | null
+          source_name: string
+          source_type: string
+          successful_checks: number | null
+          total_checks: number | null
+          updated_at: string
+        }
+        Insert: {
+          base_url: string
+          check_frequency_hours?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_check_at?: string | null
+          last_successful_check_at?: string | null
+          monitoring_rules?: Json | null
+          source_name: string
+          source_type: string
+          successful_checks?: number | null
+          total_checks?: number | null
+          updated_at?: string
+        }
+        Update: {
+          base_url?: string
+          check_frequency_hours?: number | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          last_check_at?: string | null
+          last_successful_check_at?: string | null
+          monitoring_rules?: Json | null
+          source_name?: string
+          source_type?: string
+          successful_checks?: number | null
+          total_checks?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       government_agencies: {
         Row: {
           agency_code: string
@@ -2529,6 +2577,65 @@ export type Database = {
           title?: string
         }
         Relationships: []
+      }
+      official_change_log: {
+        Row: {
+          admin_notes: string | null
+          admin_reviewed: boolean | null
+          change_description: string | null
+          change_type: string
+          created_at: string
+          detected_at: string
+          id: string
+          new_data: Json | null
+          official_id: string | null
+          official_name: string
+          previous_data: Json | null
+          processed: boolean | null
+          source_type: string
+          source_url: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          admin_reviewed?: boolean | null
+          change_description?: string | null
+          change_type: string
+          created_at?: string
+          detected_at?: string
+          id?: string
+          new_data?: Json | null
+          official_id?: string | null
+          official_name: string
+          previous_data?: Json | null
+          processed?: boolean | null
+          source_type: string
+          source_url?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          admin_reviewed?: boolean | null
+          change_description?: string | null
+          change_type?: string
+          created_at?: string
+          detected_at?: string
+          id?: string
+          new_data?: Json | null
+          official_id?: string | null
+          official_name?: string
+          previous_data?: Json | null
+          processed?: boolean | null
+          source_type?: string
+          source_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "official_change_log_official_id_fkey"
+            columns: ["official_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       orders: {
         Row: {
@@ -4757,6 +4864,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      detect_official_changes: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          change_detected: boolean
+          changes_count: number
+        }[]
+      }
       generate_vendor_id: {
         Args: Record<PropertyKey, never>
         Returns: string
