@@ -2,6 +2,8 @@ import { ReactNode } from 'react';
 import { ThemeAwareHeader } from './ThemeAwareHeader';
 import { MobileNavigation } from './MobileNavigation';
 import { PWAInstallPrompt } from './PWAInstallPrompt';
+import { LuxAeternaParticles } from '@/components/Theme/LuxAeternaParticles';
+import { LuxAeternaEffects } from '@/components/Theme/LuxAeternaEffects';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -10,15 +12,18 @@ interface AppLayoutProps {
 
 export const AppLayout = ({ children, showMobileNav = true }: AppLayoutProps) => {
   return (
-    <div className="min-h-screen bg-background">
-      <ThemeAwareHeader />
-      
-      <main className="flex-1">
-        {children}
-      </main>
-      
-      {showMobileNav && <MobileNavigation />}
-      <PWAInstallPrompt />
-    </div>
+    <LuxAeternaEffects>
+      <div className="min-h-screen bg-background">
+        <LuxAeternaParticles />
+        <ThemeAwareHeader />
+        
+        <main className="flex-1 relative z-10">
+          {children}
+        </main>
+        
+        {showMobileNav && <MobileNavigation />}
+        <PWAInstallPrompt />
+      </div>
+    </LuxAeternaEffects>
   );
 };
