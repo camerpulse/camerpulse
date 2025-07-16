@@ -140,3 +140,9 @@ verify_jwt = false
 
 [functions.autonomous-refresh-engine]
 verify_jwt = false
+
+[functions.ashen-auto-sync-engine]
+verify_jwt = false
+
+[functions.test-dummy-module]
+verify_jwt = false
