@@ -121,8 +121,34 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
 
       toast({
         title: "Poll created!",
-        description: "Your poll has been published and is now live"
+        description: "Your poll has been published and is now live! +50 points earned"
       });
+      
+      // Award points for creating poll
+      if (user) {
+        try {
+          // We need to get the poll ID from the insert result
+          const { data: pollData } = await supabase
+            .from('polls')
+            .select('id')
+            .eq('creator_id', user.id)
+            .eq('title', formData.title.trim())
+            .order('created_at', { ascending: false })
+            .limit(1)
+            .single();
+            
+          if (pollData) {
+            await supabase.rpc('award_points', {
+              p_user_id: user.id,
+              p_activity_type: 'poll_created',
+              p_activity_reference_id: pollData.id,
+              p_description: `Created poll: ${formData.title.trim()}`
+            });
+          }
+        } catch (error) {
+          console.error('Error awarding points:', error);
+        }
+      }
 
       // Reset form
       setFormData({

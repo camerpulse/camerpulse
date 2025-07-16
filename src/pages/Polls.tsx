@@ -184,8 +184,22 @@ const Polls = () => {
 
       toast({
         title: "Vote submitted!",
-        description: "Thank you for participating in the poll"
+        description: "Thank you for participating in the poll! +10 points earned"
       });
+      
+      // Award points for voting
+      if (user) {
+        try {
+          await supabase.rpc('award_points', {
+            p_user_id: user.id,
+            p_activity_type: 'poll_voted',
+            p_activity_reference_id: pollId,
+            p_description: `Voted in poll: ${polls.find(p => p.id === pollId)?.title || 'Unknown poll'}`
+          });
+        } catch (error) {
+          console.error('Error awarding points:', error);
+        }
+      }
 
       // Refresh polls to show updated results
       fetchPolls();

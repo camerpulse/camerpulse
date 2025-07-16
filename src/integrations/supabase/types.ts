@@ -7172,6 +7172,45 @@ export type Database = {
         }
         Relationships: []
       }
+      digital_badges: {
+        Row: {
+          badge_type: string
+          created_at: string | null
+          description: string | null
+          icon_url: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          points_cost: number | null
+          rarity: string | null
+          unlock_criteria: Json | null
+        }
+        Insert: {
+          badge_type?: string
+          created_at?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          points_cost?: number | null
+          rarity?: string | null
+          unlock_criteria?: Json | null
+        }
+        Update: {
+          badge_type?: string
+          created_at?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          points_cost?: number | null
+          rarity?: string | null
+          unlock_criteria?: Json | null
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount: number
@@ -10539,6 +10578,39 @@ export type Database = {
           },
         ]
       }
+      points_transactions: {
+        Row: {
+          activity_reference_id: string | null
+          activity_type: string
+          created_at: string | null
+          description: string | null
+          id: string
+          points_amount: number
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          activity_reference_id?: string | null
+          activity_type: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          points_amount: number
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          activity_reference_id?: string | null
+          activity_type?: string
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          points_amount?: number
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       policy_tracker: {
         Row: {
           abstaining_parties: string[] | null
@@ -12877,6 +12949,38 @@ export type Database = {
         }
         Relationships: []
       }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string | null
+          id: string
+          is_equipped: boolean | null
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string | null
+          id?: string
+          is_equipped?: boolean | null
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string | null
+          id?: string
+          is_equipped?: boolean | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "digital_badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_devices: {
         Row: {
           created_at: string | null
@@ -12945,6 +13049,36 @@ export type Database = {
           key_name?: string
           private_key_encrypted?: string
           public_key?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_points: {
+        Row: {
+          created_at: string | null
+          id: string
+          points_balance: number
+          total_earned: number
+          total_spent: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          points_balance?: number
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          points_balance?: number
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
@@ -13097,6 +13231,66 @@ export type Database = {
           },
         ]
       }
+      wallet_credits: {
+        Row: {
+          created_at: string | null
+          credit_balance: number
+          id: string
+          total_earned: number
+          total_spent: number
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          credit_balance?: number
+          id?: string
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          credit_balance?: number
+          id?: string
+          total_earned?: number
+          total_spent?: number
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string | null
+          id: string
+          reference_id: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       election_forecast_summary: {
@@ -13170,6 +13364,15 @@ export type Database = {
         }
         Returns: string
       }
+      award_points: {
+        Args: {
+          p_user_id: string
+          p_activity_type: string
+          p_activity_reference_id?: string
+          p_description?: string
+        }
+        Returns: number
+      }
       calculate_agent_performance: {
         Args: { p_agent_id: string; p_date?: string }
         Returns: Json
@@ -13207,6 +13410,10 @@ export type Database = {
       compare_snapshots: {
         Args: { p_snapshot_a_id: string; p_snapshot_b_id: string }
         Returns: string
+      }
+      convert_points_to_credit: {
+        Args: { p_user_id: string; p_points_amount: number }
+        Returns: Json
       }
       create_media_alert: {
         Args: {
@@ -13422,6 +13629,10 @@ export type Database = {
           p_result_data?: Json
         }
         Returns: string
+      }
+      purchase_badge: {
+        Args: { p_user_id: string; p_badge_id: string }
+        Returns: Json
       }
       register_new_feature: {
         Args: {
