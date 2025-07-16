@@ -195,6 +195,9 @@ export const Header = () => {
                 <Link to="/companies" onClick={() => setMobileMenuOpen(false)}>Companies</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/billionaires" onClick={() => setMobileMenuOpen(false)}>👑 Billionaires</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/news" onClick={() => setMobileMenuOpen(false)}>News</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
