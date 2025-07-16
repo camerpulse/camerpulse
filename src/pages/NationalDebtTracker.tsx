@@ -293,19 +293,19 @@ export default function NationalDebtTracker() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-      <div className="max-w-7xl mx-auto p-4 space-y-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="text-center space-y-4">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
+        <div className="text-center space-y-3 sm:space-y-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground leading-tight">
             🇨🇲 Cameroon National Debt Intelligence
           </h1>
-          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-3xl mx-auto px-2">
             Real-time monitoring and analysis of Cameroon's national debt. Empowering citizens with transparent, 
             AI-driven insights into the country's financial health and fiscal responsibility.
           </p>
-          <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
-            <span>Last Updated: {lastUpdated.toLocaleString()}</span>
-            <Badge variant="outline" className="text-green-600 border-green-600">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+            <span className="truncate">Last Updated: {lastUpdated.toLocaleString()}</span>
+            <Badge variant="outline" className="text-green-600 border-green-600 shrink-0">
               <Zap className="h-3 w-3 mr-1" />
               Live Data
             </Badge>
@@ -326,44 +326,58 @@ export default function NationalDebtTracker() {
           </Alert>
         ))}
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="overview">📊 Overview</TabsTrigger>
-            <TabsTrigger value="history">📈 History</TabsTrigger>
-            <TabsTrigger value="lenders">🌍 Lenders</TabsTrigger>
-            <TabsTrigger value="analysis">🧠 AI Analysis</TabsTrigger>
-            <TabsTrigger value="education">📚 Learn</TabsTrigger>
-            <TabsTrigger value="regional">🗺️ Regional</TabsTrigger>
-          </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
+          <div className="overflow-x-auto">
+            <TabsList className="grid w-full grid-cols-6 min-w-[600px] sm:min-w-0 h-auto p-1">
+              <TabsTrigger value="overview" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+                <span className="hidden sm:inline">📊 </span>Overview
+              </TabsTrigger>
+              <TabsTrigger value="history" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+                <span className="hidden sm:inline">📈 </span>History
+              </TabsTrigger>
+              <TabsTrigger value="lenders" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+                <span className="hidden sm:inline">🌍 </span>Lenders
+              </TabsTrigger>
+              <TabsTrigger value="analysis" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+                <span className="hidden sm:inline">🧠 </span>AI
+              </TabsTrigger>
+              <TabsTrigger value="education" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+                <span className="hidden sm:inline">📚 </span>Learn
+              </TabsTrigger>
+              <TabsTrigger value="regional" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+                <span className="hidden sm:inline">🗺️ </span>Regional
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* MODULE 1: Live Debt Overview Panel */}
-          <TabsContent value="overview" className="space-y-6">
+          <TabsContent value="overview" className="space-y-4 sm:space-y-6">
             {latest && (
               <>
                 {/* Key Metrics Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-200 dark:border-purple-800">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                  <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-200 dark:border-purple-800 hover:shadow-md transition-shadow touch-manipulation">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Total National Debt</CardTitle>
-                      <DollarSign className="h-4 w-4 text-purple-600" />
+                      <CardTitle className="text-xs sm:text-sm font-medium">Total National Debt</CardTitle>
+                      <DollarSign className="h-4 w-4 text-purple-600 shrink-0" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-purple-600">
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-purple-600 truncate">
                         {formatCurrency(latest.total_debt_fcfa)}
                       </div>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-xs text-muted-foreground truncate">
                         {formatCurrency(latest.total_debt_usd, 'USD')}
                       </p>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-200 dark:border-blue-800">
+                  <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-200 dark:border-blue-800 hover:shadow-md transition-shadow touch-manipulation">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Debt Per Capita</CardTitle>
-                      <Users className="h-4 w-4 text-blue-600" />
+                      <CardTitle className="text-xs sm:text-sm font-medium">Debt Per Capita</CardTitle>
+                      <Users className="h-4 w-4 text-blue-600 shrink-0" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-blue-600">
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600 truncate">
                         {formatCurrency(latest.total_debt_fcfa / latest.population)}
                       </div>
                       <p className="text-xs text-muted-foreground">
@@ -372,13 +386,13 @@ export default function NationalDebtTracker() {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-200 dark:border-green-800">
+                  <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-200 dark:border-green-800 hover:shadow-md transition-shadow touch-manipulation">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Debt-to-GDP Ratio</CardTitle>
-                      <Target className="h-4 w-4 text-green-600" />
+                      <CardTitle className="text-xs sm:text-sm font-medium">Debt-to-GDP Ratio</CardTitle>
+                      <Target className="h-4 w-4 text-green-600 shrink-0" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-green-600">
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-green-600">
                         {latest.debt_to_gdp_ratio}%
                       </div>
                       <Progress 
@@ -389,13 +403,13 @@ export default function NationalDebtTracker() {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border-orange-200 dark:border-orange-800">
+                  <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border-orange-200 dark:border-orange-800 hover:shadow-md transition-shadow touch-manipulation">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">External vs Internal</CardTitle>
-                      <Globe className="h-4 w-4 text-orange-600" />
+                      <CardTitle className="text-xs sm:text-sm font-medium">External vs Internal</CardTitle>
+                      <Globe className="h-4 w-4 text-orange-600 shrink-0" />
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold text-orange-600">
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-orange-600">
                         {((latest.external_debt_fcfa / latest.total_debt_fcfa) * 100).toFixed(0)}% / {((latest.internal_debt_fcfa / latest.total_debt_fcfa) * 100).toFixed(0)}%
                       </div>
                       <p className="text-xs text-muted-foreground">
@@ -406,15 +420,15 @@ export default function NationalDebtTracker() {
                 </div>
 
                 {/* Debt Composition Chart */}
-                <Card>
+                <Card className="touch-manipulation">
                   <CardHeader>
-                    <CardTitle>Debt Composition Analysis</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">Debt Composition Analysis</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
                       <div>
-                        <h3 className="text-lg font-semibold mb-4">Internal vs External Debt</h3>
-                        <ResponsiveContainer width="100%" height={250}>
+                        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Internal vs External Debt</h3>
+                        <ResponsiveContainer width="100%" height={220}>
                           <PieChart>
                             <Pie
                               data={[
@@ -467,19 +481,19 @@ export default function NationalDebtTracker() {
                 </Card>
 
                 {/* Data Sources */}
-                <Card>
+                <Card className="touch-manipulation">
                   <CardHeader>
-                    <CardTitle>Data Sources & Credibility</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl">Data Sources & Credibility</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
                       {sources.map((source) => (
-                        <div key={source.id} className="flex items-center space-x-3 p-3 border rounded-lg">
-                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                        <div key={source.id} className="flex items-center space-x-3 p-3 border rounded-lg touch-manipulation hover:shadow-sm transition-shadow">
+                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
                             <span className="text-xs font-bold">{source.acronym}</span>
                           </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-sm">{source.name}</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="font-medium text-sm truncate">{source.name}</p>
                             <a 
                               href={source.website_url} 
                               target="_blank" 
@@ -499,16 +513,16 @@ export default function NationalDebtTracker() {
           </TabsContent>
 
           {/* MODULE 2: Debt History Timeline */}
-          <TabsContent value="history" className="space-y-6">
-            <Card>
+          <TabsContent value="history" className="space-y-4 sm:space-y-6">
+            <Card className="touch-manipulation">
               <CardHeader>
-                <CardTitle>Debt Evolution (2000 - Present)</CardTitle>
-                <p className="text-muted-foreground">
+                <CardTitle className="text-lg sm:text-xl">Debt Evolution (2000 - Present)</CardTitle>
+                <p className="text-sm sm:text-base text-muted-foreground">
                   Track how Cameroon's national debt has evolved over the years
                 </p>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={400}>
+                <ResponsiveContainer width="100%" height={350}>
                   <AreaChart data={debtRecords}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="year" />
@@ -539,12 +553,12 @@ export default function NationalDebtTracker() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="touch-manipulation">
               <CardHeader>
-                <CardTitle>Debt-to-GDP Ratio Trend</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">Debt-to-GDP Ratio Trend</CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
+                <ResponsiveContainer width="100%" height={250}>
                   <LineChart data={debtRecords}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="year" />
@@ -578,14 +592,14 @@ export default function NationalDebtTracker() {
           </TabsContent>
 
           {/* MODULE 3: Lender Breakdown */}
-          <TabsContent value="lenders" className="space-y-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card>
+          <TabsContent value="lenders" className="space-y-4 sm:space-y-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+              <Card className="touch-manipulation">
                 <CardHeader>
-                  <CardTitle>Debt by Creditor</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl">Debt by Creditor</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={300}>
+                  <ResponsiveContainer width="100%" height={250}>
                     <PieChart>
                       <Pie
                         data={lenderData}
@@ -607,19 +621,19 @@ export default function NationalDebtTracker() {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="touch-manipulation">
                 <CardHeader>
-                  <CardTitle>Creditor Risk Assessment</CardTitle>
+                  <CardTitle className="text-lg sm:text-xl">Creditor Risk Assessment</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
+                  <div className="space-y-3 sm:space-y-4">
                     {lenderData.map((lender, index) => (
-                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div className="flex items-center space-x-3">
-                          <span className="text-2xl">{lender.flag}</span>
-                          <div>
-                            <p className="font-medium">{lender.name}</p>
-                            <p className="text-sm text-muted-foreground">
+                      <div key={index} className="flex items-center justify-between p-3 border rounded-lg touch-manipulation hover:shadow-sm transition-shadow">
+                        <div className="flex items-center space-x-3 min-w-0 flex-1">
+                          <span className="text-xl sm:text-2xl shrink-0">{lender.flag}</span>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-sm sm:text-base truncate">{lender.name}</p>
+                            <p className="text-xs sm:text-sm text-muted-foreground truncate">
                               {lender.percentage}% • {formatCurrency(lender.amount)}
                             </p>
                           </div>
@@ -629,6 +643,7 @@ export default function NationalDebtTracker() {
                             lender.risk_level === 'high' ? 'destructive' :
                             lender.risk_level === 'medium' ? 'secondary' : 'default'
                           }
+                          className="text-xs shrink-0"
                         >
                           {lender.risk_level.toUpperCase()} RISK
                         </Badge>
@@ -639,12 +654,12 @@ export default function NationalDebtTracker() {
               </Card>
             </div>
 
-            <Card>
+            <Card className="touch-manipulation">
               <CardHeader>
-                <CardTitle>Risk Analysis by Creditor Type</CardTitle>
+                <CardTitle className="text-lg sm:text-xl">Risk Analysis by Creditor Type</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
                   <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-950">
                     <h3 className="font-semibold text-green-800 dark:text-green-200">Low Risk</h3>
                     <p className="text-sm text-green-600 dark:text-green-400">
@@ -868,26 +883,26 @@ export default function NationalDebtTracker() {
         </Tabs>
 
         {/* MODULE 9: Download & Share Tools */}
-        <Card>
+        <Card className="touch-manipulation">
           <CardHeader>
-            <CardTitle>Export & Share Tools</CardTitle>
+            <CardTitle className="text-lg sm:text-xl">Export & Share Tools</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2">
-              <Button onClick={() => exportData('csv')} variant="outline">
-                <Download className="h-4 w-4 mr-2" />
+            <div className="flex flex-wrap gap-2 sm:gap-3">
+              <Button onClick={() => exportData('csv')} variant="outline" className="flex-1 sm:flex-none text-xs sm:text-sm touch-manipulation">
+                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 Export CSV
               </Button>
-              <Button onClick={() => exportData('json')} variant="outline">
-                <Download className="h-4 w-4 mr-2" />
+              <Button onClick={() => exportData('json')} variant="outline" className="flex-1 sm:flex-none text-xs sm:text-sm touch-manipulation">
+                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 Export JSON
               </Button>
-              <Button onClick={() => shareToSocial('whatsapp')} variant="outline">
-                <Share2 className="h-4 w-4 mr-2" />
+              <Button onClick={() => shareToSocial('whatsapp')} variant="outline" className="flex-1 sm:flex-none text-xs sm:text-sm touch-manipulation">
+                <Share2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 Share WhatsApp
               </Button>
-              <Button onClick={() => shareToSocial('facebook')} variant="outline">
-                <Share2 className="h-4 w-4 mr-2" />
+              <Button onClick={() => shareToSocial('facebook')} variant="outline" className="flex-1 sm:flex-none text-xs sm:text-sm touch-manipulation">
+                <Share2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 Share Facebook
               </Button>
             </div>
