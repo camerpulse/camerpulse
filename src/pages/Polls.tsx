@@ -243,279 +243,296 @@ const Polls = () => {
 
   return (
     <AppLayout>
-      <main className="container mx-auto px-4 py-8">
-        {/* Header Section */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">
-              Democratic Polls
-            </h1>
-            <p className="text-muted-foreground">
-              Voice your opinion on important civic matters
-            </p>
-          </div>
-          
-          {user && (
-            <Button onClick={() => setShowCreatePoll(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              Create Poll
-            </Button>
-          )}
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Vote className="w-8 h-8 text-primary mx-auto mb-2" />
-              <div className="text-2xl font-bold">{polls.length}</div>
-              <div className="text-sm text-muted-foreground">Total Polls</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Users className="w-8 h-8 text-cm-green mx-auto mb-2" />
-              <div className="text-2xl font-bold">
-                {polls.reduce((sum, poll) => sum + poll.votes_count, 0)}
-              </div>
-              <div className="text-sm text-muted-foreground">Total Votes</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-4 text-center">
-              <TrendingUp className="w-8 h-8 text-cm-yellow mx-auto mb-2" />
-              <div className="text-2xl font-bold">
-                {polls.filter(poll => isPollActive(poll)).length}
-              </div>
-              <div className="text-sm text-muted-foreground">Active Polls</div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardContent className="p-4 text-center">
-              <BarChart3 className="w-8 h-8 text-cm-red mx-auto mb-2" />
-              <div className="text-2xl font-bold">
-                {Math.round(polls.reduce((sum, poll) => sum + poll.votes_count, 0) / Math.max(polls.length, 1))}
-              </div>
-              <div className="text-sm text-muted-foreground">Avg Votes</div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Polls List */}
-        {loading ? (
-          <div className="space-y-6">
-            {[...Array(3)].map((_, i) => (
-              <Card key={i} className="animate-pulse">
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 bg-muted rounded-full"></div>
-                    <div className="flex-1">
-                      <div className="h-4 bg-muted rounded mb-2"></div>
-                      <div className="h-3 bg-muted rounded w-1/3"></div>
-                    </div>
-                  </div>
-                  <div className="h-6 bg-muted rounded mb-4"></div>
-                  <div className="space-y-2">
-                    {[...Array(3)].map((_, j) => (
-                      <div key={j} className="h-10 bg-muted rounded"></div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        ) : polls.length === 0 ? (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <Vote className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No polls yet</h3>
-              <p className="text-muted-foreground mb-4">
-                Be the first to create a poll and engage the community
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
+        <div className="container mx-auto px-4 py-6 lg:py-8 max-w-6xl">
+          {/* Header Section */}
+          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-8">
+            <div className="space-y-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Democratic Polls
+              </h1>
+              <p className="text-sm sm:text-base text-muted-foreground max-w-lg">
+                Voice your opinion on important civic matters and help shape democracy
               </p>
-              {user && (
-                <Button onClick={() => setShowCreatePoll(true)}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Create First Poll
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-        ) : (
-          <div className="space-y-6">
-            {polls.map((poll) => {
-              const isActive = isPollActive(poll);
-              const hasVoted = poll.user_vote !== undefined;
-              
-              return (
-                <Card key={poll.id} className="border-0 shadow-elegant">
-                  <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-center gap-3 flex-1">
-                          <Avatar>
-                            <AvatarImage src={poll.privacy_mode === 'anonymous' ? '' : poll.profiles?.avatar_url} />
-                            <AvatarFallback className="bg-primary text-primary-foreground">
-                              {poll.privacy_mode === 'anonymous' ? '?' : poll.profiles?.username?.charAt(0).toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <CardTitle className="text-lg">{poll.title}</CardTitle>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span>
-                                by {poll.privacy_mode === 'anonymous' ? 'Anonymous' : `@${poll.profiles?.username}`}
-                              </span>
-                              <span>•</span>
-                              <span>{formatDistanceToNow(new Date(poll.created_at), { addSuffix: true })}</span>
+            </div>
+            
+            {user && (
+              <Button 
+                onClick={() => setShowCreatePoll(true)}
+                className="w-full sm:w-auto bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Create Poll
+              </Button>
+            )}
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8">
+            <Card className="backdrop-blur-sm bg-card/80 border-border/50 shadow-elegant hover:shadow-glow transition-all duration-300">
+              <CardContent className="p-3 sm:p-4 lg:p-6 text-center">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3">
+                  <Vote className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-primary" />
+                </div>
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">{polls.length}</div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Total Polls</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="backdrop-blur-sm bg-card/80 border-border/50 shadow-elegant hover:shadow-glow transition-all duration-300">
+              <CardContent className="p-3 sm:p-4 lg:p-6 text-center">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3">
+                  <Users className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-emerald-500" />
+                </div>
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">
+                  {polls.reduce((sum, poll) => sum + poll.votes_count, 0)}
+                </div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Total Votes</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="backdrop-blur-sm bg-card/80 border-border/50 shadow-elegant hover:shadow-glow transition-all duration-300">
+              <CardContent className="p-3 sm:p-4 lg:p-6 text-center">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-amber-500/10 rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3">
+                  <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-amber-500" />
+                </div>
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">
+                  {polls.filter(poll => isPollActive(poll)).length}
+                </div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Active Polls</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="backdrop-blur-sm bg-card/80 border-border/50 shadow-elegant hover:shadow-glow transition-all duration-300 col-span-2 lg:col-span-1">
+              <CardContent className="p-3 sm:p-4 lg:p-6 text-center">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-rose-500/10 rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3">
+                  <BarChart3 className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-rose-500" />
+                </div>
+                <div className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground">
+                  {Math.round(polls.reduce((sum, poll) => sum + poll.votes_count, 0) / Math.max(polls.length, 1))}
+                </div>
+                <div className="text-xs sm:text-sm text-muted-foreground">Avg Votes</div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Polls List */}
+          {loading ? (
+            <div className="space-y-4 lg:space-y-6">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="animate-pulse backdrop-blur-sm bg-card/80 border-border/50">
+                  <CardContent className="p-4 sm:p-6">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-muted rounded-full"></div>
+                      <div className="flex-1">
+                        <div className="h-3 sm:h-4 bg-muted rounded mb-2"></div>
+                        <div className="h-2 sm:h-3 bg-muted rounded w-1/3"></div>
+                      </div>
+                    </div>
+                    <div className="h-4 sm:h-6 bg-muted rounded mb-4"></div>
+                    <div className="space-y-2">
+                      {[...Array(3)].map((_, j) => (
+                        <div key={j} className="h-8 sm:h-10 bg-muted rounded"></div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : polls.length === 0 ? (
+            <Card className="backdrop-blur-sm bg-card/80 border-border/50 shadow-elegant">
+              <CardContent className="p-8 sm:p-12 text-center">
+                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-muted/50 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Vote className="w-8 h-8 sm:w-10 sm:h-10 text-muted-foreground" />
+                </div>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2">No polls yet</h3>
+                <p className="text-sm sm:text-base text-muted-foreground mb-6 max-w-md mx-auto">
+                  Be the first to create a poll and engage the community in meaningful civic discussions
+                </p>
+                {user && (
+                  <Button 
+                    onClick={() => setShowCreatePoll(true)}
+                    className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90"
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Create First Poll
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="space-y-4 lg:space-y-6">
+              {polls.map((poll) => {
+                const isActive = isPollActive(poll);
+                const hasVoted = poll.user_vote !== undefined;
+                
+                return (
+                  <Card key={poll.id} className="backdrop-blur-sm bg-card/80 border-border/50 shadow-elegant hover:shadow-glow transition-all duration-300">
+                    <CardHeader className="pb-4">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                          <div className="flex items-center gap-3 flex-1 min-w-0">
+                            <Avatar className="w-8 h-8 sm:w-10 sm:h-10 shrink-0">
+                              <AvatarImage src={poll.privacy_mode === 'anonymous' ? '' : poll.profiles?.avatar_url} />
+                              <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                                {poll.privacy_mode === 'anonymous' ? '?' : poll.profiles?.username?.charAt(0).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="flex-1 min-w-0">
+                              <CardTitle className="text-base sm:text-lg leading-tight mb-1 truncate">{poll.title}</CardTitle>
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
+                                <span className="truncate">
+                                  by {poll.privacy_mode === 'anonymous' ? 'Anonymous' : `@${poll.profiles?.username}`}
+                                </span>
+                                <span className="hidden sm:inline">•</span>
+                                <span className="truncate">{formatDistanceToNow(new Date(poll.created_at), { addSuffix: true })}</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      
-                        <div className="flex items-center gap-2">
-                          {poll.privacy_mode !== 'public' && (
-                            <Badge variant="outline" className="gap-1">
-                              {poll.privacy_mode === 'private' && <Shield className="w-3 h-3" />}
-                              {poll.privacy_mode === 'anonymous' && <EyeOff className="w-3 h-3" />}
-                              <span className="capitalize">{poll.privacy_mode}</span>
-                            </Badge>
-                          )}
-                          
-                          {isActive ? (
-                            <Badge className="bg-cm-green text-white">
-                              <CheckCircle className="w-3 h-3 mr-1" />
-                              Active
-                            </Badge>
-                          ) : (
-                            <Badge variant="secondary">
-                              <XCircle className="w-3 h-3 mr-1" />
-                              Closed
-                            </Badge>
-                          )}
-                          
-                          {poll.ends_at && (
-                            <Badge variant="outline">
-                              <Calendar className="w-3 h-3 mr-1" />
-                              Ends {formatDistanceToNow(new Date(poll.ends_at), { addSuffix: true })}
-                            </Badge>
-                          )}
-                        </div>
-                    </div>
-                    
-                    {poll.description && (
-                      <p className="text-muted-foreground mt-2">
-                        {poll.description}
-                      </p>
-                    )}
-                  </CardHeader>
-                  
-                  <CardContent>
-                    <div className="space-y-3">
-                      {poll.options.map((option, index) => {
-                        const votes = poll.vote_results?.[index] || 0;
-                        const percentage = getVotePercentage(votes, poll.votes_count);
-                        const isSelected = poll.user_vote === index;
                         
-                        // Determine if results should be shown
-                        const showResults = hasVoted || !isActive || 
-                          (!isActive && poll.show_results_after_expiry);
-                        
-                        return (
-                          <div key={index} className="space-y-2">
-                            <Button
-                              variant={isSelected ? "default" : "outline"}
-                              className="w-full justify-start text-left h-auto p-4"
-                              onClick={() => isActive && !hasVoted ? submitVote(poll.id, index) : undefined}
-                              disabled={!isActive || hasVoted}
-                            >
-                              <div className="flex items-center justify-between w-full">
-                                <span className="flex-1">{option}</span>
-                                {showResults && (
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-sm">
-                                      {votes} votes ({percentage}%)
-                                    </span>
-                                    {isSelected && (
-                                      <CheckCircle className="w-4 h-4" />
-                                    )}
-                                  </div>
-                                )}
-                              </div>
-                            </Button>
+                          <div className="flex flex-wrap items-center gap-2 shrink-0">
+                            {poll.privacy_mode !== 'public' && (
+                              <Badge variant="outline" className="gap-1 text-xs">
+                                {poll.privacy_mode === 'private' && <Shield className="w-3 h-3" />}
+                                {poll.privacy_mode === 'anonymous' && <EyeOff className="w-3 h-3" />}
+                                <span className="capitalize">{poll.privacy_mode}</span>
+                              </Badge>
+                            )}
                             
-                            {showResults && (
-                              <Progress value={percentage} className="h-2" />
+                            {isActive ? (
+                              <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs">
+                                <CheckCircle className="w-3 h-3 mr-1" />
+                                Active
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary" className="text-xs">
+                                <XCircle className="w-3 h-3 mr-1" />
+                                Closed
+                              </Badge>
+                            )}
+                            
+                            {poll.ends_at && (
+                              <Badge variant="outline" className="text-xs hidden sm:flex">
+                                <Calendar className="w-3 h-3 mr-1" />
+                                Ends {formatDistanceToNow(new Date(poll.ends_at), { addSuffix: true })}
+                              </Badge>
                             )}
                           </div>
-                        );
-                      })}
-                    </div>
-                    
-                    <div className="flex items-center justify-between mt-6 pt-4 border-t">
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Users className="w-4 h-4" />
-                          <span>{poll.votes_count} votes</span>
-                        </div>
-                        {poll.ends_at && (
+                      </div>
+                      
+                      {poll.description && (
+                        <p className="text-sm text-muted-foreground mt-3 leading-relaxed">
+                          {poll.description}
+                        </p>
+                      )}
+                    </CardHeader>
+                  
+                    <CardContent className="pt-0">
+                      <div className="space-y-3">
+                        {poll.options.map((option, index) => {
+                          const votes = poll.vote_results?.[index] || 0;
+                          const percentage = getVotePercentage(votes, poll.votes_count);
+                          const isSelected = poll.user_vote === index;
+                          
+                          // Determine if results should be shown
+                          const showResults = hasVoted || !isActive || 
+                            (!isActive && poll.show_results_after_expiry);
+                          
+                          return (
+                            <div key={index} className="space-y-2">
+                              <Button
+                                variant={isSelected ? "default" : "outline"}
+                                className={`w-full justify-start text-left h-auto p-3 sm:p-4 transition-all duration-200 ${
+                                  isActive && !hasVoted ? 'hover:scale-[1.02] hover:shadow-md' : ''
+                                } ${isSelected ? 'bg-gradient-to-r from-primary to-accent' : ''}`}
+                                onClick={() => isActive && !hasVoted ? submitVote(poll.id, index) : undefined}
+                                disabled={!isActive || hasVoted}
+                              >
+                                <div className="flex items-center justify-between w-full gap-3">
+                                  <span className="flex-1 text-sm sm:text-base leading-relaxed">{option}</span>
+                                  {showResults && (
+                                    <div className="flex items-center gap-2 shrink-0">
+                                      <span className="text-xs sm:text-sm whitespace-nowrap">
+                                        {votes} ({percentage}%)
+                                      </span>
+                                      {isSelected && (
+                                        <CheckCircle className="w-4 h-4" />
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                              </Button>
+                              
+                              {showResults && (
+                                <div className="px-1">
+                                  <Progress value={percentage} className="h-2" />
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-6 pt-4 border-t border-border/50">
+                        <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            <span>
-                              {new Date(poll.ends_at) > new Date() ? 'Ends' : 'Ended'} {' '}
-                              {formatDistanceToNow(new Date(poll.ends_at), { addSuffix: true })}
-                            </span>
+                            <Users className="w-4 h-4" />
+                            <span>{poll.votes_count} votes</span>
                           </div>
-                        )}
+                          {poll.ends_at && (
+                            <div className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              <span className="hidden sm:inline">
+                                {new Date(poll.ends_at) > new Date() ? 'Ends' : 'Ended'} {' '}
+                                {formatDistanceToNow(new Date(poll.ends_at), { addSuffix: true })}
+                              </span>
+                              <span className="sm:hidden">
+                                {formatDistanceToNow(new Date(poll.ends_at), { addSuffix: true })}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        
                         <Button
-                          variant="ghost"
+                          variant="outline"
                           size="sm"
                           onClick={() => toggleHeatmap(poll.id)}
-                          className="flex items-center gap-1 h-6 px-2"
+                          className="flex items-center gap-2 text-xs sm:text-sm w-full sm:w-auto justify-center"
                         >
-                          <MapPin className="w-3 h-3" />
+                          <MapPin className="w-4 h-4" />
                           Regional Map
                         </Button>
                       </div>
                       
-                      {hasVoted && (
-                        <Badge variant="outline" className="border-cm-green text-cm-green">
-                          ✓ Voted
-                        </Badge>
+                      {expandedHeatmaps.has(poll.id) && (
+                        <div className="mt-4 p-3 sm:p-4 border rounded-lg bg-muted/20">
+                          <RegionalHeatmap 
+                            pollId={poll.id} 
+                            pollOptions={poll.options}
+                            isVisible={expandedHeatmaps.has(poll.id)}
+                          />
+                        </div>
                       )}
-                    </div>
-                    
-                    {/* Regional Heatmap */}
-                    {expandedHeatmaps.has(poll.id) && (
+                      
                       <div className="mt-4">
-                        <RegionalHeatmap
-                          pollId={poll.id}
-                          pollOptions={poll.options}
-                          isVisible={expandedHeatmaps.has(poll.id)}
-                        />
+                        <CommentThread pollId={poll.id} />
                       </div>
-                    )}
-                    
-                    {/* Comment Thread */}
-                    <div className="mt-6 pt-6 border-t">
-                      <CommentThread pollId={poll.id} />
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-        )}
-      </main>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
 
-      {/* Create Poll Dialog */}
-      <CreatePollDialog
-        isOpen={showCreatePoll}
-        onClose={() => setShowCreatePoll(false)}
-        onSuccess={() => {
-          setShowCreatePoll(false);
-          fetchPolls();
-        }}
-      />
+          <CreatePollDialog 
+            isOpen={showCreatePoll} 
+            onClose={() => setShowCreatePoll(false)} 
+            onSuccess={() => {
+              setShowCreatePoll(false);
+              fetchPolls();
+            }}
+          />
+        </div>
+      </div>
     </AppLayout>
   );
 };
