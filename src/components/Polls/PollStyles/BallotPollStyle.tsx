@@ -13,6 +13,7 @@ interface BallotPollStyleProps {
     user_vote?: number;
     ends_at?: string;
     privacy_mode: string;
+    party_logos?: Record<string, string | null>;
   };
   showResults?: boolean;
   onVote?: (optionIndex: number) => void;
@@ -104,6 +105,20 @@ export const BallotPollStyle = ({
                       <div className="w-3 h-3 rounded-full bg-cm-yellow animate-pulse" />
                     )}
                   </div>
+                  
+                  {/* Party Logo */}
+                  {poll.party_logos && poll.party_logos[option] && (
+                    <div className="w-12 h-12 rounded-full bg-muted/20 border border-border flex items-center justify-center overflow-hidden">
+                      <img 
+                        src={poll.party_logos[option] || "/api/placeholder/48/48"} 
+                        alt={`${option} logo`}
+                        className="w-10 h-10 object-contain"
+                        onError={(e) => {
+                          e.currentTarget.src = "/api/placeholder/48/48";
+                        }}
+                      />
+                    </div>
+                  )}
                   
                   {/* Option Text */}
                   <div className="flex-1">

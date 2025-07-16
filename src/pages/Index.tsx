@@ -5,6 +5,7 @@ import { LuxAeternaAchievements } from "@/components/Theme/LuxAeternaAchievement
 import { PatrioticDataVisualization } from "@/components/Theme/PatrioticDataVisualization";
 import { CivicPollCreator } from "@/components/Polls/CivicPollCreator";
 import { YouthPollCreator } from "@/components/Polls/YouthPollCreator";
+import { PresidentialPollCreator } from "@/components/Polls/PresidentialPollCreator";
 
 const Index = () => {
   return (
@@ -14,6 +15,7 @@ const Index = () => {
         <PatrioticDataVisualization />
       </div>
       <div className="container mx-auto px-4 py-8 space-y-12">
+        <PresidentialPollCreator />
         <CivicPollCreator />
         <YouthPollCreator />
       </div>
