@@ -9,6 +9,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { PollFraudProtectionEngine } from '@/components/Polls/PollFraudProtectionEngine';
 import { 
   BarChart3, 
   Download, 
@@ -28,7 +29,8 @@ import {
   Image,
   Table,
   Plus,
-  Settings
+  Settings,
+  Shield
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
@@ -75,6 +77,7 @@ const PollsDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [showCreatePoll, setShowCreatePoll] = useState(false);
   const [selectedPoll, setSelectedPoll] = useState<Poll | null>(null);
+  const [selectedPollForFraud, setSelectedPollForFraud] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
@@ -311,11 +314,15 @@ const PollsDashboard = () => {
             </Card>
           ) : (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-4 mb-8">
+              <TabsList className="grid w-full grid-cols-5 mb-8">
                 <TabsTrigger value="overview">Poll Overview</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
                 <TabsTrigger value="management">Management</TabsTrigger>
                 <TabsTrigger value="templates">Templates</TabsTrigger>
+                <TabsTrigger value="fraud-protection">
+                  <Shield className="w-4 h-4 mr-1" />
+                  Fraud Protection
+                </TabsTrigger>
               </TabsList>
 
               {/* Overview Tab */}
@@ -628,6 +635,78 @@ const PollsDashboard = () => {
                     </div>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              {/* Fraud Protection Tab */}
+              <TabsContent value="fraud-protection" className="space-y-6">
+                {selectedPollForFraud ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <Button 
+                        variant="outline" 
+                        onClick={() => setSelectedPollForFraud(null)}
+                      >
+                        ← Back to Poll List
+                      </Button>
+                      <h3 className="text-lg font-semibold">
+                        Fraud Protection: {polls.find(p => p.id === selectedPollForFraud)?.title}
+                      </h3>
+                    </div>
+                    <PollFraudProtectionEngine 
+                      pollId={selectedPollForFraud} 
+                      isCreator={true}
+                    />
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <h3 className="text-xl font-semibold mb-2">Select a Poll to Configure Fraud Protection</h3>
+                      <p className="text-muted-foreground">
+                        Choose one of your polls to view and configure anti-fraud settings
+                      </p>
+                    </div>
+
+                    <div className="grid gap-4">
+                      {polls.map((poll) => (
+                        <Card key={poll.id} className="cursor-pointer hover:shadow-md transition-shadow"
+                              onClick={() => setSelectedPollForFraud(poll.id)}>
+                          <CardContent className="p-4">
+                            <div className="flex items-center justify-between">
+                              <div className="flex-1">
+                                <h4 className="font-medium">{poll.title}</h4>
+                                <p className="text-sm text-muted-foreground">
+                                  {poll.votes_count} votes • Created {formatDistanceToNow(new Date(poll.created_at), { addSuffix: true })}
+                                </p>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <Badge variant={poll.is_active ? "default" : "secondary"}>
+                                  {poll.is_active ? "Active" : "Closed"}
+                                </Badge>
+                                <Shield className="w-5 h-5 text-muted-foreground" />
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+
+                    {polls.length === 0 && (
+                      <Card>
+                        <CardContent className="p-8 text-center">
+                          <Shield className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                          <h3 className="text-lg font-semibold mb-2">No Polls Yet</h3>
+                          <p className="text-muted-foreground mb-4">
+                            Create your first poll to access fraud protection features
+                          </p>
+                          <Button onClick={() => setShowCreatePoll(true)}>
+                            <Plus className="w-4 h-4 mr-2" />
+                            Create Your First Poll
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    )}
+                  </div>
+                )}
               </TabsContent>
             </Tabs>
           )}

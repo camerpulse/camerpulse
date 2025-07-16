@@ -8,9 +8,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CreatePollDialog } from '@/components/Polls/CreatePollDialog';
 import { RegionalHeatmap } from '@/components/Polls/RegionalHeatmap';
 import { CommentThread } from '@/components/Polls/CommentThread';
+import { PollFraudProtectionEngine } from '@/components/Polls/PollFraudProtectionEngine';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useFraudProtection } from '@/hooks/useFraudProtection';
 import { 
   BarChart3, 
   Plus, 
@@ -52,10 +54,12 @@ interface Poll {
 const Polls = () => {
   const { user, profile } = useAuth();
   const { toast } = useToast();
+  const { validateVote, logVote } = useFraudProtection();
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreatePoll, setShowCreatePoll] = useState(false);
   const [expandedHeatmaps, setExpandedHeatmaps] = useState<Set<string>>(new Set());
+  const [selectedPollForFraud, setSelectedPollForFraud] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPolls();
@@ -158,7 +162,18 @@ const Polls = () => {
     }
 
     try {
-      // Check if user already voted
+      // Validate vote with fraud protection
+      const validation = await validateVote(pollId, user.id);
+      if (!validation.canVote) {
+        toast({
+          title: "Vote blocked",
+          description: validation.reason || "Unable to process vote",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Check if user already voted in poll_votes table
       const { data: existingVote } = await supabase
         .from('poll_votes')
         .select('id')
@@ -175,9 +190,6 @@ const Polls = () => {
         return;
       }
 
-      // For now, region tracking is optional and can be enhanced later
-      let userRegion = region;
-
       // Submit vote with region tracking
       const { error } = await supabase
         .from('poll_votes')
@@ -185,10 +197,13 @@ const Polls = () => {
           poll_id: pollId,
           user_id: user.id,
           option_index: optionIndex,
-          region: userRegion
+          region: region
         });
 
       if (error) throw error;
+
+      // Log vote for fraud detection
+      await logVote(pollId, optionIndex, user.id, region);
 
       toast({
         title: "Vote submitted!",

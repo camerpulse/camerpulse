@@ -11894,6 +11894,103 @@ export type Database = {
           },
         ]
       }
+      poll_fraud_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_message: string
+          alert_severity: string
+          alert_type: string
+          detected_at: string | null
+          id: string
+          poll_id: string
+          time_window: string | null
+          vote_count: number | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_message: string
+          alert_severity?: string
+          alert_type: string
+          detected_at?: string | null
+          id?: string
+          poll_id: string
+          time_window?: string | null
+          vote_count?: number | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_message?: string
+          alert_severity?: string
+          alert_type?: string
+          detected_at?: string | null
+          id?: string
+          poll_id?: string
+          time_window?: string | null
+          vote_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_fraud_alerts_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_fraud_settings: {
+        Row: {
+          alert_threshold: number | null
+          created_at: string | null
+          enable_captcha: boolean | null
+          enable_fingerprinting: boolean | null
+          enable_rate_limiting: boolean | null
+          id: string
+          max_votes_per_ip: number | null
+          max_votes_per_session: number | null
+          poll_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          alert_threshold?: number | null
+          created_at?: string | null
+          enable_captcha?: boolean | null
+          enable_fingerprinting?: boolean | null
+          enable_rate_limiting?: boolean | null
+          id?: string
+          max_votes_per_ip?: number | null
+          max_votes_per_session?: number | null
+          poll_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          alert_threshold?: number | null
+          created_at?: string | null
+          enable_captcha?: boolean | null
+          enable_fingerprinting?: boolean | null
+          enable_rate_limiting?: boolean | null
+          id?: string
+          max_votes_per_ip?: number | null
+          max_votes_per_session?: number | null
+          poll_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_fraud_settings_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: true
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       poll_impact_tracking: {
         Row: {
           confidence_score: number | null
@@ -12120,6 +12217,59 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      poll_vote_log: {
+        Row: {
+          created_at: string | null
+          device_fingerprint: string | null
+          hashed_ip: string
+          id: string
+          poll_id: string
+          region: string | null
+          session_id: string | null
+          suspicious_flag: boolean | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+          vote_option: number
+        }
+        Insert: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          hashed_ip: string
+          id?: string
+          poll_id: string
+          region?: string | null
+          session_id?: string | null
+          suspicious_flag?: boolean | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          vote_option: number
+        }
+        Update: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          hashed_ip?: string
+          id?: string
+          poll_id?: string
+          region?: string | null
+          session_id?: string | null
+          suspicious_flag?: boolean | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          vote_option?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_vote_log_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       poll_votes: {
         Row: {
@@ -13921,6 +14071,10 @@ export type Database = {
           p_tags?: string[]
         }
         Returns: string
+      }
+      detect_fraud_patterns: {
+        Args: { p_poll_id: string }
+        Returns: undefined
       }
       detect_official_changes: {
         Args: Record<PropertyKey, never>
