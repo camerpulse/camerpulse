@@ -11893,8 +11893,11 @@ export type Database = {
           ends_at: string | null
           id: string
           is_active: boolean | null
+          moderation_enabled: boolean | null
           options: Json
+          party_logos: Json | null
           privacy_mode: string
+          requires_verification: boolean | null
           show_results_after_expiry: boolean
           theme_color: string | null
           title: string
@@ -11911,8 +11914,11 @@ export type Database = {
           ends_at?: string | null
           id?: string
           is_active?: boolean | null
+          moderation_enabled?: boolean | null
           options: Json
+          party_logos?: Json | null
           privacy_mode?: string
+          requires_verification?: boolean | null
           show_results_after_expiry?: boolean
           theme_color?: string | null
           title: string
@@ -11929,8 +11935,11 @@ export type Database = {
           ends_at?: string | null
           id?: string
           is_active?: boolean | null
+          moderation_enabled?: boolean | null
           options?: Json
+          party_logos?: Json | null
           privacy_mode?: string
+          requires_verification?: boolean | null
           show_results_after_expiry?: boolean
           theme_color?: string | null
           title?: string
