@@ -6322,6 +6322,203 @@ export type Database = {
           },
         ]
       }
+      integrity_alert_log: {
+        Row: {
+          alert_description: string
+          alert_title: string
+          alert_type: string
+          civil_implications: string | null
+          created_at: string
+          evidence_links: string[] | null
+          id: string
+          is_public_visible: boolean
+          requires_review: boolean
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          risk_score: number
+          severity_level: string
+          source_data: Json
+          status: string
+          suggested_cause: string | null
+          target_entity_id: string | null
+          target_entity_name: string
+          target_entity_type: string
+          updated_at: string
+        }
+        Insert: {
+          alert_description: string
+          alert_title: string
+          alert_type: string
+          civil_implications?: string | null
+          created_at?: string
+          evidence_links?: string[] | null
+          id?: string
+          is_public_visible?: boolean
+          requires_review?: boolean
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_score?: number
+          severity_level?: string
+          source_data?: Json
+          status?: string
+          suggested_cause?: string | null
+          target_entity_id?: string | null
+          target_entity_name: string
+          target_entity_type: string
+          updated_at?: string
+        }
+        Update: {
+          alert_description?: string
+          alert_title?: string
+          alert_type?: string
+          civil_implications?: string | null
+          created_at?: string
+          evidence_links?: string[] | null
+          id?: string
+          is_public_visible?: boolean
+          requires_review?: boolean
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_score?: number
+          severity_level?: string
+          source_data?: Json
+          status?: string
+          suggested_cause?: string | null
+          target_entity_id?: string | null
+          target_entity_name?: string
+          target_entity_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      integrity_review_actions: {
+        Row: {
+          action_reason: string | null
+          action_type: string
+          admin_id: string
+          admin_notes: string | null
+          alert_id: string
+          created_at: string
+          external_sharing_approved: boolean
+          id: string
+          public_release_approved: boolean
+        }
+        Insert: {
+          action_reason?: string | null
+          action_type: string
+          admin_id: string
+          admin_notes?: string | null
+          alert_id: string
+          created_at?: string
+          external_sharing_approved?: boolean
+          id?: string
+          public_release_approved?: boolean
+        }
+        Update: {
+          action_reason?: string | null
+          action_type?: string
+          admin_id?: string
+          admin_notes?: string | null
+          alert_id?: string
+          created_at?: string
+          external_sharing_approved?: boolean
+          id?: string
+          public_release_approved?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integrity_review_actions_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "integrity_alert_log"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integrity_risk_assessments: {
+        Row: {
+          assessment_name: string
+          auto_alert_enabled: boolean
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          risk_category: string
+          risk_indicators: Json
+          severity_mapping: Json
+          threshold_values: Json
+          updated_at: string
+        }
+        Insert: {
+          assessment_name: string
+          auto_alert_enabled?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          risk_category: string
+          risk_indicators: Json
+          severity_mapping?: Json
+          threshold_values: Json
+          updated_at?: string
+        }
+        Update: {
+          assessment_name?: string
+          auto_alert_enabled?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          risk_category?: string
+          risk_indicators?: Json
+          severity_mapping?: Json
+          threshold_values?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      integrity_scan_sources: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          last_scanned_at: string | null
+          scan_frequency_hours: number
+          scan_parameters: Json
+          source_name: string
+          source_type: string
+          source_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_scanned_at?: string | null
+          scan_frequency_hours?: number
+          scan_parameters?: Json
+          source_name: string
+          source_type: string
+          source_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_scanned_at?: string | null
+          scan_frequency_hours?: number
+          scan_parameters?: Json
+          source_name?: string
+          source_type?: string
+          source_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       legal_document_processing: {
         Row: {
           completed_at: string | null
@@ -10543,6 +10740,17 @@ export type Database = {
         Args: { p_integration_id: string }
         Returns: Json
       }
+      flag_behavioral_inconsistency: {
+        Args: {
+          p_entity_type: string
+          p_entity_id: string
+          p_entity_name: string
+          p_inconsistency_details: string
+          p_evidence_data?: Json
+          p_severity?: string
+        }
+        Returns: string
+      }
       generate_vendor_id: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -10562,6 +10770,10 @@ export type Database = {
         Returns: Json
       }
       get_civic_strategy_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_integrity_monitor_stats: {
         Args: Record<PropertyKey, never>
         Returns: Json
       }

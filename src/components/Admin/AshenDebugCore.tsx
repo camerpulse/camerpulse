@@ -37,6 +37,7 @@ import { AshenSyncGuard } from './AshenSyncGuard';
 import CivicMediaWatch from '../AI/CivicMediaWatch';
 import { LegalIntelligenceCore } from '../AI/LegalIntelligenceCore';
 import CivicStrategistCore from '../AI/CivicStrategistCore';
+import { CivicIntegrityMonitor } from '../AI/CivicIntegrityMonitor';
 
 interface ErrorLog {
   id: string;
@@ -447,6 +448,7 @@ export default function AshenDebugCore() {
           <TabsTrigger value="civic-missions" className="text-xs">Civic Missions</TabsTrigger>
           <TabsTrigger value="jr-training" className="text-xs">Jr. Training</TabsTrigger>
           <TabsTrigger value="civic-architect" className="text-xs">Civic Strategist</TabsTrigger>
+          <TabsTrigger value="integrity-monitor" className="text-xs">Integrity Monitor</TabsTrigger>
           <TabsTrigger value="pan-africa-mesh" className="text-xs">Pan-Africa Mesh</TabsTrigger>
           <TabsTrigger value="custom-integrator" className="text-xs">Custom Integrator</TabsTrigger>
           <TabsTrigger value="sync-guard" className="text-xs">Sync Guard</TabsTrigger>
@@ -477,6 +479,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="civic-architect" className="space-y-4">
           <CivicStrategistCore />
+        </TabsContent>
+        
+        <TabsContent value="integrity-monitor" className="space-y-4">
+          <CivicIntegrityMonitor />
         </TabsContent>
         
         <TabsContent value="pan-africa-mesh" className="space-y-4">
