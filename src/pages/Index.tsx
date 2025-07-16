@@ -3,6 +3,7 @@ import { ThemeAwareHero } from "@/components/Homepage/ThemeAwareHero";
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { LuxAeternaAchievements } from "@/components/Theme/LuxAeternaAchievements";
 import { PatrioticDataVisualization } from "@/components/Theme/PatrioticDataVisualization";
+import { CivicPollCreator } from "@/components/Polls/CivicPollCreator";
 
 const Index = () => {
   return (
@@ -10,6 +11,9 @@ const Index = () => {
       <ThemeAwareHero />
       <div className="container mx-auto px-4 py-8">
         <PatrioticDataVisualization />
+      </div>
+      <div className="container mx-auto px-4 py-8">
+        <CivicPollCreator />
       </div>
       <LuxAeternaAchievements />
     </AppLayout>
