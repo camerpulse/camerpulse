@@ -3644,6 +3644,54 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_campaign_templates: {
+        Row: {
+          content_template: Json
+          created_at: string
+          created_by: string | null
+          customization_options: Json | null
+          engagement_metrics: Json | null
+          id: string
+          is_approved: boolean
+          platform: string | null
+          success_stories: Json | null
+          target_audience: string
+          template_name: string
+          template_type: string
+          updated_at: string
+        }
+        Insert: {
+          content_template: Json
+          created_at?: string
+          created_by?: string | null
+          customization_options?: Json | null
+          engagement_metrics?: Json | null
+          id?: string
+          is_approved?: boolean
+          platform?: string | null
+          success_stories?: Json | null
+          target_audience: string
+          template_name: string
+          template_type: string
+          updated_at?: string
+        }
+        Update: {
+          content_template?: Json
+          created_at?: string
+          created_by?: string | null
+          customization_options?: Json | null
+          engagement_metrics?: Json | null
+          id?: string
+          is_approved?: boolean
+          platform?: string | null
+          success_stories?: Json | null
+          target_audience?: string
+          template_name?: string
+          template_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       civic_content_monitoring: {
         Row: {
           ai_analysis: Json | null
@@ -4904,6 +4952,161 @@ export type Database = {
           source_url?: string | null
           start_date?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_simulation_results: {
+        Row: {
+          affected_regions: string[] | null
+          confidence_score: number | null
+          created_at: string
+          created_by: string | null
+          id: string
+          input_parameters: Json
+          mitigation_strategies: Json | null
+          predicted_outcomes: Json | null
+          risk_factors: Json | null
+          simulation_scenario: string
+          simulation_type: string
+          timeframe_years: number | null
+        }
+        Insert: {
+          affected_regions?: string[] | null
+          confidence_score?: number | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          input_parameters: Json
+          mitigation_strategies?: Json | null
+          predicted_outcomes?: Json | null
+          risk_factors?: Json | null
+          simulation_scenario: string
+          simulation_type?: string
+          timeframe_years?: number | null
+        }
+        Update: {
+          affected_regions?: string[] | null
+          confidence_score?: number | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          input_parameters?: Json
+          mitigation_strategies?: Json | null
+          predicted_outcomes?: Json | null
+          risk_factors?: Json | null
+          simulation_scenario?: string
+          simulation_type?: string
+          timeframe_years?: number | null
+        }
+        Relationships: []
+      }
+      civic_strategies: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          digital_tools: Json | null
+          id: string
+          implementation_timeline: Json | null
+          is_public: boolean
+          leadership_recommendations: Json | null
+          long_term_reforms: Json | null
+          policy_suggestions: Json | null
+          problem_id: string | null
+          short_term_actions: Json | null
+          strategy_title: string
+          success_metrics: Json | null
+          updated_at: string
+          visibility_level: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          digital_tools?: Json | null
+          id?: string
+          implementation_timeline?: Json | null
+          is_public?: boolean
+          leadership_recommendations?: Json | null
+          long_term_reforms?: Json | null
+          policy_suggestions?: Json | null
+          problem_id?: string | null
+          short_term_actions?: Json | null
+          strategy_title: string
+          success_metrics?: Json | null
+          updated_at?: string
+          visibility_level?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          digital_tools?: Json | null
+          id?: string
+          implementation_timeline?: Json | null
+          is_public?: boolean
+          leadership_recommendations?: Json | null
+          long_term_reforms?: Json | null
+          policy_suggestions?: Json | null
+          problem_id?: string | null
+          short_term_actions?: Json | null
+          strategy_title?: string
+          success_metrics?: Json | null
+          updated_at?: string
+          visibility_level?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_strategies_problem_id_fkey"
+            columns: ["problem_id"]
+            isOneToOne: false
+            referencedRelation: "civic_strategy_problems"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_strategy_problems: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          impact_groups: Json | null
+          problem_category: string
+          problem_description: string
+          problem_title: string
+          root_causes: Json | null
+          target_demographics: Json | null
+          target_region: string | null
+          updated_at: string
+          urgency_level: string
+          volatility_score: number | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          impact_groups?: Json | null
+          problem_category?: string
+          problem_description: string
+          problem_title: string
+          root_causes?: Json | null
+          target_demographics?: Json | null
+          target_region?: string | null
+          updated_at?: string
+          urgency_level?: string
+          volatility_score?: number | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          impact_groups?: Json | null
+          problem_category?: string
+          problem_description?: string
+          problem_title?: string
+          root_causes?: Json | null
+          target_demographics?: Json | null
+          target_region?: string | null
+          updated_at?: string
+          urgency_level?: string
+          volatility_score?: number | null
         }
         Relationships: []
       }
@@ -9515,6 +9718,62 @@ export type Database = {
           },
         ]
       }
+      strategy_execution_logs: {
+        Row: {
+          challenges_encountered: Json | null
+          completed_at: string | null
+          created_at: string
+          executed_by: string | null
+          execution_phase: string
+          id: string
+          impact_measurements: Json | null
+          milestones_completed: Json | null
+          phase_status: string
+          progress_percentage: number | null
+          public_feedback: Json | null
+          started_at: string | null
+          strategy_id: string | null
+        }
+        Insert: {
+          challenges_encountered?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          executed_by?: string | null
+          execution_phase: string
+          id?: string
+          impact_measurements?: Json | null
+          milestones_completed?: Json | null
+          phase_status?: string
+          progress_percentage?: number | null
+          public_feedback?: Json | null
+          started_at?: string | null
+          strategy_id?: string | null
+        }
+        Update: {
+          challenges_encountered?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          executed_by?: string | null
+          execution_phase?: string
+          id?: string
+          impact_measurements?: Json | null
+          milestones_completed?: Json | null
+          phase_status?: string
+          progress_percentage?: number | null
+          public_feedback?: Json | null
+          started_at?: string | null
+          strategy_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "strategy_execution_logs_strategy_id_fkey"
+            columns: ["strategy_id"]
+            isOneToOne: false
+            referencedRelation: "civic_strategies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       strategy_implementations: {
         Row: {
           created_at: string
@@ -10300,6 +10559,10 @@ export type Database = {
       }
       get_autonomous_config: {
         Args: { p_config_key?: string }
+        Returns: Json
+      }
+      get_civic_strategy_stats: {
+        Args: Record<PropertyKey, never>
         Returns: Json
       }
       get_legal_dashboard_stats: {
