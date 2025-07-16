@@ -11434,6 +11434,77 @@ export type Database = {
           },
         ]
       }
+      poll_suggestions: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          options: string[]
+          priority_level: string | null
+          published_at: string | null
+          published_poll_id: string | null
+          question: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source_event: string | null
+          status: string | null
+          suggested_by: string | null
+          title: string
+          trending_topics: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          options: string[]
+          priority_level?: string | null
+          published_at?: string | null
+          published_poll_id?: string | null
+          question: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_event?: string | null
+          status?: string | null
+          suggested_by?: string | null
+          title: string
+          trending_topics?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          options?: string[]
+          priority_level?: string | null
+          published_at?: string | null
+          published_poll_id?: string | null
+          question?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_event?: string | null
+          status?: string | null
+          suggested_by?: string | null
+          title?: string
+          trending_topics?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_suggestions_published_poll_id_fkey"
+            columns: ["published_poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       poll_votes: {
         Row: {
           created_at: string | null
@@ -12792,6 +12863,14 @@ export type Database = {
         }
         Returns: Json
       }
+      approve_and_publish_poll_suggestion: {
+        Args: {
+          p_suggestion_id: string
+          p_admin_id: string
+          p_publish_immediately?: boolean
+        }
+        Returns: string
+      }
       calculate_agent_performance: {
         Args: { p_agent_id: string; p_date?: string }
         Returns: Json
@@ -13052,6 +13131,10 @@ export type Database = {
           p_user_agent?: string
         }
         Returns: string
+      }
+      reject_poll_suggestion: {
+        Args: { p_suggestion_id: string; p_admin_id: string; p_reason?: string }
+        Returns: boolean
       }
       run_ashen_simulation: {
         Args: {

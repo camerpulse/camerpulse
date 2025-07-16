@@ -67,6 +67,7 @@ import PoliticianEngagementScore from '@/components/AI/PoliticianEngagementScore
 import CivicSentimentTimeline from '@/components/AI/CivicSentimentTimeline';
 import AshenCivicCoreSyncLayer from '@/components/AI/AshenCivicCoreSyncLayer';
 import NationalDebtIntelligenceCore from '@/components/AI/NationalDebtIntelligenceCore';
+import PollSuggestionsPanel from '@/components/AI/PollSuggestionsPanel';
 
 interface SentimentData {
   id: string;
@@ -316,6 +317,7 @@ const CamerPulseIntelligence = () => {
               <TabsTrigger value="timeline" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📆 Sentiment Timeline</TabsTrigger>
               <TabsTrigger value="debt-intelligence" className="whitespace-nowrap min-h-[48px] px-3 text-sm">💰 Debt Intelligence</TabsTrigger>
               <TabsTrigger value="sync-layer" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🛡️ Sync Layer</TabsTrigger>
+              <TabsTrigger value="poll-suggestions" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📊 Poll Suggestions</TabsTrigger>
               <TabsTrigger value="config" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚙️ Config</TabsTrigger>
             </TabsList>
           </div>
@@ -541,6 +543,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="sync-layer" className="space-y-4">
             <AshenCivicCoreSyncLayer />
+          </TabsContent>
+
+          <TabsContent value="poll-suggestions" className="space-y-4">
+            <PollSuggestionsPanel />
           </TabsContent>
 
           <TabsContent value="config" className="space-y-4">
