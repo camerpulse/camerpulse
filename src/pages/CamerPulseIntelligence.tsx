@@ -53,6 +53,7 @@ import CivicFusionCore from '@/components/AI/CivicFusionCore';
 import GovSyncPanel from '@/components/AI/GovSyncPanel';
 import CivicTrustIndex from '@/components/AI/CivicTrustIndex';
 import RedRoomPanel from '@/components/AI/RedRoomPanel';
+import ElectionCommandCore from '@/components/AI/ElectionCommandCore';
 
 interface SentimentData {
   id: string;
@@ -270,7 +271,7 @@ const CamerPulseIntelligence = () => {
               <TabsTrigger value="fusion" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚡ Fusion Core</TabsTrigger>
               <TabsTrigger value="civic" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📰 Civic Feed</TabsTrigger>
               <TabsTrigger value="sentiment" className="whitespace-nowrap min-h-[48px] px-3 text-sm">💭 Sentiment</TabsTrigger>
-              <TabsTrigger value="election" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🗳️ Election</TabsTrigger>
+              <TabsTrigger value="election" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🗳️ Election War Room</TabsTrigger>
               <TabsTrigger value="regional" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🗺️ Regional</TabsTrigger>
               <TabsTrigger value="local" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📍 Local</TabsTrigger>
               <TabsTrigger value="disinfoShield" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🛡️ Disinfo Shield</TabsTrigger>
@@ -381,7 +382,7 @@ const CamerPulseIntelligence = () => {
           </TabsContent>
 
           <TabsContent value="election" className="space-y-4">
-            <ElectionSentimentTracker />
+            <ElectionCommandCore />
           </TabsContent>
 
           <TabsContent value="regional" className="space-y-4">
