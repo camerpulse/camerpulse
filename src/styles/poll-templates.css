@@ -1,0 +1,264 @@
+/* Poll Template Styles */
+
+/* Civic Card Template */
+.civic-card-template {
+  @apply transition-all duration-300 hover:shadow-lg;
+}
+
+.civic-card-template .progress-bar {
+  @apply animate-pulse;
+}
+
+.civic-card-template .flag-badge {
+  @apply absolute top-4 right-4 bg-red-600 text-white px-2 py-1 rounded text-xs;
+}
+
+/* Interactive Ballot Template */
+.ballot-template {
+  @apply bg-white border-2 border-gray-300 font-serif;
+}
+
+.ballot-template .ballot-header {
+  @apply text-center py-6 border-b-2 border-gray-200 bg-gray-50;
+}
+
+.ballot-template .ballot-option {
+  @apply flex items-center gap-4 p-4 border-b border-gray-100 cursor-pointer transition-colors;
+}
+
+.ballot-template .ballot-option:hover {
+  @apply bg-gray-50;
+}
+
+.ballot-template .checkbox {
+  @apply w-6 h-6 border-2 border-gray-400 rounded flex items-center justify-center;
+}
+
+.ballot-template .checkbox.checked {
+  @apply border-blue-600 bg-blue-50;
+}
+
+/* Bar Chart Template */
+.bar-chart-template {
+  @apply space-y-4;
+}
+
+.bar-chart-template .chart-bar {
+  @apply transition-all duration-1000 ease-out;
+}
+
+.bar-chart-template .chart-label {
+  @apply text-sm font-medium;
+}
+
+.bar-chart-template .chart-value {
+  @apply text-xs text-gray-600;
+}
+
+/* Emoji Burst Template */
+.emoji-burst-template {
+  @apply text-center space-y-6;
+}
+
+.emoji-burst-template .emoji-option {
+  @apply transition-all duration-300 hover:scale-110 cursor-pointer;
+}
+
+.emoji-burst-template .emoji-option.selected {
+  @apply scale-125 animate-bounce;
+}
+
+.emoji-burst-template .floating-emoji {
+  @apply animate-ping absolute;
+}
+
+/* Flash Poll Template */
+.flash-poll-template {
+  @apply relative overflow-hidden;
+}
+
+.flash-poll-template .urgency-bar {
+  @apply absolute top-0 left-0 right-0 h-1 bg-red-500 animate-pulse;
+}
+
+.flash-poll-template .timer-display {
+  @apply text-3xl font-bold text-red-600 animate-pulse;
+}
+
+.flash-poll-template .urgent-button {
+  @apply animate-pulse hover:animate-none;
+}
+
+/* Comparison Template */
+.comparison-template .option-card {
+  @apply transition-transform duration-300 hover:scale-105 cursor-pointer;
+}
+
+.comparison-template .option-card:hover .option-image {
+  @apply scale-110;
+}
+
+.comparison-template .option-image {
+  @apply transition-transform duration-300;
+}
+
+/* Carousel Template */
+.carousel-template {
+  @apply space-y-4;
+}
+
+.carousel-template .slide {
+  @apply transition-all duration-500 ease-in-out;
+}
+
+.carousel-template .slide-indicator {
+  @apply w-2 h-2 rounded-full cursor-pointer transition-opacity duration-300;
+}
+
+.carousel-template .slide-indicator.active {
+  @apply opacity-100;
+}
+
+.carousel-template .slide-indicator.inactive {
+  @apply opacity-30;
+}
+
+/* Radar Sentiment Template */
+.radar-sentiment-template {
+  @apply relative;
+}
+
+.radar-sentiment-template .radar-point {
+  @apply cursor-pointer transition-all duration-300 hover:scale-125;
+}
+
+.radar-sentiment-template .radar-line {
+  @apply stroke-current opacity-50;
+}
+
+/* Heatmap Template */
+.heatmap-template .region {
+  @apply cursor-pointer transition-all duration-300;
+}
+
+.heatmap-template .region:hover {
+  @apply opacity-80 scale-105;
+}
+
+.heatmap-template .intensity-low {
+  @apply fill-blue-200;
+}
+
+.heatmap-template .intensity-medium {
+  @apply fill-blue-400;
+}
+
+.heatmap-template .intensity-high {
+  @apply fill-blue-600;
+}
+
+.heatmap-template .intensity-very-high {
+  @apply fill-blue-800;
+}
+
+/* Voice Poll Template */
+.voice-template {
+  @apply space-y-6;
+}
+
+.voice-template .audio-indicator {
+  @apply animate-pulse;
+}
+
+.voice-template .voice-button {
+  @apply rounded-full p-6 transition-all duration-300 hover:scale-110;
+}
+
+.voice-template .accessibility-indicator {
+  @apply flex items-center gap-2 text-sm text-gray-600;
+}
+
+/* Animation Keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px currentColor; }
+  50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes zoomIn {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .poll-template {
+    @apply px-4;
+  }
+  
+  .emoji-burst-template .emoji-option {
+    @apply text-3xl p-4;
+  }
+  
+  .comparison-template {
+    @apply grid-cols-1 gap-4;
+  }
+  
+  .carousel-template .slide {
+    @apply h-64;
+  }
+  
+  .flash-poll-template .timer-display {
+    @apply text-2xl;
+  }
+  
+  .ballot-template .ballot-option {
+    @apply p-3;
+  }
+}
+
+/* Touch-friendly interactions */
+@media (hover: none) {
+  .hover\:scale-105:hover {
+    @apply scale-105;
+  }
+  
+  .hover\:scale-110:hover {
+    @apply scale-110;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .ballot-template {
+    @apply bg-gray-900 border-gray-700;
+  }
+  
+  .ballot-template .ballot-header {
+    @apply bg-gray-800 border-gray-700;
+  }
+  
+  .ballot-template .ballot-option:hover {
+    @apply bg-gray-800;
+  }
+}

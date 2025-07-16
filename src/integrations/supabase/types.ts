@@ -12035,6 +12035,92 @@ export type Database = {
           },
         ]
       }
+      poll_template_usage: {
+        Row: {
+          created_at: string
+          id: string
+          poll_id: string
+          template_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          poll_id: string
+          template_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          poll_id?: string
+          template_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_template_usage_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "poll_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_templates: {
+        Row: {
+          color_theme: Json
+          created_at: string
+          description: string
+          features: Json
+          icon_set: string
+          id: string
+          is_active: boolean
+          is_premium: boolean
+          layout_type: string
+          preview_image_url: string | null
+          style_class: string
+          style_name: string
+          supported_poll_types: string[]
+          template_name: string
+          updated_at: string
+        }
+        Insert: {
+          color_theme?: Json
+          created_at?: string
+          description: string
+          features?: Json
+          icon_set: string
+          id?: string
+          is_active?: boolean
+          is_premium?: boolean
+          layout_type: string
+          preview_image_url?: string | null
+          style_class: string
+          style_name: string
+          supported_poll_types?: string[]
+          template_name: string
+          updated_at?: string
+        }
+        Update: {
+          color_theme?: Json
+          created_at?: string
+          description?: string
+          features?: Json
+          icon_set?: string
+          id?: string
+          is_active?: boolean
+          is_premium?: boolean
+          layout_type?: string
+          preview_image_url?: string | null
+          style_class?: string
+          style_name?: string
+          supported_poll_types?: string[]
+          template_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       poll_votes: {
         Row: {
           created_at: string | null

@@ -13,7 +13,7 @@ import {
   AlertTriangle, CheckCircle, Clock, Menu, X, Search,
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
-  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin
+  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette
 } from 'lucide-react';
 
 // Import all feature modules
@@ -39,6 +39,7 @@ import { PromisesManager } from './modules/PromisesManager';
 import { RegionalAnalyticsManager } from './modules/RegionalAnalyticsManager';
 import RoleAccessTestSuite from './tests/RoleAccessTestSuite';
 import SecurityAuditSuite from './security/SecurityAuditSuite';
+import { PollTemplatesManager } from './PollTemplatesManager';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -264,6 +265,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'regional-analytics', label: 'Regional Analytics', icon: MapPin, color: 'text-blue-600', permission: 'analytics' },
     { id: 'role-access-test', label: 'Role Access Test', icon: Shield, color: 'text-orange-600', permission: 'all' },
     { id: 'security-audit', label: 'Security Audit', icon: Shield, color: 'text-red-600', permission: 'all' },
+    { id: 'poll-templates', label: 'Poll Templates', icon: Palette, color: 'text-purple-600', permission: 'content' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
     { id: 'settings-sync', label: 'Settings & Sync', icon: Settings, color: 'text-gray-500', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
@@ -314,6 +316,8 @@ export const AdminCoreV2: React.FC = () => {
         return <RoleAccessTestSuite hasPermission={hasPermission} adminRole={adminRole} currentUser={user} />;
       case 'security-audit':
         return <SecurityAuditSuite hasPermission={hasPermission} adminRole={adminRole} currentUser={user} />;
+      case 'poll-templates':
+        return <PollTemplatesManager hasPermission={hasPermission} logActivity={logActivity} />;
       case 'settings-sync':
         return <SettingsSyncManager {...moduleProps} systemModules={systemModules} onAutoSync={() => autoSyncMutation.mutate()} />;
       default:
