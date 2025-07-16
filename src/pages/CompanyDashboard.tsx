@@ -49,15 +49,18 @@ const CompanyDashboard = () => {
 
   const fetchCompanyData = async () => {
     try {
-      // Fetch company owned by current user
-      const { data: companyData, error: companyError } = await supabase
+      if (!user?.id) return;
+
+      // Fetch company owned by current user using raw query to avoid type issues
+      const { data, error } = await (supabase as any)
         .from('companies')
         .select('id, company_name, sector, description, status, average_rating, total_ratings, logo_url, created_at')
-        .eq('owner_id', user?.id)
+        .eq('owner_id', user.id)
         .eq('status', 'approved')
         .maybeSingle();
 
-      if (companyError) {
+      if (error) {
+        console.error('Company fetch error:', error);
         toast({
           title: "Error",
           description: "Failed to fetch company data",
@@ -66,26 +69,26 @@ const CompanyDashboard = () => {
         return;
       }
 
+      const companyData = data as Company | null;
       setCompany(companyData);
 
       if (companyData) {
-        // Fetch company statistics
-        const [jobsResult, updatesResult] = await Promise.all([
-          supabase
-            .from('company_jobs')
-            .select('id')
-            .eq('company_id', companyData.id)
-            .eq('is_active', true),
-          supabase
-            .from('company_updates')
-            .select('id')
-            .eq('company_id', companyData.id)
-        ]);
+        // Fetch statistics
+        const jobsResponse = await (supabase as any)
+          .from('company_jobs')
+          .select('id')
+          .eq('company_id', companyData.id)
+          .eq('is_active', true);
+
+        const updatesResponse = await (supabase as any)
+          .from('company_updates')
+          .select('id')
+          .eq('company_id', companyData.id);
 
         setStats({
-          profile_views: 0, // This would come from analytics
-          job_posts: jobsResult.data?.length || 0,
-          updates: updatesResult.data?.length || 0,
+          profile_views: 0,
+          job_posts: jobsResponse.data?.length || 0,
+          updates: updatesResponse.data?.length || 0,
           avg_rating: companyData.average_rating || 0
         });
       }
