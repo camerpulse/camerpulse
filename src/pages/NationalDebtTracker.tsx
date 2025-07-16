@@ -177,12 +177,18 @@ const NationalDebtTracker = () => {
 
   const fetchDebtData = async () => {
     try {
+      console.log('Starting debt data fetch...');
       const { data, error } = await supabase
         .from('debt_records')
         .select('*')
         .order('year', { ascending: false });
 
-      if (error) throw error;
+      console.log('Debt data fetch response:', { data, error });
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
       
       // Transform the data to ensure milestone_events is properly typed
       const transformedData = (data || []).map(record => ({
@@ -194,10 +200,12 @@ const NationalDebtTracker = () => {
             : []
       })) as DebtRecord[];
       
+      console.log('Transformed data:', transformedData);
       setDebtRecords(transformedData);
+      toast.success(`Loaded ${transformedData.length} debt records`);
     } catch (error) {
       console.error('Error fetching debt data:', error);
-      toast.error('Failed to fetch debt data');
+      toast.error(`Failed to fetch debt data: ${error.message}`);
     }
   };
 
