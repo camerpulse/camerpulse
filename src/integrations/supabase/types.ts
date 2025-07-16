@@ -4886,6 +4886,63 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_sentiment_timeline: {
+        Row: {
+          age_group: string | null
+          approval_rating: number
+          created_at: string
+          data_sources: Json
+          date_recorded: string
+          emotions: Json
+          id: string
+          language: string | null
+          metadata: Json
+          region: string | null
+          sentiment_score: number
+          subject_id: string | null
+          subject_name: string
+          subject_type: string
+          trust_ratio: number
+          updated_at: string
+        }
+        Insert: {
+          age_group?: string | null
+          approval_rating?: number
+          created_at?: string
+          data_sources?: Json
+          date_recorded: string
+          emotions?: Json
+          id?: string
+          language?: string | null
+          metadata?: Json
+          region?: string | null
+          sentiment_score?: number
+          subject_id?: string | null
+          subject_name: string
+          subject_type: string
+          trust_ratio?: number
+          updated_at?: string
+        }
+        Update: {
+          age_group?: string | null
+          approval_rating?: number
+          created_at?: string
+          data_sources?: Json
+          date_recorded?: string
+          emotions?: Json
+          id?: string
+          language?: string | null
+          metadata?: Json
+          region?: string | null
+          sentiment_score?: number
+          subject_id?: string | null
+          subject_name?: string
+          subject_type?: string
+          trust_ratio?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       civic_service_events: {
         Row: {
           affected_population: number | null
@@ -10296,6 +10353,151 @@ export type Database = {
         }
         Relationships: []
       }
+      sentiment_annotations: {
+        Row: {
+          annotated_by: string
+          annotated_by_name: string
+          annotation_date: string
+          annotation_text: string
+          annotation_type: string
+          created_at: string
+          id: string
+          is_public: boolean
+          metadata: Json
+          timeline_id: string
+          updated_at: string
+        }
+        Insert: {
+          annotated_by: string
+          annotated_by_name: string
+          annotation_date: string
+          annotation_text: string
+          annotation_type?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          metadata?: Json
+          timeline_id: string
+          updated_at?: string
+        }
+        Update: {
+          annotated_by?: string
+          annotated_by_name?: string
+          annotation_date?: string
+          annotation_text?: string
+          annotation_type?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          metadata?: Json
+          timeline_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentiment_annotations_timeline_id_fkey"
+            columns: ["timeline_id"]
+            isOneToOne: false
+            referencedRelation: "civic_sentiment_timeline"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sentiment_export_requests: {
+        Row: {
+          created_at: string
+          date_range: Json
+          download_url: string | null
+          expires_at: string | null
+          export_data: Json | null
+          export_type: string
+          id: string
+          requested_by: string
+          status: string
+          subject_filter: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date_range?: Json
+          download_url?: string | null
+          expires_at?: string | null
+          export_data?: Json | null
+          export_type: string
+          id?: string
+          requested_by: string
+          status?: string
+          subject_filter?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date_range?: Json
+          download_url?: string | null
+          expires_at?: string | null
+          export_data?: Json | null
+          export_type?: string
+          id?: string
+          requested_by?: string
+          status?: string
+          subject_filter?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sentiment_spikes: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          detected_cause: string | null
+          event_source: string | null
+          event_title: string | null
+          id: string
+          manual_annotation: string | null
+          spike_intensity: number
+          spike_type: string
+          timeline_id: string
+          updated_at: string
+          verified_by: string | null
+        }
+        Insert: {
+          confidence_score?: number
+          created_at?: string
+          detected_cause?: string | null
+          event_source?: string | null
+          event_title?: string | null
+          id?: string
+          manual_annotation?: string | null
+          spike_intensity?: number
+          spike_type: string
+          timeline_id: string
+          updated_at?: string
+          verified_by?: string | null
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          detected_cause?: string | null
+          event_source?: string | null
+          event_title?: string | null
+          id?: string
+          manual_annotation?: string | null
+          spike_intensity?: number
+          spike_type?: string
+          timeline_id?: string
+          updated_at?: string
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentiment_spikes_timeline_id_fkey"
+            columns: ["timeline_id"]
+            isOneToOne: false
+            referencedRelation: "civic_sentiment_timeline"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       service_emotion_correlations: {
         Row: {
           analysis_confidence: number
@@ -11167,6 +11369,10 @@ export type Database = {
           changes_count: number
         }[]
       }
+      detect_sentiment_spikes: {
+        Args: { p_timeline_id: string; p_threshold?: number }
+        Returns: Json
+      }
       execute_civic_mission: {
         Args: { p_mission_id: string }
         Returns: Json
@@ -11238,6 +11444,17 @@ export type Database = {
       }
       get_pan_africa_config: {
         Args: { p_config_key?: string }
+        Returns: Json
+      }
+      get_sentiment_timeline: {
+        Args: {
+          p_subject_type?: string
+          p_subject_name?: string
+          p_start_date?: string
+          p_end_date?: string
+          p_region?: string
+          p_age_group?: string
+        }
         Returns: Json
       }
       get_sync_guard_status: {
