@@ -84,9 +84,6 @@ export const Header = () => {
               <Link to="/billionaires">👑 Billionaires</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/debt-tracker">📉 National Debt</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/civic-portal">🌍 Civic Portal</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
@@ -199,9 +196,6 @@ export const Header = () => {
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/billionaires" onClick={() => setMobileMenuOpen(false)}>👑 Billionaires</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/debt-tracker" onClick={() => setMobileMenuOpen(false)}>📉 National Debt</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/news" onClick={() => setMobileMenuOpen(false)}>News</Link>
