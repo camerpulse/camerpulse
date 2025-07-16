@@ -5270,6 +5270,189 @@ export type Database = {
           },
         ]
       }
+      corruption_case_sources: {
+        Row: {
+          case_id: string
+          created_at: string
+          credibility_score: number | null
+          document_type: string | null
+          id: string
+          is_primary_source: boolean | null
+          publication_date: string | null
+          source_name: string
+          source_type: string
+          source_url: string | null
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          credibility_score?: number | null
+          document_type?: string | null
+          id?: string
+          is_primary_source?: boolean | null
+          publication_date?: string | null
+          source_name: string
+          source_type: string
+          source_url?: string | null
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          credibility_score?: number | null
+          document_type?: string | null
+          id?: string
+          is_primary_source?: boolean | null
+          publication_date?: string | null
+          source_name?: string
+          source_type?: string
+          source_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "corruption_case_sources_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "corruption_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      corruption_case_updates: {
+        Row: {
+          added_by: string | null
+          case_id: string
+          created_at: string
+          id: string
+          new_status: string | null
+          previous_status: string | null
+          source_reference: string | null
+          update_date: string
+          update_description: string
+          update_type: string
+        }
+        Insert: {
+          added_by?: string | null
+          case_id: string
+          created_at?: string
+          id?: string
+          new_status?: string | null
+          previous_status?: string | null
+          source_reference?: string | null
+          update_date: string
+          update_description: string
+          update_type: string
+        }
+        Update: {
+          added_by?: string | null
+          case_id?: string
+          created_at?: string
+          id?: string
+          new_status?: string | null
+          previous_status?: string | null
+          source_reference?: string | null
+          update_date?: string
+          update_description?: string
+          update_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "corruption_case_updates_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "corruption_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      corruption_cases: {
+        Row: {
+          amount_involved: number | null
+          case_description: string
+          case_reference_id: string | null
+          case_status: string
+          case_title: string
+          case_type: string
+          created_at: string
+          created_by: string | null
+          currency: string | null
+          date_court_ruling: string | null
+          date_investigation_started: string | null
+          date_reported: string | null
+          id: string
+          investigating_body: string | null
+          is_verified: boolean | null
+          last_updated_by: string | null
+          politician_id: string | null
+          politician_name: string
+          politician_party: string | null
+          politician_position: string | null
+          regions_affected: string[] | null
+          sentence_details: string | null
+          updated_at: string
+          verification_notes: string | null
+        }
+        Insert: {
+          amount_involved?: number | null
+          case_description: string
+          case_reference_id?: string | null
+          case_status?: string
+          case_title: string
+          case_type: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          date_court_ruling?: string | null
+          date_investigation_started?: string | null
+          date_reported?: string | null
+          id?: string
+          investigating_body?: string | null
+          is_verified?: boolean | null
+          last_updated_by?: string | null
+          politician_id?: string | null
+          politician_name: string
+          politician_party?: string | null
+          politician_position?: string | null
+          regions_affected?: string[] | null
+          sentence_details?: string | null
+          updated_at?: string
+          verification_notes?: string | null
+        }
+        Update: {
+          amount_involved?: number | null
+          case_description?: string
+          case_reference_id?: string | null
+          case_status?: string
+          case_title?: string
+          case_type?: string
+          created_at?: string
+          created_by?: string | null
+          currency?: string | null
+          date_court_ruling?: string | null
+          date_investigation_started?: string | null
+          date_reported?: string | null
+          id?: string
+          investigating_body?: string | null
+          is_verified?: boolean | null
+          last_updated_by?: string | null
+          politician_id?: string | null
+          politician_name?: string
+          politician_party?: string | null
+          politician_position?: string | null
+          regions_affected?: string[] | null
+          sentence_details?: string | null
+          updated_at?: string
+          verification_notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "corruption_cases_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       country_administrative_divisions: {
         Row: {
           country_code: string
@@ -9274,6 +9457,59 @@ export type Database = {
           },
         ]
       }
+      politician_transparency_scores: {
+        Row: {
+          conviction_count: number | null
+          corruption_cases_count: number | null
+          created_at: string
+          id: string
+          investigation_count: number | null
+          last_case_date: string | null
+          notes: string | null
+          politician_id: string
+          sanction_count: number | null
+          score_updated_at: string
+          transparency_rating: string
+          updated_at: string
+        }
+        Insert: {
+          conviction_count?: number | null
+          corruption_cases_count?: number | null
+          created_at?: string
+          id?: string
+          investigation_count?: number | null
+          last_case_date?: string | null
+          notes?: string | null
+          politician_id: string
+          sanction_count?: number | null
+          score_updated_at?: string
+          transparency_rating?: string
+          updated_at?: string
+        }
+        Update: {
+          conviction_count?: number | null
+          corruption_cases_count?: number | null
+          created_at?: string
+          id?: string
+          investigation_count?: number | null
+          last_case_date?: string | null
+          notes?: string | null
+          politician_id?: string
+          sanction_count?: number | null
+          score_updated_at?: string
+          transparency_rating?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "politician_transparency_scores_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       politicians: {
         Row: {
           auto_imported: boolean | null
@@ -10770,6 +11006,10 @@ export type Database = {
         Returns: Json
       }
       get_civic_strategy_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_corruption_statistics: {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
