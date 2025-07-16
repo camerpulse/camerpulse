@@ -11511,6 +11511,7 @@ export type Database = {
           id: string
           option_index: number
           poll_id: string
+          region: string | null
           user_id: string
         }
         Insert: {
@@ -11518,6 +11519,7 @@ export type Database = {
           id?: string
           option_index: number
           poll_id: string
+          region?: string | null
           user_id: string
         }
         Update: {
@@ -11525,6 +11527,7 @@ export type Database = {
           id?: string
           option_index?: number
           poll_id?: string
+          region?: string | null
           user_id?: string
         }
         Relationships: [
@@ -12827,7 +12830,24 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      poll_regional_results: {
+        Row: {
+          option_index: number | null
+          percentage: number | null
+          poll_id: string | null
+          region: string | null
+          vote_count: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_votes_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       analyze_dev_request: {

@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CreatePollDialog } from '@/components/Polls/CreatePollDialog';
+import { RegionalHeatmap } from '@/components/Polls/RegionalHeatmap';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -18,7 +19,8 @@ import {
   TrendingUp,
   Calendar,
   CheckCircle,
-  XCircle
+  XCircle,
+  MapPin
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -47,6 +49,7 @@ const Polls = () => {
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreatePoll, setShowCreatePoll] = useState(false);
+  const [expandedHeatmaps, setExpandedHeatmaps] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     fetchPolls();
@@ -135,7 +138,7 @@ const Polls = () => {
     }
   };
 
-  const submitVote = async (pollId: string, optionIndex: number) => {
+  const submitVote = async (pollId: string, optionIndex: number, region?: string) => {
     if (!user) {
       toast({
         title: "Login required",
@@ -163,13 +166,17 @@ const Polls = () => {
         return;
       }
 
-      // Submit vote
+      // For now, region tracking is optional and can be enhanced later
+      let userRegion = region;
+
+      // Submit vote with region tracking
       const { error } = await supabase
         .from('poll_votes')
         .insert({
           poll_id: pollId,
           user_id: user.id,
-          option_index: optionIndex
+          option_index: optionIndex,
+          region: userRegion
         });
 
       if (error) throw error;
@@ -199,6 +206,16 @@ const Polls = () => {
 
   const getVotePercentage = (votes: number, total: number) => {
     return total > 0 ? Math.round((votes / total) * 100) : 0;
+  };
+
+  const toggleHeatmap = (pollId: string) => {
+    const newExpanded = new Set(expandedHeatmaps);
+    if (newExpanded.has(pollId)) {
+      newExpanded.delete(pollId);
+    } else {
+      newExpanded.add(pollId);
+    }
+    setExpandedHeatmaps(newExpanded);
   };
 
   return (
@@ -410,6 +427,15 @@ const Polls = () => {
                             </span>
                           </div>
                         )}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => toggleHeatmap(poll.id)}
+                          className="flex items-center gap-1 h-6 px-2"
+                        >
+                          <MapPin className="w-3 h-3" />
+                          Regional Map
+                        </Button>
                       </div>
                       
                       {hasVoted && (
@@ -418,6 +444,17 @@ const Polls = () => {
                         </Badge>
                       )}
                     </div>
+                    
+                    {/* Regional Heatmap */}
+                    {expandedHeatmaps.has(poll.id) && (
+                      <div className="mt-4">
+                        <RegionalHeatmap
+                          pollId={poll.id}
+                          pollOptions={poll.options}
+                          isVisible={expandedHeatmaps.has(poll.id)}
+                        />
+                      </div>
+                    )}
                   </CardContent>
                 </Card>
               );
