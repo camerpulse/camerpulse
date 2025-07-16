@@ -4462,6 +4462,77 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_law_explanations: {
+        Row: {
+          auto_generated: boolean | null
+          citizen_impact: string | null
+          created_at: string | null
+          created_by: string | null
+          downvotes: number | null
+          examples: string[] | null
+          expert_reviewed: boolean | null
+          french_explanation: string | null
+          id: string
+          key_points: string[] | null
+          legal_document_id: string | null
+          metadata: Json | null
+          pidgin_explanation: string | null
+          question_asked: string
+          related_laws: string[] | null
+          simple_explanation: string
+          updated_at: string | null
+          upvotes: number | null
+        }
+        Insert: {
+          auto_generated?: boolean | null
+          citizen_impact?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          downvotes?: number | null
+          examples?: string[] | null
+          expert_reviewed?: boolean | null
+          french_explanation?: string | null
+          id?: string
+          key_points?: string[] | null
+          legal_document_id?: string | null
+          metadata?: Json | null
+          pidgin_explanation?: string | null
+          question_asked: string
+          related_laws?: string[] | null
+          simple_explanation: string
+          updated_at?: string | null
+          upvotes?: number | null
+        }
+        Update: {
+          auto_generated?: boolean | null
+          citizen_impact?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          downvotes?: number | null
+          examples?: string[] | null
+          expert_reviewed?: boolean | null
+          french_explanation?: string | null
+          id?: string
+          key_points?: string[] | null
+          legal_document_id?: string | null
+          metadata?: Json | null
+          pidgin_explanation?: string | null
+          question_asked?: string
+          related_laws?: string[] | null
+          simple_explanation?: string
+          updated_at?: string | null
+          upvotes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_law_explanations_legal_document_id_fkey"
+            columns: ["legal_document_id"]
+            isOneToOne: false
+            referencedRelation: "legal_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       civic_mission_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -4871,6 +4942,130 @@ export type Database = {
           previous_state?: Json | null
         }
         Relationships: []
+      }
+      constitutional_articles: {
+        Row: {
+          article_number: string
+          article_summary: string | null
+          article_text: string
+          article_title: string | null
+          category: string
+          chapter_title: string | null
+          created_at: string | null
+          id: string
+          is_fundamental_right: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          article_number: string
+          article_summary?: string | null
+          article_text: string
+          article_title?: string | null
+          category: string
+          chapter_title?: string | null
+          created_at?: string | null
+          id?: string
+          is_fundamental_right?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          article_number?: string
+          article_summary?: string | null
+          article_text?: string
+          article_title?: string | null
+          category?: string
+          chapter_title?: string | null
+          created_at?: string | null
+          id?: string
+          is_fundamental_right?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      constitutional_violations: {
+        Row: {
+          auto_detected: boolean | null
+          confidence_score: number | null
+          constitutional_article_id: string | null
+          created_at: string | null
+          expert_opinion: string | null
+          flagged_by: string | null
+          id: string
+          legal_analysis: string | null
+          legal_document_id: string | null
+          metadata: Json | null
+          policy_id: string | null
+          public_alert_issued: boolean | null
+          resolution_status: string | null
+          reviewed_by_legal_expert: boolean | null
+          severity_level: string
+          updated_at: string | null
+          violation_description: string
+          violation_type: string
+        }
+        Insert: {
+          auto_detected?: boolean | null
+          confidence_score?: number | null
+          constitutional_article_id?: string | null
+          created_at?: string | null
+          expert_opinion?: string | null
+          flagged_by?: string | null
+          id?: string
+          legal_analysis?: string | null
+          legal_document_id?: string | null
+          metadata?: Json | null
+          policy_id?: string | null
+          public_alert_issued?: boolean | null
+          resolution_status?: string | null
+          reviewed_by_legal_expert?: boolean | null
+          severity_level?: string
+          updated_at?: string | null
+          violation_description: string
+          violation_type: string
+        }
+        Update: {
+          auto_detected?: boolean | null
+          confidence_score?: number | null
+          constitutional_article_id?: string | null
+          created_at?: string | null
+          expert_opinion?: string | null
+          flagged_by?: string | null
+          id?: string
+          legal_analysis?: string | null
+          legal_document_id?: string | null
+          metadata?: Json | null
+          policy_id?: string | null
+          public_alert_issued?: boolean | null
+          resolution_status?: string | null
+          reviewed_by_legal_expert?: boolean | null
+          severity_level?: string
+          updated_at?: string | null
+          violation_description?: string
+          violation_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "constitutional_violations_constitutional_article_id_fkey"
+            columns: ["constitutional_article_id"]
+            isOneToOne: false
+            referencedRelation: "constitutional_articles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "constitutional_violations_legal_document_id_fkey"
+            columns: ["legal_document_id"]
+            isOneToOne: false
+            referencedRelation: "legal_documents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "constitutional_violations_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "policy_tracker"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       country_administrative_divisions: {
         Row: {
@@ -5923,6 +6118,149 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      legal_document_processing: {
+        Row: {
+          completed_at: string | null
+          confidence_score: number | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          input_format: string | null
+          legal_document_id: string | null
+          output_format: string | null
+          processed_by: string | null
+          processing_duration_ms: number | null
+          processing_notes: string | null
+          processing_status: string
+          processing_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          input_format?: string | null
+          legal_document_id?: string | null
+          output_format?: string | null
+          processed_by?: string | null
+          processing_duration_ms?: number | null
+          processing_notes?: string | null
+          processing_status?: string
+          processing_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          input_format?: string | null
+          legal_document_id?: string | null
+          output_format?: string | null
+          processed_by?: string | null
+          processing_duration_ms?: number | null
+          processing_notes?: string | null
+          processing_status?: string
+          processing_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_document_processing_legal_document_id_fkey"
+            columns: ["legal_document_id"]
+            isOneToOne: false
+            referencedRelation: "legal_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legal_documents: {
+        Row: {
+          affected_regions: string[] | null
+          affected_sectors: string[] | null
+          created_at: string | null
+          created_by: string | null
+          document_number: string | null
+          document_title: string
+          document_type: string
+          document_url: string | null
+          enforcement_date: string | null
+          english_summary: string | null
+          expiry_date: string | null
+          id: string
+          introduction_date: string | null
+          jurisdiction: string
+          key_provisions: string[] | null
+          metadata: Json | null
+          ministry_department: string | null
+          original_language: string
+          original_text: string | null
+          passed_date: string | null
+          penalties_summary: string | null
+          pidgin_summary: string | null
+          simplified_summary: string | null
+          source_official: boolean | null
+          status: string
+          updated_at: string | null
+        }
+        Insert: {
+          affected_regions?: string[] | null
+          affected_sectors?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          document_number?: string | null
+          document_title: string
+          document_type: string
+          document_url?: string | null
+          enforcement_date?: string | null
+          english_summary?: string | null
+          expiry_date?: string | null
+          id?: string
+          introduction_date?: string | null
+          jurisdiction?: string
+          key_provisions?: string[] | null
+          metadata?: Json | null
+          ministry_department?: string | null
+          original_language?: string
+          original_text?: string | null
+          passed_date?: string | null
+          penalties_summary?: string | null
+          pidgin_summary?: string | null
+          simplified_summary?: string | null
+          source_official?: boolean | null
+          status?: string
+          updated_at?: string | null
+        }
+        Update: {
+          affected_regions?: string[] | null
+          affected_sectors?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          document_number?: string | null
+          document_title?: string
+          document_type?: string
+          document_url?: string | null
+          enforcement_date?: string | null
+          english_summary?: string | null
+          expiry_date?: string | null
+          id?: string
+          introduction_date?: string | null
+          jurisdiction?: string
+          key_provisions?: string[] | null
+          metadata?: Json | null
+          ministry_department?: string | null
+          original_language?: string
+          original_text?: string | null
+          passed_date?: string | null
+          penalties_summary?: string | null
+          pidgin_summary?: string | null
+          simplified_summary?: string | null
+          source_official?: boolean | null
+          status?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       manual_fix_history: {
         Row: {
@@ -7892,6 +8230,80 @@ export type Database = {
           },
         ]
       }
+      policy_tracker: {
+        Row: {
+          abstaining_parties: string[] | null
+          affected_regions: string[] | null
+          affected_sectors: string[] | null
+          created_at: string | null
+          id: string
+          initiator_name: string | null
+          initiator_party: string | null
+          initiator_type: string | null
+          legal_document_id: string | null
+          metadata: Json | null
+          opposing_parties: string[] | null
+          policy_summary: string | null
+          policy_title: string
+          policy_type: string
+          proposed_date: string | null
+          status: string
+          supporting_parties: string[] | null
+          updated_at: string | null
+          vote_results: Json | null
+        }
+        Insert: {
+          abstaining_parties?: string[] | null
+          affected_regions?: string[] | null
+          affected_sectors?: string[] | null
+          created_at?: string | null
+          id?: string
+          initiator_name?: string | null
+          initiator_party?: string | null
+          initiator_type?: string | null
+          legal_document_id?: string | null
+          metadata?: Json | null
+          opposing_parties?: string[] | null
+          policy_summary?: string | null
+          policy_title: string
+          policy_type: string
+          proposed_date?: string | null
+          status?: string
+          supporting_parties?: string[] | null
+          updated_at?: string | null
+          vote_results?: Json | null
+        }
+        Update: {
+          abstaining_parties?: string[] | null
+          affected_regions?: string[] | null
+          affected_sectors?: string[] | null
+          created_at?: string | null
+          id?: string
+          initiator_name?: string | null
+          initiator_party?: string | null
+          initiator_type?: string | null
+          legal_document_id?: string | null
+          metadata?: Json | null
+          opposing_parties?: string[] | null
+          policy_summary?: string | null
+          policy_title?: string
+          policy_type?: string
+          proposed_date?: string | null
+          status?: string
+          supporting_parties?: string[] | null
+          updated_at?: string | null
+          vote_results?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "policy_tracker_legal_document_id_fkey"
+            columns: ["legal_document_id"]
+            isOneToOne: false
+            referencedRelation: "legal_documents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       politica_ai_config: {
         Row: {
           config_key: string
@@ -9830,6 +10242,10 @@ export type Database = {
         Args: { p_source_content: string; p_target_content: string }
         Returns: number
       }
+      check_constitutional_compliance: {
+        Args: { p_document_id: string; p_document_text: string }
+        Returns: Json
+      }
       compare_snapshots: {
         Args: { p_snapshot_a_id: string; p_snapshot_b_id: string }
         Returns: string
@@ -9884,6 +10300,10 @@ export type Database = {
       }
       get_autonomous_config: {
         Args: { p_config_key?: string }
+        Returns: Json
+      }
+      get_legal_dashboard_stats: {
+        Args: Record<PropertyKey, never>
         Returns: Json
       }
       get_mesh_status_overview: {
@@ -9970,6 +10390,14 @@ export type Database = {
           p_user_agent?: string
           p_metadata?: Json
           p_severity?: string
+        }
+        Returns: string
+      }
+      process_legal_document: {
+        Args: {
+          p_document_id: string
+          p_processing_type: string
+          p_result_data?: Json
         }
         Returns: string
       }

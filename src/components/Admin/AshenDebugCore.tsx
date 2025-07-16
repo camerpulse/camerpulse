@@ -35,6 +35,7 @@ import PanAfricaMeshManager from './PanAfricaMeshManager';
 import { CustomIntegratorBuilder } from './CustomIntegratorBuilder';
 import { AshenSyncGuard } from './AshenSyncGuard';
 import CivicMediaWatch from '../AI/CivicMediaWatch';
+import { LegalIntelligenceCore } from '../AI/LegalIntelligenceCore';
 
 interface ErrorLog {
   id: string;
@@ -449,6 +450,7 @@ export default function AshenDebugCore() {
           <TabsTrigger value="custom-integrator" className="text-xs">Custom Integrator</TabsTrigger>
           <TabsTrigger value="sync-guard" className="text-xs">Sync Guard</TabsTrigger>
           <TabsTrigger value="media-watch" className="text-xs">Media Watch</TabsTrigger>
+          <TabsTrigger value="legal-core" className="text-xs">Legal Core</TabsTrigger>
           <TabsTrigger value="zero-input-mode" className="text-xs">Zero Input Mode</TabsTrigger>
           <TabsTrigger value="security" className="text-xs">Security</TabsTrigger>
           <TabsTrigger value="patch-intelligence" className="text-xs">Patch Intelligence</TabsTrigger>
@@ -490,6 +492,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="media-watch" className="space-y-4">
           <CivicMediaWatch />
+        </TabsContent>
+        
+        <TabsContent value="legal-core" className="space-y-4">
+          <LegalIntelligenceCore />
         </TabsContent>
         
         <TabsContent value="zero-input-mode" className="space-y-4">
