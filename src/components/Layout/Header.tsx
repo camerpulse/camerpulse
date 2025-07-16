@@ -81,6 +81,9 @@ export const Header = () => {
               <Link to="/companies">Companies</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/billionaires">👑 Billionaires</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/civic-portal">🌍 Civic Portal</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">

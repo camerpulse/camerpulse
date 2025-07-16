@@ -2859,6 +2859,211 @@ export type Database = {
           },
         ]
       }
+      billionaire_applications: {
+        Row: {
+          admin_notes: string | null
+          applicant_email: string
+          applicant_name: string
+          applicant_phone: string | null
+          application_tier: Database["public"]["Enums"]["application_tier"]
+          billionaire_id: string | null
+          business_background: string
+          claimed_net_worth_fcfa: number
+          created_at: string | null
+          id: string
+          paid_at: string | null
+          payment_amount: number
+          payment_reference: string | null
+          payment_status: string | null
+          proof_documents: string[] | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          updated_at: string | null
+          wealth_source: Database["public"]["Enums"]["wealth_source"]
+        }
+        Insert: {
+          admin_notes?: string | null
+          applicant_email: string
+          applicant_name: string
+          applicant_phone?: string | null
+          application_tier: Database["public"]["Enums"]["application_tier"]
+          billionaire_id?: string | null
+          business_background: string
+          claimed_net_worth_fcfa: number
+          created_at?: string | null
+          id?: string
+          paid_at?: string | null
+          payment_amount: number
+          payment_reference?: string | null
+          payment_status?: string | null
+          proof_documents?: string[] | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          wealth_source: Database["public"]["Enums"]["wealth_source"]
+        }
+        Update: {
+          admin_notes?: string | null
+          applicant_email?: string
+          applicant_name?: string
+          applicant_phone?: string | null
+          application_tier?: Database["public"]["Enums"]["application_tier"]
+          billionaire_id?: string | null
+          business_background?: string
+          claimed_net_worth_fcfa?: number
+          created_at?: string | null
+          id?: string
+          paid_at?: string | null
+          payment_amount?: number
+          payment_reference?: string | null
+          payment_status?: string | null
+          proof_documents?: string[] | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          wealth_source?: Database["public"]["Enums"]["wealth_source"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billionaire_applications_billionaire_id_fkey"
+            columns: ["billionaire_id"]
+            isOneToOne: false
+            referencedRelation: "billionaires"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      billionaire_payments: {
+        Row: {
+          amount: number
+          application_id: string | null
+          created_at: string | null
+          currency: string | null
+          id: string
+          payment_method: string | null
+          payment_reference: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          application_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          application_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billionaire_payments_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "billionaire_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      billionaires: {
+        Row: {
+          biography: string | null
+          business_investments: string[] | null
+          company_affiliation: string | null
+          contact_info: string | null
+          created_at: string | null
+          created_by: string | null
+          current_rank: number | null
+          display_alias: string | null
+          full_name: string
+          id: string
+          is_anonymous: boolean | null
+          is_verified: boolean | null
+          media_profiles: Json | null
+          net_worth_usd: number | null
+          previous_rank: number | null
+          profile_picture_url: string | null
+          profile_views: number | null
+          region: string
+          social_media_handles: Json | null
+          updated_at: string | null
+          verified_at: string | null
+          verified_by: string | null
+          verified_net_worth_fcfa: number
+          wealth_source: Database["public"]["Enums"]["wealth_source"]
+          year_on_year_change: number | null
+        }
+        Insert: {
+          biography?: string | null
+          business_investments?: string[] | null
+          company_affiliation?: string | null
+          contact_info?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_rank?: number | null
+          display_alias?: string | null
+          full_name: string
+          id?: string
+          is_anonymous?: boolean | null
+          is_verified?: boolean | null
+          media_profiles?: Json | null
+          net_worth_usd?: number | null
+          previous_rank?: number | null
+          profile_picture_url?: string | null
+          profile_views?: number | null
+          region: string
+          social_media_handles?: Json | null
+          updated_at?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          verified_net_worth_fcfa: number
+          wealth_source: Database["public"]["Enums"]["wealth_source"]
+          year_on_year_change?: number | null
+        }
+        Update: {
+          biography?: string | null
+          business_investments?: string[] | null
+          company_affiliation?: string | null
+          contact_info?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          current_rank?: number | null
+          display_alias?: string | null
+          full_name?: string
+          id?: string
+          is_anonymous?: boolean | null
+          is_verified?: boolean | null
+          media_profiles?: Json | null
+          net_worth_usd?: number | null
+          previous_rank?: number | null
+          profile_picture_url?: string | null
+          profile_views?: number | null
+          region?: string
+          social_media_handles?: Json | null
+          updated_at?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          verified_net_worth_fcfa?: number
+          wealth_source?: Database["public"]["Enums"]["wealth_source"]
+          year_on_year_change?: number | null
+        }
+        Relationships: []
+      }
       cache_flush_operations: {
         Row: {
           cache_layers: string[]
@@ -11778,6 +11983,10 @@ export type Database = {
         Args: { p_config_key?: string }
         Returns: Json
       }
+      get_billionaire_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       get_civic_strategy_stats: {
         Args: Record<PropertyKey, never>
         Returns: Json
@@ -11956,6 +12165,10 @@ export type Database = {
         Args: { "": string }
         Returns: string[]
       }
+      update_billionaire_rankings: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       update_plugin_request_status: {
         Args: {
           p_request_id: string
@@ -11994,6 +12207,7 @@ export type Database = {
         | "verified_politician"
         | "verified_vendor"
         | "user"
+      application_tier: "bronze" | "silver" | "gold"
       bias_level: "none" | "mild" | "moderate" | "high"
       civic_entity_type:
         | "politician"
@@ -12061,6 +12275,21 @@ export type Database = {
         | "rejected"
         | "flagged"
         | "missing"
+      wealth_source:
+        | "technology"
+        | "oil_gas"
+        | "real_estate"
+        | "banking_finance"
+        | "agriculture"
+        | "mining"
+        | "telecommunications"
+        | "manufacturing"
+        | "retail_trade"
+        | "construction"
+        | "entertainment"
+        | "healthcare"
+        | "logistics"
+        | "other"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -12195,6 +12424,7 @@ export const Constants = {
         "verified_vendor",
         "user",
       ],
+      application_tier: ["bronze", "silver", "gold"],
       bias_level: ["none", "mild", "moderate", "high"],
       civic_entity_type: [
         "politician",
@@ -12268,6 +12498,22 @@ export const Constants = {
         "rejected",
         "flagged",
         "missing",
+      ],
+      wealth_source: [
+        "technology",
+        "oil_gas",
+        "real_estate",
+        "banking_finance",
+        "agriculture",
+        "mining",
+        "telecommunications",
+        "manufacturing",
+        "retail_trade",
+        "construction",
+        "entertainment",
+        "healthcare",
+        "logistics",
+        "other",
       ],
     },
   },
