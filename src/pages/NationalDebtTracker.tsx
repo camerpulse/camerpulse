@@ -37,7 +37,8 @@ import {
   Calendar,
   BookOpen,
   Target,
-  Zap
+  Zap,
+  RefreshCw
 } from "lucide-react";
 import { toast } from "sonner";
 import { CreditorBreakdown } from "@/components/AI/CreditorBreakdown";
@@ -93,19 +94,40 @@ export default function NationalDebtTracker() {
   const [activeTab, setActiveTab] = useState("overview");
   const [aiSummary, setAiSummary] = useState("");
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   // Chart colors
   const COLORS = ['#8B5CF6', '#06B6D4', '#10B981', '#F59E0B', '#EF4444', '#6366F1'];
 
   useEffect(() => {
     fetchData();
+    checkAdminStatus();
   }, []);
+
+  const checkAdminStatus = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: roles } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .single();
+        
+        setIsAdmin(roles?.role === 'admin');
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+    }
+  };
 
   const fetchData = async () => {
     try {
-      const [debtResult, sourcesResult] = await Promise.all([
+      const [debtResult, sourcesResult, refreshLogsResult] = await Promise.all([
         supabase.from('debt_records').select('*').order('year', { ascending: true }),
-        supabase.from('debt_sources').select('*').eq('is_active', true)
+        supabase.from('debt_sources').select('*').eq('is_active', true),
+        supabase.from('debt_refresh_logs').select('*').order('created_at', { ascending: false }).limit(1)
       ]);
 
       if (debtResult.error) throw debtResult.error;
@@ -114,18 +136,57 @@ export default function NationalDebtTracker() {
       setDebtRecords(debtResult.data || []);
       setSources(sourcesResult.data || []);
       
+      // Set last updated from most recent refresh log or fallback to now
+      const lastRefreshLog = refreshLogsResult.data?.[0];
+      if (lastRefreshLog?.completed_at) {
+        setLastUpdated(new Date(lastRefreshLog.completed_at));
+      } else {
+        setLastUpdated(new Date());
+      }
+      
       // Generate AI summary
       generateAISummary(debtResult.data || []);
       
       // Simulate alerts
       generateAlerts(debtResult.data || []);
       
-      setLastUpdated(new Date());
     } catch (error) {
       console.error('Error fetching data:', error);
       toast.error('Failed to load debt data');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const forceRefresh = async () => {
+    if (!isAdmin) {
+      toast.error('Only administrators can force refresh');
+      return;
+    }
+
+    setIsRefreshing(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const { data, error } = await supabase.functions.invoke('automated-debt-refresh', {
+        body: {
+          trigger_type: 'manual',
+          user_id: user?.id
+        }
+      });
+
+      if (error) throw error;
+
+      toast.success(`Debt data refreshed successfully! Updated ${data.records_updated} records.`);
+      
+      // Refresh the page data
+      await fetchData();
+      
+    } catch (error) {
+      console.error('Error forcing refresh:', error);
+      toast.error('Failed to refresh debt data');
+    } finally {
+      setIsRefreshing(false);
     }
   };
 
@@ -305,11 +366,23 @@ export default function NationalDebtTracker() {
             AI-driven insights into the country's financial health and fiscal responsibility.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
-            <span className="truncate">Last Updated: {lastUpdated.toLocaleString()}</span>
+            <span className="truncate">Last Updated: {lastUpdated.toLocaleString()} – Source: MINFI</span>
             <Badge variant="outline" className="text-green-600 border-green-600 shrink-0">
               <Zap className="h-3 w-3 mr-1" />
-              Live Data
+              Auto-Updated Daily
             </Badge>
+            {isAdmin && (
+              <Button
+                onClick={forceRefresh}
+                disabled={isRefreshing}
+                size="sm"
+                variant="outline"
+                className="shrink-0"
+              >
+                <RefreshCw className={`h-3 w-3 mr-1 ${isRefreshing ? 'animate-spin' : ''}`} />
+                {isRefreshing ? 'Refreshing...' : 'Force Update'}
+              </Button>
+            )}
           </div>
         </div>
 

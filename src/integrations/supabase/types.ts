@@ -6951,6 +6951,45 @@ export type Database = {
         }
         Relationships: []
       }
+      debt_refresh_logs: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          id: string
+          records_updated: number | null
+          refresh_type: string
+          sources_scraped: string[] | null
+          started_at: string | null
+          status: string
+          triggered_by: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          records_updated?: number | null
+          refresh_type: string
+          sources_scraped?: string[] | null
+          started_at?: string | null
+          status?: string
+          triggered_by?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          records_updated?: number | null
+          refresh_type?: string
+          sources_scraped?: string[] | null
+          started_at?: string | null
+          status?: string
+          triggered_by?: string | null
+        }
+        Relationships: []
+      }
       debt_scraping_results: {
         Row: {
           borrowing_purposes: string[] | null
@@ -7062,6 +7101,7 @@ export type Database = {
           description: string | null
           id: string
           is_active: boolean | null
+          last_refreshed: string | null
           logo_url: string | null
           name: string
           updated_at: string
@@ -7073,6 +7113,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean | null
+          last_refreshed?: string | null
           logo_url?: string | null
           name: string
           updated_at?: string
@@ -7084,6 +7125,7 @@ export type Database = {
           description?: string | null
           id?: string
           is_active?: boolean | null
+          last_refreshed?: string | null
           logo_url?: string | null
           name?: string
           updated_at?: string
@@ -13028,6 +13070,10 @@ export type Database = {
         Returns: Json
       }
       schedule_background_healing: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      schedule_debt_refresh: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
