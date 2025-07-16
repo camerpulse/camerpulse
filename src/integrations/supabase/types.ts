@@ -6268,6 +6268,150 @@ export type Database = {
         }
         Relationships: []
       }
+      debt_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_description: string | null
+          alert_severity: string
+          alert_title: string
+          alert_type: string
+          created_at: string
+          current_value: number | null
+          debt_record_id: string | null
+          id: string
+          is_acknowledged: boolean | null
+          threshold_id: string | null
+          threshold_value: number | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_description?: string | null
+          alert_severity: string
+          alert_title: string
+          alert_type: string
+          created_at?: string
+          current_value?: number | null
+          debt_record_id?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          threshold_id?: string | null
+          threshold_value?: number | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_description?: string | null
+          alert_severity?: string
+          alert_title?: string
+          alert_type?: string
+          created_at?: string
+          current_value?: number | null
+          debt_record_id?: string | null
+          id?: string
+          is_acknowledged?: boolean | null
+          threshold_id?: string | null
+          threshold_value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debt_alerts_debt_record_id_fkey"
+            columns: ["debt_record_id"]
+            isOneToOne: false
+            referencedRelation: "debt_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "debt_alerts_threshold_id_fkey"
+            columns: ["threshold_id"]
+            isOneToOne: false
+            referencedRelation: "debt_thresholds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debt_api_logs: {
+        Row: {
+          api_source: string
+          created_at: string
+          endpoint_url: string | null
+          error_message: string | null
+          execution_time_ms: number | null
+          id: string
+          records_updated: number | null
+          request_status: string
+          response_data: Json | null
+        }
+        Insert: {
+          api_source: string
+          created_at?: string
+          endpoint_url?: string | null
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          records_updated?: number | null
+          request_status: string
+          response_data?: Json | null
+        }
+        Update: {
+          api_source?: string
+          created_at?: string
+          endpoint_url?: string | null
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          records_updated?: number | null
+          request_status?: string
+          response_data?: Json | null
+        }
+        Relationships: []
+      }
+      debt_country_comparisons: {
+        Row: {
+          country_code: string
+          country_name: string
+          created_at: string
+          data_source: string | null
+          debt_per_capita_usd: number | null
+          debt_to_gdp_ratio: number | null
+          gdp_usd: number | null
+          id: string
+          population: number | null
+          total_debt_usd: number | null
+          updated_at: string
+          year: number
+        }
+        Insert: {
+          country_code: string
+          country_name: string
+          created_at?: string
+          data_source?: string | null
+          debt_per_capita_usd?: number | null
+          debt_to_gdp_ratio?: number | null
+          gdp_usd?: number | null
+          id?: string
+          population?: number | null
+          total_debt_usd?: number | null
+          updated_at?: string
+          year: number
+        }
+        Update: {
+          country_code?: string
+          country_name?: string
+          created_at?: string
+          data_source?: string | null
+          debt_per_capita_usd?: number | null
+          debt_to_gdp_ratio?: number | null
+          gdp_usd?: number | null
+          id?: string
+          population?: number | null
+          total_debt_usd?: number | null
+          updated_at?: string
+          year?: number
+        }
+        Relationships: []
+      }
       debt_documents: {
         Row: {
           created_at: string
@@ -6331,6 +6475,63 @@ export type Database = {
           },
         ]
       }
+      debt_knowledge_articles: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          created_by: string | null
+          difficulty_level: string | null
+          featured_image_url: string | null
+          id: string
+          is_published: boolean | null
+          language: string | null
+          reading_time_minutes: number | null
+          slug: string
+          summary: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string
+          created_by?: string | null
+          difficulty_level?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_published?: boolean | null
+          language?: string | null
+          reading_time_minutes?: number | null
+          slug: string
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          difficulty_level?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_published?: boolean | null
+          language?: string | null
+          reading_time_minutes?: number | null
+          slug?: string
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: []
+      }
       debt_lenders: {
         Row: {
           amount_fcfa: number
@@ -6368,6 +6569,59 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "debt_lenders_debt_record_id_fkey"
+            columns: ["debt_record_id"]
+            isOneToOne: false
+            referencedRelation: "debt_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debt_milestones: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          debt_record_id: string | null
+          description: string | null
+          id: string
+          impact_level: string | null
+          metadata: Json | null
+          milestone_date: string
+          milestone_type: string
+          source_document_url: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          debt_record_id?: string | null
+          description?: string | null
+          id?: string
+          impact_level?: string | null
+          metadata?: Json | null
+          milestone_date: string
+          milestone_type: string
+          source_document_url?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          debt_record_id?: string | null
+          description?: string | null
+          id?: string
+          impact_level?: string | null
+          metadata?: Json | null
+          milestone_date?: string
+          milestone_type?: string
+          source_document_url?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debt_milestones_debt_record_id_fkey"
             columns: ["debt_record_id"]
             isOneToOne: false
             referencedRelation: "debt_records"
@@ -6434,17 +6688,63 @@ export type Database = {
           },
         ]
       }
+      debt_predictions: {
+        Row: {
+          confidence_level: number | null
+          created_at: string
+          created_by_ai: boolean | null
+          factors_considered: Json | null
+          id: string
+          predicted_debt_to_gdp: number | null
+          predicted_total_debt_fcfa: number | null
+          predicted_total_debt_usd: number | null
+          prediction_date: string
+          prediction_model: string | null
+        }
+        Insert: {
+          confidence_level?: number | null
+          created_at?: string
+          created_by_ai?: boolean | null
+          factors_considered?: Json | null
+          id?: string
+          predicted_debt_to_gdp?: number | null
+          predicted_total_debt_fcfa?: number | null
+          predicted_total_debt_usd?: number | null
+          prediction_date: string
+          prediction_model?: string | null
+        }
+        Update: {
+          confidence_level?: number | null
+          created_at?: string
+          created_by_ai?: boolean | null
+          factors_considered?: Json | null
+          id?: string
+          predicted_debt_to_gdp?: number | null
+          predicted_total_debt_fcfa?: number | null
+          predicted_total_debt_usd?: number | null
+          prediction_date?: string
+          prediction_model?: string | null
+        }
+        Relationships: []
+      }
       debt_records: {
         Row: {
+          ai_analysis_summary: string | null
           created_at: string
           created_by: string | null
           debt_to_gdp_ratio: number | null
           external_debt_fcfa: number
           gdp_fcfa: number | null
+          gdp_value_fcfa: number | null
           id: string
           internal_debt_fcfa: number
+          milestone_events: Json | null
+          monthly_change_percentage: number | null
           notes: string | null
           population: number | null
+          population_count: number | null
+          prediction_data: Json | null
+          risk_level: string | null
           total_debt_fcfa: number
           total_debt_usd: number
           updated_at: string
@@ -6452,15 +6752,22 @@ export type Database = {
           year: number
         }
         Insert: {
+          ai_analysis_summary?: string | null
           created_at?: string
           created_by?: string | null
           debt_to_gdp_ratio?: number | null
           external_debt_fcfa?: number
           gdp_fcfa?: number | null
+          gdp_value_fcfa?: number | null
           id?: string
           internal_debt_fcfa?: number
+          milestone_events?: Json | null
+          monthly_change_percentage?: number | null
           notes?: string | null
           population?: number | null
+          population_count?: number | null
+          prediction_data?: Json | null
+          risk_level?: string | null
           total_debt_fcfa: number
           total_debt_usd: number
           updated_at?: string
@@ -6468,20 +6775,69 @@ export type Database = {
           year: number
         }
         Update: {
+          ai_analysis_summary?: string | null
           created_at?: string
           created_by?: string | null
           debt_to_gdp_ratio?: number | null
           external_debt_fcfa?: number
           gdp_fcfa?: number | null
+          gdp_value_fcfa?: number | null
           id?: string
           internal_debt_fcfa?: number
+          milestone_events?: Json | null
+          monthly_change_percentage?: number | null
           notes?: string | null
           population?: number | null
+          population_count?: number | null
+          prediction_data?: Json | null
+          risk_level?: string | null
           total_debt_fcfa?: number
           total_debt_usd?: number
           updated_at?: string
           verified?: boolean | null
           year?: number
+        }
+        Relationships: []
+      }
+      debt_sentiment_data: {
+        Row: {
+          confidence_level: number | null
+          created_at: string
+          date_recorded: string
+          id: string
+          keyword_topic: string
+          mention_count: number | null
+          metadata: Json | null
+          platform: string
+          sample_text: string | null
+          sentiment_label: string | null
+          sentiment_score: number | null
+        }
+        Insert: {
+          confidence_level?: number | null
+          created_at?: string
+          date_recorded?: string
+          id?: string
+          keyword_topic: string
+          mention_count?: number | null
+          metadata?: Json | null
+          platform: string
+          sample_text?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+        }
+        Update: {
+          confidence_level?: number | null
+          created_at?: string
+          date_recorded?: string
+          id?: string
+          keyword_topic?: string
+          mention_count?: number | null
+          metadata?: Json | null
+          platform?: string
+          sample_text?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
         }
         Relationships: []
       }
@@ -6518,6 +6874,45 @@ export type Database = {
           name?: string
           updated_at?: string
           website_url?: string | null
+        }
+        Relationships: []
+      }
+      debt_thresholds: {
+        Row: {
+          alert_severity: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          notification_channels: string[] | null
+          threshold_name: string
+          threshold_type: string
+          threshold_value: number
+          updated_at: string
+        }
+        Insert: {
+          alert_severity?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          notification_channels?: string[] | null
+          threshold_name: string
+          threshold_type: string
+          threshold_value: number
+          updated_at?: string
+        }
+        Update: {
+          alert_severity?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          notification_channels?: string[] | null
+          threshold_name?: string
+          threshold_type?: string
+          threshold_value?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -12165,6 +12560,12 @@ export type Database = {
         Args: { p_document_id: string; p_document_text: string }
         Returns: Json
       }
+      check_debt_thresholds: {
+        Args: { p_debt_record_id: string }
+        Returns: {
+          alerts_created: number
+        }[]
+      }
       compare_snapshots: {
         Args: { p_snapshot_a_id: string; p_snapshot_b_id: string }
         Returns: string
@@ -12217,6 +12618,12 @@ export type Database = {
           p_severity?: string
         }
         Returns: string
+      }
+      generate_debt_predictions: {
+        Args: { p_years_ahead?: number }
+        Returns: {
+          predictions_created: number
+        }[]
       }
       generate_vendor_id: {
         Args: Record<PropertyKey, never>
