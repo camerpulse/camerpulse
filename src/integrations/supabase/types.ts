@@ -6412,6 +6412,98 @@ export type Database = {
         }
         Relationships: []
       }
+      debt_data_comparisons: {
+        Row: {
+          alert_sent_at: string | null
+          alert_triggered: boolean | null
+          changes_summary: Json | null
+          comparison_date: string
+          comparison_metadata: Json | null
+          created_at: string
+          current_record_id: string | null
+          id: string
+          previous_record_id: string | null
+          significant_changes: boolean | null
+          source_id: string
+          threshold_violations: string[] | null
+        }
+        Insert: {
+          alert_sent_at?: string | null
+          alert_triggered?: boolean | null
+          changes_summary?: Json | null
+          comparison_date?: string
+          comparison_metadata?: Json | null
+          created_at?: string
+          current_record_id?: string | null
+          id?: string
+          previous_record_id?: string | null
+          significant_changes?: boolean | null
+          source_id: string
+          threshold_violations?: string[] | null
+        }
+        Update: {
+          alert_sent_at?: string | null
+          alert_triggered?: boolean | null
+          changes_summary?: Json | null
+          comparison_date?: string
+          comparison_metadata?: Json | null
+          created_at?: string
+          current_record_id?: string | null
+          id?: string
+          previous_record_id?: string | null
+          significant_changes?: boolean | null
+          source_id?: string
+          threshold_violations?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debt_data_comparisons_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "debt_data_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debt_data_sources: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          last_scraped_at: string | null
+          metadata: Json | null
+          scraping_frequency: string
+          source_name: string
+          source_type: string
+          source_url: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_scraped_at?: string | null
+          metadata?: Json | null
+          scraping_frequency?: string
+          source_name: string
+          source_type?: string
+          source_url: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_scraped_at?: string | null
+          metadata?: Json | null
+          scraping_frequency?: string
+          source_name?: string
+          source_type?: string
+          source_url?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       debt_documents: {
         Row: {
           created_at: string
@@ -6798,6 +6890,68 @@ export type Database = {
           year?: number
         }
         Relationships: []
+      }
+      debt_scraping_results: {
+        Row: {
+          borrowing_purposes: string[] | null
+          changes_detected: boolean | null
+          comparison_with_previous: Json | null
+          created_at: string
+          creditors_found: string[] | null
+          data_quality_score: number | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          parsed_data: Json | null
+          raw_data: Json | null
+          scraping_date: string
+          source_id: string
+          status: string
+          total_debt_detected: number | null
+        }
+        Insert: {
+          borrowing_purposes?: string[] | null
+          changes_detected?: boolean | null
+          comparison_with_previous?: Json | null
+          created_at?: string
+          creditors_found?: string[] | null
+          data_quality_score?: number | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          parsed_data?: Json | null
+          raw_data?: Json | null
+          scraping_date?: string
+          source_id: string
+          status?: string
+          total_debt_detected?: number | null
+        }
+        Update: {
+          borrowing_purposes?: string[] | null
+          changes_detected?: boolean | null
+          comparison_with_previous?: Json | null
+          created_at?: string
+          creditors_found?: string[] | null
+          data_quality_score?: number | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          parsed_data?: Json | null
+          raw_data?: Json | null
+          scraping_date?: string
+          source_id?: string
+          status?: string
+          total_debt_detected?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debt_scraping_results_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "debt_data_sources"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       debt_sentiment_data: {
         Row: {
