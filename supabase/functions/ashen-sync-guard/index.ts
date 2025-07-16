@@ -71,13 +71,22 @@ serve(async (req) => {
 });
 
 async function scanForConflicts(supabaseClient: any, params: any) {
-  const { feature_name, feature_type = 'component', description } = params;
+  const { feature_name, feature_type = 'component', description, prompt_content } = params;
 
   if (!feature_name) {
     throw new Error('feature_name is required for conflict scanning');
   }
 
-  console.log(`Scanning for conflicts: ${feature_name} (${feature_type})`);
+  console.log(`🔍 Ashen Sync Guard: Scanning for conflicts - ${feature_name} (${feature_type})`);
+
+  // Get sync guard configuration
+  const { data: config } = await supabaseClient
+    .from('ashen_sync_config')
+    .select('*')
+    .eq('is_active', true);
+
+  const allowDuplicate = config?.find(c => c.config_key === 'allow_duplicate')?.config_value || false;
+  const versioningEnabled = config?.find(c => c.config_key === 'versioning_enabled')?.config_value || true;
 
   // Call the database function to scan for conflicts
   const { data, error } = await supabaseClient.rpc('scan_for_feature_conflicts', {
@@ -87,21 +96,79 @@ async function scanForConflicts(supabaseClient: any, params: any) {
   });
 
   if (error) {
-    console.error('Error scanning for conflicts:', error);
+    console.error('❌ Conflict scan failed:', error);
     throw new Error(`Conflict scan failed: ${error.message}`);
   }
 
-  console.log('Conflict scan results:', data);
+  let decision = 'PROCEED';
+  let reason = 'No conflicts found - feature is new';
+  let action_required = null;
 
-  // If conflicts found, also run deeper analysis
   if (data.conflicts && data.conflicts.length > 0) {
+    const highestConflict = data.conflicts[0]; // Already sorted by similarity
+    
+    console.log(`⚠️ Conflict detected: ${highestConflict.similarity_score}% similarity with ${highestConflict.existing_name}`);
+
+    // Apply Sync Guard decision logic
+    if (highestConflict.similarity_score >= 90) {
+      if (highestConflict.status === 'active') {
+        decision = allowDuplicate ? 'PROCEED_WITH_WARNING' : 'SKIP';
+        reason = `Feature "${highestConflict.existing_name}" already exists and is functional`;
+        action_required = allowDuplicate ? 'build_anyway' : 'skip_build';
+      } else if (highestConflict.status === 'broken') {
+        decision = 'REPAIR';
+        reason = `Feature "${highestConflict.existing_name}" exists but is broken - should be repaired`;
+        action_required = 'repair_existing';
+      } else if (highestConflict.status === 'deprecated') {
+        decision = 'UPGRADE';
+        reason = `Feature "${highestConflict.existing_name}" is outdated - should be upgraded`;
+        action_required = 'upgrade_existing';
+      }
+    } else if (highestConflict.similarity_score >= 70) {
+      decision = 'REVIEW_SIMILAR';
+      reason = `Similar feature "${highestConflict.existing_name}" exists - review for potential consolidation`;
+      action_required = 'review_and_decide';
+    }
+
+    // Log detailed conflict analysis
     await analyzeConflictsInDetail(supabaseClient, feature_name, data.conflicts);
   }
 
+  // Log the scan result
+  const scanLog = {
+    scan_type: 'pre_build_sync_check',
+    feature_scanned: feature_name,
+    conflict_status: data.conflicts?.length > 0 ? 'conflict_detected' : 'no_conflict',
+    scan_result: decision,
+    decision_reason: reason,
+    action_required,
+    scan_duration_ms: 0, // Would be calculated in real implementation
+    conflict_details: data,
+    prompt_content: prompt_content || null
+  };
+
+  const { error: logError } = await supabaseClient
+    .from('ashen_sync_logs')
+    .insert(scanLog);
+
+  if (logError) {
+    console.error('❌ Failed to log scan result:', logError);
+  }
+
+  console.log(`✅ Sync Guard Decision: ${decision} - ${reason}`);
+
   return {
+    decision,
+    reason,
+    action_required,
+    conflicts: data.conflicts || [],
+    recommendations: data.recommendations || [],
     scan_result: data,
     timestamp: new Date().toISOString(),
-    recommendations: data.recommendations || []
+    config: {
+      allow_duplicate: allowDuplicate,
+      versioning_enabled: versioningEnabled
+    }
   };
 }
 
