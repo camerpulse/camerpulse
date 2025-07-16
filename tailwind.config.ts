@@ -103,7 +103,8 @@ export default {
 				'green': 'var(--shadow-green)',
 				'red': 'var(--shadow-red)',
 				'yellow': 'var(--shadow-yellow)',
-				'elegant': 'var(--shadow-elegant)'
+				'elegant': 'var(--shadow-elegant)',
+				'glow': 'var(--shadow-glow)'
 			},
 			transitionTimingFunction: {
 				'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',

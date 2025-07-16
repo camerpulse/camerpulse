@@ -5,14 +5,15 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors - Cameroon Flag Inspired */
-    --primary: 142 69% 32%;          /* Deep green #00A651 */
+    /* Core Brand Colors - Cameroon Flag Inspired (#007E33, #C8102E, #FFD700) */
+    --primary: 142 100% 25%;         /* Cameroon Green #007E33 */
     --primary-foreground: 0 0% 100%; /* White text */
+    --primary-glow: 142 100% 35%;    /* Lighter green for glows */
     
-    --secondary: 46 100% 50%;        /* Bright yellow #FFD700 */
+    --secondary: 51 100% 50%;        /* Cameroon Yellow #FFD700 */
     --secondary-foreground: 0 0% 0%; /* Black text */
     
-    --accent: 0 84% 54%;             /* Rich red #DC2626 */
+    --accent: 349 87% 44%;           /* Cameroon Red #C8102E */
     --accent-foreground: 0 0% 100%;  /* White text */
     
     /* Semantic Colors */
@@ -36,21 +37,26 @@
     --destructive: 0 84% 60%;        /* Red */
     --destructive-foreground: 0 0% 100%; /* White */
     
-    /* Cameroon Specific */
-    --cm-green: 142 69% 32%;         /* Cameroon green */
-    --cm-green-light: 142 69% 45%;   /* Lighter Cameroon green */
-    --cm-yellow: 46 100% 50%;        /* Cameroon yellow */
-    --cm-yellow-light: 46 100% 65%;  /* Lighter Cameroon yellow */
-    --cm-red: 0 84% 54%;             /* Cameroon red */
-    --cm-red-light: 0 84% 65%;       /* Lighter Cameroon red */
+    /* Cameroon National Colors - Exact Flag Colors */
+    --cm-green: 142 100% 25%;        /* Exact Cameroon green #007E33 */
+    --cm-green-light: 142 100% 35%;  /* Lighter Cameroon green */
+    --cm-yellow: 51 100% 50%;        /* Exact Cameroon yellow #FFD700 */
+    --cm-yellow-light: 51 100% 65%;  /* Lighter Cameroon yellow */
+    --cm-red: 349 87% 44%;           /* Exact Cameroon red #C8102E */
+    --cm-red-light: 349 87% 55%;     /* Lighter Cameroon red */
     
-    /* Gradients */
-    --gradient-civic: linear-gradient(135deg, hsl(var(--cm-green)), hsl(var(--cm-green)) 60%, hsl(var(--cm-yellow)) 100%);
+    /* CamerPulse Brand Gradients */
+    --gradient-civic: linear-gradient(135deg, hsl(var(--cm-green)), hsl(var(--cm-green-light)) 60%, hsl(var(--cm-yellow)) 100%);
     --gradient-flag: linear-gradient(to right, hsl(var(--cm-green)) 33%, hsl(var(--cm-red)) 33%, hsl(var(--cm-red)) 66%, hsl(var(--cm-yellow)) 66%);
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
+    --gradient-patriotic: linear-gradient(45deg, hsl(var(--cm-green)), hsl(var(--cm-red)), hsl(var(--cm-yellow)));
     
-    /* Shadows */
+    /* CamerPulse Brand Shadows */
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--primary) / 0.4);
+    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
+    --shadow-green: 0 8px 25px -8px hsl(var(--cm-green) / 0.4);
+    --shadow-red: 0 8px 25px -8px hsl(var(--cm-red) / 0.4);
+    --shadow-yellow: 0 8px 25px -8px hsl(var(--cm-yellow) / 0.4);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
