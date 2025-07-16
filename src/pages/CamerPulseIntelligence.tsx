@@ -54,6 +54,7 @@ import GovSyncPanel from '@/components/AI/GovSyncPanel';
 import CivicTrustIndex from '@/components/AI/CivicTrustIndex';
 import RedRoomPanel from '@/components/AI/RedRoomPanel';
 import ElectionCommandCore from '@/components/AI/ElectionCommandCore';
+import CivicExplainerAssistant from '@/components/AI/CivicExplainerAssistant';
 
 interface SentimentData {
   id: string;
@@ -290,6 +291,7 @@ const CamerPulseIntelligence = () => {
               <TabsTrigger value="alerts" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚠️ Alerts</TabsTrigger>
               <TabsTrigger value="interference" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🛡️ Interference</TabsTrigger>
               <TabsTrigger value="trust" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🤝 Trust Index</TabsTrigger>
+              <TabsTrigger value="explainer" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🧠 Citizen Assistant</TabsTrigger>
               <TabsTrigger value="config" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚙️ Config</TabsTrigger>
             </TabsList>
           </div>
@@ -463,6 +465,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="trust" className="space-y-4">
             <CivicTrustIndex />
+          </TabsContent>
+
+          <TabsContent value="explainer" className="space-y-4">
+            <CivicExplainerAssistant />
           </TabsContent>
 
           <TabsContent value="config" className="space-y-4">
