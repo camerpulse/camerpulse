@@ -62,6 +62,7 @@ import CivicImportCore from '@/components/AI/CivicImportCore';
 import PublicSentimentTransparencyPortal from '@/components/AI/PublicSentimentTransparencyPortal';
 import CivicFactCheckWidget from '@/components/AI/CivicFactCheckWidget';
 import { PromiseTracker } from '@/components/AI/PromiseTracker';
+import { CivicLearningHub } from '@/components/AI/CivicLearningHub';
 
 interface SentimentData {
   id: string;
@@ -306,6 +307,7 @@ const CamerPulseIntelligence = () => {
               <TabsTrigger value="public-portal" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🌍 Public Portal</TabsTrigger>
               <TabsTrigger value="fact-check" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🔍 Fact Check</TabsTrigger>
               <TabsTrigger value="promise-tracker" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📋 Promise Tracker</TabsTrigger>
+              <TabsTrigger value="civic-learning" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🎓 Civic Learning</TabsTrigger>
               <TabsTrigger value="config" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚙️ Config</TabsTrigger>
             </TabsList>
           </div>
@@ -511,6 +513,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="promise-tracker" className="space-y-4">
             <PromiseTracker />
+          </TabsContent>
+
+          <TabsContent value="civic-learning" className="space-y-4">
+            <CivicLearningHub />
           </TabsContent>
 
           <TabsContent value="config" className="space-y-4">
