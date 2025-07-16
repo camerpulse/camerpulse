@@ -30,12 +30,14 @@ import {
   Table,
   Plus,
   Settings,
-  Shield
+  Shield,
+  Flag
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { CreatePollDialog } from '@/components/Polls/CreatePollDialog';
 import { RegionalHeatmap } from '@/components/Polls/RegionalHeatmap';
+import { PollModerationTab } from '@/components/Admin/PollModerationTab';
 
 interface Poll {
   id: string;
@@ -314,7 +316,7 @@ const PollsDashboard = () => {
             </Card>
           ) : (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-              <TabsList className="grid w-full grid-cols-5 mb-8">
+              <TabsList className="grid w-full grid-cols-6 mb-8">
                 <TabsTrigger value="overview">Poll Overview</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
                 <TabsTrigger value="management">Management</TabsTrigger>
@@ -322,6 +324,10 @@ const PollsDashboard = () => {
                 <TabsTrigger value="fraud-protection">
                   <Shield className="w-4 h-4 mr-1" />
                   Fraud Protection
+                </TabsTrigger>
+                <TabsTrigger value="moderation">
+                  <Flag className="w-4 h-4 mr-1" />
+                  Moderation
                 </TabsTrigger>
               </TabsList>
 
@@ -707,6 +713,11 @@ const PollsDashboard = () => {
                     )}
                   </div>
                 )}
+              </TabsContent>
+
+              {/* Moderation Tab */}
+              <TabsContent value="moderation" className="space-y-6">
+                <PollModerationTab />
               </TabsContent>
             </Tabs>
           )}

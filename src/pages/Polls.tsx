@@ -27,6 +27,7 @@ import {
   Shield,
   EyeOff
 } from 'lucide-react';
+import { PollModerationSystem } from '@/components/Polls/PollModerationSystem';
 import { formatDistanceToNow } from 'date-fns';
 
 interface Poll {
@@ -422,6 +423,11 @@ const Polls = () => {
                                 <span className="capitalize">{poll.privacy_mode}</span>
                               </Badge>
                             )}
+                            
+                            <PollModerationSystem 
+                              pollId={poll.id} 
+                              pollTitle={poll.title} 
+                            />
                             
                             {isActive ? (
                               <Badge className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs">

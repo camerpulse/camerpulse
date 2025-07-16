@@ -12061,6 +12061,131 @@ export type Database = {
           },
         ]
       }
+      poll_moderation_log: {
+        Row: {
+          action_reason: string | null
+          action_type: string
+          admin_id: string
+          created_at: string
+          creator_notified: boolean | null
+          id: string
+          metadata: Json | null
+          poll_id: string
+          report_id: string | null
+        }
+        Insert: {
+          action_reason?: string | null
+          action_type: string
+          admin_id: string
+          created_at?: string
+          creator_notified?: boolean | null
+          id?: string
+          metadata?: Json | null
+          poll_id: string
+          report_id?: string | null
+        }
+        Update: {
+          action_reason?: string | null
+          action_type?: string
+          admin_id?: string
+          created_at?: string
+          creator_notified?: boolean | null
+          id?: string
+          metadata?: Json | null
+          poll_id?: string
+          report_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_moderation_log_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_moderation_log_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "poll_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_moderation_settings: {
+        Row: {
+          auto_hide_after_reports: number | null
+          ban_duration_days: number | null
+          created_at: string
+          id: string
+          notify_creator_on_action: boolean | null
+          require_admin_review: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          auto_hide_after_reports?: number | null
+          ban_duration_days?: number | null
+          created_at?: string
+          id?: string
+          notify_creator_on_action?: boolean | null
+          require_admin_review?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          auto_hide_after_reports?: number | null
+          ban_duration_days?: number | null
+          created_at?: string
+          id?: string
+          notify_creator_on_action?: boolean | null
+          require_admin_review?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      poll_reports: {
+        Row: {
+          created_at: string
+          id: string
+          poll_id: string
+          report_message: string | null
+          report_reason: string
+          reported_by_user_id: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          poll_id: string
+          report_message?: string | null
+          report_reason: string
+          reported_by_user_id?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          poll_id?: string
+          report_message?: string | null
+          report_reason?: string
+          reported_by_user_id?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_reports_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       poll_suggestions: {
         Row: {
           confidence_score: number | null
@@ -14167,6 +14292,10 @@ export type Database = {
         Returns: Json
       }
       get_mesh_status_overview: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_moderation_stats: {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
