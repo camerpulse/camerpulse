@@ -5203,6 +5203,374 @@ export type Database = {
         }
         Relationships: []
       }
+      companies: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          average_rating: number | null
+          company_name: string
+          company_type: Database["public"]["Enums"]["company_type"]
+          cover_photo_url: string | null
+          created_at: string
+          description: string | null
+          division: string
+          email: string
+          employee_count_range: string
+          estimated_net_worth: number | null
+          id: string
+          is_featured: boolean | null
+          logo_url: string | null
+          past_management: string | null
+          payment_amount: number | null
+          payment_date: string | null
+          payment_status: Database["public"]["Enums"]["payment_status"] | null
+          phone_number: string
+          physical_address: string
+          profile_views: number | null
+          region: string
+          sector: string
+          social_media_links: Json | null
+          status: Database["public"]["Enums"]["company_status"] | null
+          tax_identification_number: string
+          total_ratings: number | null
+          updated_at: string
+          user_id: string | null
+          website_url: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          average_rating?: number | null
+          company_name: string
+          company_type: Database["public"]["Enums"]["company_type"]
+          cover_photo_url?: string | null
+          created_at?: string
+          description?: string | null
+          division: string
+          email: string
+          employee_count_range: string
+          estimated_net_worth?: number | null
+          id?: string
+          is_featured?: boolean | null
+          logo_url?: string | null
+          past_management?: string | null
+          payment_amount?: number | null
+          payment_date?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          phone_number: string
+          physical_address: string
+          profile_views?: number | null
+          region: string
+          sector: string
+          social_media_links?: Json | null
+          status?: Database["public"]["Enums"]["company_status"] | null
+          tax_identification_number: string
+          total_ratings?: number | null
+          updated_at?: string
+          user_id?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          average_rating?: number | null
+          company_name?: string
+          company_type?: Database["public"]["Enums"]["company_type"]
+          cover_photo_url?: string | null
+          created_at?: string
+          description?: string | null
+          division?: string
+          email?: string
+          employee_count_range?: string
+          estimated_net_worth?: number | null
+          id?: string
+          is_featured?: boolean | null
+          logo_url?: string | null
+          past_management?: string | null
+          payment_amount?: number | null
+          payment_date?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          phone_number?: string
+          physical_address?: string
+          profile_views?: number | null
+          region?: string
+          sector?: string
+          social_media_links?: Json | null
+          status?: Database["public"]["Enums"]["company_status"] | null
+          tax_identification_number?: string
+          total_ratings?: number | null
+          updated_at?: string
+          user_id?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      company_creation_requests: {
+        Row: {
+          additional_documents: Json | null
+          admin_notes: string | null
+          business_plan_url: string | null
+          company_type: Database["public"]["Enums"]["company_type"]
+          created_at: string
+          founder_email: string
+          founder_name: string
+          founder_phone: string
+          id: string
+          id_card_url: string | null
+          legal_terms_accepted: boolean
+          preferred_location: string
+          processed_at: string | null
+          processed_by: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          additional_documents?: Json | null
+          admin_notes?: string | null
+          business_plan_url?: string | null
+          company_type: Database["public"]["Enums"]["company_type"]
+          created_at?: string
+          founder_email: string
+          founder_name: string
+          founder_phone: string
+          id?: string
+          id_card_url?: string | null
+          legal_terms_accepted?: boolean
+          preferred_location: string
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          additional_documents?: Json | null
+          admin_notes?: string | null
+          business_plan_url?: string | null
+          company_type?: Database["public"]["Enums"]["company_type"]
+          created_at?: string
+          founder_email?: string
+          founder_name?: string
+          founder_phone?: string
+          id?: string
+          id_card_url?: string | null
+          legal_terms_accepted?: boolean
+          preferred_location?: string
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      company_jobs: {
+        Row: {
+          application_email: string | null
+          application_link: string | null
+          applications_count: number | null
+          company_id: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          job_description: string
+          job_title: string
+          location: string
+          requirements: string | null
+          salary_range: string | null
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          application_email?: string | null
+          application_link?: string | null
+          applications_count?: number | null
+          company_id?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          job_description: string
+          job_title: string
+          location: string
+          requirements?: string | null
+          salary_range?: string | null
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          application_email?: string | null
+          application_link?: string | null
+          applications_count?: number | null
+          company_id?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          job_description?: string
+          job_title?: string
+          location?: string
+          requirements?: string | null
+          salary_range?: string | null
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_payments: {
+        Row: {
+          amount: number
+          company_id: string | null
+          company_type: Database["public"]["Enums"]["company_type"]
+          created_at: string
+          currency: string | null
+          id: string
+          payment_date: string | null
+          payment_method: string | null
+          status: Database["public"]["Enums"]["payment_status"] | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          company_id?: string | null
+          company_type: Database["public"]["Enums"]["company_type"]
+          created_at?: string
+          currency?: string | null
+          id?: string
+          payment_date?: string | null
+          payment_method?: string | null
+          status?: Database["public"]["Enums"]["payment_status"] | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          company_id?: string | null
+          company_type?: Database["public"]["Enums"]["company_type"]
+          created_at?: string
+          currency?: string | null
+          id?: string
+          payment_date?: string | null
+          payment_method?: string | null
+          status?: Database["public"]["Enums"]["payment_status"] | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_ratings: {
+        Row: {
+          comment: string | null
+          company_id: string | null
+          created_at: string
+          id: string
+          is_moderated: boolean | null
+          moderated_at: string | null
+          moderated_by: string | null
+          rating: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          comment?: string | null
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          is_moderated?: boolean | null
+          moderated_at?: string | null
+          moderated_by?: string | null
+          rating: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          comment?: string | null
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          is_moderated?: boolean | null
+          moderated_at?: string | null
+          moderated_by?: string | null
+          rating?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_ratings_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_updates: {
+        Row: {
+          company_id: string | null
+          content: string
+          created_at: string
+          id: string
+          image_url: string | null
+          is_published: boolean | null
+          title: string
+          update_type: string | null
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          company_id?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          title: string
+          update_type?: string | null
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          company_id?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_published?: boolean | null
+          title?: string
+          update_type?: string | null
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_updates_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       constitutional_articles: {
         Row: {
           article_number: string
@@ -11637,6 +12005,8 @@ export type Database = {
         | "election_event"
         | "policy_document"
         | "government_statement"
+      company_status: "pending" | "approved" | "suspended" | "rejected"
+      company_type: "sole_proprietor" | "limited_company" | "public_company"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
       engagement_activity_type:
         | "public_appearance"
@@ -11672,6 +12042,7 @@ export type Database = {
         | "radio_stream"
         | "blog"
         | "social_feed"
+      payment_status: "pending" | "completed" | "failed" | "refunded"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -11836,6 +12207,8 @@ export const Constants = {
         "policy_document",
         "government_statement",
       ],
+      company_status: ["pending", "approved", "suspended", "rejected"],
+      company_type: ["sole_proprietor", "limited_company", "public_company"],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
       engagement_activity_type: [
         "public_appearance",
@@ -11875,6 +12248,7 @@ export const Constants = {
         "blog",
         "social_feed",
       ],
+      payment_status: ["pending", "completed", "failed", "refunded"],
       source_type: [
         "government_official",
         "parliamentary",
