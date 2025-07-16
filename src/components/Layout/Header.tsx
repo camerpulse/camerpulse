@@ -78,6 +78,9 @@ export const Header = () => {
               <Link to="/marketplace">Marketplace</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/companies">Companies</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/civic-portal">🌍 Civic Portal</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
@@ -184,6 +187,9 @@ export const Header = () => {
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/marketplace" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/companies" onClick={() => setMobileMenuOpen(false)}>Companies</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/news" onClick={() => setMobileMenuOpen(false)}>News</Link>

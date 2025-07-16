@@ -24,6 +24,11 @@ import Promises from "./pages/Promises";
 import RegionalAnalytics from "./pages/RegionalAnalytics";
 import OrderSuccess from "./pages/OrderSuccess";
 import NotFound from "./pages/NotFound";
+import CompanyDirectory from "./pages/CompanyDirectory";
+import CompanyRegister from "./pages/CompanyRegister";
+import CompanyProfile from "./pages/CompanyProfile";
+import CompanyDashboard from "./pages/CompanyDashboard";
+import CompanyCreationRequest from "./pages/CompanyCreationRequest";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -87,6 +92,11 @@ const App = () => {
               <Route path="/promises" element={<Promises />} />
               <Route path="/regional-analytics" element={<RegionalAnalytics />} />
               <Route path="/marketplace/order-success" element={<OrderSuccess />} />
+              <Route path="/companies" element={<CompanyDirectory />} />
+              <Route path="/companies/register" element={<CompanyRegister />} />
+              <Route path="/companies/create-request" element={<CompanyCreationRequest />} />
+              <Route path="/companies/dashboard" element={<CompanyDashboard />} />
+              <Route path="/companies/:id" element={<CompanyProfile />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
