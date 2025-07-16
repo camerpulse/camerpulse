@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { CheckCircle, Vote } from 'lucide-react';
+import { CheckCircle, Vote, Shield } from 'lucide-react';
+import { useState } from 'react';
 
 interface BallotPollStyleProps {
   poll: {
@@ -28,64 +29,113 @@ export const BallotPollStyle = ({
   hasVoted = false,
   className = ""
 }: BallotPollStyleProps) => {
+  const [touchedIndex, setTouchedIndex] = useState<number | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   const getVotePercentage = (votes: number, total: number) => {
     return total > 0 ? Math.round((votes / total) * 100) : 0;
+  };
+
+  const handleTouchStart = (index: number) => {
+    if (isActive && !hasVoted) {
+      setTouchedIndex(index);
+    }
+  };
+
+  const handleTouchEnd = () => {
+    setTouchedIndex(null);
+  };
+
+  const handleVote = (index: number) => {
+    if (isActive && !hasVoted && onVote) {
+      onVote(index);
+    }
   };
 
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Ballot Header */}
-      <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground mb-4 pb-2 border-b border-dashed">
-        <Vote className="w-4 h-4" />
-        Official Ballot
+      <div className="flex items-center gap-2 text-sm font-semibold text-cm-green mb-4 pb-3 border-b-2 border-gradient-civic bg-gradient-to-r from-cm-green/5 to-cm-yellow/5 p-3 rounded-t-lg">
+        <Shield className="w-5 h-5 animate-pulse" />
+        Official Civic Ballot
+        <div className="ml-auto text-xs text-muted-foreground">
+          Secure • Verified
+        </div>
       </div>
 
       {/* Ballot Options */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         {poll.options.map((option, index) => {
           const votes = poll.vote_results?.[index] || 0;
           const percentage = getVotePercentage(votes, poll.votes_count);
           const isSelected = poll.user_vote === index;
+          const isTouched = touchedIndex === index;
+          const isHovered = hoveredIndex === index;
           
           return (
             <div key={index} className="space-y-2">
               <div 
-                className={`border rounded-lg p-4 transition-all duration-200 cursor-pointer ${
+                className={`border-2 rounded-xl p-4 transition-all duration-300 cursor-pointer touch-manipulation ${
                   isSelected 
-                    ? 'border-primary bg-primary/5 shadow-md' 
-                    : 'border-border hover:border-primary/50 hover:bg-muted/50'
-                } ${!isActive || hasVoted ? 'opacity-60 cursor-not-allowed' : ''}`}
-                onClick={() => isActive && !hasVoted && onVote ? onVote(index) : undefined}
+                    ? 'border-cm-green bg-gradient-civic/10 shadow-elegant animate-patriotic-pulse' 
+                    : isHovered
+                    ? 'border-cm-yellow bg-cm-yellow/5 shadow-md'
+                    : isTouched
+                    ? 'border-cm-green bg-cm-green/5 scale-98'
+                    : 'border-border hover:border-cm-green/50 hover:bg-muted/30'
+                } ${!isActive || hasVoted ? 'opacity-60 cursor-not-allowed' : 'hover:scale-[1.01] active:scale-[0.98]'}`}
+                onTouchStart={() => handleTouchStart(index)}
+                onTouchEnd={handleTouchEnd}
+                onTouchCancel={handleTouchEnd}
+                onMouseEnter={() => setHoveredIndex(index)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => handleVote(index)}
               >
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-4">
                   {/* Radio Button Style */}
-                  <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all ${
+                  <div className={`w-6 h-6 rounded-full border-3 flex items-center justify-center transition-all duration-200 ${
                     isSelected 
-                      ? 'border-primary bg-primary' 
-                      : 'border-muted-foreground'
+                      ? 'border-cm-green bg-cm-green shadow-lg' 
+                      : isHovered
+                      ? 'border-cm-yellow bg-cm-yellow/20'
+                      : 'border-muted-foreground hover:border-cm-green'
                   }`}>
                     {isSelected && (
-                      <div className="w-2 h-2 rounded-full bg-white" />
+                      <div className="w-3 h-3 rounded-full bg-cm-yellow animate-pulse" />
                     )}
                   </div>
                   
                   {/* Option Text */}
                   <div className="flex-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm sm:text-base font-medium">{option}</span>
+                      <span className={`text-sm sm:text-base font-semibold transition-colors ${
+                        isSelected ? 'text-cm-green' : isHovered ? 'text-cm-yellow' : 'text-foreground'
+                      }`}>
+                        {option}
+                      </span>
                       {isSelected && (
-                        <CheckCircle className="w-4 h-4 text-primary" />
+                        <CheckCircle className="w-5 h-5 text-cm-yellow animate-heartbeat" />
                       )}
                     </div>
                     
                     {/* Results */}
                     {showResults && (
-                      <div className="mt-2 space-y-1">
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span>{votes} votes</span>
-                          <span>{percentage}%</span>
+                      <div className="mt-3 space-y-2">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground font-medium">{votes} votes</span>
+                          <span className={`font-bold ${isSelected ? 'text-cm-green' : 'text-muted-foreground'}`}>
+                            {percentage}%
+                          </span>
                         </div>
-                        <Progress value={percentage} className="h-1.5" />
+                        <div className="relative">
+                          <Progress 
+                            value={percentage} 
+                            className="h-2 bg-muted/30 overflow-hidden" 
+                          />
+                          {isSelected && (
+                            <div className="absolute inset-0 bg-gradient-civic/20 animate-pulse rounded-full" />
+                          )}
+                        </div>
                       </div>
                     )}
                   </div>
@@ -98,11 +148,14 @@ export const BallotPollStyle = ({
 
       {/* Ballot Footer */}
       {hasVoted && (
-        <div className="mt-4 pt-4 border-t border-dashed text-center">
-          <div className="flex items-center justify-center gap-2 text-sm text-primary font-medium">
-            <CheckCircle className="w-4 h-4" />
-            Your vote has been recorded
+        <div className="mt-6 pt-4 border-t-2 border-gradient-civic text-center bg-gradient-to-r from-cm-green/5 to-cm-yellow/5 p-4 rounded-b-lg">
+          <div className="flex items-center justify-center gap-2 text-sm text-cm-green font-semibold">
+            <CheckCircle className="w-5 h-5 animate-heartbeat" />
+            Your vote has been securely recorded
           </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            Thank you for participating in civic democracy
+          </p>
         </div>
       )}
     </div>
