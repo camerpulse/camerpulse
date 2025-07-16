@@ -5,13 +5,28 @@ import { CardPollStyle } from './PollStyles/CardPollStyle';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { createCivicPoll } from '@/utils/createCivicPoll';
-import { Vote, Eye, CheckCircle } from 'lucide-react';
+import { usePollOnboarding } from '@/hooks/usePollOnboarding';
+import { PollOnboardingFlow, OnboardingTooltip, OnboardingProgressBadge } from './PollOnboardingFlow';
+import { Vote, Eye, CheckCircle, Shield, Share2, BarChart3 } from 'lucide-react';
 
 export const CivicPollCreator = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [pollCreated, setPollCreated] = useState(false);
+  
+  // Onboarding hook
+  const {
+    showWelcomeModal,
+    showFirstPollSuccess,
+    isFirstPoll,
+    isSecondPoll,
+    needsOnboarding,
+    dismissWelcomeModal,
+    dismissFirstPollSuccess,
+    markStepCompleted,
+    trackPollCreation
+  } = usePollOnboarding();
 
   // Sample poll data for preview
   const previewPoll = {
@@ -45,6 +60,9 @@ export const CivicPollCreator = () => {
       setLoading(true);
       const createdPoll = await createCivicPoll(user.id);
       
+      // Track poll creation for onboarding
+      await trackPollCreation();
+
       toast({
         title: "Civic poll created successfully!",
         description: "Your poll is now live and featured on the civic feed. +50 points earned!"
@@ -90,19 +108,48 @@ export const CivicPollCreator = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Vote className="w-6 h-6 text-cm-green" />
-            Create Civic Poll: Government Performance 2020-2025
-          </CardTitle>
-        </CardHeader>
+    <>
+      {/* Onboarding Flow */}
+      <PollOnboardingFlow
+        showWelcomeModal={showWelcomeModal}
+        showFirstPollSuccess={showFirstPollSuccess}
+        isFirstPoll={isFirstPoll}
+        isSecondPoll={isSecondPoll}
+        onDismissWelcome={dismissWelcomeModal}
+        onDismissSuccess={dismissFirstPollSuccess}
+        onStepCompleted={markStepCompleted}
+      />
+
+      <div className="max-w-4xl mx-auto space-y-6">
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <Vote className="w-6 h-6 text-cm-green" />
+                Create Civic Poll: Government Performance 2020-2025
+              </CardTitle>
+              {needsOnboarding && (
+                <OnboardingProgressBadge currentStep={1} totalSteps={2} />
+              )}
+            </div>
+          </CardHeader>
         <CardContent className="space-y-6">
-          {/* Poll Configuration */}
+          {/* Poll Configuration with Onboarding Tooltips */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 bg-muted/30 rounded-lg">
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">Poll Configuration</h4>
+              {needsOnboarding ? (
+                <OnboardingTooltip 
+                  title="Poll Configuration"
+                  content="These settings determine how your poll behaves. Card format is engaging and mobile-friendly, while 7-day duration allows for good participation without dragging on too long."
+                >
+                  <h4 className="font-medium text-sm flex items-center gap-2">
+                    Poll Configuration
+                    <Shield className="w-4 h-4 text-cm-green" />
+                  </h4>
+                </OnboardingTooltip>
+              ) : (
+                <h4 className="font-medium text-sm">Poll Configuration</h4>
+              )}
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• Style: Card Format</li>
                 <li>• Duration: 7 days</li>
@@ -111,7 +158,19 @@ export const CivicPollCreator = () => {
               </ul>
             </div>
             <div className="space-y-2">
-              <h4 className="font-medium text-sm">Analytics Features</h4>
+              {needsOnboarding ? (
+                <OnboardingTooltip 
+                  title="Analytics Features"
+                  content="These powerful analytics help you understand voting patterns across Cameroon's regions and demographics. Use this data to better understand public opinion."
+                >
+                  <h4 className="font-medium text-sm flex items-center gap-2">
+                    Analytics Features
+                    <BarChart3 className="w-4 h-4 text-blue-500" />
+                  </h4>
+                </OnboardingTooltip>
+              ) : (
+                <h4 className="font-medium text-sm">Analytics Features</h4>
+              )}
               <ul className="text-sm text-muted-foreground space-y-1">
                 <li>• Geo-mapping enabled</li>
                 <li>• Gender split tracking</li>
@@ -121,9 +180,21 @@ export const CivicPollCreator = () => {
             </div>
           </div>
 
-          {/* Tags */}
+          {/* Tags with Onboarding Tooltip */}
           <div className="space-y-2">
-            <h4 className="font-medium text-sm">Tags</h4>
+            {needsOnboarding ? (
+              <OnboardingTooltip 
+                title="Tags for Discovery"
+                content="Tags help people find your poll when searching. Use relevant political parties, regions, and topics to maximize reach and engagement."
+              >
+                <h4 className="font-medium text-sm flex items-center gap-2">
+                  Tags
+                  <Share2 className="w-4 h-4 text-purple-500" />
+                </h4>
+              </OnboardingTooltip>
+            ) : (
+              <h4 className="font-medium text-sm">Tags</h4>
+            )}
             <div className="flex flex-wrap gap-2">
               {previewPoll.tags.map((tag) => (
                 <span 
@@ -136,11 +207,20 @@ export const CivicPollCreator = () => {
             </div>
           </div>
 
-          {/* Preview Section */}
+          {/* Preview Section with Onboarding Tooltip */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Eye className="w-5 h-5 text-primary" />
-              <h4 className="font-medium">Live Preview</h4>
+              {needsOnboarding ? (
+                <OnboardingTooltip 
+                  title="Live Preview"
+                  content="This shows exactly how your poll will appear to voters. Make sure the question is clear and options are balanced before publishing."
+                >
+                  <h4 className="font-medium">Live Preview</h4>
+                </OnboardingTooltip>
+              ) : (
+                <h4 className="font-medium">Live Preview</h4>
+              )}
             </div>
             
             <div className="border border-dashed border-primary/30 rounded-lg p-4 bg-primary/5">
@@ -154,15 +234,21 @@ export const CivicPollCreator = () => {
             </div>
           </div>
 
-          {/* Create Poll Button */}
-          <div className="flex justify-center pt-4">
+          {/* Create Poll Button with Onboarding Context */}
+          <div className="flex flex-col items-center pt-4 space-y-3">
+            {needsOnboarding && isFirstPoll && (
+              <div className="text-center text-sm text-muted-foreground bg-cm-green/5 p-3 rounded-lg border border-cm-green/20">
+                🎯 <strong>First Poll Tip:</strong> Once published, share your poll on social media and WhatsApp groups to maximize participation from across Cameroon!
+              </div>
+            )}
+            
             <Button 
               onClick={handleCreatePoll}
               disabled={loading || !user}
               size="lg"
               className="bg-cm-green hover:bg-cm-green/90 text-white px-8"
             >
-              {loading ? 'Creating Poll...' : 'Create & Publish Civic Poll'}
+              {loading ? 'Creating Poll...' : isFirstPoll ? '🚀 Create My First Civic Poll' : 'Create & Publish Civic Poll'}
             </Button>
           </div>
 
@@ -174,5 +260,6 @@ export const CivicPollCreator = () => {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 };

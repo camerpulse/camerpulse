@@ -13842,6 +13842,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_poll_onboarding: {
+        Row: {
+          created_at: string
+          first_poll_created_at: string | null
+          id: string
+          onboarding_completed: boolean
+          onboarding_completed_at: string | null
+          onboarding_steps_completed: Json | null
+          polls_created_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          first_poll_created_at?: string | null
+          id?: string
+          onboarding_completed?: boolean
+          onboarding_completed_at?: string | null
+          onboarding_steps_completed?: Json | null
+          polls_created_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          first_poll_created_at?: string | null
+          id?: string
+          onboarding_completed?: boolean
+          onboarding_completed_at?: string | null
+          onboarding_steps_completed?: Json | null
+          polls_created_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           granted_at: string | null
@@ -14464,6 +14500,10 @@ export type Database = {
       show_trgm: {
         Args: { "": string }
         Returns: string[]
+      }
+      track_user_poll_creation: {
+        Args: { p_user_id: string }
+        Returns: undefined
       }
       update_billionaire_rankings: {
         Args: Record<PropertyKey, never>
