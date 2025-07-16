@@ -2859,6 +2859,105 @@ export type Database = {
           },
         ]
       }
+      autonomous_poll_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          created_at: string
+          id: string
+          is_enabled: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      autonomous_polls: {
+        Row: {
+          admin_approved: boolean | null
+          ai_reasoning: Json | null
+          approved_at: string | null
+          approved_by: string | null
+          auto_published: boolean
+          confidence_score: number
+          created_at: string
+          generation_method: string
+          generation_prompt: string | null
+          id: string
+          performance_metrics: Json | null
+          poll_id: string | null
+          topic_category: string
+          trigger_sentiment_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          admin_approved?: boolean | null
+          ai_reasoning?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          auto_published?: boolean
+          confidence_score?: number
+          created_at?: string
+          generation_method?: string
+          generation_prompt?: string | null
+          id?: string
+          performance_metrics?: Json | null
+          poll_id?: string | null
+          topic_category: string
+          trigger_sentiment_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          admin_approved?: boolean | null
+          ai_reasoning?: Json | null
+          approved_at?: string | null
+          approved_by?: string | null
+          auto_published?: boolean
+          confidence_score?: number
+          created_at?: string
+          generation_method?: string
+          generation_prompt?: string | null
+          id?: string
+          performance_metrics?: Json | null
+          poll_id?: string | null
+          topic_category?: string
+          trigger_sentiment_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "autonomous_polls_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "autonomous_polls_trigger_sentiment_id_fkey"
+            columns: ["trigger_sentiment_id"]
+            isOneToOne: false
+            referencedRelation: "sentiment_trends"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       billionaire_applications: {
         Row: {
           admin_notes: string | null
@@ -3894,6 +3993,57 @@ export type Database = {
           template_name?: string
           template_type?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_complaints: {
+        Row: {
+          complaint_type: string
+          created_at: string
+          description: string | null
+          id: string
+          metadata: Json | null
+          region: string
+          related_polls: string[] | null
+          reported_by: string | null
+          sentiment_score: number | null
+          severity_level: string
+          title: string
+          trending_score: number | null
+          updated_at: string
+          verified_status: string
+        }
+        Insert: {
+          complaint_type: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          region: string
+          related_polls?: string[] | null
+          reported_by?: string | null
+          sentiment_score?: number | null
+          severity_level?: string
+          title: string
+          trending_score?: number | null
+          updated_at?: string
+          verified_status?: string
+        }
+        Update: {
+          complaint_type?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          region?: string
+          related_polls?: string[] | null
+          reported_by?: string | null
+          sentiment_score?: number | null
+          severity_level?: string
+          title?: string
+          trending_score?: number | null
+          updated_at?: string
+          verified_status?: string
         }
         Relationships: []
       }
@@ -12419,6 +12569,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sentiment_trends: {
+        Row: {
+          created_at: string
+          detected_at: string
+          expires_at: string
+          id: string
+          keywords: string[]
+          metadata: Json | null
+          platform: string
+          region: string | null
+          sentiment_score: number
+          topic: string
+          trend_strength: number
+        }
+        Insert: {
+          created_at?: string
+          detected_at?: string
+          expires_at?: string
+          id?: string
+          keywords?: string[]
+          metadata?: Json | null
+          platform: string
+          region?: string | null
+          sentiment_score?: number
+          topic: string
+          trend_strength?: number
+        }
+        Update: {
+          created_at?: string
+          detected_at?: string
+          expires_at?: string
+          id?: string
+          keywords?: string[]
+          metadata?: Json | null
+          platform?: string
+          region?: string | null
+          sentiment_score?: number
+          topic?: string
+          trend_strength?: number
+        }
+        Relationships: []
       }
       service_emotion_correlations: {
         Row: {

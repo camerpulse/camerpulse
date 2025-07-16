@@ -1,1 +1,142 @@
 project_id = "wsiorhtiovwcajiarydw"
+
+[functions.camerpulse-intelligence-core]
+verify_jwt = false
+
+[functions.camerpulse-social-apis]
+verify_jwt = false
+
+[functions.camerpulse-processor]
+verify_jwt = false
+
+[functions.camerpulse-twitter]
+verify_jwt = false
+
+[functions.civic-alert-bot]
+verify_jwt = false
+
+[functions.civic-auto-sync-engine]
+verify_jwt = false
+
+[functions.civic-import-core-sync]
+verify_jwt = false
+
+[functions.civic-integrity-monitor]
+verify_jwt = false
+
+[functions.civic-intelligence-missions]
+verify_jwt = false
+
+[functions.civic-media-watch]
+verify_jwt = false
+
+[functions.civic-strategist-core]
+verify_jwt = false
+
+[functions.custom-integrator-builder]
+verify_jwt = false
+
+[functions.daily-report-generator]
+verify_jwt = false
+
+[functions.face-verification-engine]
+verify_jwt = false
+
+[functions.generate-poll-suggestions]
+verify_jwt = false
+
+[functions.gov-change-tracker]
+verify_jwt = false
+
+[functions.government-minister-scraper]
+verify_jwt = false
+
+[functions.government-website-scraper]
+verify_jwt = false
+
+[functions.human-simulation-engine]
+verify_jwt = false
+
+[functions.legal-intelligence-core]
+verify_jwt = false
+
+[functions.local-sentiment-mapper]
+verify_jwt = false
+
+[functions.minat-party-scraper]
+verify_jwt = false
+
+[functions.multimodal-emotion-processor]
+verify_jwt = false
+
+[functions.natural-language-plugin-builder]
+verify_jwt = false
+
+[functions.pan-africa-mesh-manager]
+verify_jwt = false
+
+[functions.plugin-stress-watchdog]
+verify_jwt = false
+
+[functions.politica-ai-manager]
+verify_jwt = false
+
+[functions.politica-ai-scanner]
+verify_jwt = false
+
+[functions.prompt-intelligence-engine]
+verify_jwt = false
+
+[functions.signal-intelligence-core]
+verify_jwt = false
+
+[functions.system-cache-flush]
+verify_jwt = false
+
+[functions.ui-visual-inspector]
+verify_jwt = false
+
+[functions.ashen-auto-healer]
+verify_jwt = false
+
+[functions.ashen-autonomous-monitor]
+verify_jwt = false
+
+[functions.ashen-behavior-tester]
+verify_jwt = false
+
+[functions.ashen-code-scanner]
+verify_jwt = false
+
+[functions.ashen-debug-core]
+verify_jwt = false
+
+[functions.ashen-dev-terminal]
+verify_jwt = false
+
+[functions.ashen-fix-suggestion-engine]
+verify_jwt = false
+
+[functions.ashen-jr-training]
+verify_jwt = false
+
+[functions.ashen-learning-engine]
+verify_jwt = false
+
+[functions.ashen-monitoring-service]
+verify_jwt = false
+
+[functions.ashen-security-engine]
+verify_jwt = false
+
+[functions.ashen-snapshot-manager]
+verify_jwt = false
+
+[functions.ashen-sync-guard]
+verify_jwt = false
+
+[functions.assembly-scraper]
+verify_jwt = false
+
+[functions.autonomous-refresh-engine]
+verify_jwt = false

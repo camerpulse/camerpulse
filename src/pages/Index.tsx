@@ -8,6 +8,8 @@ import { YouthPollCreator } from "@/components/Polls/YouthPollCreator";
 import { PresidentialPollCreator } from "@/components/Polls/PresidentialPollCreator";
 import { ElectricityPollCreator } from "@/components/Polls/ElectricityPollCreator";
 import { RegionalSentimentPollCreator } from "@/components/Polls/RegionalSentimentPollCreator";
+import { AutonomousPollAdmin } from "@/components/Admin/AutonomousPollAdmin";
+import { CivicComplaintForm } from "@/components/Civic/CivicComplaintForm";
 
 const Index = () => {
   return (
@@ -17,6 +19,8 @@ const Index = () => {
         <PatrioticDataVisualization />
       </div>
       <div className="container mx-auto px-4 py-8 space-y-12">
+        <AutonomousPollAdmin />
+        <CivicComplaintForm />
         <PresidentialPollCreator />
         <RegionalSentimentPollCreator />
         <ElectricityPollCreator />
