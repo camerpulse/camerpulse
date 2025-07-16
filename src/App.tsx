@@ -32,6 +32,7 @@ import CompanyCreationRequest from "./pages/CompanyCreationRequest";
 import BillionaireTracker from "./pages/BillionaireTracker";
 import BillionaireApplication from "./pages/BillionaireApplication";
 import BillionaireProfile from "./pages/BillionaireProfile";
+import BillionaireAdmin from "./pages/BillionaireAdmin";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -100,9 +101,10 @@ const App = () => {
               <Route path="/companies/create-request" element={<CompanyCreationRequest />} />
               <Route path="/companies/dashboard" element={<CompanyDashboard />} />
               <Route path="/companies/:id" element={<CompanyProfile />} />
-              <Route path="/billionaires" element={<BillionaireTracker />} />
-              <Route path="/billionaires/apply" element={<BillionaireApplication />} />
-              <Route path="/billionaires/:id" element={<BillionaireProfile />} />
+          <Route path="/billionaires" element={<BillionaireTracker />} />
+          <Route path="/billionaires/apply" element={<BillionaireApplication />} />
+          <Route path="/billionaires/:id" element={<BillionaireProfile />} />
+          <Route path="/admin/billionaires" element={<BillionaireAdmin />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
