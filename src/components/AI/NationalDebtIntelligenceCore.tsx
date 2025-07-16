@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { DebtDataScraper } from './DebtDataScraper';
 import { 
   DollarSign, 
   TrendingUp, 
@@ -434,6 +435,7 @@ export const NationalDebtIntelligenceCore: React.FC = () => {
           <TabsTrigger value="intelligence">AI Intelligence</TabsTrigger>
           <TabsTrigger value="alerts">Risk Alerts</TabsTrigger>
           <TabsTrigger value="predictions">Forecasting</TabsTrigger>
+          <TabsTrigger value="scraper">Data Scraper</TabsTrigger>
           <TabsTrigger value="analysis">Custom Analysis</TabsTrigger>
         </TabsList>
 
@@ -666,6 +668,11 @@ export const NationalDebtIntelligenceCore: React.FC = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        {/* Data Scraper Tab */}
+        <TabsContent value="scraper">
+          <DebtDataScraper />
         </TabsContent>
 
         {/* Custom Analysis Tab */}

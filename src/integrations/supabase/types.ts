@@ -12720,6 +12720,10 @@ export type Database = {
           alerts_created: number
         }[]
       }
+      compare_debt_data_changes: {
+        Args: { p_source_id: string; p_current_result_id: string }
+        Returns: Json
+      }
       compare_snapshots: {
         Args: { p_snapshot_a_id: string; p_snapshot_b_id: string }
         Returns: string
