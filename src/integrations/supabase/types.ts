@@ -4747,6 +4747,84 @@ export type Database = {
           },
         ]
       }
+      custom_integrations: {
+        Row: {
+          auth_config: Json | null
+          auth_type: string
+          created_at: string
+          created_by: string
+          endpoint_url: string | null
+          error_count: number
+          execution_count: number
+          id: string
+          integration_name: string
+          integration_type: string
+          is_active: boolean
+          is_public: boolean
+          last_executed_at: string | null
+          metadata: Json | null
+          output_target: string | null
+          pull_interval: string | null
+          pull_schedule: string | null
+          purpose: string | null
+          request_body: Json | null
+          request_headers: Json | null
+          request_method: string
+          success_count: number
+          updated_at: string
+        }
+        Insert: {
+          auth_config?: Json | null
+          auth_type?: string
+          created_at?: string
+          created_by: string
+          endpoint_url?: string | null
+          error_count?: number
+          execution_count?: number
+          id?: string
+          integration_name: string
+          integration_type?: string
+          is_active?: boolean
+          is_public?: boolean
+          last_executed_at?: string | null
+          metadata?: Json | null
+          output_target?: string | null
+          pull_interval?: string | null
+          pull_schedule?: string | null
+          purpose?: string | null
+          request_body?: Json | null
+          request_headers?: Json | null
+          request_method?: string
+          success_count?: number
+          updated_at?: string
+        }
+        Update: {
+          auth_config?: Json | null
+          auth_type?: string
+          created_at?: string
+          created_by?: string
+          endpoint_url?: string | null
+          error_count?: number
+          execution_count?: number
+          id?: string
+          integration_name?: string
+          integration_type?: string
+          is_active?: boolean
+          is_public?: boolean
+          last_executed_at?: string | null
+          metadata?: Json | null
+          output_target?: string | null
+          pull_interval?: string | null
+          pull_schedule?: string | null
+          purpose?: string | null
+          request_body?: Json | null
+          request_headers?: Json | null
+          request_method?: string
+          success_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount: number
@@ -5484,6 +5562,135 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      integration_auth_secrets: {
+        Row: {
+          created_at: string
+          id: string
+          integration_id: string
+          secret_key: string
+          secret_value: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          integration_id: string
+          secret_key: string
+          secret_value: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          integration_id?: string
+          secret_key?: string
+          secret_value?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_auth_secrets_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "custom_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integration_execution_logs: {
+        Row: {
+          created_by: string | null
+          error_message: string | null
+          executed_at: string
+          execution_status: string
+          execution_time_ms: number | null
+          id: string
+          integration_id: string
+          request_data: Json | null
+          response_data: Json | null
+          response_status_code: number | null
+        }
+        Insert: {
+          created_by?: string | null
+          error_message?: string | null
+          executed_at?: string
+          execution_status: string
+          execution_time_ms?: number | null
+          id?: string
+          integration_id: string
+          request_data?: Json | null
+          response_data?: Json | null
+          response_status_code?: number | null
+        }
+        Update: {
+          created_by?: string | null
+          error_message?: string | null
+          executed_at?: string
+          execution_status?: string
+          execution_time_ms?: number | null
+          id?: string
+          integration_id?: string
+          request_data?: Json | null
+          response_data?: Json | null
+          response_status_code?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_execution_logs_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "custom_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integration_usage_stats: {
+        Row: {
+          average_response_time_ms: number
+          created_at: string
+          failed_requests: number
+          id: string
+          integration_id: string
+          stat_date: string
+          successful_requests: number
+          total_data_transferred_bytes: number
+          total_requests: number
+          updated_at: string
+        }
+        Insert: {
+          average_response_time_ms?: number
+          created_at?: string
+          failed_requests?: number
+          id?: string
+          integration_id: string
+          stat_date?: string
+          successful_requests?: number
+          total_data_transferred_bytes?: number
+          total_requests?: number
+          updated_at?: string
+        }
+        Update: {
+          average_response_time_ms?: number
+          created_at?: string
+          failed_requests?: number
+          id?: string
+          integration_id?: string
+          stat_date?: string
+          successful_requests?: number
+          total_data_transferred_bytes?: number
+          total_requests?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_usage_stats_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "custom_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       manual_fix_history: {
         Row: {
@@ -9106,6 +9313,10 @@ export type Database = {
       }
       execute_civic_mission: {
         Args: { p_mission_id: string }
+        Returns: Json
+      }
+      execute_integration: {
+        Args: { p_integration_id: string }
         Returns: Json
       }
       generate_vendor_id: {
