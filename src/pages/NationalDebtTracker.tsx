@@ -176,44 +176,44 @@ const NationalDebtTracker = () => {
   };
 
   const fetchDebtData = async () => {
-    const { data, error } = await supabase
-      .from('debt_records')
-      .select(`
-        *,
-        debt_sources (
-          name,
-          logo_url
-        ),
-        debt_lenders (
-          lender_name,
-          amount_fcfa
-        )
-      `)
-      .order('year', { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from('debt_records')
+        .select('*')
+        .order('year', { ascending: false });
 
-    if (error) throw error;
-    
-    // Transform the data to ensure milestone_events is properly typed
-    const transformedData = (data || []).map(record => ({
-      ...record,
-      milestone_events: Array.isArray(record.milestone_events) 
-        ? record.milestone_events 
-        : record.milestone_events 
-          ? (typeof record.milestone_events === 'string' ? JSON.parse(record.milestone_events) : record.milestone_events)
-          : []
-    })) as DebtRecord[];
-    
-    setDebtRecords(transformedData);
+      if (error) throw error;
+      
+      // Transform the data to ensure milestone_events is properly typed
+      const transformedData = (data || []).map(record => ({
+        ...record,
+        milestone_events: Array.isArray(record.milestone_events) 
+          ? record.milestone_events 
+          : record.milestone_events 
+            ? (typeof record.milestone_events === 'string' ? JSON.parse(record.milestone_events) : record.milestone_events)
+            : []
+      })) as DebtRecord[];
+      
+      setDebtRecords(transformedData);
+    } catch (error) {
+      console.error('Error fetching debt data:', error);
+      toast.error('Failed to fetch debt data');
+    }
   };
 
   const fetchDebtSources = async () => {
-    const { data, error } = await supabase
-      .from('debt_sources')
-      .select('*')
-      .order('source_name');
+    try {
+      const { data, error } = await supabase
+        .from('debt_sources')
+        .select('*')
+        .order('name');
 
-    if (error) throw error;
-    setDebtSources(data || []);
+      if (error) throw error;
+      setDebtSources(data || []);
+    } catch (error) {
+      console.error('Error fetching debt sources:', error);
+      toast.error('Failed to fetch debt sources');
+    }
   };
 
   const fetchDebtAlerts = async () => {
