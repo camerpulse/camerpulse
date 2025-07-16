@@ -18,6 +18,12 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // Cameroon flag themed variants
+        "cm-green": "bg-cm-green text-white hover:bg-cm-green-light shadow-glow",
+        "cm-red": "bg-cm-red text-white hover:bg-cm-red-light shadow-glow",
+        "cm-yellow": "bg-cm-yellow text-black hover:bg-cm-yellow-light shadow-glow",
+        "patriotic": "bg-gradient-flag text-white hover:shadow-elegant transition-all duration-300",
+        "civic": "bg-gradient-civic text-white hover:shadow-elegant transition-all duration-300",
       },
       size: {
         default: "h-10 px-4 py-2",
