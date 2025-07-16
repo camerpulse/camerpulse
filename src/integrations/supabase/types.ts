@@ -7342,6 +7342,54 @@ export type Database = {
           },
         ]
       }
+      election_forecasts: {
+        Row: {
+          confidence_interval_lower: number | null
+          confidence_interval_upper: number | null
+          created_at: string | null
+          demographic_group: string | null
+          election_type: string
+          forecast_date: string
+          id: string
+          methodology: string | null
+          party_name: string | null
+          predicted_vote_percentage: number
+          region: string | null
+          sample_size: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          confidence_interval_lower?: number | null
+          confidence_interval_upper?: number | null
+          created_at?: string | null
+          demographic_group?: string | null
+          election_type?: string
+          forecast_date?: string
+          id?: string
+          methodology?: string | null
+          party_name?: string | null
+          predicted_vote_percentage: number
+          region?: string | null
+          sample_size?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          confidence_interval_lower?: number | null
+          confidence_interval_upper?: number | null
+          created_at?: string | null
+          demographic_group?: string | null
+          election_type?: string
+          forecast_date?: string
+          id?: string
+          methodology?: string | null
+          party_name?: string | null
+          predicted_vote_percentage?: number
+          region?: string | null
+          sample_size?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       election_interference_alerts: {
         Row: {
           action_taken: string | null
@@ -13051,6 +13099,16 @@ export type Database = {
       }
     }
     Views: {
+      election_forecast_summary: {
+        Row: {
+          last_updated: string | null
+          national_average: number | null
+          party_name: string | null
+          regions_leading: number | null
+          weighted_average: number | null
+        }
+        Relationships: []
+      }
       poll_regional_results: {
         Row: {
           option_index: number | null
@@ -13207,6 +13265,14 @@ export type Database = {
         Args: { p_years_ahead?: number }
         Returns: {
           predictions_created: number
+        }[]
+      }
+      generate_election_forecast: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          forecasts_created: number
+          regions_processed: number
+          parties_processed: number
         }[]
       }
       generate_vendor_id: {

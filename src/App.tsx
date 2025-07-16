@@ -35,6 +35,7 @@ import BillionaireProfile from "./pages/BillionaireProfile";
 import BillionaireAdmin from "./pages/BillionaireAdmin";
 import NationalDebtTracker from "./pages/NationalDebtTracker";
 import DebtAdmin from "./pages/DebtAdmin";
+import ElectionForecast from "./pages/ElectionForecast";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -109,6 +110,7 @@ const App = () => {
           <Route path="/admin/billionaires" element={<BillionaireAdmin />} />
           <Route path="/national-debt" element={<NationalDebtTracker />} />
           <Route path="/admin/debt" element={<DebtAdmin />} />
+          <Route path="/election-forecast" element={<ElectionForecast />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
