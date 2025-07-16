@@ -8,7 +8,8 @@ import {
   ShoppingBag, 
   Bell,
   User,
-  Settings
+  Settings,
+  Vote
 } from 'lucide-react';
 
 interface NavItem {
@@ -38,6 +39,12 @@ const navItems: NavItem[] = [
     label: 'Politics',
     icon: Users,
     path: '/politicians',
+  },
+  {
+    id: 'polls',
+    label: 'Polls',
+    icon: Vote,
+    path: '/polls',
   },
   {
     id: 'marketplace',

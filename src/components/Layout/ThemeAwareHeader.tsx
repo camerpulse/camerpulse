@@ -133,6 +133,11 @@ export const ThemeAwareHeader = () => {
               </Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/polls">
+                {currentTheme.id === 'lux-aeterna' ? 'Sacred Polls' : 'Polls'}
+              </Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/civic-portal">
                 {currentTheme.id === 'lux-aeterna' ? '🌟 Sacred Portal' : '🌍 Civic Portal'}
               </Link>
@@ -252,6 +257,11 @@ export const ThemeAwareHeader = () => {
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/marketplace" onClick={() => setMobileMenuOpen(false)}>
                   {currentTheme.id === 'lux-aeterna' ? 'Noble Commerce' : 'Marketplace'}
+                </Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>
+                  {currentTheme.id === 'lux-aeterna' ? 'Sacred Polls' : 'Polls'}
                 </Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
