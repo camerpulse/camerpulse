@@ -78,10 +78,10 @@ interface DebtRecord {
   source_id?: string;
   created_by?: string; // From DB
   verified?: boolean; // From DB
-  debt_sources?: {
-    source_name: string;
-    source_logo_url?: string;
-  };
+  debt_sources?: Array<{
+    name: string;
+    logo_url?: string;
+  }> | null;
   debt_lenders?: Array<{
     lender_name: string;
     amount_fcfa: number;
@@ -181,8 +181,8 @@ const NationalDebtTracker = () => {
       .select(`
         *,
         debt_sources (
-          source_name,
-          source_logo_url
+          name,
+          logo_url
         ),
         debt_lenders (
           lender_name,
@@ -192,7 +192,18 @@ const NationalDebtTracker = () => {
       .order('year', { ascending: false });
 
     if (error) throw error;
-    setDebtRecords(data || []);
+    
+    // Transform the data to ensure milestone_events is properly typed
+    const transformedData = (data || []).map(record => ({
+      ...record,
+      milestone_events: Array.isArray(record.milestone_events) 
+        ? record.milestone_events 
+        : record.milestone_events 
+          ? (typeof record.milestone_events === 'string' ? JSON.parse(record.milestone_events) : record.milestone_events)
+          : []
+    })) as DebtRecord[];
+    
+    setDebtRecords(transformedData);
   };
 
   const fetchDebtSources = async () => {
