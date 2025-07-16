@@ -58,6 +58,7 @@ import CivicExplainerAssistant from '@/components/AI/CivicExplainerAssistant';
 import CivicEducationCampaignManager from '@/components/AI/CivicEducationCampaignManager';
 import CivicVideoGenerator from '@/components/AI/CivicVideoGenerator';
 import VoterReadinessScanner from '@/components/AI/VoterReadinessScanner';
+import CivicImportCore from '@/components/AI/CivicImportCore';
 
 interface SentimentData {
   id: string;
@@ -298,6 +299,7 @@ const CamerPulseIntelligence = () => {
               <TabsTrigger value="campaigns" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📢 Civic Campaigns</TabsTrigger>
               <TabsTrigger value="videos" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🎥 Video Generator</TabsTrigger>
               <TabsTrigger value="voter-scanner" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🗳️ Voter Scanner</TabsTrigger>
+              <TabsTrigger value="import-core" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🧠 Import Core</TabsTrigger>
               <TabsTrigger value="config" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚙️ Config</TabsTrigger>
             </TabsList>
           </div>
@@ -487,6 +489,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="voter-scanner" className="space-y-4">
             <VoterReadinessScanner />
+          </TabsContent>
+
+          <TabsContent value="import-core" className="space-y-4">
+            <CivicImportCore />
           </TabsContent>
 
           <TabsContent value="config" className="space-y-4">
