@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
+import { CivicAIChatbot } from './CivicAIChatbot';
 
 interface LearningPath {
   id: string;
@@ -589,69 +590,7 @@ export const CivicLearningHub: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="chatbot" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageCircle className="h-5 w-5" />
-                Ask CivicBot
-              </CardTitle>
-              <CardDescription>
-                Get instant answers to your civic questions from our AI assistant
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex gap-2">
-                  <Input
-                    placeholder="Ask a civic question... (e.g., 'How do I report corruption?')"
-                    value={chatQuery}
-                    onChange={(e) => setChatQuery(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleChatQuery()}
-                    className="flex-1"
-                  />
-                  <Button onClick={handleChatQuery}>
-                    <MessageCircle className="h-4 w-4 mr-2" />
-                    Ask
-                  </Button>
-                </div>
-                
-                {chatResponse && (
-                  <Alert>
-                    <Brain className="h-4 w-4" />
-                    <AlertDescription className="flex items-center justify-between">
-                      <span>{chatResponse}</span>
-                      <Button 
-                        size="sm" 
-                        variant="outline"
-                        onClick={() => handleTextToSpeech(chatResponse)}
-                        disabled={isPlaying}
-                      >
-                        {isPlaying ? <Pause className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
-                      </Button>
-                    </AlertDescription>
-                  </Alert>
-                )}
-                
-                <div className="space-y-3">
-                  <h3 className="font-semibold">Frequently Asked Questions</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {frequentQuestions.map((faq, index) => (
-                      <Button
-                        key={index}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setChatQuery(faq.question)}
-                        className="justify-start h-auto p-3 text-left"
-                      >
-                        <HelpCircle className="h-4 w-4 mr-2 flex-shrink-0" />
-                        <span className="text-sm">{faq.question}</span>
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <CivicAIChatbot />
         </TabsContent>
 
         <TabsContent value="youth" className="space-y-4">
