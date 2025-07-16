@@ -85,6 +85,7 @@ import AshenDebugCore from "@/components/Admin/AshenDebugCore";
 import CodeHealthLog from "@/components/Admin/CodeHealthLog";
 import UXSimulationLog from "@/components/Admin/UXSimulationLog";
 import CamerPulseActivityTimeline from "@/components/Admin/CamerPulseActivityTimeline";
+import { CivicIntegrityMonitor } from "@/components/AI/CivicIntegrityMonitor";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -284,6 +285,10 @@ const Admin = () => {
                   <TabsTrigger value="activity-timeline" className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
                     Activity Timeline
+                  </TabsTrigger>
+                  <TabsTrigger value="integrity-monitor" className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Ashen Quill
                   </TabsTrigger>
               </TabsList>
             </ScrollArea>
@@ -1098,6 +1103,23 @@ const Admin = () => {
             {/* 21. ACTIVITY TIMELINE */}
             <TabsContent value="activity-timeline">
               <CamerPulseActivityTimeline />
+            </TabsContent>
+
+            {/* 22. CIVIC INTEGRITY MONITOR - ASHEN QUILL */}
+            <TabsContent value="integrity-monitor">
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Shield className="h-5 w-5" />
+                      Ashen Quill - Civic Integrity Monitor
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CivicIntegrityMonitor />
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
