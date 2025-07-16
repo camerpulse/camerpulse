@@ -205,6 +205,45 @@ export type Database = {
           },
         ]
       }
+      ai_generation_schedule: {
+        Row: {
+          created_at: string
+          frequency: string
+          generation_rules: Json | null
+          id: string
+          is_active: boolean
+          last_run_at: string | null
+          next_run_at: string | null
+          performance_stats: Json | null
+          scan_sources: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          frequency?: string
+          generation_rules?: Json | null
+          id?: string
+          is_active?: boolean
+          last_run_at?: string | null
+          next_run_at?: string | null
+          performance_stats?: Json | null
+          scan_sources?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          frequency?: string
+          generation_rules?: Json | null
+          id?: string
+          is_active?: boolean
+          last_run_at?: string | null
+          next_run_at?: string | null
+          performance_stats?: Json | null
+          scan_sources?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       approval_ratings: {
         Row: {
           comment: string | null
@@ -12097,6 +12136,89 @@ export type Database = {
         }
         Relationships: []
       }
+      polls_ai_generated: {
+        Row: {
+          admin_edited: boolean
+          ai_confidence_score: number
+          ai_reasoning: Json | null
+          created_at: string
+          duplicate_check_passed: boolean
+          edit_history: Json | null
+          generation_prompt: string | null
+          generation_trigger: string
+          id: string
+          original_options: string[] | null
+          original_question: string | null
+          performance_metrics: Json | null
+          poll_id: string | null
+          regional_data: Json | null
+          security_clearance: boolean
+          sentiment_analysis: Json | null
+          social_metrics: Json | null
+          source_platform: string | null
+          topic_category: string
+          trending_keywords: string[] | null
+          updated_at: string
+          urgency_level: string
+        }
+        Insert: {
+          admin_edited?: boolean
+          ai_confidence_score?: number
+          ai_reasoning?: Json | null
+          created_at?: string
+          duplicate_check_passed?: boolean
+          edit_history?: Json | null
+          generation_prompt?: string | null
+          generation_trigger: string
+          id?: string
+          original_options?: string[] | null
+          original_question?: string | null
+          performance_metrics?: Json | null
+          poll_id?: string | null
+          regional_data?: Json | null
+          security_clearance?: boolean
+          sentiment_analysis?: Json | null
+          social_metrics?: Json | null
+          source_platform?: string | null
+          topic_category: string
+          trending_keywords?: string[] | null
+          updated_at?: string
+          urgency_level?: string
+        }
+        Update: {
+          admin_edited?: boolean
+          ai_confidence_score?: number
+          ai_reasoning?: Json | null
+          created_at?: string
+          duplicate_check_passed?: boolean
+          edit_history?: Json | null
+          generation_prompt?: string | null
+          generation_trigger?: string
+          id?: string
+          original_options?: string[] | null
+          original_question?: string | null
+          performance_metrics?: Json | null
+          poll_id?: string | null
+          regional_data?: Json | null
+          security_clearance?: boolean
+          sentiment_analysis?: Json | null
+          social_metrics?: Json | null
+          source_platform?: string | null
+          topic_category?: string
+          trending_keywords?: string[] | null
+          updated_at?: string
+          urgency_level?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "polls_ai_generated_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -12661,6 +12783,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      social_media_trends: {
+        Row: {
+          age_demographics: Json | null
+          created_at: string
+          detected_at: string
+          engagement_rate: number | null
+          expires_at: string
+          geographic_data: Json | null
+          hashtag: string | null
+          id: string
+          keywords: string[] | null
+          mention_count: number
+          platform: string
+          poll_generated: boolean
+          raw_data: Json | null
+          sentiment_score: number
+          trend_strength: number
+        }
+        Insert: {
+          age_demographics?: Json | null
+          created_at?: string
+          detected_at?: string
+          engagement_rate?: number | null
+          expires_at?: string
+          geographic_data?: Json | null
+          hashtag?: string | null
+          id?: string
+          keywords?: string[] | null
+          mention_count?: number
+          platform: string
+          poll_generated?: boolean
+          raw_data?: Json | null
+          sentiment_score?: number
+          trend_strength?: number
+        }
+        Update: {
+          age_demographics?: Json | null
+          created_at?: string
+          detected_at?: string
+          engagement_rate?: number | null
+          expires_at?: string
+          geographic_data?: Json | null
+          hashtag?: string | null
+          id?: string
+          keywords?: string[] | null
+          mention_count?: number
+          platform?: string
+          poll_generated?: boolean
+          raw_data?: Json | null
+          sentiment_score?: number
+          trend_strength?: number
+        }
+        Relationships: []
       }
       strategy_execution_logs: {
         Row: {

@@ -377,31 +377,47 @@ serve(async (req) => {
       throw pollError;
     }
 
-    // Log the autonomous poll generation
-    const { error: logError } = await supabase
-      .from('autonomous_polls')
+    // Enhanced logging to polls_ai_generated table
+    const { error: aiLogError } = await supabase
+      .from('polls_ai_generated')
       .insert({
         poll_id: newPoll.id,
-        trigger_sentiment_id: triggerSentimentId,
-        generation_method: generationMethod,
+        generation_trigger: generationMethod,
+        source_platform: selectedTopic.platform || 'civic_complaints',
+        trending_keywords: selectedTopic.keywords || [],
+        sentiment_analysis: sentimentAnalysis || {},
+        urgency_level: topicCategory === 'emergency' ? 'critical' : 
+                      selectedTopic.trendingScore > 0.8 ? 'high' :
+                      selectedTopic.trendingScore > 0.6 ? 'medium' : 'low',
         topic_category: topicCategory,
-        confidence_score: confidenceScore,
-        auto_published: !config.auto_publish?.require_admin_approval,
-        admin_approved: config.auto_publish?.require_admin_approval ? null : true,
-        generation_prompt: `CamerPulse AI template for ${topicCategory}: ${selectedTopic.title}`,
+        ai_confidence_score: confidenceScore,
+        generation_prompt: `CivicAIPollGenerator template for ${topicCategory}: ${selectedTopic.title}`,
         ai_reasoning: {
           reasoning: pollData.reasoning,
           selectedTopic: selectedTopic,
+          sentimentAnalysis: sentimentAnalysis,
           confidenceFactors: {
             topicRelevance: selectedTopic.trendingScore || selectedTopic.trendStrength,
             optionQuality: pollData.options.length,
-            hasReasoning: !!pollData.reasoning
+            hasReasoning: !!pollData.reasoning,
+            emotionalTone: sentimentAnalysis?.dominantTone
           }
-        }
+        },
+        social_metrics: selectedTopic.platform ? {
+          platform: selectedTopic.platform,
+          mention_count: selectedTopic.mention_count || 0,
+          engagement_rate: selectedTopic.engagement_rate || 0
+        } : {},
+        regional_data: selectedTopic.region ? {
+          primary_region: selectedTopic.region,
+          boost_applied: config.regional_boost?.enabled
+        } : {},
+        original_question: pollData.question,
+        original_options: pollData.options
       });
 
-    if (logError) {
-      console.error('Error logging autonomous poll:', logError);
+    if (aiLogError) {
+      console.error('Error logging to polls_ai_generated:', aiLogError);
     }
 
     console.log(`✅ Successfully generated autonomous poll: "${pollData.question}"`);
