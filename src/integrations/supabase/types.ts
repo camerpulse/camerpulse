@@ -11883,44 +11883,56 @@ export type Database = {
       }
       polls: {
         Row: {
+          anonymous_mode: boolean | null
           auto_delete_at: string | null
+          banner_image_url: string | null
           created_at: string | null
           creator_id: string
           description: string | null
+          duration_days: number | null
           ends_at: string | null
           id: string
           is_active: boolean | null
           options: Json
           privacy_mode: string
           show_results_after_expiry: boolean
+          theme_color: string | null
           title: string
           votes_count: number | null
         }
         Insert: {
+          anonymous_mode?: boolean | null
           auto_delete_at?: string | null
+          banner_image_url?: string | null
           created_at?: string | null
           creator_id: string
           description?: string | null
+          duration_days?: number | null
           ends_at?: string | null
           id?: string
           is_active?: boolean | null
           options: Json
           privacy_mode?: string
           show_results_after_expiry?: boolean
+          theme_color?: string | null
           title: string
           votes_count?: number | null
         }
         Update: {
+          anonymous_mode?: boolean | null
           auto_delete_at?: string | null
+          banner_image_url?: string | null
           created_at?: string | null
           creator_id?: string
           description?: string | null
+          duration_days?: number | null
           ends_at?: string | null
           id?: string
           is_active?: boolean | null
           options?: Json
           privacy_mode?: string
           show_results_after_expiry?: boolean
+          theme_color?: string | null
           title?: string
           votes_count?: number | null
         }

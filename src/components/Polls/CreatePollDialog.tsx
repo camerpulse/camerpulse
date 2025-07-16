@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -28,7 +29,11 @@ import {
   EyeOff,
   CreditCard,
   BarChart3,
-  FileText
+  FileText,
+  Upload,
+  Palette,
+  Image as ImageIcon,
+  UserMinus
 } from 'lucide-react';
 
 interface CreatePollDialogProps {
@@ -41,6 +46,7 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -51,11 +57,83 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
     showResultsAfterExpiry: true,
     autoDelete: false,
     autoDeleteDays: 30,
-    pollStyle: 'card' as 'card' | 'chart' | 'ballot'
+    pollStyle: 'card' as 'card' | 'chart' | 'ballot',
+    // New customization fields
+    themeColor: 'cm-green' as 'cm-green' | 'cm-yellow' | 'cm-red' | 'primary' | 'accent',
+    bannerImageUrl: '',
+    anonymousMode: false,
+    durationDays: 7
   });
+
+  // Civic theme colors
+  const themeColors = [
+    { value: 'cm-green', name: 'Civic Green', class: 'bg-cm-green' },
+    { value: 'cm-yellow', name: 'Unity Yellow', class: 'bg-cm-yellow' },
+    { value: 'cm-red', name: 'National Red', class: 'bg-cm-red' },
+    { value: 'primary', name: 'Classic Blue', class: 'bg-primary' },
+    { value: 'accent', name: 'Elegant Purple', class: 'bg-accent' }
+  ];
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !user) return;
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "File too large",
+        description: "Image must be smaller than 5MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Invalid file type",
+        description: "Please upload an image file",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      setUploadingImage(true);
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${user.id}-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError, data } = await supabase.storage
+        .from('poll-banners')
+        .upload(fileName, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: urlData } = supabase.storage
+        .from('poll-banners')
+        .getPublicUrl(fileName);
+
+      handleInputChange('bannerImageUrl', urlData.publicUrl);
+      
+      toast({
+        title: "Image uploaded!",
+        description: "Your banner image has been uploaded successfully"
+      });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload image. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const addOption = () => {
@@ -118,9 +196,14 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
     try {
       setLoading(true);
 
+      // Calculate expiry date based on duration if no custom expiry is set
+      const expiryDate = formData.hasExpiry && formData.expiryDate 
+        ? formData.expiryDate 
+        : new Date(Date.now() + (formData.durationDays * 24 * 60 * 60 * 1000));
+
       // Calculate auto delete date if enabled
-      const autoDeleteAt = formData.autoDelete && formData.expiryDate 
-        ? new Date(formData.expiryDate.getTime() + (formData.autoDeleteDays * 24 * 60 * 60 * 1000))
+      const autoDeleteAt = formData.autoDelete 
+        ? new Date(expiryDate.getTime() + (formData.autoDeleteDays * 24 * 60 * 60 * 1000))
         : null;
 
       const { error } = await supabase
@@ -130,13 +213,16 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
           title: formData.title.trim(),
           description: formData.description.trim() || null,
           options: validOptions,
-          ends_at: formData.hasExpiry && formData.expiryDate 
-            ? formData.expiryDate.toISOString() 
-            : null,
+          ends_at: expiryDate.toISOString(),
           privacy_mode: formData.privacyMode,
           show_results_after_expiry: formData.showResultsAfterExpiry,
           auto_delete_at: autoDeleteAt?.toISOString() || null,
-          is_active: true
+          is_active: true,
+          // New customization fields
+          theme_color: formData.themeColor,
+          banner_image_url: formData.bannerImageUrl || null,
+          anonymous_mode: formData.anonymousMode,
+          duration_days: formData.durationDays
         });
 
       if (error) throw error;
@@ -183,7 +269,11 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
         showResultsAfterExpiry: true,
         autoDelete: false,
         autoDeleteDays: 30,
-        pollStyle: 'card'
+        pollStyle: 'card',
+        themeColor: 'cm-green',
+        bannerImageUrl: '',
+        anonymousMode: false,
+        durationDays: 7
       });
 
       onSuccess();
@@ -334,16 +424,143 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
             </CardContent>
           </Card>
 
+          {/* Customization Panel */}
+          <Card className="bg-gradient-to-br from-cm-green/5 to-cm-yellow/5 border-cm-green/20">
+            <CardContent className="pt-6 space-y-6">
+              <Label className="flex items-center gap-2 text-cm-green font-semibold">
+                <Palette className="w-5 h-5" />
+                Poll Customization
+              </Label>
+              
+              {/* Theme Color Selection */}
+              <div className="space-y-3">
+                <Label>Civic Theme Color</Label>
+                <div className="grid grid-cols-5 gap-2">
+                  {themeColors.map((color) => (
+                    <Button
+                      key={color.value}
+                      type="button"
+                      variant={formData.themeColor === color.value ? 'default' : 'outline'}
+                      className={cn(
+                        "h-12 flex-col gap-1 p-2 border-2",
+                        formData.themeColor === color.value ? 'border-ring shadow-md' : 'border-border'
+                      )}
+                      onClick={() => handleInputChange('themeColor', color.value)}
+                    >
+                      <div className={cn("w-4 h-4 rounded-full", color.class)} />
+                      <span className="text-xs font-medium">{color.name.split(' ')[0]}</span>
+                    </Button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Banner Image Upload */}
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4" />
+                  Civic Banner Image (Optional)
+                </Label>
+                {formData.bannerImageUrl && (
+                  <div className="relative">
+                    <img 
+                      src={formData.bannerImageUrl} 
+                      alt="Poll banner" 
+                      className="w-full h-32 object-cover rounded-lg border border-border"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2"
+                      onClick={() => handleInputChange('bannerImageUrl', '')}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploadingImage}
+                    className="hidden"
+                    id="banner-upload"
+                  />
+                  <Label 
+                    htmlFor="banner-upload"
+                    className={cn(
+                      "flex items-center gap-2 px-4 py-2 rounded-md border border-dashed cursor-pointer transition-colors",
+                      "hover:bg-muted/50 hover:border-primary",
+                      uploadingImage && "opacity-50 cursor-not-allowed"
+                    )}
+                  >
+                    <Upload className="w-4 h-4" />
+                    {uploadingImage ? 'Uploading...' : 'Upload Banner'}
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    JPG, PNG up to 5MB
+                  </p>
+                </div>
+              </div>
+
+              {/* Anonymous Mode */}
+              <div className="flex items-center justify-between p-3 rounded-lg border border-border bg-background">
+                <div className="space-y-1">
+                  <Label htmlFor="anonymousMode" className="flex items-center gap-2">
+                    <UserMinus className="w-4 h-4" />
+                    Anonymous Mode
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Hide voter identities from results
+                  </p>
+                </div>
+                <Switch
+                  id="anonymousMode"
+                  checked={formData.anonymousMode}
+                  onCheckedChange={(checked) => handleInputChange('anonymousMode', checked)}
+                />
+              </div>
+
+              {/* Poll Duration */}
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2">
+                  <Clock className="w-4 h-4" />
+                  Poll Duration
+                </Label>
+                <Select 
+                  value={formData.durationDays.toString()} 
+                  onValueChange={(value) => handleInputChange('durationDays', parseInt(value))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1 Day</SelectItem>
+                    <SelectItem value="3">3 Days</SelectItem>
+                    <SelectItem value="7">7 Days (Recommended)</SelectItem>
+                    <SelectItem value="14">14 Days</SelectItem>
+                    <SelectItem value="30">30 Days</SelectItem>
+                    <SelectItem value="90">90 Days</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  Poll will automatically close after this duration
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Poll Settings */}
           <Card>
             <CardContent className="pt-6 space-y-4">
-              <Label>Poll Settings</Label>
+              <Label>Advanced Settings</Label>
               
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <Label htmlFor="hasExpiry">Set Expiry Date</Label>
+                  <Label htmlFor="hasExpiry">Custom Expiry Date</Label>
                   <p className="text-sm text-muted-foreground">
-                    Automatically close the poll after a specific date
+                    Override duration with specific date
                   </p>
                 </div>
                 <Switch
@@ -490,102 +707,86 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
             </CardContent>
           </Card>
 
-          {/* Enhanced Preview */}
-          <Card className="bg-muted/50">
-            <CardContent className="pt-6">
-              <Label className="text-sm font-medium mb-4 block">Live Preview - {formData.pollStyle.charAt(0).toUpperCase() + formData.pollStyle.slice(1)} Style</Label>
+          {/* Live Preview */}
+          <Card>
+            <CardContent className="pt-6 space-y-4">
+              <Label className="flex items-center gap-2">
+                <Eye className="w-4 h-4" />
+                Live Preview
+              </Label>
               
-              {/* Preview Poll Data */}
-              {(() => {
-                const previewPoll = {
-                  title: formData.title || 'Your poll title will appear here',
-                  description: formData.description || undefined,
-                  options: formData.options.filter(opt => opt.trim()),
-                  vote_results: formData.options.map(() => Math.floor(Math.random() * 50) + 1),
-                  votes_count: formData.options.reduce((sum) => sum + Math.floor(Math.random() * 50) + 1, 0),
-                  user_vote: undefined,
-                  ends_at: formData.expiryDate?.toISOString(),
-                  privacy_mode: formData.privacyMode
-                };
-
-                const validOptions = formData.options.filter(option => option.trim());
-                
-                if (validOptions.length < 2) {
-                  return (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Vote className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                      <p>Add at least 2 options to see the preview</p>
-                    </div>
-                  );
-                }
-
-                return (
-                  <div className="border rounded-lg p-4 bg-background">
-                    <div className="mb-4">
-                      <h4 className="font-semibold text-base sm:text-lg mb-2">
-                        {previewPoll.title}
-                      </h4>
-                      {previewPoll.description && (
-                        <p className="text-sm text-muted-foreground mb-3">
-                          {previewPoll.description}
-                        </p>
-                      )}
-                    </div>
-
-                    {formData.pollStyle === 'card' && (
-                      <CardPollStyle 
-                        poll={previewPoll} 
-                        showResults={false}
-                        isActive={false}
-                        hasVoted={false}
-                      />
-                    )}
-                    
-                    {formData.pollStyle === 'chart' && (
-                      <ChartPollStyle 
-                        poll={previewPoll} 
-                        showResults={false}
-                        isActive={false}
-                        hasVoted={false}
-                      />
-                    )}
-                    
-                    {formData.pollStyle === 'ballot' && (
-                      <BallotPollStyle 
-                        poll={previewPoll} 
-                        showResults={false}
-                        isActive={false}
-                        hasVoted={false}
-                      />
-                    )}
-
-                    <div className="flex flex-wrap items-center gap-3 mt-4 pt-3 border-t border-border/50 text-xs text-muted-foreground">
-                      <div className="flex items-center gap-1">
-                        <Users className="w-3 h-3" />
-                        <span>0 votes</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        {formData.privacyMode === 'public' && <Users className="w-3 h-3" />}
-                        {formData.privacyMode === 'private' && <Shield className="w-3 h-3" />}
-                        {formData.privacyMode === 'anonymous' && <EyeOff className="w-3 h-3" />}
-                        <span className="capitalize">{formData.privacyMode}</span>
-                      </div>
-                      {formData.hasExpiry && formData.expiryDate && (
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          <span>Ends {format(formData.expiryDate, "PPP")}</span>
-                        </div>
-                      )}
-                      {formData.autoDelete && formData.hasExpiry && (
-                        <div className="flex items-center gap-1">
-                          <X className="w-3 h-3" />
-                          <span>Auto-delete in {formData.autoDeleteDays}d</span>
-                        </div>
-                      )}
-                    </div>
+              {formData.bannerImageUrl && (
+                <div className="relative">
+                  <img 
+                    src={formData.bannerImageUrl} 
+                    alt="Poll banner" 
+                    className="w-full h-24 object-cover rounded-lg"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg" />
+                  <div className="absolute bottom-2 left-3 text-white">
+                    <h3 className="font-semibold text-sm">{formData.title || 'Your Poll Title'}</h3>
                   </div>
-                );
-              })()}
+                </div>
+              )}
+              
+              <div className={`p-4 rounded-lg border-2 ${formData.themeColor === 'cm-green' ? 'border-cm-green/30 bg-cm-green/5' : formData.themeColor === 'cm-yellow' ? 'border-cm-yellow/30 bg-cm-yellow/5' : formData.themeColor === 'cm-red' ? 'border-cm-red/30 bg-cm-red/5' : formData.themeColor === 'primary' ? 'border-primary/30 bg-primary/5' : 'border-accent/30 bg-accent/5'}`}>
+                {(() => {
+                  const validOptions = formData.options.filter(option => option.trim());
+                  
+                  if (validOptions.length < 2) {
+                    return (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <Vote className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                        <p>Add at least 2 options to see the preview</p>
+                      </div>
+                    );
+                  }
+
+                  const previewPoll = {
+                    title: formData.title || 'Sample Poll Title',
+                    description: formData.description || 'This is how your poll will look',
+                    options: validOptions,
+                    votes_count: 0,
+                    privacy_mode: formData.privacyMode,
+                    ends_at: formData.hasExpiry && formData.expiryDate ? formData.expiryDate.toISOString() : null
+                  };
+
+                  return (
+                    <>
+                      {formData.pollStyle === 'card' && (
+                        <CardPollStyle
+                          poll={previewPoll}
+                          isActive={false}
+                          hasVoted={false}
+                          className="pointer-events-none"
+                        />
+                      )}
+                      {formData.pollStyle === 'chart' && (
+                        <ChartPollStyle
+                          poll={previewPoll}
+                          isActive={false}
+                          hasVoted={false}
+                          className="pointer-events-none"
+                        />
+                      )}
+                      {formData.pollStyle === 'ballot' && (
+                        <BallotPollStyle
+                          poll={previewPoll}
+                          isActive={false}
+                          hasVoted={false}
+                          className="pointer-events-none"
+                        />
+                      )}
+                    </>
+                  );
+                })()}
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-muted-foreground bg-muted/30 p-2 rounded">
+                <span>Theme: {themeColors.find(c => c.value === formData.themeColor)?.name}</span>
+                <span>Duration: {formData.durationDays} days</span>
+                <span>{formData.anonymousMode ? 'Anonymous' : 'Public votes'}</span>
+              </div>
             </CardContent>
           </Card>
         </div>
