@@ -58,6 +58,12 @@ const navItems: NavItem[] = [
     icon: User,
     path: '/social',
   },
+  {
+    id: 'admin',
+    label: 'Admin',
+    icon: Settings,
+    path: '/admin/core',
+  },
 ];
 
 export const MobileNavigation = () => {

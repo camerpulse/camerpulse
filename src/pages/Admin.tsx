@@ -70,8 +70,10 @@ import {
   Monitor,
   Building2,
   Star,
-  FileCode
+  FileCode,
+  ExternalLink
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import PartyDirectorySync from "@/components/AI/PartyDirectorySync";
 import MinisterDirectorySync from "@/components/AI/MinisterDirectorySync";
 import SenateDirectorySync from "@/components/AI/SenateDirectorySync";
@@ -350,6 +352,41 @@ const Admin = () => {
                     </CardContent>
                   </Card>
                 </div>
+
+                {/* CamerPulse Admin Core Access Card */}
+                <Card className="bg-gradient-civic/10 border-primary/20 hover:shadow-elegant transition-all duration-300">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      <Shield className="h-6 w-6 text-primary" />
+                      CamerPulse Admin Core
+                    </CardTitle>
+                    <CardDescription>
+                      Access the advanced admin dashboard with real-time analytics, user management, and system controls
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                      <div className="flex items-center gap-2 text-sm">
+                        <Users className="h-4 w-4 text-cm-green" />
+                        <span>User Management</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <BarChart3 className="h-4 w-4 text-cm-red" />
+                        <span>Real-time Analytics</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-sm">
+                        <Bot className="h-4 w-4 text-cm-yellow" />
+                        <span>Intelligence Panel</span>
+                      </div>
+                    </div>
+                    <Button asChild variant="patriotic" className="w-full">
+                      <Link to="/admin/core" className="flex items-center gap-2">
+                        <ExternalLink className="h-4 w-4" />
+                        Launch Admin Core Dashboard
+                      </Link>
+                    </Button>
+                  </CardContent>
+                </Card>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <Card>

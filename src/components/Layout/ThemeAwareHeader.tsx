@@ -155,6 +155,11 @@ export const ThemeAwareHeader = () => {
                 {currentTheme.id === 'lux-aeterna' ? '✨ Eternal Intel' : '🧠 Pan-African Intel'}
               </Link>
             </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/admin/core">
+                {currentTheme.id === 'lux-aeterna' ? '👑 Admin Core' : '⚙️ Admin Core'}
+              </Link>
+            </Button>
           </nav>
 
           {/* Right side actions */}
