@@ -241,28 +241,47 @@ export const CivicLearningHub: React.FC = () => {
     try {
       setIsPlaying(true);
       
-      // Call Supabase edge function for text-to-speech
-      const { data, error } = await supabase.functions.invoke('text-to-speech', {
-        body: { 
-          text, 
-          voice: language === 'fr' ? 'Aria' : 'Brian',
-          language 
-        }
-      });
-
-      if (error) throw error;
-
-      // Play the audio
-      if (data?.audioContent) {
-        const audio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
-        audio.onended = () => setIsPlaying(false);
-        await audio.play();
+      // Check if browser supports speech synthesis
+      if (!('speechSynthesis' in window)) {
+        throw new Error('Speech synthesis not supported');
       }
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      
+      // Set voice based on language
+      const voices = speechSynthesis.getVoices();
+      let selectedVoice = null;
+      
+      if (language === 'fr') {
+        selectedVoice = voices.find(voice => voice.lang.startsWith('fr')) || null;
+      } else if (language === 'en') {
+        selectedVoice = voices.find(voice => voice.lang.startsWith('en')) || null;
+      }
+      
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+      
+      utterance.rate = 0.9;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+      
+      utterance.onend = () => {
+        setIsPlaying(false);
+      };
+      
+      utterance.onerror = (event) => {
+        console.error('Speech synthesis error:', event);
+        setIsPlaying(false);
+      };
+      
+      speechSynthesis.speak(utterance);
+      
     } catch (error) {
       console.error('Error with text-to-speech:', error);
       toast({
         title: "Audio Error",
-        description: "Could not play audio. Please try again.",
+        description: "Speech synthesis not available. Please check your browser settings.",
         variant: "destructive"
       });
       setIsPlaying(false);

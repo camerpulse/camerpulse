@@ -14,7 +14,8 @@ import { CacheManagementDashboard } from "@/components/Admin/CacheManagementDash
 import { CacheStatusMonitor } from "@/components/Admin/CacheStatusMonitor";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppLayout } from "@/components/Layout/AppLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,6 +39,11 @@ import {
   Bot,
   Power,
   Settings,
+  BookOpen,
+  GraduationCap,
+  Volume2,
+  Languages,
+  MessageCircle,
   Shield,
   DollarSign,
   BarChart3,
@@ -59,7 +65,6 @@ import {
   Filter,
   RefreshCw,
   UserCheck,
-  Languages,
   Ban,
   Unlock,
   Monitor,
@@ -289,6 +294,10 @@ const Admin = () => {
                   <TabsTrigger value="integrity-monitor" className="flex items-center gap-2">
                     <Shield className="h-4 w-4" />
                     Ashen Quill
+                  </TabsTrigger>
+                  <TabsTrigger value="civic-learning" className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    Civic Learning
                   </TabsTrigger>
               </TabsList>
             </ScrollArea>
@@ -1117,6 +1126,148 @@ const Admin = () => {
                   </CardHeader>
                   <CardContent>
                     <CivicIntegrityMonitor />
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            {/* 23. CIVIC LEARNING HUB MANAGEMENT */}
+            <TabsContent value="civic-learning">
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <GraduationCap className="h-5 w-5" />
+                      Civic Learning Hub Management
+                    </CardTitle>
+                    <CardDescription>
+                      Manage educational content, learning paths, and voice settings
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm">Learning Modules</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">12</div>
+                          <p className="text-xs text-muted-foreground">Active modules</p>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm">Voice Languages</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">3</div>
+                          <p className="text-xs text-muted-foreground">EN, FR, Pidgin</p>
+                        </CardContent>
+                      </Card>
+                      <Card>
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-sm">Daily Learners</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="text-2xl font-bold">2.3k</div>
+                          <p className="text-xs text-muted-foreground">+15% this week</p>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Volume2 className="h-4 w-4" />
+                        Voice Settings (Independent AI)
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label>Speech Rate</Label>
+                          <Select defaultValue="1.0">
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="0.5">0.5x (Slow)</SelectItem>
+                              <SelectItem value="0.75">0.75x</SelectItem>
+                              <SelectItem value="1.0">1.0x (Normal)</SelectItem>
+                              <SelectItem value="1.25">1.25x</SelectItem>
+                              <SelectItem value="1.5">1.5x (Fast)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Voice Pitch</Label>
+                          <Select defaultValue="1.0">
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="0.5">Low</SelectItem>
+                              <SelectItem value="1.0">Normal</SelectItem>
+                              <SelectItem value="1.5">High</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <Alert>
+                        <Volume2 className="h-4 w-4" />
+                        <AlertDescription>
+                          Using browser's built-in Web Speech API for 100% independent operation. No external dependencies required.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold flex items-center gap-2">
+                        <Languages className="h-4 w-4" />
+                        Content Management
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <Button className="justify-start" variant="outline">
+                          <FileText className="h-4 w-4 mr-2" />
+                          Manage Learning Paths
+                        </Button>
+                        <Button className="justify-start" variant="outline">
+                          <Search className="h-4 w-4 mr-2" />
+                          Edit Knowledge Library
+                        </Button>
+                        <Button className="justify-start" variant="outline">
+                          <MessageCircle className="h-4 w-4 mr-2" />
+                          Configure CivicBot
+                        </Button>
+                        <Button className="justify-start" variant="outline">
+                          <GraduationCap className="h-4 w-4 mr-2" />
+                          Youth Edition Settings
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold">Recent Activity</h3>
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between p-3 border rounded-lg">
+                          <div>
+                            <p className="font-medium">New learning path: "Election Process"</p>
+                            <p className="text-sm text-muted-foreground">Added 2 hours ago</p>
+                          </div>
+                          <Badge variant="secondary">Published</Badge>
+                        </div>
+                        <div className="flex items-center justify-between p-3 border rounded-lg">
+                          <div>
+                            <p className="font-medium">CivicBot knowledge updated</p>
+                            <p className="text-sm text-muted-foreground">Updated 6 hours ago</p>
+                          </div>
+                          <Badge variant="secondary">Active</Badge>
+                        </div>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
