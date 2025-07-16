@@ -61,23 +61,23 @@ interface DebtRecord {
   total_debt_usd: number;
   domestic_debt_fcfa?: number;
   external_debt_fcfa?: number;
-  internal_debt_fcfa?: number; // Alternative name from DB
+  internal_debt_fcfa?: number;
   debt_breakdown?: any;
   debt_to_gdp_ratio?: number;
   gdp_value_fcfa?: number;
-  gdp_fcfa?: number; // Alternative name from DB
+  gdp_fcfa?: number;
   population_count?: number;
-  population?: number; // Alternative name from DB
+  population?: number;
   monthly_change_percentage?: number;
   ai_analysis_summary?: string;
   risk_level?: string;
   milestone_events?: any[];
   prediction_data?: any;
   last_updated?: string;
-  updated_at?: string; // Alternative name from DB
+  updated_at?: string;
   source_id?: string;
-  created_by?: string; // From DB
-  verified?: boolean; // From DB
+  created_by?: string;
+  verified?: boolean;
   debt_sources?: Array<{
     name: string;
     logo_url?: string;
@@ -132,14 +132,14 @@ interface KnowledgeArticle {
 interface DebtSource {
   id: string;
   source_name?: string;
-  name?: string; // Alternative name from DB
+  name?: string;
   source_logo_url?: string;
-  logo_url?: string; // Alternative name from DB
+  logo_url?: string;
   is_verified?: boolean;
-  is_active?: boolean; // From DB
-  acronym?: string; // From DB
-  website_url?: string; // From DB
-  description?: string; // From DB
+  is_active?: boolean;
+  acronym?: string;
+  website_url?: string;
+  description?: string;
 }
 
 const NationalDebtTracker = () => {
@@ -190,14 +190,23 @@ const NationalDebtTracker = () => {
         throw error;
       }
       
-      // Transform the data to ensure milestone_events is properly typed
+      // Transform and validate the data
       const transformedData = (data || []).map(record => ({
         ...record,
         milestone_events: Array.isArray(record.milestone_events) 
           ? record.milestone_events 
           : record.milestone_events 
             ? (typeof record.milestone_events === 'string' ? JSON.parse(record.milestone_events) : record.milestone_events)
-            : []
+            : [],
+        // Ensure numeric values are valid
+        total_debt_fcfa: Number(record.total_debt_fcfa) || 0,
+        total_debt_usd: Number(record.total_debt_usd) || 0,
+        debt_to_gdp_ratio: Number(record.debt_to_gdp_ratio) || 0,
+        monthly_change_percentage: Number(record.monthly_change_percentage) || 0,
+        domestic_debt_fcfa: Number(record.domestic_debt_fcfa) || Number(record.internal_debt_fcfa) || 0,
+        external_debt_fcfa: Number(record.external_debt_fcfa) || 0,
+        population_count: Number(record.population_count) || Number(record.population) || 27000000,
+        gdp_value_fcfa: Number(record.gdp_value_fcfa) || Number(record.gdp_fcfa) || 0
       })) as DebtRecord[];
       
       console.log('Transformed data:', transformedData);
@@ -269,15 +278,15 @@ const NationalDebtTracker = () => {
     setKnowledgeArticles(data || []);
   };
 
-  // Calculate debt per capita and metrics for latest record
+  // Calculate debt metrics with safe fallbacks
   const latestRecord = debtRecords[0];
-  const population = latestRecord?.population_count || 27000000; // Default to 27M
+  const population = latestRecord?.population_count || 27000000;
   const debtPerCapitaFCFA = latestRecord ? Math.round(latestRecord.total_debt_fcfa / population) : 0;
   const debtPerCapitaUSD = latestRecord ? Math.round(latestRecord.total_debt_usd / population) : 0;
   
-  // Calculate year-over-year change
+  // Calculate year-over-year change with validation
   const previousRecord = debtRecords[1];
-  const yearOverYearChange = latestRecord && previousRecord 
+  const yearOverYearChange = latestRecord && previousRecord && previousRecord.total_debt_usd > 0
     ? ((latestRecord.total_debt_usd - previousRecord.total_debt_usd) / previousRecord.total_debt_usd) * 100
     : 0;
 
@@ -300,43 +309,54 @@ const NationalDebtTracker = () => {
     }
   };
 
-  // Prepare chart data with predictions
+  // Prepare chart data with proper validation
   const chartData = debtRecords
     .slice()
     .reverse()
+    .filter(record => record.year && record.total_debt_usd)
     .map(record => ({
       year: record.year,
-      totalDebtUSD: Math.round(record.total_debt_usd / 1000000), // Convert to millions
-      domesticDebt: Math.round(record.domestic_debt_fcfa / 600000000), // Convert to millions USD
-      externalDebt: Math.round(record.external_debt_fcfa / 600000000), // Convert to millions USD
-      debtToGDP: record.debt_to_gdp_ratio,
+      totalDebtUSD: Math.round((record.total_debt_usd || 0) / 1000000),
+      domesticDebt: Math.round((record.domestic_debt_fcfa || 0) / 600000000),
+      externalDebt: Math.round((record.external_debt_fcfa || 0) / 600000000),
+      debtToGDP: record.debt_to_gdp_ratio || 0,
       type: 'actual'
-    }));
+    }))
+    .filter(item => item.totalDebtUSD > 0);
 
-  // Add predictions to chart data
-  const predictionData = debtPredictions.map(pred => ({
-    year: new Date(pred.prediction_date).getFullYear(),
-    totalDebtUSD: Math.round(pred.predicted_total_debt_usd / 1000000),
-    debtToGDP: pred.predicted_debt_to_gdp,
-    confidence: pred.confidence_level,
-    type: 'prediction'
-  }));
+  // Add predictions to chart data with validation
+  const predictionData = debtPredictions
+    .filter(pred => pred.predicted_total_debt_usd && pred.prediction_date)
+    .map(pred => ({
+      year: new Date(pred.prediction_date).getFullYear(),
+      totalDebtUSD: Math.round((pred.predicted_total_debt_usd || 0) / 1000000),
+      debtToGDP: pred.predicted_debt_to_gdp || 0,
+      confidence: pred.confidence_level || 0,
+      type: 'prediction'
+    }))
+    .filter(item => !isNaN(item.year) && item.totalDebtUSD > 0);
 
   const combinedChartData = [...chartData, ...predictionData];
 
-  // Prepare pie chart data for debt breakdown
-  const pieData = latestRecord?.debt_lenders?.map(lender => ({
+  // Prepare pie chart data with validation
+  const pieData = latestRecord?.debt_lenders?.filter(lender => 
+    lender.lender_name && lender.amount_fcfa && lender.amount_fcfa > 0
+  ).map(lender => ({
     name: lender.lender_name,
     value: lender.amount_fcfa,
-    percentage: ((lender.amount_fcfa / latestRecord.total_debt_fcfa) * 100).toFixed(1)
+    percentage: latestRecord.total_debt_fcfa > 0 
+      ? ((lender.amount_fcfa / latestRecord.total_debt_fcfa) * 100).toFixed(1)
+      : '0'
   })) || [];
 
-  // Country comparison chart data
-  const comparisonData = countryComparisons.map(country => ({
-    country: country.country_name,
-    debtToGDP: country.debt_to_gdp_ratio,
-    debtPerCapita: country.debt_per_capita_usd
-  }));
+  // Country comparison chart data with validation
+  const comparisonData = countryComparisons
+    .filter(country => country.country_name && !isNaN(country.debt_to_gdp_ratio))
+    .map(country => ({
+      country: country.country_name,
+      debtToGDP: country.debt_to_gdp_ratio || 0,
+      debtPerCapita: country.debt_per_capita_usd || 0
+    }));
 
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00C49F', '#FFBB28'];
 
@@ -441,7 +461,7 @@ const NationalDebtTracker = () => {
                 </span>
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                Last updated: {latestRecord ? new Date(latestRecord.last_updated).toLocaleDateString() : 'N/A'}
+                Last updated: {latestRecord ? new Date(latestRecord.last_updated || latestRecord.updated_at || '').toLocaleDateString() : 'N/A'}
               </p>
             </CardContent>
           </Card>
@@ -537,37 +557,43 @@ const NationalDebtTracker = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ResponsiveContainer width="100%" height={350}>
-                    <ComposedChart data={combinedChartData}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="year" />
-                      <YAxis />
-                      <Tooltip 
-                        formatter={(value, name) => [
-                          `$${value}M`, 
-                          name === 'totalDebtUSD' ? (
-                            combinedChartData.find(d => d.totalDebtUSD === value)?.type === 'prediction' ? 'Predicted Debt' : 'Actual Debt'
-                          ) : name
-                        ]} 
-                      />
-                      <Legend />
-                      <Line 
-                        type="monotone" 
-                        dataKey="totalDebtUSD" 
-                        stroke="#8884d8" 
-                        strokeWidth={3}
-                        name="Total Debt (USD)"
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="debtToGDP" 
-                        stroke="#82ca9d" 
-                        strokeWidth={2}
-                        name="Debt-to-GDP %"
-                        yAxisId="right"
-                      />
-                    </ComposedChart>
-                  </ResponsiveContainer>
+                  {combinedChartData.length > 0 ? (
+                    <ResponsiveContainer width="100%" height={350}>
+                      <ComposedChart data={combinedChartData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="year" />
+                        <YAxis />
+                        <Tooltip 
+                          formatter={(value, name) => [
+                            `$${value}M`, 
+                            name === 'totalDebtUSD' ? (
+                              combinedChartData.find(d => d.totalDebtUSD === value)?.type === 'prediction' ? 'Predicted Debt' : 'Actual Debt'
+                            ) : name
+                          ]} 
+                        />
+                        <Legend />
+                        <Line 
+                          type="monotone" 
+                          dataKey="totalDebtUSD" 
+                          stroke="#8884d8" 
+                          strokeWidth={3}
+                          name="Total Debt (USD)"
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="debtToGDP" 
+                          stroke="#82ca9d" 
+                          strokeWidth={2}
+                          name="Debt-to-GDP %"
+                          yAxisId="right"
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  ) : (
+                    <div className="h-[350px] flex items-center justify-center text-muted-foreground">
+                      No chart data available
+                    </div>
+                  )}
                   <div className="mt-2 text-xs text-muted-foreground">
                     Dashed lines indicate AI predictions • Confidence levels vary by timeframe
                   </div>
@@ -626,16 +652,22 @@ const NationalDebtTracker = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={comparisonData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="country" />
-                    <YAxis />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="debtToGDP" fill="#8884d8" name="Debt-to-GDP %" />
-                  </BarChart>
-                </ResponsiveContainer>
+                {comparisonData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={comparisonData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="country" />
+                      <YAxis />
+                      <Tooltip />
+                      <Legend />
+                      <Bar dataKey="debtToGDP" fill="#8884d8" name="Debt-to-GDP %" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="h-[300px] flex items-center justify-center text-muted-foreground">
+                    No comparison data available
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
