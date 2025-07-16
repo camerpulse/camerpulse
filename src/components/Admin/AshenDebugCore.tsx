@@ -33,6 +33,7 @@ import AshenJrTrainingCore from './AshenJrTrainingCore';
 import CivicArchitectEngine from './CivicArchitectEngine';
 import PanAfricaMeshManager from './PanAfricaMeshManager';
 import { CustomIntegratorBuilder } from './CustomIntegratorBuilder';
+import { AshenSyncGuard } from './AshenSyncGuard';
 import CivicMediaWatch from '../AI/CivicMediaWatch';
 
 interface ErrorLog {
@@ -446,6 +447,7 @@ export default function AshenDebugCore() {
           <TabsTrigger value="civic-architect" className="text-xs">Strategy Engine</TabsTrigger>
           <TabsTrigger value="pan-africa-mesh" className="text-xs">Pan-Africa Mesh</TabsTrigger>
           <TabsTrigger value="custom-integrator" className="text-xs">Custom Integrator</TabsTrigger>
+          <TabsTrigger value="sync-guard" className="text-xs">Sync Guard</TabsTrigger>
           <TabsTrigger value="media-watch" className="text-xs">Media Watch</TabsTrigger>
           <TabsTrigger value="zero-input-mode" className="text-xs">Zero Input Mode</TabsTrigger>
           <TabsTrigger value="security" className="text-xs">Security</TabsTrigger>
@@ -480,6 +482,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="custom-integrator" className="space-y-4">
           <CustomIntegratorBuilder />
+        </TabsContent>
+        
+        <TabsContent value="sync-guard" className="space-y-4">
+          <AshenSyncGuard />
         </TabsContent>
         
         <TabsContent value="media-watch" className="space-y-4">

@@ -666,6 +666,59 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_conflict_analysis: {
+        Row: {
+          analysis_details: Json | null
+          auto_resolvable: boolean | null
+          conflict_severity: string
+          conflict_type: string
+          created_at: string
+          existing_feature_id: string | null
+          feature_name: string
+          id: string
+          resolution_recommendation: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          similarity_score: number | null
+        }
+        Insert: {
+          analysis_details?: Json | null
+          auto_resolvable?: boolean | null
+          conflict_severity?: string
+          conflict_type: string
+          created_at?: string
+          existing_feature_id?: string | null
+          feature_name: string
+          id?: string
+          resolution_recommendation?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          similarity_score?: number | null
+        }
+        Update: {
+          analysis_details?: Json | null
+          auto_resolvable?: boolean | null
+          conflict_severity?: string
+          conflict_type?: string
+          created_at?: string
+          existing_feature_id?: string | null
+          feature_name?: string
+          id?: string
+          resolution_recommendation?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          similarity_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_conflict_analysis_existing_feature_id_fkey"
+            columns: ["existing_feature_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_feature_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_deduplication_analysis: {
         Row: {
           analysis_type: string
@@ -876,6 +929,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ashen_feature_registry: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          dependencies: string[] | null
+          description: string | null
+          feature_name: string
+          feature_type: string
+          file_paths: string[] | null
+          id: string
+          last_scanned_at: string | null
+          linked_features: string[] | null
+          metadata: Json | null
+          status: string
+          updated_at: string
+          version_tag: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          dependencies?: string[] | null
+          description?: string | null
+          feature_name: string
+          feature_type?: string
+          file_paths?: string[] | null
+          id?: string
+          last_scanned_at?: string | null
+          linked_features?: string[] | null
+          metadata?: Json | null
+          status?: string
+          updated_at?: string
+          version_tag?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          dependencies?: string[] | null
+          description?: string | null
+          feature_name?: string
+          feature_type?: string
+          file_paths?: string[] | null
+          id?: string
+          last_scanned_at?: string | null
+          linked_features?: string[] | null
+          metadata?: Json | null
+          status?: string
+          updated_at?: string
+          version_tag?: string
+        }
+        Relationships: []
       }
       ashen_fix_trust_metrics: {
         Row: {
@@ -2516,6 +2620,75 @@ export type Database = {
         }
         Relationships: []
       }
+      ashen_sync_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          id: string
+          is_active: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value?: Json
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      ashen_sync_logs: {
+        Row: {
+          admin_override: boolean | null
+          conflict_details: Json | null
+          conflict_status: string
+          created_at: string
+          feature_scanned: string
+          id: string
+          metadata: Json | null
+          recommendations: string[] | null
+          scan_duration_ms: number | null
+          scan_result: string
+          scan_type: string
+        }
+        Insert: {
+          admin_override?: boolean | null
+          conflict_details?: Json | null
+          conflict_status: string
+          created_at?: string
+          feature_scanned: string
+          id?: string
+          metadata?: Json | null
+          recommendations?: string[] | null
+          scan_duration_ms?: number | null
+          scan_result: string
+          scan_type?: string
+        }
+        Update: {
+          admin_override?: boolean | null
+          conflict_details?: Json | null
+          conflict_status?: string
+          created_at?: string
+          feature_scanned?: string
+          id?: string
+          metadata?: Json | null
+          recommendations?: string[] | null
+          scan_duration_ms?: number | null
+          scan_result?: string
+          scan_type?: string
+        }
+        Relationships: []
+      }
       ashen_system_snapshots: {
         Row: {
           compression_ratio: number | null
@@ -2626,6 +2799,65 @@ export type Database = {
           rollback_count?: number | null
         }
         Relationships: []
+      }
+      ashen_upgrade_history: {
+        Row: {
+          backward_compatible: boolean | null
+          changes_summary: string | null
+          created_at: string
+          feature_id: string
+          id: string
+          metadata: Json | null
+          new_version: string
+          old_version: string
+          rollback_available: boolean | null
+          rollback_data: Json | null
+          upgrade_duration_ms: number | null
+          upgrade_reason: string | null
+          upgrade_type: string
+          upgraded_by: string | null
+        }
+        Insert: {
+          backward_compatible?: boolean | null
+          changes_summary?: string | null
+          created_at?: string
+          feature_id: string
+          id?: string
+          metadata?: Json | null
+          new_version: string
+          old_version: string
+          rollback_available?: boolean | null
+          rollback_data?: Json | null
+          upgrade_duration_ms?: number | null
+          upgrade_reason?: string | null
+          upgrade_type: string
+          upgraded_by?: string | null
+        }
+        Update: {
+          backward_compatible?: boolean | null
+          changes_summary?: string | null
+          created_at?: string
+          feature_id?: string
+          id?: string
+          metadata?: Json | null
+          new_version?: string
+          old_version?: string
+          rollback_available?: boolean | null
+          rollback_data?: Json | null
+          upgrade_duration_ms?: number | null
+          upgrade_reason?: string | null
+          upgrade_type?: string
+          upgraded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_upgrade_history_feature_id_fkey"
+            columns: ["feature_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_feature_registry"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cache_flush_operations: {
         Row: {
@@ -9670,6 +9902,10 @@ export type Database = {
         Args: { p_config_key?: string }
         Returns: Json
       }
+      get_sync_guard_status: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       gtrgm_compress: {
         Args: { "": unknown }
         Returns: unknown
@@ -9737,6 +9973,17 @@ export type Database = {
         }
         Returns: string
       }
+      register_new_feature: {
+        Args: {
+          p_feature_name: string
+          p_feature_type: string
+          p_version_tag?: string
+          p_file_paths?: string[]
+          p_dependencies?: string[]
+          p_description?: string
+        }
+        Returns: string
+      }
       register_user_device: {
         Args: {
           p_device_name: string
@@ -9753,6 +10000,14 @@ export type Database = {
           p_device_model?: string
         }
         Returns: string
+      }
+      scan_for_feature_conflicts: {
+        Args: {
+          p_feature_name: string
+          p_feature_type?: string
+          p_description?: string
+        }
+        Returns: Json
       }
       schedule_background_healing: {
         Args: Record<PropertyKey, never>
