@@ -365,24 +365,26 @@ export default function NationalDebtTracker() {
             Real-time monitoring and analysis of Cameroon's national debt. Empowering citizens with transparent, 
             AI-driven insights into the country's financial health and fiscal responsibility.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
-            <span className="truncate">Last Updated: {lastUpdated.toLocaleString()} – Source: MINFI</span>
-            <Badge variant="outline" className="text-green-600 border-green-600 shrink-0">
-              <Zap className="h-3 w-3 mr-1" />
-              Auto-Updated Daily
-            </Badge>
-            {isAdmin && (
-              <Button
-                onClick={forceRefresh}
-                disabled={isRefreshing}
-                size="sm"
-                variant="outline"
-                className="shrink-0"
-              >
-                <RefreshCw className={`h-3 w-3 mr-1 ${isRefreshing ? 'animate-spin' : ''}`} />
-                {isRefreshing ? 'Refreshing...' : 'Force Update'}
-              </Button>
-            )}
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-center sm:gap-4 text-xs sm:text-sm text-muted-foreground">
+            <span className="text-center sm:text-left">Last Updated: {lastUpdated.toLocaleString()} – Source: MINFI</span>
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4">
+              <Badge variant="outline" className="text-green-600 border-green-600 w-fit">
+                <Zap className="h-3 w-3 mr-1" />
+                Auto-Updated Daily
+              </Badge>
+              {isAdmin && (
+                <Button
+                  onClick={forceRefresh}
+                  disabled={isRefreshing}
+                  size="sm"
+                  variant="outline"
+                  className="w-full sm:w-auto min-h-[44px] touch-manipulation"
+                >
+                  <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  {isRefreshing ? 'Refreshing...' : 'Force Update'}
+                </Button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -401,27 +403,27 @@ export default function NationalDebtTracker() {
         ))}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
-            <div className="overflow-x-auto">
-              <TabsList className="grid w-full grid-cols-7 min-w-[700px] sm:min-w-0 h-auto p-1">
-              <TabsTrigger value="overview" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+            <div className="overflow-x-auto pb-2">
+              <TabsList className="grid w-full grid-cols-7 min-w-[600px] sm:min-w-0 h-auto p-1 bg-muted/50">
+              <TabsTrigger value="overview" className="text-xs sm:text-sm py-3 px-2 sm:px-3 min-h-[44px] touch-manipulation">
                 <span className="hidden sm:inline">📊 </span>Overview
               </TabsTrigger>
-              <TabsTrigger value="history" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+              <TabsTrigger value="history" className="text-xs sm:text-sm py-3 px-2 sm:px-3 min-h-[44px] touch-manipulation">
                 <span className="hidden sm:inline">📈 </span>History
               </TabsTrigger>
-              <TabsTrigger value="lenders" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+              <TabsTrigger value="lenders" className="text-xs sm:text-sm py-3 px-2 sm:px-3 min-h-[44px] touch-manipulation">
                 <span className="hidden sm:inline">🌍 </span>Lenders
               </TabsTrigger>
-              <TabsTrigger value="analysis" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+              <TabsTrigger value="analysis" className="text-xs sm:text-sm py-3 px-2 sm:px-3 min-h-[44px] touch-manipulation">
                 <span className="hidden sm:inline">🧠 </span>AI
               </TabsTrigger>
-              <TabsTrigger value="education" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+              <TabsTrigger value="education" className="text-xs sm:text-sm py-3 px-2 sm:px-3 min-h-[44px] touch-manipulation">
                 <span className="hidden sm:inline">📚 </span>Learn
               </TabsTrigger>
-              <TabsTrigger value="creditors" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+              <TabsTrigger value="creditors" className="text-xs sm:text-sm py-3 px-2 sm:px-3 min-h-[44px] touch-manipulation">
                 <span className="hidden sm:inline">🏛️ </span>Creditors
               </TabsTrigger>
-              <TabsTrigger value="regional" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+              <TabsTrigger value="regional" className="text-xs sm:text-sm py-3 px-2 sm:px-3 min-h-[44px] touch-manipulation">
                 <span className="hidden sm:inline">🗺️ </span>Regional
               </TabsTrigger>
             </TabsList>
@@ -432,64 +434,64 @@ export default function NationalDebtTracker() {
             {latest && (
               <>
                 {/* Key Metrics Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                  <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-200 dark:border-purple-800 hover:shadow-md transition-shadow touch-manipulation">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xs sm:text-sm font-medium">Total National Debt</CardTitle>
-                      <DollarSign className="h-4 w-4 text-purple-600 shrink-0" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+                  <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-200 dark:border-purple-800 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                      <CardTitle className="text-sm sm:text-base font-medium">Total National Debt</CardTitle>
+                      <DollarSign className="h-5 w-5 text-purple-600 shrink-0" />
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-purple-600 truncate">
+                    <CardContent className="pt-0">
+                      <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-purple-600 break-words">
                         {formatCurrency(latest.total_debt_fcfa)}
                       </div>
-                      <p className="text-xs text-muted-foreground truncate">
+                      <p className="text-sm text-muted-foreground mt-2 break-words">
                         {formatCurrency(latest.total_debt_usd, 'USD')}
                       </p>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-200 dark:border-blue-800 hover:shadow-md transition-shadow touch-manipulation">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xs sm:text-sm font-medium">Debt Per Capita</CardTitle>
-                      <Users className="h-4 w-4 text-blue-600 shrink-0" />
+                  <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-200 dark:border-blue-800 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                      <CardTitle className="text-sm sm:text-base font-medium">Debt Per Capita</CardTitle>
+                      <Users className="h-5 w-5 text-blue-600 shrink-0" />
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-blue-600 truncate">
+                    <CardContent className="pt-0">
+                      <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-600 break-words">
                         {formatCurrency(latest.total_debt_fcfa / latest.population)}
                       </div>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-sm text-muted-foreground mt-2">
                         Per citizen debt burden
                       </p>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-200 dark:border-green-800 hover:shadow-md transition-shadow touch-manipulation">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xs sm:text-sm font-medium">Debt-to-GDP Ratio</CardTitle>
-                      <Target className="h-4 w-4 text-green-600 shrink-0" />
+                  <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-200 dark:border-green-800 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                      <CardTitle className="text-sm sm:text-base font-medium">Debt-to-GDP Ratio</CardTitle>
+                      <Target className="h-5 w-5 text-green-600 shrink-0" />
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-green-600">
+                    <CardContent className="pt-0">
+                      <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600 mb-3">
                         {latest.debt_to_gdp_ratio}%
                       </div>
                       <Progress 
                         value={latest.debt_to_gdp_ratio} 
-                        className="w-full mt-2"
+                        className="w-full h-2"
                         max={100}
                       />
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border-orange-200 dark:border-orange-800 hover:shadow-md transition-shadow touch-manipulation">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-xs sm:text-sm font-medium">External vs Internal</CardTitle>
-                      <Globe className="h-4 w-4 text-orange-600 shrink-0" />
+                  <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border-orange-200 dark:border-orange-800 hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                      <CardTitle className="text-sm sm:text-base font-medium">External vs Internal</CardTitle>
+                      <Globe className="h-5 w-5 text-orange-600 shrink-0" />
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-orange-600">
+                    <CardContent className="pt-0">
+                      <div className="text-lg sm:text-xl lg:text-2xl font-bold text-orange-600 break-words">
                         {((latest.external_debt_fcfa / latest.total_debt_fcfa) * 100).toFixed(0)}% / {((latest.internal_debt_fcfa / latest.total_debt_fcfa) * 100).toFixed(0)}%
                       </div>
-                      <p className="text-xs text-muted-foreground">
+                      <p className="text-sm text-muted-foreground mt-2">
                         External / Internal split
                       </p>
                     </CardContent>
@@ -497,59 +499,61 @@ export default function NationalDebtTracker() {
                 </div>
 
                 {/* Debt Composition Chart */}
-                <Card className="touch-manipulation">
+                <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg sm:text-xl">Debt Composition Analysis</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl lg:text-2xl">Debt Composition Analysis</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                       <div>
-                        <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Internal vs External Debt</h3>
-                        <ResponsiveContainer width="100%" height={220}>
-                          <PieChart>
-                            <Pie
-                              data={[
-                                { name: 'External Debt', value: latest.external_debt_fcfa, color: '#8B5CF6' },
-                                { name: 'Internal Debt', value: latest.internal_debt_fcfa, color: '#06B6D4' }
-                              ]}
-                              cx="50%"
-                              cy="50%"
-                              labelLine={false}
-                              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                              outerRadius={80}
-                              fill="#8884d8"
-                              dataKey="value"
-                            >
-                              {[
-                                { name: 'External Debt', value: latest.external_debt_fcfa, color: '#8B5CF6' },
-                                { name: 'Internal Debt', value: latest.internal_debt_fcfa, color: '#06B6D4' }
-                              ].map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={entry.color} />
-                              ))}
-                            </Pie>
-                            <Tooltip formatter={(value: number) => formatCurrency(value)} />
-                          </PieChart>
-                        </ResponsiveContainer>
+                        <h3 className="text-base sm:text-lg font-semibold mb-4">Internal vs External Debt</h3>
+                        <div className="w-full h-[280px] sm:h-[320px]">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                              <Pie
+                                data={[
+                                  { name: 'External Debt', value: latest.external_debt_fcfa, color: '#8B5CF6' },
+                                  { name: 'Internal Debt', value: latest.internal_debt_fcfa, color: '#06B6D4' }
+                                ]}
+                                cx="50%"
+                                cy="50%"
+                                labelLine={false}
+                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                                outerRadius={window.innerWidth < 640 ? 70 : 90}
+                                fill="#8884d8"
+                                dataKey="value"
+                              >
+                                {[
+                                  { name: 'External Debt', value: latest.external_debt_fcfa, color: '#8B5CF6' },
+                                  { name: 'Internal Debt', value: latest.internal_debt_fcfa, color: '#06B6D4' }
+                                ].map((entry, index) => (
+                                  <Cell key={`cell-${index}`} fill={entry.color} />
+                                ))}
+                              </Pie>
+                              <Tooltip formatter={(value: number) => formatCurrency(value)} />
+                            </PieChart>
+                          </ResponsiveContainer>
+                        </div>
                       </div>
 
                       <div>
-                        <h3 className="text-lg font-semibold mb-4">Key Statistics</h3>
+                        <h3 className="text-base sm:text-lg font-semibold mb-4">Key Statistics</h3>
                         <div className="space-y-4">
-                          <div className="flex justify-between items-center">
-                            <span>External Debt</span>
-                            <span className="font-mono">{formatCurrency(latest.external_debt_fcfa)}</span>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm sm:text-base">External Debt</span>
+                            <span className="font-mono text-sm sm:text-base break-all text-right">{formatCurrency(latest.external_debt_fcfa)}</span>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span>Internal Debt</span>
-                            <span className="font-mono">{formatCurrency(latest.internal_debt_fcfa)}</span>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm sm:text-base">Internal Debt</span>
+                            <span className="font-mono text-sm sm:text-base break-all text-right">{formatCurrency(latest.internal_debt_fcfa)}</span>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span>GDP Value</span>
-                            <span className="font-mono">{formatCurrency(latest.gdp_fcfa)}</span>
+                          <div className="flex justify-between items-center py-2 border-b">
+                            <span className="text-sm sm:text-base">GDP Value</span>
+                            <span className="font-mono text-sm sm:text-base break-all text-right">{formatCurrency(latest.gdp_fcfa)}</span>
                           </div>
-                          <div className="flex justify-between items-center">
-                            <span>Population</span>
-                            <span className="font-mono">{latest.population.toLocaleString()}</span>
+                          <div className="flex justify-between items-center py-2">
+                            <span className="text-sm sm:text-base">Population</span>
+                            <span className="font-mono text-sm sm:text-base">{latest.population.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>
@@ -558,24 +562,24 @@ export default function NationalDebtTracker() {
                 </Card>
 
                 {/* Data Sources */}
-                <Card className="touch-manipulation">
+                <Card>
                   <CardHeader>
-                    <CardTitle className="text-lg sm:text-xl">Data Sources & Credibility</CardTitle>
+                    <CardTitle className="text-lg sm:text-xl lg:text-2xl">Data Sources & Credibility</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
                       {sources.map((source) => (
-                        <div key={source.id} className="flex items-center space-x-3 p-3 border rounded-lg touch-manipulation hover:shadow-sm transition-shadow">
-                          <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
-                            <span className="text-xs font-bold">{source.acronym}</span>
+                        <div key={source.id} className="flex items-center space-x-3 p-4 border rounded-lg hover:shadow-md transition-shadow min-h-[80px]">
+                          <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center shrink-0">
+                            <span className="text-sm font-bold">{source.acronym}</span>
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className="font-medium text-sm truncate">{source.name}</p>
+                            <p className="font-medium text-sm sm:text-base break-words">{source.name}</p>
                             <a 
                               href={source.website_url} 
                               target="_blank" 
                               rel="noopener noreferrer"
-                              className="text-xs text-primary hover:underline inline-flex items-center"
+                              className="text-xs sm:text-sm text-primary hover:underline inline-flex items-center mt-1 min-h-[44px] touch-manipulation"
                             >
                               Visit Source <ExternalLink className="h-3 w-3 ml-1" />
                             </a>
@@ -591,79 +595,107 @@ export default function NationalDebtTracker() {
 
           {/* MODULE 2: Debt History Timeline */}
           <TabsContent value="history" className="space-y-4 sm:space-y-6">
-            <Card className="touch-manipulation">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-lg sm:text-xl">Debt Evolution (2000 - Present)</CardTitle>
+                <CardTitle className="text-lg sm:text-xl lg:text-2xl">Debt Evolution (2000 - Present)</CardTitle>
                 <p className="text-sm sm:text-base text-muted-foreground">
                   Track how Cameroon's national debt has evolved over the years
                 </p>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={350}>
-                  <AreaChart data={debtRecords}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="year" />
-                    <YAxis tickFormatter={(value) => formatCurrency(value)} />
-                    <Tooltip 
-                      formatter={(value: number, name: string) => [formatCurrency(value), name]}
-                      labelFormatter={(label) => `Year: ${label}`}
-                    />
-                    <Legend />
-                    <Area 
-                      type="monotone" 
-                      dataKey="total_debt_fcfa" 
-                      stroke="#8B5CF6" 
-                      fill="#8B5CF6" 
-                      fillOpacity={0.3}
-                      name="Total Debt (FCFA)"
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="external_debt_fcfa" 
-                      stroke="#06B6D4" 
-                      fill="#06B6D4" 
-                      fillOpacity={0.3}
-                      name="External Debt (FCFA)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+                <div className="w-full h-[300px] sm:h-[400px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={debtRecords}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis 
+                        dataKey="year" 
+                        fontSize={12}
+                        tickMargin={8}
+                      />
+                      <YAxis 
+                        tickFormatter={(value) => formatCurrency(value)} 
+                        fontSize={12}
+                        width={80}
+                      />
+                      <Tooltip 
+                        formatter={(value: number, name: string) => [formatCurrency(value), name]}
+                        labelFormatter={(label) => `Year: ${label}`}
+                        contentStyle={{ 
+                          fontSize: '14px',
+                          maxWidth: '300px'
+                        }}
+                      />
+                      <Legend />
+                      <Area 
+                        type="monotone" 
+                        dataKey="total_debt_fcfa" 
+                        stroke="#8B5CF6" 
+                        fill="#8B5CF6" 
+                        fillOpacity={0.3}
+                        name="Total Debt (FCFA)"
+                      />
+                      <Area 
+                        type="monotone" 
+                        dataKey="external_debt_fcfa" 
+                        stroke="#06B6D4" 
+                        fill="#06B6D4" 
+                        fillOpacity={0.3}
+                        name="External Debt (FCFA)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
               </CardContent>
             </Card>
 
-            <Card className="touch-manipulation">
+            <Card>
               <CardHeader>
-                <CardTitle className="text-lg sm:text-xl">Debt-to-GDP Ratio Trend</CardTitle>
+                <CardTitle className="text-lg sm:text-xl lg:text-2xl">Debt-to-GDP Ratio Trend</CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={250}>
-                  <LineChart data={debtRecords}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="year" />
-                    <YAxis />
-                    <Tooltip 
-                      formatter={(value: number) => [`${value}%`, 'Debt-to-GDP Ratio']}
-                    />
-                    <Line 
-                      type="monotone" 
-                      dataKey="debt_to_gdp_ratio" 
-                      stroke="#10B981" 
-                      strokeWidth={3}
-                      name="Debt-to-GDP %"
-                    />
-                    <Line 
-                      y={50} 
-                      stroke="#F59E0B" 
-                      strokeDasharray="5 5" 
-                      name="Caution Threshold (50%)"
-                    />
-                    <Line 
-                      y={70} 
-                      stroke="#EF4444" 
-                      strokeDasharray="5 5" 
-                      name="Danger Threshold (70%)"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <div className="w-full h-[280px] sm:h-[320px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={debtRecords}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis 
+                        dataKey="year" 
+                        fontSize={12}
+                        tickMargin={8}
+                      />
+                      <YAxis 
+                        fontSize={12}
+                        width={50}
+                      />
+                      <Tooltip 
+                        formatter={(value: number) => [`${value}%`, 'Debt-to-GDP Ratio']}
+                        contentStyle={{ 
+                          fontSize: '14px',
+                          maxWidth: '250px'
+                        }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="debt_to_gdp_ratio" 
+                        stroke="#10B981" 
+                        strokeWidth={3}
+                        name="Debt-to-GDP %"
+                        dot={{ r: 4 }}
+                      />
+                      <Line 
+                        y={50} 
+                        stroke="#F59E0B" 
+                        strokeDasharray="5 5" 
+                        name="Caution Threshold (50%)"
+                      />
+                      <Line 
+                        y={70} 
+                        stroke="#EF4444" 
+                        strokeDasharray="5 5" 
+                        name="Danger Threshold (70%)"
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -965,27 +997,43 @@ export default function NationalDebtTracker() {
         </Tabs>
 
         {/* MODULE 9: Download & Share Tools */}
-        <Card className="touch-manipulation">
+        <Card>
           <CardHeader>
-            <CardTitle className="text-lg sm:text-xl">Export & Share Tools</CardTitle>
+            <CardTitle className="text-lg sm:text-xl lg:text-2xl">Export & Share Tools</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-wrap gap-2 sm:gap-3">
-              <Button onClick={() => exportData('csv')} variant="outline" className="flex-1 sm:flex-none text-xs sm:text-sm touch-manipulation">
-                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                Export CSV
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              <Button 
+                onClick={() => exportData('csv')} 
+                variant="outline" 
+                className="min-h-[48px] text-sm touch-manipulation"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Export </span>CSV
               </Button>
-              <Button onClick={() => exportData('json')} variant="outline" className="flex-1 sm:flex-none text-xs sm:text-sm touch-manipulation">
-                <Download className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                Export JSON
+              <Button 
+                onClick={() => exportData('json')} 
+                variant="outline" 
+                className="min-h-[48px] text-sm touch-manipulation"
+              >
+                <Download className="h-4 w-4 mr-2" />
+                <span className="hidden sm:inline">Export </span>JSON
               </Button>
-              <Button onClick={() => shareToSocial('whatsapp')} variant="outline" className="flex-1 sm:flex-none text-xs sm:text-sm touch-manipulation">
-                <Share2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                Share WhatsApp
+              <Button 
+                onClick={() => shareToSocial('whatsapp')} 
+                variant="outline" 
+                className="min-h-[48px] text-sm touch-manipulation"
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                WhatsApp
               </Button>
-              <Button onClick={() => shareToSocial('facebook')} variant="outline" className="flex-1 sm:flex-none text-xs sm:text-sm touch-manipulation">
-                <Share2 className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
-                Share Facebook
+              <Button 
+                onClick={() => shareToSocial('facebook')} 
+                variant="outline" 
+                className="min-h-[48px] text-sm touch-manipulation"
+              >
+                <Share2 className="h-4 w-4 mr-2" />
+                Facebook
               </Button>
             </div>
           </CardContent>
