@@ -18,7 +18,11 @@ import {
   BarChart3,
   Users,
   Zap,
-  AlertCircle
+  AlertCircle,
+  Edit,
+  Calendar,
+  Globe,
+  Hash
 } from 'lucide-react';
 
 interface AutonomousConfig {
@@ -29,6 +33,7 @@ interface AutonomousConfig {
   style_mapping?: Record<string, string>;
   sentiment_thresholds?: Record<string, number>;
   regional_boost?: { enabled: boolean; boost_factor: number; affected_regions_only: boolean };
+  social_monitoring?: { enabled: boolean; platforms: string[]; hashtag_threshold: number };
 }
 
 interface AutonomousPoll {
@@ -290,23 +295,62 @@ export const AutonomousPollAdmin = () => {
               />
             </div>
 
-            <Button 
-              onClick={triggerGeneration}
-              disabled={!config.system_enabled?.enabled || generating}
-              className="w-full"
-            >
-              {generating ? (
-                <>
-                  <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
-                  Generating...
-                </>
-              ) : (
-                <>
-                  <Play className="w-4 h-4 mr-2" />
-                  Trigger Generation Now
-                </>
-              )}
-            </Button>
+             <div className="space-y-3">
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="font-medium">Generation Frequency</p>
+                   <p className="text-sm text-muted-foreground">How often to check for trending topics</p>
+                 </div>
+                 <select 
+                   className="px-3 py-1 border rounded-md text-sm"
+                   value={config.generation_schedule?.frequency || 'daily'}
+                   onChange={(e) => updateConfig('generation_schedule', {
+                     ...config.generation_schedule,
+                     frequency: e.target.value
+                   })}
+                 >
+                   <option value="hourly">Every 6 hours</option>
+                   <option value="daily">Daily</option>
+                   <option value="weekly">Weekly</option>
+                   <option value="manual">Manual only</option>
+                 </select>
+               </div>
+
+               <div className="flex items-center justify-between">
+                 <div>
+                   <p className="font-medium">Social Media Sources</p>
+                   <p className="text-sm text-muted-foreground">Monitor trending hashtags & mentions</p>
+                 </div>
+                 <Switch
+                   checked={config.social_monitoring?.enabled || false}
+                   onCheckedChange={(checked) => 
+                     updateConfig('social_monitoring', { 
+                       enabled: checked,
+                       platforms: ['twitter', 'facebook'],
+                       hashtag_threshold: 100
+                     })
+                   }
+                 />
+               </div>
+             </div>
+
+             <Button 
+               onClick={triggerGeneration}
+               disabled={!config.system_enabled?.enabled || generating}
+               className="w-full"
+             >
+               {generating ? (
+                 <>
+                   <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
+                   Generating...
+                 </>
+               ) : (
+                 <>
+                   <Play className="w-4 h-4 mr-2" />
+                   Trigger Generation Now
+                 </>
+               )}
+             </Button>
           </CardContent>
         </Card>
 

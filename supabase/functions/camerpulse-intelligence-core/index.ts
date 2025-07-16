@@ -12,49 +12,156 @@ const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-// CamerPulse AI: Generate polls from trending topics
-function generatePollFromTopic(selectedTopic: any, topicCategory: string) {
+// CivicAIPollGenerator: Advanced AI-powered poll generation system
+function generatePollFromTopic(selectedTopic: any, topicCategory: string, sourceData: any = {}) {
   const templates = {
     fuel_scarcity: {
       question: `How has the fuel shortage in ${selectedTopic.region || 'your area'} affected you?`,
       options: ['Severely affected my daily activities', 'Made some adjustments but managing', 'Not much impact on me', 'I use alternative transport'],
-      reasoning: 'Understanding fuel scarcity impact helps track infrastructure challenges'
+      reasoning: 'Understanding fuel scarcity impact helps track infrastructure challenges',
+      style: 'chart'
     },
     power_outage: {
       question: `How frequent are power outages in ${selectedTopic.region || 'your region'} lately?`,
       options: ['Daily outages', 'Several times per week', 'Once or twice a week', 'Rarely experience outages'],
-      reasoning: 'Tracking power reliability for infrastructure planning'
+      reasoning: 'Tracking power reliability for infrastructure planning',
+      style: 'chart'
     },
     water_shortage: {
       question: `What is your main source of water during shortages?`,
       options: ['Buy from vendors', 'Well/borehole', 'Collect rainwater', 'Travel to distant source'],
-      reasoning: 'Understanding water access helps improve distribution networks'
+      reasoning: 'Understanding water access helps improve distribution networks',
+      style: 'chart'
+    },
+    transport_issues: {
+      question: `What transport challenges affect you most in ${selectedTopic.region || 'your area'}?`,
+      options: ['High transport costs', 'Poor road conditions', 'Limited vehicle availability', 'Safety concerns'],
+      reasoning: 'Identifying transport priorities for infrastructure development',
+      style: 'chart'
+    },
+    education_concerns: {
+      question: `What education issue needs immediate attention in ${selectedTopic.region || 'your region'}?`,
+      options: ['Teacher shortages', 'Lack of materials/books', 'Infrastructure problems', 'School fees burden'],
+      reasoning: 'Prioritizing education improvements based on community needs',
+      style: 'ballot'
+    },
+    healthcare_access: {
+      question: `What healthcare challenge affects your community most?`,
+      options: ['Distance to facilities', 'Cost of treatment', 'Medication shortages', 'Staff availability'],
+      reasoning: 'Understanding healthcare access barriers for policy planning',
+      style: 'chart'
     },
     governance_default: {
       question: `What should be the priority for ${selectedTopic.region || 'national'} development?`,
       options: ['Healthcare improvement', 'Education system', 'Infrastructure (roads, bridges)', 'Economic opportunities'],
-      reasoning: 'Identifying development priorities for effective governance'
+      reasoning: 'Identifying development priorities for effective governance',
+      style: 'ballot'
+    },
+    political_engagement: {
+      question: `How can political leaders better engage with citizens in ${selectedTopic.region || 'your area'}?`,
+      options: ['Regular town halls', 'Social media interaction', 'Community forums', 'Direct visits'],
+      reasoning: 'Improving democratic participation and government accountability',
+      style: 'ballot'
+    },
+    economic_concerns: {
+      question: `What economic issue affects your daily life most?`,
+      options: ['Rising cost of living', 'Unemployment', 'Business challenges', 'Market access'],
+      reasoning: 'Understanding economic pressures for policy response',
+      style: 'chart'
     },
     humor_default: {
       question: `What best describes your reaction to recent ${selectedTopic.title?.toLowerCase() || 'events'}?`,
       options: ['Found it amusing', 'Made me think differently', 'Just another day in Cameroon', 'Prefer to stay positive'],
-      reasoning: 'Light engagement while maintaining constructive civic dialogue'
+      reasoning: 'Light engagement while maintaining constructive civic dialogue',
+      style: 'card'
+    },
+    social_trends: {
+      question: `How do you feel about the recent trend: "${selectedTopic.title}"?`,
+      options: ['Very positive', 'Somewhat positive', 'Neutral', 'Concerning'],
+      reasoning: 'Gauging public sentiment on emerging social trends',
+      style: 'card'
+    },
+    urgent_response: {
+      question: `What immediate action is needed regarding ${selectedTopic.title?.toLowerCase()}?`,
+      options: ['Government intervention', 'Community action', 'International support', 'Private sector involvement'],
+      reasoning: 'Identifying preferred response mechanisms for urgent issues',
+      style: 'ballot'
     }
   };
 
-  // Select appropriate template
+  // Enhanced topic selection logic
   let template = templates.governance_default;
   
-  if (selectedTopic.type) {
-    template = templates[selectedTopic.type as keyof typeof templates] || templates.governance_default;
+  if (selectedTopic.type && templates[selectedTopic.type as keyof typeof templates]) {
+    template = templates[selectedTopic.type as keyof typeof templates];
   } else if (topicCategory === 'humor') {
     template = templates.humor_default;
+  } else if (topicCategory === 'emergency') {
+    template = templates.urgent_response;
+  } else if (sourceData.platform === 'twitter' || sourceData.platform === 'facebook') {
+    template = templates.social_trends;
+  }
+
+  // Dynamic option generation based on keywords and sentiment
+  if (selectedTopic.keywords && selectedTopic.keywords.length > 0) {
+    const keywords = selectedTopic.keywords.join(' ').toLowerCase();
+    
+    if (keywords.includes('transport') || keywords.includes('taxi') || keywords.includes('road')) {
+      template = templates.transport_issues;
+    } else if (keywords.includes('health') || keywords.includes('hospital') || keywords.includes('medicine')) {
+      template = templates.healthcare_access;
+    } else if (keywords.includes('school') || keywords.includes('education') || keywords.includes('teacher')) {
+      template = templates.education_concerns;
+    } else if (keywords.includes('economy') || keywords.includes('business') || keywords.includes('job')) {
+      template = templates.economic_concerns;
+    } else if (keywords.includes('political') || keywords.includes('government') || keywords.includes('leader')) {
+      template = templates.political_engagement;
+    }
   }
 
   return {
     question: template.question,
     options: template.options,
-    reasoning: template.reasoning
+    reasoning: template.reasoning,
+    style: template.style
+  };
+}
+
+// Enhanced sentiment analysis for social media content
+function analyzeSentimentTone(keywords: string[], sentimentScore: number) {
+  const emotionWords = {
+    fear: ['afraid', 'scared', 'worry', 'concern', 'danger', 'risk'],
+    anger: ['angry', 'furious', 'outrage', 'frustrated', 'mad'],
+    urgency: ['urgent', 'immediate', 'crisis', 'emergency', 'now', 'quickly'],
+    hope: ['hope', 'optimistic', 'better', 'improve', 'positive', 'forward'],
+    unity: ['together', 'united', 'solidarity', 'community', 'support']
+  };
+
+  const tones = {
+    fear: 0,
+    anger: 0,
+    urgency: 0,
+    hope: 0,
+    unity: 0
+  };
+
+  const keywordText = keywords.join(' ').toLowerCase();
+  
+  Object.entries(emotionWords).forEach(([emotion, words]) => {
+    words.forEach(word => {
+      if (keywordText.includes(word)) {
+        tones[emotion as keyof typeof tones] += 1;
+      }
+    });
+  });
+
+  // Determine dominant tone
+  const dominantTone = Object.entries(tones).reduce((a, b) => tones[a[0] as keyof typeof tones] > tones[b[0] as keyof typeof tones] ? a : b)[0];
+  
+  return {
+    tones,
+    dominantTone,
+    sentimentPolarity: sentimentScore > 0.2 ? 'positive' : sentimentScore < -0.2 ? 'negative' : 'neutral'
   };
 }
 
@@ -185,13 +292,35 @@ serve(async (req) => {
 
     console.log(`🎯 Selected topic: ${selectedTopic.title || selectedTopic.title} (Category: ${topicCategory})`);
 
-    // Generate poll using CamerPulse AI capabilities
-    console.log('🤖 Generating poll with CamerPulse AI...');
+    // Enhanced AI generation with sentiment analysis
+    console.log('🤖 CivicAIPollGenerator - Processing topic with enhanced AI...');
     
-    // Use prebuilt poll templates based on topic analysis
-    const pollData = generatePollFromTopic(selectedTopic, topicCategory);
+    // Perform advanced sentiment analysis if keywords available
+    let sentimentAnalysis = null;
+    if (selectedTopic.keywords) {
+      sentimentAnalysis = analyzeSentimentTone(selectedTopic.keywords, selectedTopic.sentimentScore || 0);
+      console.log('💭 Sentiment Analysis:', sentimentAnalysis);
+      
+      // Adjust category based on emotional tone
+      if (sentimentAnalysis.dominantTone === 'urgency' || sentimentAnalysis.dominantTone === 'fear') {
+        topicCategory = 'emergency';
+      } else if (sentimentAnalysis.dominantTone === 'anger') {
+        topicCategory = 'governance';
+      } else if (sentimentAnalysis.tones.hope > 0 || sentimentAnalysis.tones.unity > 0) {
+        topicCategory = 'public_interest';
+      }
+    }
     
-    console.log('📝 CamerPulse AI generated content:', pollData);
+    // Use enhanced poll generation with source data
+    const sourceData = {
+      platform: selectedTopic.platform,
+      sentimentAnalysis,
+      detectionTime: new Date().toISOString()
+    };
+    
+    const pollData = generatePollFromTopic(selectedTopic, topicCategory, sourceData);
+    
+    console.log('📝 CivicAIPollGenerator generated content:', pollData);
 
     // Determine poll style based on category
     const styleMapping = config.style_mapping || {
