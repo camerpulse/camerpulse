@@ -14,6 +14,11 @@ interface CardPollStyleProps {
     user_vote?: number;
     ends_at?: string;
     privacy_mode: string;
+    custom_settings?: {
+      showEmojiResults?: boolean;
+      emojiMap?: Record<number, string>;
+      resultStyle?: string;
+    };
   };
   showResults?: boolean;
   onVote?: (optionIndex: number) => void;
@@ -82,32 +87,59 @@ export const CardPollStyle = ({
               >
                 <div className="flex items-center justify-between w-full gap-3">
                   <span className="flex-1 text-sm sm:text-base leading-relaxed font-medium">{option}</span>
-                  {showResults && (
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-xs sm:text-sm whitespace-nowrap font-semibold">
-                        {votes} ({percentage}%)
-                      </span>
-                      {isSelected && (
-                        <CheckCircle className="w-4 h-4 text-cm-yellow animate-heartbeat" />
-                      )}
-                    </div>
-                  )}
+                   {showResults && (
+                     <div className="flex items-center gap-2 shrink-0">
+                       {poll.custom_settings?.showEmojiResults && poll.custom_settings?.emojiMap?.[index] && (
+                         <span className="text-lg mr-1">
+                           {poll.custom_settings.emojiMap[index]}
+                         </span>
+                       )}
+                       <span className="text-xs sm:text-sm whitespace-nowrap font-semibold">
+                         {votes} ({percentage}%)
+                       </span>
+                       {isSelected && (
+                         <CheckCircle className="w-4 h-4 text-cm-yellow animate-heartbeat" />
+                       )}
+                     </div>
+                   )}
                 </div>
               </Button>
               
-              {showResults && (
-                <div className="px-1">
-                  <div className="relative">
-                    <Progress 
-                      value={percentage} 
-                      className="h-3 bg-muted/50 overflow-hidden" 
-                    />
-                    {isSelected && (
-                      <div className="absolute inset-0 bg-gradient-civic opacity-20 animate-pulse" />
-                    )}
-                  </div>
-                </div>
-              )}
+               {showResults && (
+                 <div className="px-1">
+                   <div className="relative">
+                     {poll.custom_settings?.resultStyle === "emoji_bars" ? (
+                       <div className="flex items-center gap-2">
+                         {poll.custom_settings?.emojiMap?.[index] && (
+                           <span className="text-sm">{poll.custom_settings.emojiMap[index]}</span>
+                         )}
+                         <div className="flex-1 relative">
+                           <Progress 
+                             value={percentage} 
+                             className="h-3 bg-muted/50 overflow-hidden" 
+                           />
+                           {isSelected && (
+                             <div className="absolute inset-0 bg-gradient-civic opacity-20 animate-pulse" />
+                           )}
+                         </div>
+                         <span className="text-xs font-medium min-w-[3rem] text-right">
+                           {percentage}%
+                         </span>
+                       </div>
+                     ) : (
+                       <div className="relative">
+                         <Progress 
+                           value={percentage} 
+                           className="h-3 bg-muted/50 overflow-hidden" 
+                         />
+                         {isSelected && (
+                           <div className="absolute inset-0 bg-gradient-civic opacity-20 animate-pulse" />
+                         )}
+                       </div>
+                     )}
+                   </div>
+                 </div>
+               )}
             </div>
           );
         })}
