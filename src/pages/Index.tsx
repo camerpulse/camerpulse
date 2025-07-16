@@ -68,15 +68,53 @@ const Index = () => {
           </CardContent>
         </Card>
       </div>
-       <div className="container mx-auto px-4 py-8 space-y-12">
-         <CivicAIPollGenerator />
-         <AutonomousPollAdmin />
+      {/* Polls CTA Section */}
+      <div className="container mx-auto px-4 py-8">
+        <Card className="bg-gradient-flag/10 border-primary/20 hover:shadow-elegant transition-all duration-300">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-3 text-2xl">
+              <BarChart3 className="h-8 w-8 text-primary" />
+              Pulse the Nation with Polls
+            </CardTitle>
+            <CardDescription>
+              Capture real-time public opinion across Cameroon — giving every citizen a voice in governance and policy
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-cm-green/10">
+                <Users className="h-6 w-6 text-cm-green" />
+                <div>
+                  <p className="font-semibold text-sm">10 Premium Templates</p>
+                  <p className="text-xs text-muted-foreground">From ballot-style to emoji polls</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-cm-red/10">
+                <BarChart3 className="h-6 w-6 text-cm-red" />
+                <div>
+                  <p className="font-semibold text-sm">Real-time Analytics</p>
+                  <p className="text-xs text-muted-foreground">Regional heatmaps & insights</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-cm-yellow/10">
+                <Settings className="h-6 w-6 text-cm-yellow" />
+                <div>
+                  <p className="font-semibold text-sm">Advanced Features</p>
+                  <p className="text-xs text-muted-foreground">Anonymous voting & QR sharing</p>
+                </div>
+              </div>
+            </div>
+            <Button asChild variant="patriotic" className="w-full sm:w-auto">
+              <Link to="/polls">
+                Explore All Polls & Templates
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+      
+      <div className="container mx-auto px-4 py-8 space-y-12">
         <CivicComplaintForm />
-        <PresidentialPollCreator />
-        <RegionalSentimentPollCreator />
-        <ElectricityPollCreator />
-        <CivicPollCreator />
-        <YouthPollCreator />
       </div>
       <LuxAeternaAchievements />
     </AppLayout>
