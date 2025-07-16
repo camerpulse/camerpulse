@@ -130,18 +130,18 @@ interface ThemeProviderProps {
   children: React.ReactNode
 }
 
-export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme)
-  const [availableThemes] = useState<ThemeConfig[]>([defaultTheme, emergence2035Theme, luxAeternaTheme])
-  const [isLoading, setIsLoading] = useState(true)
-  const [canManageThemes, setCanManageThemes] = useState(false)
+export function ThemeProvider({ children }: ThemeProviderProps) {
+  const [currentTheme, setCurrentTheme] = React.useState<ThemeConfig>(defaultTheme)
+  const [availableThemes] = React.useState<ThemeConfig[]>([defaultTheme, emergence2035Theme, luxAeternaTheme])
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [canManageThemes, setCanManageThemes] = React.useState(false)
 
-  useEffect(() => {
+  React.useEffect(() => {
     loadActiveTheme()
     checkAdminStatus()
   }, [])
 
-  useEffect(() => {
+  React.useEffect(() => {
     applyThemeToDocument(currentTheme)
   }, [currentTheme])
 
