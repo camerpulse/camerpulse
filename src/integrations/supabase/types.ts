@@ -11109,6 +11109,66 @@ export type Database = {
           },
         ]
       }
+      politician_poll_responses: {
+        Row: {
+          created_at: string | null
+          engagement_metrics: Json | null
+          id: string
+          is_official_position: boolean | null
+          is_verified: boolean | null
+          politician_id: string
+          poll_id: string
+          response_text: string
+          response_type: string | null
+          sentiment_score: number | null
+          updated_at: string | null
+          visibility: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          engagement_metrics?: Json | null
+          id?: string
+          is_official_position?: boolean | null
+          is_verified?: boolean | null
+          politician_id: string
+          poll_id: string
+          response_text: string
+          response_type?: string | null
+          sentiment_score?: number | null
+          updated_at?: string | null
+          visibility?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          engagement_metrics?: Json | null
+          id?: string
+          is_official_position?: boolean | null
+          is_verified?: boolean | null
+          politician_id?: string
+          poll_id?: string
+          response_text?: string
+          response_type?: string | null
+          sentiment_score?: number | null
+          updated_at?: string | null
+          visibility?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "politician_poll_responses_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "politician_poll_responses_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       politician_promises: {
         Row: {
           broken_promise_alert_sent: boolean | null
@@ -11246,6 +11306,7 @@ export type Database = {
           biography: string | null
           birth_date: string | null
           campaign_promises: Json | null
+          can_create_polls: boolean | null
           career_background: string | null
           civic_score: number | null
           claim_documents_url: string[] | null
@@ -11275,6 +11336,7 @@ export type Database = {
           is_claimable: boolean | null
           is_claimed: boolean | null
           is_currently_in_office: boolean | null
+          last_poll_created_at: string | null
           last_term_validation: string | null
           level_of_office: string | null
           name: string
@@ -11282,6 +11344,7 @@ export type Database = {
           party: string | null
           performance_score: number | null
           political_party_id: string | null
+          poll_creation_count: number | null
           position_end_date: string | null
           position_start_date: string | null
           profile_image_url: string | null
@@ -11305,6 +11368,7 @@ export type Database = {
           biography?: string | null
           birth_date?: string | null
           campaign_promises?: Json | null
+          can_create_polls?: boolean | null
           career_background?: string | null
           civic_score?: number | null
           claim_documents_url?: string[] | null
@@ -11334,6 +11398,7 @@ export type Database = {
           is_claimable?: boolean | null
           is_claimed?: boolean | null
           is_currently_in_office?: boolean | null
+          last_poll_created_at?: string | null
           last_term_validation?: string | null
           level_of_office?: string | null
           name: string
@@ -11341,6 +11406,7 @@ export type Database = {
           party?: string | null
           performance_score?: number | null
           political_party_id?: string | null
+          poll_creation_count?: number | null
           position_end_date?: string | null
           position_start_date?: string | null
           profile_image_url?: string | null
@@ -11364,6 +11430,7 @@ export type Database = {
           biography?: string | null
           birth_date?: string | null
           campaign_promises?: Json | null
+          can_create_polls?: boolean | null
           career_background?: string | null
           civic_score?: number | null
           claim_documents_url?: string[] | null
@@ -11393,6 +11460,7 @@ export type Database = {
           is_claimable?: boolean | null
           is_claimed?: boolean | null
           is_currently_in_office?: boolean | null
+          last_poll_created_at?: string | null
           last_term_validation?: string | null
           level_of_office?: string | null
           name?: string
@@ -11400,6 +11468,7 @@ export type Database = {
           party?: string | null
           performance_score?: number | null
           political_party_id?: string | null
+          poll_creation_count?: number | null
           position_end_date?: string | null
           position_start_date?: string | null
           profile_image_url?: string | null
@@ -11430,6 +11499,76 @@ export type Database = {
             columns: ["image_verification_id"]
             isOneToOne: false
             referencedRelation: "politician_image_verifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_impact_tracking: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          demographic_affected: string | null
+          id: string
+          impact_details: Json | null
+          impact_direction: string | null
+          impact_type: string
+          impact_value: number | null
+          measured_at: string | null
+          party_id: string | null
+          politician_id: string | null
+          poll_id: string
+          region_affected: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          demographic_affected?: string | null
+          id?: string
+          impact_details?: Json | null
+          impact_direction?: string | null
+          impact_type: string
+          impact_value?: number | null
+          measured_at?: string | null
+          party_id?: string | null
+          politician_id?: string | null
+          poll_id: string
+          region_affected?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          demographic_affected?: string | null
+          id?: string
+          impact_details?: Json | null
+          impact_direction?: string | null
+          impact_type?: string
+          impact_value?: number | null
+          measured_at?: string | null
+          party_id?: string | null
+          politician_id?: string | null
+          poll_id?: string
+          region_affected?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_impact_tracking_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_impact_tracking_politician_id_fkey"
+            columns: ["politician_id"]
+            isOneToOne: false
+            referencedRelation: "politicians"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_impact_tracking_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
             referencedColumns: ["id"]
           },
         ]
@@ -12959,6 +13098,10 @@ export type Database = {
         Args: { p_timeline_id: string; p_threshold?: number }
         Returns: Json
       }
+      enable_politician_poll_creation: {
+        Args: { p_politician_id: string; p_admin_id: string }
+        Returns: boolean
+      }
       execute_civic_mission: {
         Args: { p_mission_id: string }
         Returns: Json
@@ -13203,6 +13346,14 @@ export type Database = {
           p_error_details?: string
         }
         Returns: boolean
+      }
+      update_politician_ratings_from_poll: {
+        Args: {
+          p_poll_id: string
+          p_politician_id: string
+          p_rating_impact?: number
+        }
+        Returns: Json
       }
       update_politician_term_status: {
         Args: {
