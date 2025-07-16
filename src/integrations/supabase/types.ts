@@ -11883,6 +11883,7 @@ export type Database = {
       }
       polls: {
         Row: {
+          auto_delete_at: string | null
           created_at: string | null
           creator_id: string
           description: string | null
@@ -11890,10 +11891,13 @@ export type Database = {
           id: string
           is_active: boolean | null
           options: Json
+          privacy_mode: string
+          show_results_after_expiry: boolean
           title: string
           votes_count: number | null
         }
         Insert: {
+          auto_delete_at?: string | null
           created_at?: string | null
           creator_id: string
           description?: string | null
@@ -11901,10 +11905,13 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           options: Json
+          privacy_mode?: string
+          show_results_after_expiry?: boolean
           title: string
           votes_count?: number | null
         }
         Update: {
+          auto_delete_at?: string | null
           created_at?: string | null
           creator_id?: string
           description?: string | null
@@ -11912,6 +11919,8 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           options?: Json
+          privacy_mode?: string
+          show_results_after_expiry?: boolean
           title?: string
           votes_count?: number | null
         }
@@ -13402,6 +13411,10 @@ export type Database = {
         Returns: {
           alerts_created: number
         }[]
+      }
+      cleanup_expired_polls: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       compare_debt_data_changes: {
         Args: { p_source_id: string; p_current_result_id: string }

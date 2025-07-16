@@ -21,7 +21,9 @@ import {
   Calendar,
   CheckCircle,
   XCircle,
-  MapPin
+  MapPin,
+  Shield,
+  EyeOff
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -35,6 +37,9 @@ interface Poll {
   ends_at?: string;
   created_at: string;
   creator_id: string;
+  privacy_mode: 'public' | 'private' | 'anonymous';
+  show_results_after_expiry: boolean;
+  auto_delete_at?: string;
   profiles?: {
     username: string;
     display_name?: string;
@@ -119,6 +124,9 @@ const Polls = () => {
             ends_at: poll.ends_at || undefined,
             created_at: poll.created_at,
             creator_id: poll.creator_id,
+            privacy_mode: poll.privacy_mode || 'public',
+            show_results_after_expiry: poll.show_results_after_expiry !== false,
+            auto_delete_at: poll.auto_delete_at || undefined,
             profiles: creatorProfile || undefined,
             user_vote: userVote,
             vote_results: optionCounts
@@ -344,44 +352,54 @@ const Polls = () => {
               return (
                 <Card key={poll.id} className="border-0 shadow-elegant">
                   <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3 flex-1">
-                        <Avatar>
-                          <AvatarImage src={poll.profiles?.avatar_url} />
-                          <AvatarFallback className="bg-primary text-primary-foreground">
-                            {poll.profiles?.username?.charAt(0).toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1">
-                          <CardTitle className="text-lg">{poll.title}</CardTitle>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <span>by @{poll.profiles?.username}</span>
-                            <span>•</span>
-                            <span>{formatDistanceToNow(new Date(poll.created_at), { addSuffix: true })}</span>
+                      <div className="flex items-start justify-between">
+                        <div className="flex items-center gap-3 flex-1">
+                          <Avatar>
+                            <AvatarImage src={poll.privacy_mode === 'anonymous' ? '' : poll.profiles?.avatar_url} />
+                            <AvatarFallback className="bg-primary text-primary-foreground">
+                              {poll.privacy_mode === 'anonymous' ? '?' : poll.profiles?.username?.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1">
+                            <CardTitle className="text-lg">{poll.title}</CardTitle>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                              <span>
+                                by {poll.privacy_mode === 'anonymous' ? 'Anonymous' : `@${poll.profiles?.username}`}
+                              </span>
+                              <span>•</span>
+                              <span>{formatDistanceToNow(new Date(poll.created_at), { addSuffix: true })}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
                       
-                      <div className="flex items-center gap-2">
-                        {isActive ? (
-                          <Badge className="bg-cm-green text-white">
-                            <CheckCircle className="w-3 h-3 mr-1" />
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary">
-                            <XCircle className="w-3 h-3 mr-1" />
-                            Closed
-                          </Badge>
-                        )}
-                        
-                        {poll.ends_at && (
-                          <Badge variant="outline">
-                            <Calendar className="w-3 h-3 mr-1" />
-                            Ends {formatDistanceToNow(new Date(poll.ends_at), { addSuffix: true })}
-                          </Badge>
-                        )}
-                      </div>
+                        <div className="flex items-center gap-2">
+                          {poll.privacy_mode !== 'public' && (
+                            <Badge variant="outline" className="gap-1">
+                              {poll.privacy_mode === 'private' && <Shield className="w-3 h-3" />}
+                              {poll.privacy_mode === 'anonymous' && <EyeOff className="w-3 h-3" />}
+                              <span className="capitalize">{poll.privacy_mode}</span>
+                            </Badge>
+                          )}
+                          
+                          {isActive ? (
+                            <Badge className="bg-cm-green text-white">
+                              <CheckCircle className="w-3 h-3 mr-1" />
+                              Active
+                            </Badge>
+                          ) : (
+                            <Badge variant="secondary">
+                              <XCircle className="w-3 h-3 mr-1" />
+                              Closed
+                            </Badge>
+                          )}
+                          
+                          {poll.ends_at && (
+                            <Badge variant="outline">
+                              <Calendar className="w-3 h-3 mr-1" />
+                              Ends {formatDistanceToNow(new Date(poll.ends_at), { addSuffix: true })}
+                            </Badge>
+                          )}
+                        </div>
                     </div>
                     
                     {poll.description && (
@@ -398,6 +416,10 @@ const Polls = () => {
                         const percentage = getVotePercentage(votes, poll.votes_count);
                         const isSelected = poll.user_vote === index;
                         
+                        // Determine if results should be shown
+                        const showResults = hasVoted || !isActive || 
+                          (!isActive && poll.show_results_after_expiry);
+                        
                         return (
                           <div key={index} className="space-y-2">
                             <Button
@@ -408,18 +430,20 @@ const Polls = () => {
                             >
                               <div className="flex items-center justify-between w-full">
                                 <span className="flex-1">{option}</span>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-sm">
-                                    {votes} votes ({percentage}%)
-                                  </span>
-                                  {isSelected && (
-                                    <CheckCircle className="w-4 h-4" />
-                                  )}
-                                </div>
+                                {showResults && (
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm">
+                                      {votes} votes ({percentage}%)
+                                    </span>
+                                    {isSelected && (
+                                      <CheckCircle className="w-4 h-4" />
+                                    )}
+                                  </div>
+                                )}
                               </div>
                             </Button>
                             
-                            {(hasVoted || !isActive) && (
+                            {showResults && (
                               <Progress value={percentage} className="h-2" />
                             )}
                           </div>

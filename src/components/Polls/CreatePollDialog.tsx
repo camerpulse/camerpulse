@@ -19,7 +19,10 @@ import {
   Calendar as CalendarIcon,
   Vote,
   Clock,
-  Users
+  Users,
+  Shield,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 interface CreatePollDialogProps {
@@ -37,7 +40,11 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
     description: '',
     options: ['', ''],
     hasExpiry: false,
-    expiryDate: undefined as Date | undefined
+    expiryDate: undefined as Date | undefined,
+    privacyMode: 'public' as 'public' | 'private' | 'anonymous',
+    showResultsAfterExpiry: true,
+    autoDelete: false,
+    autoDeleteDays: 30
   });
 
   const handleInputChange = (field: string, value: any) => {
@@ -104,6 +111,11 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
     try {
       setLoading(true);
 
+      // Calculate auto delete date if enabled
+      const autoDeleteAt = formData.autoDelete && formData.expiryDate 
+        ? new Date(formData.expiryDate.getTime() + (formData.autoDeleteDays * 24 * 60 * 60 * 1000))
+        : null;
+
       const { error } = await supabase
         .from('polls')
         .insert({
@@ -114,6 +126,9 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
           ends_at: formData.hasExpiry && formData.expiryDate 
             ? formData.expiryDate.toISOString() 
             : null,
+          privacy_mode: formData.privacyMode,
+          show_results_after_expiry: formData.showResultsAfterExpiry,
+          auto_delete_at: autoDeleteAt?.toISOString() || null,
           is_active: true
         });
 
@@ -156,7 +171,11 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
         description: '',
         options: ['', ''],
         hasExpiry: false,
-        expiryDate: undefined
+        expiryDate: undefined,
+        privacyMode: 'public',
+        showResultsAfterExpiry: true,
+        autoDelete: false,
+        autoDeleteDays: 30
       });
 
       onSuccess();
@@ -320,6 +339,107 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
             </CardContent>
           </Card>
 
+          {/* Privacy Controls */}
+          <Card>
+            <CardContent className="pt-6 space-y-4">
+              <Label className="flex items-center gap-2">
+                <Shield className="w-4 h-4" />
+                Privacy Controls
+              </Label>
+              
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="privacyMode">Privacy Mode</Label>
+                  <div className="grid grid-cols-3 gap-2 mt-2">
+                    <Button
+                      type="button"
+                      variant={formData.privacyMode === 'public' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => handleInputChange('privacyMode', 'public')}
+                      className="flex-col h-auto p-3 gap-1"
+                    >
+                      <Users className="w-4 h-4" />
+                      <span className="text-xs">Public</span>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={formData.privacyMode === 'private' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => handleInputChange('privacyMode', 'private')}
+                      className="flex-col h-auto p-3 gap-1"
+                    >
+                      <Shield className="w-4 h-4" />
+                      <span className="text-xs">Private</span>
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={formData.privacyMode === 'anonymous' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => handleInputChange('privacyMode', 'anonymous')}
+                      className="flex-col h-auto p-3 gap-1"
+                    >
+                      <EyeOff className="w-4 h-4" />
+                      <span className="text-xs">Anonymous</span>
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {formData.privacyMode === 'public' && "Visible to everyone"}
+                    {formData.privacyMode === 'private' && "Only visible to you and voters"}
+                    {formData.privacyMode === 'anonymous' && "Visible to everyone but creator is hidden"}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <Label htmlFor="showResults">Show Results After Expiry</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Display vote results even after poll expires
+                    </p>
+                  </div>
+                  <Switch
+                    id="showResults"
+                    checked={formData.showResultsAfterExpiry}
+                    onCheckedChange={(checked) => handleInputChange('showResultsAfterExpiry', checked)}
+                  />
+                </div>
+
+                {formData.hasExpiry && (
+                  <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                      <Label htmlFor="autoDelete">Auto-Delete Poll</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Automatically delete poll after expiry
+                      </p>
+                    </div>
+                    <Switch
+                      id="autoDelete"
+                      checked={formData.autoDelete}
+                      onCheckedChange={(checked) => handleInputChange('autoDelete', checked)}
+                    />
+                  </div>
+                )}
+
+                {formData.autoDelete && formData.hasExpiry && (
+                  <div>
+                    <Label htmlFor="autoDeleteDays">Delete After (Days)</Label>
+                    <Input
+                      id="autoDeleteDays"
+                      type="number"
+                      min="1"
+                      max="365"
+                      value={formData.autoDeleteDays}
+                      onChange={(e) => handleInputChange('autoDeleteDays', parseInt(e.target.value) || 30)}
+                      className="mt-1"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Poll will be deleted {formData.autoDeleteDays} days after expiry
+                    </p>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Preview */}
           <Card className="bg-muted/50">
             <CardContent className="pt-6">
@@ -347,10 +467,22 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
                     <Users className="w-3 h-3" />
                     <span>0 votes</span>
                   </div>
+                  <div className="flex items-center gap-1">
+                    {formData.privacyMode === 'public' && <Users className="w-3 h-3" />}
+                    {formData.privacyMode === 'private' && <Shield className="w-3 h-3" />}
+                    {formData.privacyMode === 'anonymous' && <EyeOff className="w-3 h-3" />}
+                    <span className="capitalize">{formData.privacyMode}</span>
+                  </div>
                   {formData.hasExpiry && formData.expiryDate && (
                     <div className="flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       <span>Ends {format(formData.expiryDate, "PPP")}</span>
+                    </div>
+                  )}
+                  {formData.autoDelete && formData.hasExpiry && (
+                    <div className="flex items-center gap-1">
+                      <X className="w-3 h-3" />
+                      <span>Auto-delete in {formData.autoDeleteDays}d</span>
                     </div>
                   )}
                 </div>
