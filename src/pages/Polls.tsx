@@ -256,15 +256,25 @@ const Polls = () => {
               </p>
             </div>
             
-            {user && (
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button 
-                onClick={() => setShowCreatePoll(true)}
-                className="w-full sm:w-auto bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg"
+                onClick={() => window.location.href = '/polls/discover'}
+                variant="outline"
+                className="w-full sm:w-auto"
               >
-                <Plus className="w-4 h-4 mr-2" />
-                Create Poll
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Découvrir
               </Button>
-            )}
+              {user && (
+                <Button 
+                  onClick={() => setShowCreatePoll(true)}
+                  className="w-full sm:w-auto bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 shadow-lg"
+                >
+                  <Plus className="w-4 h-4 mr-2" />
+                  Create Poll
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Stats Cards */}

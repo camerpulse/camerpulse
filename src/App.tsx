@@ -11,6 +11,7 @@ import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
 import Marketplace from "./pages/Marketplace";
 import Polls from "./pages/Polls";
+import PollsDiscovery from "./pages/PollsDiscovery";
 import Donations from "./pages/Donations";
 import Social from "./pages/Social";
 import News from "./pages/News";
@@ -80,6 +81,7 @@ const App = () => {
               <Route path="/security" element={<Security />} />
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/polls" element={<Polls />} />
+              <Route path="/polls/discover" element={<PollsDiscovery />} />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/donate" element={<Donations />} />
               <Route path="/social" element={<Social />} />

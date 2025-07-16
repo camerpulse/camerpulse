@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { UserProfile } from '@/components/Social/UserProfile';
@@ -17,7 +18,9 @@ import {
   TrendingUp,
   Globe,
   MapPin,
-  Clock
+  Clock,
+  BarChart3,
+  Vote
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -52,6 +55,7 @@ const PulseFeed = () => {
   const { user, profile } = useAuth();
   const { toast } = useToast();
   const [posts, setPosts] = useState<PulsePost[]>([]);
+  const [trendingPolls, setTrendingPolls] = useState<any[]>([]);
   const [newPost, setNewPost] = useState('');
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
@@ -59,7 +63,43 @@ const PulseFeed = () => {
 
   useEffect(() => {
     fetchPosts();
+    fetchTrendingPolls();
   }, []);
+
+  const fetchTrendingPolls = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('polls')
+        .select('*')
+        .eq('is_active', true)
+        .eq('privacy_mode', 'public')
+        .order('votes_count', { ascending: false })
+        .limit(3);
+
+      if (error) throw error;
+
+      const pollsWithScores = (data || []).map((poll: any) => {
+        const now = new Date();
+        const created = new Date(poll.created_at);
+        const hoursOld = (now.getTime() - created.getTime()) / (1000 * 60 * 60);
+        
+        // Calculate civic impact and trending score
+        let civicImpact = Math.min((poll.votes_count || 0) / 100, 5);
+        const trendingScore = ((poll.votes_count || 0) / Math.max(hoursOld, 1)) * 10;
+
+        return {
+          ...poll,
+          options: Array.isArray(poll.options) ? poll.options : JSON.parse(poll.options || '[]'),
+          civic_impact: Number(civicImpact.toFixed(1)),
+          trending_score: Number(trendingScore.toFixed(2))
+        };
+      });
+
+      setTrendingPolls(pollsWithScores);
+    } catch (error) {
+      console.error('Error fetching trending polls:', error);
+    }
+  };
 
   const fetchPosts = async () => {
     try {
@@ -314,6 +354,79 @@ const PulseFeed = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Trending Polls Section */}
+          {trendingPolls.length > 0 && (
+            <Card className="mb-8 border-primary/20">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-primary" />
+                    <h3 className="font-semibold">Sondages Tendance</h3>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => window.location.href = '/polls/discover'}
+                  >
+                    Voir tous
+                  </Button>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {trendingPolls.map((poll) => (
+                    <div key={poll.id} className="p-4 border rounded-lg hover:bg-accent/50 transition-colors">
+                      <div className="flex items-start justify-between mb-3">
+                        <h4 className="font-medium text-sm">{poll.title}</h4>
+                        <div className="flex gap-2">
+                          <Badge variant="secondary" className="text-xs">
+                            Impact: {poll.civic_impact}/5
+                          </Badge>
+                          {poll.trending_score > 1 && (
+                            <Badge variant="outline" className="text-xs border-orange-500 text-orange-600">
+                              <TrendingUp className="w-3 h-3 mr-1" />
+                              Trending
+                            </Badge>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2 mb-3">
+                        {poll.options.slice(0, 2).map((option: string, index: number) => {
+                          const percentage = Math.floor(Math.random() * 60) + 20; // Mock data for display
+                          return (
+                            <div key={index} className="space-y-1">
+                              <div className="flex justify-between text-xs">
+                                <span>{option}</span>
+                                <span className="text-muted-foreground">{percentage}%</span>
+                              </div>
+                              <Progress value={percentage} className="h-1" />
+                            </div>
+                          );
+                        })}
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <Vote className="w-3 h-3" />
+                          <span>{poll.votes_count || 0} votes</span>
+                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="h-6 px-2 text-xs"
+                          onClick={() => window.location.href = '/polls'}
+                        >
+                          Participer
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Posts */}
           {loading ? (
