@@ -203,7 +203,7 @@ const NationalDebtTracker = () => {
         total_debt_usd: Number(record.total_debt_usd) || 0,
         debt_to_gdp_ratio: Number(record.debt_to_gdp_ratio) || 0,
         monthly_change_percentage: Number(record.monthly_change_percentage) || 0,
-        domestic_debt_fcfa: Number(record.domestic_debt_fcfa) || Number(record.internal_debt_fcfa) || 0,
+        domestic_debt_fcfa: Number(record.internal_debt_fcfa) || 0,
         external_debt_fcfa: Number(record.external_debt_fcfa) || 0,
         population_count: Number(record.population_count) || Number(record.population) || 27000000,
         gdp_value_fcfa: Number(record.gdp_value_fcfa) || Number(record.gdp_fcfa) || 0
