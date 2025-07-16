@@ -91,6 +91,7 @@ import CodeHealthLog from "@/components/Admin/CodeHealthLog";
 import UXSimulationLog from "@/components/Admin/UXSimulationLog";
 import CamerPulseActivityTimeline from "@/components/Admin/CamerPulseActivityTimeline";
 import { CivicIntegrityMonitor } from "@/components/AI/CivicIntegrityMonitor";
+import { CreditorBreakdown } from "@/components/AI/CreditorBreakdown";
 
 const Admin = () => {
   const { user } = useAuth();
@@ -857,6 +858,22 @@ const Admin = () => {
                         Revenue Analytics
                       </Button>
                     </div>
+                  </CardContent>
+                </Card>
+
+                {/* National Debt Creditor Management */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Building2 className="h-5 w-5" />
+                      National Debt Creditor Management
+                    </CardTitle>
+                    <CardDescription>
+                      Manage and monitor Cameroon's debt creditors, loan purposes, and terms
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <CreditorBreakdown />
                   </CardContent>
                 </Card>
               </div>

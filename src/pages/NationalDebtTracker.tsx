@@ -40,6 +40,7 @@ import {
   Zap
 } from "lucide-react";
 import { toast } from "sonner";
+import { CreditorBreakdown } from "@/components/AI/CreditorBreakdown";
 
 interface DebtRecord {
   id: string;
@@ -327,8 +328,8 @@ export default function NationalDebtTracker() {
         ))}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
-          <div className="overflow-x-auto">
-            <TabsList className="grid w-full grid-cols-6 min-w-[600px] sm:min-w-0 h-auto p-1">
+            <div className="overflow-x-auto">
+              <TabsList className="grid w-full grid-cols-7 min-w-[700px] sm:min-w-0 h-auto p-1">
               <TabsTrigger value="overview" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
                 <span className="hidden sm:inline">📊 </span>Overview
               </TabsTrigger>
@@ -343,6 +344,9 @@ export default function NationalDebtTracker() {
               </TabsTrigger>
               <TabsTrigger value="education" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
                 <span className="hidden sm:inline">📚 </span>Learn
+              </TabsTrigger>
+              <TabsTrigger value="creditors" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
+                <span className="hidden sm:inline">🏛️ </span>Creditors
               </TabsTrigger>
               <TabsTrigger value="regional" className="text-xs sm:text-sm py-2 px-1 sm:px-3">
                 <span className="hidden sm:inline">🗺️ </span>Regional
@@ -847,6 +851,11 @@ export default function NationalDebtTracker() {
                 </Tabs>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* MODULE 12: Creditor Breakdown */}
+          <TabsContent value="creditors" className="space-y-6">
+            <CreditorBreakdown />
           </TabsContent>
 
           {/* MODULE 13: Regional Comparison */}

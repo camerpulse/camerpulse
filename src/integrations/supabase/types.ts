@@ -6412,6 +6412,66 @@ export type Database = {
         }
         Relationships: []
       }
+      debt_creditors: {
+        Row: {
+          amount_borrowed_fcfa: number
+          amount_borrowed_usd: number
+          country_code: string | null
+          created_at: string | null
+          creditor_name: string
+          creditor_type: string
+          date_borrowed: string
+          id: string
+          interest_rate: number | null
+          loan_purpose: string | null
+          loan_purpose_ai_suggested: boolean | null
+          loan_status: string
+          logo_url: string | null
+          maturity_date: string | null
+          notes: string | null
+          updated_at: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          amount_borrowed_fcfa: number
+          amount_borrowed_usd: number
+          country_code?: string | null
+          created_at?: string | null
+          creditor_name: string
+          creditor_type: string
+          date_borrowed: string
+          id?: string
+          interest_rate?: number | null
+          loan_purpose?: string | null
+          loan_purpose_ai_suggested?: boolean | null
+          loan_status?: string
+          logo_url?: string | null
+          maturity_date?: string | null
+          notes?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          amount_borrowed_fcfa?: number
+          amount_borrowed_usd?: number
+          country_code?: string | null
+          created_at?: string | null
+          creditor_name?: string
+          creditor_type?: string
+          date_borrowed?: string
+          id?: string
+          interest_rate?: number | null
+          loan_purpose?: string | null
+          loan_purpose_ai_suggested?: boolean | null
+          loan_status?: string
+          logo_url?: string | null
+          maturity_date?: string | null
+          notes?: string | null
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
       debt_data_comparisons: {
         Row: {
           alert_sent_at: string | null

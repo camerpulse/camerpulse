@@ -12,13 +12,71 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  const requestBody = await req.json();
+  const { action, creditor_name, creditor_type } = requestBody;
+
+  // Handle AI loan purpose suggestions
+  if (action === 'suggest_purpose') {
+    
+    try {
+      let suggestedPurpose = '';
+      
+      // AI-powered suggestions based on creditor type and name
+      if (creditor_type === 'country') {
+        if (creditor_name.toLowerCase().includes('china')) {
+          suggestedPurpose = 'Infrastructure development including roads, bridges, ports, telecommunications, and Belt and Road Initiative projects';
+        } else if (creditor_name.toLowerCase().includes('france')) {
+          suggestedPurpose = 'Development aid, budget support, and francophone cooperation programs';
+        } else if (creditor_name.toLowerCase().includes('germany')) {
+          suggestedPurpose = 'Technical cooperation, renewable energy projects, and industrial development';
+        } else if (creditor_name.toLowerCase().includes('japan')) {
+          suggestedPurpose = 'Infrastructure modernization, technology transfer, and economic development assistance';
+        } else {
+          suggestedPurpose = 'Bilateral development assistance and economic cooperation programs';
+        }
+      } else if (creditor_type === 'multilateral') {
+        if (creditor_name.toLowerCase().includes('world bank')) {
+          suggestedPurpose = 'Poverty reduction, sustainable development, health and education sector improvements';
+        } else if (creditor_name.toLowerCase().includes('imf')) {
+          suggestedPurpose = 'Economic stabilization, balance of payments support, and structural adjustment programs';
+        } else if (creditor_name.toLowerCase().includes('african development bank') || creditor_name.toLowerCase().includes('afdb')) {
+          suggestedPurpose = 'Regional development projects, agriculture modernization, and social infrastructure';
+        } else if (creditor_name.toLowerCase().includes('european')) {
+          suggestedPurpose = 'Regional integration, trade facilitation, and sustainable development projects';
+        } else {
+          suggestedPurpose = 'Multilateral development programs and capacity building initiatives';
+        }
+      } else if (creditor_type === 'commercial') {
+        suggestedPurpose = 'Trade finance, working capital, project financing, and commercial banking services';
+      } else if (creditor_type === 'private') {
+        suggestedPurpose = 'Private sector investment, infrastructure financing, and commercial development projects';
+      }
+
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          suggested_purpose: suggestedPurpose,
+          ai_generated: true 
+        }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+      
+    } catch (error) {
+      console.error('Error generating purpose suggestion:', error);
+      return new Response(
+        JSON.stringify({ error: 'Failed to generate suggestion' }),
+        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+  }
+
   try {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
     );
 
-    const { action, source_id, source_url, force_scrape } = await req.json();
+    const { action, source_id, source_url, force_scrape } = requestBody;
 
     console.log(`Debt Data Scraper Action: ${action}`);
 
