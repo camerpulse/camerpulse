@@ -56,6 +56,7 @@ import RedRoomPanel from '@/components/AI/RedRoomPanel';
 import ElectionCommandCore from '@/components/AI/ElectionCommandCore';
 import CivicExplainerAssistant from '@/components/AI/CivicExplainerAssistant';
 import CivicEducationCampaignManager from '@/components/AI/CivicEducationCampaignManager';
+import CivicVideoGenerator from '@/components/AI/CivicVideoGenerator';
 
 interface SentimentData {
   id: string;
@@ -294,6 +295,7 @@ const CamerPulseIntelligence = () => {
               <TabsTrigger value="trust" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🤝 Trust Index</TabsTrigger>
               <TabsTrigger value="explainer" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🧠 Citizen Assistant</TabsTrigger>
               <TabsTrigger value="campaigns" className="whitespace-nowrap min-h-[48px] px-3 text-sm">📢 Civic Campaigns</TabsTrigger>
+              <TabsTrigger value="videos" className="whitespace-nowrap min-h-[48px] px-3 text-sm">🎥 Video Generator</TabsTrigger>
               <TabsTrigger value="config" className="whitespace-nowrap min-h-[48px] px-3 text-sm">⚙️ Config</TabsTrigger>
             </TabsList>
           </div>
@@ -475,6 +477,10 @@ const CamerPulseIntelligence = () => {
 
           <TabsContent value="campaigns" className="space-y-4">
             <CivicEducationCampaignManager />
+          </TabsContent>
+
+          <TabsContent value="videos" className="space-y-4">
+            <CivicVideoGenerator />
           </TabsContent>
 
           <TabsContent value="config" className="space-y-4">
