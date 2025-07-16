@@ -37,6 +37,7 @@ import NationalDebtTracker from "./pages/NationalDebtTracker";
 import DebtAdmin from "./pages/DebtAdmin";
 import ElectionForecast from "./pages/ElectionForecast";
 import RewardsCenter from "./pages/RewardsCenter";
+import PollArchive from "./pages/PollArchive";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -113,6 +114,7 @@ const App = () => {
           <Route path="/admin/debt" element={<DebtAdmin />} />
           <Route path="/election-forecast" element={<ElectionForecast />} />
           <Route path="/rewards" element={<RewardsCenter />} />
+          <Route path="/poll-archive" element={<PollArchive />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
