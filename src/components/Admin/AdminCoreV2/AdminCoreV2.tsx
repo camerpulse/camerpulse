@@ -96,7 +96,7 @@ export const AdminCoreV2: React.FC = () => {
         .from('user_roles')
         .select('role')
         .eq('user_id', user.id)
-        .in('role', ['admin', 'super_admin', 'moderator', 'editor'])
+        .in('role', ['admin', 'moderator'])
         .single();
       
       if (error) return null;

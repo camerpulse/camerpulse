@@ -42,7 +42,7 @@ export const UsersRolesManager: React.FC<UsersRolesManagerProps> = ({
       }
 
       if (roleFilter !== 'all') {
-        query = query.eq('user_roles.role', roleFilter);
+        query = query.eq('user_roles.role', roleFilter as any);
       }
 
       const { data, error } = await query.limit(50);
@@ -56,7 +56,7 @@ export const UsersRolesManager: React.FC<UsersRolesManagerProps> = ({
     try {
       const { error } = await supabase
         .from('user_roles')
-        .upsert({ user_id: userId, role: newRole });
+        .upsert({ user_id: userId, role: newRole as any });
 
       if (error) throw error;
 

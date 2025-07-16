@@ -1,8 +1,8 @@
 import React from 'react';
-import { CamerPulseAdminCore as AdminCore } from '@/components/Admin/CamerPulseAdminCore';
+import { AdminCoreV2 } from '@/components/Admin/AdminCoreV2/AdminCoreV2';
 
 const CamerPulseAdminCore = () => {
-  return <AdminCore />;
+  return <AdminCoreV2 />;
 };
 
 export default CamerPulseAdminCore;
