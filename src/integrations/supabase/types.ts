@@ -5910,6 +5910,90 @@ export type Database = {
           },
         ]
       }
+      pan_africa_civic_mesh_nodes: {
+        Row: {
+          api_endpoints: Json | null
+          capital_city: string
+          civic_issues_count: number | null
+          country_code: string
+          country_name: string
+          created_at: string | null
+          cross_border_enabled: boolean | null
+          currency_code: string
+          data_quality_score: number | null
+          data_sources: Json | null
+          flag_emoji: string
+          id: string
+          intelligence_sharing_enabled: boolean | null
+          is_active: boolean | null
+          last_sync_at: string | null
+          legislators_count: number | null
+          mesh_status: string | null
+          ministers_count: number | null
+          parties_count: number | null
+          primary_language: string
+          region: string
+          scraper_config: Json | null
+          supported_languages: string[] | null
+          sync_frequency_hours: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          api_endpoints?: Json | null
+          capital_city: string
+          civic_issues_count?: number | null
+          country_code: string
+          country_name: string
+          created_at?: string | null
+          cross_border_enabled?: boolean | null
+          currency_code: string
+          data_quality_score?: number | null
+          data_sources?: Json | null
+          flag_emoji: string
+          id?: string
+          intelligence_sharing_enabled?: boolean | null
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          legislators_count?: number | null
+          mesh_status?: string | null
+          ministers_count?: number | null
+          parties_count?: number | null
+          primary_language?: string
+          region: string
+          scraper_config?: Json | null
+          supported_languages?: string[] | null
+          sync_frequency_hours?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          api_endpoints?: Json | null
+          capital_city?: string
+          civic_issues_count?: number | null
+          country_code?: string
+          country_name?: string
+          created_at?: string | null
+          cross_border_enabled?: boolean | null
+          currency_code?: string
+          data_quality_score?: number | null
+          data_sources?: Json | null
+          flag_emoji?: string
+          id?: string
+          intelligence_sharing_enabled?: boolean | null
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          legislators_count?: number | null
+          mesh_status?: string | null
+          ministers_count?: number | null
+          parties_count?: number | null
+          primary_language?: string
+          region?: string
+          scraper_config?: Json | null
+          supported_languages?: string[] | null
+          sync_frequency_hours?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       pan_africa_config: {
         Row: {
           config_key: string
@@ -6003,6 +6087,54 @@ export type Database = {
         }
         Relationships: []
       }
+      pan_africa_cross_border_analytics: {
+        Row: {
+          analysis_date: string | null
+          analysis_results: Json
+          analysis_type: string
+          anomalies_detected: Json | null
+          confidence_score: number | null
+          countries_analyzed: string[]
+          created_at: string | null
+          generated_by: string | null
+          id: string
+          insights: Json | null
+          region_scope: string | null
+          risk_indicators: Json | null
+          urgency_level: string | null
+        }
+        Insert: {
+          analysis_date?: string | null
+          analysis_results?: Json
+          analysis_type: string
+          anomalies_detected?: Json | null
+          confidence_score?: number | null
+          countries_analyzed: string[]
+          created_at?: string | null
+          generated_by?: string | null
+          id?: string
+          insights?: Json | null
+          region_scope?: string | null
+          risk_indicators?: Json | null
+          urgency_level?: string | null
+        }
+        Update: {
+          analysis_date?: string | null
+          analysis_results?: Json
+          analysis_type?: string
+          anomalies_detected?: Json | null
+          confidence_score?: number | null
+          countries_analyzed?: string[]
+          created_at?: string | null
+          generated_by?: string | null
+          id?: string
+          insights?: Json | null
+          region_scope?: string | null
+          risk_indicators?: Json | null
+          urgency_level?: string | null
+        }
+        Relationships: []
+      }
       pan_africa_cross_country_analytics: {
         Row: {
           analysis_data: Json
@@ -6030,6 +6162,168 @@ export type Database = {
           created_at?: string
           id?: string
           insights?: Json | null
+        }
+        Relationships: []
+      }
+      pan_africa_mesh_alerts: {
+        Row: {
+          acknowledged_by: string[] | null
+          affected_countries: string[]
+          alert_description: string
+          alert_title: string
+          alert_type: string
+          auto_resolve_at: string | null
+          created_at: string | null
+          evidence_data: Json | null
+          id: string
+          recommended_actions: Json | null
+          region: string | null
+          related_events: Json | null
+          resolved_at: string | null
+          severity_level: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          acknowledged_by?: string[] | null
+          affected_countries: string[]
+          alert_description: string
+          alert_title: string
+          alert_type: string
+          auto_resolve_at?: string | null
+          created_at?: string | null
+          evidence_data?: Json | null
+          id?: string
+          recommended_actions?: Json | null
+          region?: string | null
+          related_events?: Json | null
+          resolved_at?: string | null
+          severity_level?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          acknowledged_by?: string[] | null
+          affected_countries?: string[]
+          alert_description?: string
+          alert_title?: string
+          alert_type?: string
+          auto_resolve_at?: string | null
+          created_at?: string | null
+          evidence_data?: Json | null
+          id?: string
+          recommended_actions?: Json | null
+          region?: string | null
+          related_events?: Json | null
+          resolved_at?: string | null
+          severity_level?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      pan_africa_mesh_config: {
+        Row: {
+          applies_to_countries: string[] | null
+          applies_to_regions: string[] | null
+          config_category: string
+          config_key: string
+          config_value: Json
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          applies_to_countries?: string[] | null
+          applies_to_regions?: string[] | null
+          config_category: string
+          config_key: string
+          config_value: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          applies_to_countries?: string[] | null
+          applies_to_regions?: string[] | null
+          config_category?: string
+          config_key?: string
+          config_value?: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      pan_africa_mesh_sync_logs: {
+        Row: {
+          completed_at: string | null
+          country_code: string
+          created_at: string | null
+          duration_seconds: number | null
+          error_details: Json | null
+          error_message: string | null
+          id: string
+          records_added: number | null
+          records_failed: number | null
+          records_processed: number | null
+          records_updated: number | null
+          started_at: string | null
+          status: string | null
+          sync_config: Json | null
+          sync_operation: string
+          sync_type: string
+          triggered_by: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          country_code: string
+          created_at?: string | null
+          duration_seconds?: number | null
+          error_details?: Json | null
+          error_message?: string | null
+          id?: string
+          records_added?: number | null
+          records_failed?: number | null
+          records_processed?: number | null
+          records_updated?: number | null
+          started_at?: string | null
+          status?: string | null
+          sync_config?: Json | null
+          sync_operation: string
+          sync_type: string
+          triggered_by?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          country_code?: string
+          created_at?: string | null
+          duration_seconds?: number | null
+          error_details?: Json | null
+          error_message?: string | null
+          id?: string
+          records_added?: number | null
+          records_failed?: number | null
+          records_processed?: number | null
+          records_updated?: number | null
+          started_at?: string | null
+          status?: string | null
+          sync_config?: Json | null
+          sync_operation?: string
+          sync_type?: string
+          triggered_by?: string | null
         }
         Relationships: []
       }
@@ -8830,6 +9124,10 @@ export type Database = {
       }
       get_autonomous_config: {
         Args: { p_config_key?: string }
+        Returns: Json
+      }
+      get_mesh_status_overview: {
+        Args: Record<PropertyKey, never>
         Returns: Json
       }
       get_module_visibility: {

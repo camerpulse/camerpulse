@@ -31,6 +31,7 @@ import AshenDevTerminal from './AshenDevTerminal';
 import CivicIntelligenceMissions from './CivicIntelligenceMissions';
 import AshenJrTrainingCore from './AshenJrTrainingCore';
 import CivicArchitectEngine from './CivicArchitectEngine';
+import PanAfricaMeshManager from './PanAfricaMeshManager';
 
 interface ErrorLog {
   id: string;
@@ -441,12 +442,12 @@ export default function AshenDebugCore() {
           <TabsTrigger value="civic-missions" className="text-xs">Civic Missions</TabsTrigger>
           <TabsTrigger value="jr-training" className="text-xs">Jr. Training</TabsTrigger>
           <TabsTrigger value="civic-architect" className="text-xs">Strategy Engine</TabsTrigger>
+          <TabsTrigger value="pan-africa-mesh" className="text-xs">Pan-Africa Mesh</TabsTrigger>
           <TabsTrigger value="zero-input-mode" className="text-xs">Zero Input Mode</TabsTrigger>
           <TabsTrigger value="security" className="text-xs">Security</TabsTrigger>
           <TabsTrigger value="patch-intelligence" className="text-xs">Patch Intelligence</TabsTrigger>
           <TabsTrigger value="healing-history" className="text-xs">Healing History</TabsTrigger>
           <TabsTrigger value="learning-engine" className="text-xs">Learning Engine</TabsTrigger>
-          <TabsTrigger value="batch-fix" className="text-xs">Batch Fix</TabsTrigger>
           <TabsTrigger value="emergency-revert" className="text-xs">Emergency Revert</TabsTrigger>
         </TabsList>
 
@@ -468,6 +469,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="civic-architect" className="space-y-4">
           <CivicArchitectEngine />
+        </TabsContent>
+        
+        <TabsContent value="pan-africa-mesh" className="space-y-4">
+          <PanAfricaMeshManager />
         </TabsContent>
         
         <TabsContent value="zero-input-mode" className="space-y-4">
