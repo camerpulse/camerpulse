@@ -5905,6 +5905,304 @@ export type Database = {
         }
         Relationships: []
       }
+      media_alerts: {
+        Row: {
+          actual_value: number | null
+          alert_description: string | null
+          alert_severity: Database["public"]["Enums"]["threat_level"] | null
+          alert_title: string
+          alert_type: string
+          analysis_id: string | null
+          created_at: string | null
+          entities_affected: string[] | null
+          id: string
+          metadata: Json | null
+          public_display: boolean | null
+          published_to_disinfo_map: boolean | null
+          regions_affected: string[] | null
+          resolution_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source_id: string | null
+          status: string | null
+          threshold_breached: string | null
+          threshold_value: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          actual_value?: number | null
+          alert_description?: string | null
+          alert_severity?: Database["public"]["Enums"]["threat_level"] | null
+          alert_title: string
+          alert_type: string
+          analysis_id?: string | null
+          created_at?: string | null
+          entities_affected?: string[] | null
+          id?: string
+          metadata?: Json | null
+          public_display?: boolean | null
+          published_to_disinfo_map?: boolean | null
+          regions_affected?: string[] | null
+          resolution_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_id?: string | null
+          status?: string | null
+          threshold_breached?: string | null
+          threshold_value?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          actual_value?: number | null
+          alert_description?: string | null
+          alert_severity?: Database["public"]["Enums"]["threat_level"] | null
+          alert_title?: string
+          alert_type?: string
+          analysis_id?: string | null
+          created_at?: string | null
+          entities_affected?: string[] | null
+          id?: string
+          metadata?: Json | null
+          public_display?: boolean | null
+          published_to_disinfo_map?: boolean | null
+          regions_affected?: string[] | null
+          resolution_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_id?: string | null
+          status?: string | null
+          threshold_breached?: string | null
+          threshold_value?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_alerts_analysis_id_fkey"
+            columns: ["analysis_id"]
+            isOneToOne: false
+            referencedRelation: "media_content_analysis"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "media_alerts_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "media_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_content_analysis: {
+        Row: {
+          agenda_detected: string | null
+          ai_confidence: number | null
+          ai_model_used: string | null
+          analysis_timestamp: string | null
+          bias_level: Database["public"]["Enums"]["bias_level"] | null
+          bias_score: number | null
+          content_date: string | null
+          content_summary: string | null
+          content_text: string | null
+          content_url: string | null
+          created_at: string | null
+          disinformation_indicators: string[] | null
+          id: string
+          language: string | null
+          metadata: Json | null
+          ministers_mentioned: string[] | null
+          parties_mentioned: string[] | null
+          politicians_mentioned: string[] | null
+          processing_time_ms: number | null
+          propaganda_markers: string[] | null
+          regions_mentioned: string[] | null
+          source_credibility_score: number | null
+          source_id: string | null
+          threat_level: Database["public"]["Enums"]["threat_level"] | null
+          title: string | null
+          tone: string | null
+          trust_score: number | null
+        }
+        Insert: {
+          agenda_detected?: string | null
+          ai_confidence?: number | null
+          ai_model_used?: string | null
+          analysis_timestamp?: string | null
+          bias_level?: Database["public"]["Enums"]["bias_level"] | null
+          bias_score?: number | null
+          content_date?: string | null
+          content_summary?: string | null
+          content_text?: string | null
+          content_url?: string | null
+          created_at?: string | null
+          disinformation_indicators?: string[] | null
+          id?: string
+          language?: string | null
+          metadata?: Json | null
+          ministers_mentioned?: string[] | null
+          parties_mentioned?: string[] | null
+          politicians_mentioned?: string[] | null
+          processing_time_ms?: number | null
+          propaganda_markers?: string[] | null
+          regions_mentioned?: string[] | null
+          source_credibility_score?: number | null
+          source_id?: string | null
+          threat_level?: Database["public"]["Enums"]["threat_level"] | null
+          title?: string | null
+          tone?: string | null
+          trust_score?: number | null
+        }
+        Update: {
+          agenda_detected?: string | null
+          ai_confidence?: number | null
+          ai_model_used?: string | null
+          analysis_timestamp?: string | null
+          bias_level?: Database["public"]["Enums"]["bias_level"] | null
+          bias_score?: number | null
+          content_date?: string | null
+          content_summary?: string | null
+          content_text?: string | null
+          content_url?: string | null
+          created_at?: string | null
+          disinformation_indicators?: string[] | null
+          id?: string
+          language?: string | null
+          metadata?: Json | null
+          ministers_mentioned?: string[] | null
+          parties_mentioned?: string[] | null
+          politicians_mentioned?: string[] | null
+          processing_time_ms?: number | null
+          propaganda_markers?: string[] | null
+          regions_mentioned?: string[] | null
+          source_credibility_score?: number | null
+          source_id?: string | null
+          threat_level?: Database["public"]["Enums"]["threat_level"] | null
+          title?: string | null
+          tone?: string | null
+          trust_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_content_analysis_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "media_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_monitoring_schedules: {
+        Row: {
+          created_at: string | null
+          cron_expression: string
+          failure_count: number | null
+          id: string
+          is_active: boolean | null
+          last_error: string | null
+          last_run_at: string | null
+          next_run_at: string | null
+          run_count: number | null
+          schedule_name: string
+          source_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          cron_expression: string
+          failure_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_error?: string | null
+          last_run_at?: string | null
+          next_run_at?: string | null
+          run_count?: number | null
+          schedule_name: string
+          source_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          cron_expression?: string
+          failure_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          last_error?: string | null
+          last_run_at?: string | null
+          next_run_at?: string | null
+          run_count?: number | null
+          schedule_name?: string
+          source_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_monitoring_schedules_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "media_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      media_sources: {
+        Row: {
+          bias_threshold: number | null
+          created_at: string | null
+          created_by: string | null
+          focus_keywords: string[] | null
+          id: string
+          is_active: boolean
+          last_monitored_at: string | null
+          metadata: Json | null
+          monitor_frequency: string
+          monitor_times: string[] | null
+          public_display: boolean | null
+          source_name: string
+          source_type: Database["public"]["Enums"]["media_source_type"]
+          source_url: string
+          threat_threshold: Database["public"]["Enums"]["threat_level"] | null
+          trust_threshold: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          bias_threshold?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          focus_keywords?: string[] | null
+          id?: string
+          is_active?: boolean
+          last_monitored_at?: string | null
+          metadata?: Json | null
+          monitor_frequency?: string
+          monitor_times?: string[] | null
+          public_display?: boolean | null
+          source_name: string
+          source_type: Database["public"]["Enums"]["media_source_type"]
+          source_url: string
+          threat_threshold?: Database["public"]["Enums"]["threat_level"] | null
+          trust_threshold?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          bias_threshold?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          focus_keywords?: string[] | null
+          id?: string
+          is_active?: boolean
+          last_monitored_at?: string | null
+          metadata?: Json | null
+          monitor_frequency?: string
+          monitor_times?: string[] | null
+          public_display?: boolean | null
+          source_name?: string
+          source_type?: Database["public"]["Enums"]["media_source_type"]
+          source_url?: string
+          threat_threshold?: Database["public"]["Enums"]["threat_level"] | null
+          trust_threshold?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
@@ -9259,6 +9557,15 @@ export type Database = {
         }
         Returns: Json
       }
+      analyze_media_content: {
+        Args: {
+          p_source_id: string
+          p_content_url: string
+          p_title?: string
+          p_content_text?: string
+        }
+        Returns: Json
+      }
       analyze_plugin_similarity: {
         Args: { p_request_text: string; p_plugin_name?: string }
         Returns: Json
@@ -9293,6 +9600,16 @@ export type Database = {
       }
       compare_snapshots: {
         Args: { p_snapshot_a_id: string; p_snapshot_b_id: string }
+        Returns: string
+      }
+      create_media_alert: {
+        Args: {
+          p_analysis_id: string
+          p_alert_type: string
+          p_alert_title: string
+          p_alert_description?: string
+          p_severity?: Database["public"]["Enums"]["threat_level"]
+        }
         Returns: string
       }
       create_system_snapshot: {
@@ -9491,6 +9808,7 @@ export type Database = {
         | "verified_politician"
         | "verified_vendor"
         | "user"
+      bias_level: "none" | "mild" | "moderate" | "high"
       civic_entity_type:
         | "politician"
         | "ministry"
@@ -9512,6 +9830,13 @@ export type Database = {
         | "public_health"
         | "education_ministry"
         | "local_councils"
+      media_source_type:
+        | "news_website"
+        | "youtube_channel"
+        | "podcast"
+        | "radio_stream"
+        | "blog"
+        | "social_feed"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -9523,6 +9848,7 @@ export type Database = {
         | "international_org"
         | "academic"
         | "unknown"
+      threat_level: "low" | "medium" | "high" | "critical"
       verification_status_enum:
         | "pending"
         | "verified"
@@ -9663,6 +9989,7 @@ export const Constants = {
         "verified_vendor",
         "user",
       ],
+      bias_level: ["none", "mild", "moderate", "high"],
       civic_entity_type: [
         "politician",
         "ministry",
@@ -9686,6 +10013,14 @@ export const Constants = {
         "education_ministry",
         "local_councils",
       ],
+      media_source_type: [
+        "news_website",
+        "youtube_channel",
+        "podcast",
+        "radio_stream",
+        "blog",
+        "social_feed",
+      ],
       source_type: [
         "government_official",
         "parliamentary",
@@ -9698,6 +10033,7 @@ export const Constants = {
         "academic",
         "unknown",
       ],
+      threat_level: ["low", "medium", "high", "critical"],
       verification_status_enum: [
         "pending",
         "verified",
