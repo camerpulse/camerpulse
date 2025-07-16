@@ -13,6 +13,9 @@ import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { CardPollStyle } from './PollStyles/CardPollStyle';
+import { ChartPollStyle } from './PollStyles/ChartPollStyle';
+import { BallotPollStyle } from './PollStyles/BallotPollStyle';
 import { 
   Plus, 
   X, 
@@ -22,7 +25,10 @@ import {
   Users,
   Shield,
   Eye,
-  EyeOff
+  EyeOff,
+  CreditCard,
+  BarChart3,
+  FileText
 } from 'lucide-react';
 
 interface CreatePollDialogProps {
@@ -44,7 +50,8 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
     privacyMode: 'public' as 'public' | 'private' | 'anonymous',
     showResultsAfterExpiry: true,
     autoDelete: false,
-    autoDeleteDays: 30
+    autoDeleteDays: 30,
+    pollStyle: 'card' as 'card' | 'chart' | 'ballot'
   });
 
   const handleInputChange = (field: string, value: any) => {
@@ -175,7 +182,8 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
         privacyMode: 'public',
         showResultsAfterExpiry: true,
         autoDelete: false,
-        autoDeleteDays: 30
+        autoDeleteDays: 30,
+        pollStyle: 'card'
       });
 
       onSuccess();
@@ -281,6 +289,48 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
                   Add Option ({formData.options.length}/6)
                 </Button>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Poll Style Selection */}
+          <Card>
+            <CardContent className="pt-6 space-y-4">
+              <Label>Poll Style</Label>
+              <div className="grid grid-cols-3 gap-3">
+                <Button
+                  type="button"
+                  variant={formData.pollStyle === 'card' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleInputChange('pollStyle', 'card')}
+                  className="flex-col h-auto p-4 gap-2"
+                >
+                  <CreditCard className="w-5 h-5" />
+                  <span className="text-xs font-medium">Card</span>
+                  <span className="text-xs text-muted-foreground text-center">Classic button layout</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant={formData.pollStyle === 'chart' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleInputChange('pollStyle', 'chart')}
+                  className="flex-col h-auto p-4 gap-2"
+                >
+                  <BarChart3 className="w-5 h-5" />
+                  <span className="text-xs font-medium">Chart</span>
+                  <span className="text-xs text-muted-foreground text-center">Visual chart display</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant={formData.pollStyle === 'ballot' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => handleInputChange('pollStyle', 'ballot')}
+                  className="flex-col h-auto p-4 gap-2"
+                >
+                  <FileText className="w-5 h-5" />
+                  <span className="text-xs font-medium">Ballot</span>
+                  <span className="text-xs text-muted-foreground text-center">Official ballot style</span>
+                </Button>
+              </div>
             </CardContent>
           </Card>
 
@@ -440,53 +490,102 @@ export const CreatePollDialog = ({ isOpen, onClose, onSuccess }: CreatePollDialo
             </CardContent>
           </Card>
 
-          {/* Preview */}
+          {/* Enhanced Preview */}
           <Card className="bg-muted/50">
             <CardContent className="pt-6">
-              <Label className="text-sm font-medium">Poll Preview</Label>
-              <div className="mt-2 space-y-2">
-                <h4 className="font-semibold">
-                  {formData.title || 'Your poll title will appear here'}
-                </h4>
-                {formData.description && (
-                  <p className="text-sm text-muted-foreground">
-                    {formData.description}
-                  </p>
-                )}
-                <div className="space-y-1">
-                  {formData.options.map((option, index) => (
-                    option.trim() && (
-                      <div key={index} className="p-2 bg-background rounded border text-sm">
-                        {option}
+              <Label className="text-sm font-medium mb-4 block">Live Preview - {formData.pollStyle.charAt(0).toUpperCase() + formData.pollStyle.slice(1)} Style</Label>
+              
+              {/* Preview Poll Data */}
+              {(() => {
+                const previewPoll = {
+                  title: formData.title || 'Your poll title will appear here',
+                  description: formData.description || undefined,
+                  options: formData.options.filter(opt => opt.trim()),
+                  vote_results: formData.options.map(() => Math.floor(Math.random() * 50) + 1),
+                  votes_count: formData.options.reduce((sum) => sum + Math.floor(Math.random() * 50) + 1, 0),
+                  user_vote: undefined,
+                  ends_at: formData.expiryDate?.toISOString(),
+                  privacy_mode: formData.privacyMode
+                };
+
+                const validOptions = formData.options.filter(option => option.trim());
+                
+                if (validOptions.length < 2) {
+                  return (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Vote className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                      <p>Add at least 2 options to see the preview</p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="border rounded-lg p-4 bg-background">
+                    <div className="mb-4">
+                      <h4 className="font-semibold text-base sm:text-lg mb-2">
+                        {previewPoll.title}
+                      </h4>
+                      {previewPoll.description && (
+                        <p className="text-sm text-muted-foreground mb-3">
+                          {previewPoll.description}
+                        </p>
+                      )}
+                    </div>
+
+                    {formData.pollStyle === 'card' && (
+                      <CardPollStyle 
+                        poll={previewPoll} 
+                        showResults={false}
+                        isActive={false}
+                        hasVoted={false}
+                      />
+                    )}
+                    
+                    {formData.pollStyle === 'chart' && (
+                      <ChartPollStyle 
+                        poll={previewPoll} 
+                        showResults={false}
+                        isActive={false}
+                        hasVoted={false}
+                      />
+                    )}
+                    
+                    {formData.pollStyle === 'ballot' && (
+                      <BallotPollStyle 
+                        poll={previewPoll} 
+                        showResults={false}
+                        isActive={false}
+                        hasVoted={false}
+                      />
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-3 mt-4 pt-3 border-t border-border/50 text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1">
+                        <Users className="w-3 h-3" />
+                        <span>0 votes</span>
                       </div>
-                    )
-                  ))}
-                </div>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1">
-                    <Users className="w-3 h-3" />
-                    <span>0 votes</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    {formData.privacyMode === 'public' && <Users className="w-3 h-3" />}
-                    {formData.privacyMode === 'private' && <Shield className="w-3 h-3" />}
-                    {formData.privacyMode === 'anonymous' && <EyeOff className="w-3 h-3" />}
-                    <span className="capitalize">{formData.privacyMode}</span>
-                  </div>
-                  {formData.hasExpiry && formData.expiryDate && (
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      <span>Ends {format(formData.expiryDate, "PPP")}</span>
+                      <div className="flex items-center gap-1">
+                        {formData.privacyMode === 'public' && <Users className="w-3 h-3" />}
+                        {formData.privacyMode === 'private' && <Shield className="w-3 h-3" />}
+                        {formData.privacyMode === 'anonymous' && <EyeOff className="w-3 h-3" />}
+                        <span className="capitalize">{formData.privacyMode}</span>
+                      </div>
+                      {formData.hasExpiry && formData.expiryDate && (
+                        <div className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          <span>Ends {format(formData.expiryDate, "PPP")}</span>
+                        </div>
+                      )}
+                      {formData.autoDelete && formData.hasExpiry && (
+                        <div className="flex items-center gap-1">
+                          <X className="w-3 h-3" />
+                          <span>Auto-delete in {formData.autoDeleteDays}d</span>
+                        </div>
+                      )}
                     </div>
-                  )}
-                  {formData.autoDelete && formData.hasExpiry && (
-                    <div className="flex items-center gap-1">
-                      <X className="w-3 h-3" />
-                      <span>Auto-delete in {formData.autoDeleteDays}d</span>
-                    </div>
-                  )}
-                </div>
-              </div>
+                  </div>
+                );
+              })()}
             </CardContent>
           </Card>
         </div>
