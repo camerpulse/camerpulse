@@ -12,7 +12,8 @@ import {
   Globe, Bot, Eye, MessageSquare, Building2, CreditCard,
   AlertTriangle, CheckCircle, Clock, Menu, X, Search,
   Bell, Database, FileText, UserCheck, Calendar, Zap,
-  Shield, Cpu, Layers, Target, Workflow, Brain, Monitor
+  Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
+  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin
 } from 'lucide-react';
 
 // Import all feature modules
@@ -28,6 +29,14 @@ import { SentimentSystemManager } from './modules/SentimentSystemManager';
 import { AnalyticsLogsManager } from './modules/AnalyticsLogsManager';
 import { SettingsSyncManager } from './modules/SettingsSyncManager';
 import { IntelligencePanel } from './modules/IntelligencePanel';
+import { PoliticalPartiesManager } from './modules/PoliticalPartiesManager';
+import { NewsSystemManager } from './modules/NewsSystemManager';
+import { MarketplaceManager } from './modules/MarketplaceManager';
+import { ElectionManager } from './modules/ElectionManager';
+import { LegalDocumentsManager } from './modules/LegalDocumentsManager';
+import { DonationsManager } from './modules/DonationsManager';
+import { PromisesManager } from './modules/PromisesManager';
+import { RegionalAnalyticsManager } from './modules/RegionalAnalyticsManager';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -243,6 +252,14 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'messenger', label: 'Pulse Messenger', icon: MessageSquare, color: 'text-green-600', permission: 'messenger' },
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
     { id: 'analytics-logs', label: 'Analytics & Logs', icon: Database, color: 'text-gray-600', permission: 'analytics' },
+    { id: 'political-parties', label: 'Political Parties', icon: Flag, color: 'text-blue-600', permission: 'politics' },
+    { id: 'news-system', label: 'News System', icon: Newspaper, color: 'text-blue-600', permission: 'content' },
+    { id: 'marketplace', label: 'Marketplace', icon: Store, color: 'text-green-600', permission: 'marketplace' },
+    { id: 'elections', label: 'Elections', icon: Vote, color: 'text-purple-600', permission: 'elections' },
+    { id: 'legal-documents', label: 'Legal Documents', icon: Scale, color: 'text-blue-600', permission: 'legal' },
+    { id: 'donations', label: 'Donations', icon: Heart, color: 'text-red-500', permission: 'finance' },
+    { id: 'promises', label: 'Promises Tracker', icon: Target, color: 'text-green-600', permission: 'tracking' },
+    { id: 'regional-analytics', label: 'Regional Analytics', icon: MapPin, color: 'text-blue-600', permission: 'analytics' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
     { id: 'settings-sync', label: 'Settings & Sync', icon: Settings, color: 'text-gray-500', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
@@ -273,6 +290,22 @@ export const AdminCoreV2: React.FC = () => {
         return <AnalyticsLogsManager {...moduleProps} />;
       case 'intelligence':
         return <IntelligencePanel {...moduleProps} />;
+      case 'political-parties':
+        return <PoliticalPartiesManager {...moduleProps} />;
+      case 'news-system':
+        return <NewsSystemManager {...moduleProps} />;
+      case 'marketplace':
+        return <MarketplaceManager {...moduleProps} />;
+      case 'elections':
+        return <ElectionManager {...moduleProps} />;
+      case 'legal-documents':
+        return <LegalDocumentsManager {...moduleProps} />;
+      case 'donations':
+        return <DonationsManager {...moduleProps} />;
+      case 'promises':
+        return <PromisesManager {...moduleProps} />;
+      case 'regional-analytics':
+        return <RegionalAnalyticsManager {...moduleProps} />;
       case 'settings-sync':
         return <SettingsSyncManager {...moduleProps} systemModules={systemModules} onAutoSync={() => autoSyncMutation.mutate()} />;
       default:
