@@ -7,6 +7,7 @@ import { CivicPollCreator } from "@/components/Polls/CivicPollCreator";
 import { YouthPollCreator } from "@/components/Polls/YouthPollCreator";
 import { PresidentialPollCreator } from "@/components/Polls/PresidentialPollCreator";
 import { ElectricityPollCreator } from "@/components/Polls/ElectricityPollCreator";
+import { RegionalSentimentPollCreator } from "@/components/Polls/RegionalSentimentPollCreator";
 
 const Index = () => {
   return (
@@ -17,6 +18,7 @@ const Index = () => {
       </div>
       <div className="container mx-auto px-4 py-8 space-y-12">
         <PresidentialPollCreator />
+        <RegionalSentimentPollCreator />
         <ElectricityPollCreator />
         <CivicPollCreator />
         <YouthPollCreator />

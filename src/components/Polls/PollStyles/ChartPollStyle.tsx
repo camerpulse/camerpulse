@@ -13,6 +13,13 @@ interface ChartPollStyleProps {
     user_vote?: number;
     ends_at?: string;
     privacy_mode: string;
+    custom_settings?: {
+      chartType?: string;
+      colorTheme?: string;
+      colors?: {
+        barColors?: Record<number, string>;
+      };
+    };
   };
   showResults?: boolean;
   onVote?: (optionIndex: number) => void;
@@ -115,16 +122,23 @@ export const ChartPollStyle = ({
                   <div className="h-6 bg-muted/30 rounded-full overflow-hidden border border-border/50">
                     <div 
                       className={`h-full transition-all duration-1000 ease-out relative ${
-                        isSelected 
+                        poll.custom_settings?.colorTheme === 'cameroon_gradient' && poll.custom_settings?.colors?.barColors?.[index]
+                          ? ''
+                          : isSelected 
                           ? 'bg-gradient-civic shadow-glow' 
                           : isHovered
                           ? 'bg-gradient-to-r from-cm-yellow/70 to-cm-red/70'
                           : 'bg-gradient-to-r from-cm-green/60 to-cm-green/40'
                       }`}
-                      style={{ width: `${animatedPercentage}%` }}
+                      style={{ 
+                        width: `${animatedPercentage}%`,
+                        backgroundColor: poll.custom_settings?.colorTheme === 'cameroon_gradient' && poll.custom_settings?.colors?.barColors?.[index]
+                          ? poll.custom_settings.colors.barColors[index]
+                          : undefined
+                      }}
                     >
                       {isSelected && (
-                        <div className="absolute inset-0 bg-gradient-civic opacity-30 animate-pulse" />
+                        <div className="absolute inset-0 bg-white/20 animate-pulse" />
                       )}
                     </div>
                   </div>
