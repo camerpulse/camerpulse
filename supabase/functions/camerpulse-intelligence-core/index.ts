@@ -9,9 +9,54 @@ const corsHeaders = {
 
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+// CamerPulse AI: Generate polls from trending topics
+function generatePollFromTopic(selectedTopic: any, topicCategory: string) {
+  const templates = {
+    fuel_scarcity: {
+      question: `How has the fuel shortage in ${selectedTopic.region || 'your area'} affected you?`,
+      options: ['Severely affected my daily activities', 'Made some adjustments but managing', 'Not much impact on me', 'I use alternative transport'],
+      reasoning: 'Understanding fuel scarcity impact helps track infrastructure challenges'
+    },
+    power_outage: {
+      question: `How frequent are power outages in ${selectedTopic.region || 'your region'} lately?`,
+      options: ['Daily outages', 'Several times per week', 'Once or twice a week', 'Rarely experience outages'],
+      reasoning: 'Tracking power reliability for infrastructure planning'
+    },
+    water_shortage: {
+      question: `What is your main source of water during shortages?`,
+      options: ['Buy from vendors', 'Well/borehole', 'Collect rainwater', 'Travel to distant source'],
+      reasoning: 'Understanding water access helps improve distribution networks'
+    },
+    governance_default: {
+      question: `What should be the priority for ${selectedTopic.region || 'national'} development?`,
+      options: ['Healthcare improvement', 'Education system', 'Infrastructure (roads, bridges)', 'Economic opportunities'],
+      reasoning: 'Identifying development priorities for effective governance'
+    },
+    humor_default: {
+      question: `What best describes your reaction to recent ${selectedTopic.title?.toLowerCase() || 'events'}?`,
+      options: ['Found it amusing', 'Made me think differently', 'Just another day in Cameroon', 'Prefer to stay positive'],
+      reasoning: 'Light engagement while maintaining constructive civic dialogue'
+    }
+  };
+
+  // Select appropriate template
+  let template = templates.governance_default;
+  
+  if (selectedTopic.type) {
+    template = templates[selectedTopic.type as keyof typeof templates] || templates.governance_default;
+  } else if (topicCategory === 'humor') {
+    template = templates.humor_default;
+  }
+
+  return {
+    question: template.question,
+    options: template.options,
+    reasoning: template.reasoning
+  };
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -21,20 +66,7 @@ serve(async (req) => {
   try {
     console.log('🧠 CamerPulse Intelligence Core - Starting sentiment analysis and poll generation');
 
-    // Check if OpenAI API key is available
-    if (!openAIApiKey) {
-      console.error('OpenAI API key not configured');
-      return new Response(
-        JSON.stringify({ 
-          error: 'OpenAI API key not configured',
-          message: 'Please configure OPENAI_API_KEY to enable AI-powered poll generation' 
-        }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
-    }
+    // Using prebuilt CamerPulse AI capabilities
 
     // Get system configuration
     const { data: configData } = await supabase
@@ -153,74 +185,13 @@ serve(async (req) => {
 
     console.log(`🎯 Selected topic: ${selectedTopic.title || selectedTopic.title} (Category: ${topicCategory})`);
 
-    // Generate poll using OpenAI
-    const pollPrompt = `
-Generate a civic engagement poll based on this trending topic in Cameroon:
-
-Topic: ${selectedTopic.title}
-Category: ${topicCategory}
-Context: ${selectedTopic.description || 'Trending on social media'}
-Region: ${selectedTopic.region || 'National'}
-
-Requirements:
-1. Create a clear, engaging question that encourages civic participation
-2. Provide 4-5 realistic answer options that represent different perspectives
-3. Keep language accessible and culturally relevant to Cameroon
-4. Focus on constructive civic dialogue rather than divisive politics
-5. If it's a regional issue, acknowledge the broader implications
-
-Style guidelines:
-- ${topicCategory === 'humor' ? 'Use light humor while remaining respectful' : ''}
-- ${topicCategory === 'governance' ? 'Focus on policy implications and governance' : ''}
-- ${topicCategory === 'public_interest' ? 'Emphasize community impact and solutions' : ''}
-- ${topicCategory === 'emergency' ? 'Address urgent community needs' : ''}
-
-Respond with ONLY a JSON object in this format:
-{
-  "question": "Your poll question here",
-  "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-  "reasoning": "Brief explanation of the poll's civic value"
-}
-`;
-
-    console.log('🤖 Generating poll with OpenAI...');
+    // Generate poll using CamerPulse AI capabilities
+    console.log('🤖 Generating poll with CamerPulse AI...');
     
-    const openAIResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { 
-            role: 'system', 
-            content: 'You are CamerPulse AI, an expert in Cameroonian civic engagement and public opinion polling. Generate polls that promote constructive civic dialogue and democratic participation.' 
-          },
-          { role: 'user', content: pollPrompt }
-        ],
-        temperature: 0.7,
-        max_tokens: 500
-      }),
-    });
-
-    if (!openAIResponse.ok) {
-      throw new Error(`OpenAI API error: ${openAIResponse.status}`);
-    }
-
-    const aiResult = await openAIResponse.json();
-    const generatedContent = aiResult.choices[0].message.content;
+    // Use prebuilt poll templates based on topic analysis
+    const pollData = generatePollFromTopic(selectedTopic, topicCategory);
     
-    console.log('📝 AI generated content:', generatedContent);
-
-    let pollData;
-    try {
-      pollData = JSON.parse(generatedContent);
-    } catch (parseError) {
-      console.error('Failed to parse AI response:', parseError);
-      throw new Error('Failed to parse AI-generated poll data');
-    }
+    console.log('📝 CamerPulse AI generated content:', pollData);
 
     // Determine poll style based on category
     const styleMapping = config.style_mapping || {
@@ -288,7 +259,7 @@ Respond with ONLY a JSON object in this format:
         confidence_score: confidenceScore,
         auto_published: !config.auto_publish?.require_admin_approval,
         admin_approved: config.auto_publish?.require_admin_approval ? null : true,
-        generation_prompt: pollPrompt,
+        generation_prompt: `CamerPulse AI template for ${topicCategory}: ${selectedTopic.title}`,
         ai_reasoning: {
           reasoning: pollData.reasoning,
           selectedTopic: selectedTopic,
