@@ -6268,6 +6268,259 @@ export type Database = {
         }
         Relationships: []
       }
+      debt_documents: {
+        Row: {
+          created_at: string
+          debt_record_id: string | null
+          description: string | null
+          document_type: string
+          file_format: string | null
+          file_size: number | null
+          file_url: string | null
+          id: string
+          published_date: string | null
+          source_id: string | null
+          title: string
+          updated_at: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          debt_record_id?: string | null
+          description?: string | null
+          document_type: string
+          file_format?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          published_date?: string | null
+          source_id?: string | null
+          title: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          debt_record_id?: string | null
+          description?: string | null
+          document_type?: string
+          file_format?: string | null
+          file_size?: number | null
+          file_url?: string | null
+          id?: string
+          published_date?: string | null
+          source_id?: string | null
+          title?: string
+          updated_at?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debt_documents_debt_record_id_fkey"
+            columns: ["debt_record_id"]
+            isOneToOne: false
+            referencedRelation: "debt_records"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "debt_documents_source_id_fkey"
+            columns: ["source_id"]
+            isOneToOne: false
+            referencedRelation: "debt_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debt_lenders: {
+        Row: {
+          amount_fcfa: number
+          amount_usd: number
+          created_at: string
+          debt_record_id: string | null
+          id: string
+          lender_name: string
+          lender_type: string
+          percentage_of_total: number | null
+          updated_at: string
+        }
+        Insert: {
+          amount_fcfa: number
+          amount_usd: number
+          created_at?: string
+          debt_record_id?: string | null
+          id?: string
+          lender_name: string
+          lender_type: string
+          percentage_of_total?: number | null
+          updated_at?: string
+        }
+        Update: {
+          amount_fcfa?: number
+          amount_usd?: number
+          created_at?: string
+          debt_record_id?: string | null
+          id?: string
+          lender_name?: string
+          lender_type?: string
+          percentage_of_total?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debt_lenders_debt_record_id_fkey"
+            columns: ["debt_record_id"]
+            isOneToOne: false
+            referencedRelation: "debt_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debt_news: {
+        Row: {
+          author: string | null
+          content: string
+          created_at: string
+          created_by: string | null
+          debt_record_id: string | null
+          id: string
+          image_url: string | null
+          is_featured: boolean | null
+          published_at: string | null
+          source_url: string | null
+          summary: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          content: string
+          created_at?: string
+          created_by?: string | null
+          debt_record_id?: string | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          published_at?: string | null
+          source_url?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          debt_record_id?: string | null
+          id?: string
+          image_url?: string | null
+          is_featured?: boolean | null
+          published_at?: string | null
+          source_url?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "debt_news_debt_record_id_fkey"
+            columns: ["debt_record_id"]
+            isOneToOne: false
+            referencedRelation: "debt_records"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      debt_records: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          debt_to_gdp_ratio: number | null
+          external_debt_fcfa: number
+          gdp_fcfa: number | null
+          id: string
+          internal_debt_fcfa: number
+          notes: string | null
+          population: number | null
+          total_debt_fcfa: number
+          total_debt_usd: number
+          updated_at: string
+          verified: boolean | null
+          year: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          debt_to_gdp_ratio?: number | null
+          external_debt_fcfa?: number
+          gdp_fcfa?: number | null
+          id?: string
+          internal_debt_fcfa?: number
+          notes?: string | null
+          population?: number | null
+          total_debt_fcfa: number
+          total_debt_usd: number
+          updated_at?: string
+          verified?: boolean | null
+          year: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          debt_to_gdp_ratio?: number | null
+          external_debt_fcfa?: number
+          gdp_fcfa?: number | null
+          id?: string
+          internal_debt_fcfa?: number
+          notes?: string | null
+          population?: number | null
+          total_debt_fcfa?: number
+          total_debt_usd?: number
+          updated_at?: string
+          verified?: boolean | null
+          year?: number
+        }
+        Relationships: []
+      }
+      debt_sources: {
+        Row: {
+          acronym: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          logo_url: string | null
+          name: string
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          acronym?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          acronym?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          logo_url?: string | null
+          name?: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount: number
