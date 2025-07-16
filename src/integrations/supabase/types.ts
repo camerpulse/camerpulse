@@ -6048,6 +6048,150 @@ export type Database = {
         }
         Relationships: []
       }
+      engagement_activities: {
+        Row: {
+          activity_date: string
+          activity_type: Database["public"]["Enums"]["engagement_activity_type"]
+          category: Database["public"]["Enums"]["engagement_category"]
+          created_at: string
+          created_by: string | null
+          description: string | null
+          evidence_attachments: string[] | null
+          id: string
+          impact_score: number
+          location: string | null
+          metadata: Json | null
+          politician_id: string
+          source_type: string
+          source_url: string | null
+          title: string
+          updated_at: string
+          verified: boolean
+        }
+        Insert: {
+          activity_date?: string
+          activity_type: Database["public"]["Enums"]["engagement_activity_type"]
+          category: Database["public"]["Enums"]["engagement_category"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          evidence_attachments?: string[] | null
+          id?: string
+          impact_score?: number
+          location?: string | null
+          metadata?: Json | null
+          politician_id: string
+          source_type?: string
+          source_url?: string | null
+          title: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Update: {
+          activity_date?: string
+          activity_type?: Database["public"]["Enums"]["engagement_activity_type"]
+          category?: Database["public"]["Enums"]["engagement_category"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          evidence_attachments?: string[] | null
+          id?: string
+          impact_score?: number
+          location?: string | null
+          metadata?: Json | null
+          politician_id?: string
+          source_type?: string
+          source_url?: string | null
+          title?: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
+      engagement_monitoring_sources: {
+        Row: {
+          check_frequency_hours: number
+          created_at: string
+          id: string
+          is_active: boolean
+          last_checked_at: string | null
+          metadata: Json | null
+          platform: string
+          politician_id: string
+          source_type: string
+          source_url: string
+          updated_at: string
+        }
+        Insert: {
+          check_frequency_hours?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_checked_at?: string | null
+          metadata?: Json | null
+          platform: string
+          politician_id: string
+          source_type: string
+          source_url: string
+          updated_at?: string
+        }
+        Update: {
+          check_frequency_hours?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          last_checked_at?: string | null
+          metadata?: Json | null
+          platform?: string
+          politician_id?: string
+          source_type?: string
+          source_url?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      engagement_score_history: {
+        Row: {
+          activities_count: number
+          communication_score: number
+          constituency_outreach_score: number
+          created_at: string
+          id: string
+          overall_score: number
+          participation_score: number
+          policy_advocacy_score: number
+          politician_id: string
+          public_visibility_score: number
+          score_date: string
+        }
+        Insert: {
+          activities_count?: number
+          communication_score: number
+          constituency_outreach_score: number
+          created_at?: string
+          id?: string
+          overall_score: number
+          participation_score: number
+          policy_advocacy_score: number
+          politician_id: string
+          public_visibility_score: number
+          score_date?: string
+        }
+        Update: {
+          activities_count?: number
+          communication_score?: number
+          constituency_outreach_score?: number
+          created_at?: string
+          id?: string
+          overall_score?: number
+          participation_score?: number
+          policy_advocacy_score?: number
+          politician_id?: string
+          public_visibility_score?: number
+          score_date?: string
+        }
+        Relationships: []
+      }
       failed_login_attempts: {
         Row: {
           attempt_time: string | null
@@ -9289,6 +9433,57 @@ export type Database = {
           },
         ]
       }
+      politician_engagement_scores: {
+        Row: {
+          communication_score: number
+          constituency_outreach_score: number
+          created_at: string
+          engagement_level: string
+          id: string
+          last_activity_date: string | null
+          last_activity_description: string | null
+          overall_score: number
+          participation_score: number
+          policy_advocacy_score: number
+          politician_id: string
+          public_visibility_score: number
+          total_activities: number
+          updated_at: string
+        }
+        Insert: {
+          communication_score?: number
+          constituency_outreach_score?: number
+          created_at?: string
+          engagement_level?: string
+          id?: string
+          last_activity_date?: string | null
+          last_activity_description?: string | null
+          overall_score?: number
+          participation_score?: number
+          policy_advocacy_score?: number
+          politician_id: string
+          public_visibility_score?: number
+          total_activities?: number
+          updated_at?: string
+        }
+        Update: {
+          communication_score?: number
+          constituency_outreach_score?: number
+          created_at?: string
+          engagement_level?: string
+          id?: string
+          last_activity_date?: string | null
+          last_activity_description?: string | null
+          overall_score?: number
+          participation_score?: number
+          policy_advocacy_score?: number
+          politician_id?: string
+          public_visibility_score?: number
+          total_activities?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       politician_follows: {
         Row: {
           created_at: string | null
@@ -10930,6 +11125,10 @@ export type Database = {
         Args: { p_plugin_id: string }
         Returns: number
       }
+      calculate_politician_engagement_score: {
+        Args: { p_politician_id: string }
+        Returns: Json
+      }
       calculate_prompt_similarity: {
         Args: { p_source_content: string; p_target_content: string }
         Returns: number
@@ -11010,6 +11209,10 @@ export type Database = {
         Returns: Json
       }
       get_corruption_statistics: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_engagement_statistics: {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
@@ -11218,6 +11421,23 @@ export type Database = {
         | "policy_document"
         | "government_statement"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
+      engagement_activity_type:
+        | "public_appearance"
+        | "social_media_post"
+        | "parliament_attendance"
+        | "community_visit"
+        | "media_interview"
+        | "town_hall"
+        | "project_launch"
+        | "policy_statement"
+        | "citizen_interaction"
+        | "volunteer_work"
+      engagement_category:
+        | "communication"
+        | "participation"
+        | "constituency_outreach"
+        | "public_visibility"
+        | "policy_advocacy"
       institution_type:
         | "presidency"
         | "parliament"
@@ -11400,6 +11620,25 @@ export const Constants = {
         "government_statement",
       ],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
+      engagement_activity_type: [
+        "public_appearance",
+        "social_media_post",
+        "parliament_attendance",
+        "community_visit",
+        "media_interview",
+        "town_hall",
+        "project_launch",
+        "policy_statement",
+        "citizen_interaction",
+        "volunteer_work",
+      ],
+      engagement_category: [
+        "communication",
+        "participation",
+        "constituency_outreach",
+        "public_visibility",
+        "policy_advocacy",
+      ],
       institution_type: [
         "presidency",
         "parliament",
