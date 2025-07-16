@@ -37,6 +37,7 @@ import { LegalDocumentsManager } from './modules/LegalDocumentsManager';
 import { DonationsManager } from './modules/DonationsManager';
 import { PromisesManager } from './modules/PromisesManager';
 import { RegionalAnalyticsManager } from './modules/RegionalAnalyticsManager';
+import RoleAccessTestSuite from './tests/RoleAccessTestSuite';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -260,6 +261,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'donations', label: 'Donations', icon: Heart, color: 'text-red-500', permission: 'finance' },
     { id: 'promises', label: 'Promises Tracker', icon: Target, color: 'text-green-600', permission: 'tracking' },
     { id: 'regional-analytics', label: 'Regional Analytics', icon: MapPin, color: 'text-blue-600', permission: 'analytics' },
+    { id: 'role-access-test', label: 'Role Access Test', icon: Shield, color: 'text-orange-600', permission: 'all' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
     { id: 'settings-sync', label: 'Settings & Sync', icon: Settings, color: 'text-gray-500', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
@@ -306,6 +308,8 @@ export const AdminCoreV2: React.FC = () => {
         return <PromisesManager {...moduleProps} />;
       case 'regional-analytics':
         return <RegionalAnalyticsManager {...moduleProps} />;
+      case 'role-access-test':
+        return <RoleAccessTestSuite hasPermission={hasPermission} adminRole={adminRole} currentUser={user} />;
       case 'settings-sync':
         return <SettingsSyncManager {...moduleProps} systemModules={systemModules} onAutoSync={() => autoSyncMutation.mutate()} />;
       default:
