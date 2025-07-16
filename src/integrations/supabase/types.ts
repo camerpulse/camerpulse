@@ -8072,6 +8072,202 @@ export type Database = {
           },
         ]
       }
+      strategy_implementations: {
+        Row: {
+          created_at: string
+          deployed_at: string | null
+          id: string
+          implementation_status: string
+          implemented_features: string[] | null
+          lessons_learned: string | null
+          progress_percentage: number | null
+          public_feedback: Json | null
+          solution_id: string
+          success_metrics: Json | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          deployed_at?: string | null
+          id?: string
+          implementation_status?: string
+          implemented_features?: string[] | null
+          lessons_learned?: string | null
+          progress_percentage?: number | null
+          public_feedback?: Json | null
+          solution_id: string
+          success_metrics?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          deployed_at?: string | null
+          id?: string
+          implementation_status?: string
+          implemented_features?: string[] | null
+          lessons_learned?: string | null
+          progress_percentage?: number | null
+          public_feedback?: Json | null
+          solution_id?: string
+          success_metrics?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "strategy_implementations_solution_id_fkey"
+            columns: ["solution_id"]
+            isOneToOne: false
+            referencedRelation: "strategy_solutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      strategy_patterns: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean | null
+          pattern_category: string
+          pattern_name: string
+          problem_types: string[] | null
+          solution_template: Json
+          success_rate: number | null
+          updated_at: string
+          usage_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          pattern_category: string
+          pattern_name: string
+          problem_types?: string[] | null
+          solution_template?: Json
+          success_rate?: number | null
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          pattern_category?: string
+          pattern_name?: string
+          problem_types?: string[] | null
+          solution_template?: Json
+          success_rate?: number | null
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
+      strategy_problems: {
+        Row: {
+          created_at: string
+          id: string
+          priority_level: number | null
+          problem_category: string
+          problem_description: string
+          problem_title: string
+          status: string
+          submitted_by: string
+          target_audience: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          priority_level?: number | null
+          problem_category?: string
+          problem_description: string
+          problem_title: string
+          status?: string
+          submitted_by: string
+          target_audience?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          priority_level?: number | null
+          problem_category?: string
+          problem_description?: string
+          problem_title?: string
+          status?: string
+          submitted_by?: string
+          target_audience?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      strategy_solutions: {
+        Row: {
+          build_ready_prompt: string | null
+          complexity_score: number | null
+          confidence_score: number | null
+          created_at: string
+          dashboard_specs: Json | null
+          data_requirements: Json | null
+          engagement_strategy: Json | null
+          export_formats: Json | null
+          id: string
+          integration_suggestions: Json | null
+          problem_id: string
+          recommended_features: Json | null
+          solution_overview: string
+          solution_title: string
+          timeline_estimate: string | null
+          updated_at: string
+          user_flows: Json | null
+        }
+        Insert: {
+          build_ready_prompt?: string | null
+          complexity_score?: number | null
+          confidence_score?: number | null
+          created_at?: string
+          dashboard_specs?: Json | null
+          data_requirements?: Json | null
+          engagement_strategy?: Json | null
+          export_formats?: Json | null
+          id?: string
+          integration_suggestions?: Json | null
+          problem_id: string
+          recommended_features?: Json | null
+          solution_overview: string
+          solution_title: string
+          timeline_estimate?: string | null
+          updated_at?: string
+          user_flows?: Json | null
+        }
+        Update: {
+          build_ready_prompt?: string | null
+          complexity_score?: number | null
+          confidence_score?: number | null
+          created_at?: string
+          dashboard_specs?: Json | null
+          data_requirements?: Json | null
+          engagement_strategy?: Json | null
+          export_formats?: Json | null
+          id?: string
+          integration_suggestions?: Json | null
+          problem_id?: string
+          recommended_features?: Json | null
+          solution_overview?: string
+          solution_title?: string
+          timeline_estimate?: string | null
+          updated_at?: string
+          user_flows?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "strategy_solutions_problem_id_fkey"
+            columns: ["problem_id"]
+            isOneToOne: false
+            referencedRelation: "strategy_problems"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscribers: {
         Row: {
           created_at: string
@@ -8568,6 +8764,14 @@ export type Database = {
       }
       analyze_prompt_before_execution: {
         Args: { p_prompt_content: string; p_prompt_title?: string }
+        Returns: Json
+      }
+      analyze_strategy_problem: {
+        Args: {
+          p_problem_id: string
+          p_problem_description: string
+          p_category?: string
+        }
         Returns: Json
       }
       calculate_agent_performance: {

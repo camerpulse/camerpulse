@@ -30,6 +30,7 @@ import ZeroInputMode from './ZeroInputMode';
 import AshenDevTerminal from './AshenDevTerminal';
 import CivicIntelligenceMissions from './CivicIntelligenceMissions';
 import AshenJrTrainingCore from './AshenJrTrainingCore';
+import CivicArchitectEngine from './CivicArchitectEngine';
 
 interface ErrorLog {
   id: string;
@@ -439,13 +440,13 @@ export default function AshenDebugCore() {
           <TabsTrigger value="dev-terminal" className="text-xs">Dev Terminal</TabsTrigger>
           <TabsTrigger value="civic-missions" className="text-xs">Civic Missions</TabsTrigger>
           <TabsTrigger value="jr-training" className="text-xs">Jr. Training</TabsTrigger>
+          <TabsTrigger value="civic-architect" className="text-xs">Strategy Engine</TabsTrigger>
           <TabsTrigger value="zero-input-mode" className="text-xs">Zero Input Mode</TabsTrigger>
           <TabsTrigger value="security" className="text-xs">Security</TabsTrigger>
           <TabsTrigger value="patch-intelligence" className="text-xs">Patch Intelligence</TabsTrigger>
           <TabsTrigger value="healing-history" className="text-xs">Healing History</TabsTrigger>
           <TabsTrigger value="learning-engine" className="text-xs">Learning Engine</TabsTrigger>
           <TabsTrigger value="batch-fix" className="text-xs">Batch Fix</TabsTrigger>
-          <TabsTrigger value="patch-deploy" className="text-xs">Patch Deploy</TabsTrigger>
           <TabsTrigger value="emergency-revert" className="text-xs">Emergency Revert</TabsTrigger>
         </TabsList>
 
@@ -463,6 +464,10 @@ export default function AshenDebugCore() {
         
         <TabsContent value="jr-training" className="space-y-4">
           <AshenJrTrainingCore />
+        </TabsContent>
+        
+        <TabsContent value="civic-architect" className="space-y-4">
+          <CivicArchitectEngine />
         </TabsContent>
         
         <TabsContent value="zero-input-mode" className="space-y-4">
