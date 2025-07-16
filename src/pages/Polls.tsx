@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CreatePollDialog } from '@/components/Polls/CreatePollDialog';
 import { RegionalHeatmap } from '@/components/Polls/RegionalHeatmap';
+import { CommentThread } from '@/components/Polls/CommentThread';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -455,6 +456,11 @@ const Polls = () => {
                         />
                       </div>
                     )}
+                    
+                    {/* Comment Thread */}
+                    <div className="mt-6 pt-6 border-t">
+                      <CommentThread pollId={poll.id} />
+                    </div>
                   </CardContent>
                 </Card>
               );

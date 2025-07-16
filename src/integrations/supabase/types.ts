@@ -11503,6 +11503,88 @@ export type Database = {
           },
         ]
       }
+      poll_comment_likes: {
+        Row: {
+          comment_id: string
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          comment_id: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          comment_id?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_comment_likes_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "poll_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          id: string
+          is_edited: boolean | null
+          is_moderated: boolean | null
+          likes_count: number | null
+          moderated_at: string | null
+          moderated_by: string | null
+          moderation_reason: string | null
+          poll_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          id?: string
+          is_edited?: boolean | null
+          is_moderated?: boolean | null
+          likes_count?: number | null
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderation_reason?: string | null
+          poll_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          id?: string
+          is_edited?: boolean | null
+          is_moderated?: boolean | null
+          likes_count?: number | null
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderation_reason?: string | null
+          poll_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_comments_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       poll_impact_tracking: {
         Row: {
           confidence_score: number | null
