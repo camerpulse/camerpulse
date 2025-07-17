@@ -158,6 +158,15 @@ export const ThemeAwareHeader = () => {
               </Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/camerplay">🎵 Music</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/events">🎪 Events</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/tickets">🎫 Tickets</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/admin/core">
                 {currentTheme.id === 'lux-aeterna' ? '👑 Admin Core' : '⚙️ Admin Core'}
               </Link>
@@ -286,6 +295,15 @@ export const ThemeAwareHeader = () => {
                 <Link to="/regional-analytics" onClick={() => setMobileMenuOpen(false)}>
                   {currentTheme.id === 'lux-aeterna' ? 'Unity Analytics' : 'Regional Analytics'}
                 </Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/camerplay" onClick={() => setMobileMenuOpen(false)}>Music</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/events" onClick={() => setMobileMenuOpen(false)}>Events</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/tickets" onClick={() => setMobileMenuOpen(false)}>Tickets</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start col-span-2">
                 <Link to="/camerpulse-intelligence" onClick={() => setMobileMenuOpen(false)}>

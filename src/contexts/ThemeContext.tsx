@@ -82,6 +82,140 @@ const emergence2035Theme: ThemeConfig = {
   }
 }
 
+// ===========================================
+// 🎵 CAMERPLAY MUSIC STREAMING THEMES 🎵
+// ===========================================
+
+const spotifyClassicTheme: ThemeConfig = {
+  id: 'spotify-classic',
+  name: 'Spotify Classic',
+  description: 'Inspired by Spotify - Dark mode with vibrant green accents and modern music UI',
+  isActive: false,
+  colors: {
+    primary: '120 93% 36%', // Spotify Green
+    secondary: '0 0% 7%', // Deep Black
+    accent: '120 93% 46%', // Bright Green
+    background: '0 0% 6%', // Pure Black
+    card: '0 0% 8%', // Dark Card
+    text: '0 0% 100%' // White Text
+  },
+  fonts: {
+    heading: 'Inter',
+    body: 'Inter'
+  },
+  components: {
+    showCivicBanner: false,
+    showMonumentBackground: false,
+    showHeartbeatLogo: false,
+    showPartyGrid: false,
+    partyGridColumns: { desktop: 4, mobile: 2 }
+  }
+}
+
+const appleMusicTheme: ThemeConfig = {
+  id: 'apple-music',
+  name: 'Apple Music',
+  description: 'Clean Apple Music aesthetic with white backgrounds and colorful gradients',
+  isActive: false,
+  colors: {
+    primary: '0 82% 60%', // Apple Red
+    secondary: '0 0% 96%', // Light Gray
+    accent: '225 100% 60%', // Apple Blue
+    background: '0 0% 100%', // Pure White
+    card: '0 0% 98%', // Off White
+    text: '0 0% 8%' // Dark Text
+  },
+  fonts: {
+    heading: 'SF Pro Display',
+    body: 'SF Pro Text'
+  },
+  components: {
+    showCivicBanner: false,
+    showMonumentBackground: false,
+    showHeartbeatLogo: false,
+    showPartyGrid: false,
+    partyGridColumns: { desktop: 3, mobile: 1 }
+  }
+}
+
+const youtubeRedTheme: ThemeConfig = {
+  id: 'youtube-red',
+  name: 'YouTube Music',
+  description: 'Bold YouTube Music theme with signature red and dark mode design',
+  isActive: false,
+  colors: {
+    primary: '0 100% 50%', // YouTube Red
+    secondary: '0 0% 12%', // Dark Gray
+    accent: '0 100% 60%', // Bright Red
+    background: '0 0% 7%', // Almost Black
+    card: '0 0% 10%', // Dark Card
+    text: '0 0% 100%' // White Text
+  },
+  fonts: {
+    heading: 'Roboto',
+    body: 'Roboto'
+  },
+  components: {
+    showCivicBanner: false,
+    showMonumentBackground: false,
+    showHeartbeatLogo: false,
+    showPartyGrid: false,
+    partyGridColumns: { desktop: 4, mobile: 2 }
+  }
+}
+
+const soundcloudOrangeTheme: ThemeConfig = {
+  id: 'soundcloud-orange',
+  name: 'SoundCloud Pulse',
+  description: 'SoundCloud inspired theme with signature orange and clean white design',
+  isActive: false,
+  colors: {
+    primary: '16 100% 50%', // SoundCloud Orange
+    secondary: '0 0% 95%', // Light Background
+    accent: '16 100% 60%', // Bright Orange
+    background: '0 0% 99%', // Off White
+    card: '0 0% 100%', // Pure White
+    text: '0 0% 13%' // Dark Text
+  },
+  fonts: {
+    heading: 'Interstate',
+    body: 'Interstate'
+  },
+  components: {
+    showCivicBanner: false,
+    showMonumentBackground: false,
+    showHeartbeatLogo: false,
+    showPartyGrid: false,
+    partyGridColumns: { desktop: 5, mobile: 2 }
+  }
+}
+
+const camerAfrobeatsTheme: ThemeConfig = {
+  id: 'camer-afrobeats',
+  name: 'CamerAfrobeats',
+  description: 'Vibrant African-inspired theme with Cameroon flag colors and Afrobeats energy',
+  isActive: false,
+  colors: {
+    primary: '12 85% 45%', // Cameroon Red
+    secondary: '145 75% 35%', // Cameroon Green
+    accent: '48 95% 55%', // Cameroon Yellow
+    background: '0 0% 4%', // Deep Black
+    card: '0 0% 8%', // Dark Card
+    text: '48 95% 90%' // Golden White
+  },
+  fonts: {
+    heading: 'Montserrat',
+    body: 'Open Sans'
+  },
+  components: {
+    showCivicBanner: false,
+    showMonumentBackground: false,
+    showHeartbeatLogo: false,
+    showPartyGrid: false,
+    partyGridColumns: { desktop: 4, mobile: 2 }
+  }
+}
+
 const luxAeternaTheme: ThemeConfig = {
   id: 'lux-aeterna',
   name: 'Lux Aeterna',
@@ -132,7 +266,16 @@ interface ThemeProviderProps {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme)
-  const [availableThemes] = useState<ThemeConfig[]>([defaultTheme, emergence2035Theme, luxAeternaTheme])
+  const [availableThemes] = useState<ThemeConfig[]>([
+    defaultTheme, 
+    emergence2035Theme, 
+    luxAeternaTheme,
+    spotifyClassicTheme,
+    appleMusicTheme,
+    youtubeRedTheme,
+    soundcloudOrangeTheme,
+    camerAfrobeatsTheme
+  ])
   const [isLoading, setIsLoading] = useState(true)
   const [canManageThemes, setCanManageThemes] = useState(false)
 
@@ -259,6 +402,46 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       root.style.setProperty('--primary-glow', '45 95% 70%') // Golden glow
       root.style.setProperty('--shadow-elegant', '0 10px 30px -10px hsl(220 90% 15% / 0.3)')
       root.style.setProperty('--gradient-patriotic', 'linear-gradient(135deg, hsl(220 90% 15%), hsl(45 95% 60%), hsl(355 85% 45%))')
+    } else if (theme.id === 'spotify-classic') {
+      // Spotify Classic Theme
+      root.style.setProperty('--primary', '120 93% 36%') // Spotify Green
+      root.style.setProperty('--secondary', '0 0% 7%') // Deep Black
+      root.style.setProperty('--accent', '120 93% 46%') // Bright Green
+      root.style.setProperty('--background', '0 0% 6%') // Pure Black
+      root.style.setProperty('--card', '0 0% 8%') // Dark Card
+      root.style.setProperty('--foreground', '0 0% 100%') // White Text
+    } else if (theme.id === 'apple-music') {
+      // Apple Music Theme
+      root.style.setProperty('--primary', '0 82% 60%') // Apple Red
+      root.style.setProperty('--secondary', '0 0% 96%') // Light Gray
+      root.style.setProperty('--accent', '225 100% 60%') // Apple Blue
+      root.style.setProperty('--background', '0 0% 100%') // Pure White
+      root.style.setProperty('--card', '0 0% 98%') // Off White
+      root.style.setProperty('--foreground', '0 0% 8%') // Dark Text
+    } else if (theme.id === 'youtube-red') {
+      // YouTube Music Theme
+      root.style.setProperty('--primary', '0 100% 50%') // YouTube Red
+      root.style.setProperty('--secondary', '0 0% 12%') // Dark Gray
+      root.style.setProperty('--accent', '0 100% 60%') // Bright Red
+      root.style.setProperty('--background', '0 0% 7%') // Almost Black
+      root.style.setProperty('--card', '0 0% 10%') // Dark Card
+      root.style.setProperty('--foreground', '0 0% 100%') // White Text
+    } else if (theme.id === 'soundcloud-orange') {
+      // SoundCloud Theme
+      root.style.setProperty('--primary', '16 100% 50%') // SoundCloud Orange
+      root.style.setProperty('--secondary', '0 0% 95%') // Light Background
+      root.style.setProperty('--accent', '16 100% 60%') // Bright Orange
+      root.style.setProperty('--background', '0 0% 99%') // Off White
+      root.style.setProperty('--card', '0 0% 100%') // Pure White
+      root.style.setProperty('--foreground', '0 0% 13%') // Dark Text
+    } else if (theme.id === 'camer-afrobeats') {
+      // CamerAfrobeats Theme
+      root.style.setProperty('--primary', '12 85% 45%') // Cameroon Red
+      root.style.setProperty('--secondary', '145 75% 35%') // Cameroon Green
+      root.style.setProperty('--accent', '48 95% 55%') // Cameroon Yellow
+      root.style.setProperty('--background', '0 0% 4%') // Deep Black
+      root.style.setProperty('--card', '0 0% 8%') // Dark Card
+      root.style.setProperty('--foreground', '48 95% 90%') // Golden White
     } else {
       // Default theme colors
       root.style.setProperty('--primary', '142 69% 40%')
