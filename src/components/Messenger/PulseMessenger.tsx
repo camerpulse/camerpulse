@@ -30,6 +30,10 @@ import { useMessenger, type Conversation, type Message } from '@/hooks/useMessen
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { MediaUpload, MediaPreview } from './MediaUpload';
+import { MediaMessage } from './MediaMessage';
+import { useMediaUpload } from '@/hooks/useMediaUpload';
+import { supabase } from '@/integrations/supabase/client';
 
 interface PulseMessengerProps {
   className?: string;
@@ -49,10 +53,14 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
     markConversationAsRead,
     toggleBlockUser
   } = useMessenger();
+  
+  const { uploadFile, uploading } = useMediaUpload();
 
   const [searchQuery, setSearchQuery] = useState('');
   const [newMessage, setNewMessage] = useState('');
   const [showNewChatDialog, setShowNewChatDialog] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // Filter conversations based on search
   const filteredConversations = conversations.filter(conv =>
@@ -68,10 +76,68 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
 
   // Handle sending message
   const handleSendMessage = async () => {
-    if (!activeConversation || !newMessage.trim()) return;
+    if (!activeConversation || (!newMessage.trim() && !pendingFile)) return;
     
-    await sendMessage(activeConversation.id, newMessage);
-    setNewMessage('');
+    if (pendingFile) {
+      await handleSendMediaMessage();
+    } else {
+      await sendMessage(activeConversation.id, newMessage);
+      setNewMessage('');
+    }
+  };
+
+  // Handle sending media message
+  const handleSendMediaMessage = async () => {
+    if (!activeConversation || !pendingFile) return;
+
+    try {
+      setUploadProgress(20);
+      
+      // Send message first to get message ID
+      const messageText = newMessage.trim() || `📎 ${pendingFile.name}`;
+      await sendMessage(activeConversation.id, messageText, 'media');
+      
+      setUploadProgress(40);
+      
+      // Get the latest message ID (the one we just sent)
+      const { data: latestMessage } = await supabase
+        .from('messages')
+        .select('id')
+        .eq('conversation_id', activeConversation.id)
+        .eq('sender_id', user?.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
+
+      if (latestMessage) {
+        setUploadProgress(60);
+        
+        // Upload the file
+        await uploadFile(pendingFile, activeConversation.id, latestMessage.id);
+        
+        setUploadProgress(100);
+      }
+      
+      // Reset form
+      setNewMessage('');
+      setPendingFile(null);
+      setUploadProgress(0);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send media message",
+        variant: "destructive"
+      });
+      setUploadProgress(0);
+    }
+  };
+
+  // Handle file selection
+  const handleFileSelect = (file: File, type: string) => {
+    setPendingFile(file);
+    if (!newMessage.trim()) {
+      setNewMessage(`Sending ${type}...`);
+    }
   };
 
   // Handle key press in message input
@@ -287,6 +353,14 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
                           </p>
                         )}
                         <p className="text-sm">{message.content}</p>
+                        
+                        {/* Media attachments */}
+                        <MediaMessage 
+                          messageId={message.id}
+                          isOwn={message.sender_id === user?.id}
+                          className="mt-2"
+                        />
+                        
                         <div className="flex items-center justify-between mt-1">
                           <span className="text-xs opacity-70">
                             {formatMessageTime(message.created_at)}
@@ -306,18 +380,40 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
 
             {/* Message Input */}
             <div className="p-4 border-t">
+              {/* File preview */}
+              {pendingFile && (
+                <div className="mb-3">
+                  <MediaPreview
+                    file={pendingFile}
+                    onRemove={() => {
+                      setPendingFile(null);
+                      setNewMessage('');
+                    }}
+                    uploading={uploading}
+                    uploadProgress={uploadProgress}
+                  />
+                </div>
+              )}
+              
               <div className="flex space-x-2">
+                <MediaUpload
+                  onFileSelect={handleFileSelect}
+                  disabled={uploading}
+                />
+                
                 <Textarea
                   placeholder="Type your message..."
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   onKeyPress={handleKeyPress}
+                  disabled={uploading}
                   className="min-h-[40px] max-h-32 resize-none flex-1"
                   rows={1}
                 />
+                
                 <Button
                   onClick={handleSendMessage}
-                  disabled={!newMessage.trim()}
+                  disabled={(!newMessage.trim() && !pendingFile) || uploading}
                   className="self-end"
                 >
                   <Send className="h-4 w-4" />

@@ -9491,6 +9491,104 @@ export type Database = {
           },
         ]
       }
+      messenger_media_files: {
+        Row: {
+          compression_ratio: number | null
+          created_at: string | null
+          download_count: number | null
+          expires_at: string | null
+          file_path: string
+          file_size_bytes: number
+          file_type: string
+          id: string
+          is_compressed: boolean | null
+          message_id: string | null
+          mime_type: string
+          original_filename: string
+          updated_at: string | null
+          uploaded_by: string
+        }
+        Insert: {
+          compression_ratio?: number | null
+          created_at?: string | null
+          download_count?: number | null
+          expires_at?: string | null
+          file_path: string
+          file_size_bytes: number
+          file_type: string
+          id?: string
+          is_compressed?: boolean | null
+          message_id?: string | null
+          mime_type: string
+          original_filename: string
+          updated_at?: string | null
+          uploaded_by: string
+        }
+        Update: {
+          compression_ratio?: number | null
+          created_at?: string | null
+          download_count?: number | null
+          expires_at?: string | null
+          file_path?: string
+          file_size_bytes?: number
+          file_type?: string
+          id?: string
+          is_compressed?: boolean | null
+          message_id?: string | null
+          mime_type?: string
+          original_filename?: string
+          updated_at?: string | null
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "messenger_media_files_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      messenger_media_settings: {
+        Row: {
+          auto_delete_days: number | null
+          created_at: string | null
+          enable_all_attachments: boolean | null
+          enable_compression: boolean | null
+          enable_images_only: boolean | null
+          enable_videos: boolean | null
+          enable_voice_only: boolean | null
+          id: string
+          max_file_size_mb: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_delete_days?: number | null
+          created_at?: string | null
+          enable_all_attachments?: boolean | null
+          enable_compression?: boolean | null
+          enable_images_only?: boolean | null
+          enable_videos?: boolean | null
+          enable_voice_only?: boolean | null
+          id?: string
+          max_file_size_mb?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_delete_days?: number | null
+          created_at?: string | null
+          enable_all_attachments?: boolean | null
+          enable_compression?: boolean | null
+          enable_images_only?: boolean | null
+          enable_videos?: boolean | null
+          enable_voice_only?: boolean | null
+          id?: string
+          max_file_size_mb?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       news_articles: {
         Row: {
           content: string | null
@@ -14348,6 +14446,10 @@ export type Database = {
         Returns: {
           alerts_created: number
         }[]
+      }
+      cleanup_expired_media: {
+        Args: Record<PropertyKey, never>
+        Returns: number
       }
       cleanup_expired_polls: {
         Args: Record<PropertyKey, never>
