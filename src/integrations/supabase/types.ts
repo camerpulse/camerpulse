@@ -500,6 +500,172 @@ export type Database = {
           },
         ]
       }
+      artist_notification_preferences: {
+        Row: {
+          artist_id: string
+          created_at: string
+          email_enabled: boolean
+          enabled: boolean
+          frequency: string
+          id: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          push_enabled: boolean
+          sms_enabled: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          artist_id: string
+          created_at?: string
+          email_enabled?: boolean
+          enabled?: boolean
+          frequency?: string
+          id?: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          push_enabled?: boolean
+          sms_enabled?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          artist_id?: string
+          created_at?: string
+          email_enabled?: boolean
+          enabled?: boolean
+          frequency?: string
+          id?: string
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          push_enabled?: boolean
+          sms_enabled?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_notification_preferences_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artist_memberships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      artist_notifications: {
+        Row: {
+          action_url: string | null
+          artist_id: string
+          created_at: string
+          data: Json | null
+          expires_at: string | null
+          id: string
+          is_read: boolean
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          priority: string
+          read_at: string | null
+          sent_via_email: boolean
+          sent_via_sms: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          artist_id: string
+          created_at?: string
+          data?: Json | null
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          priority?: string
+          read_at?: string | null
+          sent_via_email?: boolean
+          sent_via_sms?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          artist_id?: string
+          created_at?: string
+          data?: Json | null
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          priority?: string
+          read_at?: string | null
+          sent_via_email?: boolean
+          sent_via_sms?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      artist_platform_connections: {
+        Row: {
+          api_credentials: Json | null
+          artist_id: string
+          connection_status: string
+          created_at: string
+          error_message: string | null
+          id: string
+          is_verified: boolean
+          last_synced_at: string | null
+          platform_type: Database["public"]["Enums"]["platform_type"]
+          platform_url: string
+          platform_username: string | null
+          sync_enabled: boolean
+          sync_frequency_hours: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          api_credentials?: Json | null
+          artist_id: string
+          connection_status?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          is_verified?: boolean
+          last_synced_at?: string | null
+          platform_type: Database["public"]["Enums"]["platform_type"]
+          platform_url: string
+          platform_username?: string | null
+          sync_enabled?: boolean
+          sync_frequency_hours?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          api_credentials?: Json | null
+          artist_id?: string
+          connection_status?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          is_verified?: boolean
+          last_synced_at?: string | null
+          platform_type?: Database["public"]["Enums"]["platform_type"]
+          platform_url?: string
+          platform_username?: string | null
+          sync_enabled?: boolean
+          sync_frequency_hours?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_platform_connections_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artist_memberships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_auto_healing_history: {
         Row: {
           admin_feedback: string | null
@@ -3112,6 +3278,47 @@ export type Database = {
             columns: ["feature_id"]
             isOneToOne: false
             referencedRelation: "ashen_feature_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audio_fingerprints: {
+        Row: {
+          audio_duration_seconds: number | null
+          created_at: string
+          fingerprint_data: Json
+          fingerprint_hash: string
+          id: string
+          sample_rate: number | null
+          track_id: string
+          updated_at: string
+        }
+        Insert: {
+          audio_duration_seconds?: number | null
+          created_at?: string
+          fingerprint_data: Json
+          fingerprint_hash: string
+          id?: string
+          sample_rate?: number | null
+          track_id: string
+          updated_at?: string
+        }
+        Update: {
+          audio_duration_seconds?: number | null
+          created_at?: string
+          fingerprint_data?: Json
+          fingerprint_hash?: string
+          id?: string
+          sample_rate?: number | null
+          track_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audio_fingerprints_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: true
+            referencedRelation: "music_tracks"
             referencedColumns: ["id"]
           },
         ]
@@ -7151,6 +7358,96 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      copyright_violations: {
+        Row: {
+          admin_notes: string | null
+          artist_id: string
+          created_at: string
+          detection_confidence: number
+          dmca_claim_sent: boolean
+          fingerprint_id: string
+          id: string
+          metadata: Json | null
+          platform_response: string | null
+          platform_type: Database["public"]["Enums"]["platform_type"]
+          reported_at: string | null
+          resolved_at: string | null
+          screenshot_url: string | null
+          status: Database["public"]["Enums"]["violation_status"]
+          track_id: string
+          updated_at: string
+          video_evidence_url: string | null
+          violation_description: string | null
+          violation_type: string
+          violation_url: string
+          violator_channel_url: string | null
+          violator_username: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          artist_id: string
+          created_at?: string
+          detection_confidence?: number
+          dmca_claim_sent?: boolean
+          fingerprint_id: string
+          id?: string
+          metadata?: Json | null
+          platform_response?: string | null
+          platform_type: Database["public"]["Enums"]["platform_type"]
+          reported_at?: string | null
+          resolved_at?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["violation_status"]
+          track_id: string
+          updated_at?: string
+          video_evidence_url?: string | null
+          violation_description?: string | null
+          violation_type: string
+          violation_url: string
+          violator_channel_url?: string | null
+          violator_username?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          artist_id?: string
+          created_at?: string
+          detection_confidence?: number
+          dmca_claim_sent?: boolean
+          fingerprint_id?: string
+          id?: string
+          metadata?: Json | null
+          platform_response?: string | null
+          platform_type?: Database["public"]["Enums"]["platform_type"]
+          reported_at?: string | null
+          resolved_at?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["violation_status"]
+          track_id?: string
+          updated_at?: string
+          video_evidence_url?: string | null
+          violation_description?: string | null
+          violation_type?: string
+          violation_url?: string
+          violator_channel_url?: string | null
+          violator_username?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "copyright_violations_fingerprint_id_fkey"
+            columns: ["fingerprint_id"]
+            isOneToOne: false
+            referencedRelation: "audio_fingerprints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "copyright_violations_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "music_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       corruption_case_sources: {
         Row: {
@@ -12154,6 +12451,153 @@ export type Database = {
         }
         Relationships: []
       }
+      performance_milestones: {
+        Row: {
+          achieved_at: string
+          artist_id: string
+          created_at: string
+          id: string
+          milestone_type: string
+          milestone_value: number
+          notified: boolean
+          platform_type: Database["public"]["Enums"]["platform_type"] | null
+          track_id: string | null
+        }
+        Insert: {
+          achieved_at?: string
+          artist_id: string
+          created_at?: string
+          id?: string
+          milestone_type: string
+          milestone_value: number
+          notified?: boolean
+          platform_type?: Database["public"]["Enums"]["platform_type"] | null
+          track_id?: string | null
+        }
+        Update: {
+          achieved_at?: string
+          artist_id?: string
+          created_at?: string
+          id?: string
+          milestone_type?: string
+          milestone_value?: number
+          notified?: boolean
+          platform_type?: Database["public"]["Enums"]["platform_type"] | null
+          track_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "performance_milestones_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "music_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_performance_data: {
+        Row: {
+          chart_positions: Json | null
+          connection_id: string
+          created_at: string
+          date_recorded: string
+          engagement_metrics: Json | null
+          followers_count: number | null
+          id: string
+          monthly_listeners: number | null
+          raw_data: Json | null
+          revenue_data: Json | null
+          stream_count: number | null
+          top_regions: Json | null
+          top_songs: Json | null
+        }
+        Insert: {
+          chart_positions?: Json | null
+          connection_id: string
+          created_at?: string
+          date_recorded?: string
+          engagement_metrics?: Json | null
+          followers_count?: number | null
+          id?: string
+          monthly_listeners?: number | null
+          raw_data?: Json | null
+          revenue_data?: Json | null
+          stream_count?: number | null
+          top_regions?: Json | null
+          top_songs?: Json | null
+        }
+        Update: {
+          chart_positions?: Json | null
+          connection_id?: string
+          created_at?: string
+          date_recorded?: string
+          engagement_metrics?: Json | null
+          followers_count?: number | null
+          id?: string
+          monthly_listeners?: number | null
+          raw_data?: Json | null
+          revenue_data?: Json | null
+          stream_count?: number | null
+          top_regions?: Json | null
+          top_songs?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_performance_data_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "artist_platform_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      platform_sync_logs: {
+        Row: {
+          completed_at: string | null
+          connection_id: string
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          records_processed: number | null
+          started_at: string
+          status: string
+          sync_duration_ms: number | null
+          sync_type: string
+        }
+        Insert: {
+          completed_at?: string | null
+          connection_id: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          records_processed?: number | null
+          started_at?: string
+          status: string
+          sync_duration_ms?: number | null
+          sync_type: string
+        }
+        Update: {
+          completed_at?: string | null
+          connection_id?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          records_processed?: number | null
+          started_at?: string
+          status?: string
+          sync_duration_ms?: number | null
+          sync_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "platform_sync_logs_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "artist_platform_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plugin_conflicts: {
         Row: {
           affected_resources: string[] | null
@@ -16176,6 +16620,15 @@ export type Database = {
           alerts_created: number
         }[]
       }
+      check_performance_milestones: {
+        Args: {
+          p_artist_id: string
+          p_track_id: string
+          p_platform_type: Database["public"]["Enums"]["platform_type"]
+          p_stream_count: number
+        }
+        Returns: number
+      }
       cleanup_expired_media: {
         Args: Record<PropertyKey, never>
         Returns: number
@@ -16195,6 +16648,18 @@ export type Database = {
       convert_points_to_credit: {
         Args: { p_user_id: string; p_points_amount: number }
         Returns: Json
+      }
+      create_artist_notification: {
+        Args: {
+          p_artist_id: string
+          p_user_id: string
+          p_notification_type: Database["public"]["Enums"]["notification_type"]
+          p_title: string
+          p_message: string
+          p_data?: Json
+          p_priority?: string
+        }
+        Returns: string
       }
       create_media_alert: {
         Args: {
@@ -16255,6 +16720,10 @@ export type Database = {
       }
       generate_artist_id: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_audio_fingerprint: {
+        Args: { p_track_id: string; p_audio_url: string }
         Returns: string
       }
       generate_debt_predictions: {
@@ -16499,6 +16968,10 @@ export type Database = {
         Args: { "": string }
         Returns: string[]
       }
+      sync_platform_data: {
+        Args: { p_connection_id: string }
+        Returns: Json
+      }
       track_user_poll_creation: {
         Args: { p_user_id: string }
         Returns: undefined
@@ -16633,8 +17106,28 @@ export type Database = {
         | "blog"
         | "social_feed"
       nomination_status: "pending" | "approved" | "rejected"
+      notification_type:
+        | "copyright_violation"
+        | "stream_milestone"
+        | "viral_spike"
+        | "award_nomination"
+        | "tip_received"
+        | "fan_comment"
+        | "chart_appearance"
+        | "platform_sync_error"
       payment_method: "mobile_money" | "card" | "paypal" | "crypto"
       payment_status: "pending" | "completed" | "failed" | "refunded"
+      platform_type:
+        | "spotify"
+        | "youtube"
+        | "apple_music"
+        | "boomplay"
+        | "audiomack"
+        | "deezer"
+        | "soundcloud"
+        | "tiktok"
+        | "facebook"
+        | "instagram"
       pricing_type: "free" | "paid" | "streaming_only"
       release_status:
         | "draft"
@@ -16669,6 +17162,12 @@ export type Database = {
         | "rejected"
         | "flagged"
         | "missing"
+      violation_status:
+        | "detected"
+        | "reported"
+        | "whitelisted"
+        | "resolved"
+        | "dismissed"
       vote_type: "public" | "jury"
       wealth_source:
         | "technology"
@@ -16908,8 +17407,30 @@ export const Constants = {
         "social_feed",
       ],
       nomination_status: ["pending", "approved", "rejected"],
+      notification_type: [
+        "copyright_violation",
+        "stream_milestone",
+        "viral_spike",
+        "award_nomination",
+        "tip_received",
+        "fan_comment",
+        "chart_appearance",
+        "platform_sync_error",
+      ],
       payment_method: ["mobile_money", "card", "paypal", "crypto"],
       payment_status: ["pending", "completed", "failed", "refunded"],
+      platform_type: [
+        "spotify",
+        "youtube",
+        "apple_music",
+        "boomplay",
+        "audiomack",
+        "deezer",
+        "soundcloud",
+        "tiktok",
+        "facebook",
+        "instagram",
+      ],
       pricing_type: ["free", "paid", "streaming_only"],
       release_status: [
         "draft",
@@ -16947,6 +17468,13 @@ export const Constants = {
         "rejected",
         "flagged",
         "missing",
+      ],
+      violation_status: [
+        "detected",
+        "reported",
+        "whitelisted",
+        "resolved",
+        "dismissed",
       ],
       vote_type: ["public", "jury"],
       wealth_source: [
