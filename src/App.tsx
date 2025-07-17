@@ -28,6 +28,7 @@ import ArtistLanding from "./pages/ArtistLanding";
 import ArtistRegister from "./pages/ArtistRegister";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import CamerPlayUpload from "./pages/CamerPlayUpload";
+import CamerPlayPlayer from "./pages/CamerPlayPlayer";
 import Promises from "./pages/Promises";
 import RegionalAnalytics from "./pages/RegionalAnalytics";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -131,7 +132,8 @@ const App = () => {
               <Route path="/artist-landing" element={<ArtistLanding />} />
               <Route path="/artist-register" element={<ArtistRegister />} />
               <Route path="/artist-dashboard" element={<ArtistDashboard />} />
-              <Route path="/camerplay/upload" element={<CamerPlayUpload />} />
+          <Route path="/camerplay/upload" element={<CamerPlayUpload />} />
+          <Route path="/camerplay" element={<CamerPlayPlayer />} />
           <Route path="/billionaires" element={<BillionaireTracker />} />
           <Route path="/billionaires/apply" element={<BillionaireApplication />} />
           <Route path="/billionaires/:id" element={<BillionaireProfile />} />
