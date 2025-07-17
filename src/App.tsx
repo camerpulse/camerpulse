@@ -53,6 +53,7 @@ import PollEmbedViewerPage from "./pages/PollEmbedViewerPage";
 import MessengerPage from "./pages/MessengerPage";
 import NotificationSettingsPage from "./pages/NotificationSettingsPage";
 import CamerPulseMaster from "./pages/CamerPulseMaster";
+import CamerPlayHome from "./pages/CamerPlayHome";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -134,7 +135,8 @@ const App = () => {
               <Route path="/artist-register" element={<ArtistRegister />} />
               <Route path="/artist-dashboard" element={<ArtistDashboard />} />
           <Route path="/camerplay/upload" element={<CamerPlayUpload />} />
-          <Route path="/camerplay" element={<CamerPlayPlayer />} />
+          <Route path="/camerplay/player" element={<CamerPlayPlayer />} />
+          <Route path="/camerplay" element={<CamerPlayHome />} />
           <Route path="/billionaires" element={<BillionaireTracker />} />
           <Route path="/billionaires/apply" element={<BillionaireApplication />} />
           <Route path="/billionaires/:id" element={<BillionaireProfile />} />
@@ -144,7 +146,7 @@ const App = () => {
           <Route path="/election-forecast" element={<ElectionForecast />} />
           <Route path="/rewards" element={<RewardsCenter />} />
           <Route path="/poll-archive" element={<PollArchive />} />
-          <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
+            <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
