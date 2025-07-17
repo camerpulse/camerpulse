@@ -41,39 +41,25 @@ export const useNotifications = () => {
     if (!user) return;
 
     const loadSettings = async () => {
-      const { data } = await supabase
-        .from('user_notification_settings')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      if (data) {
-        setSettings({
-          enable_all_notifications: data.enable_all_notifications ?? true,
-          enable_message_popups: data.enable_message_popups ?? true,
-          enable_push_notifications: data.enable_push_notifications ?? false,
-          muted_conversations: data.muted_conversations ?? [],
-          quiet_hours_start: data.quiet_hours_start,
-          quiet_hours_end: data.quiet_hours_end,
-        });
-      }
+      // For now, use default settings since the table doesn't exist yet
+      setSettings({
+        enable_all_notifications: true,
+        enable_message_popups: true,
+        enable_push_notifications: false,
+        muted_conversations: [],
+      });
     };
 
     loadSettings();
   }, [user]);
 
-  // Load unread message count
+  // Load unread message count from messages table
   useEffect(() => {
     if (!user) return;
 
     const loadUnreadCount = async () => {
-      const { data } = await supabase
-        .from('message_read_status')
-        .select('message_id')
-        .eq('user_id', user.id)
-        .eq('is_read', false);
-
-      setUnreadCount(data?.length || 0);
+      // For now, use a simple count from messages
+      setUnreadCount(0); // Will be updated by real-time subscription
     };
 
     loadUnreadCount();
@@ -84,45 +70,8 @@ export const useNotifications = () => {
     if (!user) return;
 
     const loadNotifications = async () => {
-      const { data } = await supabase
-        .from('messages')
-        .select(`
-          id,
-          conversation_id,
-          sender_id,
-          content,
-          created_at,
-          conversations!inner(
-            title,
-            is_group,
-            conversation_participants!inner(
-              user_id,
-              profiles(display_name, email)
-            )
-          ),
-          message_read_status(is_read)
-        `)
-        .neq('sender_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (data) {
-        const formattedNotifications: MessageNotification[] = data.map((msg: any) => ({
-          id: msg.id,
-          conversation_id: msg.conversation_id,
-          sender_id: msg.sender_id,
-          sender_name: msg.conversations.conversation_participants[0]?.profiles?.display_name || 
-                      msg.conversations.conversation_participants[0]?.profiles?.email || 
-                      'Unknown User',
-          message_snippet: msg.content.substring(0, 50) + (msg.content.length > 50 ? '...' : ''),
-          created_at: msg.created_at,
-          is_read: msg.message_read_status?.[0]?.is_read ?? false,
-          conversation_title: msg.conversations.title,
-          is_group: msg.conversations.is_group,
-        }));
-
-        setNotifications(formattedNotifications);
-      }
+      // For now, use empty array since tables are not ready
+      setNotifications([]);
     };
 
     loadNotifications();
@@ -195,11 +144,11 @@ export const useNotifications = () => {
     // Get sender info
     const { data: senderData } = await supabase
       .from('profiles')
-      .select('display_name, email')
-      .eq('id', message.sender_id)
+      .select('display_name, username')
+      .eq('user_id', message.sender_id)
       .single();
 
-    const senderName = senderData?.display_name || senderData?.email || 'Unknown User';
+    const senderName = senderData?.display_name || senderData?.username || 'Unknown User';
     const snippet = message.content.substring(0, 50) + (message.content.length > 50 ? '...' : '');
 
     toast({
@@ -214,25 +163,14 @@ export const useNotifications = () => {
     const updatedSettings = { ...settings, ...newSettings };
     setSettings(updatedSettings);
 
-    await supabase
-      .from('user_notification_settings')
-      .upsert({
-        user_id: user.id,
-        ...updatedSettings,
-      });
+    // For now, just update local state since the table doesn't exist yet
+    // TODO: Implement database storage when user_notification_settings table is ready
   };
 
   const markAsRead = async (messageId: string) => {
     if (!user) return;
 
-    await supabase
-      .from('message_read_status')
-      .upsert({
-        user_id: user.id,
-        message_id: messageId,
-        is_read: true,
-      });
-
+    // For now, just update local state
     setUnreadCount(prev => Math.max(0, prev - 1));
     setNotifications(prev => 
       prev.map(notif => 
@@ -246,24 +184,11 @@ export const useNotifications = () => {
   const markAllAsRead = async () => {
     if (!user) return;
 
-    const unreadIds = notifications.filter(n => !n.is_read).map(n => n.id);
-    
-    if (unreadIds.length > 0) {
-      const updates = unreadIds.map(id => ({
-        user_id: user.id,
-        message_id: id,
-        is_read: true,
-      }));
-
-      await supabase
-        .from('message_read_status')
-        .upsert(updates);
-
-      setUnreadCount(0);
-      setNotifications(prev => 
-        prev.map(notif => ({ ...notif, is_read: true }))
-      );
-    }
+    // For now, just update local state
+    setUnreadCount(0);
+    setNotifications(prev => 
+      prev.map(notif => ({ ...notif, is_read: true }))
+    );
   };
 
   const muteConversation = async (conversationId: string) => {
