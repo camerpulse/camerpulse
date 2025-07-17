@@ -282,6 +282,149 @@ export type Database = {
           },
         ]
       }
+      artist_applications: {
+        Row: {
+          admin_notes: string | null
+          application_status: string | null
+          artist_id_number: string | null
+          bio_full: string | null
+          bio_short: string | null
+          created_at: string
+          gender: string | null
+          genres: string[] | null
+          id: string
+          id_card_generated: boolean | null
+          id_card_url: string | null
+          id_document_url: string | null
+          languages_spoken: string[] | null
+          membership_fee_paid: number | null
+          nationality: string | null
+          payment_status: string | null
+          phone_number: string | null
+          profile_photo_url: string | null
+          real_name: string
+          region: string | null
+          rejection_reason: string | null
+          social_media_links: Json | null
+          stage_name: string
+          stripe_payment_intent_id: string | null
+          updated_at: string
+          user_id: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          application_status?: string | null
+          artist_id_number?: string | null
+          bio_full?: string | null
+          bio_short?: string | null
+          created_at?: string
+          gender?: string | null
+          genres?: string[] | null
+          id?: string
+          id_card_generated?: boolean | null
+          id_card_url?: string | null
+          id_document_url?: string | null
+          languages_spoken?: string[] | null
+          membership_fee_paid?: number | null
+          nationality?: string | null
+          payment_status?: string | null
+          phone_number?: string | null
+          profile_photo_url?: string | null
+          real_name: string
+          region?: string | null
+          rejection_reason?: string | null
+          social_media_links?: Json | null
+          stage_name: string
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          application_status?: string | null
+          artist_id_number?: string | null
+          bio_full?: string | null
+          bio_short?: string | null
+          created_at?: string
+          gender?: string | null
+          genres?: string[] | null
+          id?: string
+          id_card_generated?: boolean | null
+          id_card_url?: string | null
+          id_document_url?: string | null
+          languages_spoken?: string[] | null
+          membership_fee_paid?: number | null
+          nationality?: string | null
+          payment_status?: string | null
+          phone_number?: string | null
+          profile_photo_url?: string | null
+          real_name?: string
+          region?: string | null
+          rejection_reason?: string | null
+          social_media_links?: Json | null
+          stage_name?: string
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
+      artist_memberships: {
+        Row: {
+          application_id: string | null
+          artist_id_number: string
+          created_at: string
+          features_enabled: Json | null
+          id: string
+          id_card_url: string | null
+          membership_active: boolean | null
+          membership_expires_at: string | null
+          real_name: string
+          stage_name: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          application_id?: string | null
+          artist_id_number: string
+          created_at?: string
+          features_enabled?: Json | null
+          id?: string
+          id_card_url?: string | null
+          membership_active?: boolean | null
+          membership_expires_at?: string | null
+          real_name: string
+          stage_name: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          application_id?: string | null
+          artist_id_number?: string
+          created_at?: string
+          features_enabled?: Json | null
+          id?: string
+          id_card_url?: string | null
+          membership_active?: boolean | null
+          membership_expires_at?: string | null
+          real_name?: string
+          stage_name?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_memberships_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "artist_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_auto_healing_history: {
         Row: {
           admin_feedback: string | null
@@ -9402,6 +9545,36 @@ export type Database = {
         }
         Relationships: []
       }
+      membership_config: {
+        Row: {
+          created_at: string
+          currency: string | null
+          features_description: Json | null
+          id: string
+          membership_fee: number | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          currency?: string | null
+          features_description?: Json | null
+          id?: string
+          membership_fee?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          currency?: string | null
+          features_description?: Json | null
+          id?: string
+          membership_fee?: number | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       message_read_status: {
         Row: {
           id: string
@@ -14408,6 +14581,10 @@ export type Database = {
         }
         Returns: string
       }
+      approve_artist_application: {
+        Args: { application_id: string }
+        Returns: Json
+      }
       award_points: {
         Args: {
           p_user_id: string
@@ -14522,6 +14699,10 @@ export type Database = {
           p_evidence_data?: Json
           p_severity?: string
         }
+        Returns: string
+      }
+      generate_artist_id: {
+        Args: Record<PropertyKey, never>
         Returns: string
       }
       generate_debt_predictions: {
