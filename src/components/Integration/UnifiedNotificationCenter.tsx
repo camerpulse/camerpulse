@@ -140,7 +140,8 @@ export const UnifiedNotificationCenter: React.FC = () => {
         .from('artist_notification_preferences')
         .upsert({
           user_id: user.id,
-          notification_type: type,
+          artist_id: user.id,
+          notification_type: type as any,
           enabled,
           email_enabled: enabled,
           push_enabled: enabled,

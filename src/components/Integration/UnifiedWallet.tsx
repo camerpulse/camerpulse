@@ -153,9 +153,9 @@ export const UnifiedWallet: React.FC = () => {
         .from('fan_transactions')
         .insert({
           fan_id: user.id,
-          transaction_type: 'topup',
+          transaction_type: 'topup' as any,
           amount_fcfa: amount,
-          payment_method: method,
+          payment_method: method as any,
           status: 'pending',
           description: `Wallet top-up via ${method}`
         })
