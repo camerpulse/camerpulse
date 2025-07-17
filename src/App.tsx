@@ -42,6 +42,7 @@ import DebtAdmin from "./pages/DebtAdmin";
 import ElectionForecast from "./pages/ElectionForecast";
 import RewardsCenter from "./pages/RewardsCenter";
 import PollArchive from "./pages/PollArchive";
+import PollResultsPage from "./pages/PollResultsPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -85,6 +86,7 @@ const App = () => {
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/polls" element={<PollsLandingPage />} />
               <Route path="/polls/discover" element={<PollsDiscovery />} />
+              <Route path="/polls/results/:poll_id" element={<PollResultsPage />} />
               <Route path="/dashboard/polls" element={<PollsDashboard />} />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/donate" element={<Donations />} />
