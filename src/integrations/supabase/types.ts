@@ -11314,6 +11314,42 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_config: {
+        Row: {
+          commission_percentage: number | null
+          config_data: Json | null
+          created_at: string | null
+          currency: string | null
+          id: string
+          is_enabled: boolean | null
+          provider: string
+          test_mode: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          commission_percentage?: number | null
+          config_data?: Json | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          provider: string
+          test_mode?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          commission_percentage?: number | null
+          config_data?: Json | null
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          provider?: string
+          test_mode?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       plugin_conflicts: {
         Row: {
           affected_resources: string[] | null
