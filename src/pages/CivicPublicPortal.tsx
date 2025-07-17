@@ -6,8 +6,12 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MobileForm, MobileFormField, MobileInput, MobileTextarea, MobileButton } from '@/components/ui/mobile-form';
+import { MobileFAB } from '@/components/ui/mobile-fab';
+import { MobileCard, MobileCardHeader, MobileCardContent, MobileCardTitle } from '@/components/ui/mobile-card';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { 
   TrendingUp, 
   MapPin, 
@@ -22,11 +26,31 @@ import {
   Wifi,
   Signal,
   Lock,
-  Info
+  Info,
+  Users,
+  Building2,
+  Star,
+  CheckCircle,
+  XCircle,
+  Target,
+  FileText,
+  Download,
+  Filter,
+  Search,
+  BarChart3,
+  Award,
+  Heart,
+  ThumbsUp,
+  ThumbsDown,
+  Calendar,
+  Mail,
+  Plus,
+  Share2
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useModuleVisibility } from '@/hooks/useModuleVisibility';
+import { Link } from 'react-router-dom';
 
 interface CivicReport {
   location: string;
@@ -54,13 +78,62 @@ interface TrendingIssue {
   volume: number;
 }
 
+interface PoliticalParty {
+  id: string;
+  name: string;
+  acronym: string;
+  logo_url?: string;
+  approval_rating: number;
+  total_ratings: number;
+  mps_count: number;
+  senators_count: number;
+  mayors_count: number;
+  political_leaning?: string;
+  headquarters_region?: string;
+  promises_fulfilled: number;
+  promises_total: number;
+}
+
+interface Politician {
+  id: string;
+  name: string;
+  role_title?: string;
+  region?: string;
+  party?: string;
+  profile_image_url?: string;
+  civic_score: number;
+  average_rating?: number;
+  total_ratings?: number;
+  promises_fulfilled: number;
+  promises_total: number;
+  verified: boolean;
+}
+
+interface TransparencyReport {
+  id: string;
+  title: string;
+  description: string;
+  file_url?: string;
+  report_type: string;
+  published_date: string;
+  author: string;
+  download_count: number;
+}
+
 const CivicPublicPortal = () => {
   const [nationalSentiment, setNationalSentiment] = useState(0);
   const [diasporaSentiment, setDiasporaSentiment] = useState(0);
   const [trendingIssues, setTrendingIssues] = useState<TrendingIssue[]>([]);
   const [regionalMoods, setRegionalMoods] = useState<RegionalMood[]>([]);
+  const [politicalParties, setPoliticalParties] = useState<PoliticalParty[]>([]);
+  const [topPoliticians, setTopPoliticians] = useState<Politician[]>([]);
+  const [transparencyReports, setTransparencyReports] = useState<TransparencyReport[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userRegion, setUserRegion] = useState<string>('');
+  const [activeTab, setActiveTab] = useState('overview');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [partyFilter, setPartyFilter] = useState('all');
+  const [regionFilter, setRegionFilter] = useState('all');
   const [report, setReport] = useState<CivicReport>({
     location: '',
     issue: '',
@@ -82,9 +155,8 @@ const CivicPublicPortal = () => {
   }, [visibilityLoading]);
 
   const loadPublicData = async () => {
-    // Only load data for modules that are visible to the current user
     try {
-      // Only load trending topics if module is visible
+      // Load sentiment data
       if (isModuleVisible('trending_topics')) {
         const { data: sentiments } = await supabase
           .from('camerpulse_intelligence_sentiment_logs')
@@ -98,7 +170,7 @@ const CivicPublicPortal = () => {
         }
       }
 
-      // Only load regional data if module is visible  
+      // Load regional data  
       if (isModuleVisible('regional_sentiment')) {
         const { data: regional } = await supabase
           .from('camerpulse_intelligence_regional_sentiment')
@@ -116,7 +188,7 @@ const CivicPublicPortal = () => {
         }
       }
 
-      // Only load trending topics if module is visible
+      // Load trending topics
       if (isModuleVisible('trending_topics')) {
         const { data: trending } = await supabase
           .from('camerpulse_intelligence_trending_topics')
@@ -135,6 +207,127 @@ const CivicPublicPortal = () => {
           setTrendingIssues(issues);
         }
       }
+
+      // Load political parties
+      const { data: parties } = await supabase
+        .from('political_parties')
+        .select('*')
+        .eq('is_active', true)
+        .order('approval_rating', { ascending: false })
+        .limit(6);
+
+      if (parties) {
+        const partiesWithPromises = await Promise.all(
+          parties.map(async (party) => {
+            const { data: promises } = await supabase
+              .from('politician_promises')
+              .select('status')
+              .in('politician_id', 
+                await supabase
+                  .from('politicians')
+                  .select('id')
+                  .eq('political_party_id', party.id)
+                  .then(({ data }) => data?.map(p => p.id) || [])
+              );
+
+            const fulfilled = promises?.filter(p => p.status === 'fulfilled').length || 0;
+            const total = promises?.length || 0;
+
+            return {
+              ...party,
+              promises_fulfilled: fulfilled,
+              promises_total: total
+            };
+          })
+        );
+        setPoliticalParties(partiesWithPromises);
+      }
+
+      // Load top politicians
+      const { data: politicians } = await supabase
+        .from('politicians')
+        .select(`
+          *,
+          politician_promises(status)
+        `)
+        .eq('is_archived', false)
+        .order('civic_score', { ascending: false })
+        .limit(8);
+
+      if (politicians) {
+        const politiciansWithPromises = politicians.map(p => {
+          const promises = p.politician_promises || [];
+          const fulfilled = promises.filter(pr => pr.status === 'fulfilled').length;
+          const total = promises.length;
+
+          return {
+            ...p,
+            promises_fulfilled: fulfilled,
+            promises_total: total,
+            politician_promises: undefined
+          };
+        });
+        setTopPoliticians(politiciansWithPromises);
+      }
+
+      // Load transparency reports (mock data for now)
+      const mockReports: TransparencyReport[] = [
+        {
+          id: '1',
+          title: 'National Budget 2024 - Transparency Report',
+          description: 'Comprehensive analysis of national budget allocation and spending transparency across all ministries.',
+          report_type: 'Budget Analysis',
+          published_date: '2024-01-15',
+          author: 'Ministry of Finance',
+          download_count: 1250
+        },
+        {
+          id: '2',
+          title: 'Municipal Development Projects - Progress Report',
+          description: 'Quarterly update on municipal infrastructure projects and their completion status.',
+          report_type: 'Development',
+          published_date: '2024-01-10',
+          author: 'Local Development Ministry',
+          download_count: 890
+        },
+        {
+          id: '3',
+          title: 'Electoral Commission Financial Audit',
+          description: 'Independent audit of ELECAM financial management and election expenditures.',
+          report_type: 'Audit',
+          published_date: '2024-01-05',
+          author: 'Supreme State Audit',
+          download_count: 2100
+        },
+        {
+          id: '4',
+          title: 'Healthcare System Performance Metrics',
+          description: 'Annual report on healthcare delivery, hospital performance, and medical supply chains.',
+          report_type: 'Healthcare',
+          published_date: '2023-12-20',
+          author: 'Ministry of Public Health',
+          download_count: 750
+        },
+        {
+          id: '5',
+          title: 'Education Sector Transparency Initiative',
+          description: 'Report on school funding, teacher deployment, and educational infrastructure development.',
+          report_type: 'Education',
+          published_date: '2023-12-15',
+          author: 'Ministry of Basic Education',
+          download_count: 620
+        },
+        {
+          id: '6',
+          title: 'Anti-Corruption Commission Annual Report',
+          description: 'Overview of corruption cases investigated, prosecutions initiated, and asset recovery.',
+          report_type: 'Anti-Corruption',
+          published_date: '2023-12-01',
+          author: 'CONAC',
+          download_count: 1800
+        }
+      ];
+      setTransparencyReports(mockReports);
 
     } catch (error) {
       console.error('Error loading public data:', error);
@@ -241,6 +434,62 @@ const CivicPublicPortal = () => {
     'Joy', 'Concern', 'Optimism', 'Disappointment'
   ];
 
+  const ratePolitician = async (politicianId: string, rating: number) => {
+    try {
+      const { error } = await supabase
+        .from('approval_ratings')
+        .upsert({
+          politician_id: politicianId,
+          user_id: '00000000-0000-0000-0000-000000000000', // Anonymous rating
+          rating: rating
+        });
+
+      if (error) throw error;
+
+      toast({
+        title: "Rating Submitted",
+        description: "Thank you for your feedback!"
+      });
+
+      loadPublicData(); // Refresh data
+    } catch (error) {
+      console.error('Error rating politician:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit rating",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const RatingStars = ({ politicianId, averageRating = 0, readOnly = false }) => {
+    const [hoverRating, setHoverRating] = useState(0);
+
+    return (
+      <div className="flex items-center gap-1">
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            onClick={() => !readOnly && ratePolitician(politicianId, star)}
+            onMouseEnter={() => !readOnly && setHoverRating(star)}
+            onMouseLeave={() => !readOnly && setHoverRating(0)}
+            disabled={readOnly}
+            className={`w-4 h-4 ${
+              star <= (hoverRating || averageRating)
+                ? 'text-yellow-400 fill-current'
+                : 'text-gray-300'
+            } ${!readOnly ? 'hover:text-yellow-400 cursor-pointer' : 'cursor-default'}`}
+          >
+            <Star className="w-full h-full" />
+          </button>
+        ))}
+        <span className="text-xs text-muted-foreground ml-1">
+          {averageRating.toFixed(1)}
+        </span>
+      </div>
+    );
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile-First Header - Responsive */}
@@ -250,26 +499,26 @@ const CivicPublicPortal = () => {
             <div className="flex items-center justify-center space-x-2 sm:space-x-3">
               <Globe className="h-6 w-6 sm:h-8 sm:w-8" />
               <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight">
-                CamerPulse Civic Portal
+                Civic Transparency Portal
               </h1>
             </div>
             
             <p className="text-sm sm:text-base md:text-lg opacity-90 max-w-2xl mx-auto px-2">
-              Real-time civic insights for every Cameroonian citizen - Track national mood, issues, and regional developments
+              Comprehensive civic insights, political transparency, and citizen engagement platform for Cameroon
             </p>
             
             <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-4 mt-4">
               <Badge variant="outline" className="text-primary-foreground border-primary-foreground/50 text-xs sm:text-sm">
-                <Eye className="h-3 w-3 mr-1" />
-                Public Access
+                <Target className="h-3 w-3 mr-1" />
+                Transparency
+              </Badge>
+              <Badge variant="outline" className="text-primary-foreground border-primary-foreground/50 text-xs sm:text-sm">
+                <Users className="h-3 w-3 mr-1" />
+                Civic Engagement
               </Badge>
               <Badge variant="outline" className="text-primary-foreground border-primary-foreground/50 text-xs sm:text-sm">
                 <Shield className="h-3 w-3 mr-1" />
-                Privacy Protected
-              </Badge>
-              <Badge variant="outline" className="text-primary-foreground border-primary-foreground/50 text-xs sm:text-sm">
-                <Smartphone className="h-3 w-3 mr-1" />
-                Mobile Optimized
+                Accountability
               </Badge>
             </div>
           </div>
@@ -327,30 +576,90 @@ const CivicPublicPortal = () => {
           </Card>
         </div>
 
-        {/* Mobile-Native Tabs with Scroll */}
-        <Tabs defaultValue="issues" className="space-y-4">
+        {/* Mobile-Native Navigation Tabs - Responsive */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <div className="w-full overflow-x-auto">
-            <TabsList className="grid w-full grid-cols-4 min-w-fit h-auto p-1">
-              <TabsTrigger value="issues" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <TrendingUp className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Trending</span>
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 min-w-fit h-auto p-1">
+              <TabsTrigger value="overview" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <BarChart3 className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Overview</span>
+              </TabsTrigger>
+              <TabsTrigger value="parties" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Building2 className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Parties</span>
+              </TabsTrigger>
+              <TabsTrigger value="politicians" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Users className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Politicians</span>
+              </TabsTrigger>
+              <TabsTrigger value="promises" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <Target className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Promises</span>
+              </TabsTrigger>
+              <TabsTrigger value="reports" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <FileText className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Reports</span>
               </TabsTrigger>
               <TabsTrigger value="regions" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <MapPin className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Regions</span>
               </TabsTrigger>
-              <TabsTrigger value="report" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <TabsTrigger value="civic-report" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <MessageSquare className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Report</span>
-              </TabsTrigger>
-              <TabsTrigger value="alerts" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
-                <AlertTriangle className="h-4 w-4 sm:mr-2" />
-                <span className="hidden sm:inline">Alerts</span>
               </TabsTrigger>
             </TabsList>
           </div>
 
-          <TabsContent value="issues" className="space-y-4">
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-4">
+            {/* National Mood Stats */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6">
+              <MobileCard className="transition-all duration-200 hover:shadow-md">
+                <MobileCardHeader className="text-center pb-3">
+                  <MobileCardTitle className="text-base sm:text-lg">National Mood</MobileCardTitle>
+                </MobileCardHeader>
+                <MobileCardContent className="text-center pt-0">
+                  <div className={`text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 ${getSentimentColor(nationalSentiment)}`}>
+                    {getSentimentLabel(nationalSentiment)}
+                  </div>
+                  <Progress value={(nationalSentiment + 1) * 50} className="mb-2 h-2" />
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Score: {nationalSentiment.toFixed(2)}
+                  </p>
+                </MobileCardContent>
+              </MobileCard>
+
+              <MobileCard className="transition-all duration-200 hover:shadow-md">
+                <MobileCardHeader className="text-center pb-3">
+                  <MobileCardTitle className="text-base sm:text-lg">Active Parties</MobileCardTitle>
+                </MobileCardHeader>
+                <MobileCardContent className="text-center pt-0">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 text-primary">
+                    {politicalParties.length}
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Political parties monitored
+                  </p>
+                </MobileCardContent>
+              </MobileCard>
+
+              <MobileCard className="transition-all duration-200 hover:shadow-md sm:col-span-2 lg:col-span-1">
+                <MobileCardHeader className="text-center pb-3">
+                  <MobileCardTitle className="text-base sm:text-lg">Officials Tracked</MobileCardTitle>
+                </MobileCardHeader>
+                <MobileCardContent className="text-center pt-0">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 text-secondary">
+                    {topPoliticians.length}
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Active politicians
+                  </p>
+                </MobileCardContent>
+              </MobileCard>
+            </div>
+
+            {/* Trending Issues */}
             {!isModuleVisible('trending_topics') ? (
               <Alert className="border-l-4 border-l-orange-500 bg-orange-50 dark:bg-orange-950">
                 <Lock className="h-4 w-4" />
@@ -359,49 +668,359 @@ const CivicPublicPortal = () => {
                 </AlertDescription>
               </Alert>
             ) : (
-              <Card>
-                <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+              <MobileCard>
+                <MobileCardHeader className="pb-4">
+                  <MobileCardTitle className="flex items-center space-x-2 text-base sm:text-lg">
                     <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
-                    <span>Top 5 Civic Issues</span>
-                  </CardTitle>
-                </CardHeader>
-              <CardContent className="pt-0">
-                <div className="space-y-3 sm:space-y-4">
-                  {trendingIssues.map((issue, idx) => (
-                    <div key={idx} className="border rounded-lg p-3 sm:p-4 transition-all duration-200 hover:shadow-sm">
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="font-semibold text-sm sm:text-base text-foreground truncate flex-1 pr-2">
-                          {issue.issue}
-                        </h3>
-                        <Badge variant="outline" className="text-xs whitespace-nowrap">
-                          Vol: {issue.volume}
-                        </Badge>
+                    <span>Top Civic Issues</span>
+                  </MobileCardTitle>
+                </MobileCardHeader>
+                <MobileCardContent className="pt-0">
+                  <div className="space-y-3 sm:space-y-4">
+                    {trendingIssues.slice(0, 3).map((issue, idx) => (
+                      <div key={idx} className="border rounded-lg p-3 sm:p-4 transition-all duration-200 hover:shadow-sm">
+                        <div className="flex items-center justify-between mb-3">
+                          <h3 className="font-semibold text-sm sm:text-base text-foreground truncate flex-1 pr-2">
+                            {issue.issue}
+                          </h3>
+                          <Badge variant="outline" className="text-xs whitespace-nowrap">
+                            Vol: {issue.volume}
+                          </Badge>
+                        </div>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
+                          <div className="text-center p-2 rounded bg-muted/50">
+                            <div className="text-destructive font-semibold text-sm sm:text-base">{issue.emotionBreakdown.anger}%</div>
+                            <div className="text-muted-foreground text-xs">Anger</div>
+                          </div>
+                          <div className="text-center p-2 rounded bg-muted/50">
+                            <div className="text-success font-semibold text-sm sm:text-base">{issue.emotionBreakdown.hope}%</div>
+                            <div className="text-muted-foreground text-xs">Hope</div>
+                          </div>
+                          <div className="text-center p-2 rounded bg-muted/50">
+                            <div className="text-primary font-semibold text-sm sm:text-base">{issue.emotionBreakdown.sadness}%</div>
+                            <div className="text-muted-foreground text-xs">Sadness</div>
+                          </div>
+                          <div className="text-center p-2 rounded bg-muted/50">
+                            <div className="text-warning font-semibold text-sm sm:text-base">{issue.emotionBreakdown.fear}%</div>
+                            <div className="text-muted-foreground text-xs">Fear</div>
+                          </div>
+                        </div>
                       </div>
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 text-xs sm:text-sm">
-                        <div className="text-center p-2 rounded bg-muted/50">
-                          <div className="text-destructive font-semibold text-sm sm:text-base">{issue.emotionBreakdown.anger}%</div>
-                          <div className="text-muted-foreground text-xs">Anger</div>
+                    ))}
+                  </div>
+                  <div className="mt-4 text-center">
+                    <Button variant="outline" size="sm" onClick={() => setActiveTab('regions')}>
+                      View All Trending Issues
+                    </Button>
+                  </div>
+                </MobileCardContent>
+              </MobileCard>
+            )}
+          </TabsContent>
+
+          {/* Political Parties Tab */}
+          <TabsContent value="parties" className="space-y-4">
+            <MobileCard>
+              <MobileCardHeader className="pb-4">
+                <MobileCardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <Building2 className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span>Political Parties</span>
+                </MobileCardTitle>
+                <div className="mt-2 flex flex-col sm:flex-row gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <input
+                      placeholder="Search parties..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 border rounded-md text-sm"
+                    />
+                  </div>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/political-parties">View All Parties</Link>
+                  </Button>
+                </div>
+              </MobileCardHeader>
+              <MobileCardContent className="pt-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  {politicalParties
+                    .filter(party => 
+                      searchTerm === '' || 
+                      party.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      party.acronym?.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .slice(0, 6)
+                    .map((party) => (
+                    <div key={party.id} className="border rounded-lg p-3 sm:p-4 transition-all duration-200 hover:shadow-sm">
+                      <div className="flex items-center gap-3 mb-3">
+                        {party.logo_url ? (
+                          <Avatar className="h-12 w-12">
+                            <AvatarImage src={party.logo_url} alt={party.name} />
+                            <AvatarFallback>{party.acronym?.substring(0, 2) || party.name.substring(0, 2)}</AvatarFallback>
+                          </Avatar>
+                        ) : (
+                          <div className="h-12 w-12 bg-muted rounded-full flex items-center justify-center">
+                            <Building2 className="h-6 w-6 text-muted-foreground" />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-sm">{party.acronym || party.name}</h3>
+                          <p className="text-xs text-muted-foreground">{party.name}</p>
+                          {party.headquarters_region && (
+                            <p className="text-xs text-muted-foreground flex items-center gap-1">
+                              <MapPin className="h-3 w-3" />
+                              {party.headquarters_region}
+                            </p>
+                          )}
                         </div>
-                        <div className="text-center p-2 rounded bg-muted/50">
-                          <div className="text-success font-semibold text-sm sm:text-base">{issue.emotionBreakdown.hope}%</div>
-                          <div className="text-muted-foreground text-xs">Hope</div>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-2 text-xs text-center mb-3">
+                        <div>
+                          <div className="font-semibold text-primary">{party.mps_count || 0}</div>
+                          <div className="text-muted-foreground">MPs</div>
                         </div>
-                        <div className="text-center p-2 rounded bg-muted/50">
-                          <div className="text-primary font-semibold text-sm sm:text-base">{issue.emotionBreakdown.sadness}%</div>
-                          <div className="text-muted-foreground text-xs">Sadness</div>
+                        <div>
+                          <div className="font-semibold text-secondary">{party.senators_count || 0}</div>
+                          <div className="text-muted-foreground">Senators</div>
                         </div>
-                        <div className="text-center p-2 rounded bg-muted/50">
-                          <div className="text-warning font-semibold text-sm sm:text-base">{issue.emotionBreakdown.fear}%</div>
-                          <div className="text-muted-foreground text-xs">Fear</div>
+                        <div>
+                          <div className="font-semibold text-accent">{party.mayors_count || 0}</div>
+                          <div className="text-muted-foreground">Mayors</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1">
+                          <Star className="h-4 w-4 text-yellow-400 fill-current" />
+                          <span className="text-sm font-medium">{party.approval_rating?.toFixed(1) || '0.0'}</span>
+                          <span className="text-xs text-muted-foreground">({party.total_ratings || 0})</span>
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          {party.promises_fulfilled}/{party.promises_total} promises kept
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-            )}
+              </MobileCardContent>
+            </MobileCard>
+          </TabsContent>
+
+          {/* Politicians Tab */}
+          <TabsContent value="politicians" className="space-y-4">
+            <MobileCard>
+              <MobileCardHeader className="pb-4">
+                <MobileCardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <Users className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span>Top Performing Officials</span>
+                </MobileCardTitle>
+                <div className="mt-2 flex flex-col sm:flex-row gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <input
+                      placeholder="Search politicians..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full pl-10 pr-4 py-2 border rounded-md text-sm"
+                    />
+                  </div>
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/politicians">View All Politicians</Link>
+                  </Button>
+                </div>
+              </MobileCardHeader>
+              <MobileCardContent className="pt-0">
+                <div className="space-y-3 sm:space-y-4">
+                  {topPoliticians
+                    .filter(politician => 
+                      searchTerm === '' || 
+                      politician.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                      politician.party?.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                    .slice(0, 6)
+                    .map((politician) => (
+                    <div key={politician.id} className="border rounded-lg p-3 sm:p-4 transition-all duration-200 hover:shadow-sm">
+                      <div className="flex items-center gap-3 mb-3">
+                        <Avatar className="h-12 w-12">
+                          <AvatarImage src={politician.profile_image_url} alt={politician.name} />
+                          <AvatarFallback>{politician.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <h3 className="font-semibold text-sm">{politician.name}</h3>
+                            {politician.verified && (
+                              <CheckCircle className="h-4 w-4 text-primary" />
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground">{politician.role_title}</p>
+                          <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <MapPin className="h-3 w-3" />
+                            {politician.region}
+                            {politician.party && (
+                              <>
+                                <span className="mx-1">•</span>
+                                {politician.party}
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="grid grid-cols-3 gap-3 text-xs text-center mb-3">
+                        <div>
+                          <div className="font-semibold text-primary">{politician.civic_score}</div>
+                          <div className="text-muted-foreground">Civic Score</div>
+                        </div>
+                        <div>
+                          <div className="font-semibold text-secondary">{politician.average_rating?.toFixed(1) || '0.0'}</div>
+                          <div className="text-muted-foreground">Rating</div>
+                        </div>
+                        <div>
+                          <div className="font-semibold text-accent">{politician.promises_fulfilled}/{politician.promises_total}</div>
+                          <div className="text-muted-foreground">Promises</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <RatingStars 
+                          politicianId={politician.id} 
+                          averageRating={politician.average_rating || 0}
+                        />
+                        <Button variant="outline" size="sm" className="text-xs px-2 py-1">
+                          View Profile
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </MobileCardContent>
+            </MobileCard>
+          </TabsContent>
+
+          {/* Promise Tracker Tab */}
+          <TabsContent value="promises" className="space-y-4">
+            <MobileCard>
+              <MobileCardHeader className="pb-4">
+                <MobileCardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <Target className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span>Promise Tracker</span>
+                </MobileCardTitle>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+                  Track political promises and their fulfillment status across parties and regions.
+                </p>
+                <div className="mt-2">
+                  <Button variant="outline" size="sm" asChild>
+                    <Link to="/promises">View Full Promise Tracker</Link>
+                  </Button>
+                </div>
+              </MobileCardHeader>
+              <MobileCardContent className="pt-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+                  {politicalParties.slice(0, 6).map((party) => (
+                    <div key={party.id} className="border rounded-lg p-3 transition-all duration-200 hover:shadow-sm">
+                      <div className="flex items-center gap-2 mb-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={party.logo_url} alt={party.name} />
+                          <AvatarFallback className="text-xs">{party.acronym?.substring(0, 2)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <h4 className="font-semibold text-sm">{party.acronym || party.name}</h4>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="flex items-center gap-1">
+                            <CheckCircle className="h-3 w-3 text-green-500" />
+                            Fulfilled
+                          </span>
+                          <span className="font-semibold">{party.promises_fulfilled}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="flex items-center gap-1">
+                            <XCircle className="h-3 w-3 text-red-500" />
+                            Unfulfilled
+                          </span>
+                          <span className="font-semibold">{party.promises_total - party.promises_fulfilled}</span>
+                        </div>
+                        <div className="pt-2">
+                          <Progress 
+                            value={party.promises_total > 0 ? (party.promises_fulfilled / party.promises_total) * 100 : 0} 
+                            className="h-2"
+                          />
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {party.promises_total > 0 ? 
+                              `${Math.round((party.promises_fulfilled / party.promises_total) * 100)}% kept` : 
+                              'No promises tracked'
+                            }
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </MobileCardContent>
+            </MobileCard>
+          </TabsContent>
+
+          {/* Transparency Reports Tab */}
+          <TabsContent value="reports" className="space-y-4">
+            <MobileCard>
+              <MobileCardHeader className="pb-4">
+                <MobileCardTitle className="flex items-center space-x-2 text-base sm:text-lg">
+                  <FileText className="h-4 w-4 sm:h-5 sm:w-5" />
+                  <span>Transparency Reports</span>
+                </MobileCardTitle>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-2">
+                  Access public transparency reports, budget documents, and accountability publications.
+                </p>
+              </MobileCardHeader>
+              <MobileCardContent className="pt-0">
+                <div className="space-y-3 sm:space-y-4">
+                  {transparencyReports.slice(0, 6).map((report) => (
+                    <div key={report.id} className="border rounded-lg p-3 sm:p-4 transition-all duration-200 hover:shadow-sm">
+                      <div className="flex items-start justify-between mb-2">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-sm mb-1">{report.title}</h4>
+                          <p className="text-xs text-muted-foreground line-clamp-2">{report.description}</p>
+                        </div>
+                        <Badge variant="outline" className="text-xs ml-2">
+                          {report.report_type}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
+                        <span className="flex items-center gap-1">
+                          <Calendar className="h-3 w-3" />
+                          {new Date(report.published_date).toLocaleDateString()}
+                        </span>
+                        <span>By {report.author}</span>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Download className="h-3 w-3" />
+                          {report.download_count} downloads
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <Button variant="outline" size="sm" className="text-xs px-2 py-1">
+                            <Eye className="h-3 w-3 mr-1" />
+                            View
+                          </Button>
+                          {report.file_url && (
+                            <Button variant="outline" size="sm" className="text-xs px-2 py-1">
+                              <Download className="h-3 w-3 mr-1" />
+                              Download
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </MobileCardContent>
+            </MobileCard>
           </TabsContent>
 
           <TabsContent value="regions" className="space-y-4">
@@ -459,7 +1078,7 @@ const CivicPublicPortal = () => {
             )}
           </TabsContent>
 
-          <TabsContent value="report" className="space-y-4">
+          <TabsContent value="civic-report" className="space-y-4">
             {!isModuleVisible('civic_reports') ? (
               <Alert className="border-l-4 border-l-orange-500 bg-orange-50 dark:bg-orange-950">
                 <Lock className="h-4 w-4" />
@@ -638,20 +1257,27 @@ const CivicPublicPortal = () => {
         {/* Mobile-Optimized Footer */}
         <div className="text-center py-6 sm:py-8 text-muted-foreground border-t mt-8">
           <div className="flex items-center justify-center mb-3">
-            <Signal className="h-4 w-4 mr-2" />
-            <Wifi className="h-4 w-4 mr-2" />
-            <Smartphone className="h-4 w-4" />
+            <Target className="h-4 w-4 mr-2" />
+            <Shield className="h-4 w-4 mr-2" />
+            <Users className="h-4 w-4" />
           </div>
           <p className="text-xs sm:text-sm font-medium">
-            CamerPulse Civic Portal - Empowering citizens with real-time civic insights
+            Civic Transparency Portal - Promoting accountability and civic engagement
           </p>
           <p className="text-xs mt-2 text-muted-foreground/80">
-            Data updated every minute • Privacy protected • Anonymous reporting available
+            Real-time data • Public access • Citizens first • Democratic transparency
           </p>
           <p className="text-xs mt-1 text-muted-foreground/60">
-            Optimized for mobile devices • Works on 2G/3G networks
+            Mobile-optimized • Accessible everywhere • Youth-friendly interface
           </p>
         </div>
+
+        {/* Floating Action Button for Mobile */}
+        <MobileFAB 
+          onClick={() => setActiveTab('civic-report')}
+          icon={<Plus className="h-6 w-6" />}
+          className="bg-primary hover:bg-primary/90"
+        />
       </div>
     </div>
   );
