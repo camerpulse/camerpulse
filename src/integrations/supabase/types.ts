@@ -3503,6 +3503,30 @@ export type Database = {
         }
         Relationships: []
       }
+      camerplay_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          id: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          id?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          id?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       camerpulse_activity_timeline: {
         Row: {
           activity_summary: string
@@ -9762,6 +9786,157 @@ export type Database = {
         }
         Relationships: []
       }
+      music_releases: {
+        Row: {
+          album_price: number | null
+          artist_id: string | null
+          cover_art_url: string | null
+          created_at: string | null
+          external_links: Json | null
+          featured_by_admin: boolean | null
+          genre: string
+          id: string
+          language: string | null
+          mood_tags: string[] | null
+          price_per_track: number | null
+          pricing_type: Database["public"]["Enums"]["pricing_type"] | null
+          release_date: string | null
+          release_type: Database["public"]["Enums"]["track_type"]
+          status: Database["public"]["Enums"]["release_status"] | null
+          streaming_enabled: boolean | null
+          title: string
+          total_downloads: number | null
+          total_earnings: number | null
+          total_plays: number | null
+          total_tracks: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          album_price?: number | null
+          artist_id?: string | null
+          cover_art_url?: string | null
+          created_at?: string | null
+          external_links?: Json | null
+          featured_by_admin?: boolean | null
+          genre: string
+          id?: string
+          language?: string | null
+          mood_tags?: string[] | null
+          price_per_track?: number | null
+          pricing_type?: Database["public"]["Enums"]["pricing_type"] | null
+          release_date?: string | null
+          release_type: Database["public"]["Enums"]["track_type"]
+          status?: Database["public"]["Enums"]["release_status"] | null
+          streaming_enabled?: boolean | null
+          title: string
+          total_downloads?: number | null
+          total_earnings?: number | null
+          total_plays?: number | null
+          total_tracks?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          album_price?: number | null
+          artist_id?: string | null
+          cover_art_url?: string | null
+          created_at?: string | null
+          external_links?: Json | null
+          featured_by_admin?: boolean | null
+          genre?: string
+          id?: string
+          language?: string | null
+          mood_tags?: string[] | null
+          price_per_track?: number | null
+          pricing_type?: Database["public"]["Enums"]["pricing_type"] | null
+          release_date?: string | null
+          release_type?: Database["public"]["Enums"]["track_type"]
+          status?: Database["public"]["Enums"]["release_status"] | null
+          streaming_enabled?: boolean | null
+          title?: string
+          total_downloads?: number | null
+          total_earnings?: number | null
+          total_plays?: number | null
+          total_tracks?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "music_releases_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artist_memberships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      music_tracks: {
+        Row: {
+          audio_file_url: string
+          audio_format: Database["public"]["Enums"]["audio_format"]
+          created_at: string | null
+          download_count: number | null
+          duration_seconds: number | null
+          featured_artists: string[] | null
+          file_hash: string | null
+          file_size_bytes: number | null
+          id: string
+          lyrics: string | null
+          play_count: number | null
+          producers: string[] | null
+          release_id: string | null
+          title: string
+          track_id: string
+          track_number: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          audio_file_url: string
+          audio_format: Database["public"]["Enums"]["audio_format"]
+          created_at?: string | null
+          download_count?: number | null
+          duration_seconds?: number | null
+          featured_artists?: string[] | null
+          file_hash?: string | null
+          file_size_bytes?: number | null
+          id?: string
+          lyrics?: string | null
+          play_count?: number | null
+          producers?: string[] | null
+          release_id?: string | null
+          title: string
+          track_id: string
+          track_number?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          audio_file_url?: string
+          audio_format?: Database["public"]["Enums"]["audio_format"]
+          created_at?: string | null
+          download_count?: number | null
+          duration_seconds?: number | null
+          featured_artists?: string[] | null
+          file_hash?: string | null
+          file_size_bytes?: number | null
+          id?: string
+          lyrics?: string | null
+          play_count?: number | null
+          producers?: string[] | null
+          release_id?: string | null
+          title?: string
+          track_id?: string
+          track_number?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "music_tracks_release_id_fkey"
+            columns: ["release_id"]
+            isOneToOne: false
+            referencedRelation: "music_releases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       news_articles: {
         Row: {
           content: string | null
@@ -13294,6 +13469,92 @@ export type Database = {
         }
         Relationships: []
       }
+      royalty_payments: {
+        Row: {
+          amount: number
+          artist_id: string | null
+          created_at: string | null
+          id: string
+          payment_period_end: string
+          payment_period_start: string
+          processed_at: string | null
+          status: Database["public"]["Enums"]["royalty_status"] | null
+          track_id: string | null
+        }
+        Insert: {
+          amount: number
+          artist_id?: string | null
+          created_at?: string | null
+          id?: string
+          payment_period_end: string
+          payment_period_start: string
+          processed_at?: string | null
+          status?: Database["public"]["Enums"]["royalty_status"] | null
+          track_id?: string | null
+        }
+        Update: {
+          amount?: number
+          artist_id?: string | null
+          created_at?: string | null
+          id?: string
+          payment_period_end?: string
+          payment_period_start?: string
+          processed_at?: string | null
+          status?: Database["public"]["Enums"]["royalty_status"] | null
+          track_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "royalty_payments_artist_id_fkey"
+            columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artist_memberships"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "royalty_payments_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "music_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      royalty_splits: {
+        Row: {
+          created_at: string | null
+          id: string
+          percentage: number
+          recipient_name: string
+          recipient_type: string
+          track_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          percentage: number
+          recipient_name: string
+          recipient_type: string
+          track_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          percentage?: number
+          recipient_name?: string
+          recipient_type?: string
+          track_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "royalty_splits_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "music_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       security_logs: {
         Row: {
           created_at: string | null
@@ -13980,6 +14241,88 @@ export type Database = {
           success?: boolean
         }
         Relationships: []
+      }
+      track_plays: {
+        Row: {
+          country: string | null
+          device_type: string | null
+          duration_played_seconds: number | null
+          id: string
+          ip_address: unknown | null
+          played_at: string | null
+          region: string | null
+          track_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          country?: string | null
+          device_type?: string | null
+          duration_played_seconds?: number | null
+          id?: string
+          ip_address?: unknown | null
+          played_at?: string | null
+          region?: string | null
+          track_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          country?: string | null
+          device_type?: string | null
+          duration_played_seconds?: number | null
+          id?: string
+          ip_address?: unknown | null
+          played_at?: string | null
+          region?: string | null
+          track_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_plays_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "music_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_purchases: {
+        Row: {
+          amount_paid: number
+          id: string
+          purchase_type: string
+          purchased_at: string | null
+          stripe_payment_intent_id: string | null
+          track_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount_paid: number
+          id?: string
+          purchase_type: string
+          purchased_at?: string | null
+          stripe_payment_intent_id?: string | null
+          track_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount_paid?: number
+          id?: string
+          purchase_type?: string
+          purchased_at?: string | null
+          stripe_payment_intent_id?: string | null
+          track_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_purchases_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "music_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       trust_events: {
         Row: {
@@ -14719,6 +15062,10 @@ export type Database = {
           parties_processed: number
         }[]
       }
+      generate_track_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       generate_vendor_id: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -14990,6 +15337,7 @@ export type Database = {
         | "verified_vendor"
         | "user"
       application_tier: "bronze" | "silver" | "gold"
+      audio_format: "mp3" | "wav" | "flac"
       bias_level: "none" | "mild" | "moderate" | "high"
       civic_entity_type:
         | "politician"
@@ -15039,6 +15387,14 @@ export type Database = {
         | "blog"
         | "social_feed"
       payment_status: "pending" | "completed" | "failed" | "refunded"
+      pricing_type: "free" | "paid" | "streaming_only"
+      release_status:
+        | "draft"
+        | "pending_review"
+        | "approved"
+        | "rejected"
+        | "published"
+      royalty_status: "pending" | "processed" | "paid"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -15051,6 +15407,7 @@ export type Database = {
         | "academic"
         | "unknown"
       threat_level: "low" | "medium" | "high" | "critical"
+      track_type: "single" | "ep" | "album"
       verification_status_enum:
         | "pending"
         | "verified"
@@ -15207,6 +15564,7 @@ export const Constants = {
         "user",
       ],
       application_tier: ["bronze", "silver", "gold"],
+      audio_format: ["mp3", "wav", "flac"],
       bias_level: ["none", "mild", "moderate", "high"],
       civic_entity_type: [
         "politician",
@@ -15261,6 +15619,15 @@ export const Constants = {
         "social_feed",
       ],
       payment_status: ["pending", "completed", "failed", "refunded"],
+      pricing_type: ["free", "paid", "streaming_only"],
+      release_status: [
+        "draft",
+        "pending_review",
+        "approved",
+        "rejected",
+        "published",
+      ],
+      royalty_status: ["pending", "processed", "paid"],
       source_type: [
         "government_official",
         "parliamentary",
@@ -15274,6 +15641,7 @@ export const Constants = {
         "unknown",
       ],
       threat_level: ["low", "medium", "high", "critical"],
+      track_type: ["single", "ep", "album"],
       verification_status_enum: [
         "pending",
         "verified",
