@@ -3202,6 +3202,27 @@ export type Database = {
         }
         Relationships: []
       }
+      blocked_users: {
+        Row: {
+          blocked_id: string | null
+          blocker_id: string | null
+          created_at: string | null
+          id: string
+        }
+        Insert: {
+          blocked_id?: string | null
+          blocker_id?: string | null
+          created_at?: string | null
+          id?: string
+        }
+        Update: {
+          blocked_id?: string | null
+          blocker_id?: string | null
+          created_at?: string | null
+          id?: string
+        }
+        Relationships: []
+      }
       cache_flush_operations: {
         Row: {
           cache_layers: string[]
@@ -6088,6 +6109,77 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      conversation_participants: {
+        Row: {
+          conversation_id: string | null
+          id: string
+          is_admin: boolean | null
+          is_muted: boolean | null
+          joined_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          conversation_id?: string | null
+          id?: string
+          is_admin?: boolean | null
+          is_muted?: boolean | null
+          joined_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          conversation_id?: string | null
+          id?: string
+          is_admin?: boolean | null
+          is_muted?: boolean | null
+          joined_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_participants_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      conversations: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          icon_url: string | null
+          id: string
+          is_group: boolean | null
+          last_message_at: string | null
+          title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string
+          is_group?: boolean | null
+          last_message_at?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string
+          is_group?: boolean | null
+          last_message_at?: string | null
+          title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       corruption_case_sources: {
         Row: {
@@ -9310,35 +9402,94 @@ export type Database = {
         }
         Relationships: []
       }
+      message_read_status: {
+        Row: {
+          id: string
+          message_id: string | null
+          read_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          id?: string
+          message_id?: string | null
+          read_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          id?: string
+          message_id?: string | null
+          read_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_read_status_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           content: string
+          conversation_id: string | null
           created_at: string
           id: string
+          is_deleted: boolean | null
           is_read: boolean | null
+          media_url: string | null
+          message_type: string | null
           receiver_id: string
+          reply_to_id: string | null
           sender_id: string
           updated_at: string
         }
         Insert: {
           content: string
+          conversation_id?: string | null
           created_at?: string
           id?: string
+          is_deleted?: boolean | null
           is_read?: boolean | null
+          media_url?: string | null
+          message_type?: string | null
           receiver_id: string
+          reply_to_id?: string | null
           sender_id: string
           updated_at?: string
         }
         Update: {
           content?: string
+          conversation_id?: string | null
           created_at?: string
           id?: string
+          is_deleted?: boolean | null
           is_read?: boolean | null
+          media_url?: string | null
+          message_type?: string | null
           receiver_id?: string
+          reply_to_id?: string | null
           sender_id?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       news_articles: {
         Row: {
