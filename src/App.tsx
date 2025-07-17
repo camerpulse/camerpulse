@@ -46,6 +46,7 @@ import PollResultsPage from "./pages/PollResultsPage";
 import PollEmbedGeneratorPage from "./pages/PollEmbedGeneratorPage";
 import PollEmbedViewerPage from "./pages/PollEmbedViewerPage";
 import MessengerPage from "./pages/MessengerPage";
+import NotificationSettingsPage from "./pages/NotificationSettingsPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -93,6 +94,7 @@ const App = () => {
           <Route path="/polls/embed/:poll_id" element={<PollEmbedViewerPage />} />
           <Route path="/polls/embed-generator/:poll_id" element={<PollEmbedGeneratorPage />} />
           <Route path="/messenger" element={<MessengerPage />} />
+          <Route path="/notification-settings" element={<NotificationSettingsPage />} />
               <Route path="/dashboard/polls" element={<PollsDashboard />} />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/donate" element={<Donations />} />

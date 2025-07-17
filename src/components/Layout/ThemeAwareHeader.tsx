@@ -26,8 +26,10 @@ import {
   X,
   Crown,
   Star,
-  Lightbulb
+  Lightbulb,
+  MessageCircle
 } from "lucide-react";
+import { NotificationCenter } from '@/components/Notifications/NotificationCenter';
 
 export const ThemeAwareHeader = () => {
   const { user, signOut } = useAuth();
@@ -171,12 +173,7 @@ export const ThemeAwareHeader = () => {
             </div>
 
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className={`text-white hover:bg-white/10 relative ${currentTheme.id === 'lux-aeterna' ? 'hover:animate-eternal-glow' : ''}`}>
-              <Bell className="w-4 h-4" />
-              <Badge className={themeStyles.notificationBadge}>
-                3
-              </Badge>
-            </Button>
+            <NotificationCenter />
 
             {/* User Menu or Auth Buttons */}
             {user ? (
@@ -209,9 +206,17 @@ export const ThemeAwareHeader = () => {
                       Profile
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
+                  <DropdownMenuItem asChild>
+                    <Link to="/messenger" className="cursor-pointer">
+                      <MessageCircle className="mr-2 h-4 w-4" />
+                      Messenger
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/notification-settings" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Notification Settings
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
