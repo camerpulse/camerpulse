@@ -205,14 +205,6 @@ export const useNotifications = () => {
     toast({
       title: `New message from ${senderName}`,
       description: snippet,
-      action: (
-        <button
-          onClick={() => window.location.href = '/messenger'}
-          className="text-sm bg-primary text-primary-foreground px-3 py-1 rounded hover:bg-primary/90"
-        >
-          Open Messenger
-        </button>
-      ),
     });
   };
 
