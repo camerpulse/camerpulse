@@ -12,6 +12,9 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Input } from '@/components/ui/input';
+import { AdminConfigPanel } from '@/components/CivicPortal/AdminConfigPanel';
+import { DataVisualization } from '@/components/CivicPortal/DataVisualization';
 import { 
   TrendingUp, 
   MapPin, 
@@ -45,7 +48,8 @@ import {
   Calendar,
   Mail,
   Plus,
-  Share2
+  Share2,
+  Settings
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -134,6 +138,11 @@ const CivicPublicPortal = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [partyFilter, setPartyFilter] = useState('all');
   const [regionFilter, setRegionFilter] = useState('all');
+  const [performanceFilter, setPerformanceFilter] = useState('all');
+  const [dateFilter, setDateFilter] = useState('all');
+  const [sortBy, setSortBy] = useState('rating');
+  const [isAdminView, setIsAdminView] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [report, setReport] = useState<CivicReport>({
     location: '',
     issue: '',
@@ -490,21 +499,127 @@ const CivicPublicPortal = () => {
     );
   };
 
+  // Filter and sort functions
+  const filterPoliticians = (politicians: Politician[]) => {
+    return politicians.filter(politician => {
+      const matchesSearch = politician.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           politician.role_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           politician.region?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesRegion = regionFilter === 'all' || politician.region === regionFilter;
+      const matchesPerformance = performanceFilter === 'all' || 
+                                (performanceFilter === 'high' && (politician.civic_score || 0) >= 70) ||
+                                (performanceFilter === 'medium' && (politician.civic_score || 0) >= 40 && (politician.civic_score || 0) < 70) ||
+                                (performanceFilter === 'low' && (politician.civic_score || 0) < 40);
+      
+      return matchesSearch && matchesRegion && matchesPerformance;
+    }).sort((a, b) => {
+      switch (sortBy) {
+        case 'rating':
+          return (b.average_rating || 0) - (a.average_rating || 0);
+        case 'civic_score':
+          return (b.civic_score || 0) - (a.civic_score || 0);
+        case 'promises':
+          return (b.promises_fulfilled / Math.max(b.promises_total, 1)) - (a.promises_fulfilled / Math.max(a.promises_total, 1));
+        case 'name':
+          return a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    });
+  };
+
+  const filterParties = (parties: PoliticalParty[]) => {
+    return parties.filter(party => {
+      const matchesSearch = party.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           party.acronym?.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchesRegion = regionFilter === 'all' || party.headquarters_region === regionFilter;
+      
+      return matchesSearch && matchesRegion;
+    }).sort((a, b) => {
+      switch (sortBy) {
+        case 'rating':
+          return (b.approval_rating || 0) - (a.approval_rating || 0);
+        case 'promises':
+          return (b.promises_fulfilled / Math.max(b.promises_total, 1)) - (a.promises_fulfilled / Math.max(a.promises_total, 1));
+        case 'name':
+          return a.name.localeCompare(b.name);
+        default:
+          return 0;
+      }
+    });
+  };
+
+  // Prepare visualization data
+  const visualizationData = {
+    sentimentData: [
+      { date: '2024-01', sentiment: 0.2, volume: 1200 },
+      { date: '2024-02', sentiment: 0.1, volume: 1350 },
+      { date: '2024-03', sentiment: -0.1, volume: 1450 },
+      { date: '2024-04', sentiment: 0.3, volume: 1600 },
+      { date: '2024-05', sentiment: 0.15, volume: 1550 },
+      { date: '2024-06', sentiment: 0.4, volume: 1800 },
+    ],
+    regionalData: regionalMoods.map(mood => ({
+      region: mood.region,
+      sentiment: mood.sentiment,
+      population: Math.floor(Math.random() * 1000000) + 500000
+    })),
+    politicalData: politicalParties.slice(0, 6).map(party => ({
+      party: party.acronym || party.name.substring(0, 10),
+      approval: party.approval_rating || 0,
+      seats: party.mps_count + party.senators_count
+    })),
+    trendingTopics: trendingIssues.map(issue => ({
+      topic: issue.issue.substring(0, 15),
+      volume: issue.volume,
+      sentiment: Object.values(issue.emotionBreakdown).reduce((a, b) => a + b, 0) / 4
+    })),
+    emotionData: [
+      { emotion: 'Hope', value: 65 },
+      { emotion: 'Anger', value: 45 },
+      { emotion: 'Fear', value: 35 },
+      { emotion: 'Joy', value: 55 },
+      { emotion: 'Sadness', value: 40 },
+      { emotion: 'Trust', value: 60 }
+    ]
+  };
+
   return (
     <div className="min-h-screen bg-background">
       {/* Mobile-First Header - Responsive */}
       <div className="bg-gradient-to-br from-primary via-primary/90 to-secondary text-primary-foreground py-6 sm:py-8 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="text-center space-y-4">
-            <div className="flex items-center justify-center space-x-2 sm:space-x-3">
-              <Globe className="h-6 w-6 sm:h-8 sm:w-8" />
-              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight">
-                Civic Transparency Portal
-              </h1>
+          <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
+            <div className="text-center lg:text-left space-y-2">
+              <div className="flex items-center justify-center lg:justify-start space-x-2 sm:space-x-3">
+                <Globe className="h-6 w-6 sm:h-8 sm:w-8" />
+                <h1 className="text-xl sm:text-2xl md:text-3xl font-bold leading-tight">
+                  Civic Transparency Portal
+                </h1>
+              </div>
+              
+              <p className="text-sm sm:text-base md:text-lg opacity-90 max-w-2xl">
+                Comprehensive civic insights, political transparency, and citizen engagement platform for Cameroon
+              </p>
             </div>
             
-            <p className="text-sm sm:text-base md:text-lg opacity-90 max-w-2xl mx-auto px-2">
-              Comprehensive civic insights, political transparency, and citizen engagement platform for Cameroon
+            {/* Admin Toggle */}
+            <div className="flex items-center space-x-4">
+              <Button
+                variant={isAdminView ? "secondary" : "outline"}
+                onClick={() => setIsAdminView(!isAdminView)}
+                className="text-xs"
+              >
+                {isAdminView ? 'Public View' : 'Admin View'}
+              </Button>
+            </div>
+          </div>
+          
+          <div className="mt-6">
+            <p className="text-sm sm:text-base md:text-lg opacity-90 max-w-2xl mx-auto text-center">
+              Real-time civic intelligence and democratic transparency
             </p>
             
             <div className="flex items-center justify-center flex-wrap gap-2 sm:gap-4 mt-4">
@@ -579,7 +694,7 @@ const CivicPublicPortal = () => {
         {/* Mobile-Native Navigation Tabs - Responsive */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
           <div className="w-full overflow-x-auto">
-            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 min-w-fit h-auto p-1">
+            <TabsList className={`grid w-full ${isAdminView ? 'grid-cols-3 sm:grid-cols-5 lg:grid-cols-9' : 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-8'} min-w-fit h-auto p-1`}>
               <TabsTrigger value="overview" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                 <BarChart3 className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Overview</span>
@@ -608,11 +723,109 @@ const CivicPublicPortal = () => {
                 <MessageSquare className="h-4 w-4 sm:mr-2" />
                 <span className="hidden sm:inline">Report</span>
               </TabsTrigger>
+              {isAdminView && (
+                <TabsTrigger value="admin" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                  <Settings className="h-4 w-4 sm:mr-2" />
+                  <span className="hidden sm:inline">Admin</span>
+                </TabsTrigger>
+              )}
+              <TabsTrigger value="analytics" className="text-xs sm:text-sm px-2 py-3 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                <BarChart3 className="h-4 w-4 sm:mr-2" />
+                <span className="hidden sm:inline">Analytics</span>
+              </TabsTrigger>
             </TabsList>
           </div>
 
+          {/* Admin Configuration Panel */}
+          {isAdminView && (
+            <TabsContent value="admin" className="space-y-4">
+              <AdminConfigPanel />
+            </TabsContent>
+          )}
+
+          {/* Data Visualization Tab */}
+          <TabsContent value="analytics" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <BarChart3 className="h-5 w-5" />
+                  <span>Professional Data Analytics</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <DataVisualization {...visualizationData} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-4">
+            {/* Advanced Search and Filters */}
+            <Card className="lg:hidden">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span className="flex items-center space-x-2">
+                    <Search className="h-4 w-4" />
+                    <span>Search & Filter</span>
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setShowMobileFilters(!showMobileFilters)}
+                  >
+                    <Filter className="h-4 w-4" />
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+              {showMobileFilters && (
+                <CardContent className="space-y-4">
+                  <Input
+                    placeholder="Search politicians, parties, regions..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="w-full"
+                  />
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <Select value={regionFilter} onValueChange={setRegionFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Region" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Regions</SelectItem>
+                        {cameroonRegions.map(region => (
+                          <SelectItem key={region} value={region}>{region}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <Select value={performanceFilter} onValueChange={setPerformanceFilter}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Performance" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Performance</SelectItem>
+                        <SelectItem value="high">High (70%+)</SelectItem>
+                        <SelectItem value="medium">Medium (40-70%)</SelectItem>
+                        <SelectItem value="low">Low (&lt;40%)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Sort by" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="rating">Rating</SelectItem>
+                      <SelectItem value="civic_score">Civic Score</SelectItem>
+                      <SelectItem value="promises">Promise Fulfillment</SelectItem>
+                      <SelectItem value="name">Name (A-Z)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </CardContent>
+              )}
+            </Card>
             {/* National Mood Stats */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mb-6">
               <MobileCard className="transition-all duration-200 hover:shadow-md">
