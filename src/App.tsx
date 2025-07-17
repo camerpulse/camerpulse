@@ -52,6 +52,7 @@ import PollEmbedGeneratorPage from "./pages/PollEmbedGeneratorPage";
 import PollEmbedViewerPage from "./pages/PollEmbedViewerPage";
 import MessengerPage from "./pages/MessengerPage";
 import NotificationSettingsPage from "./pages/NotificationSettingsPage";
+import CamerPulseMaster from "./pages/CamerPulseMaster";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -143,6 +144,7 @@ const App = () => {
           <Route path="/election-forecast" element={<ElectionForecast />} />
           <Route path="/rewards" element={<RewardsCenter />} />
           <Route path="/poll-archive" element={<PollArchive />} />
+          <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
