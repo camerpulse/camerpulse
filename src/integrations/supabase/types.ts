@@ -9657,6 +9657,553 @@ export type Database = {
         }
         Relationships: []
       }
+      fan_activities: {
+        Row: {
+          activity_type: Database["public"]["Enums"]["fan_activity_type"]
+          created_at: string
+          fan_id: string
+          id: string
+          metadata: Json | null
+          points_earned: number | null
+          reference_id: string | null
+          reference_name: string | null
+        }
+        Insert: {
+          activity_type: Database["public"]["Enums"]["fan_activity_type"]
+          created_at?: string
+          fan_id: string
+          id?: string
+          metadata?: Json | null
+          points_earned?: number | null
+          reference_id?: string | null
+          reference_name?: string | null
+        }
+        Update: {
+          activity_type?: Database["public"]["Enums"]["fan_activity_type"]
+          created_at?: string
+          fan_id?: string
+          id?: string
+          metadata?: Json | null
+          points_earned?: number | null
+          reference_id?: string | null
+          reference_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_activities_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_badges: {
+        Row: {
+          artist_id: string | null
+          badge_description: string | null
+          badge_icon_url: string | null
+          badge_name: string
+          badge_type: Database["public"]["Enums"]["badge_type"]
+          earned_at: string
+          earned_for_month: string | null
+          fan_id: string
+          id: string
+          is_active: boolean | null
+        }
+        Insert: {
+          artist_id?: string | null
+          badge_description?: string | null
+          badge_icon_url?: string | null
+          badge_name: string
+          badge_type: Database["public"]["Enums"]["badge_type"]
+          earned_at?: string
+          earned_for_month?: string | null
+          fan_id: string
+          id?: string
+          is_active?: boolean | null
+        }
+        Update: {
+          artist_id?: string | null
+          badge_description?: string | null
+          badge_icon_url?: string | null
+          badge_name?: string
+          badge_type?: Database["public"]["Enums"]["badge_type"]
+          earned_at?: string
+          earned_for_month?: string | null
+          fan_id?: string
+          id?: string
+          is_active?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_badges_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_leaderboards: {
+        Row: {
+          created_at: string
+          current_rank: number
+          fan_id: string
+          id: string
+          last_activity_at: string | null
+          leaderboard_type: string
+          monthly_points: number | null
+          reference_id: string | null
+          total_points: number
+          updated_at: string
+          weekly_points: number | null
+        }
+        Insert: {
+          created_at?: string
+          current_rank: number
+          fan_id: string
+          id?: string
+          last_activity_at?: string | null
+          leaderboard_type: string
+          monthly_points?: number | null
+          reference_id?: string | null
+          total_points?: number
+          updated_at?: string
+          weekly_points?: number | null
+        }
+        Update: {
+          created_at?: string
+          current_rank?: number
+          fan_id?: string
+          id?: string
+          last_activity_at?: string | null
+          leaderboard_type?: string
+          monthly_points?: number | null
+          reference_id?: string | null
+          total_points?: number
+          updated_at?: string
+          weekly_points?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_leaderboards_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string
+          expires_at: string | null
+          fan_id: string
+          id: string
+          is_read: boolean | null
+          message: string
+          notification_type: string
+          priority: string | null
+          read_at: string | null
+          title: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string
+          expires_at?: string | null
+          fan_id: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          notification_type: string
+          priority?: string | null
+          read_at?: string | null
+          title: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string
+          expires_at?: string | null
+          fan_id?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          notification_type?: string
+          priority?: string | null
+          read_at?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_notifications_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          current_rank: number | null
+          display_name: string | null
+          favorite_genres: string[] | null
+          id: string
+          is_verified: boolean | null
+          preferred_region: string | null
+          total_activity_points: number | null
+          total_events_attended: number | null
+          total_spent_fcfa: number | null
+          total_votes_cast: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          current_rank?: number | null
+          display_name?: string | null
+          favorite_genres?: string[] | null
+          id?: string
+          is_verified?: boolean | null
+          preferred_region?: string | null
+          total_activity_points?: number | null
+          total_events_attended?: number | null
+          total_spent_fcfa?: number | null
+          total_votes_cast?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          current_rank?: number | null
+          display_name?: string | null
+          favorite_genres?: string[] | null
+          id?: string
+          is_verified?: boolean | null
+          preferred_region?: string | null
+          total_activity_points?: number | null
+          total_events_attended?: number | null
+          total_spent_fcfa?: number | null
+          total_votes_cast?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      fan_purchases: {
+        Row: {
+          access_expires_at: string | null
+          download_count: number | null
+          fan_id: string
+          id: string
+          max_downloads: number | null
+          product_id: string
+          purchased_at: string
+          quantity: number | null
+          total_price_fcfa: number
+          transaction_id: string | null
+          unit_price_fcfa: number
+        }
+        Insert: {
+          access_expires_at?: string | null
+          download_count?: number | null
+          fan_id: string
+          id?: string
+          max_downloads?: number | null
+          product_id: string
+          purchased_at?: string
+          quantity?: number | null
+          total_price_fcfa: number
+          transaction_id?: string | null
+          unit_price_fcfa: number
+        }
+        Update: {
+          access_expires_at?: string | null
+          download_count?: number | null
+          fan_id?: string
+          id?: string
+          max_downloads?: number | null
+          product_id?: string
+          purchased_at?: string
+          quantity?: number | null
+          total_price_fcfa?: number
+          transaction_id?: string | null
+          unit_price_fcfa?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_purchases_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fan_purchases_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "storefront_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fan_purchases_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "fan_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_saved_content: {
+        Row: {
+          artist_name: string | null
+          content_id: string
+          content_title: string
+          content_type: string
+          fan_id: string
+          id: string
+          saved_at: string
+        }
+        Insert: {
+          artist_name?: string | null
+          content_id: string
+          content_title: string
+          content_type: string
+          fan_id: string
+          id?: string
+          saved_at?: string
+        }
+        Update: {
+          artist_name?: string | null
+          content_id?: string
+          content_title?: string
+          content_type?: string
+          fan_id?: string
+          id?: string
+          saved_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_saved_content_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_subscriptions: {
+        Row: {
+          artist_id: string
+          auto_renew: boolean | null
+          benefits: Json | null
+          created_at: string
+          expires_at: string | null
+          fan_id: string
+          id: string
+          is_active: boolean | null
+          monthly_price_fcfa: number
+          started_at: string
+          subscription_tier: string
+        }
+        Insert: {
+          artist_id: string
+          auto_renew?: boolean | null
+          benefits?: Json | null
+          created_at?: string
+          expires_at?: string | null
+          fan_id: string
+          id?: string
+          is_active?: boolean | null
+          monthly_price_fcfa: number
+          started_at?: string
+          subscription_tier: string
+        }
+        Update: {
+          artist_id?: string
+          auto_renew?: boolean | null
+          benefits?: Json | null
+          created_at?: string
+          expires_at?: string | null
+          fan_id?: string
+          id?: string
+          is_active?: boolean | null
+          monthly_price_fcfa?: number
+          started_at?: string
+          subscription_tier?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_subscriptions_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_transactions: {
+        Row: {
+          amount_fcfa: number
+          completed_at: string | null
+          created_at: string
+          description: string
+          external_reference: string | null
+          fan_id: string
+          id: string
+          metadata: Json | null
+          payment_method: Database["public"]["Enums"]["payment_method"] | null
+          reference_id: string | null
+          status: string | null
+          transaction_type: Database["public"]["Enums"]["transaction_type"]
+        }
+        Insert: {
+          amount_fcfa: number
+          completed_at?: string | null
+          created_at?: string
+          description: string
+          external_reference?: string | null
+          fan_id: string
+          id?: string
+          metadata?: Json | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          reference_id?: string | null
+          status?: string | null
+          transaction_type: Database["public"]["Enums"]["transaction_type"]
+        }
+        Update: {
+          amount_fcfa?: number
+          completed_at?: string | null
+          created_at?: string
+          description?: string
+          external_reference?: string | null
+          fan_id?: string
+          id?: string
+          metadata?: Json | null
+          payment_method?: Database["public"]["Enums"]["payment_method"] | null
+          reference_id?: string | null
+          status?: string | null
+          transaction_type?: Database["public"]["Enums"]["transaction_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_transactions_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_voting: {
+        Row: {
+          award_category: string | null
+          created_at: string
+          device_fingerprint: string | null
+          fan_id: string
+          id: string
+          ip_address: unknown | null
+          poll_id: string | null
+          vote_weight: number | null
+          voted_for_id: string
+          voted_for_name: string
+          voting_round: string | null
+        }
+        Insert: {
+          award_category?: string | null
+          created_at?: string
+          device_fingerprint?: string | null
+          fan_id: string
+          id?: string
+          ip_address?: unknown | null
+          poll_id?: string | null
+          vote_weight?: number | null
+          voted_for_id: string
+          voted_for_name: string
+          voting_round?: string | null
+        }
+        Update: {
+          award_category?: string | null
+          created_at?: string
+          device_fingerprint?: string | null
+          fan_id?: string
+          id?: string
+          ip_address?: unknown | null
+          poll_id?: string | null
+          vote_weight?: number | null
+          voted_for_id?: string
+          voted_for_name?: string
+          voting_round?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_voting_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_wallets: {
+        Row: {
+          balance_fcfa: number | null
+          created_at: string
+          fan_id: string
+          id: string
+          is_active: boolean | null
+          pending_balance_fcfa: number | null
+          pin_hash: string | null
+          spending_limit_fcfa: number | null
+          total_spent_fcfa: number | null
+          total_topup_fcfa: number | null
+          updated_at: string
+        }
+        Insert: {
+          balance_fcfa?: number | null
+          created_at?: string
+          fan_id: string
+          id?: string
+          is_active?: boolean | null
+          pending_balance_fcfa?: number | null
+          pin_hash?: string | null
+          spending_limit_fcfa?: number | null
+          total_spent_fcfa?: number | null
+          total_topup_fcfa?: number | null
+          updated_at?: string
+        }
+        Update: {
+          balance_fcfa?: number | null
+          created_at?: string
+          fan_id?: string
+          id?: string
+          is_active?: boolean | null
+          pending_balance_fcfa?: number | null
+          pin_hash?: string | null
+          spending_limit_fcfa?: number | null
+          total_spent_fcfa?: number | null
+          total_topup_fcfa?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_wallets_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follows: {
         Row: {
           created_at: string | null
@@ -10967,6 +11514,56 @@ export type Database = {
           updated_by?: string | null
         }
         Relationships: []
+      }
+      merchandise: {
+        Row: {
+          artist_id: string
+          care_instructions: string | null
+          colors_available: string[] | null
+          created_at: string
+          id: string
+          material: string | null
+          merch_type: string
+          product_id: string | null
+          shipping_info: Json | null
+          sizes_available: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          artist_id: string
+          care_instructions?: string | null
+          colors_available?: string[] | null
+          created_at?: string
+          id?: string
+          material?: string | null
+          merch_type: string
+          product_id?: string | null
+          shipping_info?: Json | null
+          sizes_available?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          artist_id?: string
+          care_instructions?: string | null
+          colors_available?: string[] | null
+          created_at?: string
+          id?: string
+          material?: string | null
+          merch_type?: string
+          product_id?: string | null
+          shipping_info?: Json | null
+          sizes_available?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "merchandise_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "storefront_products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       message_read_status: {
         Row: {
@@ -15434,6 +16031,69 @@ export type Database = {
         }
         Relationships: []
       }
+      storefront_products: {
+        Row: {
+          artist_id: string
+          created_at: string
+          description: string | null
+          discount_percentage: number | null
+          download_url: string | null
+          genres: string[] | null
+          id: string
+          is_digital: boolean | null
+          is_featured: boolean | null
+          metadata: Json | null
+          preview_url: string | null
+          price_fcfa: number
+          product_name: string
+          product_type: Database["public"]["Enums"]["product_type"]
+          stock_quantity: number | null
+          tags: string[] | null
+          thumbnail_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          artist_id: string
+          created_at?: string
+          description?: string | null
+          discount_percentage?: number | null
+          download_url?: string | null
+          genres?: string[] | null
+          id?: string
+          is_digital?: boolean | null
+          is_featured?: boolean | null
+          metadata?: Json | null
+          preview_url?: string | null
+          price_fcfa: number
+          product_name: string
+          product_type: Database["public"]["Enums"]["product_type"]
+          stock_quantity?: number | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          artist_id?: string
+          created_at?: string
+          description?: string | null
+          discount_percentage?: number | null
+          download_url?: string | null
+          genres?: string[] | null
+          id?: string
+          is_digital?: boolean | null
+          is_featured?: boolean | null
+          metadata?: Json | null
+          preview_url?: string | null
+          price_fcfa?: number
+          product_name?: string
+          product_type?: Database["public"]["Enums"]["product_type"]
+          stock_quantity?: number | null
+          tags?: string[] | null
+          thumbnail_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       strategy_execution_logs: {
         Row: {
           challenges_encountered: Json | null
@@ -16570,6 +17230,15 @@ export type Database = {
         Args: { application_id: string }
         Returns: Json
       }
+      award_fan_points: {
+        Args: {
+          p_fan_id: string
+          p_activity_type: Database["public"]["Enums"]["fan_activity_type"]
+          p_reference_id?: string
+          p_reference_name?: string
+        }
+        Returns: number
+      }
       award_points: {
         Args: {
           p_user_id: string
@@ -16658,6 +17327,16 @@ export type Database = {
           p_message: string
           p_data?: Json
           p_priority?: string
+        }
+        Returns: string
+      }
+      create_fan_notification: {
+        Args: {
+          p_fan_id: string
+          p_type: string
+          p_title: string
+          p_message: string
+          p_action_url?: string
         }
         Returns: string
       }
@@ -16904,6 +17583,16 @@ export type Database = {
         }
         Returns: string
       }
+      process_wallet_transaction: {
+        Args: {
+          p_fan_id: string
+          p_transaction_type: Database["public"]["Enums"]["transaction_type"]
+          p_amount_fcfa: number
+          p_description: string
+          p_reference_id?: string
+        }
+        Returns: string
+      }
       purchase_badge: {
         Args: { p_user_id: string; p_badge_id: string }
         Returns: Json
@@ -17034,6 +17723,12 @@ export type Database = {
         | "voting_open"
         | "voting_closed"
         | "results_published"
+      badge_type:
+        | "fan_of_month"
+        | "top_supporter"
+        | "early_adopter"
+        | "voting_champion"
+        | "event_attendee"
       bias_level: "none" | "mild" | "moderate" | "high"
       brand_ambassador_status: "available" | "not_available" | "negotiable"
       campaign_type:
@@ -17088,6 +17783,14 @@ export type Database = {
         | "rejected"
         | "cancelled"
         | "completed"
+      fan_activity_type:
+        | "stream"
+        | "vote"
+        | "donation"
+        | "purchase"
+        | "event_attendance"
+        | "review"
+        | "share"
       institution_type:
         | "presidency"
         | "parliament"
@@ -17129,6 +17832,13 @@ export type Database = {
         | "facebook"
         | "instagram"
       pricing_type: "free" | "paid" | "streaming_only"
+      product_type:
+        | "song"
+        | "album"
+        | "ticket"
+        | "merchandise"
+        | "livestream"
+        | "exclusive_content"
       release_status:
         | "draft"
         | "pending_review"
@@ -17156,6 +17866,13 @@ export type Database = {
         | "student"
         | "early_bird"
       track_type: "single" | "ep" | "album"
+      transaction_type:
+        | "topup"
+        | "purchase"
+        | "tip"
+        | "donation"
+        | "subscription"
+        | "refund"
       verification_status_enum:
         | "pending"
         | "verified"
@@ -17327,6 +18044,13 @@ export const Constants = {
         "voting_closed",
         "results_published",
       ],
+      badge_type: [
+        "fan_of_month",
+        "top_supporter",
+        "early_adopter",
+        "voting_champion",
+        "event_attendee",
+      ],
       bias_level: ["none", "mild", "moderate", "high"],
       brand_ambassador_status: ["available", "not_available", "negotiable"],
       campaign_type: [
@@ -17387,6 +18111,15 @@ export const Constants = {
         "cancelled",
         "completed",
       ],
+      fan_activity_type: [
+        "stream",
+        "vote",
+        "donation",
+        "purchase",
+        "event_attendance",
+        "review",
+        "share",
+      ],
       institution_type: [
         "presidency",
         "parliament",
@@ -17432,6 +18165,14 @@ export const Constants = {
         "instagram",
       ],
       pricing_type: ["free", "paid", "streaming_only"],
+      product_type: [
+        "song",
+        "album",
+        "ticket",
+        "merchandise",
+        "livestream",
+        "exclusive_content",
+      ],
       release_status: [
         "draft",
         "pending_review",
@@ -17462,6 +18203,14 @@ export const Constants = {
         "early_bird",
       ],
       track_type: ["single", "ep", "album"],
+      transaction_type: [
+        "topup",
+        "purchase",
+        "tip",
+        "donation",
+        "subscription",
+        "refund",
+      ],
       verification_status_enum: [
         "pending",
         "verified",
