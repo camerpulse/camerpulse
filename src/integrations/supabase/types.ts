@@ -3140,6 +3140,490 @@ export type Database = {
           },
         ]
       }
+      award_audit_logs: {
+        Row: {
+          action_details: Json | null
+          action_type: string
+          admin_id: string | null
+          award_id: string | null
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string | null
+          id: string
+          ip_address: unknown | null
+        }
+        Insert: {
+          action_details?: Json | null
+          action_type: string
+          admin_id?: string | null
+          award_id?: string | null
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          ip_address?: unknown | null
+        }
+        Update: {
+          action_details?: Json | null
+          action_type?: string
+          admin_id?: string | null
+          award_id?: string | null
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          id?: string
+          ip_address?: unknown | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_audit_logs_award_id_fkey"
+            columns: ["award_id"]
+            isOneToOne: false
+            referencedRelation: "awards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      award_categories: {
+        Row: {
+          award_id: string | null
+          category_order: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_main_category: boolean | null
+          max_nominees: number | null
+          min_eligibility_score: number | null
+          name: string
+          prize_amount: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          award_id?: string | null
+          category_order?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_main_category?: boolean | null
+          max_nominees?: number | null
+          min_eligibility_score?: number | null
+          name: string
+          prize_amount?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          award_id?: string | null
+          category_order?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_main_category?: boolean | null
+          max_nominees?: number | null
+          min_eligibility_score?: number | null
+          name?: string
+          prize_amount?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_categories_award_id_fkey"
+            columns: ["award_id"]
+            isOneToOne: false
+            referencedRelation: "awards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      award_external_data: {
+        Row: {
+          created_at: string | null
+          data_period_end: string | null
+          data_period_start: string | null
+          data_source: Json | null
+          id: string
+          metric_type: string
+          metric_value: number | null
+          nomination_id: string | null
+          platform: string
+          updated_at: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          data_period_end?: string | null
+          data_period_start?: string | null
+          data_source?: Json | null
+          id?: string
+          metric_type: string
+          metric_value?: number | null
+          nomination_id?: string | null
+          platform: string
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          data_period_end?: string | null
+          data_period_start?: string | null
+          data_source?: Json | null
+          id?: string
+          metric_type?: string
+          metric_value?: number | null
+          nomination_id?: string | null
+          platform?: string
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_external_data_nomination_id_fkey"
+            columns: ["nomination_id"]
+            isOneToOne: false
+            referencedRelation: "award_nominations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      award_jury: {
+        Row: {
+          assigned_categories: string[] | null
+          award_id: string | null
+          bio: string | null
+          conflict_categories: string[] | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          jury_name: string
+          jury_title: string | null
+          updated_at: string | null
+          user_id: string | null
+          weight_percentage: number | null
+        }
+        Insert: {
+          assigned_categories?: string[] | null
+          award_id?: string | null
+          bio?: string | null
+          conflict_categories?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          jury_name: string
+          jury_title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          weight_percentage?: number | null
+        }
+        Update: {
+          assigned_categories?: string[] | null
+          award_id?: string | null
+          bio?: string | null
+          conflict_categories?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          jury_name?: string
+          jury_title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          weight_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_jury_award_id_fkey"
+            columns: ["award_id"]
+            isOneToOne: false
+            referencedRelation: "awards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      award_nominations: {
+        Row: {
+          admin_notes: string | null
+          artist_id: string | null
+          award_id: string | null
+          category_id: string | null
+          created_at: string | null
+          eligibility_verified: boolean | null
+          id: string
+          nominated_work_id: string | null
+          nominated_work_title: string | null
+          nomination_reason: string | null
+          status: Database["public"]["Enums"]["nomination_status"] | null
+          submitted_by: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          artist_id?: string | null
+          award_id?: string | null
+          category_id?: string | null
+          created_at?: string | null
+          eligibility_verified?: boolean | null
+          id?: string
+          nominated_work_id?: string | null
+          nominated_work_title?: string | null
+          nomination_reason?: string | null
+          status?: Database["public"]["Enums"]["nomination_status"] | null
+          submitted_by?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          artist_id?: string | null
+          award_id?: string | null
+          category_id?: string | null
+          created_at?: string | null
+          eligibility_verified?: boolean | null
+          id?: string
+          nominated_work_id?: string | null
+          nominated_work_title?: string | null
+          nomination_reason?: string | null
+          status?: Database["public"]["Enums"]["nomination_status"] | null
+          submitted_by?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_nominations_award_id_fkey"
+            columns: ["award_id"]
+            isOneToOne: false
+            referencedRelation: "awards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "award_nominations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "award_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      award_results: {
+        Row: {
+          acceptance_speech: string | null
+          award_id: string | null
+          category_id: string | null
+          created_at: string | null
+          id: string
+          nomination_id: string | null
+          payout_status: string | null
+          position: number | null
+          prize_amount: number | null
+          result_published: boolean | null
+          trophy_delivery_status: string | null
+          trophy_type: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          acceptance_speech?: string | null
+          award_id?: string | null
+          category_id?: string | null
+          created_at?: string | null
+          id?: string
+          nomination_id?: string | null
+          payout_status?: string | null
+          position?: number | null
+          prize_amount?: number | null
+          result_published?: boolean | null
+          trophy_delivery_status?: string | null
+          trophy_type?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          acceptance_speech?: string | null
+          award_id?: string | null
+          category_id?: string | null
+          created_at?: string | null
+          id?: string
+          nomination_id?: string | null
+          payout_status?: string | null
+          position?: number | null
+          prize_amount?: number | null
+          result_published?: boolean | null
+          trophy_delivery_status?: string | null
+          trophy_type?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_results_award_id_fkey"
+            columns: ["award_id"]
+            isOneToOne: false
+            referencedRelation: "awards"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "award_results_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "award_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "award_results_nomination_id_fkey"
+            columns: ["nomination_id"]
+            isOneToOne: false
+            referencedRelation: "award_nominations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      award_scores: {
+        Row: {
+          camerplay_score: number | null
+          created_at: string | null
+          external_score: number | null
+          id: string
+          is_winner: boolean | null
+          jury_score: number | null
+          last_calculated: string | null
+          nomination_id: string | null
+          prize_amount: number | null
+          public_score: number | null
+          rank_position: number | null
+          score_breakdown: Json | null
+          total_score: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          camerplay_score?: number | null
+          created_at?: string | null
+          external_score?: number | null
+          id?: string
+          is_winner?: boolean | null
+          jury_score?: number | null
+          last_calculated?: string | null
+          nomination_id?: string | null
+          prize_amount?: number | null
+          public_score?: number | null
+          rank_position?: number | null
+          score_breakdown?: Json | null
+          total_score?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          camerplay_score?: number | null
+          created_at?: string | null
+          external_score?: number | null
+          id?: string
+          is_winner?: boolean | null
+          jury_score?: number | null
+          last_calculated?: string | null
+          nomination_id?: string | null
+          prize_amount?: number | null
+          public_score?: number | null
+          rank_position?: number | null
+          score_breakdown?: Json | null
+          total_score?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_scores_nomination_id_fkey"
+            columns: ["nomination_id"]
+            isOneToOne: true
+            referencedRelation: "award_nominations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      award_votes: {
+        Row: {
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          nomination_id: string | null
+          score: number | null
+          user_agent: string | null
+          vote_type: Database["public"]["Enums"]["vote_type"]
+          vote_weight: number | null
+          voter_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          nomination_id?: string | null
+          score?: number | null
+          user_agent?: string | null
+          vote_type: Database["public"]["Enums"]["vote_type"]
+          vote_weight?: number | null
+          voter_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          nomination_id?: string | null
+          score?: number | null
+          user_agent?: string | null
+          vote_type?: Database["public"]["Enums"]["vote_type"]
+          vote_weight?: number | null
+          voter_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_votes_nomination_id_fkey"
+            columns: ["nomination_id"]
+            isOneToOne: false
+            referencedRelation: "award_nominations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      awards: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          eligibility_criteria: Json | null
+          id: string
+          is_active: boolean | null
+          nomination_deadline: string | null
+          results_date: string | null
+          scoring_weights: Json | null
+          status: Database["public"]["Enums"]["award_status"] | null
+          title: string
+          total_prize_pool: number | null
+          updated_at: string | null
+          voting_deadline: string | null
+          year: number
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          eligibility_criteria?: Json | null
+          id?: string
+          is_active?: boolean | null
+          nomination_deadline?: string | null
+          results_date?: string | null
+          scoring_weights?: Json | null
+          status?: Database["public"]["Enums"]["award_status"] | null
+          title: string
+          total_prize_pool?: number | null
+          updated_at?: string | null
+          voting_deadline?: string | null
+          year: number
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          eligibility_criteria?: Json | null
+          id?: string
+          is_active?: boolean | null
+          nomination_deadline?: string | null
+          results_date?: string | null
+          scoring_weights?: Json | null
+          status?: Database["public"]["Enums"]["award_status"] | null
+          title?: string
+          total_prize_pool?: number | null
+          updated_at?: string | null
+          voting_deadline?: string | null
+          year?: number
+        }
+        Relationships: []
+      }
       billionaire_applications: {
         Row: {
           admin_notes: string | null
@@ -15335,6 +15819,10 @@ export type Database = {
         Args: { p_agent_id: string; p_date?: string }
         Returns: Json
       }
+      calculate_award_scores: {
+        Args: { p_nomination_id: string }
+        Returns: undefined
+      }
       calculate_fix_trust_score: {
         Args: { p_fix_type: string }
         Returns: number
@@ -15740,6 +16228,12 @@ export type Database = {
         | "user"
       application_tier: "bronze" | "silver" | "gold"
       audio_format: "mp3" | "wav" | "flac"
+      award_status:
+        | "draft"
+        | "nomination_open"
+        | "voting_open"
+        | "voting_closed"
+        | "results_published"
       bias_level: "none" | "mild" | "moderate" | "high"
       check_in_status: "pending" | "checked_in" | "no_show"
       civic_entity_type:
@@ -15796,6 +16290,7 @@ export type Database = {
         | "radio_stream"
         | "blog"
         | "social_feed"
+      nomination_status: "pending" | "approved" | "rejected"
       payment_method: "mobile_money" | "card" | "paypal" | "crypto"
       payment_status: "pending" | "completed" | "failed" | "refunded"
       pricing_type: "free" | "paid" | "streaming_only"
@@ -15832,6 +16327,7 @@ export type Database = {
         | "rejected"
         | "flagged"
         | "missing"
+      vote_type: "public" | "jury"
       wealth_source:
         | "technology"
         | "oil_gas"
@@ -15983,6 +16479,13 @@ export const Constants = {
       ],
       application_tier: ["bronze", "silver", "gold"],
       audio_format: ["mp3", "wav", "flac"],
+      award_status: [
+        "draft",
+        "nomination_open",
+        "voting_open",
+        "voting_closed",
+        "results_published",
+      ],
       bias_level: ["none", "mild", "moderate", "high"],
       check_in_status: ["pending", "checked_in", "no_show"],
       civic_entity_type: [
@@ -16045,6 +16548,7 @@ export const Constants = {
         "blog",
         "social_feed",
       ],
+      nomination_status: ["pending", "approved", "rejected"],
       payment_method: ["mobile_money", "card", "paypal", "crypto"],
       payment_status: ["pending", "completed", "failed", "refunded"],
       pricing_type: ["free", "paid", "streaming_only"],
@@ -16085,6 +16589,7 @@ export const Constants = {
         "flagged",
         "missing",
       ],
+      vote_type: ["public", "jury"],
       wealth_source: [
         "technology",
         "oil_gas",
