@@ -8261,6 +8261,274 @@ export type Database = {
         }
         Relationships: []
       }
+      event_check_ins: {
+        Row: {
+          check_in_device: string | null
+          check_in_location: string | null
+          check_in_time: string | null
+          checked_in_by: string | null
+          created_at: string | null
+          event_id: string
+          id: string
+          notes: string | null
+          status: Database["public"]["Enums"]["check_in_status"] | null
+          ticket_purchase_id: string
+        }
+        Insert: {
+          check_in_device?: string | null
+          check_in_location?: string | null
+          check_in_time?: string | null
+          checked_in_by?: string | null
+          created_at?: string | null
+          event_id: string
+          id?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["check_in_status"] | null
+          ticket_purchase_id: string
+        }
+        Update: {
+          check_in_device?: string | null
+          check_in_location?: string | null
+          check_in_time?: string | null
+          checked_in_by?: string | null
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          notes?: string | null
+          status?: Database["public"]["Enums"]["check_in_status"] | null
+          ticket_purchase_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_check_ins_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_check_ins_ticket_purchase_id_fkey"
+            columns: ["ticket_purchase_id"]
+            isOneToOne: false
+            referencedRelation: "ticket_purchases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_earnings: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          organizer_earnings: number
+          organizer_id: string
+          payout_date: string | null
+          payout_reference: string | null
+          payout_status: string | null
+          platform_commission: number
+          tickets_sold: number | null
+          total_sales: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          organizer_earnings?: number
+          organizer_id: string
+          payout_date?: string | null
+          payout_reference?: string | null
+          payout_status?: string | null
+          platform_commission?: number
+          tickets_sold?: number | null
+          total_sales?: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          organizer_earnings?: number
+          organizer_id?: string
+          payout_date?: string | null
+          payout_reference?: string | null
+          payout_status?: string | null
+          platform_commission?: number
+          tickets_sold?: number | null
+          total_sales?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_earnings_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_ticket_types: {
+        Row: {
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          event_id: string
+          id: string
+          includes_livestream: boolean | null
+          includes_meet_greet: boolean | null
+          includes_vip_area: boolean | null
+          max_quantity: number
+          name: string
+          perks: Json | null
+          price: number
+          sold_quantity: number | null
+          type: Database["public"]["Enums"]["ticket_type"]
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          event_id: string
+          id?: string
+          includes_livestream?: boolean | null
+          includes_meet_greet?: boolean | null
+          includes_vip_area?: boolean | null
+          max_quantity: number
+          name: string
+          perks?: Json | null
+          price: number
+          sold_quantity?: number | null
+          type?: Database["public"]["Enums"]["ticket_type"]
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          event_id?: string
+          id?: string
+          includes_livestream?: boolean | null
+          includes_meet_greet?: boolean | null
+          includes_vip_area?: boolean | null
+          max_quantity?: number
+          name?: string
+          perks?: Json | null
+          price?: number
+          sold_quantity?: number | null
+          type?: Database["public"]["Enums"]["ticket_type"]
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_ticket_types_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          admin_notes: string | null
+          age_restriction: number | null
+          approved_at: string | null
+          approved_by: string | null
+          category: string
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          event_date: string
+          flyer_url: string | null
+          genre: string | null
+          has_livestream: boolean | null
+          id: string
+          is_featured: boolean | null
+          language: string | null
+          livestream_password: string | null
+          livestream_type: string | null
+          livestream_url: string | null
+          max_attendees: number | null
+          organizer_id: string
+          organizer_type: string
+          performing_artists: string[] | null
+          platform_commission_percentage: number | null
+          status: Database["public"]["Enums"]["event_status"] | null
+          ticket_sale_deadline: string | null
+          title: string
+          updated_at: string | null
+          venue_address: string
+          venue_coordinates: Json | null
+          venue_name: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          age_restriction?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          event_date: string
+          flyer_url?: string | null
+          genre?: string | null
+          has_livestream?: boolean | null
+          id?: string
+          is_featured?: boolean | null
+          language?: string | null
+          livestream_password?: string | null
+          livestream_type?: string | null
+          livestream_url?: string | null
+          max_attendees?: number | null
+          organizer_id: string
+          organizer_type?: string
+          performing_artists?: string[] | null
+          platform_commission_percentage?: number | null
+          status?: Database["public"]["Enums"]["event_status"] | null
+          ticket_sale_deadline?: string | null
+          title: string
+          updated_at?: string | null
+          venue_address: string
+          venue_coordinates?: Json | null
+          venue_name: string
+        }
+        Update: {
+          admin_notes?: string | null
+          age_restriction?: number | null
+          approved_at?: string | null
+          approved_by?: string | null
+          category?: string
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          event_date?: string
+          flyer_url?: string | null
+          genre?: string | null
+          has_livestream?: boolean | null
+          id?: string
+          is_featured?: boolean | null
+          language?: string | null
+          livestream_password?: string | null
+          livestream_type?: string | null
+          livestream_url?: string | null
+          max_attendees?: number | null
+          organizer_id?: string
+          organizer_type?: string
+          performing_artists?: string[] | null
+          platform_commission_percentage?: number | null
+          status?: Database["public"]["Enums"]["event_status"] | null
+          ticket_sale_deadline?: string | null
+          title?: string
+          updated_at?: string | null
+          venue_address?: string
+          venue_coordinates?: Json | null
+          venue_name?: string
+        }
+        Relationships: []
+      }
       failed_login_attempts: {
         Row: {
           attempt_time: string | null
@@ -14242,6 +14510,96 @@ export type Database = {
         }
         Relationships: []
       }
+      ticket_purchases: {
+        Row: {
+          buyer_email: string
+          buyer_id: string | null
+          buyer_name: string
+          buyer_phone: string | null
+          created_at: string | null
+          event_id: string
+          expires_at: string | null
+          id: string
+          is_refundable: boolean | null
+          is_transferable: boolean | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_reference: string | null
+          payment_status: Database["public"]["Enums"]["payment_status"] | null
+          platform_fee: number
+          qr_code_data: string
+          qr_code_url: string | null
+          quantity: number
+          ticket_number: string
+          ticket_type_id: string
+          total_amount: number
+          unit_price: number
+          updated_at: string | null
+        }
+        Insert: {
+          buyer_email: string
+          buyer_id?: string | null
+          buyer_name: string
+          buyer_phone?: string | null
+          created_at?: string | null
+          event_id: string
+          expires_at?: string | null
+          id?: string
+          is_refundable?: boolean | null
+          is_transferable?: boolean | null
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          payment_reference?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          platform_fee?: number
+          qr_code_data: string
+          qr_code_url?: string | null
+          quantity?: number
+          ticket_number: string
+          ticket_type_id: string
+          total_amount: number
+          unit_price: number
+          updated_at?: string | null
+        }
+        Update: {
+          buyer_email?: string
+          buyer_id?: string | null
+          buyer_name?: string
+          buyer_phone?: string | null
+          created_at?: string | null
+          event_id?: string
+          expires_at?: string | null
+          id?: string
+          is_refundable?: boolean | null
+          is_transferable?: boolean | null
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          payment_reference?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"] | null
+          platform_fee?: number
+          qr_code_data?: string
+          qr_code_url?: string | null
+          quantity?: number
+          ticket_number?: string
+          ticket_type_id?: string
+          total_amount?: number
+          unit_price?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_purchases_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ticket_purchases_ticket_type_id_fkey"
+            columns: ["ticket_type_id"]
+            isOneToOne: false
+            referencedRelation: "event_ticket_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       track_plays: {
         Row: {
           country: string | null
@@ -15062,6 +15420,14 @@ export type Database = {
           parties_processed: number
         }[]
       }
+      generate_qr_data: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_ticket_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       generate_track_id: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -15339,6 +15705,7 @@ export type Database = {
       application_tier: "bronze" | "silver" | "gold"
       audio_format: "mp3" | "wav" | "flac"
       bias_level: "none" | "mild" | "moderate" | "high"
+      check_in_status: "pending" | "checked_in" | "no_show"
       civic_entity_type:
         | "politician"
         | "ministry"
@@ -15369,6 +15736,13 @@ export type Database = {
         | "constituency_outreach"
         | "public_visibility"
         | "policy_advocacy"
+      event_status:
+        | "draft"
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "cancelled"
+        | "completed"
       institution_type:
         | "presidency"
         | "parliament"
@@ -15386,6 +15760,7 @@ export type Database = {
         | "radio_stream"
         | "blog"
         | "social_feed"
+      payment_method: "mobile_money" | "card" | "paypal" | "crypto"
       payment_status: "pending" | "completed" | "failed" | "refunded"
       pricing_type: "free" | "paid" | "streaming_only"
       release_status:
@@ -15407,6 +15782,13 @@ export type Database = {
         | "academic"
         | "unknown"
       threat_level: "low" | "medium" | "high" | "critical"
+      ticket_type:
+        | "regular"
+        | "vip"
+        | "vvip"
+        | "livestream"
+        | "student"
+        | "early_bird"
       track_type: "single" | "ep" | "album"
       verification_status_enum:
         | "pending"
@@ -15566,6 +15948,7 @@ export const Constants = {
       application_tier: ["bronze", "silver", "gold"],
       audio_format: ["mp3", "wav", "flac"],
       bias_level: ["none", "mild", "moderate", "high"],
+      check_in_status: ["pending", "checked_in", "no_show"],
       civic_entity_type: [
         "politician",
         "ministry",
@@ -15599,6 +15982,14 @@ export const Constants = {
         "public_visibility",
         "policy_advocacy",
       ],
+      event_status: [
+        "draft",
+        "pending",
+        "approved",
+        "rejected",
+        "cancelled",
+        "completed",
+      ],
       institution_type: [
         "presidency",
         "parliament",
@@ -15618,6 +16009,7 @@ export const Constants = {
         "blog",
         "social_feed",
       ],
+      payment_method: ["mobile_money", "card", "paypal", "crypto"],
       payment_status: ["pending", "completed", "failed", "refunded"],
       pricing_type: ["free", "paid", "streaming_only"],
       release_status: [
@@ -15641,6 +16033,14 @@ export const Constants = {
         "unknown",
       ],
       threat_level: ["low", "medium", "high", "critical"],
+      ticket_type: [
+        "regular",
+        "vip",
+        "vvip",
+        "livestream",
+        "student",
+        "early_bird",
+      ],
       track_type: ["single", "ep", "album"],
       verification_status_enum: [
         "pending",
