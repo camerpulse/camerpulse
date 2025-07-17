@@ -26,45 +26,53 @@ export const useMobileDetection = (): MobileDetectionResult => {
   })
 
   useEffect(() => {
-    const userAgent = navigator.userAgent
-    const isIOS = /iPad|iPhone|iPod/.test(userAgent)
-    const isAndroid = /Android/.test(userAgent)
-    const isMobile = /Mobi|Android/i.test(userAgent) || isIOS
-    const isTablet = /iPad/.test(userAgent) || (isAndroid && !/Mobile/.test(userAgent))
-    const isDesktop = !isMobile && !isTablet
+    if (typeof window === 'undefined') return
 
-    // PWA detection
-    const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
-                  (window.navigator as any).standalone === true ||
-                  document.referrer.includes('android-app://')
+    const detectMobile = () => {
+      const userAgent = navigator.userAgent
+      const isIOS = /iPad|iPhone|iPod/.test(userAgent)
+      const isAndroid = /Android/.test(userAgent)
+      const isMobile = /Mobi|Android/i.test(userAgent) || isIOS
+      const isTablet = /iPad/.test(userAgent) || (isAndroid && !/Mobile/.test(userAgent))
+      const isDesktop = !isMobile && !isTablet
 
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+                    (window.navigator as any).standalone === true ||
+                    document.referrer.includes('android-app://')
 
-    // Screen size detection
-    const getScreenSize = (): 'mobile' | 'tablet' | 'desktop' => {
-      const width = window.innerWidth
-      if (width < 768) return 'mobile'
-      if (width < 1024) return 'tablet'
-      return 'desktop'
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+
+      const getScreenSize = (): 'mobile' | 'tablet' | 'desktop' => {
+        const width = window.innerWidth
+        if (width < 768) return 'mobile'
+        if (width < 1024) return 'tablet'
+        return 'desktop'
+      }
+
+      setDetection({
+        isMobile,
+        isTablet,
+        isDesktop,
+        isIOS,
+        isAndroid,
+        isPWA,
+        isStandalone,
+        userAgent,
+        screenSize: getScreenSize()
+      })
     }
 
-    setDetection({
-      isMobile,
-      isTablet,
-      isDesktop,
-      isIOS,
-      isAndroid,
-      isPWA,
-      isStandalone,
-      userAgent,
-      screenSize: getScreenSize()
-    })
+    detectMobile()
 
-    // Listen for resize events
     const handleResize = () => {
       setDetection(prev => ({
         ...prev,
-        screenSize: getScreenSize()
+        screenSize: (() => {
+          const width = window.innerWidth
+          if (width < 768) return 'mobile'
+          if (width < 1024) return 'tablet'
+          return 'desktop'
+        })()
       }))
     }
 

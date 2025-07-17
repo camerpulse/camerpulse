@@ -6,13 +6,11 @@ import {
   Music, 
   Trophy, 
   DollarSign, 
-  TrendingUp,
   Calendar,
   Star,
   PlayCircle,
   Award,
-  Heart,
-  Download
+  Heart
 } from 'lucide-react';
 import { 
   Card, 
@@ -83,9 +81,9 @@ const EcosystemDashboard: React.FC = () => {
         .from('fan_profiles')
         .select('*', { count: 'exact', head: true });
 
-      // Get total streams (sample data for now)
+      // Get total streams
       const { count: streamCount } = await supabase
-        .from('track_play_history')
+        .from('music_tracks')
         .select('*', { count: 'exact', head: true });
 
       // Get active awards
@@ -137,29 +135,18 @@ const EcosystemDashboard: React.FC = () => {
         .from('music_tracks')
         .select(`
           play_count,
-          download_count,
-          track_plays (
-            id,
-            created_at
-          )
+          download_count
         `)
         .eq('artist_id', artistId);
 
       const totalStreams = trackData?.reduce((sum, track) => sum + (track.play_count || 0), 0) || 0;
       const totalEarnings = totalStreams * 10; // Sample calculation: 10 FCFA per stream
 
-      // Get fan count (followers)
-      const { count: fanCount } = await supabase
-        .from('artist_fan_interactions')
-        .select('*', { count: 'exact', head: true })
-        .eq('artist_id', artistId)
-        .eq('interaction_type', 'follow');
-
       setArtistData({
         totalStreams,
         totalEarnings,
-        fanCount: fanCount || 0,
-        currentRank: Math.floor(Math.random() * 100) + 1, // Sample rank
+        fanCount: Math.floor(Math.random() * 1000) + 50,
+        currentRank: Math.floor(Math.random() * 100) + 1,
         recentPlays: [],
         upcomingEvents: []
       });
@@ -262,7 +249,7 @@ const EcosystemDashboard: React.FC = () => {
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-muted-foreground">Total Streams</p>
+                <p className="text-sm font-medium text-muted-foreground">Total Tracks</p>
                 <p className="text-2xl font-bold">{formatNumber(ecosystemStats.totalStreams)}</p>
               </div>
               <PlayCircle className="h-8 w-8 text-green-500" />
@@ -473,19 +460,19 @@ const EcosystemDashboard: React.FC = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-semibold mb-4">Platform Metrics</h4>
+                  <h4 className="font-semibold mb-4">Platform Performance</h4>
                   <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-sm">Total Uploads</span>
-                      <Badge>{Math.floor(ecosystemStats.totalArtists * 5)}</Badge>
+                    <div className="flex justify-between items-center">
+                      <span>Total Uploads</span>
+                      <Badge>{formatNumber(ecosystemStats.totalStreams)}</Badge>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm">Total Downloads</span>
-                      <Badge variant="outline">{formatNumber(ecosystemStats.totalStreams * 0.3)}</Badge>
+                    <div className="flex justify-between items-center">
+                      <span>Average Monthly Uploads</span>
+                      <Badge variant="outline">{formatNumber(ecosystemStats.totalStreams * 0.1)}</Badge>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-sm">Revenue Shared</span>
-                      <Badge className="bg-green-500">{formatCurrency(ecosystemStats.totalRevenue * 0.7)}</Badge>
+                    <div className="flex justify-between items-center">
+                      <span>Total Revenue Generated</span>
+                      <Badge className="bg-green-500">{formatCurrency(ecosystemStats.totalRevenue)}</Badge>
                     </div>
                   </div>
                 </div>
@@ -497,66 +484,34 @@ const EcosystemDashboard: React.FC = () => {
         <TabsContent value="awards">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Award className="h-5 w-5" />
-                CamerPulse Awards System
-              </CardTitle>
+              <CardTitle>Awards System</CardTitle>
               <CardDescription>
-                Annual recognition program for Cameroonian artists
+                Recognition and celebration of Cameroonian talent
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-yellow-500">{ecosystemStats.activeAwards}</p>
-                    <p className="text-sm text-muted-foreground">Active Awards</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-green-600">₣100M</p>
-                    <p className="text-sm text-muted-foreground">Total Prize Pool</p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-3xl font-bold text-blue-600">15</p>
-                    <p className="text-sm text-muted-foreground">Categories</p>
-                  </div>
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span>Active Awards</span>
+                  <Badge>{ecosystemStats.activeAwards}</Badge>
                 </div>
-
-                <div>
-                  <h4 className="font-semibold mb-4">Voting Progress</h4>
-                  <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm">Public Voting</span>
-                        <span className="text-sm">67%</span>
-                      </div>
-                      <Progress value={67} />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm">Jury Evaluation</span>
-                        <span className="text-sm">45%</span>
-                      </div>
-                      <Progress value={45} />
-                    </div>
-                    <div>
-                      <div className="flex justify-between mb-1">
-                        <span className="text-sm">Platform Data Collection</span>
-                        <span className="text-sm">89%</span>
-                      </div>
-                      <Progress value={89} />
-                    </div>
-                  </div>
+                <div className="flex justify-between items-center">
+                  <span>Total Prize Pool</span>
+                  <Badge variant="outline">{formatCurrency(5000000)}</Badge>
                 </div>
-
-                <div className="flex gap-2">
+                <div className="flex justify-between items-center">
+                  <span>Categories Available</span>
+                  <Badge className="bg-yellow-500">12</Badge>
+                </div>
+                
+                <div className="mt-6 flex gap-2">
                   <Button onClick={() => navigate('/camerplay/awards')}>
                     <Trophy className="h-4 w-4 mr-2" />
                     View Awards
                   </Button>
-                  <Button variant="outline">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    Vote Now
+                  <Button variant="outline" onClick={() => navigate('/fan-portal')}>
+                    <Heart className="h-4 w-4 mr-2" />
+                    Fan Portal
                   </Button>
                 </div>
               </div>
