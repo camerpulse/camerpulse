@@ -372,6 +372,81 @@ export type Database = {
         }
         Relationships: []
       }
+      artist_branding_profiles: {
+        Row: {
+          artist_id: string
+          audience_types: string[]
+          average_rating: number | null
+          bio_ambassador: string | null
+          branding_status: Database["public"]["Enums"]["brand_ambassador_status"]
+          created_at: string
+          current_brands: Json | null
+          exclusivity_available: boolean | null
+          expected_deliverables: string[] | null
+          id: string
+          industry_interests: string[]
+          is_active: boolean
+          media_kit_url: string | null
+          minimum_contract_weeks: number | null
+          minimum_fee_fcfa: number | null
+          past_partnerships: Json | null
+          portfolio_links: Json | null
+          preferred_regions: string[]
+          total_campaigns: number | null
+          total_connections: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          artist_id: string
+          audience_types?: string[]
+          average_rating?: number | null
+          bio_ambassador?: string | null
+          branding_status?: Database["public"]["Enums"]["brand_ambassador_status"]
+          created_at?: string
+          current_brands?: Json | null
+          exclusivity_available?: boolean | null
+          expected_deliverables?: string[] | null
+          id?: string
+          industry_interests?: string[]
+          is_active?: boolean
+          media_kit_url?: string | null
+          minimum_contract_weeks?: number | null
+          minimum_fee_fcfa?: number | null
+          past_partnerships?: Json | null
+          portfolio_links?: Json | null
+          preferred_regions?: string[]
+          total_campaigns?: number | null
+          total_connections?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          artist_id?: string
+          audience_types?: string[]
+          average_rating?: number | null
+          bio_ambassador?: string | null
+          branding_status?: Database["public"]["Enums"]["brand_ambassador_status"]
+          created_at?: string
+          current_brands?: Json | null
+          exclusivity_available?: boolean | null
+          expected_deliverables?: string[] | null
+          id?: string
+          industry_interests?: string[]
+          is_active?: boolean
+          media_kit_url?: string | null
+          minimum_contract_weeks?: number | null
+          minimum_fee_fcfa?: number | null
+          past_partnerships?: Json | null
+          portfolio_links?: Json | null
+          preferred_regions?: string[]
+          total_campaigns?: number | null
+          total_connections?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       artist_memberships: {
         Row: {
           application_id: string | null
@@ -3849,6 +3924,251 @@ export type Database = {
           id?: string
         }
         Relationships: []
+      }
+      brand_ambassador_connections: {
+        Row: {
+          artist_contact_email: string | null
+          artist_contact_phone: string | null
+          artist_profile_id: string
+          campaign_completed_at: string | null
+          campaign_started_at: string | null
+          campaign_success: boolean | null
+          company_contact_email: string | null
+          company_contact_phone: string | null
+          contract_signed: boolean | null
+          contract_url: string | null
+          created_at: string
+          final_amount_paid: number | null
+          id: string
+          request_id: string
+          updated_at: string
+        }
+        Insert: {
+          artist_contact_email?: string | null
+          artist_contact_phone?: string | null
+          artist_profile_id: string
+          campaign_completed_at?: string | null
+          campaign_started_at?: string | null
+          campaign_success?: boolean | null
+          company_contact_email?: string | null
+          company_contact_phone?: string | null
+          contract_signed?: boolean | null
+          contract_url?: string | null
+          created_at?: string
+          final_amount_paid?: number | null
+          id?: string
+          request_id: string
+          updated_at?: string
+        }
+        Update: {
+          artist_contact_email?: string | null
+          artist_contact_phone?: string | null
+          artist_profile_id?: string
+          campaign_completed_at?: string | null
+          campaign_started_at?: string | null
+          campaign_success?: boolean | null
+          company_contact_email?: string | null
+          company_contact_phone?: string | null
+          contract_signed?: boolean | null
+          contract_url?: string | null
+          created_at?: string
+          final_amount_paid?: number | null
+          id?: string
+          request_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brand_ambassador_connections_artist_profile_id_fkey"
+            columns: ["artist_profile_id"]
+            isOneToOne: false
+            referencedRelation: "artist_branding_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "brand_ambassador_connections_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "brand_ambassador_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      brand_ambassador_contracts: {
+        Row: {
+          contract_type: Database["public"]["Enums"]["contract_type"]
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          template_content: string
+          template_name: string
+          updated_at: string
+          variables: Json | null
+        }
+        Insert: {
+          contract_type: Database["public"]["Enums"]["contract_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          template_content: string
+          template_name: string
+          updated_at?: string
+          variables?: Json | null
+        }
+        Update: {
+          contract_type?: Database["public"]["Enums"]["contract_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          template_content?: string
+          template_name?: string
+          updated_at?: string
+          variables?: Json | null
+        }
+        Relationships: []
+      }
+      brand_ambassador_ratings: {
+        Row: {
+          artist_profile_id: string
+          artist_rating: number | null
+          artist_review: string | null
+          artist_review_public: boolean | null
+          company_rating: number | null
+          company_review: string | null
+          company_review_public: boolean | null
+          connection_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          artist_profile_id: string
+          artist_rating?: number | null
+          artist_review?: string | null
+          artist_review_public?: boolean | null
+          company_rating?: number | null
+          company_review?: string | null
+          company_review_public?: boolean | null
+          connection_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          artist_profile_id?: string
+          artist_rating?: number | null
+          artist_review?: string | null
+          artist_review_public?: boolean | null
+          company_rating?: number | null
+          company_review?: string | null
+          company_review_public?: boolean | null
+          connection_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brand_ambassador_ratings_artist_profile_id_fkey"
+            columns: ["artist_profile_id"]
+            isOneToOne: false
+            referencedRelation: "artist_branding_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "brand_ambassador_ratings_connection_id_fkey"
+            columns: ["connection_id"]
+            isOneToOne: false
+            referencedRelation: "brand_ambassador_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      brand_ambassador_requests: {
+        Row: {
+          artist_contacted_at: string | null
+          artist_profile_id: string
+          budget_range_max: number | null
+          budget_range_min: number | null
+          campaign_description: string
+          campaign_duration_weeks: number | null
+          campaign_type: Database["public"]["Enums"]["campaign_type"]
+          company_description: string | null
+          company_email: string
+          company_name: string
+          company_notified_at: string | null
+          company_size: Database["public"]["Enums"]["company_size"]
+          company_website: string | null
+          connection_fee_fcfa: number
+          created_at: string
+          expected_deliverables: string[] | null
+          id: string
+          initial_message: string | null
+          payment_intent_id: string | null
+          status: Database["public"]["Enums"]["connection_status"]
+          target_regions: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          artist_contacted_at?: string | null
+          artist_profile_id: string
+          budget_range_max?: number | null
+          budget_range_min?: number | null
+          campaign_description: string
+          campaign_duration_weeks?: number | null
+          campaign_type: Database["public"]["Enums"]["campaign_type"]
+          company_description?: string | null
+          company_email: string
+          company_name: string
+          company_notified_at?: string | null
+          company_size: Database["public"]["Enums"]["company_size"]
+          company_website?: string | null
+          connection_fee_fcfa: number
+          created_at?: string
+          expected_deliverables?: string[] | null
+          id?: string
+          initial_message?: string | null
+          payment_intent_id?: string | null
+          status?: Database["public"]["Enums"]["connection_status"]
+          target_regions?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          artist_contacted_at?: string | null
+          artist_profile_id?: string
+          budget_range_max?: number | null
+          budget_range_min?: number | null
+          campaign_description?: string
+          campaign_duration_weeks?: number | null
+          campaign_type?: Database["public"]["Enums"]["campaign_type"]
+          company_description?: string | null
+          company_email?: string
+          company_name?: string
+          company_notified_at?: string | null
+          company_size?: Database["public"]["Enums"]["company_size"]
+          company_website?: string | null
+          connection_fee_fcfa?: number
+          created_at?: string
+          expected_deliverables?: string[] | null
+          id?: string
+          initial_message?: string | null
+          payment_intent_id?: string | null
+          status?: Database["public"]["Enums"]["connection_status"]
+          target_regions?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "brand_ambassador_requests_artist_profile_id_fkey"
+            columns: ["artist_profile_id"]
+            isOneToOne: false
+            referencedRelation: "artist_branding_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cache_flush_operations: {
         Row: {
@@ -15823,6 +16143,13 @@ export type Database = {
         Args: { p_nomination_id: string }
         Returns: undefined
       }
+      calculate_connection_fee: {
+        Args: {
+          p_company_size: Database["public"]["Enums"]["company_size"]
+          p_campaign_type: Database["public"]["Enums"]["campaign_type"]
+        }
+        Returns: number
+      }
       calculate_fix_trust_score: {
         Args: { p_fix_type: string }
         Returns: number
@@ -16235,6 +16562,13 @@ export type Database = {
         | "voting_closed"
         | "results_published"
       bias_level: "none" | "mild" | "moderate" | "high"
+      brand_ambassador_status: "available" | "not_available" | "negotiable"
+      campaign_type:
+        | "event"
+        | "product_launch"
+        | "awareness"
+        | "sponsorship"
+        | "content_creation"
       check_in_status: "pending" | "checked_in" | "no_show"
       civic_entity_type:
         | "politician"
@@ -16246,8 +16580,16 @@ export type Database = {
         | "election_event"
         | "policy_document"
         | "government_statement"
+      company_size: "startup" | "sme" | "large_corp"
       company_status: "pending" | "approved" | "suspended" | "rejected"
       company_type: "sole_proprietor" | "limited_company" | "public_company"
+      connection_status:
+        | "pending"
+        | "paid"
+        | "connected"
+        | "completed"
+        | "cancelled"
+      contract_type: "branding" | "exclusivity" | "nda" | "general"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
       engagement_activity_type:
         | "public_appearance"
@@ -16487,6 +16829,14 @@ export const Constants = {
         "results_published",
       ],
       bias_level: ["none", "mild", "moderate", "high"],
+      brand_ambassador_status: ["available", "not_available", "negotiable"],
+      campaign_type: [
+        "event",
+        "product_launch",
+        "awareness",
+        "sponsorship",
+        "content_creation",
+      ],
       check_in_status: ["pending", "checked_in", "no_show"],
       civic_entity_type: [
         "politician",
@@ -16499,8 +16849,17 @@ export const Constants = {
         "policy_document",
         "government_statement",
       ],
+      company_size: ["startup", "sme", "large_corp"],
       company_status: ["pending", "approved", "suspended", "rejected"],
       company_type: ["sole_proprietor", "limited_company", "public_company"],
+      connection_status: [
+        "pending",
+        "paid",
+        "connected",
+        "completed",
+        "cancelled",
+      ],
+      contract_type: ["branding", "exclusivity", "nda", "general"],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
       engagement_activity_type: [
         "public_appearance",
