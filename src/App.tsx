@@ -43,6 +43,8 @@ import ElectionForecast from "./pages/ElectionForecast";
 import RewardsCenter from "./pages/RewardsCenter";
 import PollArchive from "./pages/PollArchive";
 import PollResultsPage from "./pages/PollResultsPage";
+import PollEmbedGeneratorPage from "./pages/PollEmbedGeneratorPage";
+import PollEmbedViewerPage from "./pages/PollEmbedViewerPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -87,6 +89,8 @@ const App = () => {
               <Route path="/polls" element={<PollsLandingPage />} />
               <Route path="/polls/discover" element={<PollsDiscovery />} />
               <Route path="/polls/results/:poll_id" element={<PollResultsPage />} />
+              <Route path="/polls/embed/:poll_id" element={<PollEmbedViewerPage />} />
+              <Route path="/polls/embed-generator/:poll_id" element={<PollEmbedGeneratorPage />} />
               <Route path="/dashboard/polls" element={<PollsDashboard />} />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/donate" element={<Donations />} />
