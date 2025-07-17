@@ -54,6 +54,9 @@ import MessengerPage from "./pages/MessengerPage";
 import NotificationSettingsPage from "./pages/NotificationSettingsPage";
 import CamerPulseMaster from "./pages/CamerPulseMaster";
 import CamerPlayHome from "./pages/CamerPlayHome";
+import CamerPlayAwards from "./pages/CamerPlayAwards";
+import EcosystemDashboard from "./pages/EcosystemDashboard";
+import FanPortal from "./pages/FanPortal";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
@@ -136,6 +139,9 @@ const App = () => {
               <Route path="/artist-dashboard" element={<ArtistDashboard />} />
           <Route path="/camerplay/upload" element={<CamerPlayUpload />} />
           <Route path="/camerplay/player" element={<CamerPlayPlayer />} />
+          <Route path="/camerplay/awards" element={<CamerPlayAwards />} />
+          <Route path="/ecosystem" element={<EcosystemDashboard />} />
+          <Route path="/fan-portal" element={<FanPortal />} />
           <Route path="/camerplay" element={<CamerPlayHome />} />
           <Route path="/billionaires" element={<BillionaireTracker />} />
           <Route path="/billionaires/apply" element={<BillionaireApplication />} />

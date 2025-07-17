@@ -264,7 +264,7 @@ interface ThemeProviderProps {
   children: React.ReactNode
 }
 
-export function ThemeProvider({ children }: ThemeProviderProps) {
+export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const [currentTheme, setCurrentTheme] = useState<ThemeConfig>(defaultTheme)
   const [availableThemes] = useState<ThemeConfig[]>([
     defaultTheme, 
