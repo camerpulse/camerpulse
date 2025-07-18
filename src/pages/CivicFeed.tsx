@@ -11,6 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { AppLayout } from '@/components/Layout/AppLayout';
+import { usePullToRefresh } from '@/hooks/usePullToRefresh';
+import { PullToRefreshIndicator } from '@/components/ui/pull-to-refresh';
 import { 
   Heart, 
   MessageCircle, 
@@ -44,7 +46,23 @@ import {
   Hash,
   AtSign,
   Play,
-  Pause
+  Pause,
+  ChevronLeft,
+  ChevronRight,
+  Crown,
+  Briefcase,
+  GraduationCap,
+  Building2,
+  Landmark,
+  Users2,
+  Calendar,
+  AlertTriangle,
+  DollarSign,
+  Handshake,
+  Megaphone,
+  Activity,
+  Menu,
+  X
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -59,7 +77,7 @@ interface FeedPost {
     username: string;
     avatar: string;
     verified: boolean;
-    type: 'user' | 'politician' | 'company' | 'institution';
+    type: 'user' | 'politician' | 'company' | 'institution' | 'minister' | 'mp' | 'artist' | 'school' | 'hospital' | 'ngo' | 'billionaire';
     title?: string;
     followers?: number;
   };
@@ -89,15 +107,23 @@ interface FeedPost {
   created_at: string;
   priority?: 'normal' | 'trending' | 'urgent' | 'promoted';
   sentiment?: 'positive' | 'negative' | 'neutral';
+  poll_data?: {
+    question: string;
+    options: Array<{ text: string; votes: number; percentage: number }>;
+    total_votes: number;
+    user_voted?: number;
+    ends_at: string;
+  };
 }
 
 interface TrendingItem {
   id: string;
   title: string;
-  type: 'topic' | 'poll' | 'politician' | 'company' | 'institution';
+  type: 'topic' | 'poll' | 'politician' | 'company' | 'institution' | 'event' | 'campaign';
   count: number;
   change: number;
   icon?: string;
+  category?: string;
 }
 
 interface FollowSuggestion {
@@ -105,11 +131,24 @@ interface FollowSuggestion {
   name: string;
   username: string;
   avatar: string;
-  type: 'user' | 'politician' | 'company' | 'institution';
+  type: 'user' | 'politician' | 'company' | 'institution' | 'minister' | 'mp' | 'artist' | 'school' | 'hospital' | 'ngo' | 'billionaire' | 'political_party';
   title?: string;
   followers: number;
   verified: boolean;
   mutual_followers?: number;
+  category?: string;
+  rating?: number;
+}
+
+interface SliderItem {
+  id: string;
+  title: string;
+  subtitle?: string;
+  image?: string;
+  type: 'poll' | 'event' | 'campaign' | 'notice' | 'project';
+  action_url?: string;
+  priority?: 'high' | 'medium' | 'low';
+  data?: any;
 }
 
 const CivicFeed = () => {
@@ -126,20 +165,201 @@ const CivicFeed = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   
-  // Sidebar data
+  // Enhanced data states
   const [trending, setTrending] = useState<TrendingItem[]>([]);
   const [followSuggestions, setFollowSuggestions] = useState<FollowSuggestion[]>([]);
+  const [sliderPolls, setSliderPolls] = useState<SliderItem[]>([]);
+  const [sliderEvents, setSliderEvents] = useState<SliderItem[]>([]);
+  const [sliderCampaigns, setSliderCampaigns] = useState<SliderItem[]>([]);
+  const [sliderNotices, setSliderNotices] = useState<SliderItem[]>([]);
+  
+  // Mobile & UI state
+  const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const [activeSlider, setActiveSlider] = useState(0);
+  const [pollIndex, setPollIndex] = useState(0);
+  const [eventIndex, setEventIndex] = useState(0);
+  const [campaignIndex, setCampaignIndex] = useState(0);
   
   // Filter state
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedRegion, setSelectedRegion] = useState('all');
-  const [isLiveMode, setIsLiveMode] = useState(false);
+  const [isLiveMode, setIsLiveMode] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   
   // Refs
   const feedRef = useRef<HTMLDivElement>(null);
   const autoRefreshRef = useRef<NodeJS.Timeout>();
   const lastPostIdRef = useRef<string>('');
+  const sliderRefs = useRef<{ [key: string]: NodeJS.Timeout }>({});
+
+  // Forward declare the functions to avoid dependency issues
+  const loadFeedData = useCallback(async (reset = false) => {
+    try {
+      if (reset) {
+        setLoading(true);
+        setPage(1);
+      }
+
+      // Enhanced mock data with more diverse content including polls
+      const pollTemplates = [
+        {
+          question: "What should be the government's top priority for 2024?",
+          options: [
+            { text: "Infrastructure Development", votes: 1247, percentage: 35 },
+            { text: "Education Reform", votes: 987, percentage: 28 },
+            { text: "Healthcare Improvement", votes: 856, percentage: 24 },
+            { text: "Economic Growth", votes: 456, percentage: 13 }
+          ],
+          total_votes: 3546,
+          ends_at: new Date(Date.now() + 86400000 * 7).toISOString()
+        },
+        {
+          question: "Should the government increase investment in renewable energy?",
+          options: [
+            { text: "Yes, significantly", votes: 2134, percentage: 62 },
+            { text: "Yes, moderately", votes: 856, percentage: 25 },
+            { text: "No, focus on current infrastructure", votes: 445, percentage: 13 }
+          ],
+          total_votes: 3435,
+          ends_at: new Date(Date.now() + 86400000 * 5).toISOString()
+        }
+      ];
+
+      const contentTemplates = [
+        "New infrastructure project launched in {city}! 🚧 This will improve connectivity and boost economic growth. What are your thoughts? #Infrastructure #Development",
+        "Education sector reforms announced by Minister of Education. Key changes include improved teacher training and digital classrooms. #Education #Reform",
+        "Healthcare improvements in {region} region showing positive results. Hospital capacity increased by 30% this quarter. #Health #Progress",
+        "Breaking: New university campus opens in {city}, providing 5000+ new student places. A milestone for higher education! 🎓 #University #Education",
+        "Community development project in {region} receives international funding. Focus on clean water and renewable energy. 🌱 #Community #Sustainability",
+        "Minister of Health visits {city} hospital, announces new medical equipment procurement. Healthcare modernization continues. 🏥 #Healthcare",
+        "Road construction project connecting {city} to neighboring regions 85% complete. Expected completion: March 2024. 🛣️ #Infrastructure",
+        "Youth empowerment program launches in {region}. 1000+ young people to receive vocational training and startup funding. 💪 #Youth #Empowerment",
+        "Digital transformation initiative: Government services going online to improve citizen access and reduce bureaucracy. 💻 #DigitalGov"
+      ];
+
+      const enhancedAuthors = [
+        { name: 'Paul Biya', username: 'paulbiya_cm', type: 'politician', title: 'President of Cameroon', verified: true, followers: 890000 },
+        { name: 'Maurice Kamto', username: 'mauricekamto', type: 'politician', title: 'Opposition Leader', verified: true, followers: 456000 },
+        { name: 'Dr. Manaouda Malachie', username: 'min_sante', type: 'minister', title: 'Minister of Health', verified: true, followers: 67000 },
+        { name: 'Prof. Laurent Serge Etoundi Ngoa', username: 'min_education', type: 'minister', title: 'Minister of Education', verified: true, followers: 54000 },
+        { name: 'MTN Cameroon', username: 'mtn_cameroon', type: 'company', title: 'Telecommunications', verified: true, followers: 234000 },
+        { name: 'University of Yaoundé I', username: 'univ_yaounde1', type: 'institution', title: 'Public University', verified: true, followers: 78000 },
+        { name: 'Charlotte Dipanda', username: 'charlotte_dipanda', type: 'artist', title: 'Musician', verified: true, followers: 456000 },
+        { name: 'Tenor', username: 'tenor_cm', type: 'artist', title: 'Musician', verified: true, followers: 678000 },
+        { name: 'Douala General Hospital', username: 'hgd_douala', type: 'hospital', title: 'Public Hospital', verified: true, followers: 34000 },
+        { name: 'CPDM Party', username: 'cpdm_cm', type: 'political_party', title: 'Ruling Party', verified: true, followers: 345000 },
+        { name: 'Orange Cameroon', username: 'orange_cm', type: 'company', title: 'Telecommunications', verified: true, followers: 198000 },
+        { name: 'Vincent Aboubakar', username: 'aboubakar_cm', type: 'user', title: 'Footballer', verified: true, followers: 567000 },
+        { name: 'Foumban Royal Palace', username: 'foumban_palace', type: 'institution', title: 'Cultural Institution', verified: true, followers: 23000 }
+      ];
+
+      const locations = [
+        { region: 'Centre', city: 'Yaoundé' },
+        { region: 'Littoral', city: 'Douala' },
+        { region: 'Ouest', city: 'Bafoussam' },
+        { region: 'Nord-Ouest', city: 'Bamenda' },
+        { region: 'Sud-Ouest', city: 'Buea' },
+        { region: 'Nord', city: 'Garoua' },
+        { region: 'Adamaoua', city: 'Ngaoundéré' },
+        { region: 'Est', city: 'Bertoua' },
+        { region: 'Sud', city: 'Ebolowa' },
+        { region: 'Extrême-Nord', city: 'Maroua' }
+      ];
+
+      const postTypes = ['text', 'poll', 'media', 'event', 'debate'] as const;
+
+      const mockPosts: FeedPost[] = Array.from({ length: 20 }, (_, i) => {
+        const author = enhancedAuthors[Math.floor(Math.random() * enhancedAuthors.length)];
+        const location = locations[Math.floor(Math.random() * locations.length)];
+        const postType = postTypes[Math.floor(Math.random() * postTypes.length)];
+        
+        let content: string;
+        let pollData = undefined;
+        
+        if (postType === 'poll') {
+          const poll = pollTemplates[Math.floor(Math.random() * pollTemplates.length)];
+          content = `📊 POLL: ${poll.question}`;
+          pollData = poll;
+        } else {
+          content = contentTemplates[Math.floor(Math.random() * contentTemplates.length)]
+            .replace(/\{city\}/g, location.city)
+            .replace(/\{region\}/g, location.region);
+        }
+        
+        return {
+          id: `post-${reset ? '' : page}-${i}`,
+          content,
+          type: postType,
+          author: {
+            id: `${author.username}-${i}`,
+            name: author.name,
+            username: author.username,
+            avatar: '/placeholder.svg',
+            verified: author.verified,
+            type: author.type as any,
+            title: author.title,
+            followers: author.followers + Math.floor(Math.random() * 1000)
+          },
+          metrics: {
+            likes: Math.floor(Math.random() * 2000) + 50,
+            comments: Math.floor(Math.random() * 200) + 5,
+            shares: Math.floor(Math.random() * 100) + 2,
+            views: Math.floor(Math.random() * 10000) + 500
+          },
+          engagement: {
+            user_liked: Math.random() > 0.8,
+            user_shared: false,
+            user_saved: Math.random() > 0.9
+          },
+          location,
+          poll_data: pollData,
+          hashtags: content.match(/#[a-zA-Z0-9_]+/g)?.map(tag => tag.slice(1)) || [],
+          mentions: content.match(/@[a-zA-Z0-9_]+/g)?.map(mention => mention.slice(1)) || [],
+          created_at: new Date(Date.now() - Math.random() * 86400000 * 7).toISOString(),
+          priority: ['normal', 'normal', 'normal', 'trending', 'urgent', 'promoted'][Math.floor(Math.random() * 6)] as any,
+          sentiment: ['positive', 'negative', 'neutral'][Math.floor(Math.random() * 3)] as any
+        };
+      });
+
+      if (reset) {
+        setPosts(mockPosts);
+        setPage(2);
+      } else {
+        setPosts(prev => [...prev, ...mockPosts]);
+        setPage(prev => prev + 1);
+      }
+
+      if (mockPosts.length > 0) {
+        lastPostIdRef.current = mockPosts[0].id;
+      }
+      
+      setHasMore(mockPosts.length === 20);
+    } catch (error) {
+      console.error('Error loading feed:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load feed posts',
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, [page, toast]);
+
+  // Define refresh function early to avoid declaration order issues
+  const handleRefresh = useCallback(async () => {
+    setRefreshing(true);
+    setHasNewPosts(false);
+    await loadFeedData(true);
+  }, [loadFeedData]);
+
+  // Pull to refresh functionality
+  const { containerRef, isPulling, pullDistance, isRefreshing, pullProgress, canTrigger } = usePullToRefresh({
+    onRefresh: handleRefresh,
+    threshold: 60,
+    triggerThreshold: 80
+  });
 
   // Real-time auto refresh with content rotation
   useEffect(() => {
@@ -184,123 +404,65 @@ const CivicFeed = () => {
     if (activeFilter || selectedRegion !== 'all' || searchQuery) {
       loadFeedData(true);
     }
-  }, [activeFilter, selectedRegion, searchQuery]);
+  }, [activeFilter, selectedRegion, searchQuery, loadFeedData]);
 
-  const loadFeedData = async (reset = false) => {
-    try {
-      if (reset) {
-        setLoading(true);
-        setPage(1);
-      }
+  // Slider rotation effects
+  useEffect(() => {
+    // Auto-slide polls every 5 seconds
+    sliderRefs.current.polls = setInterval(() => {
+      setPollIndex(prev => (prev + 1) % 3);
+    }, 5000);
 
-      // Enhanced mock data with rotating content
-      const contentTemplates = [
-        "New infrastructure project launched in {city}! 🚧 This will improve connectivity and boost economic growth. What are your thoughts? #Infrastructure #Development",
-        "Education sector reforms announced by Minister of Education. Key changes include improved teacher training and digital classrooms. #Education #Reform",
-        "Healthcare improvements in {region} region showing positive results. Hospital capacity increased by 30% this quarter. #Health #Progress",
-        "📊 POLL: What should be the government's top priority for 2024? A) Infrastructure B) Education C) Healthcare D) Economy #CameroonPoll",
-        "Breaking: New university campus opens in {city}, providing 5000+ new student places. A milestone for higher education! 🎓 #University #Education",
-        "Community development project in {region} receives international funding. Focus on clean water and renewable energy. 🌱 #Community #Sustainability",
-        "Minister of Health visits {city} hospital, announces new medical equipment procurement. Healthcare modernization continues. 🏥 #Healthcare",
-        "Road construction project connecting {city} to neighboring regions 85% complete. Expected completion: March 2024. 🛣️ #Infrastructure",
-        "Youth empowerment program launches in {region}. 1000+ young people to receive vocational training and startup funding. 💪 #Youth #Empowerment",
-        "Digital transformation initiative: Government services going online to improve citizen access and reduce bureaucracy. 💻 #DigitalGov"
-      ];
+    // Auto-slide events every 7 seconds  
+    sliderRefs.current.events = setInterval(() => {
+      setEventIndex(prev => (prev + 1) % 3);
+    }, 7000);
 
-      const authors = [
-        { name: 'Paul Biya', username: 'paulbiya_cm', type: 'politician', title: 'President of Cameroon', verified: true, followers: 890000 },
-        { name: 'Maurice Kamto', username: 'mauricekamto', type: 'politician', title: 'Opposition Leader', verified: true, followers: 456000 },
-        { name: 'Minister of Health', username: 'min_sante', type: 'politician', title: 'Dr. Manaouda Malachie', verified: true, followers: 67000 },
-        { name: 'MTN Cameroon', username: 'mtn_cameroon', type: 'company', title: 'Telecommunications', verified: true, followers: 234000 },
-        { name: 'University of Yaoundé', username: 'univ_yaounde', type: 'institution', title: 'Public University', verified: true, followers: 78000 },
-        { name: 'Charlotte Dipanda', username: 'charlotte_dipanda', type: 'user', title: 'Musician', verified: true, followers: 456000 },
-        { name: 'Douala General Hospital', username: 'hgd_douala', type: 'institution', title: 'Public Hospital', verified: true, followers: 34000 },
-        { name: 'CPDM Party', username: 'cpdm_cm', type: 'politician', title: 'Ruling Party', verified: true, followers: 345000 },
-        { name: 'Orange Cameroon', username: 'orange_cm', type: 'company', title: 'Telecommunications', verified: true, followers: 198000 },
-        { name: 'Local Journalist', username: 'journalist_cm', type: 'user', title: 'Independent Media', verified: false, followers: 12000 }
-      ];
+    // Auto-slide campaigns every 6 seconds
+    sliderRefs.current.campaigns = setInterval(() => {
+      setCampaignIndex(prev => (prev + 1) % 3);
+    }, 6000);
 
-      const locations = [
-        { region: 'Centre', city: 'Yaoundé' },
-        { region: 'Littoral', city: 'Douala' },
-        { region: 'Ouest', city: 'Bafoussam' },
-        { region: 'Nord-Ouest', city: 'Bamenda' },
-        { region: 'Sud-Ouest', city: 'Buea' },
-        { region: 'Nord', city: 'Garoua' },
-        { region: 'Adamaoua', city: 'Ngaoundéré' },
-        { region: 'Est', city: 'Bertoua' },
-        { region: 'Sud', city: 'Ebolowa' },
-        { region: 'Extrême-Nord', city: 'Maroua' }
-      ];
+    return () => {
+      Object.values(sliderRefs.current).forEach(clearInterval);
+    };
+  }, []);
 
-      const postTypes = ['text', 'poll', 'media', 'event', 'debate'] as const;
+  // Load slider data
+  useEffect(() => {
+    loadSliderData();
+  }, []);
 
-      const mockPosts: FeedPost[] = Array.from({ length: 20 }, (_, i) => {
-        const author = authors[Math.floor(Math.random() * authors.length)];
-        const location = locations[Math.floor(Math.random() * locations.length)];
-        const content = contentTemplates[Math.floor(Math.random() * contentTemplates.length)]
-          .replace(/\{city\}/g, location.city)
-          .replace(/\{region\}/g, location.region);
-        
-        return {
-          id: `post-${reset ? '' : page}-${i}`,
-          content,
-          type: postTypes[Math.floor(Math.random() * postTypes.length)],
-          author: {
-            id: `${author.username}-${i}`,
-            name: author.name,
-            username: author.username,
-            avatar: '/placeholder.svg',
-            verified: author.verified,
-            type: author.type as any,
-            title: author.title,
-            followers: author.followers + Math.floor(Math.random() * 1000)
-          },
-          metrics: {
-            likes: Math.floor(Math.random() * 2000) + 50,
-            comments: Math.floor(Math.random() * 200) + 5,
-            shares: Math.floor(Math.random() * 100) + 2,
-            views: Math.floor(Math.random() * 10000) + 500
-          },
-          engagement: {
-            user_liked: Math.random() > 0.8,
-            user_shared: false,
-            user_saved: Math.random() > 0.9
-          },
-          location,
-          hashtags: content.match(/#[a-zA-Z0-9_]+/g)?.map(tag => tag.slice(1)) || [],
-          mentions: content.match(/@[a-zA-Z0-9_]+/g)?.map(mention => mention.slice(1)) || [],
-          created_at: new Date(Date.now() - Math.random() * 86400000 * 7).toISOString(),
-          priority: ['normal', 'normal', 'normal', 'trending', 'urgent', 'promoted'][Math.floor(Math.random() * 6)] as any,
-          sentiment: ['positive', 'negative', 'neutral'][Math.floor(Math.random() * 3)] as any
-        };
-      });
+  const loadSliderData = () => {
+    // Mock slider polls
+    setSliderPolls([
+      { id: '1', title: "What's your top concern for 2024?", subtitle: 'Infrastructure vs Healthcare', type: 'poll', priority: 'high' },
+      { id: '2', title: "Should CRTV be privatized?", subtitle: 'Media Freedom Discussion', type: 'poll', priority: 'medium' },
+      { id: '3', title: "Rate the current education system", subtitle: 'Quality Assessment', type: 'poll', priority: 'medium' }
+    ]);
 
-      if (reset) {
-        setPosts(mockPosts);
-        setPage(2);
-      } else {
-        setPosts(prev => [...prev, ...mockPosts]);
-        setPage(prev => prev + 1);
-      }
+    // Mock slider events
+    setSliderEvents([
+      { id: '1', title: 'Yaoundé Tech Summit 2024', subtitle: 'Innovation Conference', type: 'event', priority: 'high' },
+      { id: '2', title: 'Douala Port Expansion Launch', subtitle: 'Infrastructure Development', type: 'event', priority: 'high' },
+      { id: '3', title: 'Cameroon Education Week', subtitle: 'Policy Discussions', type: 'event', priority: 'medium' }
+    ]);
 
-      if (mockPosts.length > 0) {
-        lastPostIdRef.current = mockPosts[0].id;
-      }
-      
-      setHasMore(mockPosts.length === 20);
-    } catch (error) {
-      console.error('Error loading feed:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load feed posts',
-        variant: 'destructive'
-      });
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+    // Mock slider campaigns 
+    setSliderCampaigns([
+      { id: '1', title: 'Clean Water for All', subtitle: 'Rural Development Initiative', type: 'campaign', priority: 'high' },
+      { id: '2', title: 'Digital Literacy Campaign', subtitle: 'Tech Education', type: 'campaign', priority: 'medium' },
+      { id: '3', title: 'Youth Employment Drive', subtitle: 'Job Creation Program', type: 'campaign', priority: 'high' }
+    ]);
+
+    // Mock government notices
+    setSliderNotices([
+      { id: '1', title: 'New Tax Policy Update', subtitle: 'MINFI Announcement', type: 'notice', priority: 'high' },
+      { id: '2', title: 'Road Closure Notice - Douala', subtitle: 'Construction Work', type: 'notice', priority: 'medium' },
+      { id: '3', title: 'Election Commission Update', subtitle: 'ELECAM Notice', type: 'notice', priority: 'high' }
+    ]);
   };
+
 
   const loadSidebarData = async () => {
     // Mock trending data with rotation
@@ -369,11 +531,6 @@ const CivicFeed = () => {
     }
   };
 
-  const handleRefresh = async () => {
-    setRefreshing(true);
-    setHasNewPosts(false);
-    await loadFeedData(true);
-  };
 
   const handleNewPostsClick = () => {
     setHasNewPosts(false);
@@ -491,37 +648,128 @@ const CivicFeed = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-background">
-        {/* Sticky Header */}
+      <div ref={containerRef} className="min-h-screen bg-background">
+        {/* Pull to Refresh Indicator */}
+        <PullToRefreshIndicator
+          isPulling={isPulling}
+          pullDistance={pullDistance}
+          isRefreshing={isRefreshing}
+          pullProgress={pullProgress}
+          canTrigger={canTrigger}
+        />
+
+        {/* Mobile Sticky Header */}
         <div className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b">
-          <div className="container mx-auto px-4 py-3">
+          <div className="px-3 py-2 sm:px-4 sm:py-3">
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-bold flex items-center gap-2">
-                <Globe className="h-6 w-6 text-primary" />
-                Civic Feed
-              </h1>
-              
               <div className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="lg:hidden"
+                  onClick={() => setShowMobileSidebar(!showMobileSidebar)}
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+                <h1 className="text-lg sm:text-2xl font-bold flex items-center gap-2">
+                  <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                  <span className="hidden sm:block">Civic Feed</span>
+                </h1>
+              </div>
+              
+              <div className="flex items-center gap-1 sm:gap-2">
                 <Button
                   variant={isLiveMode ? "destructive" : "outline"}
                   size="sm"
                   onClick={() => setIsLiveMode(!isLiveMode)}
+                  className="text-xs px-2 sm:px-3"
                 >
-                  {isLiveMode ? <Pause className="h-4 w-4" /> : <Radio className="h-4 w-4" />}
-                  {isLiveMode ? 'Live' : 'Auto'}
+                  {isLiveMode ? <Radio className="h-3 w-3 sm:h-4 sm:w-4" /> : <Pause className="h-3 w-3 sm:h-4 sm:w-4" />}
+                  <span className="hidden sm:inline ml-1">{isLiveMode ? 'Live' : 'Auto'}</span>
                 </Button>
                 
-                <Button variant="outline" size="sm">
-                  <Bell className="h-4 w-4" />
+                <Button variant="outline" size="sm" className="p-1.5 sm:p-2">
+                  <Bell className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
                 
-                <Button variant="outline" size="sm">
-                  <MessageCircle className="h-4 w-4" />
+                <Button variant="outline" size="sm" className="p-1.5 sm:p-2">
+                  <MessageCircle className="h-3 w-3 sm:h-4 sm:w-4" />
+                </Button>
+
+                <Button variant="outline" size="sm" className="p-1.5 sm:p-2">
+                  <Search className="h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Mobile Sidebar Overlay */}
+        {showMobileSidebar && (
+          <div className="fixed inset-0 z-50 lg:hidden">
+            <div className="absolute inset-0 bg-black/50" onClick={() => setShowMobileSidebar(false)} />
+            <div className="absolute left-0 top-0 h-full w-80 bg-background shadow-lg overflow-y-auto">
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold">Menu</h2>
+                  <Button variant="ghost" size="sm" onClick={() => setShowMobileSidebar(false)}>
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+                
+                {/* Mobile Trending */}
+                <Card className="mb-4">
+                  <CardHeader>
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4" />
+                      Trending Topics
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {trending.slice(0, 3).map((item, index) => (
+                      <div key={item.id} className="flex items-center justify-between text-sm">
+                        <div>
+                          <p className="font-medium">{item.title}</p>
+                          <p className="text-xs text-muted-foreground">{formatNumber(item.count)} mentions</p>
+                        </div>
+                        <Badge variant="outline" className={item.change > 0 ? 'text-green-600' : 'text-red-600'}>
+                          {item.change > 0 ? '+' : ''}{item.change}%
+                        </Badge>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                {/* Mobile Follow Suggestions */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm flex items-center gap-2">
+                      <UserPlus className="h-4 w-4" />
+                      People to Follow
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {followSuggestions.slice(0, 3).map((suggestion) => (
+                      <div key={suggestion.id} className="flex items-center gap-3">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={suggestion.avatar} />
+                          <AvatarFallback>{suggestion.name[0]}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{suggestion.name}</p>
+                          <p className="text-xs text-muted-foreground truncate">@{suggestion.username}</p>
+                        </div>
+                        <Button size="sm" variant="outline" className="text-xs">
+                          Follow
+                        </Button>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* New Posts Banner */}
         {hasNewPosts && (
