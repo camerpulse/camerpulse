@@ -43,10 +43,12 @@ interface CertificateData {
   custom_text?: string;
   issued_at: string;
   download_count: number;
+  event_name: string;
+  event_date: string;
   civic_events?: {
     name: string;
     start_date: string;
-  };
+  } | null;
 }
 
 interface CertificateManagerProps {
@@ -65,7 +67,7 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({
   const [settings, setSettings] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [showPreview, setShowPreview] = useState(false);
-  const [previewCertificate, setPreviewCertificate] = useState<CertificateData | null>(null);
+  const [previewCertificate, setPreviewCertificate] = useState<any>(null);
   const [isCreating, setIsCreating] = useState(false);
 
   // Form state for new certificate
@@ -88,15 +90,20 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({
     try {
       const { data, error } = await supabase
         .from('event_certificates')
-        .select(`
-          *,
-          civic_events (name, start_date)
-        `)
+        .select('*')
         .eq('event_id', eventId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setCertificates(data || []);
+      
+      const transformedData = (data || []).map(cert => ({
+        ...cert,
+        event_name: eventName,
+        event_date: new Date().toISOString(),
+        civic_events: null
+      }));
+      
+      setCertificates(transformedData);
     } catch (error) {
       console.error('Error fetching certificates:', error);
       toast.error('Failed to load certificates');
@@ -187,12 +194,12 @@ export const CertificateManager: React.FC<CertificateManagerProps> = ({
       certificate_title: cert.certificate_title,
       recipient_name: cert.recipient_name,
       recipient_role: cert.recipient_role,
-      event_name: cert.civic_events?.name || eventName,
-      event_date: cert.civic_events?.start_date || new Date().toISOString(),
+      event_name: cert.event_name,
+      event_date: cert.event_date,
       organizer_name: cert.organizer_name,
       verification_code: cert.verification_code,
       template_design: cert.template_design,
-      custom_text: cert.custom_text
+      custom_text: cert.custom_text || ''
     };
     
     setPreviewCertificate(certificateData);

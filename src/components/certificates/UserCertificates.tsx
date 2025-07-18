@@ -40,7 +40,7 @@ interface UserCertificate {
     name: string;
     start_date: string;
     venue_name?: string;
-  };
+  } | null;
 }
 
 export const UserCertificates: React.FC = () => {
@@ -63,15 +63,15 @@ export const UserCertificates: React.FC = () => {
     try {
       const { data, error } = await supabase
         .from('event_certificates')
-        .select(`
-          *,
-          civic_events (name, start_date, venue_name)
-        `)
+        .select('*')
         .eq('user_id', user.id)
         .order('issued_at', { ascending: false });
 
       if (error) throw error;
-      setCertificates(data || []);
+      setCertificates((data || []).map(cert => ({
+        ...cert,
+        civic_events: null
+      })));
     } catch (error) {
       console.error('Error fetching certificates:', error);
       toast.error('Failed to load certificates');
@@ -81,9 +81,8 @@ export const UserCertificates: React.FC = () => {
   };
 
   const filteredCertificates = certificates.filter(cert =>
-    cert.certificate_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cert.civic_events?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    cert.recipient_role.toLowerCase().includes(searchTerm.toLowerCase())
+    cert.certificate_title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    cert.recipient_role?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const groupedCertificates = {
@@ -99,8 +98,8 @@ export const UserCertificates: React.FC = () => {
       certificate_title: cert.certificate_title,
       recipient_name: cert.recipient_name,
       recipient_role: cert.recipient_role,
-      event_name: cert.civic_events?.name || '',
-      event_date: cert.civic_events?.start_date || new Date().toISOString(),
+      event_name: 'Event Name',
+      event_date: new Date().toISOString(),
       organizer_name: cert.organizer_name,
       verification_code: cert.verification_code,
       template_design: cert.template_design,
@@ -139,7 +138,7 @@ export const UserCertificates: React.FC = () => {
       try {
         await navigator.share({
           title: certificate.certificate_title,
-          text: `Check out my certificate from ${certificate.civic_events?.name}`,
+          text: `Check out my certificate`,
           url: shareUrl
         });
       } catch (error) {
@@ -160,7 +159,8 @@ export const UserCertificates: React.FC = () => {
       claimed: 'default',
       revoked: 'destructive'
     };
-    return <Badge variant={variants[status as keyof typeof variants] || 'secondary'}>{status}</Badge>;
+    const variant = variants[status as keyof typeof variants] as "default" | "secondary" | "destructive";
+    return <Badge variant={variant || 'secondary'}>{status}</Badge>;
   };
 
   const getTypeIcon = (type: string) => {
@@ -350,8 +350,8 @@ const CertificateList: React.FC<CertificateListProps> = ({
           </CardHeader>
           <CardContent className="space-y-3">
             <div>
-              <h3 className="font-semibold truncate" title={certificate.civic_events?.name}>
-                {certificate.civic_events?.name}
+              <h3 className="font-semibold truncate" title={certificate.certificate_title}>
+                {certificate.certificate_title}
               </h3>
               <p className="text-sm text-muted-foreground">
                 {certificate.recipient_role}
@@ -361,9 +361,7 @@ const CertificateList: React.FC<CertificateListProps> = ({
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Calendar className="w-4 h-4" />
               <span>
-                {certificate.civic_events?.start_date && 
-                  format(new Date(certificate.civic_events.start_date), 'MMM dd, yyyy')
-                }
+                {format(new Date(certificate.issued_at), 'MMM dd, yyyy')}
               </span>
             </div>
 

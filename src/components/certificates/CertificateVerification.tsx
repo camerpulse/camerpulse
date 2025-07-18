@@ -30,7 +30,7 @@ interface VerificationResult {
   civic_events?: {
     name: string;
     start_date: string;
-  };
+  } | null;
 }
 
 export const CertificateVerification: React.FC = () => {
@@ -53,10 +53,7 @@ export const CertificateVerification: React.FC = () => {
       // First, search for the certificate
       const { data: certificate, error: certError } = await supabase
         .from('event_certificates')
-        .select(`
-          *,
-          civic_events (name, start_date)
-        `)
+        .select('*')
         .eq('verification_code', verificationCode.trim().toUpperCase())
         .single();
 
@@ -78,7 +75,10 @@ export const CertificateVerification: React.FC = () => {
           is_valid: certificate.certificate_status === 'issued' || certificate.certificate_status === 'claimed'
         });
 
-      setResult(certificate);
+      setResult({
+        ...certificate,
+        civic_events: null
+      });
       
       if (certificate.certificate_status === 'revoked') {
         setError('This certificate has been revoked and is no longer valid.');
@@ -188,12 +188,10 @@ export const CertificateVerification: React.FC = () => {
                       <span className="text-sm font-medium">Event</span>
                     </div>
                     <div className="font-semibold">
-                      {result.civic_events?.name || 'Event Name'}
+                      Event Name
                     </div>
                     <div className="text-sm text-gray-600">
-                      {result.civic_events?.start_date && 
-                        format(new Date(result.civic_events.start_date), 'MMM dd, yyyy')
-                      }
+                      {format(new Date(result.issued_at), 'MMM dd, yyyy')}
                     </div>
                   </div>
 
