@@ -126,7 +126,7 @@ export const ProfileSearch: React.FC<ProfileSearchProps> = ({
 
       // Apply filters
       if (filters.profileType !== 'all') {
-        query = query.eq('profile_type', filters.profileType);
+        query = query.eq('profile_type', filters.profileType as any);
       }
 
       if (filters.region !== 'all') {
@@ -143,10 +143,10 @@ export const ProfileSearch: React.FC<ProfileSearchProps> = ({
           query = query.order('civic_influence_score', { ascending: false });
           break;
         case 'recent':
-          query = query.order('last_active_at', { ascending: false, nullsLast: true });
+          query = query.order('last_active_at', { ascending: false });
           break;
         case 'alphabetical':
-          query = query.order('display_name', { ascending: true, nullsLast: true });
+          query = query.order('display_name', { ascending: true });
           break;
         default:
           // Relevance - order by verification status, then influence score

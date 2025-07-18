@@ -67,6 +67,7 @@ export const MessageDialog: React.FC<MessageDialogProps> = ({
         .insert({
           conversation_id: conversationId,
           sender_id: user.id,
+          receiver_id: recipientId,
           content: message,
           message_type: 'text'
         });

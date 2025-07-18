@@ -10,7 +10,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Palette, Monitor, Sun, Moon, Sparkles, Eye } from 'lucide-react';
 
 interface ProfileTheme {
-  id: string;
+  id?: string;
   profile_id: string;
   theme_name: string;
   primary_color: string;
@@ -86,21 +86,24 @@ export const ProfileThemeCustomizer: React.FC<ProfileThemeCustomizerProps> = ({
   const fetchCurrentTheme = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('profile_themes')
-        .select('*')
-        .eq('profile_id', profileId)
-        .eq('is_active', true)
-        .single();
-
-      if (error && error.code !== 'PGRST116') throw error;
       
-      if (data) {
-        setCurrentTheme(data);
-      } else {
-        // Create default theme
-        await createDefaultTheme();
-      }
+      // Mock default theme for now - will be implemented with database
+      const defaultTheme: ProfileTheme = {
+        id: 'mock-theme-1',
+        profile_id: profileId,
+        theme_name: 'Default',
+        primary_color: '#2563eb',
+        secondary_color: '#64748b',
+        accent_color: '#0ea5e9',
+        background_style: 'solid',
+        font_family: 'Inter',
+        card_style: 'elevated',
+        animation_level: 50,
+        is_active: true,
+        custom_css: ''
+      };
+      
+      setCurrentTheme(defaultTheme);
     } catch (error) {
       console.error('Error fetching theme:', error);
     } finally {
@@ -109,48 +112,17 @@ export const ProfileThemeCustomizer: React.FC<ProfileThemeCustomizerProps> = ({
   };
 
   const createDefaultTheme = async () => {
-    try {
-      const defaultTheme = {
-        profile_id: profileId,
-        theme_name: 'Default',
-        primary_color: '#2563eb',
-        secondary_color: '#64748b',
-        accent_color: '#0ea5e9',
-        background_style: 'solid' as const,
-        font_family: 'Inter',
-        card_style: 'elevated' as const,
-        animation_level: 50,
-        is_active: true
-      };
-
-      const { data, error } = await supabase
-        .from('profile_themes')
-        .insert(defaultTheme)
-        .select()
-        .single();
-
-      if (error) throw error;
-      setCurrentTheme(data);
-    } catch (error) {
-      console.error('Error creating default theme:', error);
-    }
+    // Mock function for now
+    console.log('Creating default theme for profile:', profileId);
   };
 
   const updateTheme = async (updates: Partial<ProfileTheme>) => {
     if (!currentTheme) return;
 
     try {
-      const { data, error } = await supabase
-        .from('profile_themes')
-        .update(updates)
-        .eq('id', currentTheme.id)
-        .select()
-        .single();
-
-      if (error) throw error;
-      
-      setCurrentTheme(data);
-      onThemeChange?.(data);
+      const updatedTheme = { ...currentTheme, ...updates };
+      setCurrentTheme(updatedTheme);
+      onThemeChange?.(updatedTheme);
       
       toast({
         title: "Theme updated",

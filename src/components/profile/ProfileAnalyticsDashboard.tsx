@@ -15,7 +15,7 @@ export const ProfileAnalyticsDashboard: React.FC<ProfileAnalyticsDashboardProps>
   profileId,
   isOwner
 }) => {
-  const { analytics, recentViews, loading } = useProfileAnalytics(profileId);
+  const { analytics, loading } = useProfileAnalytics(profileId);
 
   if (loading) {
     return (
@@ -248,46 +248,18 @@ export const ProfileAnalyticsDashboard: React.FC<ProfileAnalyticsDashboardProps>
         )}
       </div>
 
-      {/* Recent Views (Owner Only) */}
-      {isOwner && recentViews.length > 0 && (
+      {/* Recent Activity Placeholder (Owner Only) */}
+      {isOwner && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Eye className="w-5 h-5" />
-              Recent Profile Views
+              Recent Activity
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {recentViews.slice(0, 10).map((view) => (
-                <div key={view.id} className="flex items-center justify-between py-2 border-b border-border/50 last:border-0">
-                  <div>
-                    <p className="text-sm">
-                      {view.viewer_id ? (
-                        <span className="font-medium">Registered User</span>
-                      ) : (
-                        <span className="text-muted-foreground">Anonymous Visitor</span>
-                      )}
-                    </p>
-                    {view.viewer_region && (
-                      <p className="text-xs text-muted-foreground">
-                        From {view.viewer_region}
-                      </p>
-                    )}
-                  </div>
-                  <div className="text-right">
-                    <p className="text-xs text-muted-foreground">
-                      {formatDistanceToNow(new Date(view.view_date), { addSuffix: true })}
-                    </p>
-                    {view.viewer_profile_type && (
-                      <Badge variant="outline" className="text-xs mt-1">
-                        {view.viewer_profile_type}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+          <CardContent className="p-6 text-center">
+            <Eye className="w-12 h-12 mx-auto mb-4 text-muted-foreground opacity-50" />
+            <p className="text-muted-foreground">Recent activity tracking coming soon</p>
           </CardContent>
         </Card>
       )}

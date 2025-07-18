@@ -75,10 +75,9 @@ export const ReportDialog: React.FC<ReportDialogProps> = ({
         .from('profile_reports')
         .insert({
           reported_profile_id: profileId,
-          reporter_id: user.id,
+          reporter_user_id: user.id,
           report_type: reportType,
-          report_description: description,
-          status: 'pending'
+          report_reason: description || reportType
         });
 
       if (error) throw error;
