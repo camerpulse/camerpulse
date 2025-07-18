@@ -13,6 +13,8 @@ export { CivicTag } from './CivicTag';
 export { FeedComposer } from './FeedComposer';
 export { CivicPostComposer } from './CivicPostComposer';
 export { CivicNotificationCenter } from './CivicNotificationCenter';
+export { AdvancedUserProfile } from './AdvancedUserProfile';
+export { ProfileDiscovery } from './ProfileDiscovery';
 export { MobileBottomNav } from './MobileBottomNav';
 export { TrendingSidebar } from './TrendingSidebar';
 
