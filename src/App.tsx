@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import CivicFeed from "./pages/CivicFeed";
 import PulseFeed from "./pages/PulseFeed";
+import Feed from "./pages/Feed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
 import Marketplace from "./pages/Marketplace";
@@ -96,7 +97,7 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/feed" element={<CivicFeed />} />
+              <Route path="/feed" element={<Feed />} />
               <Route path="/civic-feed" element={<CivicFeed />} />
               <Route path="/politicians" element={<Politicians />} />
               <Route path="/security" element={<Security />} />

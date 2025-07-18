@@ -10,6 +10,9 @@ export { FollowButton } from './FollowButton';
 export { UserAvatar } from './UserAvatar';
 export { RatingStars } from './RatingStars';
 export { CivicTag } from './CivicTag';
+export { FeedComposer } from './FeedComposer';
+export { MobileBottomNav } from './MobileBottomNav';
+export { TrendingSidebar } from './TrendingSidebar';
 
 // Card Components
 export { PollCard } from './PollCard';
