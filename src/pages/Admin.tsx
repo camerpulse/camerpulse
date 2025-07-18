@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { ThemeManagement } from "@/components/Theme/ThemeManagement";
 import PanAfricaAdminPanel from "@/components/AI/PanAfricaAdminPanel";
 import CivicViewControlPanel from "@/components/AI/CivicViewControlPanel";
 import { PoliticalImportDashboard } from "@/components/Politics/PoliticalImportDashboard";
@@ -975,10 +974,17 @@ const Admin = () => {
               </div>
             </TabsContent>
 
-            {/* 11. THEMES MANAGEMENT */}
+            {/* 11. SYSTEM SETTINGS */}
             <TabsContent value="themes">
               <div className="space-y-6">
-                <ThemeManagement />
+                <Card>
+                  <CardHeader>
+                    <CardTitle>System Configuration</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p>Theme management has been removed from the system.</p>
+                  </CardContent>
+                </Card>
               </div>
             </TabsContent>
 

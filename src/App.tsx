@@ -60,7 +60,6 @@ import EcosystemDashboard from "./pages/EcosystemDashboard";
 import FanPortal from "./pages/FanPortal";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
-import { ThemeProvider } from "./contexts/ThemeContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
 
@@ -84,7 +83,6 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
         <MobileProvider>
           <PanAfricaProvider>
             <AuthProvider>
@@ -163,7 +161,6 @@ const App = () => {
       </AuthProvider>
     </PanAfricaProvider>
   </MobileProvider>
-</ThemeProvider>
 </QueryClientProvider>
   );
 };
