@@ -380,107 +380,168 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const applyThemeToDocument = (theme: ThemeConfig) => {
     const root = document.documentElement
     
-    // Clear existing CSS variables first
-    const clearVariables = [
-      '--primary', '--secondary', '--accent', '--background', '--card', '--foreground',
-      '--primary-glow', '--lux-divine', '--lux-noble', '--lux-ethereal', '--lux-sacred',
-      '--lux-celebration', '--lux-radiance', '--gradient-lux-primary', '--gradient-lux-divine',
-      '--gradient-lux-noble', '--gradient-lux-celebration', '--shadow-elegant'
-    ]
-    clearVariables.forEach(prop => root.style.removeProperty(prop))
+    console.log('Applying theme:', theme.name, theme.id)
     
-    // Apply theme-specific colors
+    // Apply theme-specific colors based on theme ID
     if (theme.id === 'emergence-2035') {
       // Cameroon flag colors for Emergence 2035
-      root.style.setProperty('--primary', '12 85% 35%') // Cameroon Red
-      root.style.setProperty('--secondary', '145 75% 25%') // Cameroon Green
-      root.style.setProperty('--accent', '48 95% 45%') // Cameroon Yellow
+      root.style.setProperty('--primary', '12 85% 35%')
+      root.style.setProperty('--secondary', '145 75% 25%')
+      root.style.setProperty('--accent', '48 95% 45%')
       root.style.setProperty('--background', '0 0% 97%')
       root.style.setProperty('--card', '0 0% 99%')
       root.style.setProperty('--foreground', '0 0% 8%')
+      root.style.setProperty('--muted', '210 40% 95%')
+      root.style.setProperty('--muted-foreground', '215 13% 65%')
+      root.style.setProperty('--border', '214 32% 91%')
+      root.style.setProperty('--input', '214 32% 91%')
+      root.style.setProperty('--ring', '12 85% 35%')
+      
     } else if (theme.id === 'lux-aeterna') {
-      // Lux Aeterna - Eternal Light theme with patriotic golden accents
-      root.style.setProperty('--primary', '220 90% 15%') // Deep patriotic blue
-      root.style.setProperty('--secondary', '45 95% 60%') // Golden hope
-      root.style.setProperty('--accent', '355 85% 45%') // Noble red
-      root.style.setProperty('--background', '45 25% 98%') // Warm ivory
-      root.style.setProperty('--card', '45 30% 99%') // Pure white with golden warmth
-      root.style.setProperty('--foreground', '220 90% 8%') // Deep patriotic text
+      // Lux Aeterna - Eternal Light theme
+      root.style.setProperty('--primary', '220 90% 15%')
+      root.style.setProperty('--primary-foreground', '45 95% 95%')
+      root.style.setProperty('--secondary', '45 95% 60%')
+      root.style.setProperty('--secondary-foreground', '220 90% 15%')
+      root.style.setProperty('--accent', '355 85% 45%')
+      root.style.setProperty('--accent-foreground', '45 95% 95%')
+      root.style.setProperty('--background', '45 25% 98%')
+      root.style.setProperty('--card', '45 30% 99%')
+      root.style.setProperty('--card-foreground', '220 90% 8%')
+      root.style.setProperty('--foreground', '220 90% 8%')
+      root.style.setProperty('--muted', '45 20% 95%')
+      root.style.setProperty('--muted-foreground', '220 60% 40%')
+      root.style.setProperty('--border', '45 20% 90%')
+      root.style.setProperty('--input', '45 20% 90%')
+      root.style.setProperty('--ring', '220 90% 15%')
       
       // Enhanced Lux Aeterna specific colors
-      root.style.setProperty('--primary-glow', '45 95% 70%') // Golden glow
-      root.style.setProperty('--lux-divine', '220 90% 20%') // Divine blue
-      root.style.setProperty('--lux-noble', '355 85% 45%') // Noble red
-      root.style.setProperty('--lux-ethereal', '45 100% 85%') // Ethereal light
-      root.style.setProperty('--lux-sacred', '45 95% 60%') // Sacred gold
-      root.style.setProperty('--lux-celebration', '30 100% 65%') // Celebration orange
-      root.style.setProperty('--lux-radiance', '45 100% 95%') // Pure radiance
+      root.style.setProperty('--primary-glow', '45 95% 70%')
+      root.style.setProperty('--lux-divine', '220 90% 20%')
+      root.style.setProperty('--lux-noble', '355 85% 45%')
+      root.style.setProperty('--lux-ethereal', '45 100% 85%')
+      root.style.setProperty('--lux-sacred', '45 95% 60%')
+      root.style.setProperty('--lux-celebration', '30 100% 65%')
+      root.style.setProperty('--lux-radiance', '45 100% 95%')
       
-      // Enhanced gradients
-      root.style.setProperty('--gradient-lux-primary', 'linear-gradient(135deg, hsl(220 90% 15%), hsl(45 95% 60%))')
-      root.style.setProperty('--gradient-lux-divine', 'linear-gradient(135deg, hsl(220 90% 20%), hsl(45 100% 85%))')
-      root.style.setProperty('--gradient-lux-noble', 'linear-gradient(135deg, hsl(355 85% 45%), hsl(45 95% 60%))')
-      root.style.setProperty('--gradient-lux-celebration', 'linear-gradient(135deg, hsl(220 90% 15%), hsl(45 95% 60%), hsl(355 85% 45%), hsl(30 100% 65%))')
-      
-      // Enhanced shadows
-      root.style.setProperty('--shadow-elegant', '0 10px 30px -10px hsl(220 90% 15% / 0.3)')
     } else if (theme.id === 'spotify-classic') {
       // Spotify Classic Theme
-      root.style.setProperty('--primary', '120 93% 36%') // Spotify Green
-      root.style.setProperty('--secondary', '0 0% 7%') // Deep Black
-      root.style.setProperty('--accent', '120 93% 46%') // Bright Green
-      root.style.setProperty('--background', '0 0% 6%') // Pure Black
-      root.style.setProperty('--card', '0 0% 8%') // Dark Card
-      root.style.setProperty('--foreground', '0 0% 100%') // White Text
+      root.style.setProperty('--primary', '141 76% 48%')
+      root.style.setProperty('--primary-foreground', '0 0% 100%')
+      root.style.setProperty('--secondary', '0 0% 7%')
+      root.style.setProperty('--secondary-foreground', '0 0% 100%')
+      root.style.setProperty('--accent', '141 86% 58%')
+      root.style.setProperty('--accent-foreground', '0 0% 0%')
+      root.style.setProperty('--background', '0 0% 6%')
+      root.style.setProperty('--card', '0 0% 8%')
+      root.style.setProperty('--card-foreground', '0 0% 100%')
+      root.style.setProperty('--foreground', '0 0% 100%')
+      root.style.setProperty('--muted', '0 0% 12%')
+      root.style.setProperty('--muted-foreground', '0 0% 60%')
+      root.style.setProperty('--border', '0 0% 20%')
+      root.style.setProperty('--input', '0 0% 15%')
+      root.style.setProperty('--ring', '141 76% 48%')
+      
     } else if (theme.id === 'apple-music') {
       // Apple Music Theme
-      root.style.setProperty('--primary', '0 82% 60%') // Apple Red
-      root.style.setProperty('--secondary', '0 0% 96%') // Light Gray
-      root.style.setProperty('--accent', '225 100% 60%') // Apple Blue
-      root.style.setProperty('--background', '0 0% 100%') // Pure White
-      root.style.setProperty('--card', '0 0% 98%') // Off White
-      root.style.setProperty('--foreground', '0 0% 8%') // Dark Text
+      root.style.setProperty('--primary', '0 82% 60%')
+      root.style.setProperty('--primary-foreground', '0 0% 100%')
+      root.style.setProperty('--secondary', '0 0% 96%')
+      root.style.setProperty('--secondary-foreground', '0 0% 8%')
+      root.style.setProperty('--accent', '225 100% 60%')
+      root.style.setProperty('--accent-foreground', '0 0% 100%')
+      root.style.setProperty('--background', '0 0% 100%')
+      root.style.setProperty('--card', '0 0% 98%')
+      root.style.setProperty('--card-foreground', '0 0% 8%')
+      root.style.setProperty('--foreground', '0 0% 8%')
+      root.style.setProperty('--muted', '0 0% 96%')
+      root.style.setProperty('--muted-foreground', '0 0% 45%')
+      root.style.setProperty('--border', '0 0% 90%')
+      root.style.setProperty('--input', '0 0% 90%')
+      root.style.setProperty('--ring', '0 82% 60%')
+      
     } else if (theme.id === 'youtube-red') {
       // YouTube Music Theme
-      root.style.setProperty('--primary', '0 100% 50%') // YouTube Red
-      root.style.setProperty('--secondary', '0 0% 12%') // Dark Gray
-      root.style.setProperty('--accent', '0 100% 60%') // Bright Red
-      root.style.setProperty('--background', '0 0% 7%') // Almost Black
-      root.style.setProperty('--card', '0 0% 10%') // Dark Card
-      root.style.setProperty('--foreground', '0 0% 100%') // White Text
+      root.style.setProperty('--primary', '0 100% 50%')
+      root.style.setProperty('--primary-foreground', '0 0% 100%')
+      root.style.setProperty('--secondary', '0 0% 12%')
+      root.style.setProperty('--secondary-foreground', '0 0% 100%')
+      root.style.setProperty('--accent', '0 100% 60%')
+      root.style.setProperty('--accent-foreground', '0 0% 100%')
+      root.style.setProperty('--background', '0 0% 7%')
+      root.style.setProperty('--card', '0 0% 10%')
+      root.style.setProperty('--card-foreground', '0 0% 100%')
+      root.style.setProperty('--foreground', '0 0% 100%')
+      root.style.setProperty('--muted', '0 0% 15%')
+      root.style.setProperty('--muted-foreground', '0 0% 60%')
+      root.style.setProperty('--border', '0 0% 20%')
+      root.style.setProperty('--input', '0 0% 15%')
+      root.style.setProperty('--ring', '0 100% 50%')
+      
     } else if (theme.id === 'soundcloud-orange') {
       // SoundCloud Theme
-      root.style.setProperty('--primary', '16 100% 50%') // SoundCloud Orange
-      root.style.setProperty('--secondary', '0 0% 95%') // Light Background
-      root.style.setProperty('--accent', '16 100% 60%') // Bright Orange
-      root.style.setProperty('--background', '0 0% 99%') // Off White
-      root.style.setProperty('--card', '0 0% 100%') // Pure White
-      root.style.setProperty('--foreground', '0 0% 13%') // Dark Text
+      root.style.setProperty('--primary', '16 100% 50%')
+      root.style.setProperty('--primary-foreground', '0 0% 100%')
+      root.style.setProperty('--secondary', '0 0% 95%')
+      root.style.setProperty('--secondary-foreground', '0 0% 13%')
+      root.style.setProperty('--accent', '16 100% 60%')
+      root.style.setProperty('--accent-foreground', '0 0% 100%')
+      root.style.setProperty('--background', '0 0% 99%')
+      root.style.setProperty('--card', '0 0% 100%')
+      root.style.setProperty('--card-foreground', '0 0% 13%')
+      root.style.setProperty('--foreground', '0 0% 13%')
+      root.style.setProperty('--muted', '0 0% 95%')
+      root.style.setProperty('--muted-foreground', '0 0% 45%')
+      root.style.setProperty('--border', '0 0% 90%')
+      root.style.setProperty('--input', '0 0% 90%')
+      root.style.setProperty('--ring', '16 100% 50%')
+      
     } else if (theme.id === 'camer-afrobeats') {
       // CamerAfrobeats Theme
-      root.style.setProperty('--primary', '12 85% 45%') // Cameroon Red
-      root.style.setProperty('--secondary', '145 75% 35%') // Cameroon Green
-      root.style.setProperty('--accent', '48 95% 55%') // Cameroon Yellow
-      root.style.setProperty('--background', '0 0% 4%') // Deep Black
-      root.style.setProperty('--card', '0 0% 8%') // Dark Card
-      root.style.setProperty('--foreground', '48 95% 90%') // Golden White
+      root.style.setProperty('--primary', '12 85% 45%')
+      root.style.setProperty('--primary-foreground', '48 95% 90%')
+      root.style.setProperty('--secondary', '145 75% 35%')
+      root.style.setProperty('--secondary-foreground', '48 95% 90%')
+      root.style.setProperty('--accent', '48 95% 55%')
+      root.style.setProperty('--accent-foreground', '0 0% 8%')
+      root.style.setProperty('--background', '0 0% 4%')
+      root.style.setProperty('--card', '0 0% 8%')
+      root.style.setProperty('--card-foreground', '48 95% 90%')
+      root.style.setProperty('--foreground', '48 95% 90%')
+      root.style.setProperty('--muted', '0 0% 12%')
+      root.style.setProperty('--muted-foreground', '48 50% 60%')
+      root.style.setProperty('--border', '0 0% 20%')
+      root.style.setProperty('--input', '0 0% 15%')
+      root.style.setProperty('--ring', '12 85% 45%')
+      
     } else {
       // Default theme colors
       root.style.setProperty('--primary', '142 69% 40%')
+      root.style.setProperty('--primary-foreground', '355 79% 97%')
       root.style.setProperty('--secondary', '210 40% 98%')
+      root.style.setProperty('--secondary-foreground', '222 84% 5%')
       root.style.setProperty('--accent', '46 100% 60%')
+      root.style.setProperty('--accent-foreground', '355 79% 97%')
       root.style.setProperty('--background', '0 0% 100%')
       root.style.setProperty('--card', '0 0% 100%')
+      root.style.setProperty('--card-foreground', '222 84% 5%')
       root.style.setProperty('--foreground', '222 84% 5%')
+      root.style.setProperty('--muted', '210 40% 96%')
+      root.style.setProperty('--muted-foreground', '215 13% 65%')
+      root.style.setProperty('--border', '214 32% 91%')
+      root.style.setProperty('--input', '214 32% 91%')
+      root.style.setProperty('--ring', '142 69% 40%')
     }
     
     // Apply fonts
     root.style.setProperty('--theme-font-heading', theme.fonts.heading)
     root.style.setProperty('--theme-font-body', theme.fonts.body)
     
-    // Add theme class to body
+    // Add theme class to body for additional styling
     document.body.className = document.body.className.replace(/theme-\w+/g, '')
     document.body.classList.add(`theme-${theme.id}`)
+    
+    console.log('Theme applied successfully:', theme.name)
   }
 
   const value: ThemeContextType = {
