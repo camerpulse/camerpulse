@@ -196,176 +196,25 @@
     @apply flex items-center justify-center py-2 text-muted-foreground;
   }
   
-  /* Emergence 2035 Theme Animations */
-  @keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    25% { transform: scale(1.1); }
-    50% { transform: scale(1.05); }
-    75% { transform: scale(1.15); }
-  }
+  /* ANIMATIONS REMOVED - Static mode enabled */
+  /* All @keyframes animations have been disabled for performance */
   
-  @keyframes heartbeat-line {
-    0%, 100% { opacity: 0.6; stroke-dasharray: 0, 100; }
-    50% { opacity: 1; stroke-dasharray: 50, 100; }
-  }
+  /* ANIMATION CLASSES DISABLED - Static alternatives */
+  .animate-heartbeat { /* disabled */ }
+  .animate-heartbeat-line { /* disabled */ }
+  .animate-pulse-heartbeat { /* disabled */ }
+  .animate-fade-in-up { /* disabled */ }
+  .animate-slide-shine { /* disabled */ }
+  .animate-eternal-glow { /* disabled */ }
+  .animate-patriotic-pulse { /* disabled */ }
+  .animate-hope-rise { /* disabled */ }
+  .animate-golden-shimmer { /* disabled */ }
+  .animate-divine-ascension { /* disabled */ }
+  .animate-sacred-pulse { /* disabled */ }
+  .animate-ethereal-float { /* disabled */ }
+  .animate-celebration-burst { /* disabled */ }
   
-  @keyframes pulse-heartbeat {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-  }
-  
-  @keyframes fade-in-up {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes slide-shine {
-    0% { transform: translateX(-100%) skewX(-12deg); }
-    100% { transform: translateX(200%) skewX(-12deg); }
-  }
-  
-  /* Lux Aeterna Theme Animations */
-  @keyframes eternal-glow {
-    0%, 100% { box-shadow: 0 0 20px hsl(45, 95%, 60%, 0.3); }
-    50% { box-shadow: 0 0 40px hsl(45, 95%, 60%, 0.6); }
-  }
-  
-  @keyframes patriotic-pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.05); opacity: 0.9; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  
-  @keyframes hope-rise {
-    0% { opacity: 0; transform: translateY(30px) scale(0.95); }
-    100% { opacity: 1; transform: translateY(0) scale(1); }
-  }
-  
-  @keyframes golden-shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-  
-  /* Enhanced Lux Aeterna Keyframes */
-  @keyframes divine-ascension {
-    0%, 100% { 
-      transform: translateY(0) scale(1); 
-      box-shadow: var(--shadow-lux-divine);
-      opacity: 1;
-    }
-    50% { 
-      transform: translateY(-10px) scale(1.02); 
-      box-shadow: var(--shadow-lux-celebration);
-      opacity: 0.95;
-    }
-  }
-  
-  @keyframes sacred-pulse {
-    0%, 100% { 
-      background-size: 100% 100%;
-      filter: brightness(1);
-    }
-    50% { 
-      background-size: 110% 110%;
-      filter: brightness(1.1);
-    }
-  }
-  
-  @keyframes ethereal-float {
-    0%, 100% { 
-      transform: translateY(0) rotate(0deg);
-      filter: hue-rotate(0deg);
-    }
-    33% { 
-      transform: translateY(-15px) rotate(1deg);
-      filter: hue-rotate(30deg);
-    }
-    67% { 
-      transform: translateY(-8px) rotate(-1deg);
-      filter: hue-rotate(-15deg);
-    }
-  }
-  
-  @keyframes celebration-burst {
-    0% { 
-      transform: scale(1) rotate(0deg);
-      box-shadow: var(--shadow-lux-divine);
-    }
-    25% { 
-      transform: scale(1.1) rotate(5deg);
-      box-shadow: var(--shadow-lux-celebration);
-    }
-    50% { 
-      transform: scale(1.05) rotate(-3deg);
-      box-shadow: var(--shadow-lux-ethereal);
-    }
-    75% { 
-      transform: scale(1.08) rotate(2deg);
-      box-shadow: var(--shadow-lux-sacred);
-    }
-    100% { 
-      transform: scale(1) rotate(0deg);
-      box-shadow: var(--shadow-lux-divine);
-    }
-  }
-  
-  .animate-heartbeat {
-    animation: heartbeat 2s ease-in-out;
-  }
-  
-  .animate-heartbeat-line {
-    animation: heartbeat-line 2s ease-in-out;
-  }
-  
-  .animate-pulse-heartbeat {
-    animation: pulse-heartbeat 1s ease-in-out 3;
-  }
-  
-  .animate-fade-in-up {
-    animation: fade-in-up 0.6s ease-out forwards;
-  }
-  
-  .animate-slide-shine {
-    animation: slide-shine 2s ease-in-out infinite;
-  }
-  
-  /* Lux Aeterna Animations */
-  .animate-eternal-glow {
-    animation: eternal-glow 3s ease-in-out infinite;
-  }
-  
-  .animate-patriotic-pulse {
-    animation: patriotic-pulse 2s ease-in-out infinite;
-  }
-  
-  .animate-hope-rise {
-    animation: hope-rise 0.8s ease-out forwards;
-  }
-  
-  .animate-golden-shimmer {
-    background: linear-gradient(90deg, transparent, hsl(45, 95%, 60%, 0.4), transparent);
-    background-size: 200% 100%;
-    animation: golden-shimmer 2s infinite;
-  }
-  
-  /* Enhanced Lux Aeterna Animations */
-  .animate-divine-ascension {
-    animation: divine-ascension 4s ease-in-out infinite;
-  }
-  
-  .animate-sacred-pulse {
-    animation: sacred-pulse 3s ease-in-out infinite;
-  }
-  
-  .animate-ethereal-float {
-    animation: ethereal-float 6s ease-in-out infinite;
-  }
-  
-  .animate-celebration-burst {
-    animation: celebration-burst 2s ease-out;
-  }
-  
-  /* Dynamic Lux Aeterna variants */
+  /* Dynamic Lux Aeterna variants - animations disabled */
   :root {
     --lux-primary-variant: 45 95% 60%;
     --lux-accent-variant: 355 85% 45%;
@@ -373,13 +222,8 @@
     --lux-special-animation: none;
   }
   
-  .animation-delay-300 {
-    animation-delay: 0.3s;
-  }
-  
-  .animation-delay-500 {
-    animation-delay: 0.5s;
-  }
+  .animation-delay-300 { /* disabled */ }
+  .animation-delay-500 { /* disabled */ }
 
   /* Mobile safe areas */
   .safe-area-padding {
@@ -389,27 +233,10 @@
     padding-right: env(safe-area-inset-right);
   }
 
-/* Lux Aeterna Advanced Animations */
-@keyframes pulse-celebration {
-  0%, 100% { 
-    transform: scale(1); 
-    box-shadow: 0 0 20px hsl(var(--lux-primary-variant) / 0.3);
-  }
-  50% { 
-    transform: scale(1.02); 
-    box-shadow: 0 0 40px hsl(var(--lux-primary-variant) / 0.6);
-  }
-}
-
-@keyframes float-golden {
-  0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
-  50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
+/* Lux Aeterna Advanced Animations - DISABLED */
+/* @keyframes pulse-celebration - removed */
+/* @keyframes float-golden - removed */
+/* @keyframes shimmer - removed */
 
 /* Lux Aeterna Time-based Variations */
 .lux-aeterna-effects.dawn-mode {
@@ -433,7 +260,7 @@
 }
 
 .lux-aeterna-effects.celebration-mode {
-  animation: var(--lux-special-animation);
+  /* animation: var(--lux-special-animation); - disabled */
   box-shadow: var(--lux-celebration-glow);
 }
 
@@ -446,16 +273,11 @@
   background: radial-gradient(circle at center, var(--tw-gradient-stops));
 }
 
-/* Golden shimmer effect */
+/* Golden shimmer effect - DISABLED */
 .shimmer-effect {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    hsl(var(--lux-primary-variant) / 0.4) 50%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: shimmer 3s infinite;
+  /* background: linear-gradient( 90deg, transparent 0%, hsl(var(--lux-primary-variant) / 0.4) 50%, transparent 100% ); */
+  /* background-size: 200% 100%; */
+  /* animation: shimmer 3s infinite; - disabled */
 }
   
   /* PWA specific styles */

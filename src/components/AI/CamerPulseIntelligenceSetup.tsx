@@ -92,7 +92,7 @@ const CamerPulseIntelligenceSetup = () => {
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <div className="text-center space-y-4 mb-8">
         <div className="flex items-center justify-center space-x-3">
-          <Brain className="h-12 w-12 text-primary animate-pulse" />
+          <Brain className="h-12 w-12 text-primary /* animate-pulse - disabled */" />
           <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
             CAMERPULSE INTELLIGENCE SETUP
           </h1>

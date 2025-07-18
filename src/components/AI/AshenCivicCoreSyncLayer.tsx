@@ -244,7 +244,7 @@ const AshenCivicCoreSyncLayer: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Layers className="h-8 w-8 text-primary animate-pulse" />
+          <Layers className="h-8 w-8 text-primary /* animate-pulse - disabled */" />
           <div>
             <h2 className="text-2xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
               Ashen-Civic Core Sync Layer
@@ -260,7 +260,7 @@ const AshenCivicCoreSyncLayer: React.FC = () => {
             Guardian Active
           </Badge>
           <Button onClick={loadSyncLayerStatus} disabled={isLoading} size="sm">
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? '/* animate-spin - disabled */' : ''}`} />
             Refresh
           </Button>
         </div>

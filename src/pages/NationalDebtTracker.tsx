@@ -380,7 +380,7 @@ export default function NationalDebtTracker() {
                   variant="outline"
                   className="w-full sm:w-auto min-h-[44px] touch-manipulation"
                 >
-                  <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  <RefreshCw className={`h-4 w-4 mr-2 ${isRefreshing ? '/* animate-spin - disabled */' : ''}`} />
                   {isRefreshing ? 'Refreshing...' : 'Force Update'}
                 </Button>
               )}

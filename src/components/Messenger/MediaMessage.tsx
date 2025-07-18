@@ -45,7 +45,7 @@ export const MediaMessage: React.FC<MediaMessageProps> = ({
 
   if (loading) {
     return (
-      <div className={cn("animate-pulse", className)}>
+      <div className={cn("/* animate-pulse - disabled */", className)}>
         <div className="h-20 bg-muted rounded-lg"></div>
       </div>
     );

@@ -412,9 +412,9 @@ const CivicExplainerAssistant = () => {
                   <div className="flex justify-start">
                     <div className="bg-muted rounded-lg p-3">
                       <div className="flex items-center space-x-2">
-                        <div className="w-2 h-2 bg-current rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                        <div className="w-2 h-2 bg-current rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <div className="w-2 h-2 bg-current rounded-full /* animate-bounce - disabled */" />
+                        <div className="w-2 h-2 bg-current rounded-full /* animate-bounce - disabled */" />
+                        <div className="w-2 h-2 bg-current rounded-full /* animate-bounce - disabled */" />
                       </div>
                     </div>
                   </div>

@@ -2,11 +2,11 @@
 
 /* Civic Card Template */
 .civic-card-template {
-  @apply transition-all duration-300 hover:shadow-lg;
+  /* @apply transition-all duration-300 hover:shadow-lg; - disabled */
 }
 
 .civic-card-template .progress-bar {
-  @apply animate-pulse;
+  /* @apply animate-pulse; - disabled */
 }
 
 .civic-card-template .flag-badge {
@@ -23,7 +23,7 @@
 }
 
 .ballot-template .ballot-option {
-  @apply flex items-center gap-4 p-4 border-b border-gray-100 cursor-pointer transition-colors;
+  @apply flex items-center gap-4 p-4 border-b border-gray-100 cursor-pointer /* transition-colors - disabled */;
 }
 
 .ballot-template .ballot-option:hover {
@@ -44,7 +44,7 @@
 }
 
 .bar-chart-template .chart-bar {
-  @apply transition-all duration-1000 ease-out;
+  /* @apply transition-all duration-1000 ease-out; - disabled */
 }
 
 .bar-chart-template .chart-label {
@@ -61,15 +61,17 @@
 }
 
 .emoji-burst-template .emoji-option {
-  @apply transition-all duration-300 hover:scale-110 cursor-pointer;
+  /* @apply transition-all duration-300 hover:scale-110 cursor-pointer; - disabled */
+  @apply cursor-pointer;
 }
 
 .emoji-burst-template .emoji-option.selected {
-  @apply scale-125 animate-bounce;
+  /* @apply scale-125 animate-bounce; - disabled */
 }
 
 .emoji-burst-template .floating-emoji {
-  @apply animate-ping absolute;
+  /* @apply animate-ping absolute; - disabled */
+  @apply absolute;
 }
 
 /* Flash Poll Template */
@@ -78,28 +80,31 @@
 }
 
 .flash-poll-template .urgency-bar {
-  @apply absolute top-0 left-0 right-0 h-1 bg-red-500 animate-pulse;
+  /* @apply absolute top-0 left-0 right-0 h-1 bg-red-500 animate-pulse; - disabled */
+  @apply absolute top-0 left-0 right-0 h-1 bg-red-500;
 }
 
 .flash-poll-template .timer-display {
-  @apply text-3xl font-bold text-red-600 animate-pulse;
+  /* @apply text-3xl font-bold text-red-600 animate-pulse; - disabled */
+  @apply text-3xl font-bold text-red-600;
 }
 
 .flash-poll-template .urgent-button {
-  @apply animate-pulse hover:animate-none;
+  /* @apply animate-pulse hover:animate-none; - disabled */
 }
 
 /* Comparison Template */
 .comparison-template .option-card {
-  @apply transition-transform duration-300 hover:scale-105 cursor-pointer;
+  /* @apply transition-transform duration-300 hover:scale-105 cursor-pointer; - disabled */
+  @apply cursor-pointer;
 }
 
 .comparison-template .option-card:hover .option-image {
-  @apply scale-110;
+  /* @apply scale-110; - disabled */
 }
 
 .comparison-template .option-image {
-  @apply transition-transform duration-300;
+  /* @apply transition-transform duration-300; - disabled */
 }
 
 /* Carousel Template */
@@ -108,11 +113,12 @@
 }
 
 .carousel-template .slide {
-  @apply transition-all duration-500 ease-in-out;
+  /* @apply transition-all duration-500 ease-in-out; - disabled */
 }
 
 .carousel-template .slide-indicator {
-  @apply w-2 h-2 rounded-full cursor-pointer transition-opacity duration-300;
+  /* @apply w-2 h-2 rounded-full cursor-pointer transition-opacity duration-300; - disabled */
+  @apply w-2 h-2 rounded-full cursor-pointer;
 }
 
 .carousel-template .slide-indicator.active {
@@ -129,7 +135,8 @@
 }
 
 .radar-sentiment-template .radar-point {
-  @apply cursor-pointer transition-all duration-300 hover:scale-125;
+  /* @apply cursor-pointer transition-all duration-300 hover:scale-125; - disabled */
+  @apply cursor-pointer;
 }
 
 .radar-sentiment-template .radar-line {
@@ -138,11 +145,13 @@
 
 /* Heatmap Template */
 .heatmap-template .region {
-  @apply cursor-pointer transition-all duration-300;
+  /* @apply cursor-pointer transition-all duration-300; - disabled */
+  @apply cursor-pointer;
 }
 
 .heatmap-template .region:hover {
-  @apply opacity-80 scale-105;
+  /* @apply opacity-80 scale-105; - disabled */
+  @apply opacity-80;
 }
 
 .heatmap-template .intensity-low {
@@ -167,48 +176,25 @@
 }
 
 .voice-template .audio-indicator {
-  @apply animate-pulse;
+  /* @apply animate-pulse; - disabled */
 }
 
 .voice-template .voice-button {
-  @apply rounded-full p-6 transition-all duration-300 hover:scale-110;
+  /* @apply rounded-full p-6 transition-all duration-300 hover:scale-110; - disabled */
+  @apply rounded-full p-6;
 }
 
 .voice-template .accessibility-indicator {
   @apply flex items-center gap-2 text-sm text-gray-600;
 }
 
-/* Animation Keyframes */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
-}
-
-@keyframes glow {
-  0%, 100% { box-shadow: 0 0 5px currentColor; }
-  50% { box-shadow: 0 0 20px currentColor, 0 0 30px currentColor; }
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideInLeft {
-  from { transform: translateX(-100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes zoomIn {
-  from { transform: scale(0.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  75% { transform: translateX(5px); }
-}
+/* Animation Keyframes - DISABLED */
+/* @keyframes float - removed */
+/* @keyframes glow - removed */
+/* @keyframes slideInRight - removed */
+/* @keyframes slideInLeft - removed */
+/* @keyframes zoomIn - removed */
+/* @keyframes shake - removed */
 
 /* Mobile Optimizations */
 @media (max-width: 768px) {
@@ -237,14 +223,14 @@
   }
 }
 
-/* Touch-friendly interactions */
+/* Touch-friendly interactions - DISABLED */
 @media (hover: none) {
   .hover\:scale-105:hover {
-    @apply scale-105;
+    /* @apply scale-105; - disabled */
   }
   
   .hover\:scale-110:hover {
-    @apply scale-110;
+    /* @apply scale-110; - disabled */
   }
 }
 

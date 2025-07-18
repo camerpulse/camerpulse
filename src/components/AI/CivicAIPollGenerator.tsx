@@ -222,7 +222,7 @@ export const CivicAIPollGenerator = () => {
       <Card className="bg-gradient-to-r from-purple-500/10 via-background to-blue-500/10 border-purple-500/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-3 text-2xl">
-            <Brain className="w-8 h-8 text-purple-600 animate-pulse" />
+            <Brain className="w-8 h-8 text-purple-600 /* animate-pulse - disabled */" />
             CivicAIPollGenerator
             <Badge variant={isEnabled ? "default" : "secondary"}>
               {isEnabled ? "Active" : "Inactive"}

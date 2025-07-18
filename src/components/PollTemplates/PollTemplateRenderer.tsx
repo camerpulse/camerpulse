@@ -410,7 +410,7 @@ export const PollTemplateRenderer: React.FC<PollTemplateRendererProps> = ({
       
       <CardHeader className="text-center">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <Timer className="h-5 w-5 animate-spin" style={{ color: colorTheme.primary }} />
+          <Timer className="h-5 w-5 /* animate-spin - disabled */" style={{ color: colorTheme.primary }} />
           <Badge 
             variant="destructive" 
             className="animate-pulse"

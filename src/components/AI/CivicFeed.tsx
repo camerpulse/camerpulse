@@ -315,7 +315,7 @@ export const CivicFeed: React.FC = () => {
             disabled={loading}
             className="flex items-center gap-2"
           >
-            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`h-4 w-4 ${loading ? '/* animate-spin - disabled */' : ''}`} />
             Actualiser
           </Button>
         </div>
@@ -436,7 +436,7 @@ export const CivicFeed: React.FC = () => {
       {/* Live Indicator */}
       {isLive && (
         <Alert className="border-red-200 bg-red-50">
-          <Radio className="h-4 w-4 text-red-600 animate-pulse" />
+          <Radio className="h-4 w-4 text-red-600 /* animate-pulse - disabled */" />
           <AlertDescription className="text-red-800">
             Mode direct activé - Actualisation automatique toutes les 10 secondes
           </AlertDescription>
@@ -448,7 +448,7 @@ export const CivicFeed: React.FC = () => {
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Flux Civique ({posts.length} discussions)</span>
-            {loading && <RefreshCw className="h-4 w-4 animate-spin" />}
+            {loading && <RefreshCw className="h-4 w-4 /* animate-spin - disabled */" />}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -456,7 +456,7 @@ export const CivicFeed: React.FC = () => {
             {loading && posts.length === 0 ? (
               <div className="space-y-4">
                 {[...Array(5)].map((_, i) => (
-                  <Card key={i} className="animate-pulse">
+                  <Card key={i} className="/* animate-pulse - disabled */">
                     <CardContent className="pt-6">
                       <div className="flex items-start gap-3">
                         <div className="w-10 h-10 bg-muted rounded-full"></div>
