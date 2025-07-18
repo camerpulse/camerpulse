@@ -396,9 +396,9 @@ const PollResultsViewer = () => {
 
         {/* Privacy Notice */}
         {poll.anonymous_voting && (
-          <Card className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950">
+          <Card className="border-amber-200 bg-amber-50">
             <CardContent className="p-4">
-              <p className="text-sm text-amber-800 dark:text-amber-200">
+              <p className="text-sm text-amber-800">
                 🔒 This poll was conducted with anonymous voting. Individual voter identities are protected and not displayed.
               </p>
             </CardContent>

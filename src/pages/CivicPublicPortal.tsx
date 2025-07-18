@@ -874,7 +874,7 @@ const CivicPublicPortal = () => {
 
             {/* Trending Issues */}
             {!isModuleVisible('trending_topics') ? (
-              <Alert className="border-l-4 border-l-orange-500 bg-orange-50 dark:bg-orange-950">
+              <Alert className="border-l-4 border-l-orange-500 bg-orange-50">
                 <Lock className="h-4 w-4" />
                 <AlertDescription className="text-sm">
                   <strong>Restricted Content:</strong> {getRestrictedMessage('trending_topics')}
@@ -1238,7 +1238,7 @@ const CivicPublicPortal = () => {
 
           <TabsContent value="regions" className="space-y-4">
             {!isModuleVisible('regional_sentiment') ? (
-              <Alert className="border-l-4 border-l-orange-500 bg-orange-50 dark:bg-orange-950">
+              <Alert className="border-l-4 border-l-orange-500 bg-orange-50">
                 <Lock className="h-4 w-4" />
                 <AlertDescription className="text-sm">
                   <strong>Restricted Content:</strong> {getRestrictedMessage('regional_sentiment')}
@@ -1293,7 +1293,7 @@ const CivicPublicPortal = () => {
 
           <TabsContent value="civic-report" className="space-y-4">
             {!isModuleVisible('civic_reports') ? (
-              <Alert className="border-l-4 border-l-orange-500 bg-orange-50 dark:bg-orange-950">
+              <Alert className="border-l-4 border-l-orange-500 bg-orange-50">
                 <Lock className="h-4 w-4" />
                 <AlertDescription className="text-sm">
                   <strong>Restricted Content:</strong> {getRestrictedMessage('civic_reports')}

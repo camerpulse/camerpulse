@@ -182,10 +182,10 @@ const BillionaireAdmin = () => {
   if (loading) {
     return (
       <AppLayout>
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950 dark:to-yellow-950 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
-            <p className="text-amber-800 dark:text-amber-200">Loading admin panel...</p>
+            <p className="text-amber-800">Loading admin panel...</p>
           </div>
         </div>
       </AppLayout>
@@ -194,7 +194,7 @@ const BillionaireAdmin = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950 dark:to-yellow-950">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="text-center mb-8">
@@ -204,50 +204,50 @@ const BillionaireAdmin = () => {
                 Billionaire Admin Panel
               </h1>
             </div>
-            <p className="text-xl text-amber-800 dark:text-amber-200">
+            <p className="text-xl text-amber-800">
               Manage Applications & Verify Billionaires
             </p>
           </div>
 
           {/* Stats Overview */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <Card className="bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900 dark:to-blue-800">
+            <Card className="bg-gradient-to-br from-blue-100 to-blue-200">
               <CardContent className="pt-6 text-center">
                 <Clock className="h-8 w-8 text-blue-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
+                <div className="text-2xl font-bold text-blue-700">
                   {applications.filter(app => app.status === 'pending').length}
                 </div>
-                <p className="text-blue-600 dark:text-blue-400">Pending Applications</p>
+                <p className="text-blue-600">Pending Applications</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-green-100 to-green-200 dark:from-green-900 dark:to-green-800">
+            <Card className="bg-gradient-to-br from-green-100 to-green-200">
               <CardContent className="pt-6 text-center">
                 <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-green-700 dark:text-green-300">
+                <div className="text-2xl font-bold text-green-700">
                   {billionaires.filter(b => b.is_verified).length}
                 </div>
-                <p className="text-green-600 dark:text-green-400">Verified Billionaires</p>
+                <p className="text-green-600">Verified Billionaires</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900 dark:to-purple-800">
+            <Card className="bg-gradient-to-br from-purple-100 to-purple-200">
               <CardContent className="pt-6 text-center">
                 <DollarSign className="h-8 w-8 text-purple-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-purple-700 dark:text-purple-300">
+                <div className="text-2xl font-bold text-purple-700">
                   {formatCurrency(billionaires.reduce((sum, b) => sum + b.verified_net_worth_fcfa, 0))}
                 </div>
-                <p className="text-purple-600 dark:text-purple-400">Total Wealth</p>
+                <p className="text-purple-600">Total Wealth</p>
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900 dark:to-orange-800">
+            <Card className="bg-gradient-to-br from-orange-100 to-orange-200">
               <CardContent className="pt-6 text-center">
                 <Eye className="h-8 w-8 text-orange-600 mx-auto mb-2" />
-                <div className="text-2xl font-bold text-orange-700 dark:text-orange-300">
+                <div className="text-2xl font-bold text-orange-700">
                   {billionaires.reduce((sum, b) => sum + b.profile_views, 0)}
                 </div>
-                <p className="text-orange-600 dark:text-orange-400">Total Profile Views</p>
+                <p className="text-orange-600">Total Profile Views</p>
               </CardContent>
             </Card>
           </div>
@@ -263,7 +263,7 @@ const BillionaireAdmin = () => {
             <TabsContent value="applications" className="space-y-6">
               <div className="grid gap-6">
                 {applications.map((application) => (
-                  <Card key={application.id} className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
+                  <Card key={application.id} className="bg-white/70 backdrop-blur-sm">
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div>
@@ -297,7 +297,7 @@ const BillionaireAdmin = () => {
                       
                       <div className="mb-4">
                         <strong>Business Background:</strong>
-                        <p className="text-sm text-muted-foreground mt-1 bg-gray-50 dark:bg-gray-800 p-3 rounded">
+                        <p className="text-sm text-muted-foreground mt-1 bg-gray-50 p-3 rounded">
                           {application.business_background}
                         </p>
                       </div>
@@ -339,7 +339,7 @@ const BillionaireAdmin = () => {
             <TabsContent value="billionaires" className="space-y-6">
               <div className="grid gap-6">
                 {billionaires.map((billionaire) => (
-                  <Card key={billionaire.id} className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
+                  <Card key={billionaire.id} className="bg-white/70 backdrop-blur-sm">
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div>

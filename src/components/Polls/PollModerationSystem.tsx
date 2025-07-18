@@ -167,8 +167,8 @@ export const PollModerationSystem: React.FC<PollModerationSystemProps> = ({
             </p>
           </div>
 
-          <div className="bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800 rounded-lg p-3">
-            <p className="text-xs text-amber-800 dark:text-amber-200">
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+            <p className="text-xs text-amber-800">
               <strong>Important:</strong> False reporting may result in account restrictions. 
               Only report content that violates our community guidelines.
             </p>

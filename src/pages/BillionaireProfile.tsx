@@ -163,10 +163,10 @@ const BillionaireProfile = () => {
   if (loading) {
     return (
       <AppLayout>
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950 dark:to-yellow-950 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
-            <p className="text-amber-800 dark:text-amber-200">Loading profile...</p>
+            <p className="text-amber-800">Loading profile...</p>
           </div>
         </div>
       </AppLayout>
@@ -176,7 +176,7 @@ const BillionaireProfile = () => {
   if (!billionaire) {
     return (
       <AppLayout>
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950 dark:to-yellow-950 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 flex items-center justify-center">
           <Card className="max-w-md">
             <CardContent className="pt-6 text-center">
               <h2 className="text-xl font-bold mb-4">Profile Not Found</h2>
@@ -195,7 +195,7 @@ const BillionaireProfile = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950 dark:to-yellow-950">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100">
         <div className="container mx-auto px-4 py-8">
           {/* Back Button */}
           <div className="mb-6">
@@ -208,7 +208,7 @@ const BillionaireProfile = () => {
           </div>
 
           {/* Profile Header */}
-          <Card className="mb-8 bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900 dark:to-yellow-900 border-amber-200">
+          <Card className="mb-8 bg-gradient-to-r from-amber-100 to-yellow-100 border-amber-200">
             <CardContent className="pt-8">
               <div className="flex flex-col md:flex-row items-start gap-8">
                 {/* Profile Picture & Rank */}
@@ -238,7 +238,7 @@ const BillionaireProfile = () => {
                 <div className="flex-grow">
                   <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
                     <div>
-                      <h1 className="text-4xl font-bold text-amber-700 dark:text-amber-300 mb-2">
+                      <h1 className="text-4xl font-bold text-amber-700 mb-2">
                         {billionaire.is_anonymous ? billionaire.display_alias : billionaire.full_name}
                         {billionaire.is_anonymous && (
                           <Badge variant="outline" className="ml-2 text-xs">Anonymous</Badge>
@@ -277,18 +277,18 @@ const BillionaireProfile = () => {
 
                   {/* Net Worth */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <Card className="bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 border-green-200">
+                    <Card className="bg-gradient-to-r from-green-100 to-emerald-100 border-green-200">
                       <CardContent className="pt-4">
-                        <h3 className="font-bold text-green-700 dark:text-green-300 mb-1">Net Worth (FCFA)</h3>
-                        <p className="text-3xl font-bold text-green-800 dark:text-green-200">
+                        <h3 className="font-bold text-green-700 mb-1">Net Worth (FCFA)</h3>
+                        <p className="text-3xl font-bold text-green-800">
                           {formatCurrency(billionaire.verified_net_worth_fcfa)}
                         </p>
                       </CardContent>
                     </Card>
-                    <Card className="bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900 dark:to-cyan-900 border-blue-200">
+                    <Card className="bg-gradient-to-r from-blue-100 to-cyan-100 border-blue-200">
                       <CardContent className="pt-4">
-                        <h3 className="font-bold text-blue-700 dark:text-blue-300 mb-1">Net Worth (USD)</h3>
-                        <p className="text-3xl font-bold text-blue-800 dark:text-blue-200">
+                        <h3 className="font-bold text-blue-700 mb-1">Net Worth (USD)</h3>
+                        <p className="text-3xl font-bold text-blue-800">
                           {formatCurrency(billionaire.net_worth_usd, 'USD')}
                         </p>
                       </CardContent>
@@ -320,7 +320,7 @@ const BillionaireProfile = () => {
                 </CardHeader>
                 <CardContent>
                   {billionaire.biography ? (
-                    <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                    <p className="text-gray-700 leading-relaxed">
                       {billionaire.biography}
                     </p>
                   ) : (
@@ -340,7 +340,7 @@ const BillionaireProfile = () => {
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {billionaire.business_investments.map((investment, index) => (
-                        <div key={index} className="p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                        <div key={index} className="p-3 bg-gray-50 rounded-lg">
                           <p className="font-medium">{investment}</p>
                         </div>
                       ))}
@@ -426,12 +426,12 @@ const BillionaireProfile = () => {
               )}
 
               {/* Apply CTA */}
-              <Card className="bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 border-green-200">
+              <Card className="bg-gradient-to-r from-green-100 to-emerald-100 border-green-200">
                 <CardContent className="pt-6 text-center">
-                  <h3 className="font-bold text-green-700 dark:text-green-300 mb-2">
+                  <h3 className="font-bold text-green-700 mb-2">
                     Join the Elite
                   </h3>
-                  <p className="text-green-600 dark:text-green-400 text-sm mb-4">
+                  <p className="text-green-600 text-sm mb-4">
                     Think you qualify for this list?
                   </p>
                   <Button asChild size="sm" className="w-full bg-green-600 hover:bg-green-700">

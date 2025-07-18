@@ -202,14 +202,14 @@ export const CivicComplaintForm = () => {
           </div>
 
           {/* Info Box */}
-          <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
             <div className="flex items-start gap-2">
               <TrendingUp className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
               <div className="text-sm">
-                <p className="font-medium text-blue-900 dark:text-blue-100 mb-1">
+                <p className="font-medium text-blue-900 mb-1">
                   How it works:
                 </p>
-                <ul className="text-blue-700 dark:text-blue-200 space-y-1 text-xs">
+                <ul className="text-blue-700 space-y-1 text-xs">
                   <li>• Your complaint will be analyzed for trending potential</li>
                   <li>• High-impact issues may trigger autonomous poll generation</li>
                   <li>• Polls help gather community sentiment and solutions</li>

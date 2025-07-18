@@ -163,10 +163,10 @@ const BillionaireTracker = () => {
   if (loading) {
     return (
       <AppLayout>
-        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950 dark:to-yellow-950 flex items-center justify-center">
+        <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-amber-600 mx-auto mb-4"></div>
-            <p className="text-amber-800 dark:text-amber-200">Loading billionaire data...</p>
+            <p className="text-amber-800">Loading billionaire data...</p>
           </div>
         </div>
       </AppLayout>
@@ -175,7 +175,7 @@ const BillionaireTracker = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950 dark:to-yellow-950">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="text-center mb-8">
@@ -185,7 +185,7 @@ const BillionaireTracker = () => {
                 Cameroon Billionaire Tracker
               </h1>
             </div>
-            <p className="text-xl text-amber-800 dark:text-amber-200 mb-2">
+            <p className="text-xl text-amber-800 mb-2">
               The Premier Ranking of Cameroon's Wealthiest Individuals
             </p>
             <Badge variant="outline" className="border-amber-600 text-amber-600">
@@ -196,52 +196,52 @@ const BillionaireTracker = () => {
           {/* Statistics */}
           {stats && (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-              <Card className="bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900 dark:to-yellow-900 border-amber-200">
+              <Card className="bg-gradient-to-br from-amber-100 to-yellow-100 border-amber-200">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-amber-700 dark:text-amber-300">
+                    <div className="text-3xl font-bold text-amber-700">
                       {stats.total_billionaires}
                     </div>
-                    <p className="text-amber-600 dark:text-amber-400">Verified Billionaires</p>
+                    <p className="text-amber-600">Verified Billionaires</p>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900 dark:to-yellow-900 border-amber-200">
+              <Card className="bg-gradient-to-br from-amber-100 to-yellow-100 border-amber-200">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-amber-700 dark:text-amber-300">
+                    <div className="text-2xl font-bold text-amber-700">
                       {formatCurrency(stats.total_wealth_fcfa)}
                     </div>
-                    <p className="text-amber-600 dark:text-amber-400">Combined Wealth</p>
+                    <p className="text-amber-600">Combined Wealth</p>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="bg-gradient-to-br from-amber-100 to-yellow-100 dark:from-amber-900 dark:to-yellow-900 border-amber-200">
+              <Card className="bg-gradient-to-br from-amber-100 to-yellow-100 border-amber-200">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-amber-700 dark:text-amber-300">
+                    <div className="text-2xl font-bold text-amber-700">
                       {formatCurrency(stats.total_wealth_usd, 'USD')}
                     </div>
-                    <p className="text-amber-600 dark:text-amber-400">USD Equivalent</p>
+                    <p className="text-amber-600">USD Equivalent</p>
                   </div>
                 </CardContent>
               </Card>
               
-              <Card className="bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-900 dark:to-emerald-900 border-green-200">
+              <Card className="bg-gradient-to-br from-green-100 to-emerald-100 border-green-200">
                 <CardContent className="pt-6 text-center">
                   <Button asChild className="w-full bg-green-600 hover:bg-green-700">
                     <Link to="/billionaires/apply">Apply to Join</Link>
                   </Button>
-                  <p className="text-green-600 dark:text-green-400 text-sm mt-2">Premium Placement</p>
+                  <p className="text-green-600 text-sm mt-2">Premium Placement</p>
                 </CardContent>
               </Card>
             </div>
           )}
 
           {/* Filters and Search */}
-          <Card className="mb-8 bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
+          <Card className="mb-8 bg-white/70 backdrop-blur-sm">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Filter className="h-5 w-5" />
@@ -314,7 +314,7 @@ const BillionaireTracker = () => {
           {/* Billionaires List */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sortedBillionaires.map((billionaire, index) => (
-              <Card key={billionaire.id} className="group hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-amber-50 dark:from-gray-900 dark:to-amber-950 border-amber-200 hover:border-amber-400">
+              <Card key={billionaire.id} className="group hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-white to-amber-50 border-amber-200 hover:border-amber-400">
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -348,7 +348,7 @@ const BillionaireTracker = () => {
                 <CardContent>
                   <div className="space-y-3">
                     <div>
-                      <p className="text-2xl font-bold text-amber-700 dark:text-amber-300">
+                      <p className="text-2xl font-bold text-amber-700">
                         {formatCurrency(billionaire.verified_net_worth_fcfa)}
                       </p>
                       <p className="text-sm text-muted-foreground">

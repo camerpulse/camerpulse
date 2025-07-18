@@ -110,12 +110,12 @@ const PollEmbedViewer = () => {
           )}
           <div className="flex items-center justify-between">
             <span className="text-sm">Total Votes:</span>
-            <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+            <Badge className="bg-blue-100 text-blue-800">
               {poll.votes_count}
             </Badge>
           </div>
           {winningOption !== null && (
-            <div className="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-lg">
+            <div className="bg-blue-50 p-3 rounded-lg">
               <p className="text-sm font-medium opacity-75">Leading Option:</p>
               <p className="font-semibold">{poll.options[winningOption]}</p>
               <p className="text-sm opacity-75">
@@ -129,7 +129,7 @@ const PollEmbedViewer = () => {
               href={`${window.location.origin}/polls/results/${poll.id}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-xs text-blue-600 hover:underline"
             >
               View Full Results on CamerPulse
             </a>
@@ -153,7 +153,7 @@ const PollEmbedViewer = () => {
                     <span className="font-medium">{option}</span>
                     <span>{percentage.toFixed(1)}% ({votes})</span>
                   </div>
-                  <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
                       className="bg-blue-600 h-2 rounded-full transition-all duration-300"
                       style={{ width: `${percentage}%` }}
@@ -163,13 +163,13 @@ const PollEmbedViewer = () => {
               );
             })}
           </div>
-          <div className="text-center pt-2 border-t border-gray-200 dark:border-gray-700">
+          <div className="text-center pt-2 border-t border-gray-200">
             <p className="text-sm opacity-75 mb-2">{poll.votes_count} total votes</p>
             <a 
               href={`${window.location.origin}/polls/results/${poll.id}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-xs text-blue-600 hover:underline"
             >
               View Full Results on CamerPulse
             </a>
@@ -197,13 +197,13 @@ const PollEmbedViewer = () => {
               );
             })}
           </ul>
-          <div className="text-center pt-2 border-t border-gray-200 dark:border-gray-700">
+          <div className="text-center pt-2 border-t border-gray-200">
             <p className="text-sm opacity-75 mb-2">{poll.votes_count} total votes</p>
             <a 
               href={`${window.location.origin}/polls/results/${poll.id}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-xs text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-xs text-blue-600 hover:underline"
             >
               View Full Results on CamerPulse
             </a>

@@ -173,7 +173,7 @@ const BillionaireApplication = () => {
 
   return (
     <AppLayout>
-      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100 dark:from-amber-950 dark:to-yellow-950">
+      <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-100">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
           <div className="text-center mb-8">
@@ -183,7 +183,7 @@ const BillionaireApplication = () => {
                 Apply for Billionaire Status
               </h1>
             </div>
-            <p className="text-xl text-amber-800 dark:text-amber-200 mb-2">
+            <p className="text-xl text-amber-800 mb-2">
               Join Cameroon's Elite Wealth Rankings
             </p>
             <Badge variant="outline" className="border-amber-600 text-amber-600">
@@ -211,7 +211,7 @@ const BillionaireApplication = () => {
           <div className="max-w-4xl mx-auto">
             {/* Step 1: Basic Information */}
             {step === 1 && (
-              <Card className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
+              <Card className="bg-white/70 backdrop-blur-sm">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CheckCircle className="h-6 w-6 text-green-500" />
@@ -303,7 +303,7 @@ const BillionaireApplication = () => {
 
             {/* Step 2: Business Details */}
             {step === 2 && (
-              <Card className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
+              <Card className="bg-white/70 backdrop-blur-sm">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CheckCircle className="h-6 w-6 text-green-500" />
@@ -371,7 +371,7 @@ const BillionaireApplication = () => {
 
             {/* Step 3: Review and Submit */}
             {step === 3 && (
-              <Card className="bg-white/70 dark:bg-gray-900/70 backdrop-blur-sm">
+              <Card className="bg-white/70 backdrop-blur-sm">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <AlertCircle className="h-6 w-6 text-amber-500" />
@@ -404,7 +404,7 @@ const BillionaireApplication = () => {
 
                   <div>
                     <h3 className="font-bold mb-2">Business Background</h3>
-                    <p className="text-sm text-muted-foreground bg-gray-50 dark:bg-gray-800 p-3 rounded">
+                    <p className="text-sm text-muted-foreground bg-gray-50 p-3 rounded">
                       {formData.business_background}
                     </p>
                   </div>
@@ -433,10 +433,10 @@ const BillionaireApplication = () => {
                   )}
 
                   {/* Disclaimer */}
-                  <Card className="bg-blue-50 dark:bg-blue-950 border-blue-200">
+                  <Card className="bg-blue-50 border-blue-200">
                     <CardContent className="pt-6">
-                      <h3 className="font-bold text-blue-700 dark:text-blue-300 mb-2">Important Notice</h3>
-                      <ul className="text-sm text-blue-600 dark:text-blue-400 space-y-1">
+                      <h3 className="font-bold text-blue-700 mb-2">Important Notice</h3>
+                      <ul className="text-sm text-blue-600 space-y-1">
                         <li>• All submissions are subject to verification by CamerPulse Intelligence</li>
                         <li>• Payment instructions will be sent to your email after submission</li>
                         <li>• Only verified applications will be published on the public leaderboard</li>
