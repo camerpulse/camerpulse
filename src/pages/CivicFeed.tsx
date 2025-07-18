@@ -1,0 +1,839 @@
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
+import { useToast } from '@/hooks/use-toast';
+import { AppLayout } from '@/components/Layout/AppLayout';
+import { 
+  Heart, 
+  MessageCircle, 
+  Share2, 
+  Send, 
+  TrendingUp,
+  Globe,
+  MapPin,
+  Clock,
+  Filter,
+  RefreshCw,
+  Users,
+  Star,
+  Building,
+  School,
+  Hospital,
+  Vote,
+  Plus,
+  Bell,
+  Search,
+  ChevronDown,
+  Eye,
+  Bookmark,
+  Flag,
+  MoreHorizontal,
+  UserPlus,
+  Radio,
+  Camera,
+  Video,
+  Link as LinkIcon,
+  Hash,
+  AtSign,
+  Play,
+  Pause
+} from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+
+// Enhanced interfaces for the new feed structure
+interface FeedPost {
+  id: string;
+  content: string;
+  type: 'text' | 'poll' | 'media' | 'event' | 'debate';
+  author: {
+    id: string;
+    name: string;
+    username: string;
+    avatar: string;
+    verified: boolean;
+    type: 'user' | 'politician' | 'company' | 'institution';
+    title?: string;
+    followers?: number;
+  };
+  metrics: {
+    likes: number;
+    comments: number;
+    shares: number;
+    views: number;
+  };
+  engagement: {
+    user_liked: boolean;
+    user_shared: boolean;
+    user_saved: boolean;
+  };
+  location?: {
+    region: string;
+    city?: string;
+  };
+  media?: {
+    type: 'image' | 'video' | 'link';
+    url: string;
+    thumbnail?: string;
+    title?: string;
+  }[];
+  hashtags?: string[];
+  mentions?: string[];
+  created_at: string;
+  priority?: 'normal' | 'trending' | 'urgent' | 'promoted';
+  sentiment?: 'positive' | 'negative' | 'neutral';
+}
+
+interface TrendingItem {
+  id: string;
+  title: string;
+  type: 'topic' | 'poll' | 'politician' | 'company' | 'institution';
+  count: number;
+  change: number;
+  icon?: string;
+}
+
+interface FollowSuggestion {
+  id: string;
+  name: string;
+  username: string;
+  avatar: string;
+  type: 'user' | 'politician' | 'company' | 'institution';
+  title?: string;
+  followers: number;
+  verified: boolean;
+  mutual_followers?: number;
+}
+
+const CivicFeed = () => {
+  const { user, profile } = useAuth();
+  const { toast } = useToast();
+  
+  // Feed state
+  const [posts, setPosts] = useState<FeedPost[]>([]);
+  const [newPost, setNewPost] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [posting, setPosting] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [hasNewPosts, setHasNewPosts] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  
+  // Sidebar data
+  const [trending, setTrending] = useState<TrendingItem[]>([]);
+  const [followSuggestions, setFollowSuggestions] = useState<FollowSuggestion[]>([]);
+  
+  // Filter state
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [selectedRegion, setSelectedRegion] = useState('all');
+  const [isLiveMode, setIsLiveMode] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  // Refs
+  const feedRef = useRef<HTMLDivElement>(null);
+  const autoRefreshRef = useRef<NodeJS.Timeout>();
+  const lastPostIdRef = useRef<string>('');
+
+  // Real-time auto refresh (15 seconds)
+  useEffect(() => {
+    if (isLiveMode) {
+      autoRefreshRef.current = setInterval(() => {
+        checkForNewPosts();
+      }, 15000);
+    } else {
+      if (autoRefreshRef.current) {
+        clearInterval(autoRefreshRef.current);
+      }
+    }
+
+    return () => {
+      if (autoRefreshRef.current) {
+        clearInterval(autoRefreshRef.current);
+      }
+    };
+  }, [isLiveMode]);
+
+  // Initial load
+  useEffect(() => {
+    loadFeedData();
+    loadSidebarData();
+  }, []);
+
+  // Filter change handler
+  useEffect(() => {
+    if (activeFilter || selectedRegion !== 'all' || searchQuery) {
+      loadFeedData(true);
+    }
+  }, [activeFilter, selectedRegion, searchQuery]);
+
+  const loadFeedData = async (reset = false) => {
+    try {
+      if (reset) {
+        setLoading(true);
+        setPage(1);
+      }
+
+      // Generate mock data for demonstration
+      const mockPosts: FeedPost[] = Array.from({ length: 20 }, (_, i) => ({
+        id: `post-${reset ? '' : page}-${i}`,
+        content: `Civic post content about Cameroon development ${i + 1}. This is a sample post to demonstrate the feed structure. #CameroonDevelopment #Douala`,
+        type: ['text', 'poll', 'media', 'event', 'debate'][Math.floor(Math.random() * 5)] as any,
+        author: {
+          id: `user-${i}`,
+          name: ['Paul Biya', 'Joshua Osih', 'Cabral Libii', 'Maurice Kamto', 'Local Citizen'][Math.floor(Math.random() * 5)],
+          username: `user${i}`,
+          avatar: '/placeholder.svg',
+          verified: Math.random() > 0.7,
+          type: ['user', 'politician', 'company', 'institution'][Math.floor(Math.random() * 4)] as any,
+          title: Math.random() > 0.5 ? 'Minister of Health' : undefined,
+          followers: Math.floor(Math.random() * 100000) + 1000
+        },
+        metrics: {
+          likes: Math.floor(Math.random() * 1000),
+          comments: Math.floor(Math.random() * 100),
+          shares: Math.floor(Math.random() * 50),
+          views: Math.floor(Math.random() * 5000) + 500
+        },
+        engagement: {
+          user_liked: Math.random() > 0.8,
+          user_shared: false,
+          user_saved: Math.random() > 0.9
+        },
+        location: {
+          region: ['Centre', 'Littoral', 'Ouest', 'Nord-Ouest', 'Sud-Ouest'][Math.floor(Math.random() * 5)],
+          city: ['Yaoundé', 'Douala', 'Bafoussam', 'Bamenda', 'Buea'][Math.floor(Math.random() * 5)]
+        },
+        hashtags: ['#CameroonDevelopment', '#Douala', '#Infrastructure'].slice(0, Math.floor(Math.random() * 3) + 1),
+        mentions: ['@PaulBiya', '@MauricKamto'].slice(0, Math.floor(Math.random() * 2)),
+        created_at: new Date(Date.now() - Math.random() * 86400000 * 7).toISOString(),
+        priority: ['normal', 'trending', 'urgent', 'promoted'][Math.floor(Math.random() * 4)] as any,
+        sentiment: ['positive', 'negative', 'neutral'][Math.floor(Math.random() * 3)] as any
+      }));
+
+      if (reset) {
+        setPosts(mockPosts);
+        setPage(2);
+      } else {
+        setPosts(prev => [...prev, ...mockPosts]);
+        setPage(prev => prev + 1);
+      }
+
+      if (mockPosts.length > 0) {
+        lastPostIdRef.current = mockPosts[0].id;
+      }
+      
+      setHasMore(mockPosts.length === 20);
+    } catch (error) {
+      console.error('Error loading feed:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load feed posts',
+        variant: 'destructive'
+      });
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  const loadSidebarData = async () => {
+    // Mock trending data
+    setTrending([
+      { id: '1', title: 'Infrastructure Development', type: 'topic', count: 1247, change: 15 },
+      { id: '2', title: 'Education Reform', type: 'topic', count: 983, change: 8 },
+      { id: '3', title: 'Health System', type: 'topic', count: 756, change: -3 },
+      { id: '4', title: 'Paul Biya', type: 'politician', count: 2156, change: 25 },
+      { id: '5', title: 'Maurice Kamto', type: 'politician', count: 1834, change: 12 }
+    ]);
+
+    // Mock follow suggestions
+    setFollowSuggestions([
+      {
+        id: '1',
+        name: 'Ministry of Health',
+        username: 'minsante_cm',
+        avatar: '/placeholder.svg',
+        type: 'institution',
+        title: 'Government Institution',
+        followers: 45000,
+        verified: true,
+        mutual_followers: 12
+      },
+      {
+        id: '2',
+        name: 'University of Yaoundé',
+        username: 'univ_yaounde',
+        avatar: '/placeholder.svg',
+        type: 'institution',
+        title: 'Educational Institution',
+        followers: 23000,
+        verified: true,
+        mutual_followers: 8
+      }
+    ]);
+  };
+
+  const checkForNewPosts = async () => {
+    // In a real app, this would check for posts newer than lastPostIdRef.current
+    // For demo, we'll randomly show new posts available
+    if (Math.random() > 0.7) {
+      setHasNewPosts(true);
+    }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    setHasNewPosts(false);
+    await loadFeedData(true);
+  };
+
+  const handleNewPostsClick = () => {
+    setHasNewPosts(false);
+    handleRefresh();
+    if (feedRef.current) {
+      feedRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const createPost = async () => {
+    if (!user || !newPost.trim()) return;
+
+    setPosting(true);
+    try {
+      // In a real app, this would post to the backend
+      const newPostData: FeedPost = {
+        id: `new-post-${Date.now()}`,
+        content: newPost,
+        type: 'text',
+        author: {
+          id: user.id,
+          name: profile?.display_name || 'User',
+          username: profile?.username || 'user',
+          avatar: profile?.avatar_url || '/placeholder.svg',
+          verified: false,
+          type: 'user',
+          followers: 0
+        },
+        metrics: { likes: 0, comments: 0, shares: 0, views: 0 },
+        engagement: { user_liked: false, user_shared: false, user_saved: false },
+        hashtags: newPost.match(/#[a-zA-Z0-9_]+/g)?.map(tag => tag.slice(1)) || [],
+        mentions: newPost.match(/@[a-zA-Z0-9_]+/g)?.map(mention => mention.slice(1)) || [],
+        created_at: new Date().toISOString(),
+        priority: 'normal'
+      };
+
+      setPosts(prev => [newPostData, ...prev]);
+      setNewPost('');
+      
+      toast({
+        title: 'Post Created',
+        description: 'Your post has been shared with the community'
+      });
+    } catch (error) {
+      console.error('Error creating post:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create post',
+        variant: 'destructive'
+      });
+    } finally {
+      setPosting(false);
+    }
+  };
+
+  const toggleLike = async (postId: string, currentlyLiked: boolean) => {
+    if (!user) return;
+
+    setPosts(posts.map(post => 
+      post.id === postId 
+        ? {
+            ...post,
+            metrics: {
+              ...post.metrics,
+              likes: currentlyLiked ? post.metrics.likes - 1 : post.metrics.likes + 1
+            },
+            engagement: {
+              ...post.engagement,
+              user_liked: !currentlyLiked
+            }
+          }
+        : post
+    ));
+  };
+
+  const formatNumber = (num: number): string => {
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+    return num.toString();
+  };
+
+  const getAuthorIcon = (type: string) => {
+    switch (type) {
+      case 'politician': return <Star className="h-3 w-3 text-yellow-500" />;
+      case 'company': return <Building className="h-3 w-3 text-blue-500" />;
+      case 'institution': return <Hospital className="h-3 w-3 text-green-500" />;
+      default: return null;
+    }
+  };
+
+  const getPriorityStyle = (priority?: string) => {
+    switch (priority) {
+      case 'urgent': return 'border-l-4 border-l-red-500 bg-red-50/50';
+      case 'trending': return 'border-l-4 border-l-orange-500 bg-orange-50/50';
+      case 'promoted': return 'border-l-4 border-l-blue-500 bg-blue-50/50';
+      default: return '';
+    }
+  };
+
+  if (!user) {
+    return (
+      <AppLayout>
+        <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
+          <Card className="w-full max-w-md text-center">
+            <CardContent className="pt-6">
+              <h2 className="text-xl font-bold mb-4">Login Required</h2>
+              <p className="text-muted-foreground mb-4">Please log in to access the Civic Feed</p>
+              <Button onClick={() => window.location.href = '/auth'}>Sign In</Button>
+            </CardContent>
+          </Card>
+        </div>
+      </AppLayout>
+    );
+  }
+
+  return (
+    <AppLayout>
+      <div className="min-h-screen bg-background">
+        {/* Sticky Header */}
+        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              <h1 className="text-2xl font-bold flex items-center gap-2">
+                <Globe className="h-6 w-6 text-primary" />
+                Civic Feed
+              </h1>
+              
+              <div className="flex items-center gap-2">
+                <Button
+                  variant={isLiveMode ? "destructive" : "outline"}
+                  size="sm"
+                  onClick={() => setIsLiveMode(!isLiveMode)}
+                >
+                  {isLiveMode ? <Pause className="h-4 w-4" /> : <Radio className="h-4 w-4" />}
+                  {isLiveMode ? 'Live' : 'Auto'}
+                </Button>
+                
+                <Button variant="outline" size="sm">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                
+                <Button variant="outline" size="sm">
+                  <MessageCircle className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* New Posts Banner */}
+        {hasNewPosts && (
+          <div className="bg-primary text-primary-foreground py-2 px-4 text-center cursor-pointer hover:bg-primary/90 transition-colors" onClick={handleNewPostsClick}>
+            <div className="flex items-center justify-center gap-2">
+              <TrendingUp className="h-4 w-4" />
+              New posts available - Click to refresh
+            </div>
+          </div>
+        )}
+
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            {/* Left Sidebar - Trending */}
+            <div className="lg:col-span-3 space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4" />
+                    Trending Topics
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {trending.map((item, index) => (
+                    <div key={item.id} className="flex items-center justify-between text-sm hover:bg-accent/50 p-2 rounded cursor-pointer">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-muted-foreground">#{index + 1}</span>
+                        <div>
+                          <p className="font-medium">{item.title}</p>
+                          <p className="text-xs text-muted-foreground">{formatNumber(item.count)} mentions</p>
+                        </div>
+                      </div>
+                      <Badge variant="outline" className={item.change > 0 ? 'text-green-600' : 'text-red-600'}>
+                        {item.change > 0 ? '+' : ''}{item.change}%
+                      </Badge>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm">Quick Filters</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {[
+                    { key: 'all', label: 'All Posts', icon: Globe },
+                    { key: 'polls', label: 'Polls', icon: Vote },
+                    { key: 'media', label: 'Media', icon: Camera },
+                    { key: 'debates', label: 'Debates', icon: MessageCircle },
+                    { key: 'officials', label: 'Officials Only', icon: Star }
+                  ].map(filter => (
+                    <Button
+                      key={filter.key}
+                      variant={activeFilter === filter.key ? 'default' : 'ghost'}
+                      size="sm"
+                      className="w-full justify-start"
+                      onClick={() => setActiveFilter(filter.key)}
+                    >
+                      <filter.icon className="h-4 w-4 mr-2" />
+                      {filter.label}
+                    </Button>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Main Feed */}
+            <div className="lg:col-span-6 space-y-6">
+              {/* Create Post */}
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex gap-3">
+                    <Avatar>
+                      <AvatarImage src={profile?.avatar_url} />
+                      <AvatarFallback>{profile?.username?.[0]?.toUpperCase()}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 space-y-3">
+                      <Textarea
+                        placeholder="What's happening in Cameroon? Share your civic thoughts..."
+                        value={newPost}
+                        onChange={(e) => setNewPost(e.target.value)}
+                        className="min-h-[100px] resize-none border-none focus:ring-0 text-lg"
+                        maxLength={500}
+                      />
+                      
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <Button variant="ghost" size="sm">
+                            <Camera className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <Video className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <Vote className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm">
+                            <LinkIcon className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm text-muted-foreground">{newPost.length}/500</span>
+                          <Button 
+                            onClick={createPost}
+                            disabled={!newPost.trim() || posting}
+                            size="sm"
+                          >
+                            {posting ? 'Posting...' : 'Post'}
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Filter Bar */}
+              <div className="flex items-center gap-4 overflow-x-auto pb-2">
+                <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                  <SelectTrigger className="w-auto">
+                    <MapPin className="h-4 w-4 mr-2" />
+                    <SelectValue placeholder="All Regions" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Regions</SelectItem>
+                    <SelectItem value="centre">Centre</SelectItem>
+                    <SelectItem value="littoral">Littoral</SelectItem>
+                    <SelectItem value="ouest">Ouest</SelectItem>
+                    <SelectItem value="nord-ouest">Nord-Ouest</SelectItem>
+                    <SelectItem value="sud-ouest">Sud-Ouest</SelectItem>
+                  </SelectContent>
+                </Select>
+
+                <div className="relative flex-1 max-w-sm">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search posts..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="pl-10"
+                  />
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleRefresh}
+                  disabled={refreshing}
+                >
+                  <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+                </Button>
+              </div>
+
+              {/* Posts Feed */}
+              <div ref={feedRef} className="space-y-4">
+                {loading && posts.length === 0 ? (
+                  // Skeleton loader
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <Card key={i} className="animate-pulse">
+                      <CardContent className="pt-6">
+                        <div className="flex gap-3">
+                          <div className="w-10 h-10 bg-muted rounded-full"></div>
+                          <div className="flex-1 space-y-2">
+                            <div className="h-4 bg-muted rounded w-1/4"></div>
+                            <div className="h-4 bg-muted rounded w-full"></div>
+                            <div className="h-4 bg-muted rounded w-3/4"></div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  posts.map((post) => (
+                    <Card key={post.id} className={`hover:shadow-md transition-all duration-200 ${getPriorityStyle(post.priority)}`}>
+                      <CardContent className="pt-6">
+                        <div className="flex gap-3">
+                          <Avatar className="cursor-pointer">
+                            <AvatarImage src={post.author.avatar} />
+                            <AvatarFallback>{post.author.name[0]}</AvatarFallback>
+                          </Avatar>
+                          
+                          <div className="flex-1 space-y-3">
+                            {/* Author info */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold hover:underline cursor-pointer">
+                                  {post.author.name}
+                                </span>
+                                {post.author.verified && (
+                                  <Badge variant="outline" className="text-xs">
+                                    ✓ Verified
+                                  </Badge>
+                                )}
+                                {getAuthorIcon(post.author.type)}
+                                <span className="text-sm text-muted-foreground">
+                                  @{post.author.username}
+                                </span>
+                                {post.author.title && (
+                                  <span className="text-xs text-muted-foreground">
+                                    • {post.author.title}
+                                  </span>
+                                )}
+                                <span className="text-sm text-muted-foreground">
+                                  • {formatDistanceToNow(new Date(post.created_at))} ago
+                                </span>
+                              </div>
+                              
+                              <Button variant="ghost" size="sm">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            {/* Post content */}
+                            <div className="space-y-3">
+                              <p className="text-base leading-relaxed">
+                                {post.content.split(' ').map((word, index) => {
+                                  if (word.startsWith('#')) {
+                                    return (
+                                      <span key={index} className="text-primary hover:underline cursor-pointer">
+                                        {word}{' '}
+                                      </span>
+                                    );
+                                  }
+                                  if (word.startsWith('@')) {
+                                    return (
+                                      <span key={index} className="text-primary hover:underline cursor-pointer">
+                                        {word}{' '}
+                                      </span>
+                                    );
+                                  }
+                                  return word + ' ';
+                                })}
+                              </p>
+
+                              {/* Media preview */}
+                              {post.media && post.media.length > 0 && (
+                                <div className="rounded-lg overflow-hidden border">
+                                  <img 
+                                    src={post.media[0].url} 
+                                    alt="Post media"
+                                    className="w-full h-64 object-cover"
+                                  />
+                                </div>
+                              )}
+
+                              {/* Location */}
+                              {post.location && (
+                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                  <MapPin className="h-3 w-3" />
+                                  {post.location.city}, {post.location.region}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Engagement bar */}
+                            <div className="flex items-center justify-between pt-3 border-t">
+                              <div className="flex items-center gap-6">
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => toggleLike(post.id, post.engagement.user_liked)}
+                                  className={post.engagement.user_liked ? 'text-red-500' : ''}
+                                >
+                                  <Heart className={`h-4 w-4 mr-1 ${post.engagement.user_liked ? 'fill-current' : ''}`} />
+                                  {formatNumber(post.metrics.likes)}
+                                </Button>
+                                
+                                <Button variant="ghost" size="sm">
+                                  <MessageCircle className="h-4 w-4 mr-1" />
+                                  {formatNumber(post.metrics.comments)}
+                                </Button>
+                                
+                                <Button variant="ghost" size="sm">
+                                  <Share2 className="h-4 w-4 mr-1" />
+                                  {formatNumber(post.metrics.shares)}
+                                </Button>
+                                
+                                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                                  <Eye className="h-3 w-3" />
+                                  {formatNumber(post.metrics.views)}
+                                </div>
+                              </div>
+                              
+                              <div className="flex items-center gap-2">
+                                <Button variant="ghost" size="sm">
+                                  <Bookmark className={`h-4 w-4 ${post.engagement.user_saved ? 'fill-current' : ''}`} />
+                                </Button>
+                                <Button variant="ghost" size="sm">
+                                  <Flag className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))
+                )}
+
+                {/* Load more */}
+                {hasMore && !loading && (
+                  <div className="text-center py-6">
+                    <Button 
+                      variant="outline" 
+                      onClick={() => loadFeedData()}
+                      disabled={loading}
+                    >
+                      {loading ? 'Loading...' : 'Load More Posts'}
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right Sidebar - Follow Suggestions */}
+            <div className="lg:col-span-3 space-y-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm flex items-center gap-2">
+                    <UserPlus className="h-4 w-4" />
+                    People to Follow
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {followSuggestions.map((suggestion) => (
+                    <div key={suggestion.id} className="flex items-center gap-3">
+                      <Avatar className="cursor-pointer">
+                        <AvatarImage src={suggestion.avatar} />
+                        <AvatarFallback>{suggestion.name[0]}</AvatarFallback>
+                      </Avatar>
+                      
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm truncate">
+                          {suggestion.name}
+                          {suggestion.verified && (
+                            <Badge variant="outline" className="text-xs ml-1">✓</Badge>
+                          )}
+                        </p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          @{suggestion.username}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {formatNumber(suggestion.followers)} followers
+                          {suggestion.mutual_followers && (
+                            <> • {suggestion.mutual_followers} mutual</>
+                          )}
+                        </p>
+                      </div>
+                      
+                      <Button size="sm" variant="outline">
+                        Follow
+                      </Button>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-sm">Trending Institutions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {[
+                    { name: 'University of Douala', type: 'university', followers: '23K' },
+                    { name: 'Douala General Hospital', type: 'hospital', followers: '18K' },
+                    { name: 'Ministry of Education', type: 'ministry', followers: '67K' }
+                  ].map((institution, index) => (
+                    <div key={index} className="flex items-center justify-between text-sm hover:bg-accent/50 p-2 rounded cursor-pointer">
+                      <div className="flex items-center gap-2">
+                        {institution.type === 'university' && <School className="h-4 w-4 text-blue-500" />}
+                        {institution.type === 'hospital' && <Hospital className="h-4 w-4 text-green-500" />}
+                        {institution.type === 'ministry' && <Building className="h-4 w-4 text-purple-500" />}
+                        <div>
+                          <p className="font-medium">{institution.name}</p>
+                          <p className="text-xs text-muted-foreground">{institution.followers} followers</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline" className="text-xs">
+                        Follow
+                      </Button>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </AppLayout>
+  );
+};
+
+export default CivicFeed;

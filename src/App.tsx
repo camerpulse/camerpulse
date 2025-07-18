@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import CivicFeed from "./pages/CivicFeed";
 import PulseFeed from "./pages/PulseFeed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
@@ -94,7 +95,8 @@ const App = () => {
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
-              <Route path="/pulse" element={<PulseFeed />} />
+              <Route path="/feed" element={<CivicFeed />} />
+              <Route path="/civic-feed" element={<CivicFeed />} />
               <Route path="/politicians" element={<Politicians />} />
               <Route path="/security" element={<Security />} />
               <Route path="/marketplace" element={<Marketplace />} />

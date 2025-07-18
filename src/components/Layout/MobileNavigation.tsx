@@ -9,7 +9,8 @@ import {
   Bell,
   User,
   Settings,
-  Vote
+  Vote,
+  Activity
 } from 'lucide-react';
 
 interface NavItem {
@@ -26,6 +27,12 @@ const navItems: NavItem[] = [
     label: 'Home',
     icon: Home,
     path: '/',
+  },
+  {
+    id: 'feed',
+    label: 'Feed',
+    icon: Activity,
+    path: '/feed'
   },
   {
     id: 'pulse',
