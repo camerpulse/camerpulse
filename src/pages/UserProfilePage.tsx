@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { AdvancedUserProfile } from '@/components/camerpulse';
+import { Card, CardContent } from '@/components/ui/card';
 
 const UserProfilePage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
@@ -17,7 +17,15 @@ const UserProfilePage: React.FC = () => {
   }
 
   return (
-    <AdvancedUserProfile userId={userId} isModal={false} />
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <Card>
+        <CardContent className="p-8 text-center">
+          <h1 className="text-2xl font-bold mb-4">User Profile</h1>
+          <p className="text-muted-foreground">Profile for user: {userId}</p>
+          <p className="text-sm text-muted-foreground mt-4">Feature coming soon!</p>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
