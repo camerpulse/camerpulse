@@ -3,37 +3,113 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
-export interface MessageNotification {
+export type NotificationType = 
+  | 'message' | 'follow' | 'profile_view' | 'tag' | 'event_nearby' | 'poll_new'
+  | 'government_notice' | 'policy_update' | 'promise_update' | 'sentiment_alert'
+  | 'election_update' | 'verification_approved' | 'post_deleted' | 'profile_issue'
+  | 'feature_unlocked' | 'broadcast';
+
+export type NotificationPriority = 'low' | 'moderate' | 'critical';
+
+export interface PulseNotification {
   id: string;
-  conversation_id: string;
-  sender_id: string;
-  sender_name: string;
-  message_snippet: string;
-  created_at: string;
+  user_id: string;
+  notification_type: NotificationType;
+  priority: NotificationPriority;
+  title: string;
+  message: string;
+  data: Record<string, any>;
+  action_url?: string;
+  icon?: string;
   is_read: boolean;
-  conversation_title?: string;
-  is_group: boolean;
+  is_dismissed: boolean;
+  expires_at?: string;
+  geo_targeted: boolean;
+  target_regions?: string[];
+  created_at: string;
+  read_at?: string;
+  dismissed_at?: string;
 }
 
 export interface NotificationSettings {
-  enable_all_notifications: boolean;
+  // Message notifications
+  enable_message_notifications: boolean;
   enable_message_popups: boolean;
+  enable_message_push: boolean;
+  enable_message_email: boolean;
+  enable_message_sms: boolean;
+  
+  // Civic engagement notifications
+  enable_civic_notifications: boolean;
+  enable_event_notifications: boolean;
+  enable_poll_notifications: boolean;
+  enable_government_notifications: boolean;
+  enable_policy_notifications: boolean;
+  
+  // Intelligence notifications
+  enable_intelligence_notifications: boolean;
+  enable_promise_tracking: boolean;
+  enable_sentiment_alerts: boolean;
+  enable_election_updates: boolean;
+  
+  // System notifications
+  enable_system_notifications: boolean;
+  enable_verification_notifications: boolean;
+  enable_security_notifications: boolean;
+  
+  // Delivery preferences
+  enable_email_digest: boolean;
+  email_digest_frequency: string;
   enable_push_notifications: boolean;
-  muted_conversations: string[];
+  
+  // Privacy and filtering
   quiet_hours_start?: string;
   quiet_hours_end?: string;
+  snooze_until?: string;
+  geo_filter_enabled: boolean;
+  preferred_regions: string[];
+  
+  // Muted entities
+  muted_conversations: string[];
+  muted_users: string[];
+  muted_politicians: string[];
+  muted_parties: string[];
+  muted_categories: string[];
 }
 
 export const useNotifications = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [unreadCount, setUnreadCount] = useState(0);
-  const [notifications, setNotifications] = useState<MessageNotification[]>([]);
+  const [notifications, setNotifications] = useState<PulseNotification[]>([]);
   const [settings, setSettings] = useState<NotificationSettings>({
-    enable_all_notifications: true,
+    enable_message_notifications: true,
     enable_message_popups: true,
+    enable_message_push: false,
+    enable_message_email: false,
+    enable_message_sms: false,
+    enable_civic_notifications: true,
+    enable_event_notifications: true,
+    enable_poll_notifications: true,
+    enable_government_notifications: true,
+    enable_policy_notifications: true,
+    enable_intelligence_notifications: true,
+    enable_promise_tracking: true,
+    enable_sentiment_alerts: true,
+    enable_election_updates: true,
+    enable_system_notifications: true,
+    enable_verification_notifications: true,
+    enable_security_notifications: true,
+    enable_email_digest: false,
+    email_digest_frequency: 'weekly',
     enable_push_notifications: false,
+    geo_filter_enabled: true,
+    preferred_regions: [],
     muted_conversations: [],
+    muted_users: [],
+    muted_politicians: [],
+    muted_parties: [],
+    muted_categories: [],
   });
 
   // Load notification settings
@@ -41,25 +117,40 @@ export const useNotifications = () => {
     if (!user) return;
 
     const loadSettings = async () => {
-      // For now, use default settings since the table doesn't exist yet
-      setSettings({
-        enable_all_notifications: true,
-        enable_message_popups: true,
-        enable_push_notifications: false,
-        muted_conversations: [],
-      });
+      try {
+        const { data } = await supabase
+          .from('user_notification_settings')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (data) {
+          setSettings(data);
+        }
+      } catch (error) {
+        console.error('Error loading notification settings:', error);
+      }
     };
 
     loadSettings();
   }, [user]);
 
-  // Load unread message count from messages table
+  // Load unread notification count
   useEffect(() => {
     if (!user) return;
 
     const loadUnreadCount = async () => {
-      // For now, use a simple count from messages
-      setUnreadCount(0); // Will be updated by real-time subscription
+      try {
+        const { count } = await supabase
+          .from('user_notifications')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('is_read', false);
+        
+        setUnreadCount(count || 0);
+      } catch (error) {
+        console.error('Error loading unread count:', error);
+      }
     };
 
     loadUnreadCount();
@@ -70,32 +161,44 @@ export const useNotifications = () => {
     if (!user) return;
 
     const loadNotifications = async () => {
-      // For now, use empty array since tables are not ready
-      setNotifications([]);
+      try {
+        const { data } = await supabase
+          .from('user_notifications')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(50);
+        
+        if (data) {
+          setNotifications(data);
+        }
+      } catch (error) {
+        console.error('Error loading notifications:', error);
+      }
     };
 
     loadNotifications();
   }, [user]);
 
-  // Real-time subscription for new messages
+  // Real-time subscription for new notifications
   useEffect(() => {
     if (!user) return;
 
     const channel = supabase
-      .channel('message-notifications')
+      .channel('user-notifications')
       .on(
         'postgres_changes',
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'messages',
-          filter: `sender_id=neq.${user.id}`,
+          table: 'user_notifications',
+          filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
-          const newMessage = payload.new as any;
+          const newNotification = payload.new as PulseNotification;
           
-          // Check if conversation is muted
-          if (settings.muted_conversations.includes(newMessage.conversation_id)) {
+          // Check if this notification type is muted
+          if (settings.muted_categories.includes(newNotification.notification_type)) {
             return;
           }
 
@@ -104,12 +207,40 @@ export const useNotifications = () => {
             return;
           }
 
-          // Update unread count
+          // Check snooze
+          if (isInSnooze()) {
+            return;
+          }
+
+          // Update state
+          setNotifications(prev => [newNotification, ...prev.slice(0, 49)]);
           setUnreadCount(prev => prev + 1);
 
           // Show popup notification if enabled
-          if (settings.enable_all_notifications && settings.enable_message_popups) {
-            showMessagePopup(newMessage);
+          if (shouldShowPopup(newNotification)) {
+            showNotificationPopup(newNotification);
+          }
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'user_notifications',
+          filter: `user_id=eq.${user.id}`,
+        },
+        (payload) => {
+          const updatedNotification = payload.new as PulseNotification;
+          setNotifications(prev => 
+            prev.map(notif => 
+              notif.id === updatedNotification.id ? updatedNotification : notif
+            )
+          );
+          
+          // Update unread count if notification was marked as read
+          if (updatedNotification.is_read && !payload.old?.is_read) {
+            setUnreadCount(prev => Math.max(0, prev - 1));
           }
         }
       )
@@ -140,20 +271,45 @@ export const useNotifications = () => {
     }
   };
 
-  const showMessagePopup = async (message: any) => {
-    // Get sender info
-    const { data: senderData } = await supabase
-      .from('profiles')
-      .select('display_name, username')
-      .eq('user_id', message.sender_id)
-      .single();
+  const isInSnooze = (): boolean => {
+    if (!settings.snooze_until) return false;
+    return new Date(settings.snooze_until) > new Date();
+  };
 
-    const senderName = senderData?.display_name || senderData?.username || 'Unknown User';
-    const snippet = message.content.substring(0, 50) + (message.content.length > 50 ? '...' : '');
+  const shouldShowPopup = (notification: PulseNotification): boolean => {
+    const typeSettings = {
+      'message': settings.enable_message_popups,
+      'follow': settings.enable_system_notifications,
+      'profile_view': settings.enable_system_notifications,
+      'tag': settings.enable_system_notifications,
+      'event_nearby': settings.enable_civic_notifications,
+      'poll_new': settings.enable_civic_notifications,
+      'government_notice': settings.enable_government_notifications,
+      'policy_update': settings.enable_policy_notifications,
+      'promise_update': settings.enable_promise_tracking,
+      'sentiment_alert': settings.enable_sentiment_alerts,
+      'election_update': settings.enable_election_updates,
+      'verification_approved': settings.enable_verification_notifications,
+      'post_deleted': settings.enable_security_notifications,
+      'profile_issue': settings.enable_security_notifications,
+      'feature_unlocked': settings.enable_system_notifications,
+      'broadcast': true, // Always show broadcasts
+    };
+
+    return typeSettings[notification.notification_type] || false;
+  };
+
+  const showNotificationPopup = (notification: PulseNotification) => {
+    const priorityEmojis = {
+      critical: '🚨',
+      moderate: '📢',
+      low: 'ℹ️'
+    };
 
     toast({
-      title: `New message from ${senderName}`,
-      description: snippet,
+      title: `${priorityEmojis[notification.priority]} ${notification.title}`,
+      description: notification.message,
+      duration: notification.priority === 'critical' ? 10000 : 5000,
     });
   };
 
@@ -163,42 +319,99 @@ export const useNotifications = () => {
     const updatedSettings = { ...settings, ...newSettings };
     setSettings(updatedSettings);
 
-    // For now, just update local state since the table doesn't exist yet
-    // TODO: Implement database storage when user_notification_settings table is ready
+    try {
+      await supabase
+        .from('user_notification_settings')
+        .upsert({
+          user_id: user.id,
+          ...updatedSettings,
+        });
+    } catch (error) {
+      console.error('Error updating notification settings:', error);
+    }
   };
 
-  const markAsRead = async (messageId: string) => {
+  const markAsRead = async (notificationId: string) => {
     if (!user) return;
 
-    // For now, just update local state
-    setUnreadCount(prev => Math.max(0, prev - 1));
-    setNotifications(prev => 
-      prev.map(notif => 
-        notif.id === messageId 
-          ? { ...notif, is_read: true }
-          : notif
-      )
-    );
+    try {
+      await supabase
+        .from('user_notifications')
+        .update({ 
+          is_read: true, 
+          read_at: new Date().toISOString() 
+        })
+        .eq('id', notificationId)
+        .eq('user_id', user.id);
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
 
   const markAllAsRead = async () => {
     if (!user) return;
 
-    // For now, just update local state
-    setUnreadCount(0);
-    setNotifications(prev => 
-      prev.map(notif => ({ ...notif, is_read: true }))
-    );
+    try {
+      await supabase
+        .from('user_notifications')
+        .update({ 
+          is_read: true, 
+          read_at: new Date().toISOString() 
+        })
+        .eq('user_id', user.id)
+        .eq('is_read', false);
+      
+      setUnreadCount(0);
+      setNotifications(prev => 
+        prev.map(notif => ({ 
+          ...notif, 
+          is_read: true, 
+          read_at: new Date().toISOString() 
+        }))
+      );
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+    }
   };
 
-  const muteConversation = async (conversationId: string) => {
-    const mutedConversations = [...settings.muted_conversations, conversationId];
-    await updateSettings({ muted_conversations: mutedConversations });
+  const dismissNotification = async (notificationId: string) => {
+    if (!user) return;
+
+    try {
+      await supabase
+        .from('user_notifications')
+        .update({ 
+          is_dismissed: true, 
+          dismissed_at: new Date().toISOString() 
+        })
+        .eq('id', notificationId)
+        .eq('user_id', user.id);
+      
+      setNotifications(prev => prev.filter(notif => notif.id !== notificationId));
+    } catch (error) {
+      console.error('Error dismissing notification:', error);
+    }
   };
 
-  const unmuteConversation = async (conversationId: string) => {
-    const mutedConversations = settings.muted_conversations.filter(id => id !== conversationId);
-    await updateSettings({ muted_conversations: mutedConversations });
+  const snoozeNotifications = async (duration: '1h' | '1d' | '1w') => {
+    const durations = {
+      '1h': 60 * 60 * 1000,
+      '1d': 24 * 60 * 60 * 1000,
+      '1w': 7 * 24 * 60 * 60 * 1000,
+    };
+    
+    const snoozeUntil = new Date(Date.now() + durations[duration]).toISOString();
+    await updateSettings({ snooze_until: snoozeUntil });
+  };
+
+  const muteCategory = async (category: string) => {
+    const mutedCategories = [...settings.muted_categories, category];
+    await updateSettings({ muted_categories: mutedCategories });
+  };
+
+  const unmuteCategory = async (category: string) => {
+    const mutedCategories = settings.muted_categories.filter(cat => cat !== category);
+    await updateSettings({ muted_categories: mutedCategories });
   };
 
   return {
@@ -208,7 +421,11 @@ export const useNotifications = () => {
     updateSettings,
     markAsRead,
     markAllAsRead,
-    muteConversation,
-    unmuteConversation,
+    dismissNotification,
+    snoozeNotifications,
+    muteCategory,
+    unmuteCategory,
+    isInQuietHours,
+    isInSnooze,
   };
 };

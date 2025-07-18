@@ -4377,6 +4377,66 @@ export type Database = {
           },
         ]
       }
+      broadcast_notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string | null
+          created_by: string
+          delivery_completed_at: string | null
+          delivery_started_at: string | null
+          expires_at: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          priority: Database["public"]["Enums"]["notification_priority"] | null
+          scheduled_for: string | null
+          sent_count: number | null
+          target_criteria: Json | null
+          target_type: string
+          title: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string | null
+          created_by: string
+          delivery_completed_at?: string | null
+          delivery_started_at?: string | null
+          expires_at?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          priority?: Database["public"]["Enums"]["notification_priority"] | null
+          scheduled_for?: string | null
+          sent_count?: number | null
+          target_criteria?: Json | null
+          target_type: string
+          title: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string | null
+          created_by?: string
+          delivery_completed_at?: string | null
+          delivery_started_at?: string | null
+          expires_at?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          message?: string
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          priority?: Database["public"]["Enums"]["notification_priority"] | null
+          scheduled_for?: string | null
+          sent_count?: number | null
+          target_criteria?: Json | null
+          target_type?: string
+          title?: string
+        }
+        Relationships: []
+      }
       cache_flush_operations: {
         Row: {
           cache_layers: string[]
@@ -17907,6 +17967,66 @@ export type Database = {
         }
         Relationships: []
       }
+      user_notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string | null
+          data: Json | null
+          dismissed_at: string | null
+          expires_at: string | null
+          geo_targeted: boolean | null
+          icon: string | null
+          id: string
+          is_dismissed: boolean | null
+          is_read: boolean | null
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          priority: Database["public"]["Enums"]["notification_priority"] | null
+          read_at: string | null
+          target_regions: string[] | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string | null
+          data?: Json | null
+          dismissed_at?: string | null
+          expires_at?: string | null
+          geo_targeted?: boolean | null
+          icon?: string | null
+          id?: string
+          is_dismissed?: boolean | null
+          is_read?: boolean | null
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          priority?: Database["public"]["Enums"]["notification_priority"] | null
+          read_at?: string | null
+          target_regions?: string[] | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string | null
+          data?: Json | null
+          dismissed_at?: string | null
+          expires_at?: string | null
+          geo_targeted?: boolean | null
+          icon?: string | null
+          id?: string
+          is_dismissed?: boolean | null
+          is_read?: boolean | null
+          message?: string
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          priority?: Database["public"]["Enums"]["notification_priority"] | null
+          read_at?: string | null
+          target_regions?: string[] | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_pgp_keys: {
         Row: {
           created_at: string | null
@@ -18732,6 +18852,20 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      send_notification: {
+        Args: {
+          p_user_id: string
+          p_type: Database["public"]["Enums"]["notification_type"]
+          p_title: string
+          p_message: string
+          p_priority?: Database["public"]["Enums"]["notification_priority"]
+          p_data?: Json
+          p_action_url?: string
+          p_icon?: string
+          p_expires_at?: string
+        }
+        Returns: string
+      }
       set_limit: {
         Args: { "": number }
         Returns: number
@@ -18910,6 +19044,7 @@ export type Database = {
         | "blog"
         | "social_feed"
       nomination_status: "pending" | "approved" | "rejected"
+      notification_priority: "low" | "moderate" | "critical"
       notification_type:
         | "copyright_violation"
         | "stream_milestone"
@@ -19280,6 +19415,7 @@ export const Constants = {
         "social_feed",
       ],
       nomination_status: ["pending", "approved", "rejected"],
+      notification_priority: ["low", "moderate", "critical"],
       notification_type: [
         "copyright_violation",
         "stream_milestone",
