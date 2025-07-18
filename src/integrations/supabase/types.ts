@@ -18381,6 +18381,9 @@ export type Database = {
         | "rejected"
         | "cancelled"
         | "completed"
+        | "published"
+        | "postponed"
+        | "ongoing"
       fan_activity_type:
         | "stream"
         | "vote"
@@ -18722,6 +18725,9 @@ export const Constants = {
         "rejected",
         "cancelled",
         "completed",
+        "published",
+        "postponed",
+        "ongoing",
       ],
       fan_activity_type: [
         "stream",
