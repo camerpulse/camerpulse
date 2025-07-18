@@ -63,6 +63,7 @@ import CamerPlayAwards from "./pages/CamerPlayAwards";
 import EcosystemDashboard from "./pages/EcosystemDashboard";
 import FanPortal from "./pages/FanPortal";
 import UserProfilePage from "./pages/UserProfilePage";
+import Events from "./pages/Events";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -160,8 +161,9 @@ const App = () => {
           <Route path="/election-forecast" element={<ElectionForecast />} />
           <Route path="/rewards" element={<RewardsCenter />} />
               <Route path="/poll-archive" element={<PollArchive />} />
-            <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
+              <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
               <Route path="/profile/:userId" element={<UserProfilePage />} />
+              <Route path="/events" element={<Events />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

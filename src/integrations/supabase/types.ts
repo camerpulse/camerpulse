@@ -5684,6 +5684,116 @@ export type Database = {
           },
         ]
       }
+      civic_event_analytics: {
+        Row: {
+          age_breakdown: Json | null
+          civic_reach_score: number | null
+          created_at: string
+          date_recorded: string
+          engagement_score: number | null
+          event_id: string
+          gender_breakdown: Json | null
+          id: string
+          region_breakdown: Json | null
+          rsvp_breakdown: Json | null
+          total_rsvps: number | null
+          total_shares: number | null
+          total_views: number | null
+        }
+        Insert: {
+          age_breakdown?: Json | null
+          civic_reach_score?: number | null
+          created_at?: string
+          date_recorded?: string
+          engagement_score?: number | null
+          event_id: string
+          gender_breakdown?: Json | null
+          id?: string
+          region_breakdown?: Json | null
+          rsvp_breakdown?: Json | null
+          total_rsvps?: number | null
+          total_shares?: number | null
+          total_views?: number | null
+        }
+        Update: {
+          age_breakdown?: Json | null
+          civic_reach_score?: number | null
+          created_at?: string
+          date_recorded?: string
+          engagement_score?: number | null
+          event_id?: string
+          gender_breakdown?: Json | null
+          id?: string
+          region_breakdown?: Json | null
+          rsvp_breakdown?: Json | null
+          total_rsvps?: number | null
+          total_shares?: number | null
+          total_views?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_event_analytics_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_event_checkins: {
+        Row: {
+          check_in_method: string | null
+          check_in_time: string
+          event_id: string
+          id: string
+          location_lat: number | null
+          location_lng: number | null
+          notes: string | null
+          rsvp_id: string | null
+          user_id: string
+          verified_by: string | null
+        }
+        Insert: {
+          check_in_method?: string | null
+          check_in_time?: string
+          event_id: string
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          notes?: string | null
+          rsvp_id?: string | null
+          user_id: string
+          verified_by?: string | null
+        }
+        Update: {
+          check_in_method?: string | null
+          check_in_time?: string
+          event_id?: string
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          notes?: string | null
+          rsvp_id?: string | null
+          user_id?: string
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_event_checkins_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "civic_event_checkins_rsvp_id_fkey"
+            columns: ["rsvp_id"]
+            isOneToOne: false
+            referencedRelation: "event_rsvps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       civic_event_templates: {
         Row: {
           created_at: string
@@ -9685,6 +9795,106 @@ export type Database = {
           },
         ]
       }
+      event_feedback: {
+        Row: {
+          civic_impact_felt: boolean | null
+          content_rating: number | null
+          created_at: string
+          event_id: string
+          feedback_text: string | null
+          id: string
+          learned_something_new: boolean | null
+          organization_rating: number | null
+          overall_rating: number | null
+          user_id: string
+          venue_rating: number | null
+          will_take_action: boolean | null
+          would_recommend: boolean | null
+        }
+        Insert: {
+          civic_impact_felt?: boolean | null
+          content_rating?: number | null
+          created_at?: string
+          event_id: string
+          feedback_text?: string | null
+          id?: string
+          learned_something_new?: boolean | null
+          organization_rating?: number | null
+          overall_rating?: number | null
+          user_id: string
+          venue_rating?: number | null
+          will_take_action?: boolean | null
+          would_recommend?: boolean | null
+        }
+        Update: {
+          civic_impact_felt?: boolean | null
+          content_rating?: number | null
+          created_at?: string
+          event_id?: string
+          feedback_text?: string | null
+          id?: string
+          learned_something_new?: boolean | null
+          organization_rating?: number | null
+          overall_rating?: number | null
+          user_id?: string
+          venue_rating?: number | null
+          will_take_action?: boolean | null
+          would_recommend?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_feedback_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_linked_content: {
+        Row: {
+          content_description: string | null
+          content_id: string | null
+          content_title: string | null
+          content_type: string
+          content_url: string | null
+          created_at: string
+          created_by: string | null
+          event_id: string
+          id: string
+        }
+        Insert: {
+          content_description?: string | null
+          content_id?: string | null
+          content_title?: string | null
+          content_type: string
+          content_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          event_id: string
+          id?: string
+        }
+        Update: {
+          content_description?: string | null
+          content_id?: string | null
+          content_title?: string | null
+          content_type?: string
+          content_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          event_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_linked_content_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_organizers: {
         Row: {
           created_at: string
@@ -9716,6 +9926,56 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "event_organizers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_reports: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          event_id: string
+          id: string
+          report_category: string
+          report_details: string | null
+          report_reason: string
+          reported_by: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          report_category: string
+          report_details?: string | null
+          report_reason: string
+          reported_by: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          report_category?: string
+          report_details?: string | null
+          report_reason?: string
+          reported_by?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_reports_event_id_fkey"
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "civic_events"
