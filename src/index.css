@@ -51,12 +51,28 @@
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
     --gradient-patriotic: linear-gradient(45deg, hsl(var(--cm-green)), hsl(var(--cm-red)), hsl(var(--cm-yellow)));
     
+    /* Lux Aeterna Enhanced Gradients */
+    --lux-primary: 220 90% 15%;  /* Deep noble blue */
+    --lux-golden: 45 95% 60%;    /* Sacred gold */
+    --lux-ethereal: 270 30% 85%; /* Ethereal light */
+    --lux-sacred: 280 70% 25%;   /* Sacred purple */
+    --gradient-lux-primary: linear-gradient(135deg, hsl(var(--lux-primary)), hsl(var(--lux-golden)), hsl(var(--lux-sacred)));
+    --gradient-lux-divine: linear-gradient(45deg, hsl(var(--lux-primary)) 0%, hsl(var(--lux-golden)) 50%, hsl(var(--lux-ethereal)) 100%);
+    --gradient-lux-noble: radial-gradient(circle at center, hsl(var(--lux-golden) / 0.8), hsl(var(--lux-primary) / 0.9));
+    --gradient-lux-celebration: conic-gradient(from 0deg, hsl(var(--cm-green)), hsl(var(--cm-red)), hsl(var(--cm-yellow)), hsl(var(--lux-golden)));
+    
     /* CamerPulse Brand Shadows */
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
     --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
     --shadow-green: 0 8px 25px -8px hsl(var(--cm-green) / 0.4);
     --shadow-red: 0 8px 25px -8px hsl(var(--cm-red) / 0.4);
     --shadow-yellow: 0 8px 25px -8px hsl(var(--cm-yellow) / 0.4);
+    
+    /* Lux Aeterna Enhanced Shadows */
+    --shadow-lux-divine: 0 15px 40px -10px hsl(var(--lux-golden) / 0.4), 0 0 50px hsl(var(--lux-primary) / 0.3);
+    --shadow-lux-sacred: 0 8px 30px -8px hsl(var(--lux-sacred) / 0.5), inset 0 1px 0 hsl(var(--lux-golden) / 0.2);
+    --shadow-lux-ethereal: 0 20px 60px -15px hsl(var(--lux-ethereal) / 0.6), 0 0 80px hsl(var(--lux-golden) / 0.2);
+    --shadow-lux-celebration: 0 0 100px hsl(var(--lux-golden) / 0.8), 0 0 150px hsl(var(--cm-green) / 0.3), 0 0 200px hsl(var(--cm-red) / 0.2);
     
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -253,6 +269,69 @@
     100% { background-position: 200% center; }
   }
   
+  /* Enhanced Lux Aeterna Keyframes */
+  @keyframes divine-ascension {
+    0%, 100% { 
+      transform: translateY(0) scale(1); 
+      box-shadow: var(--shadow-lux-divine);
+      opacity: 1;
+    }
+    50% { 
+      transform: translateY(-10px) scale(1.02); 
+      box-shadow: var(--shadow-lux-celebration);
+      opacity: 0.95;
+    }
+  }
+  
+  @keyframes sacred-pulse {
+    0%, 100% { 
+      background-size: 100% 100%;
+      filter: brightness(1);
+    }
+    50% { 
+      background-size: 110% 110%;
+      filter: brightness(1.1);
+    }
+  }
+  
+  @keyframes ethereal-float {
+    0%, 100% { 
+      transform: translateY(0) rotate(0deg);
+      filter: hue-rotate(0deg);
+    }
+    33% { 
+      transform: translateY(-15px) rotate(1deg);
+      filter: hue-rotate(30deg);
+    }
+    67% { 
+      transform: translateY(-8px) rotate(-1deg);
+      filter: hue-rotate(-15deg);
+    }
+  }
+  
+  @keyframes celebration-burst {
+    0% { 
+      transform: scale(1) rotate(0deg);
+      box-shadow: var(--shadow-lux-divine);
+    }
+    25% { 
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: var(--shadow-lux-celebration);
+    }
+    50% { 
+      transform: scale(1.05) rotate(-3deg);
+      box-shadow: var(--shadow-lux-ethereal);
+    }
+    75% { 
+      transform: scale(1.08) rotate(2deg);
+      box-shadow: var(--shadow-lux-sacred);
+    }
+    100% { 
+      transform: scale(1) rotate(0deg);
+      box-shadow: var(--shadow-lux-divine);
+    }
+  }
+  
   .animate-heartbeat {
     animation: heartbeat 2s ease-in-out;
   }
@@ -290,6 +369,23 @@
     background: linear-gradient(90deg, transparent, hsl(45, 95%, 60%, 0.4), transparent);
     background-size: 200% 100%;
     animation: golden-shimmer 2s infinite;
+  }
+  
+  /* Enhanced Lux Aeterna Animations */
+  .animate-divine-ascension {
+    animation: divine-ascension 4s ease-in-out infinite;
+  }
+  
+  .animate-sacred-pulse {
+    animation: sacred-pulse 3s ease-in-out infinite;
+  }
+  
+  .animate-ethereal-float {
+    animation: ethereal-float 6s ease-in-out infinite;
+  }
+  
+  .animate-celebration-burst {
+    animation: celebration-burst 2s ease-out;
   }
   
   /* Dynamic Lux Aeterna variants */
@@ -467,5 +563,44 @@
   
   .border-patriotic {
     border-image: linear-gradient(135deg, hsl(220, 90%, 15%), hsl(45, 95%, 60%), hsl(355, 85%, 45%)) 1;
+  }
+  
+  /* Enhanced Lux Aeterna Utilities */
+  .text-gradient-lux-divine {
+    background: var(--gradient-lux-divine);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .text-gradient-lux-noble {
+    background: var(--gradient-lux-noble);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .shadow-lux-divine {
+    box-shadow: var(--shadow-lux-divine);
+  }
+  
+  .shadow-lux-sacred {
+    box-shadow: var(--shadow-lux-sacred);
+  }
+  
+  .shadow-lux-ethereal {
+    box-shadow: var(--shadow-lux-ethereal);
+  }
+  
+  .shadow-lux-celebration {
+    box-shadow: var(--shadow-lux-celebration);
+  }
+  
+  .border-lux-divine {
+    border-image: var(--gradient-lux-divine) 1;
+  }
+  
+  .border-lux-celebration {
+    border-image: var(--gradient-lux-celebration) 1;
   }
 }

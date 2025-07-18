@@ -97,7 +97,12 @@ export default {
 				'gradient-flag': 'var(--gradient-flag)',
 				'gradient-primary': 'var(--gradient-primary)',
 				'gradient-civic': 'var(--gradient-civic)',
-				'gradient-pulse': 'var(--gradient-pulse)'
+				'gradient-pulse': 'var(--gradient-pulse)',
+				// Lux Aeterna Enhanced Gradients
+				'gradient-lux-primary': 'var(--gradient-lux-primary)',
+				'gradient-lux-divine': 'var(--gradient-lux-divine)',
+				'gradient-lux-noble': 'var(--gradient-lux-noble)',
+				'gradient-lux-celebration': 'var(--gradient-lux-celebration)'
 			},
 			boxShadow: {
 				'green': 'var(--shadow-green)',

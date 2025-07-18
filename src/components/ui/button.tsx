@@ -24,6 +24,12 @@ const buttonVariants = cva(
         "cm-yellow": "bg-cm-yellow text-black hover:bg-cm-yellow-light shadow-glow",
         "patriotic": "bg-gradient-flag text-white hover:shadow-elegant transition-all duration-300",
         "civic": "bg-gradient-civic text-white hover:shadow-elegant transition-all duration-300",
+        // Lux Aeterna themed variants
+        "lux-primary": "bg-gradient-patriotic text-white hover:shadow-patriotic animate-eternal-glow transition-all duration-300",
+        "lux-golden": "bg-gradient-to-r from-yellow-400 to-yellow-600 text-black hover:from-yellow-500 hover:to-yellow-700 shadow-yellow animate-golden-shimmer",
+        "lux-noble": "bg-gradient-to-br from-blue-900 via-purple-800 to-blue-900 text-yellow-300 hover:shadow-patriotic border border-yellow-400/30",
+        "lux-ethereal": "bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white/20 hover:shadow-patriotic",
+        "lux-sacred": "bg-gradient-to-r from-blue-950 to-purple-950 text-yellow-200 hover:shadow-patriotic border border-yellow-400/50 animate-patriotic-pulse",
       },
       size: {
         default: "h-10 px-4 py-2",
