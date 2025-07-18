@@ -18346,6 +18346,17 @@ export type Database = {
         | "election_event"
         | "policy_document"
         | "government_statement"
+      civic_event_type:
+        | "civic"
+        | "campaign"
+        | "education"
+        | "protest"
+        | "music"
+        | "business"
+        | "youth"
+        | "community"
+        | "government"
+        | "religious"
       company_size: "startup" | "sme" | "large_corp"
       company_status: "pending" | "approved" | "suspended" | "rejected"
       company_type: "sole_proprietor" | "limited_company" | "public_company"
@@ -18419,6 +18430,15 @@ export type Database = {
         | "fan_comment"
         | "chart_appearance"
         | "platform_sync_error"
+      organizer_type:
+        | "verified_user"
+        | "government_institution"
+        | "political_party"
+        | "company"
+        | "school"
+        | "ngo"
+        | "artist"
+        | "event_organizer"
       payment_method: "mobile_money" | "card" | "paypal" | "crypto"
       payment_status: "pending" | "completed" | "failed" | "refunded"
       platform_type:
@@ -18460,6 +18480,7 @@ export type Database = {
         | "rejected"
         | "published"
       royalty_status: "pending" | "processed" | "paid"
+      rsvp_status: "interested" | "going" | "not_going"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -18687,6 +18708,18 @@ export const Constants = {
         "policy_document",
         "government_statement",
       ],
+      civic_event_type: [
+        "civic",
+        "campaign",
+        "education",
+        "protest",
+        "music",
+        "business",
+        "youth",
+        "community",
+        "government",
+        "religious",
+      ],
       company_size: ["startup", "sme", "large_corp"],
       company_status: ["pending", "approved", "suspended", "rejected"],
       company_type: ["sole_proprietor", "limited_company", "public_company"],
@@ -18768,6 +18801,16 @@ export const Constants = {
         "chart_appearance",
         "platform_sync_error",
       ],
+      organizer_type: [
+        "verified_user",
+        "government_institution",
+        "political_party",
+        "company",
+        "school",
+        "ngo",
+        "artist",
+        "event_organizer",
+      ],
       payment_method: ["mobile_money", "card", "paypal", "crypto"],
       payment_status: ["pending", "completed", "failed", "refunded"],
       platform_type: [
@@ -18813,6 +18856,7 @@ export const Constants = {
         "published",
       ],
       royalty_status: ["pending", "processed", "paid"],
+      rsvp_status: ["interested", "going", "not_going"],
       source_type: [
         "government_official",
         "parliamentary",
