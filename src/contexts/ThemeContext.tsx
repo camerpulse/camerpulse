@@ -380,6 +380,15 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const applyThemeToDocument = (theme: ThemeConfig) => {
     const root = document.documentElement
     
+    // Clear existing CSS variables first
+    const clearVariables = [
+      '--primary', '--secondary', '--accent', '--background', '--card', '--foreground',
+      '--primary-glow', '--lux-divine', '--lux-noble', '--lux-ethereal', '--lux-sacred',
+      '--lux-celebration', '--lux-radiance', '--gradient-lux-primary', '--gradient-lux-divine',
+      '--gradient-lux-noble', '--gradient-lux-celebration', '--shadow-elegant'
+    ]
+    clearVariables.forEach(prop => root.style.removeProperty(prop))
+    
     // Apply theme-specific colors
     if (theme.id === 'emergence-2035') {
       // Cameroon flag colors for Emergence 2035
@@ -398,10 +407,23 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
       root.style.setProperty('--card', '45 30% 99%') // Pure white with golden warmth
       root.style.setProperty('--foreground', '220 90% 8%') // Deep patriotic text
       
-      // Additional Lux Aeterna specific colors
+      // Enhanced Lux Aeterna specific colors
       root.style.setProperty('--primary-glow', '45 95% 70%') // Golden glow
+      root.style.setProperty('--lux-divine', '220 90% 20%') // Divine blue
+      root.style.setProperty('--lux-noble', '355 85% 45%') // Noble red
+      root.style.setProperty('--lux-ethereal', '45 100% 85%') // Ethereal light
+      root.style.setProperty('--lux-sacred', '45 95% 60%') // Sacred gold
+      root.style.setProperty('--lux-celebration', '30 100% 65%') // Celebration orange
+      root.style.setProperty('--lux-radiance', '45 100% 95%') // Pure radiance
+      
+      // Enhanced gradients
+      root.style.setProperty('--gradient-lux-primary', 'linear-gradient(135deg, hsl(220 90% 15%), hsl(45 95% 60%))')
+      root.style.setProperty('--gradient-lux-divine', 'linear-gradient(135deg, hsl(220 90% 20%), hsl(45 100% 85%))')
+      root.style.setProperty('--gradient-lux-noble', 'linear-gradient(135deg, hsl(355 85% 45%), hsl(45 95% 60%))')
+      root.style.setProperty('--gradient-lux-celebration', 'linear-gradient(135deg, hsl(220 90% 15%), hsl(45 95% 60%), hsl(355 85% 45%), hsl(30 100% 65%))')
+      
+      // Enhanced shadows
       root.style.setProperty('--shadow-elegant', '0 10px 30px -10px hsl(220 90% 15% / 0.3)')
-      root.style.setProperty('--gradient-patriotic', 'linear-gradient(135deg, hsl(220 90% 15%), hsl(45 95% 60%), hsl(355 85% 45%))')
     } else if (theme.id === 'spotify-classic') {
       // Spotify Classic Theme
       root.style.setProperty('--primary', '120 93% 36%') // Spotify Green
