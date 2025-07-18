@@ -25,6 +25,8 @@ import PoliticalParties from "./pages/PoliticalParties";
 import PoliticalPartyDetail from "./pages/PoliticalPartyDetail";
 import PoliticaAI from "./pages/PoliticaAI";
 import CamerPulseIntelligence from "./pages/CamerPulseIntelligence";
+import IntelligenceDashboard from "./pages/IntelligenceDashboard";
+import IntelligenceDashboardDebug from "./pages/IntelligenceDashboardDebug";
 import CivicPublicPortal from "./pages/CivicPublicPortal";
 import ArtistLanding from "./pages/ArtistLanding";
 import ArtistRegister from "./pages/ArtistRegister";
@@ -122,6 +124,8 @@ const App = () => {
                   <CamerPulseIntelligence />
                 </DynamicCountryRouter>
               } />
+              <Route path="/intelligence-dashboard" element={<IntelligenceDashboard />} />
+              <Route path="/intel-dashboard/debug" element={<IntelligenceDashboardDebug />} />
               <Route path="/camerpulse/:countryCode" element={
                 <DynamicCountryRouter>
                   <CamerPulseIntelligence />
