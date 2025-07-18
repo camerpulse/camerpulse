@@ -77,6 +77,14 @@ export const Footer = () => {
                 <Target className="w-3 h-3" />
                 Promise Tracker
               </Link>
+              <Link to="/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Calendar className="w-3 h-3" />
+                Events
+              </Link>
+              <Link to="/feed" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <TrendingUp className="w-3 h-3" />
+                Pulse Feed
+              </Link>
             </div>
           </div>
 
@@ -102,6 +110,18 @@ export const Footer = () => {
               <Link to="/camerplay" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Music className="w-3 h-3" />
                 CamerPlay Music
+              </Link>
+              <Link to="/messenger" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                Messenger
+              </Link>
+              <Link to="/rewards" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Crown className="w-3 h-3" />
+                Rewards Center
+              </Link>
+              <Link to="/regional-analytics" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <BarChart3 className="w-3 h-3" />
+                Regional Analytics
               </Link>
             </div>
           </div>
@@ -132,25 +152,28 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Support */}
+          {/* Support & Admin */}
           <div className="space-y-4">
-            <h3 className="font-semibold">Support</h3>
+            <h3 className="font-semibold">Support & Admin</h3>
             <div className="space-y-2 text-sm">
               <Link to="/auth" className="block text-muted-foreground hover:text-primary transition-colors">
                 Sign In / Register
               </Link>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
-                Help Center
-              </a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
-                Privacy Policy
-              </a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
-                Terms of Service
-              </a>
-              <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
-                Contact Us
-              </a>
+              <Link to="/admin" className="block text-muted-foreground hover:text-primary transition-colors">
+                Admin Panel
+              </Link>
+              <Link to="/camerpulse-intelligence" className="block text-muted-foreground hover:text-primary transition-colors">
+                Intelligence Hub
+              </Link>
+              <Link to="/notification-settings" className="block text-muted-foreground hover:text-primary transition-colors">
+                Notifications
+              </Link>
+              <Link to="/ecosystem" className="block text-muted-foreground hover:text-primary transition-colors">
+                Ecosystem
+              </Link>
+              <Link to="/fan-portal" className="block text-muted-foreground hover:text-primary transition-colors">
+                Fan Portal
+              </Link>
             </div>
           </div>
         </div>
