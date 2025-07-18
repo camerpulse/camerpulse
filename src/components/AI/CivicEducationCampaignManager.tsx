@@ -443,21 +443,21 @@ const CivicEducationCampaignManager = () => {
                 <div className="space-y-4">
                   <h3 className="font-semibold">Regional Adaptation Guidelines</h3>
                   <div className="space-y-3">
-                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                      <p className="font-medium text-blue-900 dark:text-blue-100">NW/SW Regions</p>
-                      <p className="text-sm text-blue-700 dark:text-blue-300">
+                    <div className="p-3 bg-blue-50 rounded-lg">
+                      <p className="font-medium text-blue-900">NW/SW Regions</p>
+                      <p className="text-sm text-blue-700">
                         Emphasis on peace-building, unity, and democratic participation
                       </p>
                     </div>
-                    <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                      <p className="font-medium text-green-900 dark:text-green-100">Northern Regions</p>
-                      <p className="text-sm text-green-700 dark:text-green-300">
+                    <div className="p-3 bg-green-50 rounded-lg">
+                      <p className="font-medium text-green-900">Northern Regions</p>
+                      <p className="text-sm text-green-700">
                         Religious emphasis, traditional authority respect, community values
                       </p>
                     </div>
-                    <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                      <p className="font-medium text-purple-900 dark:text-purple-100">Centre & Littoral</p>
-                      <p className="text-sm text-purple-700 dark:text-purple-300">
+                    <div className="p-3 bg-purple-50 rounded-lg">
+                      <p className="font-medium text-purple-900">Centre & Littoral</p>
+                      <p className="text-sm text-purple-700">
                         Constitutional focus, formal governance, institutional respect
                       </p>
                     </div>

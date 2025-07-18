@@ -80,39 +80,6 @@
     --radius: 0.75rem; /* 12px rounded corners */
   }
 
-  .dark {
-    /* Dark Mode Colors */
-    --background: 222 84% 5%;        /* Very dark */
-    --foreground: 210 40% 98%;       /* Nearly white */
-    
-    --card: 222 84% 5%;              /* Dark card */
-    --card-foreground: 210 40% 98%;  /* Light text */
-    
-    --popover: 222 84% 5%;           /* Dark popover */
-    --popover-foreground: 210 40% 98%; /* Light text */
-    
-    --primary: 142 69% 40%;          /* Slightly lighter green */
-    --primary-foreground: 0 0% 100%; /* White text */
-    
-    --secondary: 46 100% 60%;        /* Slightly muted yellow */
-    --secondary-foreground: 0 0% 0%; /* Black text */
-    
-    --muted: 217 33% 17%;            /* Dark muted */
-    --muted-foreground: 215 20% 65%; /* Light muted text */
-    
-    --accent: 0 84% 60%;             /* Bright red */
-    --accent-foreground: 0 0% 100%;  /* White text */
-    
-    --destructive: 0 63% 31%;        /* Dark red */
-    --destructive-foreground: 0 0% 100%; /* White text */
-    
-    --border: 217 33% 17%;           /* Dark border */
-    --input: 217 33% 17%;            /* Dark input */
-    --ring: 142 69% 40%;             /* Focus ring */
-    
-    /* Dark mode gradients */
-    --gradient-civic: linear-gradient(135deg, hsl(var(--primary)), hsl(217 33% 17%));
-  }
 }
 
 @layer base {
