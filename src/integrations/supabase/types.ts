@@ -5246,6 +5246,80 @@ export type Database = {
         }
         Relationships: []
       }
+      certificate_templates: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          preview_url: string | null
+          template_config: Json
+          template_name: string
+          template_type: Database["public"]["Enums"]["certificate_template"]
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          preview_url?: string | null
+          template_config?: Json
+          template_name: string
+          template_type: Database["public"]["Enums"]["certificate_template"]
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          preview_url?: string | null
+          template_config?: Json
+          template_name?: string
+          template_type?: Database["public"]["Enums"]["certificate_template"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      certificate_verification_logs: {
+        Row: {
+          certificate_id: string | null
+          id: string
+          is_valid: boolean | null
+          verification_code: string
+          verified_at: string | null
+          verifier_ip: unknown | null
+          verifier_user_agent: string | null
+        }
+        Insert: {
+          certificate_id?: string | null
+          id?: string
+          is_valid?: boolean | null
+          verification_code: string
+          verified_at?: string | null
+          verifier_ip?: unknown | null
+          verifier_user_agent?: string | null
+        }
+        Update: {
+          certificate_id?: string | null
+          id?: string
+          is_valid?: boolean | null
+          verification_code?: string
+          verified_at?: string | null
+          verifier_ip?: unknown | null
+          verifier_user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "certificate_verification_logs_certificate_id_fkey"
+            columns: ["certificate_id"]
+            isOneToOne: false
+            referencedRelation: "event_certificates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       civic_alerts: {
         Row: {
           content: string
@@ -9802,30 +9876,146 @@ export type Database = {
           },
         ]
       }
+      event_certificate_settings: {
+        Row: {
+          auto_issue: boolean | null
+          certificate_message: string | null
+          certificates_enabled: boolean | null
+          claim_deadline: string | null
+          created_at: string | null
+          custom_template_config: Json | null
+          event_id: string | null
+          id: string
+          manual_approval_required: boolean | null
+          organizer_signature_url: string | null
+          require_checkin: boolean | null
+          template_design:
+            | Database["public"]["Enums"]["certificate_template"]
+            | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_issue?: boolean | null
+          certificate_message?: string | null
+          certificates_enabled?: boolean | null
+          claim_deadline?: string | null
+          created_at?: string | null
+          custom_template_config?: Json | null
+          event_id?: string | null
+          id?: string
+          manual_approval_required?: boolean | null
+          organizer_signature_url?: string | null
+          require_checkin?: boolean | null
+          template_design?:
+            | Database["public"]["Enums"]["certificate_template"]
+            | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_issue?: boolean | null
+          certificate_message?: string | null
+          certificates_enabled?: boolean | null
+          claim_deadline?: string | null
+          created_at?: string | null
+          custom_template_config?: Json | null
+          event_id?: string | null
+          id?: string
+          manual_approval_required?: boolean | null
+          organizer_signature_url?: string | null
+          require_checkin?: boolean | null
+          template_design?:
+            | Database["public"]["Enums"]["certificate_template"]
+            | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_certificate_settings_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: true
+            referencedRelation: "civic_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_certificates: {
         Row: {
           certificate_hash: string | null
+          certificate_status: Database["public"]["Enums"]["certificate_status"]
+          certificate_title: string | null
+          certificate_type: Database["public"]["Enums"]["certificate_type"]
           certificate_url: string | null
+          created_at: string | null
+          custom_text: string | null
+          download_count: number | null
+          downloaded_at: string | null
           event_id: string
+          expiry_date: string | null
           id: string
+          is_verified: boolean | null
           issued_at: string | null
+          issued_by: string | null
+          organizer_name: string | null
+          organizer_signature_url: string | null
+          qr_code_url: string | null
+          recipient_name: string
+          recipient_role: string | null
+          template_design: Database["public"]["Enums"]["certificate_template"]
+          updated_at: string | null
           user_id: string
+          verification_code: string | null
         }
         Insert: {
           certificate_hash?: string | null
+          certificate_status?: Database["public"]["Enums"]["certificate_status"]
+          certificate_title?: string | null
+          certificate_type?: Database["public"]["Enums"]["certificate_type"]
           certificate_url?: string | null
+          created_at?: string | null
+          custom_text?: string | null
+          download_count?: number | null
+          downloaded_at?: string | null
           event_id: string
+          expiry_date?: string | null
           id?: string
+          is_verified?: boolean | null
           issued_at?: string | null
+          issued_by?: string | null
+          organizer_name?: string | null
+          organizer_signature_url?: string | null
+          qr_code_url?: string | null
+          recipient_name?: string
+          recipient_role?: string | null
+          template_design?: Database["public"]["Enums"]["certificate_template"]
+          updated_at?: string | null
           user_id: string
+          verification_code?: string | null
         }
         Update: {
           certificate_hash?: string | null
+          certificate_status?: Database["public"]["Enums"]["certificate_status"]
+          certificate_title?: string | null
+          certificate_type?: Database["public"]["Enums"]["certificate_type"]
           certificate_url?: string | null
+          created_at?: string | null
+          custom_text?: string | null
+          download_count?: number | null
+          downloaded_at?: string | null
           event_id?: string
+          expiry_date?: string | null
           id?: string
+          is_verified?: boolean | null
           issued_at?: string | null
+          issued_by?: string | null
+          organizer_name?: string | null
+          organizer_signature_url?: string | null
+          qr_code_url?: string | null
+          recipient_name?: string
+          recipient_role?: string | null
+          template_design?: Database["public"]["Enums"]["certificate_template"]
+          updated_at?: string | null
           user_id?: string
+          verification_code?: string | null
         }
         Relationships: [
           {
@@ -19603,6 +19793,13 @@ export type Database = {
         | "awareness"
         | "sponsorship"
         | "content_creation"
+      certificate_status: "pending" | "issued" | "claimed" | "revoked"
+      certificate_template: "modern" | "classic" | "official"
+      certificate_type:
+        | "participation"
+        | "speaker"
+        | "organizer"
+        | "education_completion"
       check_in_status: "pending" | "checked_in" | "no_show"
       civic_entity_type:
         | "politician"
@@ -19964,6 +20161,14 @@ export const Constants = {
         "awareness",
         "sponsorship",
         "content_creation",
+      ],
+      certificate_status: ["pending", "issued", "claimed", "revoked"],
+      certificate_template: ["modern", "classic", "official"],
+      certificate_type: [
+        "participation",
+        "speaker",
+        "organizer",
+        "education_completion",
       ],
       check_in_status: ["pending", "checked_in", "no_show"],
       civic_entity_type: [
