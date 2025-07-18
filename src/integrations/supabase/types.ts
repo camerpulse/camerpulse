@@ -16096,6 +16096,56 @@ export type Database = {
         }
         Relationships: []
       }
+      profile_activity_feed: {
+        Row: {
+          activity_data: Json | null
+          activity_description: string | null
+          activity_icon: string | null
+          activity_title: string
+          activity_type: string
+          activity_url: string | null
+          created_at: string | null
+          id: string
+          importance_score: number | null
+          profile_id: string | null
+          visibility: string | null
+        }
+        Insert: {
+          activity_data?: Json | null
+          activity_description?: string | null
+          activity_icon?: string | null
+          activity_title: string
+          activity_type: string
+          activity_url?: string | null
+          created_at?: string | null
+          id?: string
+          importance_score?: number | null
+          profile_id?: string | null
+          visibility?: string | null
+        }
+        Update: {
+          activity_data?: Json | null
+          activity_description?: string | null
+          activity_icon?: string | null
+          activity_title?: string
+          activity_type?: string
+          activity_url?: string | null
+          created_at?: string | null
+          id?: string
+          importance_score?: number | null
+          profile_id?: string | null
+          visibility?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_activity_feed_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profile_activity_log: {
         Row: {
           activity_description: string | null
@@ -16252,6 +16302,48 @@ export type Database = {
           },
         ]
       }
+      profile_comparisons: {
+        Row: {
+          comparer_id: string | null
+          comparison_data: Json | null
+          created_at: string | null
+          id: string
+          profile_a_id: string | null
+          profile_b_id: string | null
+        }
+        Insert: {
+          comparer_id?: string | null
+          comparison_data?: Json | null
+          created_at?: string | null
+          id?: string
+          profile_a_id?: string | null
+          profile_b_id?: string | null
+        }
+        Update: {
+          comparer_id?: string | null
+          comparison_data?: Json | null
+          created_at?: string | null
+          id?: string
+          profile_a_id?: string | null
+          profile_b_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_comparisons_profile_a_id_fkey"
+            columns: ["profile_a_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profile_comparisons_profile_b_id_fkey"
+            columns: ["profile_b_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profile_ratings: {
         Row: {
           comment: string | null
@@ -16386,6 +16478,94 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "profile_settings_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profile_social_links: {
+        Row: {
+          click_count: number | null
+          created_at: string | null
+          id: string
+          is_verified: boolean | null
+          platform: string
+          profile_id: string | null
+          url: string
+          verification_date: string | null
+        }
+        Insert: {
+          click_count?: number | null
+          created_at?: string | null
+          id?: string
+          is_verified?: boolean | null
+          platform: string
+          profile_id?: string | null
+          url: string
+          verification_date?: string | null
+        }
+        Update: {
+          click_count?: number | null
+          created_at?: string | null
+          id?: string
+          is_verified?: boolean | null
+          platform?: string
+          profile_id?: string | null
+          url?: string
+          verification_date?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_social_links_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profile_themes: {
+        Row: {
+          background_style: string | null
+          created_at: string | null
+          custom_css: string | null
+          id: string
+          is_active: boolean | null
+          primary_color: string | null
+          profile_id: string | null
+          secondary_color: string | null
+          theme_name: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          background_style?: string | null
+          created_at?: string | null
+          custom_css?: string | null
+          id?: string
+          is_active?: boolean | null
+          primary_color?: string | null
+          profile_id?: string | null
+          secondary_color?: string | null
+          theme_name?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          background_style?: string | null
+          created_at?: string | null
+          custom_css?: string | null
+          id?: string
+          is_active?: boolean | null
+          primary_color?: string | null
+          profile_id?: string | null
+          secondary_color?: string | null
+          theme_name?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_themes_profile_id_fkey"
             columns: ["profile_id"]
             isOneToOne: false
             referencedRelation: "profiles"
@@ -19146,6 +19326,10 @@ export type Database = {
           p_reason?: string
         }
         Returns: boolean
+      }
+      update_profile_analytics: {
+        Args: { p_profile_id: string }
+        Returns: undefined
       }
       validate_password_strength: {
         Args: { password: string }

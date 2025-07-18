@@ -15,6 +15,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ProfileEditDialog } from '@/components/profile/ProfileEditDialog';
+import { ProfileQRCode } from '@/components/profile/ProfileQRCode';
+import { ProfileComparison } from '@/components/profile/ProfileComparison';
 import { 
   MapPin, 
   Calendar, 
@@ -56,7 +59,9 @@ import {
   Monitor,
   Smartphone,
   Trash,
-  Download
+  Download,
+  MessageSquare,
+  AlertCircle
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -547,140 +552,172 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="absolute bottom-4 right-4 flex gap-2">
+        <div className="absolute bottom-4 right-4 flex gap-2 flex-wrap">
+          <ProfileQRCode 
+            profileSlug={profile?.profile_slug || profile?.username || ''} 
+            displayName={profile?.display_name || profile?.username || 'User'} 
+          />
+          <ProfileComparison currentProfile={profile} />
           <Button variant="outline" size="sm" onClick={handleShareProfile}>
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
           {user?.id === userId ? (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="default" size="sm">
-                  <Settings className="h-4 w-4 mr-2" />
-                  Settings
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Profile Settings</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-6">
-                  {/* Privacy Settings */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Privacy & Visibility</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Hide Polls</Label>
-                          <p className="text-sm text-muted-foreground">Hide your poll history from others</p>
+            <div className="flex gap-2">
+              <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
+                <Edit className="h-4 w-4 mr-2" />
+                Edit Profile
+              </Button>
+              <ProfileEditDialog
+                isOpen={isEditing}
+                onClose={() => setIsEditing(false)}
+                profile={profile}
+                onProfileUpdate={(updatedProfile) => {
+                  setProfile(updatedProfile);
+                  setIsEditing(false);
+                }}
+              />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="default" size="sm">
+                    <Settings className="h-4 w-4 mr-2" />
+                    Settings
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                  <DialogHeader>
+                    <DialogTitle>Profile Settings</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-6">
+                    {/* Privacy Settings */}
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Privacy & Visibility</h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label>Hide Polls</Label>
+                            <p className="text-sm text-muted-foreground">Hide your poll history from others</p>
+                          </div>
+                          <Switch 
+                            checked={profileSettings?.hide_polls || false}
+                            onCheckedChange={(checked) => updateProfileSetting('hide_polls', checked)}
+                          />
                         </div>
-                        <Switch 
-                          checked={profileSettings?.hide_polls || false}
-                          onCheckedChange={(checked) => updateProfileSetting('hide_polls', checked)}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Hide Activity</Label>
-                          <p className="text-sm text-muted-foreground">Hide your activity timeline</p>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label>Hide Activity</Label>
+                            <p className="text-sm text-muted-foreground">Hide your activity timeline</p>
+                          </div>
+                          <Switch 
+                            checked={profileSettings?.hide_activity || false}
+                            onCheckedChange={(checked) => updateProfileSetting('hide_activity', checked)}
+                          />
                         </div>
-                        <Switch 
-                          checked={profileSettings?.hide_activity || false}
-                          onCheckedChange={(checked) => updateProfileSetting('hide_activity', checked)}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Hide Followers</Label>
-                          <p className="text-sm text-muted-foreground">Hide your follower list</p>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label>Hide Followers</Label>
+                            <p className="text-sm text-muted-foreground">Hide your follower list</p>
+                          </div>
+                          <Switch 
+                            checked={profileSettings?.hide_followers || false}
+                            onCheckedChange={(checked) => updateProfileSetting('hide_followers', checked)}
+                          />
                         </div>
-                        <Switch 
-                          checked={profileSettings?.hide_followers || false}
-                          onCheckedChange={(checked) => updateProfileSetting('hide_followers', checked)}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Show Contact Info</Label>
-                          <p className="text-sm text-muted-foreground">Show contact information publicly</p>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label>Show Contact Info</Label>
+                            <p className="text-sm text-muted-foreground">Show contact information publicly</p>
+                          </div>
+                          <Switch 
+                            checked={profileSettings?.show_contact_info || false}
+                            onCheckedChange={(checked) => updateProfileSetting('show_contact_info', checked)}
+                          />
                         </div>
-                        <Switch 
-                          checked={profileSettings?.show_contact_info || false}
-                          onCheckedChange={(checked) => updateProfileSetting('show_contact_info', checked)}
-                        />
                       </div>
                     </div>
-                  </div>
 
-                  {/* Profile Settings */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Profile Configuration</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Enable Notifications</Label>
-                          <p className="text-sm text-muted-foreground">Receive platform notifications</p>
+                    {/* Profile Settings */}
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Profile Configuration</h3>
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label>Enable Notifications</Label>
+                            <p className="text-sm text-muted-foreground">Receive platform notifications</p>
+                          </div>
+                          <Switch 
+                            checked={profile?.enable_notifications || false}
+                            onCheckedChange={(checked) => updateProfile({ enable_notifications: checked })}
+                          />
                         </div>
-                        <Switch 
-                          checked={profile?.enable_notifications || false}
-                          onCheckedChange={(checked) => updateProfile({ enable_notifications: checked })}
-                        />
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <Label>Allow Messages</Label>
-                          <p className="text-sm text-muted-foreground">Allow direct messages from other users</p>
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <Label>Allow Messages</Label>
+                            <p className="text-sm text-muted-foreground">Allow direct messages from other users</p>
+                          </div>
+                          <Switch 
+                            checked={profile?.allow_messages || false}
+                            onCheckedChange={(checked) => updateProfile({ allow_messages: checked })}
+                          />
                         </div>
-                        <Switch 
-                          checked={profile?.allow_messages || false}
-                          onCheckedChange={(checked) => updateProfile({ allow_messages: checked })}
-                        />
-                      </div>
-                      <div>
-                        <Label>Language Preference</Label>
-                        <Select 
-                          value={profile?.language_preference || 'en'}
-                          onValueChange={(value) => updateProfile({ language_preference: value })}
-                        >
-                          <SelectTrigger className="w-full mt-2">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="en">English</SelectItem>
-                            <SelectItem value="fr">Français</SelectItem>
-                          </SelectContent>
-                        </Select>
+                        <div>
+                          <Label>Language Preference</Label>
+                          <Select 
+                            value={profile?.language_preference || 'en'}
+                            onValueChange={(value) => updateProfile({ language_preference: value })}
+                          >
+                            <SelectTrigger className="w-full mt-2">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="en">English</SelectItem>
+                              <SelectItem value="fr">Français</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Verification Request */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Account Verification</h3>
-                    <div className="space-y-4">
-                      {profile?.verification_status !== 'verified' && (
-                        <Button onClick={requestVerification} className="w-full">
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          Request Verification
-                        </Button>
-                      )}
-                      <p className="text-sm text-muted-foreground">
-                        Current status: <Badge variant={profile?.verification_status === 'verified' ? 'default' : 'secondary'}>
-                          {profile?.verification_status || 'pending'}
-                        </Badge>
-                      </p>
+                    {/* Verification Request */}
+                    <div>
+                      <h3 className="text-lg font-semibold mb-4">Account Verification</h3>
+                      <div className="space-y-4">
+                        {profile?.verification_status !== 'verified' && (
+                          <Button onClick={requestVerification} className="w-full">
+                            <CheckCircle className="h-4 w-4 mr-2" />
+                            Request Verification
+                          </Button>
+                        )}
+                        <p className="text-sm text-muted-foreground">
+                          Current status: <Badge variant={profile?.verification_status === 'verified' ? 'default' : 'secondary'}>
+                            {profile?.verification_status || 'pending'}
+                          </Badge>
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </DialogContent>
-            </Dialog>
+                </DialogContent>
+              </Dialog>
+            </div>
           ) : (
-            <FollowButton 
-              targetUserId={userId} 
-              targetUsername={profile?.username}
-              variant="default"
-              size="sm"
-            />
+            <div className="flex gap-2">
+              {profile?.allow_messages && (
+                <Button variant="outline" size="sm">
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Message
+                </Button>
+              )}
+              <Button variant="outline" size="sm">
+                <AlertCircle className="h-4 w-4 mr-2" />
+                Report
+              </Button>
+              <FollowButton 
+                targetUserId={userId} 
+                targetUsername={profile?.username}
+                variant="default"
+                size="sm"
+              />
+            </div>
           )}
         </div>
       </div>
