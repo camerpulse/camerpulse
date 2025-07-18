@@ -48,6 +48,7 @@ interface EventFilters {
 
 const Events = () => {
   const { user } = useAuth();
+  useEventNotifications();
   const [events, setEvents] = useState<CivicEvent[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState<EventFilters>({ 

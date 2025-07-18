@@ -9748,6 +9748,143 @@ export type Database = {
         }
         Relationships: []
       }
+      event_agenda: {
+        Row: {
+          agenda_description: string | null
+          agenda_order: number | null
+          agenda_time: string
+          agenda_title: string
+          created_at: string | null
+          duration_minutes: number | null
+          event_id: string
+          id: string
+          speaker_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          agenda_description?: string | null
+          agenda_order?: number | null
+          agenda_time: string
+          agenda_title: string
+          created_at?: string | null
+          duration_minutes?: number | null
+          event_id: string
+          id?: string
+          speaker_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          agenda_description?: string | null
+          agenda_order?: number | null
+          agenda_time?: string
+          agenda_title?: string
+          created_at?: string | null
+          duration_minutes?: number | null
+          event_id?: string
+          id?: string
+          speaker_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_agenda_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_agenda_speaker_id_fkey"
+            columns: ["speaker_id"]
+            isOneToOne: false
+            referencedRelation: "event_speakers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_certificates: {
+        Row: {
+          certificate_hash: string | null
+          certificate_url: string | null
+          event_id: string
+          id: string
+          issued_at: string | null
+          user_id: string
+        }
+        Insert: {
+          certificate_hash?: string | null
+          certificate_url?: string | null
+          event_id: string
+          id?: string
+          issued_at?: string | null
+          user_id: string
+        }
+        Update: {
+          certificate_hash?: string | null
+          certificate_url?: string | null
+          event_id?: string
+          id?: string
+          issued_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_certificates_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_chat_messages: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          is_deleted: boolean | null
+          message_content: string
+          reply_to_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          is_deleted?: boolean | null
+          message_content: string
+          reply_to_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          is_deleted?: boolean | null
+          message_content?: string
+          reply_to_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_chat_messages_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_chat_messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "event_chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_check_ins: {
         Row: {
           check_in_device: string | null
@@ -9955,6 +10092,47 @@ export type Database = {
           },
         ]
       }
+      event_live_updates: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          is_featured: boolean | null
+          posted_by: string
+          update_content: string
+          update_title: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          is_featured?: boolean | null
+          posted_by: string
+          update_content: string
+          update_title: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          is_featured?: boolean | null
+          posted_by?: string
+          update_content?: string
+          update_title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_live_updates_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_organizers: {
         Row: {
           created_at: string
@@ -10095,6 +10273,56 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "civic_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_speakers: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          is_keynote: boolean | null
+          profile_id: string | null
+          speaker_bio: string | null
+          speaker_image_url: string | null
+          speaker_name: string
+          speaker_order: number | null
+          speaker_title: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          is_keynote?: boolean | null
+          profile_id?: string | null
+          speaker_bio?: string | null
+          speaker_image_url?: string | null
+          speaker_name: string
+          speaker_order?: number | null
+          speaker_title?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          is_keynote?: boolean | null
+          profile_id?: string | null
+          speaker_bio?: string | null
+          speaker_image_url?: string | null
+          speaker_name?: string
+          speaker_order?: number | null
+          speaker_title?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_speakers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
             referencedColumns: ["id"]
           },
         ]
