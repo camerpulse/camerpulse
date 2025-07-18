@@ -253,14 +253,14 @@ const CompanyCreationRequest = () => {
                   </div>
 
                   {/* Information Notice */}
-                  <div className="bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <div className="flex items-start gap-3">
-                      <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                      <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
                       <div className="text-sm">
-                        <h4 className="font-medium text-blue-900 dark:text-blue-100 mb-1">
+                        <h4 className="font-medium text-blue-900 mb-1">
                           What happens next?
                         </h4>
-                        <ul className="text-blue-800 dark:text-blue-200 space-y-1">
+                        <ul className="text-blue-800 space-y-1">
                           <li>• Our team will review your request within 2-3 business days</li>
                           <li>• We'll contact you to discuss requirements and next steps</li>
                           <li>• You'll receive guidance on legal requirements and documentation</li>

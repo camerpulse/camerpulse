@@ -391,9 +391,9 @@ export default function NationalDebtTracker() {
         {/* Alert Bar */}
         {alerts.filter(a => a.is_active).map(alert => (
           <Alert key={alert.id} className={`border-l-4 ${
-            alert.severity === 'critical' ? 'border-red-500 bg-red-50 dark:bg-red-950' :
-            alert.severity === 'high' ? 'border-orange-500 bg-orange-50 dark:bg-orange-950' :
-            'border-yellow-500 bg-yellow-50 dark:bg-yellow-950'
+            alert.severity === 'critical' ? 'border-red-500 bg-red-50' :
+            alert.severity === 'high' ? 'border-orange-500 bg-orange-50' :
+            'border-yellow-500 bg-yellow-50'
           }`}>
             <AlertTriangle className="h-4 w-4" />
             <AlertDescription className="font-medium">
@@ -435,7 +435,7 @@ export default function NationalDebtTracker() {
               <>
                 {/* Key Metrics Cards */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-                  <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-200 dark:border-purple-800 hover:shadow-md transition-shadow">
+                  <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/10 border-purple-200 hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                       <CardTitle className="text-sm sm:text-base font-medium">Total National Debt</CardTitle>
                       <DollarSign className="h-5 w-5 text-purple-600 shrink-0" />
@@ -450,7 +450,7 @@ export default function NationalDebtTracker() {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-200 dark:border-blue-800 hover:shadow-md transition-shadow">
+                  <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/10 border-blue-200 hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                       <CardTitle className="text-sm sm:text-base font-medium">Debt Per Capita</CardTitle>
                       <Users className="h-5 w-5 text-blue-600 shrink-0" />
@@ -465,7 +465,7 @@ export default function NationalDebtTracker() {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-200 dark:border-green-800 hover:shadow-md transition-shadow">
+                  <Card className="bg-gradient-to-br from-green-500/10 to-green-600/10 border-green-200 hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                       <CardTitle className="text-sm sm:text-base font-medium">Debt-to-GDP Ratio</CardTitle>
                       <Target className="h-5 w-5 text-green-600 shrink-0" />
@@ -482,7 +482,7 @@ export default function NationalDebtTracker() {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border-orange-200 dark:border-orange-800 hover:shadow-md transition-shadow">
+                  <Card className="bg-gradient-to-br from-orange-500/10 to-orange-600/10 border-orange-200 hover:shadow-md transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                       <CardTitle className="text-sm sm:text-base font-medium">External vs Internal</CardTitle>
                       <Globe className="h-5 w-5 text-orange-600 shrink-0" />
@@ -769,21 +769,21 @@ export default function NationalDebtTracker() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-                  <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-950">
-                    <h3 className="font-semibold text-green-800 dark:text-green-200">Low Risk</h3>
-                    <p className="text-sm text-green-600 dark:text-green-400">
+                  <div className="p-4 border rounded-lg bg-green-50">
+                    <h3 className="font-semibold text-green-800">Low Risk</h3>
+                    <p className="text-sm text-green-600">
                       Multilateral institutions (IMF, World Bank) with favorable terms
                     </p>
                   </div>
-                  <div className="p-4 border rounded-lg bg-yellow-50 dark:bg-yellow-950">
-                    <h3 className="font-semibold text-yellow-800 dark:text-yellow-200">Medium Risk</h3>
-                    <p className="text-sm text-yellow-600 dark:text-yellow-400">
+                  <div className="p-4 border rounded-lg bg-yellow-50">
+                    <h3 className="font-semibold text-yellow-800">Medium Risk</h3>
+                    <p className="text-sm text-yellow-600">
                       Bilateral and commercial loans with market rates
                     </p>
                   </div>
-                  <div className="p-4 border rounded-lg bg-red-50 dark:bg-red-950">
-                    <h3 className="font-semibold text-red-800 dark:text-red-200">High Risk</h3>
-                    <p className="text-sm text-red-600 dark:text-red-400">
+                  <div className="p-4 border rounded-lg bg-red-50">
+                    <h3 className="font-semibold text-red-800">High Risk</h3>
+                    <p className="text-sm text-red-600">
                       High dependency on single creditor or unfavorable terms
                     </p>
                   </div>
