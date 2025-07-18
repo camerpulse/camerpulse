@@ -82,12 +82,15 @@ const Index = () => {
                 <CardDescription className="responsive-text">
                   Discover and participate in civic events with ticket management
                 </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button asChild className="w-full" variant="outline">
-                  <Link to="/events">Explore Events</Link>
-                </Button>
-              </CardContent>
+               </CardHeader>
+               <CardContent className="space-y-2">
+                 <Button asChild className="w-full" variant="outline">
+                   <Link to="/events">Explore Events</Link>
+                 </Button>
+                 <Button asChild className="w-full" variant="secondary">
+                   <Link to="/calendar">📅 Calendar View</Link>
+                 </Button>
+               </CardContent>
             </Card>
 
             {/* National Tracker Card */}

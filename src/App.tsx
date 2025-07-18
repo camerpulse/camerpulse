@@ -65,6 +65,7 @@ import FanPortal from "./pages/FanPortal";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProfileSlugPage from "./pages/ProfileSlugPage";
 import Events from "./pages/Events";
+import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
@@ -166,8 +167,9 @@ const App = () => {
               <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
               <Route path="/profile/:userId" element={<UserProfilePage />} />
               <Route path="/@:slug" element={<ProfileSlugPage />} />
-              <Route path="/events" element={<Events />} />
-              <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
+          <Route path="/events" element={<Events />} />
+          <Route path="/calendar" element={<EventCalendarPage />} />
+          <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

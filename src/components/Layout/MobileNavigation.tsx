@@ -10,7 +10,8 @@ import {
   User,
   Settings,
   Vote,
-  Activity
+  Activity,
+  Calendar
 } from 'lucide-react';
 
 interface NavItem {
@@ -46,6 +47,12 @@ const navItems: NavItem[] = [
     label: 'Politics',
     icon: Users,
     path: '/politicians',
+  },
+  {
+    id: 'calendar',
+    label: 'Calendar',
+    icon: Calendar,
+    path: '/calendar',
   },
   {
     id: 'polls',
