@@ -77,9 +77,9 @@ export const Footer = () => {
                 <Target className="w-3 h-3" />
                 Promise Tracker
               </Link>
-              <Link to="/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Calendar className="w-3 h-3" />
-                Events
+              <Link to="/events" className="flex items-center gap-2 text-green-600 hover:text-green-700 transition-colors font-semibold">
+                <Calendar className="w-4 h-4" />
+                🎟️ Events & Tickets
               </Link>
               <Link to="/feed" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <TrendingUp className="w-3 h-3" />
