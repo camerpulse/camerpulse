@@ -9,6 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { FollowButton } from '@/components/Social/FollowButton';
 import { useToast } from '@/hooks/use-toast';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { 
   MapPin, 
   Calendar, 
@@ -33,7 +39,24 @@ import {
   CheckCircle,
   AlertTriangle,
   Crown,
-  Briefcase
+  Briefcase,
+  Edit,
+  Save,
+  X,
+  Upload,
+  Bookmark,
+  History,
+  UserCheck,
+  BarChart3,
+  Languages,
+  Bell,
+  Lock,
+  Key,
+  FileText,
+  Monitor,
+  Smartphone,
+  Trash,
+  Download
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -57,8 +80,8 @@ interface EnhancedProfile {
   subdivision?: string;
   profession?: string;
   civic_tagline?: string;
-  profile_type: string;
-  verification_status: string;
+  profile_type: 'government_institution' | 'political_party' | 'company' | 'school' | 'ngo' | 'artist' | 'politician' | 'normal_user' | 'journalist' | 'activist' | 'camerpulse_official' | 'moderator';
+  verification_status: 'verified' | 'pending' | 'rejected' | 'under_review';
   civic_influence_score: number;
   post_count: number;
   polls_created: number;
@@ -74,6 +97,48 @@ interface EnhancedProfile {
   is_banned: boolean;
   last_active_at: string;
   created_at: string;
+  // PulseProfile v4.0 fields
+  profile_slug?: string;
+  civic_interests?: string[];
+  profile_tags?: string[];
+  contribution_level?: string;
+  language_preference?: string;
+  enable_notifications?: boolean;
+  allow_messages?: boolean;
+}
+
+interface ProfileSettings {
+  id: string;
+  profile_id: string;
+  hide_polls: boolean;
+  hide_activity: boolean;
+  hide_followers: boolean;
+  hide_location: boolean;
+  show_civic_score: boolean;
+  show_contact_info: boolean;
+}
+
+interface UserAchievement {
+  id: string;
+  user_id: string;
+  achievement_type_id: string;
+  awarded_at: string;
+  progress_data: any;
+  achievement_type?: {
+    name: string;
+    description: string;
+    icon: string;
+    category: string;
+    points_value: number;
+  };
+}
+
+interface SavedContent {
+  id: string;
+  user_id: string;
+  content_type: string;
+  content_id: string;
+  saved_at: string;
 }
 
 interface ProfileStats {
@@ -120,8 +185,13 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
   });
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [badges, setBadges] = useState<ProfileBadge[]>([]);
+  const [achievements, setAchievements] = useState<UserAchievement[]>([]);
+  const [savedContent, setSavedContent] = useState<SavedContent[]>([]);
+  const [profileSettings, setProfileSettings] = useState<ProfileSettings | null>(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingProfile, setEditingProfile] = useState<Partial<EnhancedProfile>>({});
 
   useEffect(() => {
     if (userId) {
@@ -129,6 +199,11 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
       fetchProfileStats();
       fetchActivityTimeline();
       fetchProfileBadges();
+      fetchAchievements();
+      fetchProfileSettings();
+      if (user?.id === userId) {
+        fetchSavedContent();
+      }
       incrementProfileViews();
     }
   }, [userId]);
@@ -229,6 +304,61 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
     }
   };
 
+  const fetchAchievements = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_achievements')
+        .select(`
+          *,
+          achievement_type:profile_achievement_types(
+            name,
+            description,
+            icon,
+            category,
+            points_value
+          )
+        `)
+        .eq('user_id', userId)
+        .order('awarded_at', { ascending: false });
+
+      if (error) throw error;
+      setAchievements(data || []);
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
+    }
+  };
+
+  const fetchProfileSettings = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profile_settings')
+        .select('*')
+        .eq('profile_id', profile?.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
+      setProfileSettings(data);
+    } catch (error) {
+      console.error('Error fetching profile settings:', error);
+    }
+  };
+
+  const fetchSavedContent = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_saved_content')
+        .select('*')
+        .eq('user_id', userId)
+        .order('saved_at', { ascending: false })
+        .limit(20);
+
+      if (error) throw error;
+      setSavedContent(data || []);
+    } catch (error) {
+      console.error('Error fetching saved content:', error);
+    }
+  };
+
   const incrementProfileViews = async () => {
     if (!profile || user?.id === userId) return;
     
@@ -279,6 +409,84 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
       toast({
         title: "Link copied!",
         description: "Profile link copied to clipboard"
+      });
+    }
+  };
+
+  const updateProfileSetting = async (setting: string, value: any) => {
+    if (!profileSettings) return;
+    
+    try {
+      const { error } = await supabase
+        .from('profile_settings')
+        .update({ [setting]: value })
+        .eq('id', profileSettings.id);
+
+      if (error) throw error;
+      
+      setProfileSettings(prev => prev ? { ...prev, [setting]: value } : null);
+      toast({
+        title: "Settings updated",
+        description: "Your privacy settings have been updated"
+      });
+    } catch (error) {
+      console.error('Error updating settings:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update settings",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const updateProfile = async (updates: Partial<EnhancedProfile>) => {
+    if (!profile) return;
+    
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update(updates)
+        .eq('id', profile.id);
+
+      if (error) throw error;
+      
+      setProfile(prev => prev ? { ...prev, ...updates } : null);
+      toast({
+        title: "Profile updated",
+        description: "Your profile has been updated successfully"
+      });
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update profile",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const requestVerification = async () => {
+    try {
+      const { error } = await supabase
+        .from('profile_verification_queue')
+        .insert({
+          user_id: userId,
+          verification_type: 'identity',
+          status: 'pending'
+        });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Verification request submitted",
+        description: "Your verification request has been submitted for review"
+      });
+    } catch (error) {
+      console.error('Error requesting verification:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit verification request",
+        variant: "destructive"
       });
     }
   };
@@ -344,7 +552,129 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
-          {user?.id !== userId && (
+          {user?.id === userId ? (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="default" size="sm">
+                  <Settings className="h-4 w-4 mr-2" />
+                  Settings
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>Profile Settings</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-6">
+                  {/* Privacy Settings */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Privacy & Visibility</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label>Hide Polls</Label>
+                          <p className="text-sm text-muted-foreground">Hide your poll history from others</p>
+                        </div>
+                        <Switch 
+                          checked={profileSettings?.hide_polls || false}
+                          onCheckedChange={(checked) => updateProfileSetting('hide_polls', checked)}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label>Hide Activity</Label>
+                          <p className="text-sm text-muted-foreground">Hide your activity timeline</p>
+                        </div>
+                        <Switch 
+                          checked={profileSettings?.hide_activity || false}
+                          onCheckedChange={(checked) => updateProfileSetting('hide_activity', checked)}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label>Hide Followers</Label>
+                          <p className="text-sm text-muted-foreground">Hide your follower list</p>
+                        </div>
+                        <Switch 
+                          checked={profileSettings?.hide_followers || false}
+                          onCheckedChange={(checked) => updateProfileSetting('hide_followers', checked)}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label>Show Contact Info</Label>
+                          <p className="text-sm text-muted-foreground">Show contact information publicly</p>
+                        </div>
+                        <Switch 
+                          checked={profileSettings?.show_contact_info || false}
+                          onCheckedChange={(checked) => updateProfileSetting('show_contact_info', checked)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Profile Settings */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Profile Configuration</h3>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label>Enable Notifications</Label>
+                          <p className="text-sm text-muted-foreground">Receive platform notifications</p>
+                        </div>
+                        <Switch 
+                          checked={profile?.enable_notifications || false}
+                          onCheckedChange={(checked) => updateProfile({ enable_notifications: checked })}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <Label>Allow Messages</Label>
+                          <p className="text-sm text-muted-foreground">Allow direct messages from other users</p>
+                        </div>
+                        <Switch 
+                          checked={profile?.allow_messages || false}
+                          onCheckedChange={(checked) => updateProfile({ allow_messages: checked })}
+                        />
+                      </div>
+                      <div>
+                        <Label>Language Preference</Label>
+                        <Select 
+                          value={profile?.language_preference || 'en'}
+                          onValueChange={(value) => updateProfile({ language_preference: value })}
+                        >
+                          <SelectTrigger className="w-full mt-2">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="en">English</SelectItem>
+                            <SelectItem value="fr">Français</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Verification Request */}
+                  <div>
+                    <h3 className="text-lg font-semibold mb-4">Account Verification</h3>
+                    <div className="space-y-4">
+                      {profile?.verification_status !== 'verified' && (
+                        <Button onClick={requestVerification} className="w-full">
+                          <CheckCircle className="h-4 w-4 mr-2" />
+                          Request Verification
+                        </Button>
+                      )}
+                      <p className="text-sm text-muted-foreground">
+                        Current status: <Badge variant={profile?.verification_status === 'verified' ? 'default' : 'secondary'}>
+                          {profile?.verification_status || 'pending'}
+                        </Badge>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </DialogContent>
+            </Dialog>
+          ) : (
             <FollowButton 
               targetUserId={userId} 
               targetUsername={profile?.username}
@@ -471,11 +801,15 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-8 md:grid-cols-8">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="posts">Posts</TabsTrigger>
-              <TabsTrigger value="activity">Activity</TabsTrigger>
+              <TabsTrigger value="polls">Polls</TabsTrigger>
+              <TabsTrigger value="events">Events</TabsTrigger>
               <TabsTrigger value="ratings">Ratings</TabsTrigger>
+              <TabsTrigger value="following">Following</TabsTrigger>
+              <TabsTrigger value="followers">Followers</TabsTrigger>
+              {user?.id === userId && <TabsTrigger value="saved">Saved</TabsTrigger>}
             </TabsList>
 
             <div className={isModal ? "max-h-64 overflow-y-auto mt-4" : "mt-4"}>
@@ -574,6 +908,82 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                   <p>Recent posts will appear here</p>
                 </div>
               </TabsContent>
+
+              <TabsContent value="polls" className="space-y-4">
+                {!profileSettings?.hide_polls ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <BarChart3 className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    <p>User-created polls will appear here</p>
+                    <p className="text-xs mt-1">{profile?.polls_created || 0} polls created</p>
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Lock className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    <p>This user has hidden their polls</p>
+                  </div>
+                )}
+              </TabsContent>
+
+              <TabsContent value="events" className="space-y-4">
+                <div className="text-center py-8 text-muted-foreground">
+                  <Calendar className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                  <p>Joined and created events will appear here</p>
+                  <p className="text-xs mt-1">{profile?.events_attended || 0} events attended</p>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="following" className="space-y-4">
+                <div className="text-center py-8 text-muted-foreground">
+                  <UserCheck className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                  <p>People, parties, and institutions followed</p>
+                  <p className="text-xs mt-1">{stats.following_count} following</p>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="followers" className="space-y-4">
+                {!profileSettings?.hide_followers ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Users className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    <p>Civic followers</p>
+                    <p className="text-xs mt-1">{stats.followers_count} followers</p>
+                  </div>
+                ) : (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Lock className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    <p>This user has hidden their followers</p>
+                  </div>
+                )}
+              </TabsContent>
+
+              {user?.id === userId && (
+                <TabsContent value="saved" className="space-y-4">
+                  {savedContent.length === 0 ? (
+                    <div className="text-center py-8 text-muted-foreground">
+                      <Bookmark className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                      <p>Saved drafts and bookmarked content</p>
+                      <p className="text-xs mt-1">No saved content yet</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {savedContent.map((item) => (
+                        <Card key={item.id}>
+                          <CardContent className="pt-4">
+                            <div className="flex items-center gap-2 mb-2">
+                              <Badge variant="outline" className="capitalize">
+                                {item.content_type}
+                              </Badge>
+                              <span className="text-xs text-muted-foreground">
+                                Saved {formatDistanceToNow(new Date(item.saved_at), { addSuffix: true })}
+                              </span>
+                            </div>
+                            <p className="text-sm">Content ID: {item.content_id}</p>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
+              )}
 
               <TabsContent value="activity" className="space-y-4">
                 {activities.length === 0 ? (

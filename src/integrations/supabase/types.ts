@@ -16060,6 +16060,75 @@ export type Database = {
           },
         ]
       }
+      profile_achievement_types: {
+        Row: {
+          category: string
+          created_at: string | null
+          criteria: Json | null
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          points_value: number | null
+        }
+        Insert: {
+          category: string
+          created_at?: string | null
+          criteria?: Json | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          points_value?: number | null
+        }
+        Update: {
+          category?: string
+          created_at?: string | null
+          criteria?: Json | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          points_value?: number | null
+        }
+        Relationships: []
+      }
+      profile_activity_log: {
+        Row: {
+          activity_description: string | null
+          activity_title: string
+          activity_type: string
+          created_at: string | null
+          id: string
+          is_public: boolean | null
+          metadata: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          activity_description?: string | null
+          activity_title: string
+          activity_type: string
+          created_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          activity_description?: string | null
+          activity_title?: string
+          activity_type?: string
+          created_at?: string | null
+          id?: string
+          is_public?: boolean | null
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profile_activity_timeline: {
         Row: {
           activity_data: Json | null
@@ -16277,6 +16346,89 @@ export type Database = {
           },
         ]
       }
+      profile_settings: {
+        Row: {
+          created_at: string | null
+          hide_activity: boolean | null
+          hide_followers: boolean | null
+          hide_location: boolean | null
+          hide_polls: boolean | null
+          id: string
+          profile_id: string | null
+          show_civic_score: boolean | null
+          show_contact_info: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          hide_activity?: boolean | null
+          hide_followers?: boolean | null
+          hide_location?: boolean | null
+          hide_polls?: boolean | null
+          id?: string
+          profile_id?: string | null
+          show_civic_score?: boolean | null
+          show_contact_info?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          hide_activity?: boolean | null
+          hide_followers?: boolean | null
+          hide_location?: boolean | null
+          hide_polls?: boolean | null
+          id?: string
+          profile_id?: string | null
+          show_civic_score?: boolean | null
+          show_contact_info?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_settings_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profile_verification_queue: {
+        Row: {
+          admin_notes: string | null
+          documents_submitted: Json | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          submitted_at: string | null
+          user_id: string | null
+          verification_type: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          documents_submitted?: Json | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          user_id?: string | null
+          verification_type: string
+        }
+        Update: {
+          admin_notes?: string | null
+          documents_submitted?: Json | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          submitted_at?: string | null
+          user_id?: string | null
+          verification_type?: string
+        }
+        Relationships: []
+      }
       profile_verification_requests: {
         Row: {
           admin_notes: string | null
@@ -16330,25 +16482,32 @@ export type Database = {
       profiles: {
         Row: {
           achievements: Json | null
+          allow_messages: boolean | null
           avatar_url: string | null
           ban_reason: string | null
           bio: string | null
           civic_influence_score: number | null
+          civic_interests: string[] | null
           civic_tagline: string | null
           contact_info: Json | null
+          contribution_level: string | null
           cover_photo_url: string | null
           created_at: string | null
           display_name: string | null
+          enable_notifications: boolean | null
           events_attended: number | null
           id: string
           is_banned: boolean | null
           is_diaspora: boolean | null
+          language_preference: string | null
           last_active_at: string | null
           location: string | null
           polls_created: number | null
           post_count: number | null
           privacy_settings: Json | null
           profession: string | null
+          profile_slug: string | null
+          profile_tags: string[] | null
           profile_type: Database["public"]["Enums"]["profile_type"] | null
           profile_views: number | null
           region: string | null
@@ -16365,25 +16524,32 @@ export type Database = {
         }
         Insert: {
           achievements?: Json | null
+          allow_messages?: boolean | null
           avatar_url?: string | null
           ban_reason?: string | null
           bio?: string | null
           civic_influence_score?: number | null
+          civic_interests?: string[] | null
           civic_tagline?: string | null
           contact_info?: Json | null
+          contribution_level?: string | null
           cover_photo_url?: string | null
           created_at?: string | null
           display_name?: string | null
+          enable_notifications?: boolean | null
           events_attended?: number | null
           id?: string
           is_banned?: boolean | null
           is_diaspora?: boolean | null
+          language_preference?: string | null
           last_active_at?: string | null
           location?: string | null
           polls_created?: number | null
           post_count?: number | null
           privacy_settings?: Json | null
           profession?: string | null
+          profile_slug?: string | null
+          profile_tags?: string[] | null
           profile_type?: Database["public"]["Enums"]["profile_type"] | null
           profile_views?: number | null
           region?: string | null
@@ -16400,25 +16566,32 @@ export type Database = {
         }
         Update: {
           achievements?: Json | null
+          allow_messages?: boolean | null
           avatar_url?: string | null
           ban_reason?: string | null
           bio?: string | null
           civic_influence_score?: number | null
+          civic_interests?: string[] | null
           civic_tagline?: string | null
           contact_info?: Json | null
+          contribution_level?: string | null
           cover_photo_url?: string | null
           created_at?: string | null
           display_name?: string | null
+          enable_notifications?: boolean | null
           events_attended?: number | null
           id?: string
           is_banned?: boolean | null
           is_diaspora?: boolean | null
+          language_preference?: string | null
           last_active_at?: string | null
           location?: string | null
           polls_created?: number | null
           post_count?: number | null
           privacy_settings?: Json | null
           profession?: string | null
+          profile_slug?: string | null
+          profile_tags?: string[] | null
           profile_type?: Database["public"]["Enums"]["profile_type"] | null
           profile_views?: number | null
           region?: string | null
@@ -17842,6 +18015,38 @@ export type Database = {
         }
         Relationships: []
       }
+      user_achievements: {
+        Row: {
+          achievement_type_id: string | null
+          awarded_at: string | null
+          id: string
+          progress_data: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          achievement_type_id?: string | null
+          awarded_at?: string | null
+          id?: string
+          progress_data?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          achievement_type_id?: string | null
+          awarded_at?: string | null
+          id?: string
+          progress_data?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_type_id_fkey"
+            columns: ["achievement_type_id"]
+            isOneToOne: false
+            referencedRelation: "profile_achievement_types"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_badges: {
         Row: {
           badge_id: string
@@ -18153,6 +18358,30 @@ export type Database = {
         }
         Relationships: []
       }
+      user_saved_content: {
+        Row: {
+          content_id: string
+          content_type: string
+          id: string
+          saved_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          id?: string
+          saved_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          id?: string
+          saved_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_trust_feedback: {
         Row: {
           comment: string | null
@@ -18461,6 +18690,10 @@ export type Database = {
           p_campaign_type: Database["public"]["Enums"]["campaign_type"]
         }
         Returns: number
+      }
+      calculate_contribution_level: {
+        Args: { p_user_id: string }
+        Returns: string
       }
       calculate_fix_trust_score: {
         Args: { p_fix_type: string }
