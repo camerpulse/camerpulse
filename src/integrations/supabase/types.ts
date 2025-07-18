@@ -5735,6 +5735,141 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_events: {
+        Row: {
+          allow_rsvp: boolean | null
+          civic_impact_score: number | null
+          civic_tags: string[] | null
+          cover_image_url: string | null
+          created_at: string
+          created_by: string | null
+          custom_fields: Json | null
+          description: string | null
+          end_date: string | null
+          event_type: Database["public"]["Enums"]["civic_event_type"]
+          expected_officials: string[] | null
+          expected_parties: string[] | null
+          external_links: Json | null
+          flagged_count: number | null
+          gallery_images: string[] | null
+          google_maps_link: string | null
+          id: string
+          is_civic_official: boolean | null
+          is_featured: boolean | null
+          last_modified_by: string | null
+          latitude: number | null
+          livestream_url: string | null
+          longitude: number | null
+          max_attendees: number | null
+          moderation_status: string | null
+          name: string
+          organizer_id: string
+          organizer_type: Database["public"]["Enums"]["organizer_type"]
+          organizer_verified: boolean | null
+          region: string
+          requires_approval: boolean | null
+          share_count: number | null
+          short_description: string | null
+          start_date: string
+          status: Database["public"]["Enums"]["event_status"] | null
+          subregion: string | null
+          tags: string[] | null
+          timezone: string | null
+          updated_at: string
+          venue_address: string | null
+          venue_name: string | null
+          view_count: number | null
+        }
+        Insert: {
+          allow_rsvp?: boolean | null
+          civic_impact_score?: number | null
+          civic_tags?: string[] | null
+          cover_image_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          custom_fields?: Json | null
+          description?: string | null
+          end_date?: string | null
+          event_type: Database["public"]["Enums"]["civic_event_type"]
+          expected_officials?: string[] | null
+          expected_parties?: string[] | null
+          external_links?: Json | null
+          flagged_count?: number | null
+          gallery_images?: string[] | null
+          google_maps_link?: string | null
+          id?: string
+          is_civic_official?: boolean | null
+          is_featured?: boolean | null
+          last_modified_by?: string | null
+          latitude?: number | null
+          livestream_url?: string | null
+          longitude?: number | null
+          max_attendees?: number | null
+          moderation_status?: string | null
+          name: string
+          organizer_id: string
+          organizer_type: Database["public"]["Enums"]["organizer_type"]
+          organizer_verified?: boolean | null
+          region: string
+          requires_approval?: boolean | null
+          share_count?: number | null
+          short_description?: string | null
+          start_date: string
+          status?: Database["public"]["Enums"]["event_status"] | null
+          subregion?: string | null
+          tags?: string[] | null
+          timezone?: string | null
+          updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          allow_rsvp?: boolean | null
+          civic_impact_score?: number | null
+          civic_tags?: string[] | null
+          cover_image_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          custom_fields?: Json | null
+          description?: string | null
+          end_date?: string | null
+          event_type?: Database["public"]["Enums"]["civic_event_type"]
+          expected_officials?: string[] | null
+          expected_parties?: string[] | null
+          external_links?: Json | null
+          flagged_count?: number | null
+          gallery_images?: string[] | null
+          google_maps_link?: string | null
+          id?: string
+          is_civic_official?: boolean | null
+          is_featured?: boolean | null
+          last_modified_by?: string | null
+          latitude?: number | null
+          livestream_url?: string | null
+          longitude?: number | null
+          max_attendees?: number | null
+          moderation_status?: string | null
+          name?: string
+          organizer_id?: string
+          organizer_type?: Database["public"]["Enums"]["organizer_type"]
+          organizer_verified?: boolean | null
+          region?: string
+          requires_approval?: boolean | null
+          share_count?: number | null
+          short_description?: string | null
+          start_date?: string
+          status?: Database["public"]["Enums"]["event_status"] | null
+          subregion?: string | null
+          tags?: string[] | null
+          timezone?: string | null
+          updated_at?: string
+          venue_address?: string | null
+          venue_name?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
+      }
       civic_fusion_alerts: {
         Row: {
           acknowledged: boolean | null
@@ -9546,6 +9681,100 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_organizers: {
+        Row: {
+          created_at: string
+          event_id: string
+          id: string
+          organizer_id: string
+          organizer_type: Database["public"]["Enums"]["organizer_type"]
+          permissions: Json | null
+          role: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_id: string
+          id?: string
+          organizer_id: string
+          organizer_type: Database["public"]["Enums"]["organizer_type"]
+          permissions?: Json | null
+          role?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_id?: string
+          id?: string
+          organizer_id?: string
+          organizer_type?: Database["public"]["Enums"]["organizer_type"]
+          permissions?: Json | null
+          role?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_organizers_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_rsvps: {
+        Row: {
+          approval_status: string | null
+          approved_at: string | null
+          approved_by: string | null
+          contact_phone: string | null
+          created_at: string
+          dietary_requirements: string | null
+          event_id: string
+          id: string
+          notes: string | null
+          plus_ones: number | null
+          rsvp_status: Database["public"]["Enums"]["rsvp_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          dietary_requirements?: string | null
+          event_id: string
+          id?: string
+          notes?: string | null
+          plus_ones?: number | null
+          rsvp_status: Database["public"]["Enums"]["rsvp_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approval_status?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          dietary_requirements?: string | null
+          event_id?: string
+          id?: string
+          notes?: string | null
+          plus_ones?: number | null
+          rsvp_status?: Database["public"]["Enums"]["rsvp_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_rsvps_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "civic_events"
             referencedColumns: ["id"]
           },
         ]
