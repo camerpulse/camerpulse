@@ -9220,6 +9220,44 @@ export type Database = {
         }
         Relationships: []
       }
+      discussion_replies: {
+        Row: {
+          content: string
+          created_at: string
+          discussion_id: string
+          id: string
+          is_solution: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          discussion_id: string
+          id?: string
+          is_solution?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          discussion_id?: string
+          id?: string
+          is_solution?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "discussion_replies_discussion_id_fkey"
+            columns: ["discussion_id"]
+            isOneToOne: false
+            referencedRelation: "village_discussions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       donations: {
         Row: {
           amount: number
@@ -9872,6 +9910,38 @@ export type Database = {
             columns: ["speaker_id"]
             isOneToOne: false
             referencedRelation: "event_speakers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_attendees: {
+        Row: {
+          attendance_status: string
+          event_id: string
+          id: string
+          registered_at: string
+          user_id: string
+        }
+        Insert: {
+          attendance_status?: string
+          event_id: string
+          id?: string
+          registered_at?: string
+          user_id: string
+        }
+        Update: {
+          attendance_status?: string
+          event_id?: string
+          id?: string
+          registered_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_attendees_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "village_events"
             referencedColumns: ["id"]
           },
         ]
@@ -19145,6 +19215,54 @@ export type Database = {
           },
         ]
       }
+      village_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_approved: boolean
+          parent_comment_id: string | null
+          updated_at: string
+          user_id: string
+          village_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          parent_comment_id?: string | null
+          updated_at?: string
+          user_id: string
+          village_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean
+          parent_comment_id?: string | null
+          updated_at?: string
+          user_id?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "village_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "village_comments_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       village_conflicts: {
         Row: {
           conflict_name: string
@@ -19330,6 +19448,121 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "village_development_associations_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_discussions: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_locked: boolean
+          is_pinned: boolean
+          last_activity_at: string
+          replies_count: number
+          title: string
+          updated_at: string
+          user_id: string
+          views_count: number
+          village_id: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_locked?: boolean
+          is_pinned?: boolean
+          last_activity_at?: string
+          replies_count?: number
+          title: string
+          updated_at?: string
+          user_id: string
+          views_count?: number
+          village_id: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_locked?: boolean
+          is_pinned?: boolean
+          last_activity_at?: string
+          replies_count?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views_count?: number
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_discussions_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_events: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          event_date: string
+          event_type: string
+          id: string
+          is_public: boolean
+          location: string | null
+          max_attendees: number | null
+          organizer_id: string
+          status: string
+          title: string
+          updated_at: string
+          village_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          event_date: string
+          event_type?: string
+          id?: string
+          is_public?: boolean
+          location?: string | null
+          max_attendees?: number | null
+          organizer_id: string
+          status?: string
+          title: string
+          updated_at?: string
+          village_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          is_public?: boolean
+          location?: string | null
+          max_attendees?: number | null
+          organizer_id?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_events_village_id_fkey"
             columns: ["village_id"]
             isOneToOne: false
             referencedRelation: "villages"

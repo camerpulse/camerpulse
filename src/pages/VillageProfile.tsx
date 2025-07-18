@@ -15,6 +15,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { VillageComments } from '@/components/villages/VillageComments';
+import { VillageDiscussions } from '@/components/villages/VillageDiscussions';
+import { VillageEvents } from '@/components/villages/VillageEvents';
 
 interface VillageData {
   id: string;
@@ -341,13 +344,16 @@ const VillageProfile = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="leaders">Leadership</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="people">Notable People</TabsTrigger>
             <TabsTrigger value="civic">Civic Activity</TabsTrigger>
             <TabsTrigger value="gallery">Gallery</TabsTrigger>
+            <TabsTrigger value="discussions">Discussions</TabsTrigger>
+            <TabsTrigger value="events">Events</TabsTrigger>
+            <TabsTrigger value="comments">Comments</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -771,6 +777,18 @@ const VillageProfile = () => {
                 </Card>
               )}
             </div>
+          </TabsContent>
+
+          <TabsContent value="discussions" className="space-y-6">
+            <VillageDiscussions villageId={id!} />
+          </TabsContent>
+
+          <TabsContent value="events" className="space-y-6">
+            <VillageEvents villageId={id!} />
+          </TabsContent>
+
+          <TabsContent value="comments" className="space-y-6">
+            <VillageComments villageId={id!} />
           </TabsContent>
         </Tabs>
       </div>
