@@ -19,6 +19,7 @@ import Donations from "./pages/Donations";
 import Social from "./pages/Social";
 import News from "./pages/News";
 import Admin from "./pages/Admin";
+import DesignSystemCore from "./pages/DesignSystemCore";
 import CamerPulseAdminCore from "./pages/CamerPulseAdminCore";
 import PoliticalParties from "./pages/PoliticalParties";
 import PoliticalPartyDetail from "./pages/PoliticalPartyDetail";
@@ -113,6 +114,7 @@ const App = () => {
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/design-core" element={<DesignSystemCore />} />
               <Route path="/admin/core" element={<CamerPulseAdminCore />} />
               <Route path="/politica-ai" element={<PoliticaAI />} />
               <Route path="/camerpulse-intelligence" element={
