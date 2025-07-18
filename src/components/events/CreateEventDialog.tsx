@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { useAuth } from '@/contexts/AuthContext';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { TicketTypeManager, TicketType } from './TicketTypeManager';
 
 interface CreateEventDialogProps {
   open: boolean;
@@ -84,6 +85,10 @@ export const CreateEventDialog = ({ open, onOpenChange, onEventCreated }: Create
     external_links: {} as Record<string, string>
   });
 
+  // Ticket management state
+  const [allowTicketSales, setAllowTicketSales] = useState(false);
+  const [ticketTypes, setTicketTypes] = useState<TicketType[]>([]);
+
   const [newTag, setNewTag] = useState('');
   const [newLinkKey, setNewLinkKey] = useState('');
   const [newLinkValue, setNewLinkValue] = useState('');
@@ -109,6 +114,8 @@ export const CreateEventDialog = ({ open, onOpenChange, onEventCreated }: Create
       civic_tags: [],
       external_links: {}
     });
+    setAllowTicketSales(false);
+    setTicketTypes([]);
   };
 
   const addCivicTag = (tag: string) => {
@@ -188,13 +195,42 @@ export const CreateEventDialog = ({ open, onOpenChange, onEventCreated }: Create
         status: 'published' as 'draft' | 'pending' | 'approved' | 'rejected' | 'cancelled' | 'completed' | 'published' | 'postponed' | 'ongoing'
       };
 
-      const { error } = await supabase
+      const { data: eventResult, error: eventError } = await supabase
         .from('civic_events')
-        .insert(eventData);
+        .insert(eventData)
+        .select()
+        .single();
 
-      if (error) throw error;
+      if (eventError) throw eventError;
 
-      toast.success('Event created successfully!');
+      // Create ticket types if enabled
+      if (allowTicketSales && ticketTypes.length > 0) {
+        const ticketTypeData = ticketTypes.map(ticket => ({
+          event_id: eventResult.id,
+          name: ticket.name,
+          description: ticket.description,
+          price: ticket.price,
+          currency: ticket.currency,
+          max_quantity: ticket.max_quantity,
+          sold_quantity: 0,
+          type: ticket.type as 'regular' | 'vip' | 'early_bird' | 'student' | 'vvip',
+          is_active: true
+        }));
+
+        const { error: ticketError } = await supabase
+          .from('event_ticket_types')
+          .insert(ticketTypeData);
+
+        if (ticketError) {
+          console.error('Error creating ticket types:', ticketError);
+          toast.error('Event created but failed to create tickets');
+        } else {
+          toast.success('Event created with tickets successfully!');
+        }
+      } else {
+        toast.success('Event created successfully!');
+      }
+
       onEventCreated();
       resetForm();
     } catch (error) {
@@ -533,6 +569,14 @@ export const CreateEventDialog = ({ open, onOpenChange, onEventCreated }: Create
               )}
             </CardContent>
           </Card>
+
+          {/* Ticket Management */}
+          <TicketTypeManager
+            ticketTypes={ticketTypes}
+            onTicketTypesChange={setTicketTypes}
+            allowTicketSales={allowTicketSales}
+            onAllowTicketSalesChange={setAllowTicketSales}
+          />
 
           {/* Submit */}
           <div className="flex justify-end gap-4">
