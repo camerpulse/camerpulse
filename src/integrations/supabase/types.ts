@@ -19252,6 +19252,10 @@ export type Database = {
         Args: { application_id: string }
         Returns: Json
       }
+      auto_issue_certificates_for_event: {
+        Args: { event_id_param: string }
+        Returns: number
+      }
       award_fan_points: {
         Args: {
           p_fan_id: string
@@ -19470,6 +19474,10 @@ export type Database = {
         Returns: string
       }
       generate_vendor_id: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_verification_code: {
         Args: Record<PropertyKey, never>
         Returns: string
       }

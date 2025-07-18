@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { EventCard } from '@/components/events/EventCard';
 import { EventFilter } from '@/components/events/EventFilter';
 import { CreateEventDialog } from '@/components/events/CreateEventDialog';
+import { CertificateManager } from '@/components/certificates/CertificateManager';
 import { useAuth } from '@/contexts/AuthContext';
 import { format, isAfter, isBefore, startOfDay, endOfDay } from 'date-fns';
 

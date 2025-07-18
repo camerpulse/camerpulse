@@ -65,6 +65,7 @@ import FanPortal from "./pages/FanPortal";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProfileSlugPage from "./pages/ProfileSlugPage";
 import Events from "./pages/Events";
+import CertificateVerificationPage from "./pages/CertificateVerificationPage";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -166,6 +167,7 @@ const App = () => {
               <Route path="/profile/:userId" element={<UserProfilePage />} />
               <Route path="/@:slug" element={<ProfileSlugPage />} />
               <Route path="/events" element={<Events />} />
+              <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
