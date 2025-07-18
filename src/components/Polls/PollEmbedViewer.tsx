@@ -96,9 +96,7 @@ const PollEmbedViewer = () => {
     ? poll.vote_results.reduce((maxIndex, votes, index, arr) => votes > arr[maxIndex] ? index : maxIndex, 0)
     : null;
 
-  const containerClass = theme === 'dark' 
-    ? 'bg-gray-900 text-white' 
-    : 'bg-white text-gray-900';
+  const containerClass = 'bg-white text-gray-900';
 
   return (
     <div className={`${containerClass} p-4 font-sans`}>

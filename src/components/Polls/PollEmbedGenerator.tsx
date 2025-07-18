@@ -335,7 +335,7 @@ const PollEmbedGenerator = () => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className={`rounded-lg border p-4 ${embedSettings.theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-white'}`}>
+              <div className="rounded-lg border p-4 bg-white text-gray-900">
                 {/* Poll Preview */}
                 {embedSettings.style === 'compact' && (
                   <div className="space-y-3">

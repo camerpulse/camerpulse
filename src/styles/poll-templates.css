@@ -248,17 +248,4 @@
   }
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .ballot-template {
-    @apply bg-gray-900 border-gray-700;
-  }
-  
-  .ballot-template .ballot-header {
-    @apply bg-gray-800 border-gray-700;
-  }
-  
-  .ballot-template .ballot-option:hover {
-    @apply bg-gray-800;
-  }
-}
+/* Removed dark mode support - using light mode only */
