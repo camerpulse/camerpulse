@@ -84,8 +84,7 @@
     --sidebar-border: 214 32% 91%;       /* Light border */
     --sidebar-ring: 142 69% 32%;         /* Focus ring - primary */
 
-    /* Animations */
-    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* Animations removed for performance */
     
     --radius: 0.75rem; /* 12px rounded corners */
   }
@@ -132,9 +131,9 @@
     @apply min-w-[44px];
   }
   
-  /* Mobile optimized components */
+  /* Mobile optimized components - static */
   .mobile-card {
-    @apply transition-shadow duration-200 hover:shadow-md;
+    @apply shadow-md;
   }
   
   /* Responsive text sizing */
@@ -150,10 +149,7 @@
     @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl;
   }
 
-  /* Animations and interactions */
-  .animate-press {
-    @apply active:scale-95 transition-transform duration-75;
-  }
+  /* Animations and interactions disabled */
 
   /* Remove tap highlights on mobile */
   * {
@@ -343,14 +339,7 @@
     box-shadow: var(--shadow-glow);
   }
   
-  /* Animation delays */
-  .animation-delay-300 {
-    animation-delay: 300ms;
-  }
-  
-  .animation-delay-500 {
-    animation-delay: 500ms;
-  }
+  /* Animation delays disabled */
   
   /* Native mobile feel */
   .touch-manipulation {

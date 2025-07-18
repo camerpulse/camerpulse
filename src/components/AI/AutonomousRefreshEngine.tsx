@@ -175,7 +175,7 @@ export const AutonomousRefreshEngine: React.FC = () => {
     return (
       <Card>
         <CardContent className="flex items-center justify-center py-8">
-          <Loader2 className="h-8 w-8 animate-spin" />
+          <Loader2 className="h-8 w-8" />
           <span className="ml-2">Loading refresh engine status...</span>
         </CardContent>
       </Card>
@@ -204,7 +204,7 @@ export const AutonomousRefreshEngine: React.FC = () => {
             />
           </div>
           <Button variant="outline" onClick={loadStatus} disabled={isLoading}>
-            <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
+            <RefreshCw className="h-4 w-4 mr-2" />
             Refresh
           </Button>
           <Button 
@@ -213,7 +213,7 @@ export const AutonomousRefreshEngine: React.FC = () => {
           >
             {isExecutingCycle ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                <Loader2 className="h-4 w-4 mr-2" />
                 Running...
               </>
             ) : (
