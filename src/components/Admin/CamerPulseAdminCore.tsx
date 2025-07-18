@@ -340,34 +340,34 @@ export const CamerPulseAdminCore: React.FC = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-green-50 dark:bg-green-950">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-green-50">
                         <div>
-                          <p className="font-medium text-green-900 dark:text-green-100">Database</p>
-                          <p className="text-sm text-green-600 dark:text-green-300">Operational</p>
+                          <p className="font-medium text-green-900">Database</p>
+                          <p className="text-sm text-green-600">Operational</p>
                         </div>
                         <CheckCircle className="h-6 w-6 text-green-600" />
                       </div>
                       
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-blue-50 dark:bg-blue-950">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-blue-50">
                         <div>
-                          <p className="font-medium text-blue-900 dark:text-blue-100">API Services</p>
-                          <p className="text-sm text-blue-600 dark:text-blue-300">Active</p>
+                          <p className="font-medium text-blue-900">API Services</p>
+                          <p className="text-sm text-blue-600">Active</p>
                         </div>
                         <CheckCircle className="h-6 w-6 text-blue-600" />
                       </div>
                       
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-yellow-50 dark:bg-yellow-950">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-yellow-50">
                         <div>
-                          <p className="font-medium text-yellow-900 dark:text-yellow-100">AI Scanner</p>
-                          <p className="text-sm text-yellow-600 dark:text-yellow-300">Monitoring</p>
+                          <p className="font-medium text-yellow-900">AI Scanner</p>
+                          <p className="text-sm text-yellow-600">Monitoring</p>
                         </div>
                         <Activity className="h-6 w-6 text-yellow-600" />
                       </div>
                       
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-purple-50 dark:bg-purple-950">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-purple-50">
                         <div>
-                          <p className="font-medium text-purple-900 dark:text-purple-100">Intelligence</p>
-                          <p className="text-sm text-purple-600 dark:text-purple-300">Learning</p>
+                          <p className="font-medium text-purple-900">Intelligence</p>
+                          <p className="text-sm text-purple-600">Learning</p>
                         </div>
                         <Bot className="h-6 w-6 text-purple-600" />
                       </div>

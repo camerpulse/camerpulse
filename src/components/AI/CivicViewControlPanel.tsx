@@ -430,8 +430,8 @@ const CivicViewControlPanel: React.FC = () => {
             {filteredModules.map((module) => (
               <Card key={module.id} className={`transition-all duration-200 ${
                 module.is_public_visible 
-                  ? 'border-green-200 bg-green-50 dark:bg-green-950 dark:border-green-800' 
-                  : 'border-red-200 bg-red-50 dark:bg-red-950 dark:border-red-800'
+                  ? 'border-green-200 bg-green-50' 
+                  : 'border-red-200 bg-red-50'
               }`}>
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
@@ -577,8 +577,8 @@ const CivicViewControlPanel: React.FC = () => {
                     </div>
                     
                     {previewModules.filter(m => !m.is_visible).length > 0 && (
-                      <div className="mt-4 p-3 bg-orange-50 dark:bg-orange-950 border border-orange-200 dark:border-orange-800 rounded-lg">
-                        <div className="flex items-center gap-2 text-orange-800 dark:text-orange-200">
+                      <div className="mt-4 p-3 bg-orange-50 border border-orange-200 rounded-lg">
+                        <div className="flex items-center gap-2 text-orange-800">
                           <AlertTriangle className="h-4 w-4" />
                           <span className="text-sm font-medium">
                             This section is temporarily restricted by administrative control. For access, contact civic@camerpulse.org.

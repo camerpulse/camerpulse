@@ -360,18 +360,18 @@ export const SecurityAuditSuite: React.FC<SecurityAuditSuiteProps> = ({
 
           <TabsContent value="failures" className="space-y-2">
             {auditResults.filter(r => r.status === 'fail' || r.severity === 'critical' || r.severity === 'high').map((result, index) => (
-              <Card key={index} className="border-red-200 dark:border-red-800">
+              <Card key={index} className="border-red-200">
                 <CardContent className="pt-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {getStatusIcon(result.status)}
-                      <span className="font-medium text-red-600 dark:text-red-400">{result.test}</span>
+                      <span className="font-medium text-red-600">{result.test}</span>
                     </div>
                     <Badge variant="destructive">
                       {result.severity}
                     </Badge>
                   </div>
-                  <p className="text-sm text-red-600 dark:text-red-400 mt-1">{result.message}</p>
+                  <p className="text-sm text-red-600 mt-1">{result.message}</p>
                 </CardContent>
               </Card>
             ))}

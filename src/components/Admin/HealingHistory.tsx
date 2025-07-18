@@ -359,16 +359,16 @@ export default function HealingHistory() {
                     <p className="text-sm">{item.fix_description}</p>
                     
                     {item.error_message && (
-                      <div className="bg-red-50 dark:bg-red-950/50 p-3 rounded-md">
-                        <h5 className="font-medium text-red-900 dark:text-red-100 mb-1">Error:</h5>
-                        <p className="text-sm text-red-800 dark:text-red-200">{item.error_message}</p>
+                      <div className="bg-red-50 p-3 rounded-md">
+                        <h5 className="font-medium text-red-900 mb-1">Error:</h5>
+                        <p className="text-sm text-red-800">{item.error_message}</p>
                       </div>
                     )}
 
                     {item.code_changes && Object.keys(item.code_changes).length > 0 && (
-                      <div className="bg-green-50 dark:bg-green-950/50 p-3 rounded-md">
-                        <h5 className="font-medium text-green-900 dark:text-green-100 mb-1">Code Changes:</h5>
-                        <pre className="text-xs text-green-800 dark:text-green-200 overflow-auto">
+                      <div className="bg-green-50 p-3 rounded-md">
+                        <h5 className="font-medium text-green-900 mb-1">Code Changes:</h5>
+                        <pre className="text-xs text-green-800 overflow-auto">
                           {JSON.stringify(item.code_changes, null, 2)}
                         </pre>
                       </div>

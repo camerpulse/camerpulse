@@ -121,7 +121,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <CheckCircle className="h-6 w-6 text-cm-green" />
             </div>
             
-            <div className="flex items-center justify-between p-4 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-blue-50 border border-blue-200">
               <div>
                 <p className="font-medium text-foreground">API Services</p>
                 <p className="text-sm text-muted-foreground">Active</p>
@@ -137,7 +137,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
               <Brain className="h-6 w-6 text-cm-yellow" />
             </div>
             
-            <div className="flex items-center justify-between p-4 rounded-lg bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-purple-50 border border-purple-200">
               <div>
                 <p className="font-medium text-foreground">Intelligence</p>
                 <p className="text-sm text-muted-foreground">Monitoring</p>

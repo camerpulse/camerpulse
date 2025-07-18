@@ -330,9 +330,9 @@ export default function ErrorDashboard() {
                   <div className="space-y-2">
                     <p className="text-sm">{error.error_message}</p>
                     {error.suggested_fix && (
-                      <div className="bg-blue-50 dark:bg-blue-950/50 p-3 rounded-md">
-                        <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Suggested Fix:</h5>
-                        <p className="text-sm text-blue-800 dark:text-blue-200">{error.suggested_fix}</p>
+                      <div className="bg-blue-50 p-3 rounded-md">
+                        <h5 className="font-medium text-blue-900 mb-1">Suggested Fix:</h5>
+                        <p className="text-sm text-blue-800">{error.suggested_fix}</p>
                       </div>
                     )}
                   </div>

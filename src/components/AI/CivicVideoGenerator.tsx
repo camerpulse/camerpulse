@@ -551,17 +551,17 @@ const CivicVideoGenerator = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <p className="font-medium text-green-900 dark:text-green-100">Top Performing Topic</p>
-                    <p className="text-sm text-green-700 dark:text-green-300">Elections & Voting (89% engagement)</p>
+                  <div className="p-3 bg-green-50 rounded-lg">
+                    <p className="font-medium text-green-900">Top Performing Topic</p>
+                    <p className="text-sm text-green-700">Elections & Voting (89% engagement)</p>
                   </div>
-                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <p className="font-medium text-blue-900 dark:text-blue-100">Best Language</p>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">English (82% avg engagement)</p>
+                  <div className="p-3 bg-blue-50 rounded-lg">
+                    <p className="font-medium text-blue-900">Best Language</p>
+                    <p className="text-sm text-blue-700">English (82% avg engagement)</p>
                   </div>
-                  <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                    <p className="font-medium text-purple-900 dark:text-purple-100">Optimal Duration</p>
-                    <p className="text-sm text-purple-700 dark:text-purple-300">45-60 seconds (highest completion rate)</p>
+                  <div className="p-3 bg-purple-50 rounded-lg">
+                    <p className="font-medium text-purple-900">Optimal Duration</p>
+                    <p className="text-sm text-purple-700">45-60 seconds (highest completion rate)</p>
                   </div>
                 </div>
 
@@ -677,24 +677,24 @@ const CivicVideoGenerator = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-3">
-                  <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <p className="font-medium text-blue-900 dark:text-blue-100">Optimal Posting Time</p>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">6-8 PM weekdays show highest engagement</p>
+                  <div className="p-3 bg-blue-50 rounded-lg">
+                    <p className="font-medium text-blue-900">Optimal Posting Time</p>
+                    <p className="text-sm text-blue-700">6-8 PM weekdays show highest engagement</p>
                   </div>
 
-                  <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <p className="font-medium text-green-900 dark:text-green-100">Voice Preference</p>
-                    <p className="text-sm text-green-700 dark:text-green-300">Youthful voices perform 40% better for election content</p>
+                  <div className="p-3 bg-green-50 rounded-lg">
+                    <p className="font-medium text-green-900">Voice Preference</p>
+                    <p className="text-sm text-green-700">Youthful voices perform 40% better for election content</p>
                   </div>
 
-                  <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                    <p className="font-medium text-purple-900 dark:text-purple-100">Visual Elements</p>
-                    <p className="text-sm text-purple-700 dark:text-purple-300">Charts increase comprehension by 65%</p>
+                  <div className="p-3 bg-purple-50 rounded-lg">
+                    <p className="font-medium text-purple-900">Visual Elements</p>
+                    <p className="text-sm text-purple-700">Charts increase comprehension by 65%</p>
                   </div>
 
-                  <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                    <p className="font-medium text-orange-900 dark:text-orange-100">Language Mix</p>
-                    <p className="text-sm text-orange-700 dark:text-orange-300">Pidgin content drives 3x more shares in SW region</p>
+                  <div className="p-3 bg-orange-50 rounded-lg">
+                    <p className="font-medium text-orange-900">Language Mix</p>
+                    <p className="text-sm text-orange-700">Pidgin content drives 3x more shares in SW region</p>
                   </div>
                 </div>
 

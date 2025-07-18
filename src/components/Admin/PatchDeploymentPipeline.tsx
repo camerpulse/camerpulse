@@ -581,7 +581,7 @@ const fetchData = async () => {
               <div>
                 <h4 className="font-medium text-sm mb-2 text-emerald-600">After (Proposed)</h4>
                 <ScrollArea className="h-64 border rounded">
-                  <pre className="p-2 text-xs bg-emerald-50 dark:bg-emerald-950/20">
+                  <pre className="p-2 text-xs bg-emerald-50">
                     <code>{selectedPatch.code_after}</code>
                   </pre>
                 </ScrollArea>

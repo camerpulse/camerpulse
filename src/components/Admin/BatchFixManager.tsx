@@ -629,7 +629,7 @@ export default function BatchFixManager() {
                         </div>
 
                         {chain.rollback_reason && (
-                          <div className="text-sm p-2 bg-amber-50 dark:bg-amber-950/20 rounded">
+                          <div className="text-sm p-2 bg-amber-50 rounded">
                             <strong>Rollback reason:</strong> {chain.rollback_reason}
                           </div>
                         )}
