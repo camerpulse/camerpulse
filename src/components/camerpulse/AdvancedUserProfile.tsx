@@ -39,8 +39,9 @@ import { formatDistanceToNow } from 'date-fns';
 
 interface AdvancedProfileProps {
   userId: string;
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen?: boolean;
+  onClose?: () => void;
+  isModal?: boolean;
 }
 
 interface EnhancedProfile {
@@ -103,8 +104,9 @@ interface ProfileBadge {
 
 export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({ 
   userId, 
-  isOpen, 
-  onClose 
+  isOpen = true, 
+  onClose,
+  isModal = true
 }) => {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -122,14 +124,14 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
   const [activeTab, setActiveTab] = useState('overview');
 
   useEffect(() => {
-    if (isOpen && userId) {
+    if (userId) {
       fetchProfile();
       fetchProfileStats();
       fetchActivityTimeline();
       fetchProfileBadges();
       incrementProfileViews();
     }
-  }, [isOpen, userId]);
+  }, [userId]);
 
   const fetchProfile = async () => {
     try {
@@ -300,22 +302,22 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
     );
   };
 
-  if (!isOpen) return null;
+  if (isModal && !isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-4xl max-h-[95vh] overflow-hidden">
-        {/* Header with Cover Photo */}
-        <div className="relative h-48 bg-gradient-to-r from-primary/20 to-accent/20">
-          {profile?.cover_photo_url && (
-            <img
-              src={profile.cover_photo_url}
-              alt="Cover"
-              className="w-full h-full object-cover"
-            />
-          )}
-          
-          {/* Close Button */}
+  const ProfileContent = () => (
+    <Card className={isModal ? "w-full max-w-4xl max-h-[95vh] overflow-hidden" : "w-full max-w-4xl mx-auto"}>
+      {/* Header with Cover Photo */}
+      <div className="relative h-48 bg-gradient-to-r from-primary/20 to-accent/20">
+        {profile?.cover_photo_url && (
+          <img
+            src={profile.cover_photo_url}
+            alt="Cover"
+            className="w-full h-full object-cover"
+          />
+        )}
+        
+        {/* Close Button - only show in modal mode */}
+        {isModal && onClose && (
           <Button
             variant="ghost"
             size="sm"
@@ -324,35 +326,35 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
           >
             ✕
           </Button>
+        )}
 
-          {/* Profile Picture & Basic Info */}
-          <div className="absolute -bottom-16 left-6">
-            <Avatar className="w-32 h-32 border-4 border-background">
-              <AvatarImage src={profile?.avatar_url} />
-              <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
-                {profile?.username?.[0]?.toUpperCase() || 'U'}
-              </AvatarFallback>
-            </Avatar>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="absolute bottom-4 right-4 flex gap-2">
-            <Button variant="outline" size="sm" onClick={handleShareProfile}>
-              <Share2 className="h-4 w-4 mr-2" />
-              Share
-            </Button>
-            {user?.id !== userId && (
-              <FollowButton 
-                targetUserId={userId} 
-                targetUsername={profile?.username}
-                variant="default"
-                size="sm"
-              />
-            )}
-          </div>
+        {/* Profile Picture & Basic Info */}
+        <div className="absolute -bottom-16 left-6">
+          <Avatar className="w-32 h-32 border-4 border-background">
+            <AvatarImage src={profile?.avatar_url} />
+            <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
+              {profile?.username?.[0]?.toUpperCase() || 'U'}
+            </AvatarFallback>
+          </Avatar>
         </div>
 
-        <CardContent className="pt-20 pb-4">
+        {/* Action Buttons */}
+        <div className="absolute bottom-4 right-4 flex gap-2">
+          <Button variant="outline" size="sm" onClick={handleShareProfile}>
+            <Share2 className="h-4 w-4 mr-2" />
+            Share
+          </Button>
+          {user?.id !== userId && (
+            <FollowButton 
+              targetUserId={userId} 
+              targetUsername={profile?.username}
+              variant="default"
+              size="sm"
+            />
+          )}
+        </div>
+      </div>
+      <CardContent className="pt-20 pb-4">
           {/* Profile Header */}
           <div className="mb-6">
             <div className="flex flex-col md:flex-row md:items-start md:justify-between mb-4">
@@ -476,7 +478,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
               <TabsTrigger value="ratings">Ratings</TabsTrigger>
             </TabsList>
 
-            <div className="max-h-64 overflow-y-auto mt-4">
+            <div className={isModal ? "max-h-64 overflow-y-auto mt-4" : "mt-4"}>
               <TabsContent value="overview" className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Contact Info */}
@@ -639,8 +641,21 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
               </TabsContent>
             </div>
           </Tabs>
-        </CardContent>
-      </Card>
+      </CardContent>
+    </Card>
+  );
+
+  if (isModal) {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <ProfileContent />
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background py-8 px-4">
+      <ProfileContent />
     </div>
   );
 };

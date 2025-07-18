@@ -2,6 +2,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useNavigate } from 'react-router-dom';
 import { 
   Heart, 
   MessageCircle, 
@@ -34,6 +35,8 @@ interface PulseProps {
 }
 
 export const PulseCard = ({ pulse }: { pulse: PulseProps }) => {
+  const navigate = useNavigate();
+  
   const getSentimentColor = () => {
     switch (pulse.sentiment) {
       case 'positive': return 'bg-cm-green text-white';
@@ -56,7 +59,10 @@ export const PulseCard = ({ pulse }: { pulse: PulseProps }) => {
         {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex items-center gap-3">
-            <Avatar className="w-10 h-10">
+            <Avatar 
+              className="w-10 h-10 cursor-pointer hover:ring-2 hover:ring-primary/20 transition-all"
+              onClick={() => navigate(`/profile/${pulse.user.username}`)}
+            >
               <AvatarImage src={pulse.user.avatar} />
               <AvatarFallback className="bg-primary text-primary-foreground">
                 {pulse.user.name.split(' ').map(n => n[0]).join('')}
@@ -65,7 +71,12 @@ export const PulseCard = ({ pulse }: { pulse: PulseProps }) => {
             
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <h4 className="font-semibold text-foreground">{pulse.user.name}</h4>
+                <h4 
+                  className="font-semibold text-foreground cursor-pointer hover:text-primary transition-colors"
+                  onClick={() => navigate(`/profile/${pulse.user.username}`)}
+                >
+                  {pulse.user.name}
+                </h4>
                 {pulse.user.verified && (
                   <Badge variant="secondary" className="bg-cm-yellow text-cm-yellow-foreground px-2 py-0 text-xs">
                     ✓

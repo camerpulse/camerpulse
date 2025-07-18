@@ -5,6 +5,7 @@
  */
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Shield, Globe, Crown, Star } from 'lucide-react';
@@ -45,6 +46,7 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   className = '',
   onClick
 }) => {
+  const navigate = useNavigate();
   const civicUser = user as CivicUser;
   const isOfficial = civicUser.role && 
     (civicUser.role.toLowerCase().includes('ministre') || 
@@ -60,11 +62,19 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
       .slice(0, 2);
   };
 
+  const handleClick = () => {
+    if (onClick) {
+      onClick();
+    } else if (user.id) {
+      navigate(`/profile/${user.id}`);
+    }
+  };
+
   return (
     <div className={`relative inline-block ${className}`}>
       <Avatar 
         className={`${sizeClasses[size]} border-2 border-primary/20 hover:border-primary/40 transition-colors cursor-pointer`}
-        onClick={onClick}
+        onClick={handleClick}
       >
         <AvatarImage src={user.avatar} alt={user.name} />
         <AvatarFallback className={`bg-primary text-primary-foreground ${textSizeClasses[size]}`}>

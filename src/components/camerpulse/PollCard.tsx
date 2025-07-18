@@ -5,6 +5,7 @@
  */
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -27,6 +28,7 @@ export const PollCard: React.FC<PollCardProps> = ({
   onShare,
   className = ''
 }) => {
+  const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState<string | null>(poll.userVote || null);
   const [hasVoted, setHasVoted] = useState(poll.isVoted || false);
 
@@ -49,9 +51,18 @@ export const PollCard: React.FC<PollCardProps> = ({
       <CardHeader className="pb-4">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-center gap-3 flex-1">
-            <UserAvatar user={poll.creator} size="sm" />
+            <UserAvatar 
+              user={poll.creator} 
+              size="sm"
+              onClick={() => navigate(`/profile/${poll.creator.id}`)}
+            />
             <div>
-              <p className="text-sm font-medium text-foreground">{poll.creator.name}</p>
+              <p 
+                className="text-sm font-medium text-foreground cursor-pointer hover:text-primary transition-colors"
+                onClick={() => navigate(`/profile/${poll.creator.id}`)}
+              >
+                {poll.creator.name}
+              </p>
               <p className="text-xs text-muted-foreground">@{poll.creator.username}</p>
             </div>
           </div>
