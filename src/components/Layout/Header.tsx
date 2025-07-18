@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { LanguageToggle } from "@/components/ui/language-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,14 +19,12 @@ import {
   Menu, 
   Settings, 
   User,
-  Globe,
   X
 } from "lucide-react";
 
 export const Header = () => {
   const { user, signOut } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [language, setLanguage] = useState('EN');
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -37,10 +34,6 @@ export const Header = () => {
     } catch (error) {
       console.error('Error signing out:', error);
     }
-  };
-
-  const toggleLanguage = () => {
-    setLanguage(language === 'EN' ? 'FR' : 'EN');
   };
 
   const toggleMobileMenu = () => {
@@ -89,11 +82,6 @@ export const Header = () => {
 
           {/* Right side actions */}
           <div className="flex items-center space-x-2">
-            {/* Language Toggle */}
-            <div className="hidden sm:flex items-center gap-1">
-              <LanguageToggle disabled={true} />
-            </div>
-
             {/* Notifications */}
             <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 relative">
               <Bell className="w-4 h-4" />
@@ -189,11 +177,6 @@ export const Header = () => {
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/camerpulse-intelligence" onClick={() => setMobileMenuOpen(false)}>🧠 Intelligence</Link>
               </Button>
-            </div>
-
-            {/* Mobile Language Toggle */}
-            <div className="mt-4 pt-4 border-t border-white/20 flex justify-center">
-              <LanguageToggle disabled={true} />
             </div>
           </nav>
         )}
