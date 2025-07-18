@@ -1,0 +1,361 @@
+import React, { useState, useEffect } from 'react';
+import { Search, Plus, Filter, MapPin, Star, Users, Crown } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { supabase } from '@/integrations/supabase/client';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+
+interface Village {
+  id: string;
+  village_name: string;
+  region: string;
+  division: string;
+  subdivision: string;
+  overall_rating: number;
+  sons_daughters_count: number;
+  view_count: number;
+  is_verified: boolean;
+  total_ratings_count: number;
+  infrastructure_score: number;
+  education_score: number;
+  health_score: number;
+  diaspora_engagement_score: number;
+}
+
+const VillagesDirectory = () => {
+  const [villages, setVillages] = useState<Village[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState<string>('all');
+  const [selectedRating, setSelectedRating] = useState<string>('all');
+  const [loading, setLoading] = useState(true);
+  const [featuredVillages, setFeaturedVillages] = useState({
+    topRated: [],
+    mostDeveloped: [],
+    mostActive: []
+  });
+
+  const regions = [
+    'all', 'Adamawa', 'Centre', 'East', 'Far North',
+    'Littoral', 'North', 'Northwest', 'South', 'Southwest', 'West'
+  ];
+
+  useEffect(() => {
+    fetchVillages();
+    fetchFeaturedVillages();
+  }, []);
+
+  const fetchVillages = async () => {
+    try {
+      let query = supabase
+        .from('villages')
+        .select('*')
+        .order('overall_rating', { ascending: false });
+
+      if (selectedRegion !== 'all') {
+        query = query.eq('region', selectedRegion);
+      }
+
+      if (searchTerm) {
+        query = query.or(`village_name.ilike.%${searchTerm}%,division.ilike.%${searchTerm}%,subdivision.ilike.%${searchTerm}%`);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+      setVillages(data || []);
+    } catch (error) {
+      console.error('Error fetching villages:', error);
+      toast.error('Failed to load villages');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchFeaturedVillages = async () => {
+    try {
+      // Top rated villages
+      const { data: topRated } = await supabase
+        .from('villages')
+        .select('*')
+        .order('overall_rating', { ascending: false })
+        .limit(10);
+
+      // Most developed (highest infrastructure score)
+      const { data: mostDeveloped } = await supabase
+        .from('villages')
+        .select('*')
+        .order('infrastructure_score', { ascending: false })
+        .limit(10);
+
+      // Most active (highest sons/daughters count)
+      const { data: mostActive } = await supabase
+        .from('villages')
+        .select('*')
+        .order('sons_daughters_count', { ascending: false })
+        .limit(10);
+
+      setFeaturedVillages({
+        topRated: topRated || [],
+        mostDeveloped: mostDeveloped || [],
+        mostActive: mostActive || []
+      });
+    } catch (error) {
+      console.error('Error fetching featured villages:', error);
+    }
+  };
+
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      fetchVillages();
+    }, 300);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchTerm, selectedRegion, selectedRating]);
+
+  const renderStars = (rating: number) => {
+    const stars = [];
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    for (let i = 0; i < fullStars; i++) {
+      stars.push(<Star key={i} className="h-4 w-4 fill-primary text-primary" />);
+    }
+
+    if (hasHalfStar) {
+      stars.push(<Star key="half" className="h-4 w-4 fill-primary/50 text-primary" />);
+    }
+
+    const emptyStars = 5 - stars.length;
+    for (let i = 0; i < emptyStars; i++) {
+      stars.push(<Star key={`empty-${i}`} className="h-4 w-4 text-muted-foreground" />);
+    }
+
+    return stars;
+  };
+
+  const VillageCard = ({ village }: { village: Village }) => (
+    <Card className="hover:shadow-lg transition-all duration-200 group cursor-pointer">
+      <Link to={`/villages/${village.id}`} className="block">
+        <CardHeader className="pb-3">
+          <div className="flex items-start justify-between">
+            <div className="flex-1">
+              <CardTitle className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                {village.village_name}
+                {village.is_verified && (
+                  <Badge variant="secondary" className="ml-2 text-xs">
+                    <Crown className="h-3 w-3 mr-1" />
+                    Verified
+                  </Badge>
+                )}
+              </CardTitle>
+              <div className="flex items-center text-sm text-muted-foreground mt-1">
+                <MapPin className="h-4 w-4 mr-1" />
+                {village.subdivision}, {village.division}, {village.region}
+              </div>
+            </div>
+            <div className="flex flex-col items-end text-right">
+              <div className="flex items-center">
+                {renderStars(village.overall_rating)}
+                <span className="ml-1 text-sm font-medium">
+                  {village.overall_rating.toFixed(1)}
+                </span>
+              </div>
+              <span className="text-xs text-muted-foreground">
+                {village.total_ratings_count} ratings
+              </span>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4 text-center">
+            <div>
+              <div className="text-lg font-bold text-primary">{village.sons_daughters_count}</div>
+              <div className="text-xs text-muted-foreground">Sons & Daughters</div>
+            </div>
+            <div>
+              <div className="text-lg font-bold text-secondary">{village.view_count}</div>
+              <div className="text-xs text-muted-foreground">Profile Views</div>
+            </div>
+            <div>
+              <div className="text-lg font-bold text-accent">{village.infrastructure_score}/20</div>
+              <div className="text-xs text-muted-foreground">Infrastructure</div>
+            </div>
+          </div>
+
+          <div className="mt-4 flex flex-wrap gap-1">
+            <Badge variant="outline" className="text-xs">
+              Education: {village.education_score}/10
+            </Badge>
+            <Badge variant="outline" className="text-xs">
+              Health: {village.health_score}/10
+            </Badge>
+            <Badge variant="outline" className="text-xs">
+              Diaspora: {village.diaspora_engagement_score}/10
+            </Badge>
+          </div>
+        </CardContent>
+      </Link>
+    </Card>
+  );
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <div className="relative bg-gradient-civic py-16 text-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">Villages Directory</h1>
+            <p className="text-xl opacity-90 mb-8">
+              Discover, connect with, and celebrate villages across Cameroon
+            </p>
+            
+            {/* Search and Filters */}
+            <div className="max-w-4xl mx-auto">
+              <div className="flex flex-col md:flex-row gap-4 mb-6">
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search villages by name, region, or division..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 bg-white text-black"
+                  />
+                </div>
+                
+                <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                  <SelectTrigger className="w-full md:w-48 bg-white text-black">
+                    <SelectValue placeholder="Select Region" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {regions.map((region) => (
+                      <SelectItem key={region} value={region}>
+                        {region === 'all' ? 'All Regions' : region}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                <Select value={selectedRating} onValueChange={setSelectedRating}>
+                  <SelectTrigger className="w-full md:w-48 bg-white text-black">
+                    <SelectValue placeholder="Rating Filter" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Ratings</SelectItem>
+                    <SelectItem value="4+">4+ Stars</SelectItem>
+                    <SelectItem value="3+">3+ Stars</SelectItem>
+                    <SelectItem value="2+">2+ Stars</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Link to="/villages/add">
+                <Button size="lg" variant="secondary" className="text-primary hover:text-primary-foreground">
+                  <Plus className="h-5 w-5 mr-2" />
+                  Add My Village
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Featured Villages */}
+        <div className="mb-12">
+          <h2 className="text-2xl font-bold mb-6">Featured Villages</h2>
+          
+          <Tabs defaultValue="top-rated" className="w-full">
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="top-rated">Top Rated</TabsTrigger>
+              <TabsTrigger value="most-developed">Most Developed</TabsTrigger>
+              <TabsTrigger value="most-active">Most Active</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="top-rated">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {featuredVillages.topRated.slice(0, 6).map((village: Village) => (
+                  <VillageCard key={village.id} village={village} />
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="most-developed">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {featuredVillages.mostDeveloped.slice(0, 6).map((village: Village) => (
+                  <VillageCard key={village.id} village={village} />
+                ))}
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="most-active">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {featuredVillages.mostActive.slice(0, 6).map((village: Village) => (
+                  <VillageCard key={village.id} village={village} />
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        </div>
+
+        {/* All Villages */}
+        <div>
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold">All Villages</h2>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Users className="h-4 w-4" />
+              {villages.length} villages found
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardHeader>
+                    <div className="h-6 bg-muted rounded w-3/4"></div>
+                    <div className="h-4 bg-muted rounded w-1/2"></div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <div className="h-4 bg-muted rounded"></div>
+                      <div className="h-4 bg-muted rounded w-2/3"></div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : villages.length === 0 ? (
+            <Card className="text-center py-12">
+              <CardContent>
+                <MapPin className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-semibold mb-2">No villages found</h3>
+                <p className="text-muted-foreground mb-4">
+                  No villages match your search criteria. Try adjusting your filters.
+                </p>
+                <Link to="/villages/add">
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add the first village
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {villages.map((village) => (
+                <VillageCard key={village.id} village={village} />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default VillagesDirectory;

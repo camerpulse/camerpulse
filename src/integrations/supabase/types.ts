@@ -19024,6 +19024,796 @@ export type Database = {
           },
         ]
       }
+      village_billionaires: {
+        Row: {
+          billionaire_name: string
+          business_profile_link: string | null
+          country_residence: string | null
+          created_at: string
+          created_by: string | null
+          estimated_net_worth_fcfa: number | null
+          estimated_net_worth_usd: number | null
+          id: string
+          is_verified: boolean | null
+          known_donations: string | null
+          main_sector: string | null
+          photo_url: string | null
+          social_media_links: Json | null
+          updated_at: string
+          village_contributions: string | null
+          village_id: string
+        }
+        Insert: {
+          billionaire_name: string
+          business_profile_link?: string | null
+          country_residence?: string | null
+          created_at?: string
+          created_by?: string | null
+          estimated_net_worth_fcfa?: number | null
+          estimated_net_worth_usd?: number | null
+          id?: string
+          is_verified?: boolean | null
+          known_donations?: string | null
+          main_sector?: string | null
+          photo_url?: string | null
+          social_media_links?: Json | null
+          updated_at?: string
+          village_contributions?: string | null
+          village_id: string
+        }
+        Update: {
+          billionaire_name?: string
+          business_profile_link?: string | null
+          country_residence?: string | null
+          created_at?: string
+          created_by?: string | null
+          estimated_net_worth_fcfa?: number | null
+          estimated_net_worth_usd?: number | null
+          id?: string
+          is_verified?: boolean | null
+          known_donations?: string | null
+          main_sector?: string | null
+          photo_url?: string | null
+          social_media_links?: Json | null
+          updated_at?: string
+          village_contributions?: string | null
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_billionaires_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_celebrities: {
+        Row: {
+          awards: string[] | null
+          celebrity_name: string
+          created_at: string
+          created_by: string | null
+          highlights: string | null
+          id: string
+          is_verified: boolean | null
+          photo_url: string | null
+          profession: string | null
+          social_media_links: Json | null
+          updated_at: string
+          village_id: string
+          village_support_activities: string | null
+        }
+        Insert: {
+          awards?: string[] | null
+          celebrity_name: string
+          created_at?: string
+          created_by?: string | null
+          highlights?: string | null
+          id?: string
+          is_verified?: boolean | null
+          photo_url?: string | null
+          profession?: string | null
+          social_media_links?: Json | null
+          updated_at?: string
+          village_id: string
+          village_support_activities?: string | null
+        }
+        Update: {
+          awards?: string[] | null
+          celebrity_name?: string
+          created_at?: string
+          created_by?: string | null
+          highlights?: string | null
+          id?: string
+          is_verified?: boolean | null
+          photo_url?: string | null
+          profession?: string | null
+          social_media_links?: Json | null
+          updated_at?: string
+          village_id?: string
+          village_support_activities?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_celebrities_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_conflicts: {
+        Row: {
+          conflict_name: string
+          conflict_type: string
+          created_at: string
+          created_by: string
+          current_status: string | null
+          description: string
+          evidence_documents: string[] | null
+          id: string
+          is_moderated: boolean | null
+          moderation_notes: string | null
+          resolution_details: string | null
+          stakeholders: string[] | null
+          timeline_end: string | null
+          timeline_start: string | null
+          updated_at: string
+          village_id: string
+        }
+        Insert: {
+          conflict_name: string
+          conflict_type: string
+          created_at?: string
+          created_by: string
+          current_status?: string | null
+          description: string
+          evidence_documents?: string[] | null
+          id?: string
+          is_moderated?: boolean | null
+          moderation_notes?: string | null
+          resolution_details?: string | null
+          stakeholders?: string[] | null
+          timeline_end?: string | null
+          timeline_start?: string | null
+          updated_at?: string
+          village_id: string
+        }
+        Update: {
+          conflict_name?: string
+          conflict_type?: string
+          created_at?: string
+          created_by?: string
+          current_status?: string | null
+          description?: string
+          evidence_documents?: string[] | null
+          id?: string
+          is_moderated?: boolean | null
+          moderation_notes?: string | null
+          resolution_details?: string | null
+          stakeholders?: string[] | null
+          timeline_end?: string | null
+          timeline_start?: string | null
+          updated_at?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_conflicts_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_contributions: {
+        Row: {
+          contribution_date: string | null
+          contribution_description: string | null
+          contribution_type: string | null
+          contribution_value: number | null
+          contributor_name: string
+          contributor_type: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          is_verified: boolean | null
+          project_sponsored: string | null
+          recognition_level: string | null
+          updated_at: string
+          village_id: string
+        }
+        Insert: {
+          contribution_date?: string | null
+          contribution_description?: string | null
+          contribution_type?: string | null
+          contribution_value?: number | null
+          contributor_name: string
+          contributor_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_verified?: boolean | null
+          project_sponsored?: string | null
+          recognition_level?: string | null
+          updated_at?: string
+          village_id: string
+        }
+        Update: {
+          contribution_date?: string | null
+          contribution_description?: string | null
+          contribution_type?: string | null
+          contribution_value?: number | null
+          contributor_name?: string
+          contributor_type?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_verified?: boolean | null
+          project_sponsored?: string | null
+          recognition_level?: string | null
+          updated_at?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_contributions_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_development_associations: {
+        Row: {
+          achievements: string | null
+          activities: string | null
+          association_name: string
+          bank_details: Json | null
+          chairperson_name: string | null
+          contact_info: Json | null
+          created_at: string
+          created_by: string | null
+          diaspora_wings: string[] | null
+          id: string
+          momo_details: Json | null
+          registration_status: string | null
+          secretary_name: string | null
+          treasurer_name: string | null
+          updated_at: string
+          village_id: string
+          website_url: string | null
+        }
+        Insert: {
+          achievements?: string | null
+          activities?: string | null
+          association_name: string
+          bank_details?: Json | null
+          chairperson_name?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          created_by?: string | null
+          diaspora_wings?: string[] | null
+          id?: string
+          momo_details?: Json | null
+          registration_status?: string | null
+          secretary_name?: string | null
+          treasurer_name?: string | null
+          updated_at?: string
+          village_id: string
+          website_url?: string | null
+        }
+        Update: {
+          achievements?: string | null
+          activities?: string | null
+          association_name?: string
+          bank_details?: Json | null
+          chairperson_name?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          created_by?: string | null
+          diaspora_wings?: string[] | null
+          id?: string
+          momo_details?: Json | null
+          registration_status?: string | null
+          secretary_name?: string | null
+          treasurer_name?: string | null
+          updated_at?: string
+          village_id?: string
+          website_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_development_associations_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_leaders: {
+        Row: {
+          accessibility_rating: number | null
+          achievements: string[] | null
+          bio: string | null
+          created_at: string
+          development_rating: number | null
+          end_year: number | null
+          id: string
+          integrity_rating: number | null
+          is_current: boolean | null
+          leader_name: string
+          leader_type: string
+          photo_url: string | null
+          start_year: number | null
+          total_ratings: number | null
+          updated_at: string
+          village_id: string
+          years_in_power: number | null
+        }
+        Insert: {
+          accessibility_rating?: number | null
+          achievements?: string[] | null
+          bio?: string | null
+          created_at?: string
+          development_rating?: number | null
+          end_year?: number | null
+          id?: string
+          integrity_rating?: number | null
+          is_current?: boolean | null
+          leader_name: string
+          leader_type: string
+          photo_url?: string | null
+          start_year?: number | null
+          total_ratings?: number | null
+          updated_at?: string
+          village_id: string
+          years_in_power?: number | null
+        }
+        Update: {
+          accessibility_rating?: number | null
+          achievements?: string[] | null
+          bio?: string | null
+          created_at?: string
+          development_rating?: number | null
+          end_year?: number | null
+          id?: string
+          integrity_rating?: number | null
+          is_current?: boolean | null
+          leader_name?: string
+          leader_type?: string
+          photo_url?: string | null
+          start_year?: number | null
+          total_ratings?: number | null
+          updated_at?: string
+          village_id?: string
+          years_in_power?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_leaders_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_memberships: {
+        Row: {
+          created_at: string
+          id: string
+          is_verified: boolean | null
+          membership_type: string | null
+          user_id: string
+          verification_method: string | null
+          village_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_verified?: boolean | null
+          membership_type?: string | null
+          user_id: string
+          verification_method?: string | null
+          village_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_verified?: boolean | null
+          membership_type?: string | null
+          user_id?: string
+          verification_method?: string | null
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_memberships_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_petitions: {
+        Row: {
+          created_at: string
+          created_by: string
+          documents_urls: string[] | null
+          end_date: string | null
+          id: string
+          is_moderated: boolean | null
+          moderation_notes: string | null
+          petition_body: string
+          petition_status: string
+          petition_title: string
+          resolution_details: string | null
+          signatures_count: number | null
+          start_date: string
+          target_audience: string
+          updated_at: string
+          village_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          documents_urls?: string[] | null
+          end_date?: string | null
+          id?: string
+          is_moderated?: boolean | null
+          moderation_notes?: string | null
+          petition_body: string
+          petition_status?: string
+          petition_title: string
+          resolution_details?: string | null
+          signatures_count?: number | null
+          start_date?: string
+          target_audience: string
+          updated_at?: string
+          village_id: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          documents_urls?: string[] | null
+          end_date?: string | null
+          id?: string
+          is_moderated?: boolean | null
+          moderation_notes?: string | null
+          petition_body?: string
+          petition_status?: string
+          petition_title?: string
+          resolution_details?: string | null
+          signatures_count?: number | null
+          start_date?: string
+          target_audience?: string
+          updated_at?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_petitions_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_photos: {
+        Row: {
+          caption: string | null
+          created_at: string
+          created_by: string | null
+          date_taken: string | null
+          id: string
+          is_verified: boolean | null
+          photo_type: string | null
+          photo_url: string
+          photographer_name: string | null
+          village_id: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_taken?: string | null
+          id?: string
+          is_verified?: boolean | null
+          photo_type?: string | null
+          photo_url: string
+          photographer_name?: string | null
+          village_id: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_taken?: string | null
+          id?: string
+          is_verified?: boolean | null
+          photo_type?: string | null
+          photo_url?: string
+          photographer_name?: string | null
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_photos_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_projects: {
+        Row: {
+          community_feedback: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          funding_amount: number | null
+          funding_source: string | null
+          id: string
+          photos: string[] | null
+          project_name: string
+          project_status: string
+          project_type: string
+          reports_urls: string[] | null
+          updated_at: string
+          village_id: string
+          year_completed: number | null
+          year_started: number | null
+        }
+        Insert: {
+          community_feedback?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          funding_amount?: number | null
+          funding_source?: string | null
+          id?: string
+          photos?: string[] | null
+          project_name: string
+          project_status: string
+          project_type: string
+          reports_urls?: string[] | null
+          updated_at?: string
+          village_id: string
+          year_completed?: number | null
+          year_started?: number | null
+        }
+        Update: {
+          community_feedback?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          funding_amount?: number | null
+          funding_source?: string | null
+          id?: string
+          photos?: string[] | null
+          project_name?: string
+          project_status?: string
+          project_type?: string
+          reports_urls?: string[] | null
+          updated_at?: string
+          village_id?: string
+          year_completed?: number | null
+          year_started?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_projects_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_ratings: {
+        Row: {
+          achievements_score: number | null
+          civic_participation_score: number | null
+          comment: string | null
+          created_at: string
+          diaspora_engagement_score: number | null
+          economic_activity_score: number | null
+          education_score: number | null
+          governance_score: number | null
+          health_score: number | null
+          id: string
+          infrastructure_score: number | null
+          overall_rating: number | null
+          peace_security_score: number | null
+          social_spirit_score: number | null
+          updated_at: string
+          user_id: string
+          village_id: string
+        }
+        Insert: {
+          achievements_score?: number | null
+          civic_participation_score?: number | null
+          comment?: string | null
+          created_at?: string
+          diaspora_engagement_score?: number | null
+          economic_activity_score?: number | null
+          education_score?: number | null
+          governance_score?: number | null
+          health_score?: number | null
+          id?: string
+          infrastructure_score?: number | null
+          overall_rating?: number | null
+          peace_security_score?: number | null
+          social_spirit_score?: number | null
+          updated_at?: string
+          user_id: string
+          village_id: string
+        }
+        Update: {
+          achievements_score?: number | null
+          civic_participation_score?: number | null
+          comment?: string | null
+          created_at?: string
+          diaspora_engagement_score?: number | null
+          economic_activity_score?: number | null
+          education_score?: number | null
+          governance_score?: number | null
+          health_score?: number | null
+          id?: string
+          infrastructure_score?: number | null
+          overall_rating?: number | null
+          peace_security_score?: number | null
+          social_spirit_score?: number | null
+          updated_at?: string
+          user_id?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_ratings_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      villages: {
+        Row: {
+          achievements_score: number | null
+          civic_participation_score: number | null
+          community_chat_link: string | null
+          created_at: string
+          created_by: string | null
+          diaspora_engagement_score: number | null
+          division: string
+          economic_activity_score: number | null
+          education_score: number | null
+          ethnic_groups: string[] | null
+          facebook_link: string | null
+          founding_story: string | null
+          governance_score: number | null
+          gps_latitude: number | null
+          gps_longitude: number | null
+          health_score: number | null
+          id: string
+          infrastructure_score: number | null
+          is_verified: boolean | null
+          migration_legend: string | null
+          notable_events: string | null
+          oral_traditions: string | null
+          overall_rating: number | null
+          peace_security_score: number | null
+          population_estimate: number | null
+          region: string
+          social_spirit_score: number | null
+          sons_daughters_count: number | null
+          subdivision: string
+          total_ratings_count: number | null
+          totem_symbol: string | null
+          traditional_languages: string[] | null
+          updated_at: string
+          verification_notes: string | null
+          view_count: number | null
+          village_motto: string | null
+          village_name: string
+          whatsapp_link: string | null
+          year_founded: number | null
+        }
+        Insert: {
+          achievements_score?: number | null
+          civic_participation_score?: number | null
+          community_chat_link?: string | null
+          created_at?: string
+          created_by?: string | null
+          diaspora_engagement_score?: number | null
+          division: string
+          economic_activity_score?: number | null
+          education_score?: number | null
+          ethnic_groups?: string[] | null
+          facebook_link?: string | null
+          founding_story?: string | null
+          governance_score?: number | null
+          gps_latitude?: number | null
+          gps_longitude?: number | null
+          health_score?: number | null
+          id?: string
+          infrastructure_score?: number | null
+          is_verified?: boolean | null
+          migration_legend?: string | null
+          notable_events?: string | null
+          oral_traditions?: string | null
+          overall_rating?: number | null
+          peace_security_score?: number | null
+          population_estimate?: number | null
+          region: string
+          social_spirit_score?: number | null
+          sons_daughters_count?: number | null
+          subdivision: string
+          total_ratings_count?: number | null
+          totem_symbol?: string | null
+          traditional_languages?: string[] | null
+          updated_at?: string
+          verification_notes?: string | null
+          view_count?: number | null
+          village_motto?: string | null
+          village_name: string
+          whatsapp_link?: string | null
+          year_founded?: number | null
+        }
+        Update: {
+          achievements_score?: number | null
+          civic_participation_score?: number | null
+          community_chat_link?: string | null
+          created_at?: string
+          created_by?: string | null
+          diaspora_engagement_score?: number | null
+          division?: string
+          economic_activity_score?: number | null
+          education_score?: number | null
+          ethnic_groups?: string[] | null
+          facebook_link?: string | null
+          founding_story?: string | null
+          governance_score?: number | null
+          gps_latitude?: number | null
+          gps_longitude?: number | null
+          health_score?: number | null
+          id?: string
+          infrastructure_score?: number | null
+          is_verified?: boolean | null
+          migration_legend?: string | null
+          notable_events?: string | null
+          oral_traditions?: string | null
+          overall_rating?: number | null
+          peace_security_score?: number | null
+          population_estimate?: number | null
+          region?: string
+          social_spirit_score?: number | null
+          sons_daughters_count?: number | null
+          subdivision?: string
+          total_ratings_count?: number | null
+          totem_symbol?: string | null
+          traditional_languages?: string[] | null
+          updated_at?: string
+          verification_notes?: string | null
+          view_count?: number | null
+          village_motto?: string | null
+          village_name?: string
+          whatsapp_link?: string | null
+          year_founded?: number | null
+        }
+        Relationships: []
+      }
       voter_suppression_reports: {
         Row: {
           coordinates: Json | null
