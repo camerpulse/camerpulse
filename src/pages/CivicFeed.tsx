@@ -141,12 +141,16 @@ const CivicFeed = () => {
   const autoRefreshRef = useRef<NodeJS.Timeout>();
   const lastPostIdRef = useRef<string>('');
 
-  // Real-time auto refresh (15 seconds)
+  // Real-time auto refresh with content rotation
   useEffect(() => {
     if (isLiveMode) {
       autoRefreshRef.current = setInterval(() => {
         checkForNewPosts();
-      }, 15000);
+        // Also refresh sidebar data for dynamic content
+        if (Math.random() > 0.6) {
+          loadSidebarData();
+        }
+      }, 10000); // More frequent updates for dynamic feel
     } else {
       if (autoRefreshRef.current) {
         clearInterval(autoRefreshRef.current);
@@ -159,6 +163,15 @@ const CivicFeed = () => {
       }
     };
   }, [isLiveMode]);
+
+  // Background content rotation even when not in live mode
+  useEffect(() => {
+    const rotationInterval = setInterval(() => {
+      loadSidebarData(); // Rotate trending and follow suggestions
+    }, 30000); // Every 30 seconds
+
+    return () => clearInterval(rotationInterval);
+  }, []);
 
   // Initial load
   useEffect(() => {
@@ -180,42 +193,88 @@ const CivicFeed = () => {
         setPage(1);
       }
 
-      // Generate mock data for demonstration
-      const mockPosts: FeedPost[] = Array.from({ length: 20 }, (_, i) => ({
-        id: `post-${reset ? '' : page}-${i}`,
-        content: `Civic post content about Cameroon development ${i + 1}. This is a sample post to demonstrate the feed structure. #CameroonDevelopment #Douala`,
-        type: ['text', 'poll', 'media', 'event', 'debate'][Math.floor(Math.random() * 5)] as any,
-        author: {
-          id: `user-${i}`,
-          name: ['Paul Biya', 'Joshua Osih', 'Cabral Libii', 'Maurice Kamto', 'Local Citizen'][Math.floor(Math.random() * 5)],
-          username: `user${i}`,
-          avatar: '/placeholder.svg',
-          verified: Math.random() > 0.7,
-          type: ['user', 'politician', 'company', 'institution'][Math.floor(Math.random() * 4)] as any,
-          title: Math.random() > 0.5 ? 'Minister of Health' : undefined,
-          followers: Math.floor(Math.random() * 100000) + 1000
-        },
-        metrics: {
-          likes: Math.floor(Math.random() * 1000),
-          comments: Math.floor(Math.random() * 100),
-          shares: Math.floor(Math.random() * 50),
-          views: Math.floor(Math.random() * 5000) + 500
-        },
-        engagement: {
-          user_liked: Math.random() > 0.8,
-          user_shared: false,
-          user_saved: Math.random() > 0.9
-        },
-        location: {
-          region: ['Centre', 'Littoral', 'Ouest', 'Nord-Ouest', 'Sud-Ouest'][Math.floor(Math.random() * 5)],
-          city: ['Yaoundé', 'Douala', 'Bafoussam', 'Bamenda', 'Buea'][Math.floor(Math.random() * 5)]
-        },
-        hashtags: ['#CameroonDevelopment', '#Douala', '#Infrastructure'].slice(0, Math.floor(Math.random() * 3) + 1),
-        mentions: ['@PaulBiya', '@MauricKamto'].slice(0, Math.floor(Math.random() * 2)),
-        created_at: new Date(Date.now() - Math.random() * 86400000 * 7).toISOString(),
-        priority: ['normal', 'trending', 'urgent', 'promoted'][Math.floor(Math.random() * 4)] as any,
-        sentiment: ['positive', 'negative', 'neutral'][Math.floor(Math.random() * 3)] as any
-      }));
+      // Enhanced mock data with rotating content
+      const contentTemplates = [
+        "New infrastructure project launched in {city}! 🚧 This will improve connectivity and boost economic growth. What are your thoughts? #Infrastructure #Development",
+        "Education sector reforms announced by Minister of Education. Key changes include improved teacher training and digital classrooms. #Education #Reform",
+        "Healthcare improvements in {region} region showing positive results. Hospital capacity increased by 30% this quarter. #Health #Progress",
+        "📊 POLL: What should be the government's top priority for 2024? A) Infrastructure B) Education C) Healthcare D) Economy #CameroonPoll",
+        "Breaking: New university campus opens in {city}, providing 5000+ new student places. A milestone for higher education! 🎓 #University #Education",
+        "Community development project in {region} receives international funding. Focus on clean water and renewable energy. 🌱 #Community #Sustainability",
+        "Minister of Health visits {city} hospital, announces new medical equipment procurement. Healthcare modernization continues. 🏥 #Healthcare",
+        "Road construction project connecting {city} to neighboring regions 85% complete. Expected completion: March 2024. 🛣️ #Infrastructure",
+        "Youth empowerment program launches in {region}. 1000+ young people to receive vocational training and startup funding. 💪 #Youth #Empowerment",
+        "Digital transformation initiative: Government services going online to improve citizen access and reduce bureaucracy. 💻 #DigitalGov"
+      ];
+
+      const authors = [
+        { name: 'Paul Biya', username: 'paulbiya_cm', type: 'politician', title: 'President of Cameroon', verified: true, followers: 890000 },
+        { name: 'Maurice Kamto', username: 'mauricekamto', type: 'politician', title: 'Opposition Leader', verified: true, followers: 456000 },
+        { name: 'Minister of Health', username: 'min_sante', type: 'politician', title: 'Dr. Manaouda Malachie', verified: true, followers: 67000 },
+        { name: 'MTN Cameroon', username: 'mtn_cameroon', type: 'company', title: 'Telecommunications', verified: true, followers: 234000 },
+        { name: 'University of Yaoundé', username: 'univ_yaounde', type: 'institution', title: 'Public University', verified: true, followers: 78000 },
+        { name: 'Charlotte Dipanda', username: 'charlotte_dipanda', type: 'user', title: 'Musician', verified: true, followers: 456000 },
+        { name: 'Douala General Hospital', username: 'hgd_douala', type: 'institution', title: 'Public Hospital', verified: true, followers: 34000 },
+        { name: 'CPDM Party', username: 'cpdm_cm', type: 'politician', title: 'Ruling Party', verified: true, followers: 345000 },
+        { name: 'Orange Cameroon', username: 'orange_cm', type: 'company', title: 'Telecommunications', verified: true, followers: 198000 },
+        { name: 'Local Journalist', username: 'journalist_cm', type: 'user', title: 'Independent Media', verified: false, followers: 12000 }
+      ];
+
+      const locations = [
+        { region: 'Centre', city: 'Yaoundé' },
+        { region: 'Littoral', city: 'Douala' },
+        { region: 'Ouest', city: 'Bafoussam' },
+        { region: 'Nord-Ouest', city: 'Bamenda' },
+        { region: 'Sud-Ouest', city: 'Buea' },
+        { region: 'Nord', city: 'Garoua' },
+        { region: 'Adamaoua', city: 'Ngaoundéré' },
+        { region: 'Est', city: 'Bertoua' },
+        { region: 'Sud', city: 'Ebolowa' },
+        { region: 'Extrême-Nord', city: 'Maroua' }
+      ];
+
+      const postTypes = ['text', 'poll', 'media', 'event', 'debate'] as const;
+
+      const mockPosts: FeedPost[] = Array.from({ length: 20 }, (_, i) => {
+        const author = authors[Math.floor(Math.random() * authors.length)];
+        const location = locations[Math.floor(Math.random() * locations.length)];
+        const content = contentTemplates[Math.floor(Math.random() * contentTemplates.length)]
+          .replace(/\{city\}/g, location.city)
+          .replace(/\{region\}/g, location.region);
+        
+        return {
+          id: `post-${reset ? '' : page}-${i}`,
+          content,
+          type: postTypes[Math.floor(Math.random() * postTypes.length)],
+          author: {
+            id: `${author.username}-${i}`,
+            name: author.name,
+            username: author.username,
+            avatar: '/placeholder.svg',
+            verified: author.verified,
+            type: author.type as any,
+            title: author.title,
+            followers: author.followers + Math.floor(Math.random() * 1000)
+          },
+          metrics: {
+            likes: Math.floor(Math.random() * 2000) + 50,
+            comments: Math.floor(Math.random() * 200) + 5,
+            shares: Math.floor(Math.random() * 100) + 2,
+            views: Math.floor(Math.random() * 10000) + 500
+          },
+          engagement: {
+            user_liked: Math.random() > 0.8,
+            user_shared: false,
+            user_saved: Math.random() > 0.9
+          },
+          location,
+          hashtags: content.match(/#[a-zA-Z0-9_]+/g)?.map(tag => tag.slice(1)) || [],
+          mentions: content.match(/@[a-zA-Z0-9_]+/g)?.map(mention => mention.slice(1)) || [],
+          created_at: new Date(Date.now() - Math.random() * 86400000 * 7).toISOString(),
+          priority: ['normal', 'normal', 'normal', 'trending', 'urgent', 'promoted'][Math.floor(Math.random() * 6)] as any,
+          sentiment: ['positive', 'negative', 'neutral'][Math.floor(Math.random() * 3)] as any
+        };
+      });
 
       if (reset) {
         setPosts(mockPosts);
@@ -244,40 +303,62 @@ const CivicFeed = () => {
   };
 
   const loadSidebarData = async () => {
-    // Mock trending data
-    setTrending([
+    // Mock trending data with rotation
+    const trendingOptions = [
       { id: '1', title: 'Infrastructure Development', type: 'topic', count: 1247, change: 15 },
       { id: '2', title: 'Education Reform', type: 'topic', count: 983, change: 8 },
       { id: '3', title: 'Health System', type: 'topic', count: 756, change: -3 },
       { id: '4', title: 'Paul Biya', type: 'politician', count: 2156, change: 25 },
-      { id: '5', title: 'Maurice Kamto', type: 'politician', count: 1834, change: 12 }
-    ]);
+      { id: '5', title: 'Maurice Kamto', type: 'politician', count: 1834, change: 12 },
+      { id: '6', title: 'Anglophone Crisis', type: 'topic', count: 1456, change: 18 },
+      { id: '7', title: 'Road Infrastructure', type: 'topic', count: 892, change: 7 },
+      { id: '8', title: 'Teacher Strikes', type: 'topic', count: 634, change: -12 }
+    ];
+    
+    // Randomly shuffle and take 5
+    const shuffled = trendingOptions.sort(() => 0.5 - Math.random()).slice(0, 5);
+    setTrending(shuffled as TrendingItem[]);
 
-    // Mock follow suggestions
-    setFollowSuggestions([
-      {
-        id: '1',
-        name: 'Ministry of Health',
-        username: 'minsante_cm',
-        avatar: '/placeholder.svg',
-        type: 'institution',
-        title: 'Government Institution',
-        followers: 45000,
-        verified: true,
-        mutual_followers: 12
-      },
-      {
-        id: '2',
-        name: 'University of Yaoundé',
-        username: 'univ_yaounde',
-        avatar: '/placeholder.svg',
-        type: 'institution',
-        title: 'Educational Institution',
-        followers: 23000,
-        verified: true,
-        mutual_followers: 8
-      }
-    ]);
+    // Enhanced follow suggestions with more entities
+    const followOptions = [
+      // Politicians
+      { id: '1', name: 'Paul Biya', username: 'paulbiya_cm', avatar: '/placeholder.svg', type: 'politician', title: 'President of Cameroon', followers: 890000, verified: true, mutual_followers: 45 },
+      { id: '2', name: 'Maurice Kamto', username: 'mauricekamto', avatar: '/placeholder.svg', type: 'politician', title: 'Opposition Leader', followers: 456000, verified: true, mutual_followers: 23 },
+      { id: '3', name: 'Joshua Osih', username: 'joshuaosih', avatar: '/placeholder.svg', type: 'politician', title: 'SDF Party Leader', followers: 234000, verified: true, mutual_followers: 18 },
+      
+      // Ministers
+      { id: '4', name: 'Minister of Health', username: 'min_sante', avatar: '/placeholder.svg', type: 'politician', title: 'Dr. Manaouda Malachie', followers: 67000, verified: true, mutual_followers: 12 },
+      { id: '5', name: 'Minister of Education', username: 'min_education', avatar: '/placeholder.svg', type: 'politician', title: 'Prof. Laurent Serge Etoundi Ngoa', followers: 54000, verified: true, mutual_followers: 8 },
+      
+      // Institutions
+      { id: '6', name: 'Ministry of Health', username: 'minsante_cm', avatar: '/placeholder.svg', type: 'institution', title: 'Government Institution', followers: 145000, verified: true, mutual_followers: 32 },
+      { id: '7', name: 'University of Yaoundé I', username: 'univ_yaounde1', avatar: '/placeholder.svg', type: 'institution', title: 'Public University', followers: 78000, verified: true, mutual_followers: 19 },
+      { id: '8', name: 'University of Buea', username: 'univ_buea', avatar: '/placeholder.svg', type: 'institution', title: 'Public University', followers: 56000, verified: true, mutual_followers: 14 },
+      { id: '9', name: 'Douala General Hospital', username: 'hgd_douala', avatar: '/placeholder.svg', type: 'institution', title: 'Public Hospital', followers: 34000, verified: true, mutual_followers: 9 },
+      
+      // Companies
+      { id: '10', name: 'MTN Cameroon', username: 'mtn_cameroon', avatar: '/placeholder.svg', type: 'company', title: 'Telecommunications', followers: 234000, verified: true, mutual_followers: 67 },
+      { id: '11', name: 'Orange Cameroon', username: 'orange_cm', avatar: '/placeholder.svg', type: 'company', title: 'Telecommunications', followers: 198000, verified: true, mutual_followers: 54 },
+      { id: '12', name: 'ENEO Cameroon', username: 'eneo_cm', avatar: '/placeholder.svg', type: 'company', title: 'Electricity Provider', followers: 87000, verified: true, mutual_followers: 23 },
+      { id: '13', name: 'CAMTEL', username: 'camtel_cm', avatar: '/placeholder.svg', type: 'company', title: 'State Telecom', followers: 45000, verified: true, mutual_followers: 15 },
+      
+      // Artists
+      { id: '14', name: 'Charlotte Dipanda', username: 'charlotte_dipanda', avatar: '/placeholder.svg', type: 'user', title: 'Musician', followers: 456000, verified: true, mutual_followers: 89 },
+      { id: '15', name: 'Tenor', username: 'tenor_cm', avatar: '/placeholder.svg', type: 'user', title: 'Musician', followers: 678000, verified: true, mutual_followers: 123 },
+      { id: '16', name: 'Daphne', username: 'daphne_njie', avatar: '/placeholder.svg', type: 'user', title: 'Musician', followers: 567000, verified: true, mutual_followers: 98 },
+      
+      // Schools
+      { id: '17', name: 'Lycée Général Leclerc', username: 'lgl_yaounde', avatar: '/placeholder.svg', type: 'institution', title: 'Secondary School', followers: 23000, verified: true, mutual_followers: 7 },
+      { id: '18', name: 'Collège de la Retraite', username: 'college_retraite', avatar: '/placeholder.svg', type: 'institution', title: 'Secondary School', followers: 18000, verified: true, mutual_followers: 5 },
+      
+      // Political Parties
+      { id: '19', name: 'CPDM Party', username: 'cpdm_cm', avatar: '/placeholder.svg', type: 'politician', title: 'Ruling Party', followers: 345000, verified: true, mutual_followers: 78 },
+      { id: '20', name: 'SDF Party', username: 'sdf_cm', avatar: '/placeholder.svg', type: 'politician', title: 'Opposition Party', followers: 234000, verified: true, mutual_followers: 56 }
+    ];
+
+    // Randomly shuffle and take 6
+    const shuffledFollows = followOptions.sort(() => 0.5 - Math.random()).slice(0, 6);
+    setFollowSuggestions(shuffledFollows as FollowSuggestion[]);
   };
 
   const checkForNewPosts = async () => {
@@ -452,11 +533,11 @@ const CivicFeed = () => {
           </div>
         )}
 
-        <div className="container mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="px-2 sm:px-4 py-3 sm:py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-6">
             
-            {/* Left Sidebar - Trending */}
-            <div className="lg:col-span-3 space-y-6">
+            {/* Left Sidebar - Trending (Hidden on mobile, shown in drawer) */}
+            <div className="hidden lg:block lg:col-span-3 space-y-4 sm:space-y-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm flex items-center gap-2">
@@ -510,7 +591,8 @@ const CivicFeed = () => {
             </div>
 
             {/* Main Feed */}
-            <div className="lg:col-span-6 space-y-6">
+            <div className="lg:col-span-6 w-full">
+              <div className="space-y-3 sm:space-y-6">
               {/* Create Post */}
               <Card>
                 <CardContent className="pt-6">
@@ -756,10 +838,11 @@ const CivicFeed = () => {
                   </div>
                 )}
               </div>
+              </div>
             </div>
 
-            {/* Right Sidebar - Follow Suggestions */}
-            <div className="lg:col-span-3 space-y-6">
+            {/* Right Sidebar - Follow Suggestions (Hidden on mobile, shown as bottom sheet) */}
+            <div className="hidden lg:block lg:col-span-3 space-y-4 sm:space-y-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-sm flex items-center gap-2">
