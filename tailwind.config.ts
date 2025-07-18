@@ -21,8 +21,8 @@ export default {
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
 				inter: ['Inter', 'system-ui', 'sans-serif'],
-				serif: ['Playfair Display', 'Georgia', 'serif'],
-				playfair: ['Playfair Display', 'Georgia', 'serif']
+				serif: ['Inter', 'system-ui', 'sans-serif'], // Unified to Inter for consistency
+				playfair: ['Inter', 'system-ui', 'sans-serif'] // Unified to Inter for consistency
 			},
 			screens: {
 				'xs': '375px',

@@ -201,18 +201,19 @@ const CivicFeed = () => {
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <h1 className="text-xl font-bold text-foreground">Civic Feed</h1>
-                <Badge variant="secondary" className="bg-primary/10 text-primary">
+                <h1 className="responsive-title font-bold text-foreground">Civic Feed</h1>
+                <Badge variant="secondary" className="bg-primary/10 text-primary hidden sm:flex">
                   <TrendingUp className="w-3 h-3 mr-1" />
                   Live
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="hidden sm:inline-flex">
                   <Search className="w-4 h-4" />
                 </Button>
                 <Button variant="ghost" size="sm">
                   <RefreshCw className="w-4 h-4" />
+                  <span className="sr-only">Refresh feed</span>
                 </Button>
               </div>
             </div>
@@ -220,8 +221,8 @@ const CivicFeed = () => {
         </div>
 
         {/* Main Content */}
-        <div className="container mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="container mx-auto px-4 py-4 lg:py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 lg:gap-6">
             
             {/* Left Sidebar - Hidden on mobile */}
             <div className="hidden lg:block">
@@ -243,7 +244,7 @@ const CivicFeed = () => {
             </div>
 
             {/* Main Feed */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-4 lg:space-y-6">
               {/* Create Post */}
               <Card className="bg-card border-border">
                 <CardContent className="p-4">

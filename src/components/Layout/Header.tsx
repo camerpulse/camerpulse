@@ -49,8 +49,8 @@ export const Header = () => {
 
   return (
     <header className="bg-gradient-civic border-b border-border/50 backdrop-blur-sm sticky top-0 z-50 shadow-elegant pt-safe-top">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="container mx-auto px-4 py-2 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between min-h-[64px]">
           {/* Logo & Branding */}
           <Link to="/" className="flex items-center space-x-3">
             <div className="relative">
@@ -60,42 +60,30 @@ export const Header = () => {
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-cm-yellow rounded-full border-2 border-white"></div>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-white font-poppins">CamerPulse</h1>
+              <h1 className="text-xl font-bold text-white font-inter">CamerPulse</h1>
               <p className="text-white/80 text-xs">Civic SuperApp</p>
             </div>
           </Link>
 
-          {/* Desktop Navigation - Hidden on mobile */}
+          {/* Desktop Navigation - Simplified for better UX */}
           <nav className="hidden lg:flex items-center space-x-1">
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/pulse">Pulse Feed</Link>
+              <Link to="/feed">Feed</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/politicians">Politicians</Link>
+              <Link to="/polls">Polls</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/marketplace">Marketplace</Link>
+              <Link to="/politicians">Politics</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/companies">Companies</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/billionaires">👑 Billionaires</Link>
+              <Link to="/national-debt">Debt Tracker</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/national-debt">📊 National Debt</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/civic-portal">🌍 Civic Portal</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/regional-analytics">📊 Regional Analytics</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/news">📰 News</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/camerpulse-intelligence">🧠 Pan-African Intel</Link>
+              <Link to="/camerpulse-intelligence">Intelligence</Link>
             </Button>
           </nav>
 
@@ -179,39 +167,27 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - Only visible when toggled */}
+        {/* Mobile Menu - Simplified for better UX */}
         {mobileMenuOpen && (
           <nav className="lg:hidden mt-4 pb-4 border-t border-white/20">
-            <div className="grid grid-cols-2 gap-2 mt-4">
+            <div className="grid grid-cols-1 gap-2 mt-4">
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/pulse" onClick={() => setMobileMenuOpen(false)}>Pulse Feed</Link>
+                <Link to="/feed" onClick={() => setMobileMenuOpen(false)}>📰 Feed</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>Politicians</Link>
+                <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Polls</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/marketplace" onClick={() => setMobileMenuOpen(false)}>Marketplace</Link>
+                <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/companies" onClick={() => setMobileMenuOpen(false)}>Companies</Link>
+                <Link to="/companies" onClick={() => setMobileMenuOpen(false)}>🏢 Companies</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/billionaires" onClick={() => setMobileMenuOpen(false)}>👑 Billionaires</Link>
+                <Link to="/national-debt" onClick={() => setMobileMenuOpen(false)}>📊 Debt Tracker</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/national-debt" onClick={() => setMobileMenuOpen(false)}>📊 National Debt</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/news" onClick={() => setMobileMenuOpen(false)}>News</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/civic-portal" onClick={() => setMobileMenuOpen(false)}>Civic Portal</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/regional-analytics" onClick={() => setMobileMenuOpen(false)}>Regional Analytics</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start col-span-2">
-                <Link to="/camerpulse-intelligence" onClick={() => setMobileMenuOpen(false)}>Intelligence Dashboard</Link>
+                <Link to="/camerpulse-intelligence" onClick={() => setMobileMenuOpen(false)}>🧠 Intelligence</Link>
               </Button>
             </div>
 

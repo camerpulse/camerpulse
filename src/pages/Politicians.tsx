@@ -402,15 +402,15 @@ const Politicians = () => {
       <div className="min-h-screen bg-gradient-subtle">
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-cameroon-primary mb-2">Politiciens du Cameroun</h1>
-            <p className="text-gray-600">Découvrez, suivez et évaluez vos représentants politiques</p>
+          <div className="mb-6 lg:mb-8">
+            <h1 className="responsive-heading font-bold text-foreground mb-2">Politicians of Cameroon</h1>
+            <p className="responsive-text text-muted-foreground">Discover, follow and evaluate your political representatives</p>
           </div>
 
           {/* Search and Filter Controls */}
           <Card className="mb-6">
             <CardContent className="pt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                   <Input
@@ -465,23 +465,25 @@ const Politicians = () => {
                 </Select>
               </div>
 
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+                  className="w-full sm:w-auto"
                 >
                   <ArrowUpDown className="w-4 h-4 mr-2" />
-                  {sortOrder === 'asc' ? 'Croissant' : 'Décroissant'}
+                  {sortOrder === 'asc' ? 'Ascending' : 'Descending'}
                 </Button>
 
                 <Button
                   variant={compareMode ? "default" : "outline"}
                   size="sm"
                   onClick={() => setCompareMode(!compareMode)}
+                  className="w-full sm:w-auto"
                 >
                   <Eye className="w-4 h-4 mr-2" />
-                  Mode comparaison {compareMode && `(${comparedPoliticians.length}/2)`}
+                  Compare Mode {compareMode && `(${comparedPoliticians.length}/2)`}
                 </Button>
 
                 {comparedPoliticians.length === 2 && (
@@ -489,8 +491,9 @@ const Politicians = () => {
                     size="sm" 
                     variant="secondary"
                     onClick={() => setShowComparisonModal(true)}
+                    className="w-full sm:w-auto"
                   >
-                    Comparer les sélectionnés
+                    Compare Selected
                   </Button>
                 )}
               </div>

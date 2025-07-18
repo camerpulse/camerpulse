@@ -88,7 +88,7 @@ export const MobileNavigation = () => {
     <>
       {/* Bottom Navigation Bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t border-border/50 pb-safe-bottom md:hidden">
-        <nav className="flex items-center justify-around px-2 py-2">
+        <nav className="flex items-center justify-around px-1 py-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);
@@ -98,9 +98,9 @@ export const MobileNavigation = () => {
                 key={item.id}
                 onClick={() => navigate(item.path)}
                 className={cn(
-                  "relative flex flex-col items-center justify-center p-2 rounded-xl transition-all duration-200 min-w-[52px] min-h-[52px]",
+                  "relative flex flex-col items-center justify-center p-2 rounded-lg transition-all duration-200 min-w-[48px] min-h-[48px] touch-manipulation",
                   active 
-                    ? "bg-primary/10 text-primary" 
+                    ? "bg-primary/10 text-primary scale-105" 
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 )}
               >
@@ -121,8 +121,8 @@ export const MobileNavigation = () => {
                 </div>
                 
                 <span className={cn(
-                  "text-[10px] font-medium mt-1 transition-all duration-200",
-                  active ? "text-primary" : "text-muted-foreground"
+                  "text-[9px] font-medium mt-1 transition-all duration-200 leading-tight",
+                  active ? "text-primary font-semibold" : "text-muted-foreground"
                 )}>
                   {item.label}
                 </span>
@@ -138,7 +138,7 @@ export const MobileNavigation = () => {
       </div>
 
       {/* Spacer for mobile navigation */}
-      <div className="h-20 md:hidden" />
+      <div className="h-16 md:hidden" />
     </>
   );
 };

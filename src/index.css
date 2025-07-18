@@ -104,6 +104,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Consistent neutral background */
+    background-color: hsl(var(--background));
   }
   
   /* Mobile optimizations */
@@ -119,14 +121,33 @@
     -webkit-tap-highlight-color: transparent;
   }
   
-  /* Better touch targets */
-  button, a, input, select, textarea {
-    @apply min-h-[44px] min-w-[44px];
+  /* Better touch targets - mobile optimization */
+  button, a[role="button"], input, select, textarea {
+    @apply min-h-[44px];
+    touch-action: manipulation;
   }
   
-  /* Mobile optimizations */
+  /* Ensure button minimum width but allow text to flow naturally */
+  button {
+    @apply min-w-[44px];
+  }
+  
+  /* Mobile optimized components */
   .mobile-card {
-    @apply transition-all duration-200 hover:shadow-md;
+    @apply transition-shadow duration-200 hover:shadow-md;
+  }
+  
+  /* Responsive text sizing */
+  .responsive-text {
+    @apply text-sm sm:text-base lg:text-lg;
+  }
+  
+  .responsive-title {
+    @apply text-lg sm:text-xl lg:text-2xl xl:text-3xl;
+  }
+  
+  .responsive-heading {
+    @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl;
   }
 
   /* Animations and interactions */

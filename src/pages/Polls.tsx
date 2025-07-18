@@ -262,12 +262,12 @@ const Polls = () => {
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
         <div className="container mx-auto px-4 py-6 lg:py-8 max-w-6xl">
           {/* Header Section */}
-          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-8">
+          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-6 lg:mb-8">
             <div className="space-y-2">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              <h1 className="responsive-heading font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
                 Democratic Polls
               </h1>
-              <p className="text-sm sm:text-base text-muted-foreground max-w-lg">
+              <p className="responsive-text text-muted-foreground max-w-lg">
                 Voice your opinion on important civic matters and help shape democracy
               </p>
             </div>
@@ -294,7 +294,7 @@ const Polls = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 lg:mb-8">
             <Card className="backdrop-blur-sm bg-card/80 border-border/50 shadow-elegant hover:shadow-glow transition-all duration-300">
               <CardContent className="p-3 sm:p-4 lg:p-6 text-center">
                 <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-2 lg:mb-3">
@@ -395,7 +395,7 @@ const Polls = () => {
                 return (
                   <Card key={poll.id} className="backdrop-blur-sm bg-card/80 border-border/50 shadow-elegant hover:shadow-glow transition-all duration-300">
                     <CardHeader className="pb-4">
-                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 sm:gap-4">
                           <div className="flex items-center gap-3 flex-1 min-w-0">
                             <Avatar className="w-8 h-8 sm:w-10 sm:h-10 shrink-0">
                               <AvatarImage src={poll.privacy_mode === 'anonymous' ? '' : poll.profiles?.avatar_url} />
@@ -404,7 +404,7 @@ const Polls = () => {
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1 min-w-0">
-                              <CardTitle className="text-base sm:text-lg leading-tight mb-1 truncate">{poll.title}</CardTitle>
+                              <CardTitle className="responsive-title leading-tight mb-1 truncate">{poll.title}</CardTitle>
                               <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2 text-xs sm:text-sm text-muted-foreground">
                                 <span className="truncate">
                                   by {poll.privacy_mode === 'anonymous' ? 'Anonymous' : `@${poll.profiles?.username}`}
