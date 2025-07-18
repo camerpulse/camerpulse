@@ -82,7 +82,7 @@ const CORE_MODULES = [
   { module: "Header Navigation", component: "Header", priority: "critical", category: "component" },
   { module: "Mobile Navigation", component: "MobileNavigation", priority: "high", category: "component" },
   { module: "Theme Management", component: "ThemeManagement", priority: "medium", category: "component" },
-  { module: "Dark Mode Toggle", component: "DarkModeToggle", priority: "low", category: "component" },
+  
 
   // AI Features
   { module: "Civic Alert Bot", component: "CivicAlertBot", priority: "high", category: "feature" },
