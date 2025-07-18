@@ -168,8 +168,8 @@ export const CreateEventDialog = ({ open, onOpenChange, onEventCreated }: Create
         name: formData.name,
         description: formData.description,
         short_description: formData.short_description,
-        event_type: formData.event_type,
-        organizer_type: formData.organizer_type,
+        event_type: formData.event_type as 'civic' | 'campaign' | 'education' | 'protest' | 'music' | 'business' | 'youth' | 'community' | 'government' | 'religious',
+        organizer_type: formData.organizer_type as 'verified_user' | 'government_institution' | 'political_party' | 'company' | 'school' | 'ngo' | 'artist' | 'event_organizer',
         region: formData.region,
         subregion: formData.subregion || null,
         venue_name: formData.venue_name || null,
@@ -185,12 +185,12 @@ export const CreateEventDialog = ({ open, onOpenChange, onEventCreated }: Create
         external_links: formData.external_links,
         organizer_id: user.id,
         created_by: user.id,
-        status: 'published'
+        status: 'published' as 'draft' | 'pending' | 'approved' | 'rejected' | 'cancelled' | 'completed' | 'published' | 'postponed' | 'ongoing'
       };
 
       const { error } = await supabase
         .from('civic_events')
-        .insert([eventData]);
+        .insert(eventData);
 
       if (error) throw error;
 

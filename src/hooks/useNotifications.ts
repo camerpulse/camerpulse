@@ -4,10 +4,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 export type NotificationType = 
-  | 'message' | 'follow' | 'profile_view' | 'tag' | 'event_nearby' | 'poll_new'
-  | 'government_notice' | 'policy_update' | 'promise_update' | 'sentiment_alert'
-  | 'election_update' | 'verification_approved' | 'post_deleted' | 'profile_issue'
-  | 'feature_unlocked' | 'broadcast';
+  | 'copyright_violation' | 'stream_milestone' | 'viral_spike' | 'award_nomination'
+  | 'tip_received' | 'fan_comment' | 'chart_appearance' | 'platform_sync_error';
 
 export type NotificationPriority = 'low' | 'moderate' | 'critical';
 
@@ -18,7 +16,7 @@ export interface PulseNotification {
   priority: NotificationPriority;
   title: string;
   message: string;
-  data: Record<string, any>;
+  data: any;
   action_url?: string;
   icon?: string;
   is_read: boolean;
@@ -32,49 +30,23 @@ export interface PulseNotification {
 }
 
 export interface NotificationSettings {
-  // Message notifications
-  enable_message_notifications: boolean;
+  enable_all_notifications: boolean;
   enable_message_popups: boolean;
-  enable_message_push: boolean;
-  enable_message_email: boolean;
-  enable_message_sms: boolean;
-  
-  // Civic engagement notifications
-  enable_civic_notifications: boolean;
-  enable_event_notifications: boolean;
-  enable_poll_notifications: boolean;
-  enable_government_notifications: boolean;
-  enable_policy_notifications: boolean;
-  
-  // Intelligence notifications
-  enable_intelligence_notifications: boolean;
-  enable_promise_tracking: boolean;
-  enable_sentiment_alerts: boolean;
-  enable_election_updates: boolean;
-  
-  // System notifications
-  enable_system_notifications: boolean;
-  enable_verification_notifications: boolean;
-  enable_security_notifications: boolean;
-  
-  // Delivery preferences
-  enable_email_digest: boolean;
-  email_digest_frequency: string;
   enable_push_notifications: boolean;
-  
-  // Privacy and filtering
+  enable_civic_alerts: boolean;
+  enable_poll_notifications: boolean;
+  enable_election_updates: boolean;
+  enable_intelligence_alerts: boolean;
+  enable_email_digest?: boolean;
+  email_digest_frequency?: string;
   quiet_hours_start?: string;
   quiet_hours_end?: string;
   snooze_until?: string;
-  geo_filter_enabled: boolean;
-  preferred_regions: string[];
-  
-  // Muted entities
+  geo_filter_enabled?: boolean;
+  preferred_regions?: string[];
   muted_conversations: string[];
-  muted_users: string[];
-  muted_politicians: string[];
-  muted_parties: string[];
-  muted_categories: string[];
+  muted_regions: string[];
+  muted_categories?: string[];
 }
 
 export const useNotifications = () => {
@@ -83,32 +55,22 @@ export const useNotifications = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [notifications, setNotifications] = useState<PulseNotification[]>([]);
   const [settings, setSettings] = useState<NotificationSettings>({
-    enable_message_notifications: true,
+    enable_all_notifications: true,
     enable_message_popups: true,
-    enable_message_push: false,
-    enable_message_email: false,
-    enable_message_sms: false,
-    enable_civic_notifications: true,
-    enable_event_notifications: true,
+    enable_push_notifications: false,
+    enable_civic_alerts: true,
     enable_poll_notifications: true,
-    enable_government_notifications: true,
-    enable_policy_notifications: true,
-    enable_intelligence_notifications: true,
-    enable_promise_tracking: true,
-    enable_sentiment_alerts: true,
     enable_election_updates: true,
-    enable_system_notifications: true,
-    enable_verification_notifications: true,
-    enable_security_notifications: true,
+    enable_intelligence_alerts: true,
     enable_email_digest: false,
     email_digest_frequency: 'weekly',
-    enable_push_notifications: false,
+    quiet_hours_start: undefined,
+    quiet_hours_end: undefined,
+    snooze_until: undefined,
     geo_filter_enabled: true,
     preferred_regions: [],
     muted_conversations: [],
-    muted_users: [],
-    muted_politicians: [],
-    muted_parties: [],
+    muted_regions: [],
     muted_categories: [],
   });
 
@@ -198,7 +160,7 @@ export const useNotifications = () => {
           const newNotification = payload.new as PulseNotification;
           
           // Check if this notification type is muted
-          if (settings.muted_categories.includes(newNotification.notification_type)) {
+          if (settings.muted_categories?.includes(newNotification.notification_type)) {
             return;
           }
 
@@ -278,22 +240,14 @@ export const useNotifications = () => {
 
   const shouldShowPopup = (notification: PulseNotification): boolean => {
     const typeSettings = {
-      'message': settings.enable_message_popups,
-      'follow': settings.enable_system_notifications,
-      'profile_view': settings.enable_system_notifications,
-      'tag': settings.enable_system_notifications,
-      'event_nearby': settings.enable_civic_notifications,
-      'poll_new': settings.enable_civic_notifications,
-      'government_notice': settings.enable_government_notifications,
-      'policy_update': settings.enable_policy_notifications,
-      'promise_update': settings.enable_promise_tracking,
-      'sentiment_alert': settings.enable_sentiment_alerts,
-      'election_update': settings.enable_election_updates,
-      'verification_approved': settings.enable_verification_notifications,
-      'post_deleted': settings.enable_security_notifications,
-      'profile_issue': settings.enable_security_notifications,
-      'feature_unlocked': settings.enable_system_notifications,
-      'broadcast': true, // Always show broadcasts
+      'copyright_violation': settings.enable_all_notifications,
+      'stream_milestone': settings.enable_all_notifications,
+      'viral_spike': settings.enable_all_notifications,
+      'award_nomination': settings.enable_all_notifications,
+      'tip_received': settings.enable_all_notifications,
+      'fan_comment': settings.enable_message_popups,
+      'chart_appearance': settings.enable_all_notifications,
+      'platform_sync_error': settings.enable_all_notifications,
     };
 
     return typeSettings[notification.notification_type] || false;
@@ -405,12 +359,12 @@ export const useNotifications = () => {
   };
 
   const muteCategory = async (category: string) => {
-    const mutedCategories = [...settings.muted_categories, category];
+    const mutedCategories = [...(settings.muted_categories || []), category];
     await updateSettings({ muted_categories: mutedCategories });
   };
 
   const unmuteCategory = async (category: string) => {
-    const mutedCategories = settings.muted_categories.filter(cat => cat !== category);
+    const mutedCategories = (settings.muted_categories || []).filter(cat => cat !== category);
     await updateSettings({ muted_categories: mutedCategories });
   };
 

@@ -40,9 +40,9 @@ interface CivicEvent {
 
 interface EventFilters {
   region?: string;
-  event_type?: string;
-  organizer_type?: string;
-  status?: string;
+  event_type?: 'civic' | 'campaign' | 'education' | 'protest' | 'music' | 'business' | 'youth' | 'community' | 'government' | 'religious';
+  organizer_type?: 'verified_user' | 'government_institution' | 'political_party' | 'company' | 'school' | 'ngo' | 'artist' | 'event_organizer';
+  status?: 'draft' | 'pending' | 'approved' | 'rejected' | 'cancelled' | 'completed' | 'published' | 'postponed' | 'ongoing';
   date_range?: 'upcoming' | 'ongoing' | 'past' | 'all';
 }
 
