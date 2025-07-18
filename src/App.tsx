@@ -67,6 +67,10 @@ import ProfileSlugPage from "./pages/ProfileSlugPage";
 import Events from "./pages/Events";
 import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
+import VillagesDirectory from "./pages/VillagesDirectory";
+import VillageProfile from "./pages/VillageProfile";
+import AddVillage from "./pages/AddVillage";
+import VillageLeaderboards from "./pages/VillageLeaderboards";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -170,6 +174,10 @@ const App = () => {
           <Route path="/events" element={<Events />} />
           <Route path="/calendar" element={<EventCalendarPage />} />
           <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
+          <Route path="/villages" element={<VillagesDirectory />} />
+          <Route path="/villages/add" element={<AddVillage />} />
+          <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
+          <Route path="/villages/:id" element={<VillageProfile />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

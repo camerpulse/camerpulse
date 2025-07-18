@@ -11,7 +11,8 @@ import {
   Settings,
   Vote,
   Activity,
-  Calendar
+  Calendar,
+  MapPin
 } from 'lucide-react';
 
 interface NavItem {
