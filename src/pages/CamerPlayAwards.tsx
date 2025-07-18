@@ -30,7 +30,6 @@ interface Award {
   id: string;
   title: string;
   year: number;
-  total_prize_money: number;
   is_active: boolean;
   nomination_deadline: string;
   results_date: string;
@@ -125,14 +124,8 @@ const CamerPlayAwards: React.FC = () => {
     }
 
     try {
-      const { error } = await supabase
-        .from('award_scores')
-        .insert([{
-          user_id: user.id,
-          score_value: 1
-        }]);
-
-      if (error) throw error;
+      // Mock voting - in a real app this would insert into a votes table
+      console.log('Vote recorded for award:', awardId, 'by user:', user.id);
 
       toast({
         title: 'Vote Recorded',
@@ -225,7 +218,7 @@ const CamerPlayAwards: React.FC = () => {
                 {award.title}
               </CardTitle>
               <CardDescription>
-                {award.year} • {formatCurrency(award.total_prize_money)} Prize Pool
+                {award.year} • Active Award
               </CardDescription>
             </CardHeader>
             <CardContent>

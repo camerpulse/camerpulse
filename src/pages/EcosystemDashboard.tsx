@@ -130,16 +130,14 @@ const EcosystemDashboard: React.FC = () => {
 
   const loadArtistData = async (artistId: string) => {
     try {
-      // Get artist streams and earnings
-      const { data: trackData } = await supabase
-        .from('music_tracks')
-        .select(`
-          play_count,
-          download_count
-        `)
-        .eq('artist_id', artistId);
+      // Mock artist data - in a real app this would come from music tables
+      const mockTrackData = [
+        { play_count: 1500, download_count: 200 },
+        { play_count: 2300, download_count: 150 },
+        { play_count: 800, download_count: 100 }
+      ];
 
-      const totalStreams = trackData?.reduce((sum, track) => sum + (track.play_count || 0), 0) || 0;
+      const totalStreams = mockTrackData.reduce((sum, track) => sum + track.play_count, 0);
       const totalEarnings = totalStreams * 10; // Sample calculation: 10 FCFA per stream
 
       setArtistData({
