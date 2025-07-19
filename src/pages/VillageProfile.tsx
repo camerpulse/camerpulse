@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { VillageComments } from '@/components/villages/VillageComments';
 import { VillageDiscussions } from '@/components/villages/VillageDiscussions';
 import { VillageEvents } from '@/components/villages/VillageEvents';
+import { VillagePhotoGallery } from '@/components/villages/VillagePhotoGallery';
 
 interface VillageData {
   id: string;
@@ -740,43 +741,7 @@ const VillageProfile = () => {
           </TabsContent>
 
           <TabsContent value="gallery">
-            <div className="space-y-6">
-              {photos.length > 0 ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {photos.map((photo: any) => (
-                    <Card key={photo.id} className="overflow-hidden">
-                      <div className="aspect-video bg-muted flex items-center justify-center">
-                        <img 
-                          src={photo.photo_url} 
-                          alt={photo.caption || 'Village photo'}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      {photo.caption && (
-                        <CardContent className="p-4">
-                          <p className="text-sm">{photo.caption}</p>
-                          {photo.photographer_name && (
-                            <p className="text-xs text-muted-foreground mt-1">
-                              Photo by {photo.photographer_name}
-                            </p>
-                          )}
-                        </CardContent>
-                      )}
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <Card className="text-center py-12">
-                  <CardContent>
-                    <Camera className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No Photos Available</h3>
-                    <p className="text-muted-foreground">
-                      Share the beauty of your village by uploading photos.
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
+            <VillagePhotoGallery villageId={id!} />
           </TabsContent>
 
           <TabsContent value="discussions" className="space-y-6">
