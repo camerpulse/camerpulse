@@ -12879,6 +12879,54 @@ export type Database = {
         }
         Relationships: []
       }
+      institution_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          flutterwave_transaction_id: string | null
+          id: string
+          institution_id: string
+          institution_name: string
+          institution_type: string
+          payment_method: string | null
+          payment_status: string
+          payment_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          flutterwave_transaction_id?: string | null
+          id?: string
+          institution_id: string
+          institution_name: string
+          institution_type: string
+          payment_method?: string | null
+          payment_status?: string
+          payment_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          flutterwave_transaction_id?: string | null
+          id?: string
+          institution_id?: string
+          institution_name?: string
+          institution_type?: string
+          payment_method?: string | null
+          payment_status?: string
+          payment_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       institutional_trust_scores: {
         Row: {
           content_volume: number | null
@@ -20357,6 +20405,54 @@ export type Database = {
         }
         Relationships: []
       }
+      revenue_analytics: {
+        Row: {
+          claim_fees: number
+          created_at: string
+          date: string
+          feature_fees: number
+          hospital_revenue: number
+          id: string
+          inbox_fees: number
+          pharmacy_revenue: number
+          promotional_fees: number
+          school_revenue: number
+          total_revenue: number
+          transactions_count: number
+          updated_at: string
+        }
+        Insert: {
+          claim_fees?: number
+          created_at?: string
+          date?: string
+          feature_fees?: number
+          hospital_revenue?: number
+          id?: string
+          inbox_fees?: number
+          pharmacy_revenue?: number
+          promotional_fees?: number
+          school_revenue?: number
+          total_revenue?: number
+          transactions_count?: number
+          updated_at?: string
+        }
+        Update: {
+          claim_fees?: number
+          created_at?: string
+          date?: string
+          feature_fees?: number
+          hospital_revenue?: number
+          id?: string
+          inbox_fees?: number
+          pharmacy_revenue?: number
+          promotional_fees?: number
+          school_revenue?: number
+          total_revenue?: number
+          transactions_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       role_change_audit: {
         Row: {
           changed_at: string
@@ -24395,6 +24491,10 @@ export type Database = {
       }
       get_pan_africa_config: {
         Args: { p_config_key?: string }
+        Returns: Json
+      }
+      get_revenue_dashboard: {
+        Args: Record<PropertyKey, never>
         Returns: Json
       }
       get_sentiment_timeline: {
