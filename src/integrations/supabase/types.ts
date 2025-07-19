@@ -20551,6 +20551,10 @@ export type Database = {
         Args: { application_id: string }
         Returns: Json
       }
+      auto_assign_moderator: {
+        Args: { p_submission_id: string; p_region: string }
+        Returns: string
+      }
       auto_issue_certificates_for_event: {
         Args: { event_id_param: string }
         Returns: number
@@ -20563,6 +20567,14 @@ export type Database = {
           p_reference_name?: string
         }
         Returns: number
+      }
+      award_moderator_badge: {
+        Args: {
+          p_moderator_id: string
+          p_badge_type: Database["public"]["Enums"]["badge_type"]
+          p_description?: string
+        }
+        Returns: string
       }
       award_points: {
         Args: {
@@ -20824,6 +20836,10 @@ export type Database = {
       }
       get_moderation_stats: {
         Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_moderator_stats: {
+        Args: { p_moderator_id: string }
         Returns: Json
       }
       get_module_visibility: {
