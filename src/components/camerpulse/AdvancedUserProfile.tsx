@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import * as React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -181,24 +181,24 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
   const { user } = useAuth();
   const { toast } = useToast();
   
-  const [profile, setProfile] = useState<EnhancedProfile | null>(null);
-  const [stats, setStats] = useState<ProfileStats>({ 
+  const [profile, setProfile] = React.useState<EnhancedProfile | null>(null);
+  const [stats, setStats] = React.useState<ProfileStats>({ 
     followers_count: 0, 
     following_count: 0, 
     average_rating: 0, 
     total_ratings: 0 
   });
-  const [activities, setActivities] = useState<ActivityItem[]>([]);
-  const [badges, setBadges] = useState<ProfileBadge[]>([]);
-  const [achievements, setAchievements] = useState<UserAchievement[]>([]);
-  const [savedContent, setSavedContent] = useState<SavedContent[]>([]);
-  const [profileSettings, setProfileSettings] = useState<ProfileSettings | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('overview');
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingProfile, setEditingProfile] = useState<Partial<EnhancedProfile>>({});
+  const [activities, setActivities] = React.useState<ActivityItem[]>([]);
+  const [badges, setBadges] = React.useState<ProfileBadge[]>([]);
+  const [achievements, setAchievements] = React.useState<UserAchievement[]>([]);
+  const [savedContent, setSavedContent] = React.useState<SavedContent[]>([]);
+  const [profileSettings, setProfileSettings] = React.useState<ProfileSettings | null>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [activeTab, setActiveTab] = React.useState('overview');
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editingProfile, setEditingProfile] = React.useState<Partial<EnhancedProfile>>({});
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (userId) {
       fetchProfile();
       fetchProfileStats();
