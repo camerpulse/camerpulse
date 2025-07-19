@@ -5,6 +5,9 @@ const DYNAMIC_CACHE = 'camerpulse-dynamic-v1';
 // Assets to cache immediately
 const STATIC_ASSETS = [
   '/',
+  '/villages',
+  '/villages/add',
+  '/villages/leaderboards',
   '/manifest.json',
   '/favicon.ico',
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap'

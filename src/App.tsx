@@ -75,6 +75,8 @@ import ModeratorPortal from "./pages/ModeratorPortal";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
+import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
+import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
 
 const queryClient = new QueryClient();
@@ -103,6 +105,8 @@ const App = () => {
               <TooltipProvider>
           <Toaster />
           <Sonner />
+          <PWAInstallPrompt />
+          <OfflineIndicator />
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />

@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
-import { VillageMap } from '@/components/villages/VillageMap';
+import { InteractiveVillageMap } from '@/components/villages/InteractiveVillageMap';
 
 interface Village {
   id: string;
@@ -274,7 +274,7 @@ const VillagesDirectory = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Interactive Map */}
         <div className="mb-12">
-          <VillageMap selectedRegion={selectedRegion} />
+          <InteractiveVillageMap selectedRegion={selectedRegion} height="600px" />
         </div>
 
         {/* Featured Villages */}

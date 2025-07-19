@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CamerPulse - Offline</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .offline-container {
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .offline-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+        }
+        
+        h1 {
+            margin-bottom: 16px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        
+        p {
+            margin-bottom: 24px;
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        .retry-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 8px;
+        }
+        
+        .retry-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .features-list {
+            text-align: left;
+            margin-top: 24px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .features-list h3 {
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+        
+        .features-list ul {
+            list-style: none;
+        }
+        
+        .features-list li {
+            padding: 4px 0;
+            opacity: 0.8;
+        }
+        
+        .features-list li:before {
+            content: "🏘️ ";
+            margin-right: 8px;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon pulse">
+            🌐
+        </div>
+        
+        <h1>You're Offline</h1>
+        
+        <p>
+            Don't worry! CamerPulse works offline too. 
+            Some features are still available while you're disconnected.
+        </p>
+        
+        <button class="retry-btn" onclick="location.reload()">
+            Try Again
+        </button>
+        
+        <button class="retry-btn" onclick="goHome()">
+            Go Home
+        </button>
+        
+        <div class="features-list">
+            <h3>Available Offline:</h3>
+            <ul>
+                <li>Browse previously visited villages</li>
+                <li>View cached village profiles</li>
+                <li>Access saved photos and content</li>
+                <li>Use basic navigation features</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function goHome() {
+            window.location.href = '/';
+        }
+        
+        // Auto-retry when connection is restored
+        window.addEventListener('online', () => {
+            location.reload();
+        });
+        
+        // Show connection status
+        window.addEventListener('load', () => {
+            if (navigator.onLine) {
+                document.querySelector('p').textContent = 
+                    'Connection restored! Click "Try Again" to continue.';
+                document.querySelector('.retry-btn').style.background = 
+                    'rgba(76, 175, 80, 0.8)';
+            }
+        });
+    </script>
+</body>
+</html>

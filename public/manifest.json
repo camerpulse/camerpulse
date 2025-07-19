@@ -33,6 +33,20 @@
   ],
   "shortcuts": [
     {
+      "name": "Villages Directory",
+      "short_name": "Villages",
+      "description": "Browse and discover villages",
+      "url": "/villages",
+      "icons": [{ "src": "/favicon.ico", "sizes": "32x32" }]
+    },
+    {
+      "name": "Interactive Map",
+      "short_name": "Map",
+      "description": "Village locations on map",
+      "url": "/villages?view=map",
+      "icons": [{ "src": "/favicon.ico", "sizes": "32x32" }]
+    },
+    {
       "name": "Pulse Feed",
       "short_name": "Pulse",
       "description": "View latest political discussions",
