@@ -31,13 +31,13 @@ export const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-cm-green to-cm-red rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-sm">CP</span>
               </div>
-              <span className="font-bold text-lg">CamerPulse</span>
+              <span className="font-bold text-lg">CamerPlay</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Empowering Cameroonian democracy through technology, transparency, and civic engagement.
+              Celebrating Cameroonian music, culture, and entertainment. Connect with artists, discover events, and experience the rhythm of Cameroon.
             </p>
             <div className="flex gap-3">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
@@ -55,129 +55,125 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Civic Tools */}
+          {/* Events & Shows */}
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <Users className="w-4 h-4 text-primary" />
-              Civic Tools
+              <Calendar className="w-4 h-4 text-primary" />
+              Events & Shows
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/unity" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Shield className="w-3 h-3" />
-                🛡️ One & Indivisible Cameroon
-              </Link>
-              <Link to="/polls" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Vote className="w-3 h-3" />
-                Polls & Surveys
-              </Link>
-              <Link to="/civic-portal" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <FileText className="w-3 h-3" />
-                Civic Portal
-              </Link>
-              <Link to="/election-forecast" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Calendar className="w-3 h-3" />
-                Election Monitor
+                All Events
               </Link>
-              <Link to="/promises" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Target className="w-3 h-3" />
-                Promise Tracker
+              <Link to="/concerts" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Music className="w-3 h-3" />
+                Concerts
               </Link>
-              <Link to="/events" className="flex items-center gap-2 text-green-600 hover:text-green-700 transition-colors font-semibold">
-                <Calendar className="w-4 h-4" />
-                🎟️ Events & Tickets
-              </Link>
-              <Link to="/feed" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <TrendingUp className="w-3 h-3" />
-                Pulse Feed
-              </Link>
-            </div>
-          </div>
-
-          {/* Platforms & Trackers */}
-          <div className="space-y-4">
-            <h3 className="font-semibold flex items-center gap-2">
-              <BarChart3 className="w-4 h-4 text-primary" />
-              Platforms & Trackers
-            </h3>
-            <div className="space-y-2 text-sm">
-              <Link to="/national-debt" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <DollarSign className="w-3 h-3" />
-                National Debt
-              </Link>
-              <Link to="/billionaires" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/festivals" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Crown className="w-3 h-3" />
-                Billionaire Tracker
+                Festivals
               </Link>
-              <Link to="/marketplace" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/comedy-shows" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                Comedy Shows
+              </Link>
+              <Link to="/tickets" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <FileText className="w-3 h-3" />
+                My Tickets
+              </Link>
+              <Link to="/event-organizers" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Briefcase className="w-3 h-3" />
-                Marketplace
-              </Link>
-              <Link to="/camerplay" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Music className="w-3 h-3" />
-                CamerPlay Music
-              </Link>
-              <Link to="/messenger" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Users className="w-3 h-3" />
-                Messenger
-              </Link>
-              <Link to="/rewards" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Crown className="w-3 h-3" />
-                Rewards Center
-              </Link>
-              <Link to="/regional-analytics" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <BarChart3 className="w-3 h-3" />
-                Regional Analytics
+                For Organizers
               </Link>
             </div>
           </div>
 
-          {/* Political & Business Profiles */}
+          {/* Music & Entertainment */}
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <Building className="w-4 h-4 text-primary" />
-              Profiles & Directory
+              <Music className="w-4 h-4 text-primary" />
+              Music & Entertainment
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/politicians" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Users className="w-3 h-3" />
-                Politicians
-              </Link>
-              <Link to="/political-parties" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Scale className="w-3 h-3" />
-                Political Parties
-              </Link>
-              <Link to="/companies" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Building className="w-3 h-3" />
-                Companies
-              </Link>
-              <Link to="/artist-landing" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/music" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Music className="w-3 h-3" />
-                Artists
+                Music Library
+              </Link>
+              <Link to="/radio" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <TrendingUp className="w-3 h-3" />
+                CamerPlay Radio
+              </Link>
+              <Link to="/playlists" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <BarChart3 className="w-3 h-3" />
+                Playlists
+              </Link>
+              <Link to="/genres" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Globe className="w-3 h-3" />
+                Genres
+              </Link>
+              <Link to="/trending" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <TrendingUp className="w-3 h-3" />
+                Trending Now
+              </Link>
+              <Link to="/discover" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Target className="w-3 h-3" />
+                Discover New Music
               </Link>
             </div>
           </div>
 
-          {/* Support & Admin */}
+          {/* Artists & Awards */}
           <div className="space-y-4">
-            <h3 className="font-semibold">Support & Admin</h3>
+            <h3 className="font-semibold flex items-center gap-2">
+              <Crown className="w-4 h-4 text-primary" />
+              Artists & Awards
+            </h3>
+            <div className="space-y-2 text-sm">
+              <Link to="/artists" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                All Artists
+              </Link>
+              <Link to="/rising-stars" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <TrendingUp className="w-3 h-3" />
+                Rising Stars
+              </Link>
+              <Link to="/awards" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Crown className="w-3 h-3" />
+                Awards & Voting
+              </Link>
+              <Link to="/artist-portal" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Briefcase className="w-3 h-3" />
+                Artist Portal
+              </Link>
+              <Link to="/fan-clubs" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Heart className="w-3 h-3" />
+                Fan Clubs
+              </Link>
+            </div>
+          </div>
+
+          {/* Support & Community */}
+          <div className="space-y-4">
+            <h3 className="font-semibold">Support & Community</h3>
             <div className="space-y-2 text-sm">
               <Link to="/auth" className="block text-muted-foreground hover:text-primary transition-colors">
                 Sign In / Register
               </Link>
-              <Link to="/admin" className="block text-muted-foreground hover:text-primary transition-colors">
-                Admin Panel
+              <Link to="/help" className="block text-muted-foreground hover:text-primary transition-colors">
+                Help Center
               </Link>
-              <Link to="/camerpulse-intelligence" className="block text-muted-foreground hover:text-primary transition-colors">
-                Intelligence Hub
+              <Link to="/contact" className="block text-muted-foreground hover:text-primary transition-colors">
+                Contact Us
               </Link>
-              <Link to="/notification-settings" className="block text-muted-foreground hover:text-primary transition-colors">
-                Notifications
+              <Link to="/privacy" className="block text-muted-foreground hover:text-primary transition-colors">
+                Privacy Policy
               </Link>
-              <Link to="/ecosystem" className="block text-muted-foreground hover:text-primary transition-colors">
-                Ecosystem
+              <Link to="/terms" className="block text-muted-foreground hover:text-primary transition-colors">
+                Terms of Service
               </Link>
-              <Link to="/fan-portal" className="block text-muted-foreground hover:text-primary transition-colors">
-                Fan Portal
+              <Link to="/community" className="block text-muted-foreground hover:text-primary transition-colors">
+                Community Guidelines
               </Link>
             </div>
           </div>
@@ -186,12 +182,12 @@ export const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 CamerPulse. All rights reserved.
+            © 2024 CamerPlay. All rights reserved.
           </p>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>Made with</span>
             <Heart className="w-4 h-4 text-red-500" />
-            <span>for Cameroon</span>
+            <span>for Cameroonian music lovers</span>
           </div>
         </div>
       </div>

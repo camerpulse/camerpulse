@@ -53,33 +53,30 @@ export const Header = () => {
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-cm-yellow rounded-full border-2 border-white"></div>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-white font-inter">CamerPulse</h1>
-              <p className="text-white/80 text-xs">Civic SuperApp</p>
+              <h1 className="text-xl font-bold text-white font-inter">CamerPlay</h1>
+              <p className="text-white/80 text-xs">Music & Entertainment</p>
             </div>
           </Link>
 
-          {/* Desktop Navigation - Simplified for better UX */}
+          {/* Desktop Navigation - CamerPlay specific */}
           <nav className="hidden lg:flex items-center space-x-1">
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/feed">Feed</Link>
+              <Link to="/events">Events</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/polls">Polls</Link>
+              <Link to="/artists">Artists</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/politicians">Politics</Link>
+              <Link to="/awards">Awards</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/villages">Villages</Link>
+              <Link to="/tickets">My Tickets</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/companies">Companies</Link>
+              <Link to="/music">Music</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/national-debt">Debt Tracker</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/camerpulse-intelligence">Intelligence</Link>
+              <Link to="/discover">Discover</Link>
             </Button>
           </nav>
 
@@ -158,30 +155,27 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - Simplified for better UX */}
+        {/* Mobile Menu - CamerPlay specific */}
         {mobileMenuOpen && (
           <nav className="lg:hidden mt-4 pb-4 border-t border-white/20">
             <div className="grid grid-cols-1 gap-2 mt-4">
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/feed" onClick={() => setMobileMenuOpen(false)}>📰 Feed</Link>
+                <Link to="/events" onClick={() => setMobileMenuOpen(false)}>🎪 Events</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Polls</Link>
+                <Link to="/artists" onClick={() => setMobileMenuOpen(false)}>🎤 Artists</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
+                <Link to="/awards" onClick={() => setMobileMenuOpen(false)}>🏆 Awards</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/villages" onClick={() => setMobileMenuOpen(false)}>🏘️ Villages</Link>
+                <Link to="/tickets" onClick={() => setMobileMenuOpen(false)}>🎟️ My Tickets</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/companies" onClick={() => setMobileMenuOpen(false)}>🏢 Companies</Link>
+                <Link to="/music" onClick={() => setMobileMenuOpen(false)}>🎵 Music</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/national-debt" onClick={() => setMobileMenuOpen(false)}>📊 Debt Tracker</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/camerpulse-intelligence" onClick={() => setMobileMenuOpen(false)}>🧠 Intelligence</Link>
+                <Link to="/discover" onClick={() => setMobileMenuOpen(false)}>🔍 Discover</Link>
               </Button>
             </div>
           </nav>
