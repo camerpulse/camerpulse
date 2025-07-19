@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Plus, Filter, MapPin, Star, Users, Crown, X, SlidersHorizontal, CheckCircle, GraduationCap, Heart, Globe } from 'lucide-react';
+import { Search, Plus, Filter, MapPin, Star, Users, Crown, X, SlidersHorizontal, CheckCircle, GraduationCap, Heart, Globe, ChevronRight, TrendingUp, Award, Building, DollarSign, FileText, User } from 'lucide-react';
 import { ServicesLayout } from '@/components/Layout/ServicesLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -11,6 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -35,6 +36,42 @@ interface Village {
   diaspora_engagement_score: number;
 }
 
+interface RankingCategory {
+  category: string;
+  title: string;
+  icon: React.ReactNode;
+  villages: Village[];
+}
+
+interface NewsItem {
+  id: string;
+  title: string;
+  summary: string;
+  village_name: string;
+  category: string;
+  date: string;
+}
+
+interface FundraisingCampaign {
+  id: string;
+  title: string;
+  village_name: string;
+  target_amount: number;
+  raised_amount: number;
+  supporters: number;
+  end_date: string;
+}
+
+interface VillagePetition {
+  id: string;
+  title: string;
+  village_name: string;
+  signatures: number;
+  target_signatures: number;
+  category: string;
+  created_date: string;
+}
+
 const VillagesDirectory = () => {
   const { trackSearch, trackVillageView } = useAnalytics();
   const [villages, setVillages] = useState<Village[]>([]);
@@ -48,6 +85,11 @@ const VillagesDirectory = () => {
     mostDeveloped: [],
     mostActive: []
   });
+  const [rankingBoards, setRankingBoards] = useState<RankingCategory[]>([]);
+  const [villageNews, setVillageNews] = useState<NewsItem[]>([]);
+  const [fundraisingCampaigns, setFundraisingCampaigns] = useState<FundraisingCampaign[]>([]);
+  const [villagePetitions, setVillagePetitions] = useState<VillagePetition[]>([]);
+  const [donChiefHighlight, setDonChiefHighlight] = useState(null);
 
   // Advanced filter states
   const [filters, setFilters] = useState({
@@ -71,6 +113,11 @@ const VillagesDirectory = () => {
   useEffect(() => {
     fetchVillages();
     fetchFeaturedVillages();
+    fetchRankingBoards();
+    fetchVillageNews();
+    fetchFundraisingCampaigns();
+    fetchVillagePetitions();
+    fetchDonChiefHighlight();
   }, []);
 
   const fetchVillages = async () => {
@@ -165,6 +212,181 @@ const VillagesDirectory = () => {
     }
   };
 
+  const fetchRankingBoards = async () => {
+    try {
+      const rankingCategories: RankingCategory[] = [
+        {
+          category: 'development',
+          title: 'Development Leaders',
+          icon: <Building className="h-5 w-5 text-blue-500" />,
+          villages: []
+        },
+        {
+          category: 'culture',
+          title: 'Cultural Heritage',
+          icon: <Crown className="h-5 w-5 text-purple-500" />,
+          villages: []
+        },
+        {
+          category: 'education',
+          title: 'Education Champions',
+          icon: <GraduationCap className="h-5 w-5 text-green-500" />,
+          villages: []
+        },
+        {
+          category: 'conflict_resolution',
+          title: 'Peace & Unity',
+          icon: <Heart className="h-5 w-5 text-red-500" />,
+          villages: []
+        }
+      ];
+
+      // Fetch top villages for each category
+      for (const category of rankingCategories) {
+        let orderBy = 'overall_rating';
+        switch (category.category) {
+          case 'development':
+            orderBy = 'infrastructure_score';
+            break;
+          case 'education':
+            orderBy = 'education_score';
+            break;
+          case 'culture':
+          case 'conflict_resolution':
+            orderBy = 'overall_rating';
+            break;
+        }
+
+        const { data } = await supabase
+          .from('villages')
+          .select('*')
+          .order(orderBy, { ascending: false })
+          .limit(5);
+
+        category.villages = data || [];
+      }
+
+      setRankingBoards(rankingCategories);
+    } catch (error) {
+      console.error('Error fetching ranking boards:', error);
+    }
+  };
+
+  const fetchVillageNews = async () => {
+    // Mock village news data
+    const mockNews: NewsItem[] = [
+      {
+        id: '1',
+        title: 'New Water Project Inaugurated in Bafut',
+        summary: 'Community celebrates access to clean drinking water for 5,000 residents',
+        village_name: 'Bafut',
+        category: 'Infrastructure',
+        date: '2024-01-15'
+      },
+      {
+        id: '2',
+        title: 'Youth Development Initiative Launches in Bandjoun',
+        summary: 'Skills training program targets 200 young people in technical trades',
+        village_name: 'Bandjoun',
+        category: 'Education',
+        date: '2024-01-12'
+      },
+      {
+        id: '3',
+        title: 'Traditional Festival Attracts International Visitors',
+        summary: 'Annual cultural celebration showcases rich heritage of Kom people',
+        village_name: 'Njinikom',
+        category: 'Culture',
+        date: '2024-01-10'
+      }
+    ];
+    setVillageNews(mockNews);
+  };
+
+  const fetchFundraisingCampaigns = async () => {
+    // Mock fundraising campaigns
+    const mockCampaigns: FundraisingCampaign[] = [
+      {
+        id: '1',
+        title: 'Build Secondary School in Mamfe',
+        village_name: 'Mamfe',
+        target_amount: 50000000,
+        raised_amount: 32000000,
+        supporters: 156,
+        end_date: '2024-06-30'
+      },
+      {
+        id: '2',
+        title: 'Health Center Renovation Project',
+        village_name: 'Foumban',
+        target_amount: 25000000,
+        raised_amount: 18500000,
+        supporters: 89,
+        end_date: '2024-04-15'
+      },
+      {
+        id: '3',
+        title: 'Rural Road Construction Initiative',
+        village_name: 'Wum',
+        target_amount: 75000000,
+        raised_amount: 15000000,
+        supporters: 234,
+        end_date: '2024-12-31'
+      }
+    ];
+    setFundraisingCampaigns(mockCampaigns);
+  };
+
+  const fetchVillagePetitions = async () => {
+    // Mock village petitions
+    const mockPetitions: VillagePetition[] = [
+      {
+        id: '1',
+        title: 'Improve Road Access to Bamenda-Kom',
+        village_name: 'Kom',
+        signatures: 1250,
+        target_signatures: 2000,
+        category: 'Infrastructure',
+        created_date: '2024-01-01'
+      },
+      {
+        id: '2',
+        title: 'Stop Illegal Mining in Sacred Forest',
+        village_name: 'Lebialem',
+        signatures: 890,
+        target_signatures: 1500,
+        category: 'Environment',
+        created_date: '2024-01-05'
+      },
+      {
+        id: '3',
+        title: 'Establish Government Hospital',
+        village_name: 'Bali',
+        signatures: 2340,
+        target_signatures: 3000,
+        category: 'Healthcare',
+        created_date: '2023-12-20'
+      }
+    ];
+    setVillagePetitions(mockPetitions);
+  };
+
+  const fetchDonChiefHighlight = async () => {
+    // Mock Don/Chief profile highlight
+    setDonChiefHighlight({
+      name: 'His Royal Highness Fon Angwafo III',
+      title: 'Fon of Mankon',
+      village: 'Mankon',
+      region: 'Northwest',
+      achievements: [
+        'Led community development for 25 years',
+        'Established 3 schools and 2 health centers',
+        'Promoted peace during regional conflicts'
+      ],
+      image: '/placeholder-chief.jpg'
+    });
+  };
+
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       fetchVillages();
@@ -215,10 +437,6 @@ const VillagesDirectory = () => {
     setSelectedRating('all');
     setSearchTerm('');
   };
-
-  // Get unique divisions and subdivisions for filter options
-  const uniqueDivisions = [...new Set(villages.map(v => v.division))].sort();
-  const uniqueSubdivisions = [...new Set(villages.map(v => v.subdivision))].sort();
 
   const VillageCard = ({ village, onClick }: { village: Village; onClick?: () => void }) => (
     <Card className="hover:shadow-lg transition-all duration-200 group cursor-pointer">
@@ -288,381 +506,326 @@ const VillagesDirectory = () => {
   return (
     <ServicesLayout serviceType="villages">
       <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-civic py-16 text-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold mb-4">Villages Directory</h1>
-            <p className="text-xl opacity-90 mb-8">
-              Discover, connect with, and celebrate villages across Cameroon
-            </p>
-            
-            {/* Search and Filters */}
-            <div className="max-w-4xl mx-auto">
-              <div className="flex flex-col md:flex-row gap-4 mb-6">
-                <div className="relative flex-1">
-                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search villages by name, region, or division..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 bg-white text-black"
-                  />
+        {/* Hero Section */}
+        <div className="relative bg-gradient-civic py-16 text-white">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold mb-4">Villages Directory</h1>
+              <p className="text-xl opacity-90 mb-8">
+                Discover, connect with, and celebrate villages across Cameroon
+              </p>
+              <div className="flex items-center justify-center gap-6 text-sm mb-8">
+                <div className="flex items-center gap-2">
+                  <Building className="h-4 w-4" />
+                  <span>{villages.length} Villages</span>
                 </div>
-                
-                <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                  <SelectTrigger className="w-full md:w-48 bg-white text-black">
-                    <SelectValue placeholder="Select Region" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {regions.map((region) => (
-                      <SelectItem key={region} value={region}>
-                        {region === 'all' ? 'All Regions' : region}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-
-                <Select value={selectedRating} onValueChange={setSelectedRating}>
-                  <SelectTrigger className="w-full md:w-48 bg-white text-black">
-                    <SelectValue placeholder="Rating Filter" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Ratings</SelectItem>
-                    <SelectItem value="4+">4+ Stars</SelectItem>
-                    <SelectItem value="3+">3+ Stars</SelectItem>
-                    <SelectItem value="2+">2+ Stars</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center gap-2">
+                  <Crown className="h-4 w-4" />
+                  <span>{villages.filter(v => v.is_verified).length} Verified</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Star className="h-4 w-4" />
+                  <span>Community Rated</span>
+                </div>
               </div>
+              
+              {/* Village Search */}
+              <div className="max-w-4xl mx-auto">
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search villages by name, region, or division..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 bg-white text-black"
+                    />
+                  </div>
+                  
+                  <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                    <SelectTrigger className="w-full md:w-48 bg-white text-black">
+                      <SelectValue placeholder="Select Region" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {regions.map((region) => (
+                        <SelectItem key={region} value={region}>
+                          {region === 'all' ? 'All Regions' : region}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
 
-              <Link to="/villages/add">
-                <Button size="lg" variant="secondary" className="text-primary hover:text-primary-foreground">
-                  <Plus className="h-5 w-5 mr-2" />
-                  Add My Village
-                </Button>
-              </Link>
+                  <Select value={selectedRating} onValueChange={setSelectedRating}>
+                    <SelectTrigger className="w-full md:w-48 bg-white text-black">
+                      <SelectValue placeholder="Rating Filter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Ratings</SelectItem>
+                      <SelectItem value="4+">4+ Stars</SelectItem>
+                      <SelectItem value="3+">3+ Stars</SelectItem>
+                      <SelectItem value="2+">2+ Stars</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <Link to="/villages/add">
+                  <Button size="lg" variant="secondary" className="text-primary hover:text-primary-foreground">
+                    <Plus className="h-5 w-5 mr-2" />
+                    Add My Village
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex gap-6">
-          {/* Left Sidebar Filters */}
-          <div className={`${showFilters ? 'block' : 'hidden'} lg:block lg:w-80 bg-card border rounded-lg p-6 h-fit sticky top-4`}>
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-8">
+          {/* Featured Village Slider */}
+          <section className="mb-12">
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center gap-2">
-                <SlidersHorizontal className="h-5 w-5" />
-                <h3 className="font-semibold">Filters</h3>
-              </div>
-              <div className="flex gap-2">
-                <Button variant="ghost" size="sm" onClick={resetFilters}>
-                  Reset
-                </Button>
-                <Button variant="ghost" size="sm" className="lg:hidden" onClick={() => setShowFilters(false)}>
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              {/* Verified Only */}
-              <div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox 
-                    id="verified" 
-                    checked={filters.verifiedOnly}
-                    onCheckedChange={(checked) => setFilters(prev => ({ ...prev, verifiedOnly: checked as boolean }))}
-                  />
-                  <Label htmlFor="verified" className="flex items-center gap-2">
-                    <CheckCircle className="h-4 w-4" />
-                    Verified villages only
-                  </Label>
-                </div>
-              </div>
-
-              <Separator />
-
-              {/* Infrastructure Score */}
-              <div>
-                <Label className="flex items-center gap-2 mb-3">
-                  <MapPin className="h-4 w-4" />
-                  Infrastructure Score: {filters.infrastructureRange[0]} - {filters.infrastructureRange[1]}
-                </Label>
-                <Slider
-                  min={0}
-                  max={20}
-                  step={1}
-                  value={filters.infrastructureRange}
-                  onValueChange={(value) => setFilters(prev => ({ ...prev, infrastructureRange: value }))}
-                  className="w-full"
-                />
-              </div>
-
-              {/* Education Score */}
-              <div>
-                <Label className="flex items-center gap-2 mb-3">
-                  <GraduationCap className="h-4 w-4" />
-                  Education Score: {filters.educationRange[0]} - {filters.educationRange[1]}
-                </Label>
-                <Slider
-                  min={0}
-                  max={10}
-                  step={1}
-                  value={filters.educationRange}
-                  onValueChange={(value) => setFilters(prev => ({ ...prev, educationRange: value }))}
-                  className="w-full"
-                />
-              </div>
-
-              {/* Health Score */}
-              <div>
-                <Label className="flex items-center gap-2 mb-3">
-                  <Heart className="h-4 w-4" />
-                  Health Score: {filters.healthRange[0]} - {filters.healthRange[1]}
-                </Label>
-                <Slider
-                  min={0}
-                  max={10}
-                  step={1}
-                  value={filters.healthRange}
-                  onValueChange={(value) => setFilters(prev => ({ ...prev, healthRange: value }))}
-                  className="w-full"
-                />
-              </div>
-
-              {/* Diaspora Engagement */}
-              <div>
-                <Label className="flex items-center gap-2 mb-3">
-                  <Globe className="h-4 w-4" />
-                  Diaspora Score: {filters.diasporaRange[0]} - {filters.diasporaRange[1]}
-                </Label>
-                <Slider
-                  min={0}
-                  max={10}
-                  step={1}
-                  value={filters.diasporaRange}
-                  onValueChange={(value) => setFilters(prev => ({ ...prev, diasporaRange: value }))}
-                  className="w-full"
-                />
-              </div>
-
-              <Separator />
-
-              {/* Minimum Sons & Daughters */}
-              <div>
-                <Label className="flex items-center gap-2 mb-3">
-                  <Users className="h-4 w-4" />
-                  Min Sons & Daughters: {filters.sonsAndDaughtersMin}
-                </Label>
-                <Slider
-                  min={0}
-                  max={1000}
-                  step={10}
-                  value={[filters.sonsAndDaughtersMin]}
-                  onValueChange={(value) => setFilters(prev => ({ ...prev, sonsAndDaughtersMin: value[0] }))}
-                  className="w-full"
-                />
-              </div>
-
-              {/* Minimum Views */}
-              <div>
-                <Label className="mb-3 block">Min Profile Views: {filters.viewsMin}</Label>
-                <Slider
-                  min={0}
-                  max={10000}
-                  step={100}
-                  value={[filters.viewsMin]}
-                  onValueChange={(value) => setFilters(prev => ({ ...prev, viewsMin: value[0] }))}
-                  className="w-full"
-                />
-              </div>
-
-              {/* Minimum Ratings Count */}
-              <div>
-                <Label className="mb-3 block">Min Ratings Count: {filters.ratingsCountMin}</Label>
-                <Slider
-                  min={0}
-                  max={100}
-                  step={1}
-                  value={[filters.ratingsCountMin]}
-                  onValueChange={(value) => setFilters(prev => ({ ...prev, ratingsCountMin: value[0] }))}
-                  className="w-full"
-                />
-              </div>
-
-              <Separator />
-
-              {/* Divisions Filter */}
-              <div>
-                <Label className="mb-3 block">Divisions</Label>
-                <div className="space-y-2 max-h-32 overflow-y-auto">
-                  {uniqueDivisions.map((division) => (
-                    <div key={division} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`division-${division}`}
-                        checked={filters.selectedDivisions.includes(division)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setFilters(prev => ({ ...prev, selectedDivisions: [...prev.selectedDivisions, division] }));
-                          } else {
-                            setFilters(prev => ({ ...prev, selectedDivisions: prev.selectedDivisions.filter(d => d !== division) }));
-                          }
-                        }}
-                      />
-                      <Label htmlFor={`division-${division}`} className="text-sm">{division}</Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Subdivisions Filter */}
-              <div>
-                <Label className="mb-3 block">Subdivisions</Label>
-                <div className="space-y-2 max-h-32 overflow-y-auto">
-                  {uniqueSubdivisions.map((subdivision) => (
-                    <div key={subdivision} className="flex items-center space-x-2">
-                      <Checkbox 
-                        id={`subdivision-${subdivision}`}
-                        checked={filters.selectedSubdivisions.includes(subdivision)}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setFilters(prev => ({ ...prev, selectedSubdivisions: [...prev.selectedSubdivisions, subdivision] }));
-                          } else {
-                            setFilters(prev => ({ ...prev, selectedSubdivisions: prev.selectedSubdivisions.filter(s => s !== subdivision) }));
-                          }
-                        }}
-                      />
-                      <Label htmlFor={`subdivision-${subdivision}`} className="text-sm">{subdivision}</Label>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="flex-1">
-            {/* Filter Toggle Button for Mobile */}
-            <div className="lg:hidden mb-4">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowFilters(!showFilters)}
-                className="w-full"
-              >
-                <Filter className="h-4 w-4 mr-2" />
-                {showFilters ? 'Hide Filters' : 'Show Filters'}
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <Award className="h-6 w-6 text-primary" />
+                Featured Villages
+              </h2>
+              <Button variant="outline" size="sm">
+                View All <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
-
-            {/* Interactive Map */}
-            <div className="mb-12">
-              <InteractiveVillageMap selectedRegion={selectedRegion} height="600px" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {featuredVillages.topRated.slice(0, 6).map((village) => (
+                <VillageCard key={village.id} village={village} />
+              ))}
             </div>
+          </section>
 
-            {/* Featured Villages */}
-            <div className="mb-12">
-              <h2 className="text-2xl font-bold mb-6">Featured Villages</h2>
-          
-              <Tabs defaultValue="top-rated" className="w-full">
-                <TabsList className="grid w-full grid-cols-3">
-                  <TabsTrigger value="top-rated">Top Rated</TabsTrigger>
-                  <TabsTrigger value="most-developed">Most Developed</TabsTrigger>
-                  <TabsTrigger value="most-active">Most Active</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="top-rated">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                    {featuredVillages.topRated.slice(0, 4).map((village: Village) => (
-                      <VillageCard key={village.id} village={village} />
-                    ))}
+          {/* Ranking Board */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <TrendingUp className="h-6 w-6 text-primary" />
+              Village Rankings
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {rankingBoards.map((board) => (
+                <Card key={board.category} className="p-4">
+                  <div className="flex items-center gap-2 mb-4">
+                    {board.icon}
+                    <h3 className="font-semibold">{board.title}</h3>
                   </div>
-                </TabsContent>
-                
-                <TabsContent value="most-developed">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                    {featuredVillages.mostDeveloped.slice(0, 4).map((village: Village) => (
-                      <VillageCard key={village.id} village={village} />
-                    ))}
-                  </div>
-                </TabsContent>
-                
-                <TabsContent value="most-active">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                    {featuredVillages.mostActive.slice(0, 4).map((village: Village) => (
-                      <VillageCard key={village.id} village={village} />
-                    ))}
-                  </div>
-                </TabsContent>
-              </Tabs>
-            </div>
-
-            {/* All Villages */}
-            <div>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-bold">All Villages</h2>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Users className="h-4 w-4" />
-                  {villages.length} villages found
-                </div>
-              </div>
-
-              {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                  {Array.from({ length: 6 }).map((_, i) => (
-                    <Card key={i} className="animate-pulse">
-                      <CardHeader>
-                        <div className="h-6 bg-muted rounded w-3/4"></div>
-                        <div className="h-4 bg-muted rounded w-1/2"></div>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="space-y-2">
-                          <div className="h-4 bg-muted rounded"></div>
-                          <div className="h-4 bg-muted rounded w-2/3"></div>
+                  <div className="space-y-2">
+                    {board.villages.slice(0, 3).map((village, index) => (
+                      <div key={village.id} className="flex items-center justify-between text-sm">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-primary">#{index + 1}</span>
+                          <span className="truncate">{village.village_name}</span>
                         </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : villages.length === 0 ? (
-                <Card className="text-center py-12">
-                  <CardContent>
-                    <MapPin className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No villages found</h3>
-                    <p className="text-muted-foreground mb-4">
-                      No villages match your search criteria. Try adjusting your filters.
-                    </p>
-                    <Link to="/villages/add">
-                      <Button>
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add the first village
-                      </Button>
-                    </Link>
-                  </CardContent>
+                        <div className="flex items-center gap-1">
+                          {renderStars(village.overall_rating).slice(0, 1)}
+                          <span className="text-xs">{village.overall_rating.toFixed(1)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <Button variant="link" className="p-0 h-auto mt-2 text-xs">
+                    View Full Ranking <ChevronRight className="h-3 w-3 ml-1" />
+                  </Button>
                 </Card>
-              ) : (
-                <div className="grid gap-6 lg:grid-cols-4">
-                  <div className="lg:col-span-3">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-                      {villages.map((village) => (
-                        <VillageCard 
-                          key={village.id} 
-                          village={village}
-                          onClick={() => trackVillageView(village.id, village)}
-                        />
+              ))}
+            </div>
+          </section>
+
+          {/* Don/Chief Profile Highlight */}
+          {donChiefHighlight && (
+            <section className="mb-12">
+              <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                <User className="h-6 w-6 text-primary" />
+                Traditional Leader Spotlight
+              </h2>
+              <Card className="p-6 bg-gradient-to-r from-purple-50 to-blue-50">
+                <div className="flex items-start gap-6">
+                  <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Crown className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-2">{donChiefHighlight.name}</h3>
+                    <p className="text-lg text-primary mb-2">{donChiefHighlight.title}</p>
+                    <p className="text-muted-foreground mb-4">
+                      {donChiefHighlight.village}, {donChiefHighlight.region} Region
+                    </p>
+                    <div className="space-y-1">
+                      {donChiefHighlight.achievements.map((achievement, index) => (
+                        <div key={index} className="flex items-center gap-2 text-sm">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>{achievement}</span>
+                        </div>
                       ))}
                     </div>
                   </div>
-                  <div className="lg:col-span-1">
-                    <VillageRecommendations />
-                  </div>
+                  <Button variant="outline">
+                    View Profile <ChevronRight className="h-4 w-4 ml-1" />
+                  </Button>
                 </div>
-              )}
+              </Card>
+            </section>
+          )}
+
+          {/* Fundraising Campaigns Board */}
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <DollarSign className="h-6 w-6 text-primary" />
+                Community Fundraising
+              </h2>
+              <Button variant="outline" size="sm">
+                View All Campaigns <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
             </div>
-          </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {fundraisingCampaigns.map((campaign) => (
+                <Card key={campaign.id} className="p-4">
+                  <h3 className="font-semibold mb-2">{campaign.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-3">{campaign.village_name}</p>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Progress</span>
+                      <span>{Math.round((campaign.raised_amount / campaign.target_amount) * 100)}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-primary h-2 rounded-full" 
+                        style={{ width: `${Math.min((campaign.raised_amount / campaign.target_amount) * 100, 100)}%` }}
+                      ></div>
+                    </div>
+                    <div className="flex justify-between text-xs text-muted-foreground">
+                      <span>{(campaign.raised_amount / 1000000).toFixed(1)}M FCFA raised</span>
+                      <span>{campaign.supporters} supporters</span>
+                    </div>
+                  </div>
+                  
+                  <Button variant="outline" size="sm" className="w-full">
+                    Support Campaign
+                  </Button>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* Village Petition Widget */}
+          <section className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold flex items-center gap-2">
+                <FileText className="h-6 w-6 text-primary" />
+                Community Petitions
+              </h2>
+              <Button variant="outline" size="sm">
+                Create Petition <Plus className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {villagePetitions.map((petition) => (
+                <Card key={petition.id} className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Badge variant="outline" className="text-xs">{petition.category}</Badge>
+                    <span className="text-xs text-muted-foreground">{petition.created_date}</span>
+                  </div>
+                  <h3 className="font-semibold mb-2">{petition.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-3">{petition.village_name}</p>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-sm">
+                      <span>Signatures</span>
+                      <span>{petition.signatures} / {petition.target_signatures}</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2">
+                      <div 
+                        className="bg-red-500 h-2 rounded-full" 
+                        style={{ width: `${Math.min((petition.signatures / petition.target_signatures) * 100, 100)}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                  
+                  <Button variant="outline" size="sm" className="w-full">
+                    Sign Petition
+                  </Button>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* News from Villages */}
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <Globe className="h-6 w-6 text-primary" />
+              Village News
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {villageNews.map((news) => (
+                <Card key={news.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge variant="outline">{news.category}</Badge>
+                      <span className="text-sm text-muted-foreground">{news.date}</span>
+                    </div>
+                    <CardTitle className="text-lg">{news.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-3">{news.summary}</p>
+                    <p className="text-sm font-medium">{news.village_name}</p>
+                    <Button variant="link" className="p-0 h-auto mt-2">
+                      Read More <ChevronRight className="h-3 w-3 ml-1" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+
+          {/* Add Your Village CTA */}
+          <section className="text-center py-12 bg-primary/5 rounded-lg">
+            <h2 className="text-2xl font-bold mb-4">Add Your Village</h2>
+            <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
+              Help showcase your village's unique heritage, development projects, and community spirit. 
+              Connect with sons and daughters worldwide.
+            </p>
+            <Link to="/villages/add">
+              <Button size="lg">
+                <Plus className="h-5 w-5 mr-2" />
+                Add Your Village
+              </Button>
+            </Link>
+          </section>
+
+          {/* Village Results Grid */}
+          {!loading && villages.length > 0 && (
+            <section className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-semibold">
+                  {villages.length} Villages Found
+                </h2>
+                {(searchTerm || selectedRegion !== 'all' || selectedRating !== 'all') && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={resetFilters}
+                  >
+                    Clear Filters
+                  </Button>
+                )}
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {villages.slice(0, 12).map((village) => (
+                  <VillageCard 
+                    key={village.id} 
+                    village={village} 
+                    onClick={() => trackVillageView(village.id, village.village_name)}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
         </div>
-      </div>
       </div>
     </ServicesLayout>
   );
