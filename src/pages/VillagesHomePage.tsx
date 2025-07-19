@@ -11,15 +11,6 @@ import { CommunityActions } from '../components/villages/CommunityActions';
 import { FeaturedVillagers } from '../components/villages/FeaturedVillagers';
 import { VillageSearch } from '../components/villages/VillageSearch';
 import { MobileVillageActions } from '../components/villages/MobileVillageActions';
-import { VillagesHeroSection } from '../components/villages/VillagesHeroSection';
-import { VillageStatsCounter } from '../components/villages/VillageStatsCounter';
-import { InteractiveMap } from '../components/villages/InteractiveMap';
-import { VillageRankings } from '../components/villages/VillageRankings';
-import { VillageFeed } from '../components/villages/VillageFeed';
-import { AddVillageWidget } from '../components/villages/AddVillageWidget';
-import { CivicCategories } from '../components/villages/CivicCategories';
-import { VillageSpotlight } from '../components/villages/VillageSpotlight';
-import { CommunityActions } from '../components/villages/CommunityActions';
 
 export const VillagesHomePage: React.FC = () => {
   return (

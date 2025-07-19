@@ -109,7 +109,7 @@ export const MobileVillageActions: React.FC = () => {
       </div>
 
       {/* Swipe Indicator for Cards */}
-      <style jsx global>{`
+      <style>{`
         @media (max-width: 768px) {
           .swipeable-cards {
             display: flex;
