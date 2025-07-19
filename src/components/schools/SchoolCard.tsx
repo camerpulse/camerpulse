@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { SchoolDetailsDialog } from './SchoolDetailsDialog';
-import { RateSchoolDialog } from './RateSchoolDialog';
+import { SchoolRatingDialog } from './SchoolRatingDialog';
 import { ClaimInstitutionButton } from '@/components/institutions/ClaimInstitutionButton';
 
 interface School {
@@ -59,6 +59,7 @@ interface SchoolCardProps {
 
 export function SchoolCard({ school, onUpdate }: SchoolCardProps) {
   const [showDetails, setShowDetails] = useState(false);
+  const [showRatingDialog, setShowRatingDialog] = useState(false);
   const [showRating, setShowRating] = useState(false);
 
   const getVerificationBadge = (status: string) => {
@@ -297,11 +298,11 @@ export function SchoolCard({ school, onUpdate }: SchoolCardProps) {
         onUpdate={onUpdate}
       />
 
-      <RateSchoolDialog 
+      <SchoolRatingDialog 
         school={school}
         open={showRating}
         onOpenChange={setShowRating}
-        onSuccess={onUpdate}
+        onRatingAdded={onUpdate}
       />
     </>
   );

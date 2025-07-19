@@ -1,7 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-import { RatePharmacyDialog } from "./RatePharmacyDialog";
+import { PharmacyRatingDialog } from "./PharmacyRatingDialog";
 import { PharmacyDetailsDialog } from "./PharmacyDetailsDialog";
 import { useState } from "react";
 import { Star, MapPin, Clock, Truck, Shield, Phone } from "lucide-react";
@@ -25,9 +25,11 @@ interface PharmacyCardProps {
     total_ratings: number;
     created_at: string;
   };
+  onUpdate?: () => void;
 }
 
-export function PharmacyCard({ pharmacy }: PharmacyCardProps) {
+export function PharmacyCard({ pharmacy, onUpdate }: PharmacyCardProps) {
+  const [showRatingDialog, setShowRatingDialog] = useState(false);
   const [isRatingDialogOpen, setIsRatingDialogOpen] = useState(false);
   const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
 
@@ -134,10 +136,11 @@ export function PharmacyCard({ pharmacy }: PharmacyCardProps) {
         </CardFooter>
       </Card>
 
-      <RatePharmacyDialog
+      <PharmacyRatingDialog
         pharmacy={pharmacy}
         open={isRatingDialogOpen}
         onOpenChange={setIsRatingDialogOpen}
+        onRatingAdded={onUpdate || (() => {})}
       />
 
       <PharmacyDetailsDialog

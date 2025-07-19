@@ -9,7 +9,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { HospitalCard } from '@/components/hospitals/HospitalCard';
 import { AddHospitalDialog } from '@/components/hospitals/AddHospitalDialog';
-import { RateHospitalDialog } from '@/components/hospitals/RateHospitalDialog';
+import { HospitalRatingDialog } from '@/components/hospitals/HospitalRatingDialog';
 import { HospitalDetailsDialog } from '@/components/hospitals/HospitalDetailsDialog';
 
 interface Hospital {
@@ -301,7 +301,7 @@ export default function HospitalsDirectory() {
 
         {selectedHospital && (
           <>
-            <RateHospitalDialog
+            <HospitalRatingDialog
               open={showRateDialog}
               onOpenChange={setShowRateDialog}
               hospital={selectedHospital}

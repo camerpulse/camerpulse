@@ -214,7 +214,7 @@ export default function PharmaciesDirectory() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPharmacies.map((pharmacy) => (
-            <PharmacyCard key={pharmacy.id} pharmacy={pharmacy} />
+            <PharmacyCard key={pharmacy.id} pharmacy={pharmacy} onUpdate={fetchPharmacies} />
           ))}
         </div>
       )}
