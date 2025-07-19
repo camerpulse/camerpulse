@@ -78,6 +78,7 @@ import { OneAndIndivisiblePage } from "./pages/OneAndIndivisiblePage";
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
 import ModeratorPortal from "./pages/ModeratorPortal";
+import ModeratorOnboarding from "./pages/ModeratorOnboarding";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -196,6 +197,7 @@ const App = () => {
           <Route path="/unity" element={<OneAndIndivisiblePage />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/moderators" element={<ModeratorPortal />} />
+          <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

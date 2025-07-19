@@ -13862,6 +13862,42 @@ export type Database = {
         }
         Relationships: []
       }
+      moderator_assignments: {
+        Row: {
+          assigned_at: string
+          assigned_by: string | null
+          assignment_type: string
+          assignment_value: string
+          created_at: string
+          id: string
+          is_primary: boolean
+          revoked_at: string | null
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string
+          assigned_by?: string | null
+          assignment_type: string
+          assignment_value: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          revoked_at?: string | null
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string
+          assigned_by?: string | null
+          assignment_type?: string
+          assignment_value?: string
+          created_at?: string
+          id?: string
+          is_primary?: boolean
+          revoked_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       moderator_badges: {
         Row: {
           badge_type: Database["public"]["Enums"]["badge_type"]
@@ -13983,6 +14019,180 @@ export type Database = {
           },
         ]
       }
+      moderator_onboarding_progress: {
+        Row: {
+          assigned_region: string | null
+          completed_at: string | null
+          created_at: string
+          current_step: string
+          id: string
+          mentor_id: string | null
+          notes: string | null
+          oath_accepted_at: string | null
+          quiz_attempts: number
+          quiz_passed: boolean
+          quiz_score: number | null
+          slides_completed: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_region?: string | null
+          completed_at?: string | null
+          created_at?: string
+          current_step?: string
+          id?: string
+          mentor_id?: string | null
+          notes?: string | null
+          oath_accepted_at?: string | null
+          quiz_attempts?: number
+          quiz_passed?: boolean
+          quiz_score?: number | null
+          slides_completed?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_region?: string | null
+          completed_at?: string | null
+          created_at?: string
+          current_step?: string
+          id?: string
+          mentor_id?: string | null
+          notes?: string | null
+          oath_accepted_at?: string | null
+          quiz_attempts?: number
+          quiz_passed?: boolean
+          quiz_score?: number | null
+          slides_completed?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      moderator_performance: {
+        Row: {
+          badges_earned: Json
+          conflicts_resolved: number
+          created_at: string
+          id: string
+          metric_date: string
+          quality_score: number
+          submissions_approved: number
+          submissions_rejected: number
+          updated_at: string
+          user_id: string
+          user_reports_handled: number
+          villages_moderated: number
+        }
+        Insert: {
+          badges_earned?: Json
+          conflicts_resolved?: number
+          created_at?: string
+          id?: string
+          metric_date?: string
+          quality_score?: number
+          submissions_approved?: number
+          submissions_rejected?: number
+          updated_at?: string
+          user_id: string
+          user_reports_handled?: number
+          villages_moderated?: number
+        }
+        Update: {
+          badges_earned?: Json
+          conflicts_resolved?: number
+          created_at?: string
+          id?: string
+          metric_date?: string
+          quality_score?: number
+          submissions_approved?: number
+          submissions_rejected?: number
+          updated_at?: string
+          user_id?: string
+          user_reports_handled?: number
+          villages_moderated?: number
+        }
+        Relationships: []
+      }
+      moderator_quiz_attempts: {
+        Row: {
+          answers: Json
+          attempt_number: number
+          completed_at: string
+          id: string
+          onboarding_progress_id: string
+          passed: boolean
+          score: number
+          time_taken_minutes: number | null
+          user_id: string
+        }
+        Insert: {
+          answers: Json
+          attempt_number: number
+          completed_at?: string
+          id?: string
+          onboarding_progress_id: string
+          passed?: boolean
+          score: number
+          time_taken_minutes?: number | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          attempt_number?: number
+          completed_at?: string
+          id?: string
+          onboarding_progress_id?: string
+          passed?: boolean
+          score?: number
+          time_taken_minutes?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      moderator_quiz_questions: {
+        Row: {
+          correct_answer: string | null
+          created_at: string
+          explanation: string | null
+          id: string
+          is_active: boolean
+          options: Json | null
+          points: number
+          question_number: number
+          question_text: string
+          question_type: string
+          updated_at: string
+        }
+        Insert: {
+          correct_answer?: string | null
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          is_active?: boolean
+          options?: Json | null
+          points?: number
+          question_number: number
+          question_text: string
+          question_type: string
+          updated_at?: string
+        }
+        Update: {
+          correct_answer?: string | null
+          created_at?: string
+          explanation?: string | null
+          id?: string
+          is_active?: boolean
+          options?: Json | null
+          points?: number
+          question_number?: number
+          question_text?: string
+          question_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       moderator_training_progress: {
         Row: {
           attempts: number | null
@@ -14027,6 +14237,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      moderator_training_slides: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          media_url: string | null
+          slide_number: number
+          slide_type: string
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          slide_number: number
+          slide_type?: string
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          slide_number?: number
+          slide_type?: string
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       music_releases: {
         Row: {
