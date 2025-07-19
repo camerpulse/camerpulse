@@ -483,6 +483,30 @@ export type Database = {
         }
         Relationships: []
       }
+      artist_followers: {
+        Row: {
+          artist_user_id: string
+          created_at: string
+          fan_user_id: string
+          id: string
+          notifications_enabled: boolean
+        }
+        Insert: {
+          artist_user_id: string
+          created_at?: string
+          fan_user_id: string
+          id?: string
+          notifications_enabled?: boolean
+        }
+        Update: {
+          artist_user_id?: string
+          created_at?: string
+          fan_user_id?: string
+          id?: string
+          notifications_enabled?: boolean
+        }
+        Relationships: []
+      }
       artist_memberships: {
         Row: {
           application_id: string | null
@@ -22961,6 +22985,16 @@ export type Database = {
       mark_notification_read: {
         Args: { p_notification_id: string }
         Returns: boolean
+      }
+      notify_artist_fans: {
+        Args: {
+          p_artist_user_id: string
+          p_update_type?: string
+          p_new_song_title?: string
+          p_event_name?: string
+          p_award_name?: string
+        }
+        Returns: number
       }
       process_legal_document: {
         Args: {
