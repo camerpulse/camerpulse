@@ -7627,6 +7627,51 @@ export type Database = {
           },
         ]
       }
+      claim_requests: {
+        Row: {
+          claim_reason: string | null
+          claimant_user_id: string
+          created_at: string
+          evidence_documents: string[] | null
+          id: string
+          institution_id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          status: Database["public"]["Enums"]["verification_status"]
+          updated_at: string
+        }
+        Insert: {
+          claim_reason?: string | null
+          claimant_user_id: string
+          created_at?: string
+          evidence_documents?: string[] | null
+          id?: string
+          institution_id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          updated_at?: string
+        }
+        Update: {
+          claim_reason?: string | null
+          claimant_user_id?: string
+          created_at?: string
+          evidence_documents?: string[] | null
+          id?: string
+          institution_id?: string
+          institution_type?: Database["public"]["Enums"]["institution_type"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       community_events: {
         Row: {
           address: string | null
@@ -12927,6 +12972,66 @@ export type Database = {
         }
         Relationships: []
       }
+      institution_submissions: {
+        Row: {
+          assigned_moderator: string | null
+          contact_info: Json | null
+          created_at: string
+          description: string | null
+          flagged_reasons: string[] | null
+          id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          location: Json | null
+          metadata: Json | null
+          moderator_notes: string | null
+          name: string
+          reviewed_at: string | null
+          submitted_by: string | null
+          updated_at: string
+          verification_checklist: Json | null
+          verification_status: Database["public"]["Enums"]["verification_status"]
+          verified_at: string | null
+        }
+        Insert: {
+          assigned_moderator?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          description?: string | null
+          flagged_reasons?: string[] | null
+          id?: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          location?: Json | null
+          metadata?: Json | null
+          moderator_notes?: string | null
+          name: string
+          reviewed_at?: string | null
+          submitted_by?: string | null
+          updated_at?: string
+          verification_checklist?: Json | null
+          verification_status?: Database["public"]["Enums"]["verification_status"]
+          verified_at?: string | null
+        }
+        Update: {
+          assigned_moderator?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          description?: string | null
+          flagged_reasons?: string[] | null
+          id?: string
+          institution_type?: Database["public"]["Enums"]["institution_type"]
+          location?: Json | null
+          metadata?: Json | null
+          moderator_notes?: string | null
+          name?: string
+          reviewed_at?: string | null
+          submitted_by?: string | null
+          updated_at?: string
+          verification_checklist?: Json | null
+          verification_status?: Database["public"]["Enums"]["verification_status"]
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       institutional_trust_scores: {
         Row: {
           content_volume: number | null
@@ -14383,6 +14488,39 @@ export type Database = {
         }
         Relationships: []
       }
+      moderation_actions: {
+        Row: {
+          action_type: string
+          created_at: string
+          details: Json | null
+          id: string
+          moderator_id: string
+          reason: string | null
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          moderator_id: string
+          reason?: string | null
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          moderator_id?: string
+          reason?: string | null
+          target_id?: string
+          target_type?: string
+        }
+        Relationships: []
+      }
       moderation_analytics: {
         Row: {
           created_at: string
@@ -14483,6 +14621,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      moderation_notifications: {
+        Row: {
+          created_at: string
+          id: string
+          is_read: boolean
+          message: string
+          moderator_id: string
+          notification_type: string
+          priority: string
+          read_at: string | null
+          related_id: string | null
+          related_type: string | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message: string
+          moderator_id: string
+          notification_type: string
+          priority?: string
+          read_at?: string | null
+          related_id?: string | null
+          related_type?: string | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message?: string
+          moderator_id?: string
+          notification_type?: string
+          priority?: string
+          read_at?: string | null
+          related_id?: string | null
+          related_type?: string | null
+          title?: string
+        }
+        Relationships: []
       }
       moderation_queue: {
         Row: {
@@ -24919,6 +25099,11 @@ export type Database = {
         | "radio_stream"
         | "blog"
         | "social_feed"
+      moderator_role:
+        | "admin"
+        | "senior_moderator"
+        | "regional_moderator"
+        | "village_moderator"
       moderator_status:
         | "pending"
         | "approved"
@@ -25377,6 +25562,12 @@ export const Constants = {
         "radio_stream",
         "blog",
         "social_feed",
+      ],
+      moderator_role: [
+        "admin",
+        "senior_moderator",
+        "regional_moderator",
+        "village_moderator",
       ],
       moderator_status: [
         "pending",

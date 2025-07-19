@@ -97,6 +97,7 @@ import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
 import ModeratorPortal from "./pages/ModeratorPortal";
 import ModeratorOnboarding from "./pages/ModeratorOnboarding";
+import ModerationDashboard from "./pages/ModerationDashboard";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -234,7 +235,8 @@ const App = () => {
           <Route path="/search-directory" element={<UnifiedSearch />} />
           <Route path="/monetization-dashboard" element={<MonetizationDashboard />} />
           <Route path="/claims-dashboard" element={<ClaimsDashboard />} />
-          <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
+           <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
+           <Route path="/moderators/dashboard" element={<ModerationDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
