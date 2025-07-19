@@ -12977,6 +12977,107 @@ export type Database = {
         }
         Relationships: []
       }
+      moderation_analytics: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          moderator_id: string | null
+          period_end: string
+          period_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          metric_value: number
+          moderator_id?: string | null
+          period_end: string
+          period_start: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          moderator_id?: string | null
+          period_end?: string
+          period_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderation_analytics_moderator_id_fkey"
+            columns: ["moderator_id"]
+            isOneToOne: false
+            referencedRelation: "civic_moderators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moderation_appeals: {
+        Row: {
+          appeal_details: string | null
+          appeal_reason: string
+          appeal_status: string
+          appellant_id: string
+          created_at: string
+          evidence_urls: string[] | null
+          id: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          submission_id: string
+          updated_at: string
+        }
+        Insert: {
+          appeal_details?: string | null
+          appeal_reason: string
+          appeal_status?: string
+          appellant_id: string
+          created_at?: string
+          evidence_urls?: string[] | null
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          submission_id: string
+          updated_at?: string
+        }
+        Update: {
+          appeal_details?: string | null
+          appeal_reason?: string
+          appeal_status?: string
+          appellant_id?: string
+          created_at?: string
+          evidence_urls?: string[] | null
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          submission_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderation_appeals_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "civic_moderators"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "moderation_appeals_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "moderation_queue"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       moderation_queue: {
         Row: {
           assigned_to: string | null
@@ -13184,6 +13285,137 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "moderator_badges_moderator_id_fkey"
+            columns: ["moderator_id"]
+            isOneToOne: false
+            referencedRelation: "civic_moderators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moderator_guidelines: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          required_reading: boolean
+          title: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          required_reading?: boolean
+          title: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          required_reading?: boolean
+          title?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: []
+      }
+      moderator_notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string
+          id: string
+          message: string
+          metadata: Json | null
+          moderator_id: string
+          notification_type: string
+          priority: string
+          read_at: string | null
+          title: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          metadata?: Json | null
+          moderator_id: string
+          notification_type: string
+          priority?: string
+          read_at?: string | null
+          title: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          metadata?: Json | null
+          moderator_id?: string
+          notification_type?: string
+          priority?: string
+          read_at?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderator_notifications_moderator_id_fkey"
+            columns: ["moderator_id"]
+            isOneToOne: false
+            referencedRelation: "civic_moderators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moderator_training_progress: {
+        Row: {
+          attempts: number | null
+          completed_at: string | null
+          created_at: string
+          guideline_id: string
+          id: string
+          moderator_id: string
+          quiz_score: number | null
+        }
+        Insert: {
+          attempts?: number | null
+          completed_at?: string | null
+          created_at?: string
+          guideline_id: string
+          id?: string
+          moderator_id: string
+          quiz_score?: number | null
+        }
+        Update: {
+          attempts?: number | null
+          completed_at?: string | null
+          created_at?: string
+          guideline_id?: string
+          id?: string
+          moderator_id?: string
+          quiz_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderator_training_progress_guideline_id_fkey"
+            columns: ["guideline_id"]
+            isOneToOne: false
+            referencedRelation: "moderator_guidelines"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "moderator_training_progress_moderator_id_fkey"
             columns: ["moderator_id"]
             isOneToOne: false
             referencedRelation: "civic_moderators"
