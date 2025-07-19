@@ -702,6 +702,86 @@ export type Database = {
           },
         ]
       }
+      artist_profile_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_reason: string | null
+          claim_type: string
+          claimed_artist_id: string | null
+          created_at: string
+          evidence_files: string[] | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          claimed_artist_id?: string | null
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          claimed_artist_id?: string | null
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_profile_claims_claimed_artist_id_fkey"
+            columns: ["claimed_artist_id"]
+            isOneToOne: false
+            referencedRelation: "artist_memberships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      artist_submission_drafts: {
+        Row: {
+          created_at: string
+          draft_data: Json
+          id: string
+          step_completed: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          draft_data?: Json
+          id?: string
+          step_completed?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          draft_data?: Json
+          id?: string
+          step_completed?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ashen_auto_healing_history: {
         Row: {
           admin_feedback: string | null
@@ -22951,6 +23031,23 @@ export type Database = {
       schedule_debt_refresh: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      search_artists: {
+        Args: {
+          p_stage_name?: string
+          p_social_url?: string
+          p_region?: string
+        }
+        Returns: {
+          id: string
+          stage_name: string
+          real_name: string
+          bio_short: string
+          profile_photo_url: string
+          region: string
+          application_status: string
+          similarity_score: number
+        }[]
       }
       search_villages: {
         Args: {

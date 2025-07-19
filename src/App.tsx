@@ -41,6 +41,7 @@ import CamerPlayRankings from "./pages/CamerPlayRankings";
 import CamerPlayMusicPlayer from "./pages/CamerPlayMusicPlayer";
 import CamerPlayTicketPurchase from "./pages/CamerPlayTicketPurchase";
 import CamerPlayAwards from "./pages/CamerPlayAwards";
+import ArtistSubmissionPage from "./pages/ArtistSubmissionPage";
 import Promises from "./pages/Promises";
 import RegionalAnalytics from "./pages/RegionalAnalytics";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -180,6 +181,7 @@ const App = () => {
             <Route path="/camerplay/tickets/:eventId" element={<CamerPlayTicketPurchase />} />
             <Route path="/camerplay/awards" element={<CamerPlayAwards />} />
             <Route path="/camerplay/rankings" element={<CamerPlayRankings />} />
+            <Route path="/camerplay/submit-artist" element={<ArtistSubmissionPage />} />
           <Route path="/camerplay" element={<CamerPlayHome />} />
           <Route path="/ecosystem" element={<EcosystemDashboard />} />
           <Route path="/fan-portal" element={<FanPortal />} />
