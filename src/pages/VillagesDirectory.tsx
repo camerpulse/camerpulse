@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
+import { VillageMap } from '@/components/villages/VillageMap';
 
 interface Village {
   id: string;
@@ -62,6 +63,12 @@ const VillagesDirectory = () => {
 
       if (searchTerm) {
         query = query.or(`village_name.ilike.%${searchTerm}%,division.ilike.%${searchTerm}%,subdivision.ilike.%${searchTerm}%`);
+      }
+
+      // Apply rating filter
+      if (selectedRating !== 'all') {
+        const minRating = parseFloat(selectedRating.replace('+', ''));
+        query = query.gte('overall_rating', minRating);
       }
 
       const { data, error } = await query;
@@ -265,6 +272,11 @@ const VillagesDirectory = () => {
       </div>
 
       <div className="container mx-auto px-4 py-8">
+        {/* Interactive Map */}
+        <div className="mb-12">
+          <VillageMap selectedRegion={selectedRegion} />
+        </div>
+
         {/* Featured Villages */}
         <div className="mb-12">
           <h2 className="text-2xl font-bold mb-6">Featured Villages</h2>
