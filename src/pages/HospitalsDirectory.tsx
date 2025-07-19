@@ -75,11 +75,11 @@ export default function HospitalsDirectory() {
       }
 
       if (selectedType) {
-        query = query.eq('type', selectedType);
+        query = query.eq('type', selectedType as any);
       }
 
       if (selectedOwnership) {
-        query = query.eq('ownership', selectedOwnership);
+        query = query.eq('ownership', selectedOwnership as any);
       }
 
       const { data, error } = await query;

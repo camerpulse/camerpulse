@@ -82,13 +82,15 @@ export function AddHospitalDialog({ open, onOpenChange, onHospitalAdded }: AddHo
 
       const hospitalData = {
         ...formData,
+        type: formData.type as any,
+        ownership: formData.ownership as any,
         services_offered: servicesArray,
         submitted_by: user.id,
       };
 
       const { error } = await supabase
         .from('hospitals')
-        .insert([hospitalData]);
+        .insert(hospitalData);
 
       if (error) {
         throw error;

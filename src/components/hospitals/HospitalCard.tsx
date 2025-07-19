@@ -59,7 +59,7 @@ export function HospitalCard({ hospital, onViewDetails, onRate }: HospitalCardPr
         <div className="flex justify-between items-start gap-2">
           <CardTitle className="text-lg line-clamp-2 flex-1">{hospital.name}</CardTitle>
           {hospital.emergency_services && (
-            <Shield className="h-5 w-5 text-red-500 flex-shrink-0" title="Emergency Services Available" />
+            <Shield className="h-5 w-5 text-red-500 flex-shrink-0" />
           )}
         </div>
         

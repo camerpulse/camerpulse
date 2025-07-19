@@ -81,21 +81,19 @@ export function AddPharmacyDialog({ open, onOpenChange, onPharmacyAdded }: AddPh
 
       const { error } = await supabase
         .from("pharmacies")
-        .insert([
-          {
-            name: formData.name,
-            type: formData.type,
-            license_number: formData.license_number || null,
-            pharmacist_in_charge: formData.pharmacist_in_charge || null,
-            region: formData.region,
-            division: formData.division,
-            village_or_city: formData.village_or_city,
-            working_hours: formData.working_hours || null,
-            delivery_available: formData.delivery_available,
-            contact_info,
-            created_by: user.id,
-          },
-        ]);
+        .insert({
+          name: formData.name,
+          type: formData.type as any,
+          license_number: formData.license_number || null,
+          pharmacist_in_charge: formData.pharmacist_in_charge || null,
+          region: formData.region,
+          division: formData.division,
+          village_or_city: formData.village_or_city,
+          working_hours: formData.working_hours || null,
+          delivery_available: formData.delivery_available,
+          contact_info,
+          created_by: user.id,
+        });
 
       if (error) throw error;
 
