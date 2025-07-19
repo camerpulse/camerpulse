@@ -14645,6 +14645,7 @@ export type Database = {
           play_count: number | null
           producers: string[] | null
           release_id: string | null
+          status: string
           title: string
           track_id: string
           track_number: number | null
@@ -14664,6 +14665,7 @@ export type Database = {
           play_count?: number | null
           producers?: string[] | null
           release_id?: string | null
+          status?: string
           title: string
           track_id: string
           track_number?: number | null
@@ -14683,6 +14685,7 @@ export type Database = {
           play_count?: number | null
           producers?: string[] | null
           release_id?: string | null
+          status?: string
           title?: string
           track_id?: string
           track_number?: number | null
