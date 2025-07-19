@@ -19510,6 +19510,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_preferences: {
+        Row: {
+          activity_level: string | null
+          id: string
+          interests: string[] | null
+          last_updated: string
+          preferred_regions: string[] | null
+          user_id: string
+        }
+        Insert: {
+          activity_level?: string | null
+          id?: string
+          interests?: string[] | null
+          last_updated?: string
+          preferred_regions?: string[] | null
+          user_id: string
+        }
+        Update: {
+          activity_level?: string | null
+          id?: string
+          interests?: string[] | null
+          last_updated?: string
+          preferred_regions?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           granted_at: string | null
@@ -19601,6 +19628,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      village_analytics: {
+        Row: {
+          created_at: string
+          event_data: Json | null
+          event_type: string
+          id: string
+          ip_address: unknown | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+          village_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          village_id: string
+        }
+        Update: {
+          created_at?: string
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          village_id?: string
+        }
+        Relationships: []
       }
       village_billionaires: {
         Row: {
@@ -20429,6 +20492,48 @@ export type Database = {
           },
         ]
       }
+      village_recommendations: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_clicked: boolean | null
+          is_dismissed: boolean | null
+          metadata: Json | null
+          reason: string | null
+          recommendation_type: string
+          user_id: string
+          village_id: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_clicked?: boolean | null
+          is_dismissed?: boolean | null
+          metadata?: Json | null
+          reason?: string | null
+          recommendation_type: string
+          user_id: string
+          village_id: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_clicked?: boolean | null
+          is_dismissed?: boolean | null
+          metadata?: Json | null
+          reason?: string | null
+          recommendation_type?: string
+          user_id?: string
+          village_id?: string
+        }
+        Relationships: []
+      }
       villages: {
         Row: {
           achievements_score: number | null
@@ -21110,6 +21215,10 @@ export type Database = {
       }
       get_sync_guard_status: {
         Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_village_analytics_summary: {
+        Args: { p_village_id: string; p_days?: number }
         Returns: Json
       }
       gtrgm_compress: {

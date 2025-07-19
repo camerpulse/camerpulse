@@ -69,6 +69,7 @@ import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
 import VillagesDirectory from "./pages/VillagesDirectory";
 import VillageProfile from "./pages/VillageProfile";
+import { Analytics } from "./pages/Analytics";
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
 import ModeratorPortal from "./pages/ModeratorPortal";
@@ -183,6 +184,7 @@ const App = () => {
           <Route path="/villages/add" element={<AddVillage />} />
           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
           <Route path="/villages/:id" element={<VillageProfile />} />
+          <Route path="/analytics" element={<Analytics />} />
           <Route path="/moderators" element={<ModeratorPortal />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

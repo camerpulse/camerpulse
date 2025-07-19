@@ -29,6 +29,7 @@ interface Village {
 }
 
 const VillagesDirectory = () => {
+  const { trackSearch, trackVillageView } = useAnalytics();
   const [villages, setVillages] = useState<Village[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
@@ -119,6 +120,10 @@ const VillagesDirectory = () => {
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
       fetchVillages();
+      // Track search if there's a search term
+      if (searchTerm.trim()) {
+        trackSearch(searchTerm, { region: selectedRegion, rating: selectedRating }, villages.length);
+      }
     }, 300);
 
     return () => clearTimeout(debounceTimer);
@@ -145,9 +150,9 @@ const VillagesDirectory = () => {
     return stars;
   };
 
-  const VillageCard = ({ village }: { village: Village }) => (
+  const VillageCard = ({ village, onClick }: { village: Village; onClick?: () => void }) => (
     <Card className="hover:shadow-lg transition-all duration-200 group cursor-pointer">
-      <Link to={`/villages/${village.id}`} className="block">
+      <Link to={`/villages/${village.id}`} className="block" onClick={onClick}>
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">
@@ -358,10 +363,21 @@ const VillagesDirectory = () => {
               </CardContent>
             </Card>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {villages.map((village) => (
-                <VillageCard key={village.id} village={village} />
-              ))}
+            <div className="grid gap-6 lg:grid-cols-4">
+              <div className="lg:col-span-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {villages.map((village) => (
+                    <VillageCard 
+                      key={village.id} 
+                      village={village}
+                      onClick={() => trackVillageView(village.id, village)}
+                    />
+                  ))}
+                </div>
+              </div>
+              <div className="lg:col-span-1">
+                <VillageRecommendations />
+              </div>
             </div>
           )}
         </div>
