@@ -56,10 +56,25 @@
     --lux-golden: 45 95% 60%;    /* Sacred gold */
     --lux-ethereal: 270 30% 85%; /* Ethereal light */
     --lux-sacred: 280 70% 25%;   /* Sacred purple */
+    
+    /* Ancestral Cameroonian Royal Colors */
+    --royal-forest-green: 120 100% 15%;    /* Deep forest green */
+    --royal-golden-ochre: 38 85% 55%;      /* Golden ochre */
+    --royal-earth-brown: 30 45% 25%;       /* Warm earth brown */
+    --royal-crimson-red: 0 75% 45%;        /* Crimson red */
+    --royal-ancestral-black: 0 0% 8%;      /* Ancestral black */
+    --royal-bronze: 32 60% 40%;            /* Sacred bronze */
+    --royal-ivory: 45 25% 88%;             /* Ancestral ivory */
     --gradient-lux-primary: linear-gradient(135deg, hsl(var(--lux-primary)), hsl(var(--lux-golden)), hsl(var(--lux-sacred)));
     --gradient-lux-divine: linear-gradient(45deg, hsl(var(--lux-primary)) 0%, hsl(var(--lux-golden)) 50%, hsl(var(--lux-ethereal)) 100%);
     --gradient-lux-noble: radial-gradient(circle at center, hsl(var(--lux-golden) / 0.8), hsl(var(--lux-primary) / 0.9));
     --gradient-lux-celebration: conic-gradient(from 0deg, hsl(var(--cm-green)), hsl(var(--cm-red)), hsl(var(--cm-yellow)), hsl(var(--lux-golden)));
+    
+    /* Ancestral Gradients */
+    --gradient-royal-forest: linear-gradient(135deg, hsl(var(--royal-forest-green)), hsl(var(--royal-bronze)), hsl(var(--royal-golden-ochre)));
+    --gradient-ancestral: radial-gradient(circle at center, hsl(var(--royal-golden-ochre) / 0.9), hsl(var(--royal-earth-brown)), hsl(var(--royal-ancestral-black)));
+    --gradient-sacred-unity: linear-gradient(45deg, hsl(var(--royal-forest-green)), hsl(var(--royal-crimson-red)), hsl(var(--royal-golden-ochre)), hsl(var(--royal-earth-brown)));
+    --gradient-heritage: conic-gradient(from 0deg, hsl(var(--royal-forest-green)), hsl(var(--royal-golden-ochre)), hsl(var(--royal-crimson-red)), hsl(var(--royal-earth-brown)), hsl(var(--royal-ancestral-black)));
     
     /* CamerPulse Brand Shadows */
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
@@ -73,6 +88,11 @@
     --shadow-lux-sacred: 0 8px 30px -8px hsl(var(--lux-sacred) / 0.5), inset 0 1px 0 hsl(var(--lux-golden) / 0.2);
     --shadow-lux-ethereal: 0 20px 60px -15px hsl(var(--lux-ethereal) / 0.6), 0 0 80px hsl(var(--lux-golden) / 0.2);
     --shadow-lux-celebration: 0 0 100px hsl(var(--lux-golden) / 0.8), 0 0 150px hsl(var(--cm-green) / 0.3), 0 0 200px hsl(var(--cm-red) / 0.2);
+    
+    /* Ancestral Shadows */
+    --shadow-royal-forest: 0 15px 40px -10px hsl(var(--royal-forest-green) / 0.4), 0 0 50px hsl(var(--royal-golden-ochre) / 0.3);
+    --shadow-ancestral-glow: 0 0 60px hsl(var(--royal-golden-ochre) / 0.6), 0 0 100px hsl(var(--royal-crimson-red) / 0.2);
+    --shadow-sacred-depth: 0 25px 60px -15px hsl(var(--royal-ancestral-black) / 0.8), 0 0 80px hsl(var(--royal-bronze) / 0.4);
     
     /* Sidebar Colors */
     --sidebar-background: 0 0% 98%;      /* Very light gray */
@@ -411,5 +431,48 @@
   
   .border-lux-celebration {
     border-image: var(--gradient-lux-celebration) 1;
+  }
+  
+  /* Ancestral Utilities */
+  .bg-gradient-royal-forest {
+    background: var(--gradient-royal-forest);
+  }
+  
+  .bg-gradient-ancestral {
+    background: var(--gradient-ancestral);
+  }
+  
+  .bg-gradient-sacred-unity {
+    background: var(--gradient-sacred-unity);
+  }
+  
+  .bg-gradient-heritage {
+    background: var(--gradient-heritage);
+  }
+  
+  .text-gradient-ancestral {
+    background: var(--gradient-ancestral);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .text-gradient-sacred-unity {
+    background: var(--gradient-sacred-unity);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .shadow-royal-forest {
+    box-shadow: var(--shadow-royal-forest);
+  }
+  
+  .shadow-ancestral-glow {
+    box-shadow: var(--shadow-ancestral-glow);
+  }
+  
+  .shadow-sacred-depth {
+    box-shadow: var(--shadow-sacred-depth);
   }
 }

@@ -73,6 +73,7 @@ import { Analytics } from "./pages/Analytics";
 import { AdvancedSearchPage } from "./pages/AdvancedSearchPage";
 import { EconomicsPage } from "./pages/EconomicsPage";
 import { CivicParticipationPage } from "./pages/CivicParticipationPage";
+import { OneAndIndivisiblePage } from "./pages/OneAndIndivisiblePage";
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
 import ModeratorPortal from "./pages/ModeratorPortal";
@@ -190,6 +191,7 @@ const App = () => {
           <Route path="/search" element={<AdvancedSearchPage />} />
           <Route path="/economics" element={<EconomicsPage />} />
           <Route path="/civic" element={<CivicParticipationPage />} />
+          <Route path="/unity" element={<OneAndIndivisiblePage />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/moderators" element={<ModeratorPortal />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
