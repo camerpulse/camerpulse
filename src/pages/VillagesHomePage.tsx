@@ -8,6 +8,18 @@ import { AddVillageWidget } from '../components/villages/AddVillageWidget';
 import { CivicCategories } from '../components/villages/CivicCategories';
 import { VillageSpotlight } from '../components/villages/VillageSpotlight';
 import { CommunityActions } from '../components/villages/CommunityActions';
+import { FeaturedVillagers } from '../components/villages/FeaturedVillagers';
+import { VillageSearch } from '../components/villages/VillageSearch';
+import { MobileVillageActions } from '../components/villages/MobileVillageActions';
+import { VillagesHeroSection } from '../components/villages/VillagesHeroSection';
+import { VillageStatsCounter } from '../components/villages/VillageStatsCounter';
+import { InteractiveMap } from '../components/villages/InteractiveMap';
+import { VillageRankings } from '../components/villages/VillageRankings';
+import { VillageFeed } from '../components/villages/VillageFeed';
+import { AddVillageWidget } from '../components/villages/AddVillageWidget';
+import { CivicCategories } from '../components/villages/CivicCategories';
+import { VillageSpotlight } from '../components/villages/VillageSpotlight';
+import { CommunityActions } from '../components/villages/CommunityActions';
 
 export const VillagesHomePage: React.FC = () => {
   return (
@@ -20,8 +32,15 @@ export const VillagesHomePage: React.FC = () => {
         {/* Live Statistics */}
         <VillageStatsCounter />
         
+        {/* Search Section */}
+        <div data-component="village-search">
+          <VillageSearch showFilters={true} />
+        </div>
+        
         {/* Interactive Map */}
-        <InteractiveMap />
+        <div data-component="interactive-map">
+          <InteractiveMap />
+        </div>
         
         {/* Village Rankings */}
         <VillageRankings />
@@ -33,14 +52,21 @@ export const VillagesHomePage: React.FC = () => {
             {/* Village Feed */}
             <VillageFeed />
             
+            {/* Featured Villagers */}
+            <FeaturedVillagers />
+            
             {/* Civic Categories */}
-            <CivicCategories />
+            <div data-component="civic-categories">
+              <CivicCategories />
+            </div>
           </div>
           
           {/* Right Column - 1/3 width */}
           <div className="space-y-8">
             {/* Add Village Widget */}
-            <AddVillageWidget />
+            <div data-component="add-village-widget">
+              <AddVillageWidget />
+            </div>
             
             {/* Village Spotlight */}
             <VillageSpotlight />
@@ -50,6 +76,9 @@ export const VillagesHomePage: React.FC = () => {
       
       {/* Community Actions Footer */}
       <CommunityActions />
+      
+      {/* Mobile Actions */}
+      <MobileVillageActions />
     </div>
   );
 };

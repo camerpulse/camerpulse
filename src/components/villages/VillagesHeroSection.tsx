@@ -33,6 +33,10 @@ export const VillagesHeroSection: React.FC = () => {
             <Button 
               size="lg" 
               className="bg-amber-600 hover:bg-amber-700 text-white px-8 py-3 text-lg shadow-ancestral-glow"
+              onClick={() => {
+                const searchSection = document.querySelector('[data-component="village-search"]');
+                searchSection?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               <Search className="w-5 h-5 mr-2" />
               Find Your Village
@@ -41,6 +45,10 @@ export const VillagesHeroSection: React.FC = () => {
               size="lg" 
               variant="outline" 
               className="border-amber-300 text-amber-100 hover:bg-amber-100 hover:text-amber-900 px-8 py-3 text-lg"
+              onClick={() => {
+                const addWidget = document.querySelector('[data-component="add-village-widget"]');
+                addWidget?.scrollIntoView({ behavior: 'smooth' });
+              }}
             >
               <Plus className="w-5 h-5 mr-2" />
               Add My Village
@@ -49,6 +57,7 @@ export const VillagesHeroSection: React.FC = () => {
               size="lg" 
               variant="outline" 
               className="border-amber-300 text-amber-100 hover:bg-amber-100 hover:text-amber-900 px-8 py-3 text-lg"
+              onClick={() => window.open('/civic', '_blank')}
             >
               <FileText className="w-5 h-5 mr-2" />
               Start a Petition
