@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
-import { AdvancedUserProfile } from '@/components/camerpulse/AdvancedUserProfile';
+import { AdvancedUserProfile } from '@/components/camerpulse';
 
 const UserProfilePage: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
