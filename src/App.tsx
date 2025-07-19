@@ -71,6 +71,7 @@ import VillagesDirectory from "./pages/VillagesDirectory";
 import VillageProfile from "./pages/VillageProfile";
 import { Analytics } from "./pages/Analytics";
 import { AdvancedSearchPage } from "./pages/AdvancedSearchPage";
+import { EconomicsPage } from "./pages/EconomicsPage";
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
 import ModeratorPortal from "./pages/ModeratorPortal";
@@ -186,6 +187,7 @@ const App = () => {
           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
           <Route path="/villages/:id" element={<VillageProfile />} />
           <Route path="/search" element={<AdvancedSearchPage />} />
+          <Route path="/economics" element={<EconomicsPage />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/moderators" element={<ModeratorPortal />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

@@ -4437,6 +4437,60 @@ export type Database = {
         }
         Relationships: []
       }
+      budget_allocations: {
+        Row: {
+          allocated_amount: number
+          beneficiaries_reached: number | null
+          beneficiaries_target: number | null
+          budget_year: number
+          created_at: string
+          execution_percentage: number | null
+          id: string
+          ministry_department: string
+          project_name: string | null
+          region: string | null
+          sector: string
+          spent_amount: number | null
+          status: string | null
+          transparency_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          allocated_amount: number
+          beneficiaries_reached?: number | null
+          beneficiaries_target?: number | null
+          budget_year: number
+          created_at?: string
+          execution_percentage?: number | null
+          id?: string
+          ministry_department: string
+          project_name?: string | null
+          region?: string | null
+          sector: string
+          spent_amount?: number | null
+          status?: string | null
+          transparency_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          allocated_amount?: number
+          beneficiaries_reached?: number | null
+          beneficiaries_target?: number | null
+          budget_year?: number
+          created_at?: string
+          execution_percentage?: number | null
+          id?: string
+          ministry_department?: string
+          project_name?: string | null
+          region?: string | null
+          sector?: string
+          spent_amount?: number | null
+          status?: string | null
+          transparency_score?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cache_flush_operations: {
         Row: {
           cache_layers: string[]
@@ -9270,6 +9324,78 @@ export type Database = {
         }
         Relationships: []
       }
+      development_projects: {
+        Row: {
+          actual_completion_date: string | null
+          citizen_feedback_score: number | null
+          communities_affected: string[] | null
+          created_at: string
+          current_status: string | null
+          description: string | null
+          disbursed_amount: number | null
+          expected_completion_date: string | null
+          funding_source: string
+          id: string
+          impact_metrics: Json | null
+          implementing_agency: string
+          progress_percentage: number | null
+          project_name: string
+          project_type: string
+          region: string
+          start_date: string | null
+          total_budget: number
+          total_feedback_count: number | null
+          transparency_rating: number | null
+          updated_at: string
+        }
+        Insert: {
+          actual_completion_date?: string | null
+          citizen_feedback_score?: number | null
+          communities_affected?: string[] | null
+          created_at?: string
+          current_status?: string | null
+          description?: string | null
+          disbursed_amount?: number | null
+          expected_completion_date?: string | null
+          funding_source: string
+          id?: string
+          impact_metrics?: Json | null
+          implementing_agency: string
+          progress_percentage?: number | null
+          project_name: string
+          project_type: string
+          region: string
+          start_date?: string | null
+          total_budget: number
+          total_feedback_count?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+        }
+        Update: {
+          actual_completion_date?: string | null
+          citizen_feedback_score?: number | null
+          communities_affected?: string[] | null
+          created_at?: string
+          current_status?: string | null
+          description?: string | null
+          disbursed_amount?: number | null
+          expected_completion_date?: string | null
+          funding_source?: string
+          id?: string
+          impact_metrics?: Json | null
+          implementing_agency?: string
+          progress_percentage?: number | null
+          project_name?: string
+          project_type?: string
+          region?: string
+          start_date?: string | null
+          total_budget?: number
+          total_feedback_count?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       digital_badges: {
         Row: {
           badge_type: string
@@ -9380,6 +9506,174 @@ export type Database = {
           payment_method?: string | null
           payment_status?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      economic_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          action_required: string | null
+          affected_region: string | null
+          alert_type: string
+          auto_generated: boolean | null
+          created_at: string
+          current_value: number | null
+          description: string
+          id: string
+          is_acknowledged: boolean | null
+          related_indicator: string | null
+          responsible_agency: string | null
+          severity: string
+          threshold_value: number | null
+          title: string
+          trend_direction: string | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          action_required?: string | null
+          affected_region?: string | null
+          alert_type: string
+          auto_generated?: boolean | null
+          created_at?: string
+          current_value?: number | null
+          description: string
+          id?: string
+          is_acknowledged?: boolean | null
+          related_indicator?: string | null
+          responsible_agency?: string | null
+          severity?: string
+          threshold_value?: number | null
+          title: string
+          trend_direction?: string | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          action_required?: string | null
+          affected_region?: string | null
+          alert_type?: string
+          auto_generated?: boolean | null
+          created_at?: string
+          current_value?: number | null
+          description?: string
+          id?: string
+          is_acknowledged?: boolean | null
+          related_indicator?: string | null
+          responsible_agency?: string | null
+          severity?: string
+          threshold_value?: number | null
+          title?: string
+          trend_direction?: string | null
+        }
+        Relationships: []
+      }
+      economic_indicators: {
+        Row: {
+          created_at: string
+          data_source: string
+          id: string
+          indicator_name: string
+          indicator_type: string
+          measurement_date: string
+          notes: string | null
+          region: string
+          reliability_score: number | null
+          unit: string
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          created_at?: string
+          data_source: string
+          id?: string
+          indicator_name: string
+          indicator_type: string
+          measurement_date: string
+          notes?: string | null
+          region: string
+          reliability_score?: number | null
+          unit: string
+          updated_at?: string
+          value: number
+        }
+        Update: {
+          created_at?: string
+          data_source?: string
+          id?: string
+          indicator_name?: string
+          indicator_type?: string
+          measurement_date?: string
+          notes?: string | null
+          region?: string
+          reliability_score?: number | null
+          unit?: string
+          updated_at?: string
+          value?: number
+        }
+        Relationships: []
+      }
+      economic_insights: {
+        Row: {
+          analysis_period_end: string | null
+          analysis_period_start: string | null
+          confidence_level: number | null
+          created_at: string
+          created_by: string | null
+          data_sources: string[] | null
+          economic_impact_rating: number | null
+          id: string
+          insight_title: string
+          insight_type: string
+          is_published: boolean | null
+          key_findings: string
+          methodology: string | null
+          policy_recommendations: string | null
+          region_focus: string | null
+          sector_focus: string | null
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          analysis_period_end?: string | null
+          analysis_period_start?: string | null
+          confidence_level?: number | null
+          created_at?: string
+          created_by?: string | null
+          data_sources?: string[] | null
+          economic_impact_rating?: number | null
+          id?: string
+          insight_title: string
+          insight_type: string
+          is_published?: boolean | null
+          key_findings: string
+          methodology?: string | null
+          policy_recommendations?: string | null
+          region_focus?: string | null
+          sector_focus?: string | null
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          analysis_period_end?: string | null
+          analysis_period_start?: string | null
+          confidence_level?: number | null
+          created_at?: string
+          created_by?: string | null
+          data_sources?: string[] | null
+          economic_impact_rating?: number | null
+          id?: string
+          insight_title?: string
+          insight_type?: string
+          is_published?: boolean | null
+          key_findings?: string
+          methodology?: string | null
+          policy_recommendations?: string | null
+          region_focus?: string | null
+          sector_focus?: string | null
+          updated_at?: string
+          views_count?: number | null
         }
         Relationships: []
       }
@@ -12223,6 +12517,84 @@ export type Database = {
           source_official?: boolean | null
           status?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      local_businesses: {
+        Row: {
+          address: string | null
+          annual_revenue_range: string | null
+          business_name: string
+          business_type: string
+          city: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          economic_impact_score: number | null
+          email: string | null
+          employees_count: number | null
+          founding_year: number | null
+          id: string
+          is_active: boolean | null
+          owner_name: string | null
+          phone_number: string | null
+          region: string
+          registration_number: string | null
+          sector: string
+          sustainability_rating: number | null
+          updated_at: string
+          verification_status: string | null
+          website_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          annual_revenue_range?: string | null
+          business_name: string
+          business_type: string
+          city: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          economic_impact_score?: number | null
+          email?: string | null
+          employees_count?: number | null
+          founding_year?: number | null
+          id?: string
+          is_active?: boolean | null
+          owner_name?: string | null
+          phone_number?: string | null
+          region: string
+          registration_number?: string | null
+          sector: string
+          sustainability_rating?: number | null
+          updated_at?: string
+          verification_status?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          annual_revenue_range?: string | null
+          business_name?: string
+          business_type?: string
+          city?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          economic_impact_score?: number | null
+          email?: string | null
+          employees_count?: number | null
+          founding_year?: number | null
+          id?: string
+          is_active?: boolean | null
+          owner_name?: string | null
+          phone_number?: string | null
+          region?: string
+          registration_number?: string | null
+          sector?: string
+          sustainability_rating?: number | null
+          updated_at?: string
+          verification_status?: string | null
+          website_url?: string | null
         }
         Relationships: []
       }
@@ -21317,6 +21689,10 @@ export type Database = {
       }
       get_corruption_statistics: {
         Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_economic_summary: {
+        Args: { p_region?: string }
         Returns: Json
       }
       get_engagement_statistics: {
