@@ -260,7 +260,13 @@ class CentralizedNotificationController {
   }
 
   private async sendNotification(event: NotificationEvent, flow: any, templateData: Record<string, any>): Promise<void> {
-    // Call centralized notification engine
+    // Handle WhatsApp notifications directly
+    if (flow.channel === 'whatsapp') {
+      await this.sendWhatsAppNotification(event, flow, templateData);
+      return;
+    }
+
+    // Call centralized notification engine for other channels
     const response = await fetch('/functions/v1/centralized-notification-engine', {
       method: 'POST',
       headers: {
@@ -281,6 +287,66 @@ class CentralizedNotificationController {
 
     // Log the notification
     await this.logNotification(event, flow, templateData, 'sent');
+  }
+
+  private async sendWhatsAppNotification(event: NotificationEvent, flow: any, templateData: Record<string, any>): Promise<void> {
+    try {
+      // Get user's WhatsApp preferences
+      const { data: whatsappPrefs } = await supabase
+        .from('user_whatsapp_preferences')
+        .select('phone_number, whatsapp_enabled, verified_at')
+        .eq('user_id', event.payload.user_id)
+        .single();
+
+      if (!whatsappPrefs?.whatsapp_enabled || !whatsappPrefs?.verified_at || !whatsappPrefs?.phone_number) {
+        console.log('User has not opted in to WhatsApp notifications or missing phone number');
+        await this.logNotification(event, flow, templateData, 'skipped');
+        return;
+      }
+
+      // Map event to template
+      const templateMap: Record<string, string> = {
+        'ticket_purchased': 'ticket_confirmation',
+        'event_reminder_24h': 'event_reminder_24h',
+        'voting_opens': 'award_voting_open',
+        'new_song_uploaded': 'new_song_alert',
+        'event_cancelled': 'event_cancelled'
+      };
+
+      const templateName = templateMap[flow.event_type];
+      
+      if (!templateName) {
+        console.log(`No WhatsApp template configured for event: ${flow.event_type}`);
+        await this.logNotification(event, flow, templateData, 'failed');
+        return;
+      }
+
+      // Call WhatsApp edge function
+      const response = await supabase.functions.invoke('whatsapp-notification', {
+        body: {
+          user_id: event.payload.user_id,
+          phone_number: whatsappPrefs.phone_number,
+          template_name: templateName,
+          variables: templateData,
+          event_type: flow.event_type
+        }
+      });
+
+      if (response.error) {
+        throw new Error(response.error.message);
+      }
+
+      const result = response.data;
+      if (result.success) {
+        await this.logNotification(event, flow, templateData, 'sent');
+      } else {
+        await this.logNotification(event, flow, templateData, 'failed');
+      }
+
+    } catch (error: any) {
+      console.error('WhatsApp notification error:', error);
+      await this.logNotification(event, flow, templateData, 'failed');
+    }
   }
 
   private async logNotification(event: NotificationEvent, flow: any, templateData: Record<string, any>, status: string): Promise<void> {

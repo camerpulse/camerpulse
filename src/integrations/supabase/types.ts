@@ -244,6 +244,42 @@ export type Database = {
         }
         Relationships: []
       }
+      api_configurations: {
+        Row: {
+          additional_config: Json | null
+          api_key: string | null
+          base_url: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          service_name: string
+          updated_at: string
+        }
+        Insert: {
+          additional_config?: Json | null
+          api_key?: string | null
+          base_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          service_name: string
+          updated_at?: string
+        }
+        Update: {
+          additional_config?: Json | null
+          api_key?: string | null
+          base_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          service_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       approval_ratings: {
         Row: {
           comment: string | null
@@ -21481,6 +21517,42 @@ export type Database = {
           },
         ]
       }
+      user_whatsapp_preferences: {
+        Row: {
+          country_code: string | null
+          created_at: string
+          id: string
+          opt_in_date: string | null
+          phone_number: string | null
+          updated_at: string
+          user_id: string
+          verified_at: string | null
+          whatsapp_enabled: boolean
+        }
+        Insert: {
+          country_code?: string | null
+          created_at?: string
+          id?: string
+          opt_in_date?: string | null
+          phone_number?: string | null
+          updated_at?: string
+          user_id: string
+          verified_at?: string | null
+          whatsapp_enabled?: boolean
+        }
+        Update: {
+          country_code?: string | null
+          created_at?: string
+          id?: string
+          opt_in_date?: string | null
+          phone_number?: string | null
+          updated_at?: string
+          user_id?: string
+          verified_at?: string | null
+          whatsapp_enabled?: boolean
+        }
+        Relationships: []
+      }
       village_analytics: {
         Row: {
           created_at: string
@@ -22774,6 +22846,96 @@ export type Database = {
           reference_id?: string | null
           transaction_type?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      whatsapp_message_logs: {
+        Row: {
+          delivered_at: string | null
+          delivery_status: string | null
+          error_message: string | null
+          id: string
+          message_content: string | null
+          metadata: Json | null
+          phone_number: string
+          sendchamp_message_id: string | null
+          sent_at: string | null
+          status: string | null
+          template_name: string | null
+          user_id: string
+        }
+        Insert: {
+          delivered_at?: string | null
+          delivery_status?: string | null
+          error_message?: string | null
+          id?: string
+          message_content?: string | null
+          metadata?: Json | null
+          phone_number: string
+          sendchamp_message_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          template_name?: string | null
+          user_id: string
+        }
+        Update: {
+          delivered_at?: string | null
+          delivery_status?: string | null
+          error_message?: string | null
+          id?: string
+          message_content?: string | null
+          metadata?: Json | null
+          phone_number?: string
+          sendchamp_message_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          template_name?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      whatsapp_templates: {
+        Row: {
+          approval_status: string | null
+          content: string
+          created_at: string
+          event_type:
+            | Database["public"]["Enums"]["notification_event_type"]
+            | null
+          id: string
+          is_active: boolean
+          template_id: string | null
+          template_name: string
+          updated_at: string
+          variables: Json | null
+        }
+        Insert: {
+          approval_status?: string | null
+          content: string
+          created_at?: string
+          event_type?:
+            | Database["public"]["Enums"]["notification_event_type"]
+            | null
+          id?: string
+          is_active?: boolean
+          template_id?: string | null
+          template_name: string
+          updated_at?: string
+          variables?: Json | null
+        }
+        Update: {
+          approval_status?: string | null
+          content?: string
+          created_at?: string
+          event_type?:
+            | Database["public"]["Enums"]["notification_event_type"]
+            | null
+          id?: string
+          is_active?: boolean
+          template_id?: string | null
+          template_name?: string
+          updated_at?: string
+          variables?: Json | null
         }
         Relationships: []
       }

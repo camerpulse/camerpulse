@@ -65,6 +65,8 @@ import PollEmbedGeneratorPage from "./pages/PollEmbedGeneratorPage";
 import PollEmbedViewerPage from "./pages/PollEmbedViewerPage";
 import MessengerPage from "./pages/MessengerPage";
 import NotificationSettingsPage from "./pages/NotificationSettingsPage";
+import AdminPanel from "./pages/AdminPanel";
+import NotificationFlow from "./pages/NotificationFlow";
 import CamerPulseMaster from "./pages/CamerPulseMaster";
 import CamerPlayHome from "./pages/CamerPlayHome";
 import EcosystemDashboard from "./pages/EcosystemDashboard";
@@ -147,6 +149,8 @@ const App = () => {
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/design-core" element={<DesignSystemCore />} />
               <Route path="/admin/core" element={<CamerPulseAdminCore />} />
+              <Route path="/admin/whatsapp" element={<AdminPanel />} />
+              <Route path="/notification-flow" element={<NotificationFlow />} />
               <Route path="/politica-ai" element={<PoliticaAI />} />
               <Route path="/camerpulse-intelligence" element={
                 <DynamicCountryRouter>
