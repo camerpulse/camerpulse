@@ -34,6 +34,10 @@ import ArtistRegister from "./pages/ArtistRegister";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import CamerPlayUpload from "./pages/CamerPlayUpload";
 import CamerPlayPlayer from "./pages/CamerPlayPlayer";
+import CamerPlaySearch from "./pages/CamerPlaySearch";
+import CamerPlayArtistProfile from "./pages/CamerPlayArtistProfile";
+import CamerPlayEvents from "./pages/CamerPlayEvents";
+import CamerPlayRankings from "./pages/CamerPlayRankings";
 import Promises from "./pages/Promises";
 import RegionalAnalytics from "./pages/RegionalAnalytics";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -168,9 +172,13 @@ const App = () => {
           <Route path="/camerplay/upload" element={<CamerPlayUpload />} />
           <Route path="/camerplay/player" element={<CamerPlayPlayer />} />
           <Route path="/camerplay/awards" element={<CamerPlayAwards />} />
+          <Route path="/camerplay/search" element={<CamerPlaySearch />} />
+          <Route path="/camerplay/artists/:artistId" element={<CamerPlayArtistProfile />} />
+          <Route path="/camerplay/events" element={<CamerPlayEvents />} />
+          <Route path="/camerplay/rankings" element={<CamerPlayRankings />} />
+          <Route path="/camerplay" element={<CamerPlayHome />} />
           <Route path="/ecosystem" element={<EcosystemDashboard />} />
           <Route path="/fan-portal" element={<FanPortal />} />
-          <Route path="/camerplay" element={<CamerPlayHome />} />
           <Route path="/billionaires" element={<BillionaireTracker />} />
           <Route path="/billionaires/apply" element={<BillionaireApplication />} />
           <Route path="/billionaires/:id" element={<BillionaireProfile />} />
