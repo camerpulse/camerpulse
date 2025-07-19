@@ -24,10 +24,7 @@ interface Comment {
   created_at: string;
   user_id: string;
   parent_comment_id?: string;
-  user_profile?: {
-    full_name: string;
-    avatar_url?: string;
-  };
+  user_name?: string;
   replies?: Comment[];
 }
 
@@ -77,10 +74,7 @@ export const SocialFeatures: React.FC<SocialFeaturesProps> = ({ track, currentUs
       // Fetch comments
       const { data: commentsData } = await supabase
         .from("track_comments")
-        .select(`
-          *,
-          user_profile:profiles(full_name, avatar_url)
-        `)
+        .select("*")
         .eq("track_id", track.id)
         .is("parent_comment_id", null)
         .order("created_at", { ascending: false });
@@ -91,18 +85,22 @@ export const SocialFeatures: React.FC<SocialFeaturesProps> = ({ track, currentUs
           commentsData.map(async (comment) => {
             const { data: replies } = await supabase
               .from("track_comments")
-              .select(`
-                *,
-                user_profile:profiles(full_name, avatar_url)
-              `)
+              .select("*")
               .eq("parent_comment_id", comment.id)
               .order("created_at", { ascending: true });
 
-            return { ...comment, replies: replies || [] };
+            return { 
+              ...comment, 
+              replies: replies || [],
+              user_name: "Anonymous User" // Temporary fallback
+            };
           })
         );
 
-        setComments(commentsWithReplies);
+        setComments(commentsWithReplies.map(comment => ({
+          ...comment,
+          user_name: "Anonymous User" // Temporary fallback
+        })));
       }
 
       // Fetch shares count
@@ -180,24 +178,26 @@ export const SocialFeatures: React.FC<SocialFeaturesProps> = ({ track, currentUs
           content: newComment.trim(),
           parent_comment_id: replyTo,
         })
-        .select(`
-          *,
-          user_profile:profiles(full_name, avatar_url)
-        `)
+        .select("*")
         .single();
 
       if (error) throw error;
+
+      const commentWithDefaults = {
+        ...data,
+        user_name: "Anonymous User" // Temporary fallback
+      };
 
       if (replyTo) {
         // Update the specific comment's replies
         setComments(prev => prev.map(comment => 
           comment.id === replyTo 
-            ? { ...comment, replies: [...(comment.replies || []), data] }
+            ? { ...comment, replies: [...(comment.replies || []), commentWithDefaults] }
             : comment
         ));
       } else {
         // Add new top-level comment
-        setComments(prev => [data, ...prev]);
+        setComments(prev => [commentWithDefaults, ...prev]);
       }
 
       setNewComment("");
@@ -315,16 +315,15 @@ export const SocialFeatures: React.FC<SocialFeaturesProps> = ({ track, currentUs
   const renderComment = (comment: Comment, isReply = false) => (
     <div key={comment.id} className={`flex gap-3 ${isReply ? "ml-8 mt-2" : "mb-4"}`}>
       <Avatar className="h-8 w-8">
-        <AvatarImage src={comment.user_profile?.avatar_url} />
         <AvatarFallback>
-          {comment.user_profile?.full_name?.charAt(0) || "U"}
+          {comment.user_name?.charAt(0) || "U"}
         </AvatarFallback>
       </Avatar>
       <div className="flex-1">
         <div className="bg-secondary rounded-lg p-3">
           <div className="flex items-center gap-2 mb-1">
             <span className="font-medium text-sm">
-              {comment.user_profile?.full_name || "Anonymous"}
+              {comment.user_name || "Anonymous"}
             </span>
             <span className="text-xs text-muted-foreground">
               {formatTimeAgo(comment.created_at)}
