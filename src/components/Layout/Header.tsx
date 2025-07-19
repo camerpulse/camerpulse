@@ -53,30 +53,27 @@ export const Header = () => {
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-cm-yellow rounded-full border-2 border-white"></div>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-white font-inter">CamerPlay</h1>
-              <p className="text-white/80 text-xs">Music & Entertainment</p>
+              <h1 className="text-xl font-bold text-white font-inter">CamerPulse</h1>
+              <p className="text-white/80 text-xs">Civic Engagement Platform</p>
             </div>
           </Link>
 
-          {/* Desktop Navigation - CamerPlay specific */}
+          {/* Desktop Navigation - CamerPulse specific */}
           <nav className="hidden lg:flex items-center space-x-1">
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/polls">Polls</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/politicians">Politicians</Link>
+            </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/events">Events</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/artists">Artists</Link>
+              <Link to="/national-debt">Trackers</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/awards">Awards</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/tickets">My Tickets</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/music">Music</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/discover">Discover</Link>
+              <Link to="/schools">Services</Link>
             </Button>
           </nav>
 
@@ -155,27 +152,24 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - CamerPlay specific */}
+        {/* Mobile Menu - CamerPulse specific */}
         {mobileMenuOpen && (
           <nav className="lg:hidden mt-4 pb-4 border-t border-white/20">
             <div className="grid grid-cols-1 gap-2 mt-4">
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/events" onClick={() => setMobileMenuOpen(false)}>🎪 Events</Link>
+                <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Polls</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/artists" onClick={() => setMobileMenuOpen(false)}>🎤 Artists</Link>
+                <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/awards" onClick={() => setMobileMenuOpen(false)}>🏆 Awards</Link>
+                <Link to="/events" onClick={() => setMobileMenuOpen(false)}>📅 Events</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/tickets" onClick={() => setMobileMenuOpen(false)}>🎟️ My Tickets</Link>
+                <Link to="/national-debt" onClick={() => setMobileMenuOpen(false)}>📊 Trackers</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/music" onClick={() => setMobileMenuOpen(false)}>🎵 Music</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/discover" onClick={() => setMobileMenuOpen(false)}>🔍 Discover</Link>
+                <Link to="/schools" onClick={() => setMobileMenuOpen(false)}>🏫 Services</Link>
               </Button>
             </div>
           </nav>

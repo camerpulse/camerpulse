@@ -31,13 +31,13 @@ export const Footer = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-sm">CP</span>
               </div>
-              <span className="font-bold text-lg">CamerPlay</span>
+              <span className="font-bold text-lg">CamerPulse</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Celebrating Cameroonian music, culture, and entertainment. Connect with artists, discover events, and experience the rhythm of Cameroon.
+              Your comprehensive civic engagement platform for democratic participation, tracking political promises, and engaging with Cameroon's governance.
             </p>
             <div className="flex gap-3">
               <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
@@ -55,100 +55,88 @@ export const Footer = () => {
             </div>
           </div>
 
-          {/* Events & Shows */}
+          {/* Civic Engagement */}
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-primary" />
-              Events & Shows
+              <Vote className="w-4 h-4 text-primary" />
+              Civic Engagement
             </h3>
             <div className="space-y-2 text-sm">
+              <Link to="/polls" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Vote className="w-3 h-3" />
+                Polls & Voting
+              </Link>
+              <Link to="/politicians" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                Politicians
+              </Link>
               <Link to="/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Calendar className="w-3 h-3" />
-                All Events
+                Civic Events
               </Link>
-              <Link to="/concerts" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Music className="w-3 h-3" />
-                Concerts
-              </Link>
-              <Link to="/festivals" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Crown className="w-3 h-3" />
-                Festivals
-              </Link>
-              <Link to="/comedy-shows" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Users className="w-3 h-3" />
-                Comedy Shows
-              </Link>
-              <Link to="/tickets" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <FileText className="w-3 h-3" />
-                My Tickets
-              </Link>
-              <Link to="/event-organizers" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Briefcase className="w-3 h-3" />
-                For Organizers
-              </Link>
-            </div>
-          </div>
-
-          {/* Music & Entertainment */}
-          <div className="space-y-4">
-            <h3 className="font-semibold flex items-center gap-2">
-              <Music className="w-4 h-4 text-primary" />
-              Music & Entertainment
-            </h3>
-            <div className="space-y-2 text-sm">
-              <Link to="/music" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Music className="w-3 h-3" />
-                Music Library
-              </Link>
-              <Link to="/radio" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <TrendingUp className="w-3 h-3" />
-                CamerPlay Radio
-              </Link>
-              <Link to="/playlists" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/national-debt" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <BarChart3 className="w-3 h-3" />
-                Playlists
+                National Trackers
               </Link>
-              <Link to="/genres" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Globe className="w-3 h-3" />
-                Genres
-              </Link>
-              <Link to="/trending" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <TrendingUp className="w-3 h-3" />
-                Trending Now
-              </Link>
-              <Link to="/discover" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Target className="w-3 h-3" />
-                Discover New Music
+              <Link to="/calendar" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Calendar className="w-3 h-3" />
+                Event Calendar
               </Link>
             </div>
           </div>
 
-          {/* Artists & Awards */}
+          {/* Services Directory */}
           <div className="space-y-4">
             <h3 className="font-semibold flex items-center gap-2">
-              <Crown className="w-4 h-4 text-primary" />
-              Artists & Awards
+              <Building className="w-4 h-4 text-primary" />
+              Services Directory
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/artists" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Users className="w-3 h-3" />
-                All Artists
+              <Link to="/schools" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Building className="w-3 h-3" />
+                Schools
               </Link>
-              <Link to="/rising-stars" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <TrendingUp className="w-3 h-3" />
-                Rising Stars
-              </Link>
-              <Link to="/awards" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Crown className="w-3 h-3" />
-                Awards & Voting
-              </Link>
-              <Link to="/artist-portal" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Briefcase className="w-3 h-3" />
-                Artist Portal
-              </Link>
-              <Link to="/fan-clubs" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/hospitals" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Heart className="w-3 h-3" />
-                Fan Clubs
+                Hospitals
+              </Link>
+              <Link to="/pharmacies" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Shield className="w-3 h-3" />
+                Pharmacies
+              </Link>
+              <Link to="/villages" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Crown className="w-3 h-3" />
+                Villages
+              </Link>
+            </div>
+          </div>
+
+          {/* Governance & Transparency */}
+          <div className="space-y-4">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Scale className="w-4 h-4 text-primary" />
+              Governance & Transparency
+            </h3>
+            <div className="space-y-2 text-sm">
+              <Link to="/legal" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Scale className="w-3 h-3" />
+                Legal Framework
+              </Link>
+              <Link to="/transparency" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <FileText className="w-3 h-3" />
+                Transparency Reports
+              </Link>
+              <Link to="/accountability" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <AlertTriangle className="w-3 h-3" />
+                Accountability
+              </Link>
+              <Link to="/budget" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <DollarSign className="w-3 h-3" />
+                Budget Tracking
+              </Link>
+              <Link to="/civic-education" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Globe className="w-3 h-3" />
+                Civic Education
               </Link>
             </div>
           </div>
@@ -182,12 +170,12 @@ export const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-sm text-muted-foreground">
-            © 2024 CamerPlay. All rights reserved.
+            © 2024 CamerPulse. All rights reserved.
           </p>
           <div className="flex items-center gap-2 text-sm text-muted-foreground">
             <span>Made with</span>
             <Heart className="w-4 h-4 text-red-500" />
-            <span>for Cameroonian music lovers</span>
+            <span>for Cameroonian civic engagement</span>
           </div>
         </div>
       </div>
