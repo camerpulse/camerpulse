@@ -18763,6 +18763,36 @@ export type Database = {
         }
         Relationships: []
       }
+      role_change_audit: {
+        Row: {
+          changed_at: string
+          changed_by: string
+          id: string
+          new_role: string
+          old_role: string | null
+          reason: string | null
+          target_user: string
+        }
+        Insert: {
+          changed_at?: string
+          changed_by: string
+          id?: string
+          new_role: string
+          old_role?: string | null
+          reason?: string | null
+          target_user: string
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string
+          id?: string
+          new_role?: string
+          old_role?: string | null
+          reason?: string | null
+          target_user?: string
+        }
+        Relationships: []
+      }
       royalty_payments: {
         Row: {
           amount: number
