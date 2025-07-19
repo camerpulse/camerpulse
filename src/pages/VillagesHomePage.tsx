@@ -8,9 +8,6 @@ import { AddVillageWidget } from '../components/villages/AddVillageWidget';
 import { CivicCategories } from '../components/villages/CivicCategories';
 import { VillageSpotlight } from '../components/villages/VillageSpotlight';
 import { CommunityActions } from '../components/villages/CommunityActions';
-import { FeaturedVillagers } from '../components/villages/FeaturedVillagers';
-import { VillageSearch } from '../components/villages/VillageSearch';
-import { MobileVillageActions } from '../components/villages/MobileVillageActions';
 
 export const VillagesHomePage: React.FC = () => {
   return (
@@ -23,15 +20,8 @@ export const VillagesHomePage: React.FC = () => {
         {/* Live Statistics */}
         <VillageStatsCounter />
         
-        {/* Search Section */}
-        <div data-component="village-search">
-          <VillageSearch showFilters={true} />
-        </div>
-        
         {/* Interactive Map */}
-        <div data-component="interactive-map">
-          <InteractiveMap />
-        </div>
+        <InteractiveMap />
         
         {/* Village Rankings */}
         <VillageRankings />
@@ -43,21 +33,14 @@ export const VillagesHomePage: React.FC = () => {
             {/* Village Feed */}
             <VillageFeed />
             
-            {/* Featured Villagers */}
-            <FeaturedVillagers />
-            
             {/* Civic Categories */}
-            <div data-component="civic-categories">
-              <CivicCategories />
-            </div>
+            <CivicCategories />
           </div>
           
           {/* Right Column - 1/3 width */}
           <div className="space-y-8">
             {/* Add Village Widget */}
-            <div data-component="add-village-widget">
-              <AddVillageWidget />
-            </div>
+            <AddVillageWidget />
             
             {/* Village Spotlight */}
             <VillageSpotlight />
@@ -67,9 +50,6 @@ export const VillagesHomePage: React.FC = () => {
       
       {/* Community Actions Footer */}
       <CommunityActions />
-      
-      {/* Mobile Actions */}
-      <MobileVillageActions />
     </div>
   );
 };
