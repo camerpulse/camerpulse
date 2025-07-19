@@ -7372,6 +7372,75 @@ export type Database = {
         }
         Relationships: []
       }
+      community_events: {
+        Row: {
+          address: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          current_attendees: number
+          description: string
+          end_time: string
+          event_type: string
+          id: string
+          latitude: number | null
+          location: string
+          longitude: number | null
+          max_attendees: number | null
+          organizer_id: string
+          registration_required: boolean
+          start_time: string
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          current_attendees?: number
+          description: string
+          end_time: string
+          event_type: string
+          id?: string
+          latitude?: number | null
+          location: string
+          longitude?: number | null
+          max_attendees?: number | null
+          organizer_id: string
+          registration_required?: boolean
+          start_time: string
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          current_attendees?: number
+          description?: string
+          end_time?: string
+          event_type?: string
+          id?: string
+          latitude?: number | null
+          location?: string
+          longitude?: number | null
+          max_attendees?: number | null
+          organizer_id?: string
+          registration_required?: boolean
+          start_time?: string
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       companies: {
         Row: {
           approved_at: string | null
@@ -11726,6 +11795,143 @@ export type Database = {
         }
         Relationships: []
       }
+      forum_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          display_order: number
+          icon: string | null
+          id: string
+          is_active: boolean
+          name: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+        }
+        Relationships: []
+      }
+      forum_replies: {
+        Row: {
+          content: string
+          created_at: string
+          creator_id: string
+          id: string
+          is_solution: boolean
+          parent_reply_id: string | null
+          topic_id: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          creator_id: string
+          id?: string
+          is_solution?: boolean
+          parent_reply_id?: string | null
+          topic_id: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          creator_id?: string
+          id?: string
+          is_solution?: boolean
+          parent_reply_id?: string | null
+          topic_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_replies_parent_reply_id_fkey"
+            columns: ["parent_reply_id"]
+            isOneToOne: false
+            referencedRelation: "forum_replies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "forum_replies_topic_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "forum_topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      forum_topics: {
+        Row: {
+          category_id: string
+          content: string
+          created_at: string
+          creator_id: string
+          id: string
+          is_locked: boolean
+          is_pinned: boolean
+          last_activity_at: string
+          reply_count: number
+          tags: string[] | null
+          title: string
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          category_id: string
+          content: string
+          created_at?: string
+          creator_id: string
+          id?: string
+          is_locked?: boolean
+          is_pinned?: boolean
+          last_activity_at?: string
+          reply_count?: number
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          category_id?: string
+          content?: string
+          created_at?: string
+          creator_id?: string
+          id?: string
+          is_locked?: boolean
+          is_pinned?: boolean
+          last_activity_at?: string
+          reply_count?: number
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "forum_topics_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "forum_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       gov_change_monitoring_config: {
         Row: {
           base_url: string
@@ -15162,6 +15368,95 @@ export type Database = {
           },
         ]
       }
+      petition_signatures: {
+        Row: {
+          comment: string | null
+          email: string | null
+          full_name: string
+          id: string
+          is_anonymous: boolean
+          petition_id: string
+          signed_at: string
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          email?: string | null
+          full_name: string
+          id?: string
+          is_anonymous?: boolean
+          petition_id: string
+          signed_at?: string
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          is_anonymous?: boolean
+          petition_id?: string
+          signed_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_signatures_petition_id_fkey"
+            columns: ["petition_id"]
+            isOneToOne: false
+            referencedRelation: "petitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      petitions: {
+        Row: {
+          category: string
+          created_at: string
+          creator_id: string
+          current_signatures: number
+          deadline: string | null
+          description: string
+          goal_signatures: number
+          id: string
+          location: string | null
+          status: string
+          target_institution: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          creator_id: string
+          current_signatures?: number
+          deadline?: string | null
+          description: string
+          goal_signatures?: number
+          id?: string
+          location?: string | null
+          status?: string
+          target_institution: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          creator_id?: string
+          current_signatures?: number
+          deadline?: string | null
+          description?: string
+          goal_signatures?: number
+          id?: string
+          location?: string | null
+          status?: string
+          target_institution?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       platform_performance_data: {
         Row: {
           chart_positions: Json | null
@@ -16957,6 +17252,41 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      poll_options: {
+        Row: {
+          created_at: string
+          id: string
+          option_order: number
+          option_text: string
+          poll_id: string
+          vote_count: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          option_order?: number
+          option_text: string
+          poll_id: string
+          vote_count?: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          option_order?: number
+          option_text?: string
+          poll_id?: string
+          vote_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_options_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       poll_reports: {
         Row: {
@@ -21182,6 +21512,107 @@ export type Database = {
           village_name?: string
           whatsapp_link?: string | null
           year_founded?: number | null
+        }
+        Relationships: []
+      }
+      volunteer_applications: {
+        Row: {
+          application_status: string
+          applied_at: string
+          id: string
+          message: string | null
+          opportunity_id: string
+          reviewed_at: string | null
+          user_id: string
+        }
+        Insert: {
+          application_status?: string
+          applied_at?: string
+          id?: string
+          message?: string | null
+          opportunity_id: string
+          reviewed_at?: string | null
+          user_id: string
+        }
+        Update: {
+          application_status?: string
+          applied_at?: string
+          id?: string
+          message?: string | null
+          opportunity_id?: string
+          reviewed_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "volunteer_applications_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "volunteer_opportunities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      volunteer_opportunities: {
+        Row: {
+          category: string
+          contact_email: string
+          contact_phone: string | null
+          created_at: string
+          description: string
+          end_date: string | null
+          id: string
+          is_recurring: boolean
+          location: string
+          organization: string
+          skills_required: string[] | null
+          spots_available: number | null
+          spots_filled: number
+          start_date: string | null
+          status: string
+          time_commitment: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          contact_email: string
+          contact_phone?: string | null
+          created_at?: string
+          description: string
+          end_date?: string | null
+          id?: string
+          is_recurring?: boolean
+          location: string
+          organization: string
+          skills_required?: string[] | null
+          spots_available?: number | null
+          spots_filled?: number
+          start_date?: string | null
+          status?: string
+          time_commitment: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          contact_email?: string
+          contact_phone?: string | null
+          created_at?: string
+          description?: string
+          end_date?: string | null
+          id?: string
+          is_recurring?: boolean
+          location?: string
+          organization?: string
+          skills_required?: string[] | null
+          spots_available?: number | null
+          spots_filled?: number
+          start_date?: string | null
+          status?: string
+          time_commitment?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
