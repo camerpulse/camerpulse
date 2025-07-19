@@ -10,6 +10,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { InteractiveVillageMap } from '@/components/villages/InteractiveVillageMap';
+import { VillageRecommendations } from '@/components/recommendations/VillageRecommendations';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 interface Village {
   id: string;
