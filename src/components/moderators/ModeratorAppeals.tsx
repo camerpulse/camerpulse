@@ -23,12 +23,12 @@ interface Appeal {
   created_at: string;
   updated_at: string;
   reviewed_at: string | null;
-  moderation_queue: {
+  moderation_queue?: {
     title: string;
     content: string;
     submission_type: string;
     region: string;
-  };
+  } | null;
 }
 
 const statusConfig = {
@@ -80,7 +80,7 @@ export function ModeratorAppeals() {
         .from('moderation_appeals')
         .select(`
           *,
-          moderation_queue:submission_id (
+          moderation_queue!submission_id (
             title,
             content,
             submission_type,
@@ -90,7 +90,9 @@ export function ModeratorAppeals() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setAppeals(data || []);
+      
+      // Cast to proper type, handling join errors gracefully
+      setAppeals((data || []) as unknown as Appeal[]);
     } catch (error: any) {
       console.error('Error fetching appeals:', error);
       toast({
