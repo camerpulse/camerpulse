@@ -4,7 +4,7 @@ import { CivicComplaintForm } from "@/components/Civic/CivicComplaintForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Users, Calendar } from "lucide-react";
+import { Users, Calendar, GraduationCap, Heart, Pill, Crown } from "lucide-react";
 
 const Index = () => {
   return (
@@ -110,6 +110,85 @@ const Index = () => {
                 </Button>
               </CardContent>
             </Card>
+           </div>
+
+          {/* Services Directory Section */}
+          <div className="mt-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold mb-4">Civic Services Directory</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Discover essential services and institutions across Cameroon. Find schools, hospitals, pharmacies, and villages with ratings and verified information.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3 responsive-title">
+                    <GraduationCap className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+                    Schools
+                  </CardTitle>
+                  <CardDescription className="responsive-text">
+                    Find quality educational institutions from nursery to university level
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild className="w-full" variant="outline">
+                    <Link to="/schools">Browse Schools</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3 responsive-title">
+                    <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-red-600" />
+                    Hospitals
+                  </CardTitle>
+                  <CardDescription className="responsive-text">
+                    Locate healthcare facilities, emergency services, and specialized care
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild className="w-full" variant="outline">
+                    <Link to="/hospitals">Find Hospitals</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3 responsive-title">
+                    <Pill className="h-6 w-6 sm:h-8 sm:w-8 text-green-600" />
+                    Pharmacies
+                  </CardTitle>
+                  <CardDescription className="responsive-text">
+                    Search for pharmacies, check medicine availability, and find herbal shops
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild className="w-full" variant="outline">
+                    <Link to="/pharmacies">Find Pharmacies</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3 responsive-title">
+                    <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-amber-600" />
+                    Villages
+                  </CardTitle>
+                  <CardDescription className="responsive-text">
+                    Explore village heritage, development projects, and traditional authority
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild className="w-full" variant="outline">
+                    <Link to="/villages">Explore Villages</Link>
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>

@@ -6,49 +6,49 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MapPin, Phone, GraduationCap, Users, Star, Plus, BookOpen, Globe, CheckCircle } from "lucide-react";
 
-// Mock data for now
+// Mock data that matches the expected structure
 const mockSchools = [
   {
     id: "1",
     name: "École Primaire de Yaoundé",
     school_type: "primary",
     region: "Centre",
-    city: "Yaoundé",
-    is_verified: true,
+    village_or_city: "Yaoundé",
+    verification_status: "verified" as const,
     average_rating: 4.5,
     total_ratings: 25,
     current_enrollment: 450,
     description: "A well-established primary school in the heart of Yaoundé",
     features: ["library", "computer_lab", "sports_field"],
-    languages: ["French", "English"]
+    languages_of_instruction: ["French", "English"]
   },
   {
     id: "2", 
     name: "Government High School Bamenda",
     school_type: "secondary",
     region: "Northwest",
-    city: "Bamenda",
-    is_verified: true,
+    village_or_city: "Bamenda",
+    verification_status: "verified" as const,
     average_rating: 4.2,
     total_ratings: 18,
     current_enrollment: 800,
     description: "Premier secondary education institution in Bamenda",
     features: ["science_lab", "library", "sports_complex"],
-    languages: ["English", "French"]
+    languages_of_instruction: ["English", "French"]
   },
   {
     id: "3",
     name: "University of Buea",
     school_type: "university", 
     region: "Southwest",
-    city: "Buea",
-    is_verified: true,
+    village_or_city: "Buea",
+    verification_status: "verified" as const,
     average_rating: 4.7,
     total_ratings: 52,
     current_enrollment: 15000,
     description: "Leading anglophone university in Cameroon",
     features: ["research_center", "library", "hostels", "medical_center"],
-    languages: ["English"]
+    languages_of_instruction: ["English"]
   }
 ];
 
@@ -59,14 +59,14 @@ export default function SchoolsDirectory() {
 
   const filteredSchools = mockSchools.filter(school => {
     const matchesSearch = school.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         school.city.toLowerCase().includes(searchTerm.toLowerCase());
+                         school.village_or_city.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = selectedType === "all" || school.school_type === selectedType;
     const matchesRegion = selectedRegion === "all" || school.region === selectedRegion;
     return matchesSearch && matchesType && matchesRegion;
   });
 
   const featuredSchools = mockSchools.filter(school => 
-    school.is_verified && school.average_rating >= 4.0
+    school.verification_status === "verified" && school.average_rating >= 4.0
   ).slice(0, 4);
 
   const topRatedSchools = mockSchools
@@ -157,10 +157,10 @@ export default function SchoolsDirectory() {
                         <CardTitle className="text-lg">{school.name}</CardTitle>
                         <CardDescription className="flex items-center gap-1">
                           <MapPin className="h-3 w-3" />
-                          {school.city}, {school.region}
+                          {school.village_or_city}, {school.region}
                         </CardDescription>
                       </div>
-                      {school.is_verified && (
+                      {school.verification_status === "verified" && (
                         <CheckCircle className="h-5 w-5 text-green-500" />
                       )}
                     </div>
@@ -232,10 +232,10 @@ export default function SchoolsDirectory() {
                         <CardTitle className="text-lg">{school.name}</CardTitle>
                         <CardDescription className="flex items-center gap-1">
                           <MapPin className="h-3 w-3" />
-                          {school.city}, {school.region}
+                          {school.village_or_city}, {school.region}
                         </CardDescription>
                       </div>
-                      {school.is_verified && (
+                      {school.verification_status === "verified" && (
                         <CheckCircle className="h-5 w-5 text-green-500" />
                       )}
                     </div>
@@ -270,7 +270,7 @@ export default function SchoolsDirectory() {
                         )}
                         <div className="flex items-center gap-1">
                           <Globe className="h-3 w-3" />
-                          {school.languages.join(", ")}
+                          {school.languages_of_instruction.join(", ")}
                         </div>
                       </div>
                       
