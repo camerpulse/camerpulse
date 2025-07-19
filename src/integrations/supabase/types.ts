@@ -16554,6 +16554,284 @@ export type Database = {
         }
         Relationships: []
       }
+      pharmacies: {
+        Row: {
+          claimable: boolean | null
+          claimed_at: string | null
+          claimed_by: string | null
+          contact_info: Json | null
+          created_at: string
+          created_by: string | null
+          delivery_available: boolean | null
+          division: string
+          id: string
+          license_number: string | null
+          license_status_rating: number | null
+          medicine_availability_rating: number | null
+          name: string
+          overall_rating: number | null
+          pharmacist_in_charge: string | null
+          photo_gallery: string[] | null
+          price_fairness_rating: number | null
+          region: string
+          service_quality_rating: number | null
+          staff_knowledge_rating: number | null
+          status: string | null
+          total_ratings: number | null
+          type: Database["public"]["Enums"]["pharmacy_type"]
+          updated_at: string
+          village_or_city: string
+          working_hours: string | null
+        }
+        Insert: {
+          claimable?: boolean | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          created_by?: string | null
+          delivery_available?: boolean | null
+          division: string
+          id?: string
+          license_number?: string | null
+          license_status_rating?: number | null
+          medicine_availability_rating?: number | null
+          name: string
+          overall_rating?: number | null
+          pharmacist_in_charge?: string | null
+          photo_gallery?: string[] | null
+          price_fairness_rating?: number | null
+          region: string
+          service_quality_rating?: number | null
+          staff_knowledge_rating?: number | null
+          status?: string | null
+          total_ratings?: number | null
+          type: Database["public"]["Enums"]["pharmacy_type"]
+          updated_at?: string
+          village_or_city: string
+          working_hours?: string | null
+        }
+        Update: {
+          claimable?: boolean | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          contact_info?: Json | null
+          created_at?: string
+          created_by?: string | null
+          delivery_available?: boolean | null
+          division?: string
+          id?: string
+          license_number?: string | null
+          license_status_rating?: number | null
+          medicine_availability_rating?: number | null
+          name?: string
+          overall_rating?: number | null
+          pharmacist_in_charge?: string | null
+          photo_gallery?: string[] | null
+          price_fairness_rating?: number | null
+          region?: string
+          service_quality_rating?: number | null
+          staff_knowledge_rating?: number | null
+          status?: string | null
+          total_ratings?: number | null
+          type?: Database["public"]["Enums"]["pharmacy_type"]
+          updated_at?: string
+          village_or_city?: string
+          working_hours?: string | null
+        }
+        Relationships: []
+      }
+      pharmacy_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_message: string | null
+          claim_status: string | null
+          created_at: string
+          evidence_files: string[] | null
+          id: string
+          pharmacy_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_message?: string | null
+          claim_status?: string | null
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          pharmacy_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_message?: string | null
+          claim_status?: string | null
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          pharmacy_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacy_claims_pharmacy_id_fkey"
+            columns: ["pharmacy_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pharmacy_monetization: {
+        Row: {
+          amount_fcfa: number
+          created_at: string
+          expires_at: string | null
+          feature_type: string
+          id: string
+          payment_reference: string | null
+          payment_status: string | null
+          pharmacy_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_fcfa: number
+          created_at?: string
+          expires_at?: string | null
+          feature_type: string
+          id?: string
+          payment_reference?: string | null
+          payment_status?: string | null
+          pharmacy_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_fcfa?: number
+          created_at?: string
+          expires_at?: string | null
+          feature_type?: string
+          id?: string
+          payment_reference?: string | null
+          payment_status?: string | null
+          pharmacy_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacy_monetization_pharmacy_id_fkey"
+            columns: ["pharmacy_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pharmacy_ratings: {
+        Row: {
+          created_at: string
+          id: string
+          license_status_rating: number | null
+          medicine_availability_rating: number | null
+          pharmacy_id: string
+          price_fairness_rating: number | null
+          review_text: string | null
+          service_quality_rating: number | null
+          staff_knowledge_rating: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          license_status_rating?: number | null
+          medicine_availability_rating?: number | null
+          pharmacy_id: string
+          price_fairness_rating?: number | null
+          review_text?: string | null
+          service_quality_rating?: number | null
+          staff_knowledge_rating?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          license_status_rating?: number | null
+          medicine_availability_rating?: number | null
+          pharmacy_id?: string
+          price_fairness_rating?: number | null
+          review_text?: string | null
+          service_quality_rating?: number | null
+          staff_knowledge_rating?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacy_ratings_pharmacy_id_fkey"
+            columns: ["pharmacy_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pharmacy_updates: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_featured: boolean | null
+          pharmacy_id: string
+          title: string
+          update_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          pharmacy_id: string
+          title: string
+          update_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          pharmacy_id?: string
+          title?: string
+          update_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacy_updates_pharmacy_id_fkey"
+            columns: ["pharmacy_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       platform_performance_data: {
         Row: {
           chart_positions: Json | null
@@ -24429,6 +24707,11 @@ export type Database = {
         | "event_organizer"
       payment_method: "mobile_money" | "card" | "paypal" | "crypto"
       payment_status: "pending" | "completed" | "failed" | "refunded"
+      pharmacy_type:
+        | "registered_pharmacy"
+        | "otc_store"
+        | "herbal_shop"
+        | "hospital_linked"
       platform_type:
         | "spotify"
         | "youtube"
@@ -24887,6 +25170,12 @@ export const Constants = {
       ],
       payment_method: ["mobile_money", "card", "paypal", "crypto"],
       payment_status: ["pending", "completed", "failed", "refunded"],
+      pharmacy_type: [
+        "registered_pharmacy",
+        "otc_store",
+        "herbal_shop",
+        "hospital_linked",
+      ],
       platform_type: [
         "spotify",
         "youtube",
