@@ -19784,6 +19784,323 @@ export type Database = {
         }
         Relationships: []
       }
+      school_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_reason: string
+          created_at: string
+          evidence_documents: string[] | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          school_id: string
+          status: Database["public"]["Enums"]["claim_status"] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_reason: string
+          created_at?: string
+          evidence_documents?: string[] | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          school_id: string
+          status?: Database["public"]["Enums"]["claim_status"] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_reason?: string
+          created_at?: string
+          evidence_documents?: string[] | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          school_id?: string
+          status?: Database["public"]["Enums"]["claim_status"] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_claims_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      school_monetization: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          feature_type: string
+          id: string
+          is_active: boolean | null
+          payment_amount: number | null
+          payment_reference: string | null
+          school_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          feature_type: string
+          id?: string
+          is_active?: boolean | null
+          payment_amount?: number | null
+          payment_reference?: string | null
+          school_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          feature_type?: string
+          id?: string
+          is_active?: boolean | null
+          payment_amount?: number | null
+          payment_reference?: string | null
+          school_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_monetization_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      school_ratings: {
+        Row: {
+          academic_performance: number | null
+          community_trust: number | null
+          created_at: string
+          discipline_safety: number | null
+          id: string
+          inclusiveness: number | null
+          infrastructure: number | null
+          overall_rating: number | null
+          review_text: string | null
+          school_id: string
+          teaching_quality: number | null
+          tech_access: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          academic_performance?: number | null
+          community_trust?: number | null
+          created_at?: string
+          discipline_safety?: number | null
+          id?: string
+          inclusiveness?: number | null
+          infrastructure?: number | null
+          overall_rating?: number | null
+          review_text?: string | null
+          school_id: string
+          teaching_quality?: number | null
+          tech_access?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          academic_performance?: number | null
+          community_trust?: number | null
+          created_at?: string
+          discipline_safety?: number | null
+          id?: string
+          inclusiveness?: number | null
+          infrastructure?: number | null
+          overall_rating?: number | null
+          review_text?: string | null
+          school_id?: string
+          teaching_quality?: number | null
+          tech_access?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_ratings_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      school_updates: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_featured: boolean | null
+          photos: string[] | null
+          school_id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          photos?: string[] | null
+          school_id: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_featured?: boolean | null
+          photos?: string[] | null
+          school_id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "school_updates_school_id_fkey"
+            columns: ["school_id"]
+            isOneToOne: false
+            referencedRelation: "schools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      schools: {
+        Row: {
+          address: string | null
+          average_rating: number | null
+          claim_status: Database["public"]["Enums"]["claim_status"] | null
+          claimed_at: string | null
+          claimed_by: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          contact_website: string | null
+          created_at: string
+          created_by: string | null
+          current_enrollment: number | null
+          description: string | null
+          division: string
+          established_year: number | null
+          fees_range_max: number | null
+          fees_range_min: number | null
+          founder_or_don: string | null
+          id: string
+          languages_taught: string[] | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          ownership: Database["public"]["Enums"]["school_ownership"]
+          photo_gallery: string[] | null
+          programs_offered: string | null
+          region: string
+          school_type: Database["public"]["Enums"]["school_type"]
+          student_capacity: number | null
+          total_ratings: number | null
+          updated_at: string
+          verification_status:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at: string | null
+          verified_by: string | null
+          village_or_city: string
+        }
+        Insert: {
+          address?: string | null
+          average_rating?: number | null
+          claim_status?: Database["public"]["Enums"]["claim_status"] | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          contact_website?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_enrollment?: number | null
+          description?: string | null
+          division: string
+          established_year?: number | null
+          fees_range_max?: number | null
+          fees_range_min?: number | null
+          founder_or_don?: string | null
+          id?: string
+          languages_taught?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          ownership: Database["public"]["Enums"]["school_ownership"]
+          photo_gallery?: string[] | null
+          programs_offered?: string | null
+          region: string
+          school_type: Database["public"]["Enums"]["school_type"]
+          student_capacity?: number | null
+          total_ratings?: number | null
+          updated_at?: string
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at?: string | null
+          verified_by?: string | null
+          village_or_city: string
+        }
+        Update: {
+          address?: string | null
+          average_rating?: number | null
+          claim_status?: Database["public"]["Enums"]["claim_status"] | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          contact_website?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_enrollment?: number | null
+          description?: string | null
+          division?: string
+          established_year?: number | null
+          fees_range_max?: number | null
+          fees_range_min?: number | null
+          founder_or_don?: string | null
+          id?: string
+          languages_taught?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          ownership?: Database["public"]["Enums"]["school_ownership"]
+          photo_gallery?: string[] | null
+          programs_offered?: string | null
+          region?: string
+          school_type?: Database["public"]["Enums"]["school_type"]
+          student_capacity?: number | null
+          total_ratings?: number | null
+          updated_at?: string
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at?: string | null
+          verified_by?: string | null
+          village_or_city?: string
+        }
+        Relationships: []
+      }
       search_analytics: {
         Row: {
           clicked_result_id: string | null
@@ -23680,6 +23997,7 @@ export type Database = {
         | "community"
         | "government"
         | "religious"
+      claim_status: "unclaimed" | "pending" | "approved" | "rejected"
       company_size: "startup" | "sme" | "large_corp"
       company_status: "pending" | "approved" | "suspended" | "rejected"
       company_type: "sole_proprietor" | "limited_company" | "public_company"
@@ -23833,6 +24151,19 @@ export type Database = {
         | "published"
       royalty_status: "pending" | "processed" | "paid"
       rsvp_status: "interested" | "going" | "not_going"
+      school_ownership:
+        | "government"
+        | "private"
+        | "community"
+        | "religious"
+        | "ngo"
+      school_type:
+        | "nursery"
+        | "primary"
+        | "secondary"
+        | "vocational"
+        | "university"
+        | "special"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -24097,6 +24428,7 @@ export const Constants = {
         "government",
         "religious",
       ],
+      claim_status: ["unclaimed", "pending", "approved", "rejected"],
       company_size: ["startup", "sme", "large_corp"],
       company_status: ["pending", "approved", "suspended", "rejected"],
       company_type: ["sole_proprietor", "limited_company", "public_company"],
@@ -24266,6 +24598,21 @@ export const Constants = {
       ],
       royalty_status: ["pending", "processed", "paid"],
       rsvp_status: ["interested", "going", "not_going"],
+      school_ownership: [
+        "government",
+        "private",
+        "community",
+        "religious",
+        "ngo",
+      ],
+      school_type: [
+        "nursery",
+        "primary",
+        "secondary",
+        "vocational",
+        "university",
+        "special",
+      ],
       source_type: [
         "government_official",
         "parliamentary",
