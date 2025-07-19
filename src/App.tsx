@@ -40,6 +40,7 @@ import CamerPlayEvents from "./pages/CamerPlayEvents";
 import CamerPlayRankings from "./pages/CamerPlayRankings";
 import CamerPlayMusicPlayer from "./pages/CamerPlayMusicPlayer";
 import CamerPlayTicketPurchase from "./pages/CamerPlayTicketPurchase";
+import CamerPlayAwards from "./pages/CamerPlayAwards";
 import Promises from "./pages/Promises";
 import RegionalAnalytics from "./pages/RegionalAnalytics";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -65,7 +66,6 @@ import MessengerPage from "./pages/MessengerPage";
 import NotificationSettingsPage from "./pages/NotificationSettingsPage";
 import CamerPulseMaster from "./pages/CamerPulseMaster";
 import CamerPlayHome from "./pages/CamerPlayHome";
-import CamerPlayAwards from "./pages/CamerPlayAwards";
 import EcosystemDashboard from "./pages/EcosystemDashboard";
 import FanPortal from "./pages/FanPortal";
 import UserProfilePage from "./pages/UserProfilePage";
@@ -173,12 +173,12 @@ const App = () => {
               <Route path="/artist-dashboard" element={<ArtistDashboard />} />
           <Route path="/camerplay/upload" element={<CamerPlayUpload />} />
           <Route path="/camerplay/player" element={<CamerPlayPlayer />} />
-          <Route path="/camerplay/awards" element={<CamerPlayAwards />} />
           <Route path="/camerplay/search" element={<CamerPlaySearch />} />
           <Route path="/camerplay/artists/:artistId" element={<CamerPlayArtistProfile />} />
           <Route path="/camerplay/events" element={<CamerPlayEvents />} />
             <Route path="/camerplay/music-player" element={<CamerPlayMusicPlayer />} />
             <Route path="/camerplay/tickets/:eventId" element={<CamerPlayTicketPurchase />} />
+            <Route path="/camerplay/awards" element={<CamerPlayAwards />} />
             <Route path="/camerplay/rankings" element={<CamerPlayRankings />} />
           <Route path="/camerplay" element={<CamerPlayHome />} />
           <Route path="/ecosystem" element={<EcosystemDashboard />} />
