@@ -39,6 +39,7 @@ import CamerPlayArtistProfile from "./pages/CamerPlayArtistProfile";
 import CamerPlayEvents from "./pages/CamerPlayEvents";
 import CamerPlayRankings from "./pages/CamerPlayRankings";
 import CamerPlayMusicPlayer from "./pages/CamerPlayMusicPlayer";
+import CamerPlayTicketPurchase from "./pages/CamerPlayTicketPurchase";
 import Promises from "./pages/Promises";
 import RegionalAnalytics from "./pages/RegionalAnalytics";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -177,6 +178,7 @@ const App = () => {
           <Route path="/camerplay/artists/:artistId" element={<CamerPlayArtistProfile />} />
           <Route path="/camerplay/events" element={<CamerPlayEvents />} />
             <Route path="/camerplay/music-player" element={<CamerPlayMusicPlayer />} />
+            <Route path="/camerplay/tickets/:eventId" element={<CamerPlayTicketPurchase />} />
             <Route path="/camerplay/rankings" element={<CamerPlayRankings />} />
           <Route path="/camerplay" element={<CamerPlayHome />} />
           <Route path="/ecosystem" element={<EcosystemDashboard />} />
