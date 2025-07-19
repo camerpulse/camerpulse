@@ -14888,6 +14888,62 @@ export type Database = {
           },
         ]
       }
+      notification_queue: {
+        Row: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          created_at: string
+          error_message: string | null
+          event_type: Database["public"]["Enums"]["notification_event_type"]
+          flow_id: string
+          id: string
+          max_retries: number | null
+          processed_at: string | null
+          recipient_id: string
+          retry_count: number | null
+          scheduled_at: string
+          status: string
+          template_data: Json | null
+        }
+        Insert: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          created_at?: string
+          error_message?: string | null
+          event_type: Database["public"]["Enums"]["notification_event_type"]
+          flow_id: string
+          id?: string
+          max_retries?: number | null
+          processed_at?: string | null
+          recipient_id: string
+          retry_count?: number | null
+          scheduled_at: string
+          status?: string
+          template_data?: Json | null
+        }
+        Update: {
+          channel?: Database["public"]["Enums"]["notification_channel"]
+          created_at?: string
+          error_message?: string | null
+          event_type?: Database["public"]["Enums"]["notification_event_type"]
+          flow_id?: string
+          id?: string
+          max_retries?: number | null
+          processed_at?: string | null
+          recipient_id?: string
+          retry_count?: number | null
+          scheduled_at?: string
+          status?: string
+          template_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_queue_flow_id_fkey"
+            columns: ["flow_id"]
+            isOneToOne: false
+            referencedRelation: "notification_flows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_templates: {
         Row: {
           channel: Database["public"]["Enums"]["notification_channel"]
