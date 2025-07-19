@@ -19,7 +19,8 @@ import {
   Scale,
   AlertTriangle,
   DollarSign,
-  Globe
+  Globe,
+  Shield
 } from "lucide-react";
 
 export const Footer = () => {
@@ -61,6 +62,10 @@ export const Footer = () => {
               Civic Tools
             </h3>
             <div className="space-y-2 text-sm">
+              <Link to="/unity" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Shield className="w-3 h-3" />
+                🛡️ One & Indivisible Cameroon
+              </Link>
               <Link to="/polls" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Vote className="w-3 h-3" />
                 Polls & Surveys
