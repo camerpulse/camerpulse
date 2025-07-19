@@ -12972,6 +12972,75 @@ export type Database = {
         }
         Relationships: []
       }
+      institution_reviews: {
+        Row: {
+          created_at: string
+          criteria_ratings: Json
+          flag_reason: string | null
+          flagged_at: string | null
+          flagged_by: string | null
+          helpful_votes: number
+          id: string
+          institution_id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          is_anonymous: boolean
+          is_flagged: boolean
+          is_verified_reviewer: boolean
+          media_attachments: string[] | null
+          moderation_status: string
+          overall_rating: number
+          review_text: string | null
+          review_title: string | null
+          reviewer_id: string
+          unhelpful_votes: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          criteria_ratings?: Json
+          flag_reason?: string | null
+          flagged_at?: string | null
+          flagged_by?: string | null
+          helpful_votes?: number
+          id?: string
+          institution_id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          is_anonymous?: boolean
+          is_flagged?: boolean
+          is_verified_reviewer?: boolean
+          media_attachments?: string[] | null
+          moderation_status?: string
+          overall_rating: number
+          review_text?: string | null
+          review_title?: string | null
+          reviewer_id: string
+          unhelpful_votes?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          criteria_ratings?: Json
+          flag_reason?: string | null
+          flagged_at?: string | null
+          flagged_by?: string | null
+          helpful_votes?: number
+          id?: string
+          institution_id?: string
+          institution_type?: Database["public"]["Enums"]["institution_type"]
+          is_anonymous?: boolean
+          is_flagged?: boolean
+          is_verified_reviewer?: boolean
+          media_attachments?: string[] | null
+          moderation_status?: string
+          overall_rating?: number
+          review_text?: string | null
+          review_title?: string | null
+          reviewer_id?: string
+          unhelpful_votes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       institution_submissions: {
         Row: {
           assigned_moderator: string | null
@@ -20585,6 +20654,39 @@ export type Database = {
         }
         Relationships: []
       }
+      rating_criteria: {
+        Row: {
+          created_at: string
+          criteria_description: string | null
+          criteria_name: string
+          display_order: number | null
+          id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          is_active: boolean
+          weight: number | null
+        }
+        Insert: {
+          created_at?: string
+          criteria_description?: string | null
+          criteria_name: string
+          display_order?: number | null
+          id?: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          is_active?: boolean
+          weight?: number | null
+        }
+        Update: {
+          created_at?: string
+          criteria_description?: string | null
+          criteria_name?: string
+          display_order?: number | null
+          id?: string
+          institution_type?: Database["public"]["Enums"]["institution_type"]
+          is_active?: boolean
+          weight?: number | null
+        }
+        Relationships: []
+      }
       revenue_analytics: {
         Row: {
           claim_fees: number
@@ -20632,6 +20734,123 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      review_comments: {
+        Row: {
+          comment_text: string
+          commenter_id: string
+          created_at: string
+          id: string
+          is_anonymous: boolean
+          is_owner_response: boolean
+          review_id: string
+          updated_at: string
+        }
+        Insert: {
+          comment_text: string
+          commenter_id: string
+          created_at?: string
+          id?: string
+          is_anonymous?: boolean
+          is_owner_response?: boolean
+          review_id: string
+          updated_at?: string
+        }
+        Update: {
+          comment_text?: string
+          commenter_id?: string
+          created_at?: string
+          id?: string
+          is_anonymous?: boolean
+          is_owner_response?: boolean
+          review_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_comments_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "institution_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_flags: {
+        Row: {
+          created_at: string
+          flag_details: string | null
+          flag_reason: string
+          flagger_id: string
+          id: string
+          review_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          flag_details?: string | null
+          flag_reason: string
+          flagger_id: string
+          id?: string
+          review_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          flag_details?: string | null
+          flag_reason?: string
+          flagger_id?: string
+          id?: string
+          review_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_flags_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "institution_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_votes: {
+        Row: {
+          created_at: string
+          id: string
+          review_id: string
+          vote_type: string
+          voter_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          review_id: string
+          vote_type: string
+          voter_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          review_id?: string
+          vote_type?: string
+          voter_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_votes_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "institution_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       role_change_audit: {
         Row: {
