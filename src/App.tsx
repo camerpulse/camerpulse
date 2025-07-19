@@ -74,7 +74,7 @@ import { AdvancedSearchPage } from "./pages/AdvancedSearchPage";
 import { EconomicsPage } from "./pages/EconomicsPage";
 import { CivicParticipationPage } from "./pages/CivicParticipationPage";
 import { OneAndIndivisiblePage } from "./pages/OneAndIndivisiblePage";
-import { VillagesHomePage } from "./pages/VillagesHomePage";
+
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
 import ModeratorPortal from "./pages/ModeratorPortal";
@@ -185,7 +185,7 @@ const App = () => {
           <Route path="/events" element={<Events />} />
           <Route path="/calendar" element={<EventCalendarPage />} />
           <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
-          <Route path="/villages" element={<VillagesHomePage />} />
+          <Route path="/villages" element={<VillagesDirectory />} />
           <Route path="/villages/directory" element={<VillagesDirectory />} />
           <Route path="/villages/add" element={<AddVillage />} />
           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
