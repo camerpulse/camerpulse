@@ -1,12 +1,12 @@
 import React from 'react';
-import { AppLayout } from '@/components/Layout/AppLayout';
+import { CamerPlayLayout } from '@/components/Layout/CamerPlayLayout';
 import CamerPlayHub from '@/components/camerplay/CamerPlayHub';
 
 const CamerPlayHome = () => {
   return (
-    <AppLayout>
+    <CamerPlayLayout>
       <CamerPlayHub />
-    </AppLayout>
+    </CamerPlayLayout>
   );
 };
 

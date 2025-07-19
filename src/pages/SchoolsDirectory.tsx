@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { AppLayout } from '@/components/Layout/AppLayout';
+import { ServicesLayout } from '@/components/Layout/ServicesLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -157,7 +157,7 @@ export default function SchoolsDirectory() {
   };
 
   return (
-    <AppLayout>
+    <ServicesLayout serviceType="schools">
       <div className="min-h-screen bg-background">
         {/* Header Section */}
         <div className="bg-gradient-to-r from-primary to-primary/80 text-white py-16">
@@ -332,6 +332,6 @@ export default function SchoolsDirectory() {
           onSuccess={fetchSchools}
         />
       </div>
-    </AppLayout>
+    </ServicesLayout>
   );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { ServicesLayout } from "@/components/Layout/ServicesLayout";
 import { PharmacyCard } from "@/components/pharmacies/PharmacyCard";
 import { AddPharmacyDialog } from "@/components/pharmacies/AddPharmacyDialog";
 import { Button } from "@/components/ui/button";
@@ -89,19 +90,22 @@ export default function PharmaciesDirectory() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <Pill className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
-            <p>Loading pharmacies...</p>
+      <ServicesLayout serviceType="pharmacies">
+        <div className="container mx-auto px-4 py-8">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="text-center">
+              <Pill className="h-8 w-8 animate-spin mx-auto mb-4 text-primary" />
+              <p>Loading pharmacies...</p>
+            </div>
           </div>
         </div>
-      </div>
+      </ServicesLayout>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <ServicesLayout serviceType="pharmacies">
+      <div className="container mx-auto px-4 py-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div className="mb-4 md:mb-0">
@@ -224,6 +228,7 @@ export default function PharmaciesDirectory() {
         onOpenChange={setIsAddDialogOpen}
         onPharmacyAdded={fetchPharmacies}
       />
-    </div>
+      </div>
+    </ServicesLayout>
   );
 }
