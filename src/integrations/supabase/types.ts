@@ -21687,6 +21687,65 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsored_listings: {
+        Row: {
+          amount_paid: number | null
+          analytics_data: Json | null
+          created_at: string
+          duration_days: number
+          expires_at: string
+          id: string
+          institution_id: string
+          is_active: boolean
+          listing_type: string
+          payment_status: string
+          sponsor_user_id: string
+          starts_at: string
+          stripe_payment_intent_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          amount_paid?: number | null
+          analytics_data?: Json | null
+          created_at?: string
+          duration_days: number
+          expires_at: string
+          id?: string
+          institution_id: string
+          is_active?: boolean
+          listing_type: string
+          payment_status?: string
+          sponsor_user_id: string
+          starts_at: string
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          amount_paid?: number | null
+          analytics_data?: Json | null
+          created_at?: string
+          duration_days?: number
+          expires_at?: string
+          id?: string
+          institution_id?: string
+          is_active?: boolean
+          listing_type?: string
+          payment_status?: string
+          sponsor_user_id?: string
+          starts_at?: string
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsored_listings_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       storefront_products: {
         Row: {
           artist_id: string
@@ -23415,6 +23474,68 @@ export type Database = {
             columns: ["village_id"]
             isOneToOne: false
             referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_data: {
+        Row: {
+          chief_contact: string | null
+          chief_name: string | null
+          conflict_resolution_score: number | null
+          created_at: string
+          culture_score: number | null
+          development_score: number | null
+          education_score: number | null
+          fundraising_campaigns: Json | null
+          heritage_info: string | null
+          id: string
+          institution_id: string
+          major_projects: string[] | null
+          petitions: Json | null
+          population: number | null
+          updated_at: string
+        }
+        Insert: {
+          chief_contact?: string | null
+          chief_name?: string | null
+          conflict_resolution_score?: number | null
+          created_at?: string
+          culture_score?: number | null
+          development_score?: number | null
+          education_score?: number | null
+          fundraising_campaigns?: Json | null
+          heritage_info?: string | null
+          id?: string
+          institution_id: string
+          major_projects?: string[] | null
+          petitions?: Json | null
+          population?: number | null
+          updated_at?: string
+        }
+        Update: {
+          chief_contact?: string | null
+          chief_name?: string | null
+          conflict_resolution_score?: number | null
+          created_at?: string
+          culture_score?: number | null
+          development_score?: number | null
+          education_score?: number | null
+          fundraising_campaigns?: Json | null
+          heritage_info?: string | null
+          id?: string
+          institution_id?: string
+          major_projects?: string[] | null
+          petitions?: Json | null
+          population?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_data_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
             referencedColumns: ["id"]
           },
         ]
