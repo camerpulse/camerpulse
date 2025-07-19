@@ -12390,6 +12390,311 @@ export type Database = {
           },
         ]
       }
+      hospital_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_type: string
+          created_at: string
+          evidence_documents: string[] | null
+          hospital_id: string
+          id: string
+          justification: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["claim_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_type?: string
+          created_at?: string
+          evidence_documents?: string[] | null
+          hospital_id: string
+          id?: string
+          justification: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["claim_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_type?: string
+          created_at?: string
+          evidence_documents?: string[] | null
+          hospital_id?: string
+          id?: string
+          justification?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["claim_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hospital_claims_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hospital_monetization: {
+        Row: {
+          active_until: string | null
+          amount_fcfa: number
+          created_at: string
+          feature_type: string
+          hospital_id: string
+          id: string
+          payment_status: string
+          stripe_payment_intent_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active_until?: string | null
+          amount_fcfa: number
+          created_at?: string
+          feature_type: string
+          hospital_id: string
+          id?: string
+          payment_status?: string
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active_until?: string | null
+          amount_fcfa?: number
+          created_at?: string
+          feature_type?: string
+          hospital_id?: string
+          id?: string
+          payment_status?: string
+          stripe_payment_intent_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hospital_monetization_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hospital_ratings: {
+        Row: {
+          anonymous: boolean
+          cleanliness: number
+          created_at: string
+          emergency_readiness: number
+          equipment_availability: number
+          hospital_id: string
+          id: string
+          patient_experience: number
+          review_text: string | null
+          service_quality: number
+          staff_response_time: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          anonymous?: boolean
+          cleanliness: number
+          created_at?: string
+          emergency_readiness: number
+          equipment_availability: number
+          hospital_id: string
+          id?: string
+          patient_experience: number
+          review_text?: string | null
+          service_quality: number
+          staff_response_time: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          anonymous?: boolean
+          cleanliness?: number
+          created_at?: string
+          emergency_readiness?: number
+          equipment_availability?: number
+          hospital_id?: string
+          id?: string
+          patient_experience?: number
+          review_text?: string | null
+          service_quality?: number
+          staff_response_time?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hospital_ratings_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hospital_updates: {
+        Row: {
+          content: string
+          created_at: string
+          hospital_id: string
+          id: string
+          is_verified: boolean
+          photos: string[] | null
+          title: string
+          update_type: string
+          updated_at: string
+          user_id: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          hospital_id: string
+          id?: string
+          is_verified?: boolean
+          photos?: string[] | null
+          title: string
+          update_type: string
+          updated_at?: string
+          user_id: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          hospital_id?: string
+          id?: string
+          is_verified?: boolean
+          photos?: string[] | null
+          title?: string
+          update_type?: string
+          updated_at?: string
+          user_id?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hospital_updates_hospital_id_fkey"
+            columns: ["hospital_id"]
+            isOneToOne: false
+            referencedRelation: "hospitals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hospitals: {
+        Row: {
+          aggregate_ratings: Json | null
+          claimed_at: string | null
+          claimed_by: string | null
+          created_at: string
+          division: string
+          email: string | null
+          emergency_services: boolean
+          id: string
+          is_claimable: boolean
+          latitude: number | null
+          longitude: number | null
+          name: string
+          overall_rating: number | null
+          ownership: Database["public"]["Enums"]["hospital_ownership"]
+          phone: string | null
+          photo_gallery: string[] | null
+          region: string
+          services_offered: string[] | null
+          submitted_by: string | null
+          total_ratings: number | null
+          type: Database["public"]["Enums"]["hospital_type"]
+          updated_at: string
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+          village_or_city: string
+          website: string | null
+          whatsapp: string | null
+          working_hours: string | null
+        }
+        Insert: {
+          aggregate_ratings?: Json | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          created_at?: string
+          division: string
+          email?: string | null
+          emergency_services?: boolean
+          id?: string
+          is_claimable?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          overall_rating?: number | null
+          ownership: Database["public"]["Enums"]["hospital_ownership"]
+          phone?: string | null
+          photo_gallery?: string[] | null
+          region: string
+          services_offered?: string[] | null
+          submitted_by?: string | null
+          total_ratings?: number | null
+          type: Database["public"]["Enums"]["hospital_type"]
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          village_or_city: string
+          website?: string | null
+          whatsapp?: string | null
+          working_hours?: string | null
+        }
+        Update: {
+          aggregate_ratings?: Json | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          created_at?: string
+          division?: string
+          email?: string | null
+          emergency_services?: boolean
+          id?: string
+          is_claimable?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          overall_rating?: number | null
+          ownership?: Database["public"]["Enums"]["hospital_ownership"]
+          phone?: string | null
+          photo_gallery?: string[] | null
+          region?: string
+          services_offered?: string[] | null
+          submitted_by?: string | null
+          total_ratings?: number | null
+          type?: Database["public"]["Enums"]["hospital_type"]
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          village_or_city?: string
+          website?: string | null
+          whatsapp?: string | null
+          working_hours?: string | null
+        }
+        Relationships: []
+      }
       image_verification_logs: {
         Row: {
           action_type: string
@@ -24044,6 +24349,19 @@ export type Database = {
         | "event_attendance"
         | "review"
         | "share"
+      hospital_ownership:
+        | "government"
+        | "private"
+        | "community"
+        | "mission"
+        | "ngo"
+      hospital_type:
+        | "general"
+        | "private_clinic"
+        | "district"
+        | "diagnostic_center"
+        | "emergency"
+        | "traditional"
       institution_type:
         | "presidency"
         | "parliament"
@@ -24479,6 +24797,21 @@ export const Constants = {
         "event_attendance",
         "review",
         "share",
+      ],
+      hospital_ownership: [
+        "government",
+        "private",
+        "community",
+        "mission",
+        "ngo",
+      ],
+      hospital_type: [
+        "general",
+        "private_clinic",
+        "district",
+        "diagnostic_center",
+        "emergency",
+        "traditional",
       ],
       institution_type: [
         "presidency",

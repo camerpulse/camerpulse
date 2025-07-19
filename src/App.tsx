@@ -84,6 +84,7 @@ import { EconomicsPage } from "./pages/EconomicsPage";
 import { CivicParticipationPage } from "./pages/CivicParticipationPage";
 import { OneAndIndivisiblePage } from "./pages/OneAndIndivisiblePage";
 import SchoolsDirectory from "./pages/SchoolsDirectory";
+import HospitalsDirectory from "./pages/HospitalsDirectory";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -216,6 +217,7 @@ const App = () => {
           <Route path="/unity" element={<OneAndIndivisiblePage />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/schools" element={<SchoolsDirectory />} />
+          <Route path="/hospitals" element={<HospitalsDirectory />} />
           <Route path="/moderators" element={<ModeratorPortal />} />
           <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
