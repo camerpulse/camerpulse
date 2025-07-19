@@ -20,6 +20,7 @@ import { VillageDiscussions } from '@/components/villages/VillageDiscussions';
 import { VillageEvents } from '@/components/villages/VillageEvents';
 import { VillagePhotoGallery } from '@/components/villages/VillagePhotoGallery';
 import { VillageMembership } from '@/components/villages/VillageMembership';
+import { VillageLeadership } from '@/components/villages/VillageLeadership';
 
 
 interface VillageData {
@@ -347,8 +348,9 @@ const VillageProfile = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-9">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-10">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="membership">Members</TabsTrigger>
             <TabsTrigger value="leaders">Leadership</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="people">Notable People</TabsTrigger>
@@ -453,67 +455,12 @@ const VillageProfile = () => {
             </Card>
           </TabsContent>
 
+          <TabsContent value="membership">
+            <VillageMembership villageId={id!} villageName={village.village_name} />
+          </TabsContent>
+
           <TabsContent value="leaders">
-            <div className="space-y-6">
-              {leaders.map((leader: any) => (
-                <Card key={leader.id}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
-                      <Avatar className="h-16 w-16">
-                        <AvatarImage src={leader.photo_url} alt={leader.leader_name} />
-                        <AvatarFallback>
-                          {leader.leader_name.split(' ').map((n: string) => n[0]).join('')}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-semibold">{leader.leader_name}</h3>
-                          <Badge variant="outline" className="capitalize">
-                            {leader.leader_type}
-                          </Badge>
-                          {leader.is_current && (
-                            <Badge variant="success">Current</Badge>
-                          )}
-                        </div>
-                        
-                        {leader.years_in_power && (
-                          <p className="text-sm text-muted-foreground mb-2">
-                            {leader.years_in_power} years in office
-                          </p>
-                        )}
-
-                        {leader.bio && (
-                          <p className="text-muted-foreground mb-3">{leader.bio}</p>
-                        )}
-
-                        <div className="flex items-center gap-4 text-sm">
-                          <div className="flex items-center">
-                            <span className="text-muted-foreground mr-1">Integrity:</span>
-                            {renderStars(leader.integrity_rating)}
-                          </div>
-                          <div className="flex items-center">
-                            <span className="text-muted-foreground mr-1">Development:</span>
-                            {renderStars(leader.development_rating)}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-
-              {leaders.length === 0 && (
-                <Card className="text-center py-12">
-                  <CardContent>
-                    <Crown className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No Leaders Listed</h3>
-                    <p className="text-muted-foreground">
-                      Be the first to add information about village leadership.
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
+            <VillageLeadership villageId={id!} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="projects">
