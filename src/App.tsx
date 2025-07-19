@@ -71,6 +71,7 @@ import VillagesDirectory from "./pages/VillagesDirectory";
 import VillageProfile from "./pages/VillageProfile";
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
+import ModeratorPortal from "./pages/ModeratorPortal";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -178,6 +179,7 @@ const App = () => {
           <Route path="/villages/add" element={<AddVillage />} />
           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
           <Route path="/villages/:id" element={<VillageProfile />} />
+          <Route path="/moderators" element={<ModeratorPortal />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

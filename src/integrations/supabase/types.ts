@@ -20935,6 +20935,17 @@ export type Database = {
         }
         Returns: string
       }
+      create_moderator_notification: {
+        Args: {
+          p_moderator_id: string
+          p_type: string
+          p_title: string
+          p_message: string
+          p_action_url?: string
+          p_priority?: string
+        }
+        Returns: string
+      }
       create_system_snapshot: {
         Args: {
           p_snapshot_name: string
@@ -21167,6 +21178,10 @@ export type Database = {
           p_severity?: string
         }
         Returns: string
+      }
+      mark_notification_read: {
+        Args: { p_notification_id: string }
+        Returns: boolean
       }
       process_legal_document: {
         Args: {
