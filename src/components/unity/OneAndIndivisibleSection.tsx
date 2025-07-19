@@ -1,9 +1,9 @@
 import React from 'react';
-import { Card } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import ancestralMask from '@/assets/ancestral-mask.jpg';
-import ancestralPatterns from '@/assets/ancestral-patterns.jpg';
-import ancestralVillage from '@/assets/ancestral-village.jpg';
+import { Card } from '../ui/card';
+import { Separator } from '../ui/separator';
+import ancestralMask from '../../assets/ancestral-mask.jpg';
+import ancestralPatterns from '../../assets/ancestral-patterns.jpg';
+import ancestralVillage from '../../assets/ancestral-village.jpg';
 
 interface SectionProps {
   title: string;

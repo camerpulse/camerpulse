@@ -1,6 +1,6 @@
 import React from 'react';
-import { CivicLayout } from '@/components/camerpulse/CivicLayout';
-import { OneAndIndivisibleSection } from '@/components/unity/OneAndIndivisibleSection';
+import { CivicLayout } from '../components/camerpulse/CivicLayout';
+import { OneAndIndivisibleSection } from '../components/unity/OneAndIndivisibleSection';
 
 export const OneAndIndivisiblePage: React.FC = () => {
   return (
