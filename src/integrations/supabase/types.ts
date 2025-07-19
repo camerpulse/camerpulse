@@ -7548,6 +7548,85 @@ export type Database = {
         }
         Relationships: []
       }
+      claim_documents: {
+        Row: {
+          claim_id: string
+          document_type: string
+          file_name: string
+          file_size: number | null
+          file_url: string
+          id: string
+          uploaded_at: string | null
+        }
+        Insert: {
+          claim_id: string
+          document_type: string
+          file_name: string
+          file_size?: number | null
+          file_url: string
+          id?: string
+          uploaded_at?: string | null
+        }
+        Update: {
+          claim_id?: string
+          document_type?: string
+          file_name?: string
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          uploaded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claim_documents_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "institution_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      claim_notifications: {
+        Row: {
+          claim_id: string
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message: string
+          notification_type: string
+          recipient_id: string
+          title: string
+        }
+        Insert: {
+          claim_id: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message: string
+          notification_type: string
+          recipient_id: string
+          title: string
+        }
+        Update: {
+          claim_id?: string
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          notification_type?: string
+          recipient_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "claim_notifications_claim_id_fkey"
+            columns: ["claim_id"]
+            isOneToOne: false
+            referencedRelation: "institution_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       community_events: {
         Row: {
           address: string | null
@@ -12734,6 +12813,69 @@ export type Database = {
           new_status?: string | null
           old_status?: string | null
           performed_by?: string | null
+        }
+        Relationships: []
+      }
+      institution_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_reason: string | null
+          claim_type: string
+          created_at: string | null
+          evidence_files: string[] | null
+          id: string
+          institution_id: string
+          institution_name: string
+          institution_type: Database["public"]["Enums"]["institution_claim_type"]
+          payment_amount: number | null
+          payment_currency: string | null
+          payment_reference: string | null
+          payment_status: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string | null
+          evidence_files?: string[] | null
+          id?: string
+          institution_id: string
+          institution_name: string
+          institution_type: Database["public"]["Enums"]["institution_claim_type"]
+          payment_amount?: number | null
+          payment_currency?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string | null
+          evidence_files?: string[] | null
+          id?: string
+          institution_id?: string
+          institution_name?: string
+          institution_type?: Database["public"]["Enums"]["institution_claim_type"]
+          payment_amount?: number | null
+          payment_currency?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -24059,6 +24201,16 @@ export type Database = {
         }
         Returns: string
       }
+      create_claim_notification: {
+        Args: {
+          p_claim_id: string
+          p_recipient_id: string
+          p_notification_type: string
+          p_title: string
+          p_message: string
+        }
+        Returns: string
+      }
       create_fan_notification: {
         Args: {
           p_fan_id: string
@@ -24465,6 +24617,15 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      update_claim_status: {
+        Args: {
+          p_claim_id: string
+          p_new_status: string
+          p_admin_notes?: string
+          p_reviewed_by?: string
+        }
+        Returns: undefined
+      }
       update_plugin_request_status: {
         Args: {
           p_request_id: string
@@ -24640,6 +24801,7 @@ export type Database = {
         | "diagnostic_center"
         | "emergency"
         | "traditional"
+      institution_claim_type: "school" | "hospital" | "pharmacy"
       institution_type:
         | "presidency"
         | "parliament"
@@ -25096,6 +25258,7 @@ export const Constants = {
         "emergency",
         "traditional",
       ],
+      institution_claim_type: ["school", "hospital", "pharmacy"],
       institution_type: [
         "presidency",
         "parliament",

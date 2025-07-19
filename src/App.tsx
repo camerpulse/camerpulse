@@ -88,6 +88,7 @@ import HospitalsDirectory from "./pages/HospitalsDirectory";
 import PharmaciesDirectory from "./pages/PharmaciesDirectory";
 import ServicesMap from "./pages/ServicesMap";
 import UnifiedServicesSearch from "./pages/UnifiedServicesSearch";
+import ClaimsDashboard from "./pages/ClaimsDashboard";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -224,7 +225,7 @@ const App = () => {
           <Route path="/pharmacies" element={<PharmaciesDirectory />} />
           <Route path="/map" element={<ServicesMap />} />
           <Route path="/services-search" element={<UnifiedServicesSearch />} />
-          <Route path="/moderators" element={<ModeratorPortal />} />
+          <Route path="/claims-dashboard" element={<ClaimsDashboard />} />
           <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />

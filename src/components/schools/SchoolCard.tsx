@@ -20,6 +20,7 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import { SchoolDetailsDialog } from './SchoolDetailsDialog';
 import { RateSchoolDialog } from './RateSchoolDialog';
+import { ClaimInstitutionButton } from '@/components/institutions/ClaimInstitutionButton';
 
 interface School {
   id: string;
@@ -47,6 +48,8 @@ interface School {
   average_rating: number;
   total_ratings: number;
   created_at: string;
+  claimed_by?: string;
+  is_claimable?: boolean;
 }
 
 interface SchoolCardProps {
@@ -240,7 +243,7 @@ export function SchoolCard({ school, onUpdate }: SchoolCardProps) {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-2">
+          <div className="flex gap-2 mb-3">
             <Button 
               variant="outline" 
               size="sm" 
@@ -259,6 +262,16 @@ export function SchoolCard({ school, onUpdate }: SchoolCardProps) {
               Rate School
             </Button>
           </div>
+
+          {/* Claim Button */}
+          <ClaimInstitutionButton
+            institutionType="school"
+            institutionId={school.id}
+            institutionName={school.name}
+            isClaimed={school.claimed_by ? true : false}
+            isClaimable={school.is_claimable}
+            className="w-full"
+          />
 
           {/* Footer */}
           <div className="flex items-center justify-between mt-3 pt-3 border-t text-xs text-muted-foreground">
