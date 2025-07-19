@@ -20802,6 +20802,16 @@ export type Database = {
         | "verified_politician"
         | "verified_vendor"
         | "user"
+        | "village_moderator"
+        | "subdivision_moderator"
+        | "regional_moderator"
+        | "national_civic_lead"
+      application_status:
+        | "submitted"
+        | "under_review"
+        | "interview_scheduled"
+        | "approved"
+        | "rejected"
       application_tier: "bronze" | "silver" | "gold"
       audio_format: "mp3" | "wav" | "flac"
       award_status:
@@ -20916,6 +20926,12 @@ export type Database = {
         | "radio_stream"
         | "blog"
         | "social_feed"
+      moderator_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "suspended"
+        | "inactive"
       nomination_status: "pending" | "approved" | "rejected"
       notification_priority: "low" | "moderate" | "critical"
       notification_type:
@@ -20989,6 +21005,11 @@ export type Database = {
         | "international_org"
         | "academic"
         | "unknown"
+      submission_status:
+        | "pending"
+        | "approved"
+        | "rejected"
+        | "needs_clarification"
       threat_level: "low" | "medium" | "high" | "critical"
       ticket_type:
         | "regular"
@@ -21167,6 +21188,17 @@ export const Constants = {
         "verified_politician",
         "verified_vendor",
         "user",
+        "village_moderator",
+        "subdivision_moderator",
+        "regional_moderator",
+        "national_civic_lead",
+      ],
+      application_status: [
+        "submitted",
+        "under_review",
+        "interview_scheduled",
+        "approved",
+        "rejected",
       ],
       application_tier: ["bronze", "silver", "gold"],
       audio_format: ["mp3", "wav", "flac"],
@@ -21295,6 +21327,13 @@ export const Constants = {
         "blog",
         "social_feed",
       ],
+      moderator_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "suspended",
+        "inactive",
+      ],
       nomination_status: ["pending", "approved", "rejected"],
       notification_priority: ["low", "moderate", "critical"],
       notification_type: [
@@ -21374,6 +21413,12 @@ export const Constants = {
         "international_org",
         "academic",
         "unknown",
+      ],
+      submission_status: [
+        "pending",
+        "approved",
+        "rejected",
+        "needs_clarification",
       ],
       threat_level: ["low", "medium", "high", "critical"],
       ticket_type: [
