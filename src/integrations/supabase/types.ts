@@ -282,6 +282,42 @@ export type Database = {
           },
         ]
       }
+      artist_analytics: {
+        Row: {
+          artist_id: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+          user_id: string
+        }
+        Insert: {
+          artist_id: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          metric_value?: number
+          period_end: string
+          period_start: string
+          user_id: string
+        }
+        Update: {
+          artist_id?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          period_end?: string
+          period_start?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       artist_applications: {
         Row: {
           admin_notes: string | null
@@ -11200,6 +11236,59 @@ export type Database = {
         }
         Relationships: []
       }
+      exclusive_content: {
+        Row: {
+          artist_id: string
+          content_type: string
+          content_url: string
+          created_at: string
+          description: string | null
+          fan_club_id: string | null
+          id: string
+          is_active: boolean
+          required_tier: string | null
+          thumbnail_url: string | null
+          title: string
+          view_count: number
+        }
+        Insert: {
+          artist_id: string
+          content_type: string
+          content_url: string
+          created_at?: string
+          description?: string | null
+          fan_club_id?: string | null
+          id?: string
+          is_active?: boolean
+          required_tier?: string | null
+          thumbnail_url?: string | null
+          title: string
+          view_count?: number
+        }
+        Update: {
+          artist_id?: string
+          content_type?: string
+          content_url?: string
+          created_at?: string
+          description?: string | null
+          fan_club_id?: string | null
+          id?: string
+          is_active?: boolean
+          required_tier?: string | null
+          thumbnail_url?: string | null
+          title?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "exclusive_content_fan_club_id_fkey"
+            columns: ["fan_club_id"]
+            isOneToOne: false
+            referencedRelation: "fan_clubs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       failed_login_attempts: {
         Row: {
           attempt_time: string | null
@@ -11314,6 +11403,83 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      fan_club_memberships: {
+        Row: {
+          expires_at: string | null
+          fan_club_id: string
+          id: string
+          is_active: boolean
+          joined_at: string
+          membership_tier: string
+          user_id: string
+        }
+        Insert: {
+          expires_at?: string | null
+          fan_club_id: string
+          id?: string
+          is_active?: boolean
+          joined_at?: string
+          membership_tier?: string
+          user_id: string
+        }
+        Update: {
+          expires_at?: string | null
+          fan_club_id?: string
+          id?: string
+          is_active?: boolean
+          joined_at?: string
+          membership_tier?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_club_memberships_fan_club_id_fkey"
+            columns: ["fan_club_id"]
+            isOneToOne: false
+            referencedRelation: "fan_clubs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fan_clubs: {
+        Row: {
+          artist_id: string
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          member_count: number
+          membership_fee_fcfa: number | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          artist_id: string
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          member_count?: number
+          membership_fee_fcfa?: number | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          artist_id?: string
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          member_count?: number
+          membership_fee_fcfa?: number | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       fan_leaderboards: {
         Row: {
@@ -15809,6 +15975,83 @@ export type Database = {
           },
         ]
       }
+      playlist_tracks: {
+        Row: {
+          added_by_user_id: string
+          created_at: string
+          id: string
+          playlist_id: string
+          position: number
+          track_id: string
+        }
+        Insert: {
+          added_by_user_id: string
+          created_at?: string
+          id?: string
+          playlist_id: string
+          position: number
+          track_id: string
+        }
+        Update: {
+          added_by_user_id?: string
+          created_at?: string
+          id?: string
+          playlist_id?: string
+          position?: number
+          track_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "playlist_tracks_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      playlists: {
+        Row: {
+          cover_image_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_collaborative: boolean
+          is_public: boolean
+          name: string
+          total_duration_seconds: number
+          total_tracks: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_collaborative?: boolean
+          is_public?: boolean
+          name: string
+          total_duration_seconds?: number
+          total_tracks?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cover_image_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_collaborative?: boolean
+          is_public?: boolean
+          name?: string
+          total_duration_seconds?: number
+          total_tracks?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       plugin_conflicts: {
         Row: {
           affected_resources: string[] | null
@@ -20043,6 +20286,110 @@ export type Database = {
           },
         ]
       }
+      track_analytics: {
+        Row: {
+          comments_count: number
+          completion_rate: number | null
+          created_at: string
+          date: string
+          id: string
+          likes_count: number
+          plays_count: number
+          shares_count: number
+          skip_rate: number | null
+          track_id: string
+          unique_listeners: number
+        }
+        Insert: {
+          comments_count?: number
+          completion_rate?: number | null
+          created_at?: string
+          date: string
+          id?: string
+          likes_count?: number
+          plays_count?: number
+          shares_count?: number
+          skip_rate?: number | null
+          track_id: string
+          unique_listeners?: number
+        }
+        Update: {
+          comments_count?: number
+          completion_rate?: number | null
+          created_at?: string
+          date?: string
+          id?: string
+          likes_count?: number
+          plays_count?: number
+          shares_count?: number
+          skip_rate?: number | null
+          track_id?: string
+          unique_listeners?: number
+        }
+        Relationships: []
+      }
+      track_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          parent_comment_id: string | null
+          timestamp_seconds: number | null
+          track_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          parent_comment_id?: string | null
+          timestamp_seconds?: number | null
+          track_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          parent_comment_id?: string | null
+          timestamp_seconds?: number | null
+          track_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "track_comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "track_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      track_likes: {
+        Row: {
+          created_at: string
+          id: string
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       track_plays: {
         Row: {
           country: string | null
@@ -20124,6 +20471,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      track_shares: {
+        Row: {
+          created_at: string
+          id: string
+          platform: string
+          track_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          platform: string
+          track_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          platform?: string
+          track_id?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       trending_searches: {
         Row: {
