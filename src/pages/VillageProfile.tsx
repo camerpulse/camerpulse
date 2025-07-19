@@ -18,7 +18,7 @@ import { toast } from 'sonner';
 import { VillageComments } from '@/components/villages/VillageComments';
 import { VillageDiscussions } from '@/components/villages/VillageDiscussions';
 import { VillageEvents } from '@/components/villages/VillageEvents';
-import { VillagePhotoGallery } from '@/components/villages/VillagePhotoGallery';
+
 
 interface VillageData {
   id: string;
@@ -741,7 +741,15 @@ const VillageProfile = () => {
           </TabsContent>
 
           <TabsContent value="gallery">
-            <VillagePhotoGallery villageId={id!} />
+            <Card className="text-center py-12">
+              <CardContent>
+                <Camera className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                <h3 className="text-lg font-semibold mb-2">Photo Gallery Coming Soon</h3>
+                <p className="text-muted-foreground">
+                  Photo gallery functionality will be available after database types are updated.
+                </p>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="discussions" className="space-y-6">

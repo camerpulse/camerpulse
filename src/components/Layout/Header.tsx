@@ -70,6 +70,9 @@ export const Header = () => {
               <Link to="/politicians">Politics</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/villages">Villages</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/companies">Companies</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
@@ -167,6 +170,9 @@ export const Header = () => {
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/villages" onClick={() => setMobileMenuOpen(false)}>🏘️ Villages</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/companies" onClick={() => setMobileMenuOpen(false)}>🏢 Companies</Link>
