@@ -14746,6 +14746,184 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_flows: {
+        Row: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          condition_logic: Json | null
+          created_at: string
+          created_by: string | null
+          delay_minutes: number | null
+          event_type: Database["public"]["Enums"]["notification_event_type"]
+          flow_name: string
+          id: string
+          is_active: boolean
+          priority: number
+          recipient_type: Database["public"]["Enums"]["user_type"]
+          template_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          condition_logic?: Json | null
+          created_at?: string
+          created_by?: string | null
+          delay_minutes?: number | null
+          event_type: Database["public"]["Enums"]["notification_event_type"]
+          flow_name: string
+          id?: string
+          is_active?: boolean
+          priority?: number
+          recipient_type: Database["public"]["Enums"]["user_type"]
+          template_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          channel?: Database["public"]["Enums"]["notification_channel"]
+          condition_logic?: Json | null
+          created_at?: string
+          created_by?: string | null
+          delay_minutes?: number | null
+          event_type?: Database["public"]["Enums"]["notification_event_type"]
+          flow_name?: string
+          id?: string
+          is_active?: boolean
+          priority?: number
+          recipient_type?: Database["public"]["Enums"]["user_type"]
+          template_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      notification_logs: {
+        Row: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          created_at: string
+          delivered_at: string | null
+          error_message: string | null
+          event_type: Database["public"]["Enums"]["notification_event_type"]
+          external_id: string | null
+          failed_at: string | null
+          flow_id: string
+          id: string
+          recipient_id: string
+          retry_count: number | null
+          sent_at: string | null
+          status: Database["public"]["Enums"]["notification_status"]
+          template_data: Json | null
+        }
+        Insert: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          created_at?: string
+          delivered_at?: string | null
+          error_message?: string | null
+          event_type: Database["public"]["Enums"]["notification_event_type"]
+          external_id?: string | null
+          failed_at?: string | null
+          flow_id: string
+          id?: string
+          recipient_id: string
+          retry_count?: number | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["notification_status"]
+          template_data?: Json | null
+        }
+        Update: {
+          channel?: Database["public"]["Enums"]["notification_channel"]
+          created_at?: string
+          delivered_at?: string | null
+          error_message?: string | null
+          event_type?: Database["public"]["Enums"]["notification_event_type"]
+          external_id?: string | null
+          failed_at?: string | null
+          flow_id?: string
+          id?: string
+          recipient_id?: string
+          retry_count?: number | null
+          sent_at?: string | null
+          status?: Database["public"]["Enums"]["notification_status"]
+          template_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_logs_flow_id_fkey"
+            columns: ["flow_id"]
+            isOneToOne: false
+            referencedRelation: "notification_flows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_metrics: {
+        Row: {
+          created_at: string
+          event_timestamp: string
+          event_type: string
+          id: string
+          log_id: string
+          metadata: Json | null
+        }
+        Insert: {
+          created_at?: string
+          event_timestamp?: string
+          event_type: string
+          id?: string
+          log_id: string
+          metadata?: Json | null
+        }
+        Update: {
+          created_at?: string
+          event_timestamp?: string
+          event_type?: string
+          id?: string
+          log_id?: string
+          metadata?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_metrics_log_id_fkey"
+            columns: ["log_id"]
+            isOneToOne: false
+            referencedRelation: "notification_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_templates: {
+        Row: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          subject: string | null
+          template_name: string
+          updated_at: string
+          variables: Json | null
+        }
+        Insert: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          subject?: string | null
+          template_name: string
+          updated_at?: string
+          variables?: Json | null
+        }
+        Update: {
+          channel?: Database["public"]["Enums"]["notification_channel"]
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          subject?: string | null
+          template_name?: string
+          updated_at?: string
+          variables?: Json | null
+        }
+        Relationships: []
+      }
       official_change_log: {
         Row: {
           admin_notes: string | null
@@ -20879,6 +21057,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_notification_preferences: {
+        Row: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          created_at: string
+          event_type: Database["public"]["Enums"]["notification_event_type"]
+          id: string
+          is_enabled: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          channel: Database["public"]["Enums"]["notification_channel"]
+          created_at?: string
+          event_type: Database["public"]["Enums"]["notification_event_type"]
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          channel?: Database["public"]["Enums"]["notification_channel"]
+          created_at?: string
+          event_type?: Database["public"]["Enums"]["notification_event_type"]
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_notification_settings: {
         Row: {
           created_at: string
@@ -23324,7 +23532,29 @@ export type Database = {
         | "suspended"
         | "inactive"
       nomination_status: "pending" | "approved" | "rejected"
+      notification_channel: "email" | "in_app" | "push" | "sms" | "whatsapp"
+      notification_event_type:
+        | "artist_profile_submitted"
+        | "artist_verified"
+        | "artist_denied"
+        | "artist_new_follower"
+        | "artist_award_nomination"
+        | "artist_award_win"
+        | "new_song_uploaded"
+        | "song_milestone_reached"
+        | "new_event_published"
+        | "ticket_purchased"
+        | "event_reminder_24h"
+        | "event_cancelled"
+        | "voting_opens"
+        | "voting_closes"
       notification_priority: "low" | "moderate" | "critical"
+      notification_status:
+        | "pending"
+        | "sent"
+        | "delivered"
+        | "failed"
+        | "retrying"
       notification_type:
         | "copyright_violation"
         | "stream_milestone"
@@ -23417,6 +23647,7 @@ export type Database = {
         | "donation"
         | "subscription"
         | "refund"
+      user_type: "artist" | "fan" | "admin" | "event_attendee"
       verification_status: "pending" | "verified" | "rejected" | "under_review"
       verification_status_enum:
         | "pending"
@@ -23726,7 +23957,31 @@ export const Constants = {
         "inactive",
       ],
       nomination_status: ["pending", "approved", "rejected"],
+      notification_channel: ["email", "in_app", "push", "sms", "whatsapp"],
+      notification_event_type: [
+        "artist_profile_submitted",
+        "artist_verified",
+        "artist_denied",
+        "artist_new_follower",
+        "artist_award_nomination",
+        "artist_award_win",
+        "new_song_uploaded",
+        "song_milestone_reached",
+        "new_event_published",
+        "ticket_purchased",
+        "event_reminder_24h",
+        "event_cancelled",
+        "voting_opens",
+        "voting_closes",
+      ],
       notification_priority: ["low", "moderate", "critical"],
+      notification_status: [
+        "pending",
+        "sent",
+        "delivered",
+        "failed",
+        "retrying",
+      ],
       notification_type: [
         "copyright_violation",
         "stream_milestone",
@@ -23829,6 +24084,7 @@ export const Constants = {
         "subscription",
         "refund",
       ],
+      user_type: ["artist", "fan", "admin", "event_attendee"],
       verification_status: ["pending", "verified", "rejected", "under_review"],
       verification_status_enum: [
         "pending",
