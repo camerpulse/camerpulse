@@ -128,8 +128,9 @@ export default function MonetizationDashboard() {
     }
 
     // For now, use mock data since tables are newly created
+    const revenueObj = typeof revenueData === 'object' ? revenueData as any : {};
     const mockData = {
-      total_revenue: revenueData?.total_revenue_month || 0,
+      total_revenue: revenueObj.total_revenue_month || 0,
       revenue_by_module: {
         schools: 0,
         hospitals: 0, 
