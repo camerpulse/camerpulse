@@ -6855,6 +6855,68 @@ export type Database = {
           },
         ]
       }
+      civic_moderators: {
+        Row: {
+          application_id: string
+          assigned_villages: string[]
+          coverage_regions: string[]
+          created_at: string
+          id: string
+          last_active_at: string | null
+          moderator_role: Database["public"]["Enums"]["app_role"]
+          status: Database["public"]["Enums"]["moderator_status"]
+          suspended_until: string | null
+          suspension_reason: string | null
+          total_approvals: number
+          total_edits: number
+          total_rejections: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          application_id: string
+          assigned_villages?: string[]
+          coverage_regions?: string[]
+          created_at?: string
+          id?: string
+          last_active_at?: string | null
+          moderator_role: Database["public"]["Enums"]["app_role"]
+          status?: Database["public"]["Enums"]["moderator_status"]
+          suspended_until?: string | null
+          suspension_reason?: string | null
+          total_approvals?: number
+          total_edits?: number
+          total_rejections?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          application_id?: string
+          assigned_villages?: string[]
+          coverage_regions?: string[]
+          created_at?: string
+          id?: string
+          last_active_at?: string | null
+          moderator_role?: Database["public"]["Enums"]["app_role"]
+          status?: Database["public"]["Enums"]["moderator_status"]
+          suspended_until?: string | null
+          suspension_reason?: string | null
+          total_approvals?: number
+          total_edits?: number
+          total_rejections?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_moderators_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "moderator_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       civic_module_visibility: {
         Row: {
           created_at: string
@@ -12914,6 +12976,220 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      moderation_queue: {
+        Row: {
+          assigned_to: string | null
+          created_at: string
+          decision_reason: string | null
+          id: string
+          moderator_notes: string | null
+          priority_level: number
+          proof_documents: string[] | null
+          region: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["submission_status"]
+          submission_data: Json
+          submission_type: string
+          submitted_by: string
+          updated_at: string
+          village_id: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          created_at?: string
+          decision_reason?: string | null
+          id?: string
+          moderator_notes?: string | null
+          priority_level?: number
+          proof_documents?: string[] | null
+          region?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["submission_status"]
+          submission_data?: Json
+          submission_type: string
+          submitted_by: string
+          updated_at?: string
+          village_id?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          created_at?: string
+          decision_reason?: string | null
+          id?: string
+          moderator_notes?: string | null
+          priority_level?: number
+          proof_documents?: string[] | null
+          region?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["submission_status"]
+          submission_data?: Json
+          submission_type?: string
+          submitted_by?: string
+          updated_at?: string
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderation_queue_assigned_to_fkey"
+            columns: ["assigned_to"]
+            isOneToOne: false
+            referencedRelation: "civic_moderators"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "moderation_queue_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "civic_moderators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moderator_activities: {
+        Row: {
+          activity_type: string
+          changes_made: Json | null
+          created_at: string
+          description: string
+          id: string
+          moderator_id: string
+          proof_documents: string[] | null
+          target_id: string | null
+          target_type: string
+        }
+        Insert: {
+          activity_type: string
+          changes_made?: Json | null
+          created_at?: string
+          description: string
+          id?: string
+          moderator_id: string
+          proof_documents?: string[] | null
+          target_id?: string | null
+          target_type: string
+        }
+        Update: {
+          activity_type?: string
+          changes_made?: Json | null
+          created_at?: string
+          description?: string
+          id?: string
+          moderator_id?: string
+          proof_documents?: string[] | null
+          target_id?: string | null
+          target_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderator_activities_moderator_id_fkey"
+            columns: ["moderator_id"]
+            isOneToOne: false
+            referencedRelation: "civic_moderators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      moderator_applications: {
+        Row: {
+          admin_notes: string | null
+          application_status: Database["public"]["Enums"]["application_status"]
+          civic_experience: string | null
+          civic_oath_accepted: boolean
+          created_at: string
+          full_name: string
+          id: string
+          id_document_url: string | null
+          interview_scheduled_at: string | null
+          preferred_coverage_area: string
+          preferred_role: Database["public"]["Enums"]["app_role"]
+          region_of_residence: string
+          rejection_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          updated_at: string
+          user_id: string
+          village_of_origin: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          application_status?: Database["public"]["Enums"]["application_status"]
+          civic_experience?: string | null
+          civic_oath_accepted?: boolean
+          created_at?: string
+          full_name: string
+          id?: string
+          id_document_url?: string | null
+          interview_scheduled_at?: string | null
+          preferred_coverage_area: string
+          preferred_role: Database["public"]["Enums"]["app_role"]
+          region_of_residence: string
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          updated_at?: string
+          user_id: string
+          village_of_origin: string
+        }
+        Update: {
+          admin_notes?: string | null
+          application_status?: Database["public"]["Enums"]["application_status"]
+          civic_experience?: string | null
+          civic_oath_accepted?: boolean
+          created_at?: string
+          full_name?: string
+          id?: string
+          id_document_url?: string | null
+          interview_scheduled_at?: string | null
+          preferred_coverage_area?: string
+          preferred_role?: Database["public"]["Enums"]["app_role"]
+          region_of_residence?: string
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          updated_at?: string
+          user_id?: string
+          village_of_origin?: string
+        }
+        Relationships: []
+      }
+      moderator_badges: {
+        Row: {
+          badge_type: Database["public"]["Enums"]["badge_type"]
+          description: string | null
+          earned_at: string
+          evidence_data: Json | null
+          id: string
+          moderator_id: string
+        }
+        Insert: {
+          badge_type: Database["public"]["Enums"]["badge_type"]
+          description?: string | null
+          earned_at?: string
+          evidence_data?: Json | null
+          id?: string
+          moderator_id: string
+        }
+        Update: {
+          badge_type?: Database["public"]["Enums"]["badge_type"]
+          description?: string | null
+          earned_at?: string
+          evidence_data?: Json | null
+          id?: string
+          moderator_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderator_badges_moderator_id_fkey"
+            columns: ["moderator_id"]
+            isOneToOne: false
+            referencedRelation: "civic_moderators"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       music_releases: {
         Row: {
