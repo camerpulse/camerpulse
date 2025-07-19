@@ -100,6 +100,7 @@ import ModeratorOnboarding from "./pages/ModeratorOnboarding";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
@@ -124,6 +125,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="light" storageKey="camerpulse-ui-theme">
         <MobileProvider>
           <PanAfricaProvider>
             <AuthProvider>
@@ -238,10 +240,11 @@ const App = () => {
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
-      </AuthProvider>
-    </PanAfricaProvider>
-  </MobileProvider>
-</QueryClientProvider>
+              </AuthProvider>
+            </PanAfricaProvider>
+          </MobileProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
   );
 };
 
