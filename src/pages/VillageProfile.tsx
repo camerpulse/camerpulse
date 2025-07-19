@@ -21,6 +21,9 @@ import { VillageEvents } from '@/components/villages/VillageEvents';
 import { VillagePhotoGallery } from '@/components/villages/VillagePhotoGallery';
 import { VillageMembership } from '@/components/villages/VillageMembership';
 import { VillageLeadership } from '@/components/villages/VillageLeadership';
+import { VillageProjects } from '@/components/villages/VillageProjects';
+import { VillageNotablePeople } from '@/components/villages/VillageNotablePeople';
+import { VillageCivicActivity } from '@/components/villages/VillageCivicActivity';
 
 
 interface VillageData {
@@ -464,229 +467,15 @@ const VillageProfile = () => {
           </TabsContent>
 
           <TabsContent value="projects">
-            <div className="space-y-6">
-              {projects.map((project: any) => (
-                <Card key={project.id}>
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div>
-                        <h3 className="text-lg font-semibold mb-2">{project.project_name}</h3>
-                        <div className="flex items-center gap-2 mb-2">
-                          <Badge variant={getProjectStatusColor(project.project_status)} className="capitalize">
-                            {project.project_status}
-                          </Badge>
-                          <Badge variant="outline" className="capitalize">
-                            {project.project_type.replace('_', ' ')}
-                          </Badge>
-                        </div>
-                      </div>
-                      {project.funding_amount && (
-                        <div className="text-right">
-                          <div className="text-lg font-semibold text-primary">
-                            {project.funding_amount.toLocaleString()} FCFA
-                          </div>
-                          <div className="text-sm text-muted-foreground">Budget</div>
-                        </div>
-                      )}
-                    </div>
-
-                    {project.description && (
-                      <p className="text-muted-foreground mb-3">{project.description}</p>
-                    )}
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                      {project.year_started && (
-                        <div>
-                          <span className="text-muted-foreground">Started:</span>
-                          <span className="ml-1 font-medium">{project.year_started}</span>
-                        </div>
-                      )}
-                      {project.year_completed && (
-                        <div>
-                          <span className="text-muted-foreground">Completed:</span>
-                          <span className="ml-1 font-medium">{project.year_completed}</span>
-                        </div>
-                      )}
-                      {project.funding_source && (
-                        <div>
-                          <span className="text-muted-foreground">Funded by:</span>
-                          <span className="ml-1 font-medium">{project.funding_source}</span>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-
-              {projects.length === 0 && (
-                <Card className="text-center py-12">
-                  <CardContent>
-                    <Building className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No Projects Listed</h3>
-                    <p className="text-muted-foreground">
-                      Help build the village profile by adding development projects.
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
+            <VillageProjects villageId={id!} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="people">
-            <div className="space-y-8">
-              {/* Billionaires Section */}
-              <div>
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
-                  <DollarSign className="h-5 w-5 mr-2" />
-                  Notable Billionaires
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {billionaires.map((billionaire: any) => (
-                    <Card key={billionaire.id}>
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <Avatar className="h-12 w-12">
-                            <AvatarImage src={billionaire.photo_url} alt={billionaire.billionaire_name} />
-                            <AvatarFallback>
-                              {billionaire.billionaire_name.split(' ').map((n: string) => n[0]).join('')}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <h4 className="font-semibold">{billionaire.billionaire_name}</h4>
-                            <p className="text-sm text-muted-foreground mb-2">{billionaire.main_sector}</p>
-                            {billionaire.estimated_net_worth_usd && (
-                              <p className="text-sm font-medium text-primary">
-                                ~${billionaire.estimated_net_worth_usd.toLocaleString()} USD
-                              </p>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Celebrities Section */}
-              <div>
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
-                  <Award className="h-5 w-5 mr-2" />
-                  Famous Personalities
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {celebrities.map((celebrity: any) => (
-                    <Card key={celebrity.id}>
-                      <CardContent className="p-6">
-                        <div className="flex items-start gap-4">
-                          <Avatar className="h-12 w-12">
-                            <AvatarImage src={celebrity.photo_url} alt={celebrity.celebrity_name} />
-                            <AvatarFallback>
-                              {celebrity.celebrity_name.split(' ').map((n: string) => n[0]).join('')}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="flex-1">
-                            <h4 className="font-semibold">{celebrity.celebrity_name}</h4>
-                            <p className="text-sm text-muted-foreground mb-2 capitalize">{celebrity.profession}</p>
-                            {celebrity.highlights && (
-                              <p className="text-sm">{celebrity.highlights}</p>
-                            )}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {(billionaires.length === 0 && celebrities.length === 0) && (
-                <Card className="text-center py-12">
-                  <CardContent>
-                    <Award className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No Notable People Listed</h3>
-                    <p className="text-muted-foreground">
-                      Help celebrate your village by adding famous personalities and successful individuals.
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
+            <VillageNotablePeople villageId={id!} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="civic">
-            <div className="space-y-8">
-              {/* Petitions Section */}
-              <div>
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
-                  <Vote className="h-5 w-5 mr-2" />
-                  Active Petitions
-                </h3>
-                <div className="space-y-4">
-                  {petitions.filter((p: any) => p.petition_status === 'active').map((petition: any) => (
-                    <Card key={petition.id}>
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="flex-1">
-                            <h4 className="font-semibold mb-2">{petition.petition_title}</h4>
-                            <p className="text-muted-foreground text-sm mb-3">{petition.petition_body}</p>
-                            <div className="flex items-center gap-4 text-sm">
-                              <span>Target: {petition.target_audience}</span>
-                              <span>Signatures: {petition.signatures_count}</span>
-                            </div>
-                          </div>
-                          <Badge variant="secondary">{petition.petition_status}</Badge>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Conflicts Section */}
-              <div>
-                <h3 className="text-xl font-semibold mb-4 flex items-center">
-                  <AlertTriangle className="h-5 w-5 mr-2" />
-                  Community Issues
-                </h3>
-                <div className="space-y-4">
-                  {conflicts.map((conflict: any) => (
-                    <Card key={conflict.id}>
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between mb-4">
-                          <div className="flex-1">
-                            <h4 className="font-semibold mb-2">{conflict.conflict_name}</h4>
-                            <p className="text-muted-foreground text-sm mb-3">{conflict.description}</p>
-                            <div className="flex items-center gap-4 text-sm">
-                              <span>Type: {conflict.conflict_type}</span>
-                              {conflict.timeline_start && (
-                                <span>Since: {new Date(conflict.timeline_start).getFullYear()}</span>
-                              )}
-                            </div>
-                          </div>
-                          <Badge 
-                            variant={conflict.current_status === 'resolved' ? 'success' : 'warning'}
-                            className="capitalize"
-                          >
-                            {conflict.current_status}
-                          </Badge>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {(petitions.length === 0 && conflicts.length === 0) && (
-                <Card className="text-center py-12">
-                  <CardContent>
-                    <Vote className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                    <h3 className="text-lg font-semibold mb-2">No Civic Activity</h3>
-                    <p className="text-muted-foreground">
-                      Start engaging with your community by creating petitions or reporting issues.
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
+            <VillageCivicActivity villageId={id!} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="gallery">
