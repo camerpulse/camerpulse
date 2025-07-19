@@ -7810,6 +7810,33 @@ export type Database = {
           },
         ]
       }
+      content_tags: {
+        Row: {
+          created_at: string
+          id: string
+          tag_category: string
+          tag_name: string
+          updated_at: string
+          usage_count: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          tag_category?: string
+          tag_name: string
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          tag_category?: string
+          tag_name?: string
+          updated_at?: string
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
       conversation_participants: {
         Row: {
           conversation_id: string | null
@@ -18120,6 +18147,81 @@ export type Database = {
           },
         ]
       }
+      saved_searches: {
+        Row: {
+          created_at: string
+          id: string
+          last_result_count: number | null
+          notification_enabled: boolean | null
+          search_filters: Json | null
+          search_name: string
+          search_query: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_result_count?: number | null
+          notification_enabled?: boolean | null
+          search_filters?: Json | null
+          search_name: string
+          search_query: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_result_count?: number | null
+          notification_enabled?: boolean | null
+          search_filters?: Json | null
+          search_name?: string
+          search_query?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      search_analytics: {
+        Row: {
+          clicked_result_id: string | null
+          clicked_result_type: string | null
+          created_at: string
+          filters_applied: Json | null
+          id: string
+          results_count: number | null
+          search_duration_ms: number | null
+          search_query: string
+          search_type: string
+          user_id: string | null
+        }
+        Insert: {
+          clicked_result_id?: string | null
+          clicked_result_type?: string | null
+          created_at?: string
+          filters_applied?: Json | null
+          id?: string
+          results_count?: number | null
+          search_duration_ms?: number | null
+          search_query: string
+          search_type?: string
+          user_id?: string | null
+        }
+        Update: {
+          clicked_result_id?: string | null
+          clicked_result_type?: string | null
+          created_at?: string
+          filters_applied?: Json | null
+          id?: string
+          results_count?: number | null
+          search_duration_ms?: number | null
+          search_query?: string
+          search_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       security_logs: {
         Row: {
           created_at: string | null
@@ -19041,6 +19143,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      trending_searches: {
+        Row: {
+          created_at: string
+          id: string
+          last_searched: string
+          search_count: number | null
+          search_query: string
+          trend_score: number | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_searched?: string
+          search_count?: number | null
+          search_query: string
+          trend_score?: number | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_searched?: string
+          search_count?: number | null
+          search_query?: string
+          trend_score?: number | null
+        }
+        Relationships: []
       }
       trust_events: {
         Row: {
@@ -20534,6 +20663,30 @@ export type Database = {
         }
         Relationships: []
       }
+      village_tags: {
+        Row: {
+          created_at: string
+          id: string
+          relevance_score: number | null
+          tag_id: string
+          village_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          relevance_score?: number | null
+          tag_id: string
+          village_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          relevance_score?: number | null
+          tag_id?: string
+          village_id?: string
+        }
+        Relationships: []
+      }
       villages: {
         Row: {
           achievements_score: number | null
@@ -21362,6 +21515,33 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      search_villages: {
+        Args: {
+          p_query: string
+          p_region?: string
+          p_tags?: string[]
+          p_min_rating?: number
+          p_limit?: number
+          p_offset?: number
+        }
+        Returns: {
+          id: string
+          village_name: string
+          region: string
+          division: string
+          subdivision: string
+          overall_rating: number
+          sons_daughters_count: number
+          view_count: number
+          is_verified: boolean
+          total_ratings_count: number
+          infrastructure_score: number
+          education_score: number
+          health_score: number
+          diaspora_engagement_score: number
+          relevance_score: number
+        }[]
+      }
       send_notification: {
         Args: {
           p_user_id: string
@@ -21426,6 +21606,10 @@ export type Database = {
       }
       update_profile_analytics: {
         Args: { p_profile_id: string }
+        Returns: undefined
+      }
+      update_trending_search: {
+        Args: { p_query: string }
         Returns: undefined
       }
       validate_password_strength: {
