@@ -24,6 +24,9 @@ import { VillageLeadership } from '@/components/villages/VillageLeadership';
 import { VillageProjects } from '@/components/villages/VillageProjects';
 import { VillageNotablePeople } from '@/components/villages/VillageNotablePeople';
 import { VillageCivicActivity } from '@/components/villages/VillageCivicActivity';
+import { VillageChat } from '@/components/villages/VillageChat';
+import { VillageAnalytics } from '@/components/villages/VillageAnalytics';
+import { VillageLeaderboards } from '@/components/villages/VillageLeaderboards';
 
 
 interface VillageData {
@@ -351,7 +354,7 @@ const VillageProfile = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-10">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-13">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="membership">Members</TabsTrigger>
             <TabsTrigger value="leaders">Leadership</TabsTrigger>
@@ -359,6 +362,9 @@ const VillageProfile = () => {
             <TabsTrigger value="people">Notable People</TabsTrigger>
             <TabsTrigger value="civic">Civic Activity</TabsTrigger>
             <TabsTrigger value="gallery">Gallery</TabsTrigger>
+            <TabsTrigger value="chat">Chat</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+            <TabsTrigger value="leaderboards">Rankings</TabsTrigger>
             <TabsTrigger value="discussions">Discussions</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
             <TabsTrigger value="comments">Comments</TabsTrigger>
@@ -480,6 +486,18 @@ const VillageProfile = () => {
 
           <TabsContent value="gallery">
             <VillagePhotoGallery villageId={id!} />
+          </TabsContent>
+
+          <TabsContent value="chat">
+            <VillageChat />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <VillageAnalytics />
+          </TabsContent>
+
+          <TabsContent value="leaderboards">
+            <VillageLeaderboards />
           </TabsContent>
 
           <TabsContent value="discussions" className="space-y-6">
