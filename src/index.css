@@ -101,7 +101,8 @@
     --shadow-glow: 0 0 30px hsl(140 90% 35% / 0.3);
     --shadow-premium: 0 25px 50px -12px hsl(0 0% 0% / 0.5), 0 0 40px hsl(140 90% 35% / 0.2);
   }
-    
+
+  :root {
     /* Directory Service Shadows */
     --shadow-directory-school: 0 8px 25px -8px hsl(var(--directory-school) / 0.3);
     --shadow-directory-hospital: 0 8px 25px -8px hsl(var(--directory-hospital) / 0.3);
@@ -163,8 +164,6 @@
     
     --radius: 0.75rem; /* 12px rounded corners */
   }
-
-}
 
 @layer base {
   * {
