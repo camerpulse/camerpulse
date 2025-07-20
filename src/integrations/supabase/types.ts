@@ -6395,6 +6395,39 @@ export type Database = {
           },
         ]
       }
+      civic_achievement_badges: {
+        Row: {
+          badge_description: string | null
+          badge_icon: string | null
+          badge_name: string
+          badge_type: string
+          earned_at: string
+          id: string
+          requirements_met: Json | null
+          user_id: string
+        }
+        Insert: {
+          badge_description?: string | null
+          badge_icon?: string | null
+          badge_name: string
+          badge_type: string
+          earned_at?: string
+          id?: string
+          requirements_met?: Json | null
+          user_id: string
+        }
+        Update: {
+          badge_description?: string | null
+          badge_icon?: string | null
+          badge_name?: string
+          badge_type?: string
+          earned_at?: string
+          id?: string
+          requirements_met?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       civic_achievements: {
         Row: {
           achievement_description: string | null
@@ -6575,6 +6608,48 @@ export type Database = {
           trending_score?: number | null
           updated_at?: string
           verified_status?: string
+        }
+        Relationships: []
+      }
+      civic_content_comments: {
+        Row: {
+          comment_text: string
+          content_id: string
+          content_type: string
+          created_at: string
+          downvotes: number
+          id: string
+          is_approved: boolean
+          parent_comment_id: string | null
+          updated_at: string
+          upvotes: number
+          user_id: string
+        }
+        Insert: {
+          comment_text: string
+          content_id: string
+          content_type: string
+          created_at?: string
+          downvotes?: number
+          id?: string
+          is_approved?: boolean
+          parent_comment_id?: string | null
+          updated_at?: string
+          upvotes?: number
+          user_id: string
+        }
+        Update: {
+          comment_text?: string
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          downvotes?: number
+          id?: string
+          is_approved?: boolean
+          parent_comment_id?: string | null
+          updated_at?: string
+          upvotes?: number
+          user_id?: string
         }
         Relationships: []
       }
@@ -7003,6 +7078,54 @@ export type Database = {
           randomize_questions?: boolean
           show_correct_answers?: boolean
           time_limit_minutes?: number | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_educational_content: {
+        Row: {
+          author_id: string | null
+          content: Json
+          content_order: number
+          content_type: string
+          created_at: string
+          difficulty_level: string
+          estimated_read_time: number | null
+          id: string
+          is_featured: boolean
+          is_published: boolean
+          tags: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author_id?: string | null
+          content: Json
+          content_order?: number
+          content_type: string
+          created_at?: string
+          difficulty_level?: string
+          estimated_read_time?: number | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string | null
+          content?: Json
+          content_order?: number
+          content_type?: string
+          created_at?: string
+          difficulty_level?: string
+          estimated_read_time?: number | null
+          id?: string
+          is_featured?: boolean
+          is_published?: boolean
+          tags?: string[] | null
           title?: string
           updated_at?: string
         }
@@ -8588,6 +8711,57 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_questions: {
+        Row: {
+          answer_text: string | null
+          answered_at: string | null
+          answered_by: string | null
+          created_at: string
+          downvotes: number
+          id: string
+          is_public: boolean
+          question_text: string
+          question_type: string
+          related_article_id: string | null
+          status: string
+          updated_at: string
+          upvotes: number
+          user_id: string
+        }
+        Insert: {
+          answer_text?: string | null
+          answered_at?: string | null
+          answered_by?: string | null
+          created_at?: string
+          downvotes?: number
+          id?: string
+          is_public?: boolean
+          question_text: string
+          question_type?: string
+          related_article_id?: string | null
+          status?: string
+          updated_at?: string
+          upvotes?: number
+          user_id: string
+        }
+        Update: {
+          answer_text?: string | null
+          answered_at?: string | null
+          answered_by?: string | null
+          created_at?: string
+          downvotes?: number
+          id?: string
+          is_public?: boolean
+          question_text?: string
+          question_type?: string
+          related_article_id?: string | null
+          status?: string
+          updated_at?: string
+          upvotes?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       civic_quiz_attempts: {
         Row: {
           answers: Json
@@ -8627,6 +8801,51 @@ export type Database = {
           started_at?: string
           time_taken_minutes?: number | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      civic_quizzes: {
+        Row: {
+          category: string
+          created_at: string
+          created_by: string | null
+          description: string | null
+          difficulty_level: string
+          id: string
+          is_active: boolean
+          passing_score: number
+          questions: Json
+          time_limit_minutes: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: string
+          id?: string
+          is_active?: boolean
+          passing_score?: number
+          questions: Json
+          time_limit_minutes?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: string
+          id?: string
+          is_active?: boolean
+          passing_score?: number
+          questions?: Json
+          time_limit_minutes?: number | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -9276,6 +9495,33 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_user_bookmarks: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          notes: string | null
+          user_id: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          user_id: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       civic_visibility_audit: {
         Row: {
           action_type: string
@@ -9872,6 +10118,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      constitution_articles: {
+        Row: {
+          article_number: string
+          chapter_name: string | null
+          content_english: string
+          content_french: string
+          content_fulfulde: string | null
+          content_other: Json | null
+          content_pidgin: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          keywords: string[] | null
+          related_articles: string[] | null
+          section_name: string
+          summary: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          article_number: string
+          chapter_name?: string | null
+          content_english: string
+          content_french: string
+          content_fulfulde?: string | null
+          content_other?: Json | null
+          content_pidgin?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          keywords?: string[] | null
+          related_articles?: string[] | null
+          section_name: string
+          summary?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          article_number?: string
+          chapter_name?: string | null
+          content_english?: string
+          content_french?: string
+          content_fulfulde?: string | null
+          content_other?: Json | null
+          content_pidgin?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          keywords?: string[] | null
+          related_articles?: string[] | null
+          section_name?: string
+          summary?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       constitutional_articles: {
         Row: {
