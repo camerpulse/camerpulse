@@ -76,12 +76,28 @@
     --gradient-sacred-unity: linear-gradient(45deg, hsl(var(--royal-forest-green)), hsl(var(--royal-crimson-red)), hsl(var(--royal-golden-ochre)), hsl(var(--royal-earth-brown)));
     --gradient-heritage: conic-gradient(from 0deg, hsl(var(--royal-forest-green)), hsl(var(--royal-golden-ochre)), hsl(var(--royal-crimson-red)), hsl(var(--royal-earth-brown)), hsl(var(--royal-ancestral-black)));
     
+    /* Directory Service Gradients */
+    --gradient-directory-schools: linear-gradient(135deg, hsl(var(--directory-school)), hsl(var(--directory-school) / 0.8));
+    --gradient-directory-hospitals: linear-gradient(135deg, hsl(var(--directory-hospital)), hsl(var(--directory-hospital) / 0.8));
+    --gradient-directory-pharmacies: linear-gradient(135deg, hsl(var(--directory-pharmacy)), hsl(var(--directory-pharmacy) / 0.8));
+    --gradient-directory-villages: linear-gradient(135deg, hsl(var(--directory-village)), hsl(var(--directory-village) / 0.8));
+    --gradient-verification: linear-gradient(135deg, hsl(var(--directory-verified)), hsl(var(--status-active)));
+    --gradient-sponsorship: linear-gradient(135deg, hsl(var(--status-sponsored)), hsl(var(--primary-glow)));
+    
     /* CamerPulse Brand Shadows */
     --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
     --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
     --shadow-green: 0 8px 25px -8px hsl(var(--cm-green) / 0.4);
     --shadow-red: 0 8px 25px -8px hsl(var(--cm-red) / 0.4);
     --shadow-yellow: 0 8px 25px -8px hsl(var(--cm-yellow) / 0.4);
+    
+    /* Directory Service Shadows */
+    --shadow-directory-school: 0 8px 25px -8px hsl(var(--directory-school) / 0.3);
+    --shadow-directory-hospital: 0 8px 25px -8px hsl(var(--directory-hospital) / 0.3);
+    --shadow-directory-pharmacy: 0 8px 25px -8px hsl(var(--directory-pharmacy) / 0.3);
+    --shadow-directory-village: 0 8px 25px -8px hsl(var(--directory-village) / 0.3);
+    --shadow-verified: 0 4px 20px -4px hsl(var(--directory-verified) / 0.4);
+    --shadow-sponsored: 0 8px 30px -8px hsl(var(--status-sponsored) / 0.5);
     
     /* Lux Aeterna Enhanced Shadows */
     --shadow-lux-divine: 0 15px 40px -10px hsl(var(--lux-golden) / 0.4), 0 0 50px hsl(var(--lux-primary) / 0.3);
@@ -103,6 +119,34 @@
     --sidebar-accent-foreground: 222 84% 5%; /* Near black */
     --sidebar-border: 214 32% 91%;       /* Light border */
     --sidebar-ring: 142 69% 32%;         /* Focus ring - primary */
+
+    /* Directory & Services Colors */
+    --directory-school: 217 91% 60%;     /* School blue */
+    --directory-hospital: 0 84% 60%;     /* Hospital red */
+    --directory-pharmacy: 142 71% 45%;   /* Pharmacy green */
+    --directory-village: 38 85% 55%;     /* Village golden ochre */
+    --directory-verified: 123 67% 42%;   /* Verified green */
+    --directory-pending: 38 92% 50%;     /* Pending orange */
+    --directory-rejected: 0 84% 60%;     /* Rejected red */
+    
+    /* Institution Status Colors */
+    --status-active: 123 67% 42%;        /* Active green */
+    --status-inactive: 0 0% 45%;         /* Inactive gray */
+    --status-verified: 217 91% 60%;      /* Verified blue */
+    --status-claimed: 51 100% 50%;       /* Claimed yellow */
+    --status-sponsored: 271 76% 53%;     /* Sponsored purple */
+    
+    /* Message Priority Colors */
+    --message-urgent: 0 84% 60%;         /* Urgent red */
+    --message-normal: 217 91% 60%;       /* Normal blue */
+    --message-support: 123 67% 42%;      /* Support green */
+    
+    /* Rating Colors */
+    --rating-excellent: 123 67% 42%;     /* 5 stars - green */
+    --rating-good: 142 71% 45%;          /* 4 stars - light green */
+    --rating-average: 51 100% 50%;       /* 3 stars - yellow */
+    --rating-poor: 25 95% 53%;           /* 2 stars - orange */
+    --rating-terrible: 0 84% 60%;        /* 1 star - red */
 
     /* Animations removed for performance */
     
@@ -474,5 +518,151 @@
   
   .shadow-sacred-depth {
     box-shadow: var(--shadow-sacred-depth);
+  }
+
+  /* Directory Service Utilities */
+  .bg-gradient-directory-schools {
+    background: var(--gradient-directory-schools);
+  }
+
+  .bg-gradient-directory-hospitals {
+    background: var(--gradient-directory-hospitals);
+  }
+
+  .bg-gradient-directory-pharmacies {
+    background: var(--gradient-directory-pharmacies);
+  }
+
+  .bg-gradient-directory-villages {
+    background: var(--gradient-directory-villages);
+  }
+
+  .bg-gradient-verification {
+    background: var(--gradient-verification);
+  }
+
+  .bg-gradient-sponsorship {
+    background: var(--gradient-sponsorship);
+  }
+
+  .shadow-directory-school {
+    box-shadow: var(--shadow-directory-school);
+  }
+
+  .shadow-directory-hospital {
+    box-shadow: var(--shadow-directory-hospital);
+  }
+
+  .shadow-directory-pharmacy {
+    box-shadow: var(--shadow-directory-pharmacy);
+  }
+
+  .shadow-directory-village {
+    box-shadow: var(--shadow-directory-village);
+  }
+
+  .shadow-verified {
+    box-shadow: var(--shadow-verified);
+  }
+
+  .shadow-sponsored {
+    box-shadow: var(--shadow-sponsored);
+  }
+
+  /* Text gradients for directory services */
+  .text-gradient-directory-school {
+    background: var(--gradient-directory-schools);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-directory-hospital {
+    background: var(--gradient-directory-hospitals);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-directory-pharmacy {
+    background: var(--gradient-directory-pharmacies);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .text-gradient-directory-village {
+    background: var(--gradient-directory-villages);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* Verification badges */
+  .badge-verified {
+    @apply bg-status-verified text-white shadow-verified;
+  }
+
+  .badge-pending {
+    @apply bg-status-pending text-white;
+  }
+
+  .badge-sponsored {
+    @apply bg-status-sponsored text-white shadow-sponsored;
+  }
+
+  /* Message priority styles */
+  .message-urgent {
+    @apply border-l-4 border-message-urgent bg-red-50;
+  }
+
+  .message-normal {
+    @apply border-l-4 border-message-normal bg-blue-50;
+  }
+
+  .message-support {
+    @apply border-l-4 border-message-support bg-green-50;
+  }
+
+  /* Rating display utilities */
+  .rating-excellent {
+    @apply text-rating-excellent;
+  }
+
+  .rating-good {
+    @apply text-rating-good;
+  }
+
+  .rating-average {
+    @apply text-rating-average;
+  }
+
+  .rating-poor {
+    @apply text-rating-poor;
+  }
+
+  .rating-terrible {
+    @apply text-rating-terrible;
+  }
+
+  /* Directory card animations */
+  .directory-card {
+    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+  }
+
+  .directory-card-school {
+    @apply directory-card hover:shadow-directory-school;
+  }
+
+  .directory-card-hospital {
+    @apply directory-card hover:shadow-directory-hospital;
+  }
+
+  .directory-card-pharmacy {
+    @apply directory-card hover:shadow-directory-pharmacy;
+  }
+
+  .directory-card-village {
+    @apply directory-card hover:shadow-directory-village;
   }
 }
