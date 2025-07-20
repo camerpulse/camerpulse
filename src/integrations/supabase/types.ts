@@ -3771,6 +3771,317 @@ export type Database = {
           },
         ]
       }
+      audit_analytics: {
+        Row: {
+          action_type: string
+          audit_id: string
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          audit_id: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          audit_id?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_analytics_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "audit_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_comments: {
+        Row: {
+          audit_id: string
+          comment_text: string
+          created_at: string | null
+          expert_credentials: string | null
+          id: string
+          is_verified_expert: boolean | null
+          parent_comment_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          audit_id: string
+          comment_text: string
+          created_at?: string | null
+          expert_credentials?: string | null
+          id?: string
+          is_verified_expert?: boolean | null
+          parent_comment_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          audit_id?: string
+          comment_text?: string
+          created_at?: string | null
+          expert_credentials?: string | null
+          id?: string
+          is_verified_expert?: boolean | null
+          parent_comment_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_comments_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "audit_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "audit_comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "audit_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_documents: {
+        Row: {
+          audit_id: string
+          file_name: string
+          file_path: string
+          file_size_bytes: number | null
+          file_type: string
+          id: string
+          is_primary_document: boolean | null
+          upload_timestamp: string | null
+          uploaded_by: string | null
+        }
+        Insert: {
+          audit_id: string
+          file_name: string
+          file_path: string
+          file_size_bytes?: number | null
+          file_type: string
+          id?: string
+          is_primary_document?: boolean | null
+          upload_timestamp?: string | null
+          uploaded_by?: string | null
+        }
+        Update: {
+          audit_id?: string
+          file_name?: string
+          file_path?: string
+          file_size_bytes?: number | null
+          file_type?: string
+          id?: string
+          is_primary_document?: boolean | null
+          upload_timestamp?: string | null
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_documents_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "audit_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_flags: {
+        Row: {
+          audit_id: string
+          created_at: string | null
+          flag_description: string | null
+          flag_reason: string
+          flag_status: string | null
+          flagged_by: string
+          id: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+        }
+        Insert: {
+          audit_id: string
+          created_at?: string | null
+          flag_description?: string | null
+          flag_reason: string
+          flag_status?: string | null
+          flagged_by: string
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+        }
+        Update: {
+          audit_id?: string
+          created_at?: string | null
+          flag_description?: string | null
+          flag_reason?: string
+          flag_status?: string | null
+          flagged_by?: string
+          id?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_flags_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "audit_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_registry: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          audit_period_end: string | null
+          audit_period_start: string | null
+          audit_score: number | null
+          audit_summary: string | null
+          created_at: string
+          document_authenticity:
+            | Database["public"]["Enums"]["document_authenticity_status"]
+            | null
+          document_title: string
+          download_count: number | null
+          entity_audited: string
+          fiscal_year: string | null
+          flag_count: number | null
+          id: string
+          is_anonymous_submission: boolean | null
+          is_sensitive: boolean | null
+          linked_institutions: Json | null
+          linked_projects: Json | null
+          region: string | null
+          source_organization: string | null
+          source_type: Database["public"]["Enums"]["audit_source_type"]
+          status: Database["public"]["Enums"]["audit_status"] | null
+          submitted_by: string | null
+          tags: string[] | null
+          updated_at: string
+          uploaded_files: Json | null
+          view_count: number | null
+          watchlist_count: number | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          audit_period_end?: string | null
+          audit_period_start?: string | null
+          audit_score?: number | null
+          audit_summary?: string | null
+          created_at?: string
+          document_authenticity?:
+            | Database["public"]["Enums"]["document_authenticity_status"]
+            | null
+          document_title: string
+          download_count?: number | null
+          entity_audited: string
+          fiscal_year?: string | null
+          flag_count?: number | null
+          id?: string
+          is_anonymous_submission?: boolean | null
+          is_sensitive?: boolean | null
+          linked_institutions?: Json | null
+          linked_projects?: Json | null
+          region?: string | null
+          source_organization?: string | null
+          source_type: Database["public"]["Enums"]["audit_source_type"]
+          status?: Database["public"]["Enums"]["audit_status"] | null
+          submitted_by?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          uploaded_files?: Json | null
+          view_count?: number | null
+          watchlist_count?: number | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          audit_period_end?: string | null
+          audit_period_start?: string | null
+          audit_score?: number | null
+          audit_summary?: string | null
+          created_at?: string
+          document_authenticity?:
+            | Database["public"]["Enums"]["document_authenticity_status"]
+            | null
+          document_title?: string
+          download_count?: number | null
+          entity_audited?: string
+          fiscal_year?: string | null
+          flag_count?: number | null
+          id?: string
+          is_anonymous_submission?: boolean | null
+          is_sensitive?: boolean | null
+          linked_institutions?: Json | null
+          linked_projects?: Json | null
+          region?: string | null
+          source_organization?: string | null
+          source_type?: Database["public"]["Enums"]["audit_source_type"]
+          status?: Database["public"]["Enums"]["audit_status"] | null
+          submitted_by?: string | null
+          tags?: string[] | null
+          updated_at?: string
+          uploaded_files?: Json | null
+          view_count?: number | null
+          watchlist_count?: number | null
+        }
+        Relationships: []
+      }
+      audit_watchlists: {
+        Row: {
+          audit_id: string
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          audit_id: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          audit_id?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_watchlists_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "audit_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       automated_moderation: {
         Row: {
           ai_model_used: string
@@ -28374,6 +28685,10 @@ export type Database = {
           priority: number
         }[]
       }
+      get_audit_statistics: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       get_autonomous_config: {
         Args: { p_config_key?: string }
         Returns: Json
@@ -28650,6 +28965,10 @@ export type Database = {
         Args: { p_connection_id: string }
         Returns: Json
       }
+      track_audit_interaction: {
+        Args: { p_audit_id: string; p_action_type: string; p_metadata?: Json }
+        Returns: undefined
+      }
       track_user_poll_creation: {
         Args: { p_user_id: string }
         Returns: undefined
@@ -28749,6 +29068,20 @@ export type Database = {
         | "rejected"
       application_tier: "bronze" | "silver" | "gold"
       audio_format: "mp3" | "wav" | "flac"
+      audit_source_type:
+        | "government_official"
+        | "third_party_review"
+        | "whistleblower_leak"
+        | "media_report"
+        | "user_submitted"
+        | "investigative_journalism"
+      audit_status:
+        | "draft"
+        | "pending_review"
+        | "approved"
+        | "rejected"
+        | "flagged"
+        | "archived"
       award_status:
         | "draft"
         | "nomination_open"
@@ -28811,6 +29144,12 @@ export type Database = {
       contract_type: "branding" | "exclusivity" | "nda" | "general"
       corruption_tag: "verified" | "alleged" | "cleared" | "under_investigation"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
+      document_authenticity_status:
+        | "verified"
+        | "pending_verification"
+        | "questionable"
+        | "disputed"
+        | "fake_flagged"
       education_content_type:
         | "article"
         | "video"
@@ -29298,6 +29637,22 @@ export const Constants = {
       ],
       application_tier: ["bronze", "silver", "gold"],
       audio_format: ["mp3", "wav", "flac"],
+      audit_source_type: [
+        "government_official",
+        "third_party_review",
+        "whistleblower_leak",
+        "media_report",
+        "user_submitted",
+        "investigative_journalism",
+      ],
+      audit_status: [
+        "draft",
+        "pending_review",
+        "approved",
+        "rejected",
+        "flagged",
+        "archived",
+      ],
       award_status: [
         "draft",
         "nomination_open",
@@ -29367,6 +29722,13 @@ export const Constants = {
       contract_type: ["branding", "exclusivity", "nda", "general"],
       corruption_tag: ["verified", "alleged", "cleared", "under_investigation"],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
+      document_authenticity_status: [
+        "verified",
+        "pending_verification",
+        "questionable",
+        "disputed",
+        "fake_flagged",
+      ],
       education_content_type: [
         "article",
         "video",
