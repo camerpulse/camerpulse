@@ -552,6 +552,66 @@ export type Database = {
         }
         Relationships: []
       }
+      application_reviews: {
+        Row: {
+          application_id: string
+          committee_id: string | null
+          created_at: string
+          criteria_scores: Json
+          id: string
+          is_final: boolean
+          recommendation: string | null
+          review_comments: string | null
+          reviewed_at: string
+          reviewer_user_id: string
+          total_score: number
+          updated_at: string
+        }
+        Insert: {
+          application_id: string
+          committee_id?: string | null
+          created_at?: string
+          criteria_scores?: Json
+          id?: string
+          is_final?: boolean
+          recommendation?: string | null
+          review_comments?: string | null
+          reviewed_at?: string
+          reviewer_user_id: string
+          total_score?: number
+          updated_at?: string
+        }
+        Update: {
+          application_id?: string
+          committee_id?: string | null
+          created_at?: string
+          criteria_scores?: Json
+          id?: string
+          is_final?: boolean
+          recommendation?: string | null
+          review_comments?: string | null
+          reviewed_at?: string
+          reviewer_user_id?: string
+          total_score?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "application_reviews_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "grant_applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "application_reviews_committee_id_fkey"
+            columns: ["committee_id"]
+            isOneToOne: false
+            referencedRelation: "grant_review_committees"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       approval_ratings: {
         Row: {
           comment: string | null
@@ -8974,6 +9034,60 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_rewards: {
+        Row: {
+          badge_color: string | null
+          category: string
+          created_at: string
+          current_recipients: number | null
+          description: string
+          icon_url: string | null
+          id: string
+          is_active: boolean
+          is_public: boolean
+          max_recipients: number | null
+          points_value: number | null
+          reward_name: string
+          reward_type: Database["public"]["Enums"]["reward_type"]
+          unlock_criteria: Json
+          updated_at: string
+        }
+        Insert: {
+          badge_color?: string | null
+          category: string
+          created_at?: string
+          current_recipients?: number | null
+          description: string
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_public?: boolean
+          max_recipients?: number | null
+          points_value?: number | null
+          reward_name: string
+          reward_type: Database["public"]["Enums"]["reward_type"]
+          unlock_criteria?: Json
+          updated_at?: string
+        }
+        Update: {
+          badge_color?: string | null
+          category?: string
+          created_at?: string
+          current_recipients?: number | null
+          description?: string
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_public?: boolean
+          max_recipients?: number | null
+          points_value?: number | null
+          reward_name?: string
+          reward_type?: Database["public"]["Enums"]["reward_type"]
+          unlock_criteria?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       civic_risk_assessments: {
         Row: {
           assessed_by: string | null
@@ -15657,6 +15771,193 @@ export type Database = {
           verified_by?: string | null
         }
         Relationships: []
+      }
+      grant_applications: {
+        Row: {
+          applicant_user_id: string
+          application_data: Json
+          application_status: Database["public"]["Enums"]["application_status"]
+          awarded_amount_fcfa: number | null
+          awarded_amount_usd: number | null
+          created_at: string
+          final_score: number | null
+          id: string
+          program_id: string
+          review_notes: Json | null
+          reviewer_assignments: Json | null
+          score_breakdown: Json | null
+          submitted_at: string | null
+          supporting_documents: Json | null
+          updated_at: string
+        }
+        Insert: {
+          applicant_user_id: string
+          application_data?: Json
+          application_status?: Database["public"]["Enums"]["application_status"]
+          awarded_amount_fcfa?: number | null
+          awarded_amount_usd?: number | null
+          created_at?: string
+          final_score?: number | null
+          id?: string
+          program_id: string
+          review_notes?: Json | null
+          reviewer_assignments?: Json | null
+          score_breakdown?: Json | null
+          submitted_at?: string | null
+          supporting_documents?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          applicant_user_id?: string
+          application_data?: Json
+          application_status?: Database["public"]["Enums"]["application_status"]
+          awarded_amount_fcfa?: number | null
+          awarded_amount_usd?: number | null
+          created_at?: string
+          final_score?: number | null
+          id?: string
+          program_id?: string
+          review_notes?: Json | null
+          reviewer_assignments?: Json | null
+          score_breakdown?: Json | null
+          submitted_at?: string | null
+          supporting_documents?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grant_applications_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "grant_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      grant_programs: {
+        Row: {
+          announcement_date: string | null
+          application_deadline: string | null
+          application_form_fields: Json | null
+          contact_information: Json | null
+          created_at: string
+          created_by: string
+          description: string
+          eligibility_criteria: Json
+          evaluation_criteria: Json
+          id: string
+          max_award_amount_fcfa: number | null
+          max_award_amount_usd: number | null
+          min_award_amount_fcfa: number | null
+          min_award_amount_usd: number | null
+          program_category: string
+          program_name: string
+          program_status: Database["public"]["Enums"]["grant_status"]
+          program_type: string
+          required_documents: Json | null
+          terms_and_conditions: string | null
+          total_budget_fcfa: number | null
+          total_budget_usd: number | null
+          updated_at: string
+        }
+        Insert: {
+          announcement_date?: string | null
+          application_deadline?: string | null
+          application_form_fields?: Json | null
+          contact_information?: Json | null
+          created_at?: string
+          created_by: string
+          description: string
+          eligibility_criteria?: Json
+          evaluation_criteria?: Json
+          id?: string
+          max_award_amount_fcfa?: number | null
+          max_award_amount_usd?: number | null
+          min_award_amount_fcfa?: number | null
+          min_award_amount_usd?: number | null
+          program_category: string
+          program_name: string
+          program_status?: Database["public"]["Enums"]["grant_status"]
+          program_type: string
+          required_documents?: Json | null
+          terms_and_conditions?: string | null
+          total_budget_fcfa?: number | null
+          total_budget_usd?: number | null
+          updated_at?: string
+        }
+        Update: {
+          announcement_date?: string | null
+          application_deadline?: string | null
+          application_form_fields?: Json | null
+          contact_information?: Json | null
+          created_at?: string
+          created_by?: string
+          description?: string
+          eligibility_criteria?: Json
+          evaluation_criteria?: Json
+          id?: string
+          max_award_amount_fcfa?: number | null
+          max_award_amount_usd?: number | null
+          min_award_amount_fcfa?: number | null
+          min_award_amount_usd?: number | null
+          program_category?: string
+          program_name?: string
+          program_status?: Database["public"]["Enums"]["grant_status"]
+          program_type?: string
+          required_documents?: Json | null
+          terms_and_conditions?: string | null
+          total_budget_fcfa?: number | null
+          total_budget_usd?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      grant_review_committees: {
+        Row: {
+          committee_name: string
+          created_at: string
+          id: string
+          is_active: boolean
+          max_score: number | null
+          program_id: string
+          review_criteria: Json
+          review_deadline: string | null
+          reviewer_user_ids: Json
+          updated_at: string
+        }
+        Insert: {
+          committee_name: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          max_score?: number | null
+          program_id: string
+          review_criteria?: Json
+          review_deadline?: string | null
+          reviewer_user_ids?: Json
+          updated_at?: string
+        }
+        Update: {
+          committee_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          max_score?: number | null
+          program_id?: string
+          review_criteria?: Json
+          review_deadline?: string | null
+          reviewer_user_ids?: Json
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grant_review_committees_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "grant_programs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       hospital_claims: {
         Row: {
@@ -28185,6 +28486,113 @@ export type Database = {
           },
         ]
       }
+      user_civic_metrics: {
+        Row: {
+          badges_earned: number | null
+          created_at: string
+          events_attended: number | null
+          grants_received: number | null
+          id: string
+          last_activity_date: string | null
+          monthly_score: number | null
+          petitions_created: number | null
+          petitions_supported: number | null
+          projects_contributed: number | null
+          quiz_completions: number | null
+          rank_in_age_group: number | null
+          rank_in_region: number | null
+          rank_overall: number | null
+          scholarships_received: number | null
+          streak_days: number | null
+          total_civic_score: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          badges_earned?: number | null
+          created_at?: string
+          events_attended?: number | null
+          grants_received?: number | null
+          id?: string
+          last_activity_date?: string | null
+          monthly_score?: number | null
+          petitions_created?: number | null
+          petitions_supported?: number | null
+          projects_contributed?: number | null
+          quiz_completions?: number | null
+          rank_in_age_group?: number | null
+          rank_in_region?: number | null
+          rank_overall?: number | null
+          scholarships_received?: number | null
+          streak_days?: number | null
+          total_civic_score?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          badges_earned?: number | null
+          created_at?: string
+          events_attended?: number | null
+          grants_received?: number | null
+          id?: string
+          last_activity_date?: string | null
+          monthly_score?: number | null
+          petitions_created?: number | null
+          petitions_supported?: number | null
+          projects_contributed?: number | null
+          quiz_completions?: number | null
+          rank_in_age_group?: number | null
+          rank_in_region?: number | null
+          rank_overall?: number | null
+          scholarships_received?: number | null
+          streak_days?: number | null
+          total_civic_score?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_civic_rewards: {
+        Row: {
+          certificate_url: string | null
+          earned_at: string
+          id: string
+          is_displayed: boolean
+          reward_id: string
+          unlock_context: Json | null
+          user_id: string
+          verification_code: string | null
+        }
+        Insert: {
+          certificate_url?: string | null
+          earned_at?: string
+          id?: string
+          is_displayed?: boolean
+          reward_id: string
+          unlock_context?: Json | null
+          user_id: string
+          verification_code?: string | null
+        }
+        Update: {
+          certificate_url?: string | null
+          earned_at?: string
+          id?: string
+          is_displayed?: boolean
+          reward_id?: string
+          unlock_context?: Json | null
+          user_id?: string
+          verification_code?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_civic_rewards_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "civic_rewards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_devices: {
         Row: {
           created_at: string | null
@@ -30312,6 +30720,10 @@ export type Database = {
         Args: { event_id_param: string }
         Returns: number
       }
+      award_civic_reward: {
+        Args: { p_user_id: string; p_reward_id: string; p_context?: Json }
+        Returns: boolean
+      }
       award_fan_points: {
         Args: {
           p_fan_id: string
@@ -30359,6 +30771,10 @@ export type Database = {
       }
       calculate_civic_risk_score: {
         Args: { p_target_type: string; p_target_id: string }
+        Returns: number
+      }
+      calculate_civic_score: {
+        Args: { p_user_id: string }
         Returns: number
       }
       calculate_connection_fee: {
@@ -31045,6 +31461,8 @@ export type Database = {
         | "interview_scheduled"
         | "approved"
         | "rejected"
+        | "draft"
+        | "awarded"
       application_tier: "bronze" | "silver" | "gold"
       audio_format: "mp3" | "wav" | "flac"
       audit_source_type:
@@ -31145,6 +31563,14 @@ export type Database = {
         | "interactive"
         | "webinar"
       education_difficulty: "beginner" | "intermediate" | "advanced"
+      eligibility_criteria_type:
+        | "age_range"
+        | "location"
+        | "education_level"
+        | "civic_score"
+        | "quiz_performance"
+        | "petition_activity"
+        | "project_contribution"
       engagement_activity_type:
         | "public_appearance"
         | "social_media_post"
@@ -31189,6 +31615,7 @@ export type Database = {
         | "private"
         | "ngo"
         | "other"
+      grant_status: "draft" | "open" | "closed" | "suspended"
       hospital_ownership:
         | "government"
         | "private"
@@ -31396,6 +31823,13 @@ export type Database = {
         | "annual_overview"
         | "custom_analysis"
       reputation_badge: "excellent" | "trusted" | "under_watch" | "flagged"
+      reward_type:
+        | "badge"
+        | "certificate"
+        | "points"
+        | "scholarship"
+        | "grant"
+        | "feature_access"
       royalty_status: "pending" | "processed" | "paid"
       rsvp_status: "interested" | "going" | "not_going"
       school_ownership:
@@ -31643,6 +32077,8 @@ export const Constants = {
         "interview_scheduled",
         "approved",
         "rejected",
+        "draft",
+        "awarded",
       ],
       application_tier: ["bronze", "silver", "gold"],
       audio_format: ["mp3", "wav", "flac"],
@@ -31756,6 +32192,15 @@ export const Constants = {
         "webinar",
       ],
       education_difficulty: ["beginner", "intermediate", "advanced"],
+      eligibility_criteria_type: [
+        "age_range",
+        "location",
+        "education_level",
+        "civic_score",
+        "quiz_performance",
+        "petition_activity",
+        "project_contribution",
+      ],
       engagement_activity_type: [
         "public_appearance",
         "social_media_post",
@@ -31805,6 +32250,7 @@ export const Constants = {
         "ngo",
         "other",
       ],
+      grant_status: ["draft", "open", "closed", "suspended"],
       hospital_ownership: [
         "government",
         "private",
@@ -32036,6 +32482,14 @@ export const Constants = {
         "custom_analysis",
       ],
       reputation_badge: ["excellent", "trusted", "under_watch", "flagged"],
+      reward_type: [
+        "badge",
+        "certificate",
+        "points",
+        "scholarship",
+        "grant",
+        "feature_access",
+      ],
       royalty_status: ["pending", "processed", "paid"],
       rsvp_status: ["interested", "going", "not_going"],
       school_ownership: [
