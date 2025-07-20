@@ -112,6 +112,14 @@ import InstitutionDirectory from "./pages/InstitutionDirectory";
 import ClaimModerationDashboard from "./pages/ClaimModerationDashboard";
 import InstitutionOwnerDashboard from "./pages/InstitutionOwnerDashboard";
 import { GovProjectTracker } from "./pages/GovProjectTracker";
+import UserManagement from "./pages/UserManagement";
+import CivicParticipationHub from "./pages/CivicParticipationHub";
+import ModerationCenter from "./pages/ModerationCenter";
+import SocialCommunity from "./pages/SocialCommunity";
+import GovernmentPortal from "./pages/GovernmentPortal";
+import AdvancedAnalytics from "./pages/AdvancedAnalytics";
+import NotificationCampaigns from "./pages/NotificationCampaigns";
+import APIIntegrations from "./pages/APIIntegrations";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";

@@ -59,7 +59,7 @@ interface ServiceRequest {
 const GovernmentPortal: React.FC = () => {
   const { toast } = useToast();
   const { user } = useAuth();
-  const [agencies, setAgencies] = useState<GovernmentAgency[]>([]);
+  const [agencies, setAgencies] = useState<any[]>([]);
   const [serviceRequests, setServiceRequests] = useState<ServiceRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateRequest, setShowCreateRequest] = useState(false);

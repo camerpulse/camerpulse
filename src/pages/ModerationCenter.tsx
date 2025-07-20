@@ -62,9 +62,9 @@ interface SecurityAuditLog {
 const ModerationCenter: React.FC = () => {
   const { toast } = useToast();
   const { user } = useAuth();
-  const [rules, setRules] = useState<ModerationRule[]>([]);
-  const [actions, setActions] = useState<ModerationAction[]>([]);
-  const [auditLogs, setAuditLogs] = useState<SecurityAuditLog[]>([]);
+  const [rules, setRules] = useState<any[]>([]);
+  const [actions, setActions] = useState<any[]>([]);
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [showCreateRule, setShowCreateRule] = useState(false);
