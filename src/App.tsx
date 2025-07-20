@@ -11,6 +11,7 @@ import PulseFeed from "./pages/PulseFeed";
 import Feed from "./pages/Feed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
+import Directory from "./pages/Directory";
 import Marketplace from "./pages/Marketplace";
 import Polls from "./pages/Polls";
 import PollsLandingPage from "./pages/PollsLandingPage";
