@@ -4791,6 +4791,98 @@ export type Database = {
         }
         Relationships: []
       }
+      bill_comments: {
+        Row: {
+          comment_text: string
+          created_at: string | null
+          downvotes: number | null
+          expert_credentials: string | null
+          id: string
+          is_expert_opinion: boolean | null
+          is_flagged: boolean | null
+          legislation_id: string
+          parent_comment_id: string | null
+          updated_at: string | null
+          upvotes: number | null
+          user_id: string
+        }
+        Insert: {
+          comment_text: string
+          created_at?: string | null
+          downvotes?: number | null
+          expert_credentials?: string | null
+          id?: string
+          is_expert_opinion?: boolean | null
+          is_flagged?: boolean | null
+          legislation_id: string
+          parent_comment_id?: string | null
+          updated_at?: string | null
+          upvotes?: number | null
+          user_id: string
+        }
+        Update: {
+          comment_text?: string
+          created_at?: string | null
+          downvotes?: number | null
+          expert_credentials?: string | null
+          id?: string
+          is_expert_opinion?: boolean | null
+          is_flagged?: boolean | null
+          legislation_id?: string
+          parent_comment_id?: string | null
+          updated_at?: string | null
+          upvotes?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bill_comments_legislation_id_fkey"
+            columns: ["legislation_id"]
+            isOneToOne: false
+            referencedRelation: "legislation_registry"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bill_comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "bill_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      bill_followers: {
+        Row: {
+          created_at: string | null
+          id: string
+          legislation_id: string
+          notification_preferences: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          legislation_id: string
+          notification_preferences?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          legislation_id?: string
+          notification_preferences?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bill_followers_legislation_id_fkey"
+            columns: ["legislation_id"]
+            isOneToOne: false
+            referencedRelation: "legislation_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       billionaire_applications: {
         Row: {
           admin_notes: string | null
@@ -6255,6 +6347,50 @@ export type Database = {
             columns: ["certificate_id"]
             isOneToOne: false
             referencedRelation: "event_certificates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      citizen_bill_engagement: {
+        Row: {
+          comment_text: string | null
+          created_at: string | null
+          engagement_type: string
+          id: string
+          legislation_id: string
+          metadata: Json | null
+          petition_reason: string | null
+          user_id: string
+          vote_position: Database["public"]["Enums"]["vote_position"] | null
+        }
+        Insert: {
+          comment_text?: string | null
+          created_at?: string | null
+          engagement_type: string
+          id?: string
+          legislation_id: string
+          metadata?: Json | null
+          petition_reason?: string | null
+          user_id: string
+          vote_position?: Database["public"]["Enums"]["vote_position"] | null
+        }
+        Update: {
+          comment_text?: string | null
+          created_at?: string | null
+          engagement_type?: string
+          id?: string
+          legislation_id?: string
+          metadata?: Json | null
+          petition_reason?: string | null
+          user_id?: string
+          vote_position?: Database["public"]["Enums"]["vote_position"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "citizen_bill_engagement_legislation_id_fkey"
+            columns: ["legislation_id"]
+            isOneToOne: false
+            referencedRelation: "legislation_registry"
             referencedColumns: ["id"]
           },
         ]
@@ -15844,6 +15980,208 @@ export type Database = {
         }
         Relationships: []
       }
+      legislation_registry: {
+        Row: {
+          affected_sectors: string[] | null
+          bill_number: string | null
+          bill_title: string
+          citizen_downvotes: number | null
+          citizen_impact_score: number | null
+          citizen_upvotes: number | null
+          corruption_risk_level: string | null
+          created_at: string
+          date_introduced: string | null
+          date_last_updated: string | null
+          estimated_cost_fcfa: number | null
+          followers_count: number | null
+          full_text_url: string | null
+          id: string
+          impact_assessment: string | null
+          implementation_timeline: string | null
+          law_type: Database["public"]["Enums"]["law_type"]
+          legislative_summary: string | null
+          originator_id: string | null
+          originator_name: string | null
+          originator_type: string | null
+          related_laws: string[] | null
+          status: Database["public"]["Enums"]["law_status"] | null
+          tags: string[] | null
+          total_comments: number | null
+          total_petitions: number | null
+          transparency_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          affected_sectors?: string[] | null
+          bill_number?: string | null
+          bill_title: string
+          citizen_downvotes?: number | null
+          citizen_impact_score?: number | null
+          citizen_upvotes?: number | null
+          corruption_risk_level?: string | null
+          created_at?: string
+          date_introduced?: string | null
+          date_last_updated?: string | null
+          estimated_cost_fcfa?: number | null
+          followers_count?: number | null
+          full_text_url?: string | null
+          id?: string
+          impact_assessment?: string | null
+          implementation_timeline?: string | null
+          law_type: Database["public"]["Enums"]["law_type"]
+          legislative_summary?: string | null
+          originator_id?: string | null
+          originator_name?: string | null
+          originator_type?: string | null
+          related_laws?: string[] | null
+          status?: Database["public"]["Enums"]["law_status"] | null
+          tags?: string[] | null
+          total_comments?: number | null
+          total_petitions?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          affected_sectors?: string[] | null
+          bill_number?: string | null
+          bill_title?: string
+          citizen_downvotes?: number | null
+          citizen_impact_score?: number | null
+          citizen_upvotes?: number | null
+          corruption_risk_level?: string | null
+          created_at?: string
+          date_introduced?: string | null
+          date_last_updated?: string | null
+          estimated_cost_fcfa?: number | null
+          followers_count?: number | null
+          full_text_url?: string | null
+          id?: string
+          impact_assessment?: string | null
+          implementation_timeline?: string | null
+          law_type?: Database["public"]["Enums"]["law_type"]
+          legislative_summary?: string | null
+          originator_id?: string | null
+          originator_name?: string | null
+          originator_type?: string | null
+          related_laws?: string[] | null
+          status?: Database["public"]["Enums"]["law_status"] | null
+          tags?: string[] | null
+          total_comments?: number | null
+          total_petitions?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      legislative_alerts: {
+        Row: {
+          alert_message: string
+          alert_title: string
+          alert_type: string
+          created_at: string | null
+          id: string
+          legislation_id: string | null
+          recipients_count: number | null
+          regions_affected: string[] | null
+          scheduled_for: string | null
+          send_email: boolean | null
+          send_push: boolean | null
+          send_sms: boolean | null
+          sent_at: string | null
+          target_audience: string
+        }
+        Insert: {
+          alert_message: string
+          alert_title: string
+          alert_type: string
+          created_at?: string | null
+          id?: string
+          legislation_id?: string | null
+          recipients_count?: number | null
+          regions_affected?: string[] | null
+          scheduled_for?: string | null
+          send_email?: boolean | null
+          send_push?: boolean | null
+          send_sms?: boolean | null
+          sent_at?: string | null
+          target_audience: string
+        }
+        Update: {
+          alert_message?: string
+          alert_title?: string
+          alert_type?: string
+          created_at?: string | null
+          id?: string
+          legislation_id?: string | null
+          recipients_count?: number | null
+          regions_affected?: string[] | null
+          scheduled_for?: string | null
+          send_email?: boolean | null
+          send_push?: boolean | null
+          send_sms?: boolean | null
+          sent_at?: string | null
+          target_audience?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legislative_alerts_legislation_id_fkey"
+            columns: ["legislation_id"]
+            isOneToOne: false
+            referencedRelation: "legislation_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      legislative_timeline: {
+        Row: {
+          actor_id: string | null
+          actor_name: string | null
+          actor_type: string | null
+          created_at: string | null
+          event_date: string
+          event_description: string | null
+          event_title: string
+          event_type: string
+          id: string
+          legislation_id: string
+          metadata: Json | null
+        }
+        Insert: {
+          actor_id?: string | null
+          actor_name?: string | null
+          actor_type?: string | null
+          created_at?: string | null
+          event_date: string
+          event_description?: string | null
+          event_title: string
+          event_type: string
+          id?: string
+          legislation_id: string
+          metadata?: Json | null
+        }
+        Update: {
+          actor_id?: string | null
+          actor_name?: string | null
+          actor_type?: string | null
+          created_at?: string | null
+          event_date?: string
+          event_description?: string | null
+          event_title?: string
+          event_type?: string
+          id?: string
+          legislation_id?: string
+          metadata?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legislative_timeline_legislation_id_fkey"
+            columns: ["legislation_id"]
+            isOneToOne: false
+            referencedRelation: "legislation_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       live_polling_sessions: {
         Row: {
           comment_stream_enabled: boolean
@@ -17591,6 +17929,116 @@ export type Database = {
           widget_configuration?: Json
         }
         Relationships: []
+      }
+      mp_legislative_stats: {
+        Row: {
+          attendance_rate: number | null
+          bills_authored: number | null
+          bills_co_sponsored: number | null
+          citizen_approval_rating: number | null
+          created_at: string | null
+          id: string
+          last_calculated_at: string | null
+          mp_id: string
+          mp_name: string
+          total_absences: number | null
+          total_abstentions: number | null
+          total_votes_cast: number | null
+          total_votes_no: number | null
+          total_votes_yes: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          attendance_rate?: number | null
+          bills_authored?: number | null
+          bills_co_sponsored?: number | null
+          citizen_approval_rating?: number | null
+          created_at?: string | null
+          id?: string
+          last_calculated_at?: string | null
+          mp_id: string
+          mp_name: string
+          total_absences?: number | null
+          total_abstentions?: number | null
+          total_votes_cast?: number | null
+          total_votes_no?: number | null
+          total_votes_yes?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          attendance_rate?: number | null
+          bills_authored?: number | null
+          bills_co_sponsored?: number | null
+          citizen_approval_rating?: number | null
+          created_at?: string | null
+          id?: string
+          last_calculated_at?: string | null
+          mp_id?: string
+          mp_name?: string
+          total_absences?: number | null
+          total_abstentions?: number | null
+          total_votes_cast?: number | null
+          total_votes_no?: number | null
+          total_votes_yes?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      mp_votes: {
+        Row: {
+          constituency: string | null
+          created_at: string | null
+          id: string
+          legislation_id: string
+          mp_id: string
+          mp_name: string
+          political_party: string | null
+          vote_date: string
+          vote_notes: string | null
+          vote_position: Database["public"]["Enums"]["vote_position"]
+          vote_round: number | null
+          vote_type: Database["public"]["Enums"]["mp_vote_type"] | null
+          was_present: boolean | null
+        }
+        Insert: {
+          constituency?: string | null
+          created_at?: string | null
+          id?: string
+          legislation_id: string
+          mp_id: string
+          mp_name: string
+          political_party?: string | null
+          vote_date: string
+          vote_notes?: string | null
+          vote_position: Database["public"]["Enums"]["vote_position"]
+          vote_round?: number | null
+          vote_type?: Database["public"]["Enums"]["mp_vote_type"] | null
+          was_present?: boolean | null
+        }
+        Update: {
+          constituency?: string | null
+          created_at?: string | null
+          id?: string
+          legislation_id?: string
+          mp_id?: string
+          mp_name?: string
+          political_party?: string | null
+          vote_date?: string
+          vote_notes?: string | null
+          vote_position?: Database["public"]["Enums"]["vote_position"]
+          vote_round?: number | null
+          vote_type?: Database["public"]["Enums"]["mp_vote_type"] | null
+          was_present?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mp_votes_legislation_id_fkey"
+            columns: ["legislation_id"]
+            isOneToOne: false
+            referencedRelation: "legislation_registry"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       music_releases: {
         Row: {
@@ -28124,6 +28572,71 @@ export type Database = {
           },
         ]
       }
+      voting_sessions: {
+        Row: {
+          created_at: string | null
+          id: string
+          legislation_id: string
+          live_stream_url: string | null
+          session_date: string
+          session_name: string
+          session_notes: string | null
+          session_result: string | null
+          session_type: string
+          total_mps_expected: number | null
+          total_mps_present: number | null
+          transcript_url: string | null
+          votes_absent: number | null
+          votes_abstain: number | null
+          votes_no: number | null
+          votes_yes: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          legislation_id: string
+          live_stream_url?: string | null
+          session_date: string
+          session_name: string
+          session_notes?: string | null
+          session_result?: string | null
+          session_type: string
+          total_mps_expected?: number | null
+          total_mps_present?: number | null
+          transcript_url?: string | null
+          votes_absent?: number | null
+          votes_abstain?: number | null
+          votes_no?: number | null
+          votes_yes?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          legislation_id?: string
+          live_stream_url?: string | null
+          session_date?: string
+          session_name?: string
+          session_notes?: string | null
+          session_result?: string | null
+          session_type?: string
+          total_mps_expected?: number | null
+          total_mps_present?: number | null
+          transcript_url?: string | null
+          votes_absent?: number | null
+          votes_abstain?: number | null
+          votes_no?: number | null
+          votes_yes?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "voting_sessions_legislation_id_fkey"
+            columns: ["legislation_id"]
+            isOneToOne: false
+            referencedRelation: "legislation_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wallet_credits: {
         Row: {
           created_at: string | null
@@ -28438,6 +28951,10 @@ export type Database = {
         Args: { p_fix_type: string }
         Returns: number
       }
+      calculate_mp_legislative_performance: {
+        Args: { p_mp_id: string }
+        Returns: undefined
+      }
       calculate_plugin_risk_score: {
         Args: { p_plugin_id: string }
         Returns: number
@@ -28718,6 +29235,10 @@ export type Database = {
         Returns: Json
       }
       get_legal_dashboard_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
+      get_legislation_statistics: {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
@@ -29230,6 +29751,25 @@ export type Database = {
         | "hospital"
         | "pharmacy"
         | "village"
+      law_status:
+        | "draft"
+        | "in_committee"
+        | "first_reading"
+        | "second_reading"
+        | "third_reading"
+        | "voted"
+        | "passed"
+        | "rejected"
+        | "paused"
+        | "withdrawn"
+        | "archived"
+      law_type:
+        | "bill"
+        | "amendment"
+        | "reform"
+        | "ordinance"
+        | "act"
+        | "resolution"
       media_source_type:
         | "news_website"
         | "youtube_channel"
@@ -29255,6 +29795,7 @@ export type Database = {
         | "suspended"
         | "inactive"
       monitoring_status: "active" | "paused" | "error" | "maintenance"
+      mp_vote_type: "official" | "committee" | "preliminary"
       nomination_status: "pending" | "approved" | "rejected"
       notification_channel: "email" | "in_app" | "push" | "sms" | "whatsapp"
       notification_event_type:
@@ -29465,6 +30006,7 @@ export type Database = {
         | "whitelisted"
         | "resolved"
         | "dismissed"
+      vote_position: "yes" | "no" | "abstain" | "absent"
       vote_type: "public" | "jury"
       wealth_source:
         | "technology"
@@ -29818,6 +30360,27 @@ export const Constants = {
         "pharmacy",
         "village",
       ],
+      law_status: [
+        "draft",
+        "in_committee",
+        "first_reading",
+        "second_reading",
+        "third_reading",
+        "voted",
+        "passed",
+        "rejected",
+        "paused",
+        "withdrawn",
+        "archived",
+      ],
+      law_type: [
+        "bill",
+        "amendment",
+        "reform",
+        "ordinance",
+        "act",
+        "resolution",
+      ],
       media_source_type: [
         "news_website",
         "youtube_channel",
@@ -29847,6 +30410,7 @@ export const Constants = {
         "inactive",
       ],
       monitoring_status: ["active", "paused", "error", "maintenance"],
+      mp_vote_type: ["official", "committee", "preliminary"],
       nomination_status: ["pending", "approved", "rejected"],
       notification_channel: ["email", "in_app", "push", "sms", "whatsapp"],
       notification_event_type: [
@@ -30082,6 +30646,7 @@ export const Constants = {
         "resolved",
         "dismissed",
       ],
+      vote_position: ["yes", "no", "abstain", "absent"],
       vote_type: ["public", "jury"],
       wealth_source: [
         "technology",

@@ -123,6 +123,7 @@ import GovernmentPortal from "./pages/GovernmentPortal";
 import AdvancedAnalytics from "./pages/AdvancedAnalytics";
 import NotificationCampaigns from "./pages/NotificationCampaigns";
 import APIIntegrations from "./pages/APIIntegrations";
+import { LegislationTracker } from "./pages/LegislationTracker";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -296,10 +297,11 @@ const App = () => {
             <Route path="/directory/ministry/:id" element={<MinistryProfile />} />
             <Route path="/directory/council/:id" element={<CouncilProfile />} />
             <Route path="/government-portal" element={<GovernmentPortal />} />
-               <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
-               <Route path="/notification-campaigns" element={<NotificationCampaigns />} />
-               <Route path="/api-integrations" element={<APIIntegrations />} />
-                <Route path="*" element={<NotFound />} />
+                <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
+                <Route path="/notification-campaigns" element={<NotificationCampaigns />} />
+                <Route path="/api-integrations" element={<APIIntegrations />} />
+                <Route path="/legislation" element={<LegislationTracker />} />
+                 <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
