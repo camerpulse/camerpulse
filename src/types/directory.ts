@@ -1,26 +1,10 @@
 export interface Institution {
   id: string;
   name: string;
-  type: 'school' | 'hospital' | 'pharmacy' | 'village';
+  institution_type: 'school' | 'hospital' | 'pharmacy' | 'village';
   description?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
-  website?: string;
-  latitude?: number;
-  longitude?: number;
   region?: string;
-  city?: string;
-  is_verified?: boolean;
-  is_featured?: boolean;
-  is_sponsored?: boolean;
-  sponsored_until?: string;
-  average_rating?: number;
-  total_reviews?: number;
-  views_count?: number;
-  claimed_by?: string;
-  claim_status?: string;
-  metadata?: Record<string, any>;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
 }
