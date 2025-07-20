@@ -17,6 +17,8 @@ import { MPVotingHeatmap } from '@/components/legislation/MPVotingHeatmap';
 import { LegislativeTimeline } from '@/components/legislation/LegislativeTimeline';
 
 export const LegislationTracker = () => {
+  console.log('LegislationTracker component rendering...');
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedType, setSelectedType] = useState('');
