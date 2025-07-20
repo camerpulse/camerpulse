@@ -14,7 +14,8 @@ import {
   Calendar,
   MapPin,
   Shield,
-  BookOpen
+  BookOpen,
+  Globe
 } from 'lucide-react';
 
 interface NavItem {
@@ -74,6 +75,12 @@ const navItems: NavItem[] = [
     label: 'Shield',
     icon: Shield,
     path: '/civic-shield',
+  },
+  {
+    id: 'diaspora',
+    label: 'Diaspora',
+    icon: Globe,
+    path: '/diaspora-connect',
   },
   {
     id: 'marketplace',

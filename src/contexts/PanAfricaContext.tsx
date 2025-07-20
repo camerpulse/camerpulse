@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import * as React from 'react';
 
 interface Country {
   country_code: string;
@@ -22,6 +22,8 @@ interface PanAfricaContextType {
   getCountriesByRegion: (region: string) => Country[];
 }
 
+const { createContext, useContext, useState } = React;
+
 const PanAfricaContext = createContext<PanAfricaContextType | undefined>(undefined);
 
 export const usePanAfrica = () => {
@@ -33,7 +35,7 @@ export const usePanAfrica = () => {
 };
 
 interface PanAfricaProviderProps {
-  children: ReactNode;
+  children: React.ReactNode;
 }
 
 export const PanAfricaProvider: React.FC<PanAfricaProviderProps> = ({ children }) => {
