@@ -11,7 +11,7 @@ import PulseFeed from "./pages/PulseFeed";
 import Feed from "./pages/Feed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
-import Directory from "./pages/Directory";
+import AdvancedDirectory from "./pages/AdvancedDirectory";
 import MinistryProfile from "./pages/MinistryProfile";
 import CouncilProfile from "./pages/CouncilProfile";
 import Marketplace from "./pages/Marketplace";
@@ -292,7 +292,7 @@ const App = () => {
                <Route path="/civic-participation-hub" element={<CivicParticipationHub />} />
                <Route path="/moderation-center" element={<ModerationCenter />} />
                <Route path="/social-community" element={<SocialCommunity />} />
-            <Route path="/directory" element={<Directory />} />
+            <Route path="/directory" element={<AdvancedDirectory />} />
             <Route path="/directory/ministry/:id" element={<MinistryProfile />} />
             <Route path="/directory/council/:id" element={<CouncilProfile />} />
             <Route path="/government-portal" element={<GovernmentPortal />} />
