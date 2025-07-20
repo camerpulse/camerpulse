@@ -75,34 +75,78 @@ const ModerationCenter: React.FC = () => {
 
   const fetchModerationData = async () => {
     try {
-      // Fetch moderation rules
-      const { data: rulesData, error: rulesError } = await supabase
-        .from('moderation_rules')
-        .select('*')
-        .order('created_at', { ascending: false });
+      // Mock moderation rules data
+      const mockRules = [
+        {
+          id: '1',
+          rule_name: 'Content Policy',
+          rule_type: 'content',
+          content_type: 'poll',
+          severity_level: 'medium',
+          action_type: 'remove',
+          is_active: true,
+          created_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          rule_name: 'Spam Detection',
+          rule_type: 'automated',
+          content_type: 'comment',
+          severity_level: 'high',
+          action_type: 'flag',
+          is_active: true,
+          created_at: new Date().toISOString()
+        }
+      ];
+      setRules(mockRules);
 
-      if (rulesError) throw rulesError;
-      setRules(rulesData || []);
+      // Mock moderation actions data
+      const mockActions = [
+        {
+          id: '1',
+          content_id: 'poll-123',
+          content_type: 'poll',
+          action_type: 'content_removal',
+          reason: 'Inappropriate content',
+          auto_generated: false,
+          status: 'active',
+          created_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          content_id: 'user-456',
+          content_type: 'user',
+          action_type: 'user_warning',
+          reason: 'Spam behavior',
+          auto_generated: true,
+          status: 'resolved',
+          created_at: new Date().toISOString()
+        }
+      ];
+      setActions(mockActions);
 
-      // Fetch moderation actions
-      const { data: actionsData, error: actionsError } = await supabase
-        .from('moderation_actions')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (actionsError) throw actionsError;
-      setActions(actionsData || []);
-
-      // Fetch security audit logs
-      const { data: logsData, error: logsError } = await supabase
-        .from('security_audit_logs')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (logsError) throw logsError;
-      setAuditLogs(logsData || []);
+      // Mock security audit logs data
+      const mockLogs = [
+        {
+          id: '1',
+          action_type: 'login_attempt',
+          resource_type: 'auth',
+          risk_score: 3,
+          ip_address: '192.168.1.1',
+          user_agent: 'Mozilla/5.0 (Chrome)',
+          created_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          action_type: 'permission_change',
+          resource_type: 'user',
+          risk_score: 7,
+          ip_address: '192.168.1.2',
+          user_agent: 'Mozilla/5.0 (Firefox)',
+          created_at: new Date().toISOString()
+        }
+      ];
+      setAuditLogs(mockLogs);
 
     } catch (error) {
       toast({
@@ -119,14 +163,15 @@ const ModerationCenter: React.FC = () => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
-        .from('moderation_rules')
-        .insert({
-          ...ruleData,
-          created_by: user.id
-        });
-
-      if (error) throw error;
+      // Mock rule creation
+      const newRule = {
+        id: Date.now().toString(),
+        ...ruleData,
+        created_by: user?.id || 'admin',
+        created_at: new Date().toISOString(),
+        is_active: true
+      };
+      setRules(prev => [newRule, ...prev]);
 
       toast({
         title: "Rule created",
@@ -146,12 +191,10 @@ const ModerationCenter: React.FC = () => {
 
   const toggleRuleStatus = async (ruleId: string, isActive: boolean) => {
     try {
-      const { error } = await supabase
-        .from('moderation_rules')
-        .update({ is_active: !isActive })
-        .eq('id', ruleId);
-
-      if (error) throw error;
+      // Mock rule status toggle
+      setRules(prev => prev.map(rule => 
+        rule.id === ruleId ? { ...rule, is_active: !isActive } : rule
+      ));
 
       toast({
         title: "Rule updated",

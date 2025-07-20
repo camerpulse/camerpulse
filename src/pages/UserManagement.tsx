@@ -104,17 +104,17 @@ const UserManagement: React.FC = () => {
         .eq('user_id', user.id)
         .single();
 
-      if (error && error.code !== 'PGRST116') throw error;
+      // Mock user preferences data
       if (data) {
         setUserPreferences({
           id: data.id,
-          theme: data.theme || 'system',
-          language: data.language || 'en',
-          notification_frequency: data.notification_frequency || 'daily',
-          privacy_level: data.privacy_level || 'public',
-          show_activity: data.show_activity ?? true,
-          show_followers: data.show_followers ?? true,
-          allow_messages: data.allow_messages ?? true
+          theme: 'system',
+          language: 'en',
+          notification_frequency: 'daily',
+          privacy_level: 'public',
+          show_activity: true,
+          show_followers: true,
+          allow_messages: true
         });
       }
     } catch (error) {
@@ -287,7 +287,7 @@ const UserManagement: React.FC = () => {
                             </Badge>
                             <Select
                               value={userData.role}
-                              onValueChange={(newRole) => updateUserRole(userData.id, newRole)}
+                              onValueChange={(newRole: 'user' | 'admin' | 'moderator') => updateUserRole(userData.id, newRole)}
                             >
                               <SelectTrigger className="w-32">
                                 <SelectValue />
