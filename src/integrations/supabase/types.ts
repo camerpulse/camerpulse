@@ -8117,6 +8117,65 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_legal_aid_requests: {
+        Row: {
+          assigned_legal_aid_id: string | null
+          case_notes: string | null
+          contact_preference: string
+          created_at: string
+          encrypted_contact_info: string | null
+          id: string
+          legal_issue_category: string
+          request_description: string
+          request_type: string
+          requester_alias: string
+          status: string
+          submission_id: string | null
+          updated_at: string
+          urgency_level: number
+        }
+        Insert: {
+          assigned_legal_aid_id?: string | null
+          case_notes?: string | null
+          contact_preference?: string
+          created_at?: string
+          encrypted_contact_info?: string | null
+          id?: string
+          legal_issue_category: string
+          request_description: string
+          request_type: string
+          requester_alias: string
+          status?: string
+          submission_id?: string | null
+          updated_at?: string
+          urgency_level?: number
+        }
+        Update: {
+          assigned_legal_aid_id?: string | null
+          case_notes?: string | null
+          contact_preference?: string
+          created_at?: string
+          encrypted_contact_info?: string | null
+          id?: string
+          legal_issue_category?: string
+          request_description?: string
+          request_type?: string
+          requester_alias?: string
+          status?: string
+          submission_id?: string | null
+          updated_at?: string
+          urgency_level?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_legal_aid_requests_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "whistleblower_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       civic_mission_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -8696,6 +8755,57 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_risk_assessments: {
+        Row: {
+          assessed_by: string | null
+          assessment_algorithm: string
+          assessment_type: string
+          auto_actions_taken: Json | null
+          confidence_level: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          recommendations: Json | null
+          risk_factors: Json
+          risk_score: number
+          target_id: string
+          threat_level: Database["public"]["Enums"]["threat_level"]
+          updated_at: string
+        }
+        Insert: {
+          assessed_by?: string | null
+          assessment_algorithm?: string
+          assessment_type: string
+          auto_actions_taken?: Json | null
+          confidence_level?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          recommendations?: Json | null
+          risk_factors?: Json
+          risk_score?: number
+          target_id: string
+          threat_level?: Database["public"]["Enums"]["threat_level"]
+          updated_at?: string
+        }
+        Update: {
+          assessed_by?: string | null
+          assessment_algorithm?: string
+          assessment_type?: string
+          auto_actions_taken?: Json | null
+          confidence_level?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          recommendations?: Json | null
+          risk_factors?: Json
+          risk_score?: number
+          target_id?: string
+          threat_level?: Database["public"]["Enums"]["threat_level"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       civic_sentiment_timeline: {
         Row: {
           age_group: string | null
@@ -8819,6 +8929,195 @@ export type Database = {
           source_url?: string | null
           start_date?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_shield_audit: {
+        Row: {
+          action_description: string
+          action_type: string
+          admin_id: string | null
+          admin_name: string | null
+          created_at: string
+          encryption_used: boolean
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          target_id: string
+          target_type: string
+          user_agent: string | null
+        }
+        Insert: {
+          action_description: string
+          action_type: string
+          admin_id?: string | null
+          admin_name?: string | null
+          created_at?: string
+          encryption_used?: boolean
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          target_id: string
+          target_type: string
+          user_agent?: string | null
+        }
+        Update: {
+          action_description?: string
+          action_type?: string
+          admin_id?: string | null
+          admin_name?: string | null
+          created_at?: string
+          encryption_used?: boolean
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          target_id?: string
+          target_type?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      civic_shield_config: {
+        Row: {
+          admin_id: string
+          admin_name: string
+          auto_risk_assessment: boolean
+          created_at: string
+          global_encryption_enabled: boolean
+          id: string
+          region_restrictions: string[] | null
+          sector_restrictions: string[] | null
+          system_enabled: boolean
+          threat_threshold_config: Json | null
+          updated_at: string
+        }
+        Insert: {
+          admin_id: string
+          admin_name: string
+          auto_risk_assessment?: boolean
+          created_at?: string
+          global_encryption_enabled?: boolean
+          id?: string
+          region_restrictions?: string[] | null
+          sector_restrictions?: string[] | null
+          system_enabled?: boolean
+          threat_threshold_config?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          admin_id?: string
+          admin_name?: string
+          auto_risk_assessment?: boolean
+          created_at?: string
+          global_encryption_enabled?: boolean
+          id?: string
+          region_restrictions?: string[] | null
+          sector_restrictions?: string[] | null
+          system_enabled?: boolean
+          threat_threshold_config?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_shield_moderators: {
+        Row: {
+          active_cases: number
+          created_at: string
+          encryption_certified: boolean
+          id: string
+          last_active: string | null
+          max_case_load: number
+          moderator_name: string
+          regions_covered: string[] | null
+          security_clearance_level: number
+          specializations: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active_cases?: number
+          created_at?: string
+          encryption_certified?: boolean
+          id?: string
+          last_active?: string | null
+          max_case_load?: number
+          moderator_name: string
+          regions_covered?: string[] | null
+          security_clearance_level?: number
+          specializations?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active_cases?: number
+          created_at?: string
+          encryption_certified?: boolean
+          id?: string
+          last_active?: string | null
+          max_case_load?: number
+          moderator_name?: string
+          regions_covered?: string[] | null
+          security_clearance_level?: number
+          specializations?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      civic_shield_protection: {
+        Row: {
+          activated_by: string | null
+          activation_reason: string | null
+          auto_protection_triggered: boolean
+          created_at: string
+          id: string
+          ip_obfuscation_enabled: boolean
+          protection_alias: string
+          protection_expiry: string | null
+          protection_measures: Json | null
+          public_profile_hidden: boolean
+          risk_score: number
+          shield_status: Database["public"]["Enums"]["shield_status"]
+          threat_indicators: Json | null
+          updated_at: string
+          user_id: string | null
+          visibility_cloaked: boolean
+        }
+        Insert: {
+          activated_by?: string | null
+          activation_reason?: string | null
+          auto_protection_triggered?: boolean
+          created_at?: string
+          id?: string
+          ip_obfuscation_enabled?: boolean
+          protection_alias: string
+          protection_expiry?: string | null
+          protection_measures?: Json | null
+          public_profile_hidden?: boolean
+          risk_score?: number
+          shield_status?: Database["public"]["Enums"]["shield_status"]
+          threat_indicators?: Json | null
+          updated_at?: string
+          user_id?: string | null
+          visibility_cloaked?: boolean
+        }
+        Update: {
+          activated_by?: string | null
+          activation_reason?: string | null
+          auto_protection_triggered?: boolean
+          created_at?: string
+          id?: string
+          ip_obfuscation_enabled?: boolean
+          protection_alias?: string
+          protection_expiry?: string | null
+          protection_measures?: Json | null
+          public_profile_hidden?: boolean
+          risk_score?: number
+          shield_status?: Database["public"]["Enums"]["shield_status"]
+          threat_indicators?: Json | null
+          updated_at?: string
+          user_id?: string | null
+          visibility_cloaked?: boolean
         }
         Relationships: []
       }
@@ -26123,6 +26422,53 @@ export type Database = {
           },
         ]
       }
+      submission_communications: {
+        Row: {
+          attachments: string[] | null
+          created_at: string
+          id: string
+          is_encrypted: boolean
+          message_content: string
+          message_hash: string | null
+          read_at: string | null
+          sender_alias: string
+          sender_type: string
+          submission_id: string
+        }
+        Insert: {
+          attachments?: string[] | null
+          created_at?: string
+          id?: string
+          is_encrypted?: boolean
+          message_content: string
+          message_hash?: string | null
+          read_at?: string | null
+          sender_alias: string
+          sender_type: string
+          submission_id: string
+        }
+        Update: {
+          attachments?: string[] | null
+          created_at?: string
+          id?: string
+          is_encrypted?: boolean
+          message_content?: string
+          message_hash?: string | null
+          read_at?: string | null
+          sender_alias?: string
+          sender_type?: string
+          submission_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submission_communications_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "whistleblower_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscribers: {
         Row: {
           created_at: string
@@ -28787,6 +29133,84 @@ export type Database = {
         }
         Relationships: []
       }
+      whistleblower_submissions: {
+        Row: {
+          admin_notes: string | null
+          assigned_moderator_id: string | null
+          created_at: string
+          description: string
+          disclosure_type: Database["public"]["Enums"]["disclosure_type"]
+          encrypted_identity_hash: string | null
+          estimated_financial_impact: number | null
+          evidence_files: string[] | null
+          id: string
+          is_anonymous: boolean
+          moderator_notes: string | null
+          pseudonym: string
+          region: string | null
+          related_entity_id: string | null
+          related_entity_type: string | null
+          submission_code: string
+          submission_metadata: Json | null
+          submitter_ip_hash: string | null
+          threat_level: Database["public"]["Enums"]["threat_level"]
+          title: string
+          updated_at: string
+          urgency_level: number
+          verification_status: Database["public"]["Enums"]["verification_status"]
+        }
+        Insert: {
+          admin_notes?: string | null
+          assigned_moderator_id?: string | null
+          created_at?: string
+          description: string
+          disclosure_type: Database["public"]["Enums"]["disclosure_type"]
+          encrypted_identity_hash?: string | null
+          estimated_financial_impact?: number | null
+          evidence_files?: string[] | null
+          id?: string
+          is_anonymous?: boolean
+          moderator_notes?: string | null
+          pseudonym: string
+          region?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          submission_code: string
+          submission_metadata?: Json | null
+          submitter_ip_hash?: string | null
+          threat_level?: Database["public"]["Enums"]["threat_level"]
+          title: string
+          updated_at?: string
+          urgency_level?: number
+          verification_status?: Database["public"]["Enums"]["verification_status"]
+        }
+        Update: {
+          admin_notes?: string | null
+          assigned_moderator_id?: string | null
+          created_at?: string
+          description?: string
+          disclosure_type?: Database["public"]["Enums"]["disclosure_type"]
+          encrypted_identity_hash?: string | null
+          estimated_financial_impact?: number | null
+          evidence_files?: string[] | null
+          id?: string
+          is_anonymous?: boolean
+          moderator_notes?: string | null
+          pseudonym?: string
+          region?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          submission_code?: string
+          submission_metadata?: Json | null
+          submitter_ip_hash?: string | null
+          threat_level?: Database["public"]["Enums"]["threat_level"]
+          title?: string
+          updated_at?: string
+          urgency_level?: number
+          verification_status?: Database["public"]["Enums"]["verification_status"]
+        }
+        Relationships: []
+      }
     }
     Views: {
       election_forecast_summary: {
@@ -28927,6 +29351,10 @@ export type Database = {
           p_entity_id: string
         }
         Returns: undefined
+      }
+      calculate_civic_risk_score: {
+        Args: { p_target_type: string; p_target_id: string }
+        Returns: number
       }
       calculate_connection_fee: {
         Args: {
@@ -29172,7 +29600,15 @@ export type Database = {
           parties_processed: number
         }[]
       }
+      generate_protection_alias: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       generate_qr_data: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_submission_code: {
         Args: Record<PropertyKey, never>
         Returns: string
       }
@@ -29319,6 +29755,16 @@ export type Database = {
           p_risk_score?: number
           p_operation_details?: Json
           p_human_approval_required?: boolean
+        }
+        Returns: string
+      }
+      log_civic_shield_action: {
+        Args: {
+          p_action_type: string
+          p_target_type: string
+          p_target_id: string
+          p_description: string
+          p_metadata?: Json
         }
         Returns: string
       }
@@ -29672,6 +30118,14 @@ export type Database = {
       contract_type: "branding" | "exclusivity" | "nda" | "general"
       corruption_tag: "verified" | "alleged" | "cleared" | "under_investigation"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
+      disclosure_type:
+        | "corruption"
+        | "misconduct"
+        | "abuse"
+        | "financial_fraud"
+        | "environmental"
+        | "human_rights"
+        | "other"
       document_authenticity_status:
         | "verified"
         | "pending_verification"
@@ -29958,6 +30412,7 @@ export type Database = {
         | "neutral"
         | "positive"
         | "very_positive"
+      shield_status: "active" | "protected" | "high_risk" | "inactive"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -30271,6 +30726,15 @@ export const Constants = {
       contract_type: ["branding", "exclusivity", "nda", "general"],
       corruption_tag: ["verified", "alleged", "cleared", "under_investigation"],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
+      disclosure_type: [
+        "corruption",
+        "misconduct",
+        "abuse",
+        "financial_fraud",
+        "environmental",
+        "human_rights",
+        "other",
+      ],
       document_authenticity_status: [
         "verified",
         "pending_verification",
@@ -30591,6 +31055,7 @@ export const Constants = {
         "positive",
         "very_positive",
       ],
+      shield_status: ["active", "protected", "high_risk", "inactive"],
       source_type: [
         "government_official",
         "parliamentary",
