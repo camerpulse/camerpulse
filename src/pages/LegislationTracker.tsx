@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useEffect } from 'react';
 import { LegislationStats } from '@/components/legislation/LegislationStats';
 import { LegislationFilters } from '@/components/legislation/LegislationFilters';
 import { BillCard } from '@/components/legislation/BillCard';
@@ -104,7 +105,7 @@ export const LegislationTracker = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        toast.error('Please sign in to follow legislation');
+        toast.error('Please sign in to follow legislation. Go to /auth to create an account.');
         return;
       }
 
@@ -115,13 +116,42 @@ export const LegislationTracker = () => {
           user_id: user.id
         });
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '23505') {
+          toast.info('You are already following this bill');
+          return;
+        }
+        throw error;
+      }
 
       toast.success('You are now following this bill');
     } catch (error) {
       toast.error('Failed to follow bill');
     }
   };
+
+  // Real-time updates
+  useEffect(() => {
+    const channel = supabase
+      .channel('legislation-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'legislation_registry'
+        },
+        () => {
+          // Refetch data when changes occur
+          window.location.reload();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -152,23 +182,37 @@ export const LegislationTracker = () => {
 
         <div className="lg:col-span-3">
           <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as any)}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="grid">Bills Overview</TabsTrigger>
-              <TabsTrigger value="list">Detailed List</TabsTrigger>
-              <TabsTrigger value="timeline">Legislative Timeline</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-3 mb-6">
+              <TabsTrigger value="grid" className="text-xs sm:text-sm">Bills Overview</TabsTrigger>
+              <TabsTrigger value="list" className="text-xs sm:text-sm">Detailed List</TabsTrigger>
+              <TabsTrigger value="timeline" className="text-xs sm:text-sm">Timeline</TabsTrigger>
             </TabsList>
 
             <TabsContent value="grid" className="mt-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {legislation?.map((bill) => (
-                  <BillCard
-                    key={bill.id}
-                    bill={bill}
-                    onVote={handleVote}
-                    onFollow={() => handleFollow(bill.id)}
-                  />
-                ))}
-              </div>
+              {isLoading ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {[1,2,3,4].map((i) => (
+                    <div key={i} className="h-64 bg-muted/50 animate-pulse rounded-lg" />
+                  ))}
+                </div>
+              ) : legislation && legislation.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                  {legislation.map((bill) => (
+                    <BillCard
+                      key={bill.id}
+                      bill={bill}
+                      onVote={handleVote}
+                      onFollow={() => handleFollow(bill.id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-12">
+                  <FileText className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">No legislation found</h3>
+                  <p className="text-muted-foreground">Try adjusting your filters to see more results.</p>
+                </div>
+              )}
             </TabsContent>
 
             <TabsContent value="list" className="mt-6">

@@ -27,6 +27,9 @@ const Index = () => {
               <Button asChild variant="outline" size="lg">
                 <Link to="/politicians">👥 View Politicians</Link>
               </Button>
+              <Button asChild variant="secondary" size="lg">
+                <Link to="/legislation">📜 Track Legislation</Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -72,20 +75,20 @@ const Index = () => {
               </CardContent>
               </Card>
 
-              {/* Directory Card */}
-              <Card className="bg-gradient-to-br from-blue-500/10 to-background border-blue-500/20 hover:shadow-elegant transition-shadow">
+              {/* Legislation Card */}
+              <Card className="bg-gradient-to-br from-purple-500/10 to-background border-purple-500/20 hover:shadow-elegant transition-shadow">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-3 responsive-title">
-                    <Building className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
-                    Government Directory
+                    <Building className="h-6 w-6 sm:h-8 sm:w-8 text-purple-600" />
+                    Legislative Tracker
                   </CardTitle>
                   <CardDescription className="responsive-text">
-                    Browse ministries, councils, and government entities with detailed profiles
+                    Track bills, laws, and parliamentary votes in real-time
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Button asChild className="w-full" variant="outline">
-                    <Link to="/directory">Browse Directory</Link>
+                    <Link to="/legislation">Track Legislation</Link>
                   </Button>
                 </CardContent>
               </Card>
