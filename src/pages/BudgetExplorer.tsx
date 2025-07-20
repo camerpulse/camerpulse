@@ -32,6 +32,7 @@ import { BudgetFilters } from '@/components/budget/BudgetFilters';
 import { BudgetAnalysis } from '@/components/budget/BudgetAnalysis';
 import { CitizenEngagement } from '@/components/budget/CitizenEngagement';
 import { AnomalyDetection } from '@/components/budget/AnomalyDetection';
+import { BudgetExplorerSkeleton } from '@/components/budget/BudgetExplorerSkeleton';
 
 const BudgetExplorer: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -104,7 +105,7 @@ const BudgetExplorer: React.FC = () => {
     const totalAllocated = budgetData.reduce((sum, item) => sum + (item.allocated_amount || 0), 0);
     const totalSpent = budgetData.reduce((sum, item) => sum + (item.spent_amount || 0), 0);
     const avgExecution = budgetData.reduce((sum, item) => sum + (item.execution_percentage || 0), 0) / budgetData.length;
-    const highRiskProjects = budgetData.filter(item => (item.transparency_score || 0) < 30).length;
+    const highRiskProjects = budgetData.filter(item => (item.transparency_score || 0) < 3).length;
     const completedProjects = budgetData.filter(item => item.status === 'completed').length;
 
     return {
@@ -162,18 +163,7 @@ const BudgetExplorer: React.FC = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="space-y-8">
-          <div className="h-32 bg-muted/50 animate-pulse rounded-lg" />
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[1,2,3,4].map((i) => (
-              <div key={i} className="h-32 bg-muted/50 animate-pulse rounded-lg" />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+    return <BudgetExplorerSkeleton />;
   }
 
   return (

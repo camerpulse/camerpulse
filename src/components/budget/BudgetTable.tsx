@@ -90,9 +90,9 @@ export const BudgetTable: React.FC<BudgetTableProps> = ({
                 <Badge className={getStatusColor(item.status)}>
                   {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                 </Badge>
-                <Badge className={getRiskColor(item.transparency_score > 70 ? 'low' : item.transparency_score > 40 ? 'medium' : 'high')}>
-                  {getRiskIcon(item.transparency_score > 70 ? 'low' : item.transparency_score > 40 ? 'medium' : 'high')}
-                  {item.transparency_score > 70 ? 'Low' : item.transparency_score > 40 ? 'Medium' : 'High'} Risk
+                <Badge className={getRiskColor(item.transparency_score > 7 ? 'low' : item.transparency_score > 4 ? 'medium' : 'high')}>
+                  {getRiskIcon(item.transparency_score > 7 ? 'low' : item.transparency_score > 4 ? 'medium' : 'high')}
+                  {item.transparency_score > 7 ? 'Low' : item.transparency_score > 4 ? 'Medium' : 'High'} Risk
                 </Badge>
               </div>
             </div>
@@ -117,8 +117,8 @@ export const BudgetTable: React.FC<BudgetTableProps> = ({
               <div>
                 <p className="text-sm text-muted-foreground">Transparency Score</p>
                 <div className="flex items-center gap-2">
-                  <Progress value={item.transparency_score} className="flex-1" />
-                  <span className="text-sm font-medium">{item.transparency_score}/100</span>
+                  <Progress value={item.transparency_score * 10} className="flex-1" />
+                  <span className="text-sm font-medium">{item.transparency_score}/10</span>
                 </div>
               </div>
             </div>

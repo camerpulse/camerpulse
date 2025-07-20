@@ -64,17 +64,17 @@ export const AnomalyDetection: React.FC<AnomalyDetectionProps> = ({
       }
 
       // Transparency risk detection
-      if (project.transparency_score < 30) {
+      if (project.transparency_score < 3) {
         detectedAnomalies.push({
           id: `transparency_${project.id}`,
           type: 'transparency_risk',
-          severity: project.transparency_score < 15 ? 'critical' : 'high',
+          severity: project.transparency_score < 2 ? 'critical' : 'high',
           title: 'Low Transparency Score',
-          description: `Project transparency score is ${project.transparency_score}/100`,
+          description: `Project transparency score is ${project.transparency_score}/10`,
           projectId: project.id,
           projectName: project.project_name,
           value: project.transparency_score,
-          threshold: 30
+          threshold: 3
         });
       }
 
@@ -212,7 +212,7 @@ export const AnomalyDetection: React.FC<AnomalyDetectionProps> = ({
                         : anomaly.type === 'budget_overrun'
                         ? `${anomaly.value.toFixed(1)}%`
                         : anomaly.type === 'transparency_risk'
-                        ? `${anomaly.value.toFixed(1)}/100`
+                        ? `${anomaly.value.toFixed(1)}/10`
                         : `${anomaly.value.toFixed(1)}%`
                     } | 
                     <strong> Threshold:</strong> {
@@ -221,7 +221,7 @@ export const AnomalyDetection: React.FC<AnomalyDetectionProps> = ({
                         : anomaly.type === 'budget_overrun'
                         ? `${anomaly.threshold}%`
                         : anomaly.type === 'transparency_risk'
-                        ? `${anomaly.threshold}/100`
+                        ? `${anomaly.threshold}/10`
                         : `${anomaly.threshold}%`
                     }
                   </div>

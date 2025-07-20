@@ -33,7 +33,7 @@ export const BudgetAnalysis: React.FC<BudgetAnalysisProps> = ({ budgetData }) =>
     
     // Transparency analysis
     const averageTransparency = budgetData.reduce((sum, item) => sum + (item.transparency_score || 0), 0) / totalProjects;
-    const highRiskProjects = budgetData.filter(item => (item.transparency_score || 0) < 30).length;
+    const highRiskProjects = budgetData.filter(item => (item.transparency_score || 0) < 3).length;
     
     // Regional distribution
     const regionalSpread = budgetData.reduce((acc, item) => {
@@ -212,9 +212,9 @@ export const BudgetAnalysis: React.FC<BudgetAnalysisProps> = ({ budgetData }) =>
             <div>
               <div className="flex justify-between text-sm">
                 <span>Transparency Score</span>
-                <span>{analysis.averageTransparency.toFixed(1)}/100</span>
+                <span>{analysis.averageTransparency.toFixed(1)}/10</span>
               </div>
-              <Progress value={analysis.averageTransparency} className="mt-2" />
+              <Progress value={analysis.averageTransparency * 10} className="mt-2" />
             </div>
             <div className="pt-2 space-y-2">
               <div className="flex justify-between">
