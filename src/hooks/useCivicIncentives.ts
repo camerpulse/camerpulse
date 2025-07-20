@@ -249,14 +249,14 @@ export const useCivicLeaderboards = (type?: string, category?: string) => {
   return useQuery({
     queryKey: ['civic-leaderboards', type, category],
     queryFn: async () => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('civic_leaderboards')
         .select('*')
         .eq('is_active', true)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data || [];
     }
   });
 };
