@@ -18,6 +18,22 @@ export interface InstitutionClaim {
   updated_at: string;
 }
 
+export interface InstitutionMessage {
+  id: string;
+  institution_id: string;
+  sender_id: string;
+  sender_name: string;
+  sender_type: 'user' | 'moderator' | 'admin';
+  subject: string;
+  message_content: string;
+  message_type: 'general' | 'urgent' | 'support';
+  is_read: boolean;
+  replied_at?: string;
+  reply_content?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface SponsoredListing {
   id: string;
   institution_id: string;

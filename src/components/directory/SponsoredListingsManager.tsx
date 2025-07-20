@@ -39,7 +39,7 @@ export const SponsoredListingsManager = ({ institution, onPurchaseComplete }: Sp
         .gte('expires_at', new Date().toISOString());
 
       if (error) throw error;
-      setActiveSponsorships(data || []);
+      setActiveSponsorships((data as unknown as SponsoredListing[]) || []);
     } catch (error) {
       console.error('Error fetching sponsorships:', error);
     }

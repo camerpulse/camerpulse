@@ -12924,6 +12924,54 @@ export type Database = {
         }
         Relationships: []
       }
+      institution_messages: {
+        Row: {
+          created_at: string
+          id: string
+          institution_id: string
+          is_read: boolean
+          message_content: string
+          message_type: string
+          replied_at: string | null
+          reply_content: string | null
+          sender_id: string
+          sender_name: string
+          sender_type: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          institution_id: string
+          is_read?: boolean
+          message_content: string
+          message_type?: string
+          replied_at?: string | null
+          reply_content?: string | null
+          sender_id: string
+          sender_name: string
+          sender_type: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          institution_id?: string
+          is_read?: boolean
+          message_content?: string
+          message_type?: string
+          replied_at?: string | null
+          reply_content?: string | null
+          sender_id?: string
+          sender_name?: string
+          sender_type?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       institution_payments: {
         Row: {
           amount: number

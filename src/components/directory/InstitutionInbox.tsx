@@ -11,20 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-
-interface Message {
-  id: string;
-  sender_id: string;
-  sender_name: string;
-  sender_type: 'user' | 'moderator' | 'admin';
-  subject: string;
-  message_content: string;
-  message_type: 'general' | 'urgent' | 'support';
-  is_read: boolean;
-  replied_at?: string;
-  reply_content?: string;
-  created_at: string;
-}
+import type { InstitutionMessage } from '@/types/directory';
 
 interface InstitutionInboxProps {
   institutionId: string;
@@ -32,10 +19,10 @@ interface InstitutionInboxProps {
 }
 
 export const InstitutionInbox = ({ institutionId, institutionName }: InstitutionInboxProps) => {
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [filteredMessages, setFilteredMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<InstitutionMessage[]>([]);
+  const [filteredMessages, setFilteredMessages] = useState<InstitutionMessage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+  const [selectedMessage, setSelectedMessage] = useState<InstitutionMessage | null>(null);
   const [replyContent, setReplyContent] = useState('');
   const [isReplying, setIsReplying] = useState(false);
   const [messageFilter, setMessageFilter] = useState('all');
@@ -53,14 +40,15 @@ export const InstitutionInbox = ({ institutionId, institutionName }: Institution
   const fetchMessages = async () => {
     try {
       setLoading(true);
+      // Use type assertion since table is not in generated types yet
       const { data, error } = await supabase
-        .from('institution_messages')
+        .from('institution_messages' as any)
         .select('*')
         .eq('institution_id', institutionId)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setMessages(data || []);
+      setMessages((data as unknown as InstitutionMessage[]) || []);
     } catch (error) {
       console.error('Error fetching messages:', error);
       toast({
@@ -101,7 +89,7 @@ export const InstitutionInbox = ({ institutionId, institutionName }: Institution
   const markAsRead = async (messageId: string) => {
     try {
       const { error } = await supabase
-        .from('institution_messages')
+        .from('institution_messages' as any)
         .update({ is_read: true })
         .eq('id', messageId);
 
@@ -121,7 +109,7 @@ export const InstitutionInbox = ({ institutionId, institutionName }: Institution
     try {
       setIsReplying(true);
       const { error } = await supabase
-        .from('institution_messages')
+        .from('institution_messages' as any)
         .update({
           reply_content: replyContent.trim(),
           replied_at: new Date().toISOString(),
@@ -166,7 +154,7 @@ export const InstitutionInbox = ({ institutionId, institutionName }: Institution
     }
   };
 
-  const getMessageBadge = (message: Message) => {
+  const getMessageBadge = (message: InstitutionMessage) => {
     if (!message.is_read) {
       return <Badge variant="destructive">New</Badge>;
     }
