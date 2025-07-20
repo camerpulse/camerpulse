@@ -23,6 +23,9 @@ import { ProjectCard } from '@/components/diaspora/ProjectCard';
 import { EventCard } from '@/components/diaspora/EventCard';
 import { RecognitionCard } from '@/components/diaspora/RecognitionCard';
 import { DonationWidget } from '@/components/diaspora/DonationWidget';
+import { VirtualTownHalls } from '@/components/diaspora/VirtualTownHalls';
+import { SecurityControls } from '@/components/diaspora/SecurityControls';
+import { CrossPlatformIntegration } from '@/components/diaspora/CrossPlatformIntegration';
 
 
 
@@ -107,13 +110,16 @@ export const DiasporaConnect = () => {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6">
+          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 lg:grid-cols-9">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
+            <TabsTrigger value="townhalls">Town Halls</TabsTrigger>
             <TabsTrigger value="recognition">Recognition</TabsTrigger>
             <TabsTrigger value="donate">Donate</TabsTrigger>
-            <TabsTrigger value="dashboard">My Dashboard</TabsTrigger>
+            <TabsTrigger value="security">Security</TabsTrigger>
+            <TabsTrigger value="integration">Integration</TabsTrigger>
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
@@ -315,6 +321,18 @@ export const DiasporaConnect = () => {
                 </Card>
               </div>
             )}
+          </TabsContent>
+
+          <TabsContent value="townhalls">
+            <VirtualTownHalls profile={profile} />
+          </TabsContent>
+
+          <TabsContent value="security">
+            <SecurityControls profile={profile} />
+          </TabsContent>
+
+          <TabsContent value="integration">
+            <CrossPlatformIntegration profile={profile} />
           </TabsContent>
         </Tabs>
       </div>

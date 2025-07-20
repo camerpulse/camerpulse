@@ -520,3 +520,94 @@ export const mockDiasporaRecognition = [
     verified: true
   }
 ];
+
+// Mock data for Virtual Town Halls
+export const mockVirtualTownhalls = [
+  {
+    id: '1',
+    title: 'Diaspora Investment Summit 2024',
+    description: 'Annual summit bringing together diaspora investors and local development partners to discuss investment opportunities in Cameroon.',
+    event_type: 'summit',
+    scheduled_date: '2024-03-15T14:00:00Z',
+    duration_minutes: 240,
+    platform: 'zoom',
+    meeting_link: 'https://zoom.us/j/123456789',
+    organizer_name: 'CamerPulse Investment Team',
+    max_participants: 1000,
+    current_participants: 342,
+    registration_required: true,
+    agenda: ['Opening Remarks', 'Investment Portfolio Review', 'New Project Presentations', 'Breakout Sessions', 'Q&A with Government Officials'],
+    regions_focus: ['All Regions'],
+    topics: ['Infrastructure', 'Education', 'Healthcare', 'Technology', 'Agriculture'],
+    status: 'scheduled'
+  },
+  {
+    id: '2',
+    title: 'Northwest Region Development Roundtable',
+    description: 'Monthly discussion on development progress in the Northwest region with direct participation from regional representatives.',
+    event_type: 'roundtable',
+    scheduled_date: '2024-02-28T16:00:00Z',
+    duration_minutes: 120,
+    platform: 'teams',
+    organizer_name: 'Northwest Regional Council',
+    max_participants: 200,
+    current_participants: 67,
+    registration_required: true,
+    agenda: ['Regional Progress Update', 'Diaspora Contribution Report', 'Community Challenges Discussion', 'Action Items Review'],
+    regions_focus: ['Northwest'],
+    topics: ['Regional Development', 'Infrastructure', 'Security', 'Education'],
+    status: 'scheduled'
+  }
+];
+
+// Mock data for Transaction Logs
+export const mockTransactionLogs = [
+  {
+    id: '1',
+    diaspora_profile_id: '1',
+    transaction_type: 'donation',
+    amount_fcfa: 75000,
+    amount_original_currency: 125,
+    original_currency: 'USD',
+    project_name: 'Rural Education Initiative - Bamenda',
+    payment_method: 'flutterwave',
+    payment_reference: 'FLW-CAMERPULSE-2024-001',
+    payment_status: 'completed',
+    qr_receipt_data: {
+      verification_code: 'QR-2024-EDU-001',
+      issued_at: '2024-01-15T10:30:00Z',
+      expires_at: '2025-01-15T10:30:00Z'
+    },
+    audit_trail: {
+      ip_address: '192.168.1.100',
+      user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      verification_level: 'verified',
+      geolocation: 'Paris, France'
+    },
+    created_at: '2024-01-15T10:30:00Z'
+  },
+  {
+    id: '2',
+    diaspora_profile_id: '1',
+    transaction_type: 'investment',
+    amount_fcfa: 250000,
+    amount_original_currency: 350,
+    original_currency: 'EUR',
+    project_name: 'Solar Energy Project - Far North',
+    payment_method: 'flutterwave',
+    payment_reference: 'FLW-CAMERPULSE-2024-002',
+    payment_status: 'completed',
+    qr_receipt_data: {
+      verification_code: 'QR-2024-SOL-002',
+      issued_at: '2024-01-20T14:15:00Z',
+      expires_at: '2025-01-20T14:15:00Z'
+    },
+    audit_trail: {
+      ip_address: '192.168.1.100',
+      user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+      verification_level: 'verified',
+      geolocation: 'Paris, France'
+    },
+    created_at: '2024-01-20T14:15:00Z'
+  }
+];

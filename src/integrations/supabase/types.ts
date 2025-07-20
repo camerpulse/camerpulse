@@ -11988,6 +11988,91 @@ export type Database = {
         }
         Relationships: []
       }
+      diaspora_civic_engagement: {
+        Row: {
+          created_at: string
+          diaspora_profile_id: string | null
+          engagement_data: Json | null
+          engagement_type: string
+          home_region_relevant: boolean | null
+          id: string
+          impact_score: number | null
+          target_id: string | null
+          target_type: string | null
+        }
+        Insert: {
+          created_at?: string
+          diaspora_profile_id?: string | null
+          engagement_data?: Json | null
+          engagement_type: string
+          home_region_relevant?: boolean | null
+          id?: string
+          impact_score?: number | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Update: {
+          created_at?: string
+          diaspora_profile_id?: string | null
+          engagement_data?: Json | null
+          engagement_type?: string
+          home_region_relevant?: boolean | null
+          id?: string
+          impact_score?: number | null
+          target_id?: string | null
+          target_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_civic_engagement_diaspora_profile_id_fkey"
+            columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diaspora_cross_platform_actions: {
+        Row: {
+          action_type: string
+          created_at: string
+          diaspora_profile_id: string | null
+          id: string
+          metadata: Json | null
+          reference_id: string
+          source_platform: string
+          target_platform: string
+        }
+        Insert: {
+          action_type: string
+          created_at?: string
+          diaspora_profile_id?: string | null
+          id?: string
+          metadata?: Json | null
+          reference_id: string
+          source_platform: string
+          target_platform: string
+        }
+        Update: {
+          action_type?: string
+          created_at?: string
+          diaspora_profile_id?: string | null
+          id?: string
+          metadata?: Json | null
+          reference_id?: string
+          source_platform?: string
+          target_platform?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_cross_platform_actions_diaspora_profile_id_fkey"
+            columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       diaspora_donations: {
         Row: {
           amount_fcfa: number
@@ -12309,6 +12394,47 @@ export type Database = {
         }
         Relationships: []
       }
+      diaspora_qr_receipts: {
+        Row: {
+          created_at: string
+          download_count: number | null
+          expires_at: string | null
+          id: string
+          qr_code_data: string
+          receipt_data: Json
+          transaction_log_id: string | null
+          verification_status: string | null
+        }
+        Insert: {
+          created_at?: string
+          download_count?: number | null
+          expires_at?: string | null
+          id?: string
+          qr_code_data: string
+          receipt_data: Json
+          transaction_log_id?: string | null
+          verification_status?: string | null
+        }
+        Update: {
+          created_at?: string
+          download_count?: number | null
+          expires_at?: string | null
+          id?: string
+          qr_code_data?: string
+          receipt_data?: Json
+          transaction_log_id?: string | null
+          verification_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_qr_receipts_transaction_log_id_fkey"
+            columns: ["transaction_log_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_transaction_logs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       diaspora_recognition: {
         Row: {
           achievement_date: string | null
@@ -12359,6 +12485,54 @@ export type Database = {
           },
         ]
       }
+      diaspora_townhall_registrations: {
+        Row: {
+          attended: boolean | null
+          diaspora_profile_id: string | null
+          feedback_comments: string | null
+          feedback_rating: number | null
+          id: string
+          questions_submitted: Json | null
+          registration_date: string
+          townhall_id: string | null
+        }
+        Insert: {
+          attended?: boolean | null
+          diaspora_profile_id?: string | null
+          feedback_comments?: string | null
+          feedback_rating?: number | null
+          id?: string
+          questions_submitted?: Json | null
+          registration_date?: string
+          townhall_id?: string | null
+        }
+        Update: {
+          attended?: boolean | null
+          diaspora_profile_id?: string | null
+          feedback_comments?: string | null
+          feedback_rating?: number | null
+          id?: string
+          questions_submitted?: Json | null
+          registration_date?: string
+          townhall_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_townhall_registrations_diaspora_profile_id_fkey"
+            columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diaspora_townhall_registrations_townhall_id_fkey"
+            columns: ["townhall_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_virtual_townhalls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       diaspora_transaction_logs: {
         Row: {
           created_at: string | null
@@ -12394,6 +12568,83 @@ export type Database = {
           {
             foreignKeyName: "diaspora_transaction_logs_diaspora_profile_id_fkey"
             columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diaspora_virtual_townhalls: {
+        Row: {
+          agenda: Json | null
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          event_type: string
+          id: string
+          livestream_url: string | null
+          max_participants: number | null
+          meeting_link: string | null
+          meeting_password: string | null
+          organizer_id: string | null
+          platform: string
+          recording_url: string | null
+          regions_focus: string[] | null
+          registration_required: boolean | null
+          scheduled_date: string
+          status: string
+          title: string
+          topics: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          agenda?: Json | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          event_type?: string
+          id?: string
+          livestream_url?: string | null
+          max_participants?: number | null
+          meeting_link?: string | null
+          meeting_password?: string | null
+          organizer_id?: string | null
+          platform?: string
+          recording_url?: string | null
+          regions_focus?: string[] | null
+          registration_required?: boolean | null
+          scheduled_date: string
+          status?: string
+          title: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          agenda?: Json | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          event_type?: string
+          id?: string
+          livestream_url?: string | null
+          max_participants?: number | null
+          meeting_link?: string | null
+          meeting_password?: string | null
+          organizer_id?: string | null
+          platform?: string
+          recording_url?: string | null
+          regions_focus?: string[] | null
+          registration_required?: boolean | null
+          scheduled_date?: string
+          status?: string
+          title?: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_virtual_townhalls_organizer_id_fkey"
+            columns: ["organizer_id"]
             isOneToOne: false
             referencedRelation: "diaspora_profiles"
             referencedColumns: ["id"]
@@ -20584,6 +20835,45 @@ export type Database = {
           provider?: string
           test_mode?: boolean | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      payment_gateway_configs: {
+        Row: {
+          configuration: Json
+          created_at: string
+          created_by: string | null
+          gateway_name: string
+          id: string
+          is_active: boolean
+          is_primary: boolean
+          supported_currencies: string[] | null
+          test_mode: boolean
+          updated_at: string
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string
+          created_by?: string | null
+          gateway_name: string
+          id?: string
+          is_active?: boolean
+          is_primary?: boolean
+          supported_currencies?: string[] | null
+          test_mode?: boolean
+          updated_at?: string
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string
+          created_by?: string | null
+          gateway_name?: string
+          id?: string
+          is_active?: boolean
+          is_primary?: boolean
+          supported_currencies?: string[] | null
+          test_mode?: boolean
+          updated_at?: string
         }
         Relationships: []
       }
