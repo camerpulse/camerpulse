@@ -49,7 +49,7 @@ export const DonationWidget: React.FC<DonationWidgetProps> = ({ profile }) => {
     is_anonymous: false,
   });
 
-  const { data: projects } = useInvestmentProjects({ status: 'fundraising' });
+  const { data: projects } = useInvestmentProjects();
   const createDonation = useCreateDonation();
 
   const handleAmountPreset = (amount: number) => {

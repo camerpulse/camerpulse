@@ -118,3 +118,40 @@ export const useDiasporaDonations = (profileId?: string) => {
     enabled: !!profileId
   });
 };
+
+export const useCreateDonation = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (donationData: any) => {
+      const { data, error } = await supabase
+        .from('diaspora_donations')
+        .insert(donationData)
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      toast({
+        title: "Donation Successful",
+        description: "Thank you for your contribution!",
+      });
+      queryClient.invalidateQueries({ queryKey: ['diaspora-donations'] });
+    },
+    onError: (error) => {
+      console.error('Error creating donation:', error);
+      toast({
+        title: "Error",
+        description: "Failed to process donation. Please try again.",
+        variant: "destructive"
+      });
+    }
+  });
+};
+
+export const useInvestmentProjects = () => {
+  return useDiasporaProjects();
+};
