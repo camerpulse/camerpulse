@@ -1,95 +1,106 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Core Brand Colors - Cameroon Flag Inspired (#007E33, #C8102E, #FFD700) */
-    --primary: 142 100% 25%;         /* Cameroon Green #007E33 */
-    --primary-foreground: 0 0% 100%; /* White text */
-    --primary-glow: 142 100% 35%;    /* Lighter green for glows */
+    /* CamerPulse Modern Brand Colors */
+    --primary: 140 90% 28%;           /* Rich Cameroon Green */
+    --primary-foreground: 0 0% 100%;  /* White text */
+    --primary-glow: 140 90% 35%;      /* Lighter green for glows */
     
-    --secondary: 51 100% 50%;        /* Cameroon Yellow #FFD700 */
-    --secondary-foreground: 0 0% 0%; /* Black text */
+    --secondary: 40 95% 55%;          /* Warm Golden Yellow */
+    --secondary-foreground: 0 0% 0%;  /* Black text */
     
-    --accent: 349 87% 44%;           /* Cameroon Red #C8102E */
-    --accent-foreground: 0 0% 100%;  /* White text */
+    --accent: 348 85% 47%;            /* Vibrant Red */
+    --accent-foreground: 0 0% 100%;   /* White text */
     
-    /* Semantic Colors */
-    --background: 0 0% 100%;         /* White */
-    --foreground: 222 84% 5%;        /* Near black */
+    /* Modern Background & Surface Colors */
+    --background: 0 0% 100%;          /* Pure White */
+    --foreground: 220 26% 14%;        /* Rich Dark Blue-Gray */
     
-    --card: 0 0% 100%;               /* White */
-    --card-foreground: 222 84% 5%;   /* Near black */
+    --card: 0 0% 100%;                /* White */
+    --card-foreground: 220 26% 14%;   /* Rich Dark Blue-Gray */
     
-    --popover: 0 0% 100%;            /* White */
-    --popover-foreground: 222 84% 5%; /* Near black */
+    --popover: 0 0% 100%;             /* White */
+    --popover-foreground: 220 26% 14%; /* Rich Dark Blue-Gray */
     
-    --muted: 210 40% 96%;            /* Light gray */
-    --muted-foreground: 215 16% 47%; /* Medium gray */
+    --muted: 210 40% 98%;             /* Very Light Gray */
+    --muted-foreground: 220 15% 45%;  /* Medium Gray */
     
-    --border: 214 32% 91%;           /* Light border */
-    --input: 214 32% 91%;            /* Input background */
-    --ring: 142 69% 32%;             /* Focus ring - primary */
+    --border: 214 32% 91%;            /* Light border */
+    --input: 0 0% 100%;               /* White input background */
+    --ring: 140 90% 28%;              /* Focus ring - primary */
     
     /* Status Colors */
-    --destructive: 0 84% 60%;        /* Red */
+    --destructive: 0 84% 60%;         /* Red */
     --destructive-foreground: 0 0% 100%; /* White */
     
-    /* Cameroon National Colors - Exact Flag Colors */
-    --cm-green: 142 100% 25%;        /* Exact Cameroon green #007E33 */
-    --cm-green-light: 142 100% 35%;  /* Lighter Cameroon green */
-    --cm-yellow: 51 100% 50%;        /* Exact Cameroon yellow #FFD700 */
-    --cm-yellow-light: 51 100% 65%;  /* Lighter Cameroon yellow */
-    --cm-red: 349 87% 44%;           /* Exact Cameroon red #C8102E */
-    --cm-red-light: 349 87% 55%;     /* Lighter Cameroon red */
+    /* Modern CamerPulse Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(140 90% 28%) 0%, hsl(140 90% 35%) 50%, hsl(40 95% 55%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(348 85% 47%) 0%, hsl(348 85% 55%) 100%);
+    --gradient-patriotic: linear-gradient(45deg, hsl(140 90% 28%) 0%, hsl(348 85% 47%) 50%, hsl(40 95% 55%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(220 26% 14%) 0%, hsl(140 90% 28%) 50%, hsl(40 95% 55%) 100%);
     
-    /* CamerPulse Brand Gradients */
-    --gradient-civic: linear-gradient(135deg, hsl(var(--cm-green)), hsl(var(--cm-green-light)) 60%, hsl(var(--cm-yellow)) 100%);
-    --gradient-flag: linear-gradient(to right, hsl(var(--cm-green)) 33%, hsl(var(--cm-red)) 33%, hsl(var(--cm-red)) 66%, hsl(var(--cm-yellow)) 66%);
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-patriotic: linear-gradient(45deg, hsl(var(--cm-green)), hsl(var(--cm-red)), hsl(var(--cm-yellow)));
+    /* Modern Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
+    --shadow: 0 1px 3px 0 hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.1), 0 8px 10px -6px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
+    --shadow-elegant: 0 20px 40px -10px hsl(140 90% 28% / 0.2);
+    --shadow-glow: 0 0 30px hsl(140 90% 35% / 0.3);
+    --shadow-premium: 0 25px 50px -12px hsl(220 26% 14% / 0.25), 0 0 40px hsl(140 90% 28% / 0.1);
     
-    /* Lux Aeterna Enhanced Gradients */
-    --lux-primary: 220 90% 15%;  /* Deep noble blue */
-    --lux-golden: 45 95% 60%;    /* Sacred gold */
-    --lux-ethereal: 270 30% 85%; /* Ethereal light */
-    --lux-sacred: 280 70% 25%;   /* Sacred purple */
+    /* Sidebar Colors */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 26% 14%;
+    --sidebar-primary: 140 90% 28%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 98%;
+    --sidebar-accent-foreground: 220 26% 14%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 140 90% 28%;
     
-    /* Ancestral Cameroonian Royal Colors */
-    --royal-forest-green: 120 100% 15%;    /* Deep forest green */
-    --royal-golden-ochre: 38 85% 55%;      /* Golden ochre */
-    --royal-earth-brown: 30 45% 25%;       /* Warm earth brown */
-    --royal-crimson-red: 0 75% 45%;        /* Crimson red */
-    --royal-ancestral-black: 0 0% 8%;      /* Ancestral black */
-    --royal-bronze: 32 60% 40%;            /* Sacred bronze */
-    --royal-ivory: 45 25% 88%;             /* Ancestral ivory */
-    --gradient-lux-primary: linear-gradient(135deg, hsl(var(--lux-primary)), hsl(var(--lux-golden)), hsl(var(--lux-sacred)));
-    --gradient-lux-divine: linear-gradient(45deg, hsl(var(--lux-primary)) 0%, hsl(var(--lux-golden)) 50%, hsl(var(--lux-ethereal)) 100%);
-    --gradient-lux-noble: radial-gradient(circle at center, hsl(var(--lux-golden) / 0.8), hsl(var(--lux-primary) / 0.9));
-    --gradient-lux-celebration: conic-gradient(from 0deg, hsl(var(--cm-green)), hsl(var(--cm-red)), hsl(var(--cm-yellow)), hsl(var(--lux-golden)));
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 220 26% 14%;
+    --foreground: 210 40% 98%;
     
-    /* Ancestral Gradients */
-    --gradient-royal-forest: linear-gradient(135deg, hsl(var(--royal-forest-green)), hsl(var(--royal-bronze)), hsl(var(--royal-golden-ochre)));
-    --gradient-ancestral: radial-gradient(circle at center, hsl(var(--royal-golden-ochre) / 0.9), hsl(var(--royal-earth-brown)), hsl(var(--royal-ancestral-black)));
-    --gradient-sacred-unity: linear-gradient(45deg, hsl(var(--royal-forest-green)), hsl(var(--royal-crimson-red)), hsl(var(--royal-golden-ochre)), hsl(var(--royal-earth-brown)));
-    --gradient-heritage: conic-gradient(from 0deg, hsl(var(--royal-forest-green)), hsl(var(--royal-golden-ochre)), hsl(var(--royal-crimson-red)), hsl(var(--royal-earth-brown)), hsl(var(--royal-ancestral-black)));
+    --card: 220 23% 18%;
+    --card-foreground: 210 40% 98%;
     
-    /* Directory Service Gradients */
-    --gradient-directory-schools: linear-gradient(135deg, hsl(var(--directory-school)), hsl(var(--directory-school) / 0.8));
-    --gradient-directory-hospitals: linear-gradient(135deg, hsl(var(--directory-hospital)), hsl(var(--directory-hospital) / 0.8));
-    --gradient-directory-pharmacies: linear-gradient(135deg, hsl(var(--directory-pharmacy)), hsl(var(--directory-pharmacy) / 0.8));
-    --gradient-directory-villages: linear-gradient(135deg, hsl(var(--directory-village)), hsl(var(--directory-village) / 0.8));
-    --gradient-verification: linear-gradient(135deg, hsl(var(--directory-verified)), hsl(var(--status-active)));
-    --gradient-sponsorship: linear-gradient(135deg, hsl(var(--status-sponsored)), hsl(var(--primary-glow)));
+    --popover: 220 23% 18%;
+    --popover-foreground: 210 40% 98%;
     
-    /* CamerPulse Brand Shadows */
-    --shadow-elegant: 0 10px 30px -10px hsl(var(--primary) / 0.3);
-    --shadow-glow: 0 0 40px hsl(var(--primary-glow) / 0.4);
-    --shadow-green: 0 8px 25px -8px hsl(var(--cm-green) / 0.4);
-    --shadow-red: 0 8px 25px -8px hsl(var(--cm-red) / 0.4);
-    --shadow-yellow: 0 8px 25px -8px hsl(var(--cm-yellow) / 0.4);
+    --primary: 140 90% 35%;
+    --primary-foreground: 220 26% 14%;
+    
+    --secondary: 220 20% 25%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 220 20% 25%;
+    --muted-foreground: 220 15% 60%;
+    
+    --accent: 348 85% 55%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 220 20% 25%;
+    --input: 220 20% 25%;
+    --ring: 140 90% 35%;
+    
+    --shadow-elegant: 0 20px 40px -10px hsl(0 0% 0% / 0.4);
+    --shadow-glow: 0 0 30px hsl(140 90% 35% / 0.3);
+    --shadow-premium: 0 25px 50px -12px hsl(0 0% 0% / 0.5), 0 0 40px hsl(140 90% 35% / 0.2);
+  }
     
     /* Directory Service Shadows */
     --shadow-directory-school: 0 8px 25px -8px hsl(var(--directory-school) / 0.3);
@@ -161,7 +172,8 @@
   }
   
   body {
-    @apply bg-background text-foreground font-inter;
+    @apply bg-background text-foreground;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
     /* Optimize for mobile */
     -webkit-font-smoothing: antialiased;

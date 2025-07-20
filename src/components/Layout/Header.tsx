@@ -41,44 +41,41 @@ export const Header = () => {
   };
 
   return (
-    <header className="bg-gradient-civic border-b border-border/50 backdrop-blur-sm sticky top-0 z-50 shadow-elegant pt-safe-top">
-      <div className="container mx-auto px-4 py-2 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between min-h-[64px]">
+    <header className="bg-white/95 backdrop-blur-md border-b border-border/50 sticky top-0 z-50 shadow-sm">
+      <div className="container mx-auto px-4 py-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between">
           {/* Logo & Branding */}
-          <Link to="/" className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
-                <span className="text-primary font-bold text-lg">CP</span>
+              <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-glow rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
+                <span className="text-white font-bold text-lg">CP</span>
               </div>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-cm-yellow rounded-full border-2 border-white"></div>
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-secondary rounded-full border-2 border-white"></div>
             </div>
             <div className="hidden sm:block">
-              <h1 className="text-xl font-bold text-white font-inter">CamerPulse</h1>
-              <p className="text-white/80 text-xs">Civic Engagement Platform</p>
+              <h1 className="text-xl font-bold text-foreground">CamerPulse</h1>
+              <p className="text-muted-foreground text-xs">Civic Engagement Platform</p>
             </div>
           </Link>
 
-          {/* Desktop Navigation - CamerPulse specific */}
+          {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+              <Link to="/diaspora-connect">DiasporaConnect</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/polls">Polls</Link>
             </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/politicians">Politicians</Link>
             </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/events">Events</Link>
+            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+              <Link to="/legislation">Legislation</Link>
             </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/civic-tools">Civic Tools</Link>
+            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+              <Link to="/analytics">Analytics</Link>
             </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/national-debt">Trackers</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
-              <Link to="/analytics/dashboard">Analytics</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/schools">Services</Link>
             </Button>
           </nav>
@@ -86,9 +83,9 @@ export const Header = () => {
           {/* Right side actions */}
           <div className="flex items-center space-x-2">
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 relative">
+            <Button variant="ghost" size="sm" className="text-foreground hover:bg-primary/10 relative">
               <Bell className="w-4 h-4" />
-              <Badge className="absolute -top-1 -right-1 w-4 h-4 p-0 text-[10px] bg-destructive text-white border-0 flex items-center justify-center">
+              <Badge className="absolute -top-1 -right-1 w-4 h-4 p-0 text-[10px] bg-accent text-accent-foreground border-0 flex items-center justify-center">
                 3
               </Badge>
             </Button>
@@ -97,10 +94,10 @@ export const Header = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="text-white hover:bg-white/10 gap-2">
+                  <Button variant="ghost" className="text-foreground hover:bg-primary/10 gap-2">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user.user_metadata?.avatar_url} />
-                      <AvatarFallback className="text-primary text-xs bg-white">
+                      <AvatarFallback className="text-white text-xs bg-primary">
                         {user.email?.charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -108,14 +105,14 @@ export const Header = () => {
                       <div className="text-sm font-medium">
                         {user.user_metadata?.full_name || user.email?.split('@')[0]}
                       </div>
-                      <div className="text-xs text-white/70">
+                      <div className="text-xs text-muted-foreground">
                         {user.email}
                       </div>
                     </div>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 bg-white border-border/20">
+                <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
@@ -137,10 +134,10 @@ export const Header = () => {
               </DropdownMenu>
             ) : (
               <div className="flex items-center gap-2">
-                <Button asChild variant="ghost" size="sm" className="text-white hover:bg-white/10">
+                <Button asChild variant="ghost" size="sm" className="text-foreground hover:bg-primary/10">
                   <Link to="/auth">Sign In</Link>
                 </Button>
-                <Button asChild size="sm" className="bg-white text-primary hover:bg-white/90">
+                <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
                   <Link to="/auth">Sign Up</Link>
                 </Button>
               </div>
@@ -150,7 +147,7 @@ export const Header = () => {
             <Button
               variant="ghost"
               size="sm"
-              className="lg:hidden text-white hover:bg-white/10"
+              className="lg:hidden text-foreground hover:bg-primary/10"
               onClick={toggleMobileMenu}
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -158,29 +155,26 @@ export const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Menu - CamerPulse specific */}
+        {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <nav className="lg:hidden mt-4 pb-4 border-t border-white/20">
+          <nav className="lg:hidden mt-4 pb-4 border-t border-border/20">
             <div className="grid grid-cols-1 gap-2 mt-4">
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
+                <Link to="/diaspora-connect" onClick={() => setMobileMenuOpen(false)}>🌍 DiasporaConnect</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Polls</Link>
               </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
               </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/events" onClick={() => setMobileMenuOpen(false)}>📅 Events</Link>
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
+                <Link to="/legislation" onClick={() => setMobileMenuOpen(false)}>📜 Legislation</Link>
               </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/civic-tools" onClick={() => setMobileMenuOpen(false)}>🏛️ Civic Tools</Link>
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
+                <Link to="/analytics" onClick={() => setMobileMenuOpen(false)}>📊 Analytics</Link>
               </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/national-debt" onClick={() => setMobileMenuOpen(false)}>📊 Trackers</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
-                <Link to="/analytics/dashboard" onClick={() => setMobileMenuOpen(false)}>📊 Analytics</Link>
-              </Button>
-              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/schools" onClick={() => setMobileMenuOpen(false)}>🏫 Services</Link>
               </Button>
             </div>

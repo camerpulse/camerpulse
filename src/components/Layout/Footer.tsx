@@ -26,16 +26,16 @@ import {
 
 export const Footer = () => {
   return (
-    <footer className="bg-muted/50 mt-16 py-12 px-4 border-t">
+    <footer className="bg-gradient-to-br from-muted/30 to-background mt-16 py-12 px-4 border-t border-border/50">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-r from-primary to-accent rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-glow rounded-xl flex items-center justify-center shadow-md">
                 <span className="text-white font-bold text-sm">CP</span>
               </div>
-              <span className="font-bold text-lg">CamerPulse</span>
+              <span className="font-bold text-lg text-foreground">CamerPulse</span>
             </div>
             <p className="text-sm text-muted-foreground">
               Your comprehensive civic engagement platform for democratic participation, tracking political promises, and engaging with Cameroon's governance.
