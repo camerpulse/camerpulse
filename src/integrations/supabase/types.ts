@@ -11988,6 +11988,418 @@ export type Database = {
         }
         Relationships: []
       }
+      diaspora_donations: {
+        Row: {
+          amount_fcfa: number
+          amount_usd: number | null
+          created_at: string | null
+          diaspora_profile_id: string
+          donation_message: string | null
+          donation_status: string | null
+          donation_type: string | null
+          exchange_rate: number | null
+          id: string
+          is_anonymous: boolean | null
+          payment_method: string | null
+          processed_at: string | null
+          project_id: string | null
+          qr_receipt_data: string | null
+          receipt_url: string | null
+          transaction_reference: string | null
+        }
+        Insert: {
+          amount_fcfa: number
+          amount_usd?: number | null
+          created_at?: string | null
+          diaspora_profile_id: string
+          donation_message?: string | null
+          donation_status?: string | null
+          donation_type?: string | null
+          exchange_rate?: number | null
+          id?: string
+          is_anonymous?: boolean | null
+          payment_method?: string | null
+          processed_at?: string | null
+          project_id?: string | null
+          qr_receipt_data?: string | null
+          receipt_url?: string | null
+          transaction_reference?: string | null
+        }
+        Update: {
+          amount_fcfa?: number
+          amount_usd?: number | null
+          created_at?: string | null
+          diaspora_profile_id?: string
+          donation_message?: string | null
+          donation_status?: string | null
+          donation_type?: string | null
+          exchange_rate?: number | null
+          id?: string
+          is_anonymous?: boolean | null
+          payment_method?: string | null
+          processed_at?: string | null
+          project_id?: string | null
+          qr_receipt_data?: string | null
+          receipt_url?: string | null
+          transaction_reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_donations_diaspora_profile_id_fkey"
+            columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diaspora_donations_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_investment_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diaspora_event_registrations: {
+        Row: {
+          attended_at: string | null
+          created_at: string | null
+          diaspora_profile_id: string
+          event_id: string
+          feedback_comment: string | null
+          feedback_rating: number | null
+          id: string
+          questions_responses: Json | null
+          registration_status: string | null
+        }
+        Insert: {
+          attended_at?: string | null
+          created_at?: string | null
+          diaspora_profile_id: string
+          event_id: string
+          feedback_comment?: string | null
+          feedback_rating?: number | null
+          id?: string
+          questions_responses?: Json | null
+          registration_status?: string | null
+        }
+        Update: {
+          attended_at?: string | null
+          created_at?: string | null
+          diaspora_profile_id?: string
+          event_id?: string
+          feedback_comment?: string | null
+          feedback_rating?: number | null
+          id?: string
+          questions_responses?: Json | null
+          registration_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_event_registrations_diaspora_profile_id_fkey"
+            columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "diaspora_event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diaspora_events: {
+        Row: {
+          agenda: Json | null
+          created_at: string | null
+          created_by: string
+          description: string
+          duration_minutes: number | null
+          event_date: string
+          event_status: string | null
+          event_type: string
+          id: string
+          languages: string[] | null
+          max_attendees: number | null
+          meeting_password: string | null
+          meeting_url: string | null
+          registration_deadline: string | null
+          registration_required: boolean | null
+          speakers: Json | null
+          target_regions: string[] | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          agenda?: Json | null
+          created_at?: string | null
+          created_by: string
+          description: string
+          duration_minutes?: number | null
+          event_date: string
+          event_status?: string | null
+          event_type: string
+          id?: string
+          languages?: string[] | null
+          max_attendees?: number | null
+          meeting_password?: string | null
+          meeting_url?: string | null
+          registration_deadline?: string | null
+          registration_required?: boolean | null
+          speakers?: Json | null
+          target_regions?: string[] | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          agenda?: Json | null
+          created_at?: string | null
+          created_by?: string
+          description?: string
+          duration_minutes?: number | null
+          event_date?: string
+          event_status?: string | null
+          event_type?: string
+          id?: string
+          languages?: string[] | null
+          max_attendees?: number | null
+          meeting_password?: string | null
+          meeting_url?: string | null
+          registration_deadline?: string | null
+          registration_required?: boolean | null
+          speakers?: Json | null
+          target_regions?: string[] | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      diaspora_investment_projects: {
+        Row: {
+          actual_completion_date: string | null
+          category: string
+          completion_percentage: number | null
+          contact_email: string | null
+          created_at: string | null
+          created_by: string
+          description: string
+          documents: string[] | null
+          expected_completion_date: string | null
+          id: string
+          images: string[] | null
+          location: string
+          project_manager: string | null
+          project_status: string | null
+          raised_amount_fcfa: number | null
+          start_date: string | null
+          target_amount_fcfa: number
+          title: string
+          updated_at: string | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          actual_completion_date?: string | null
+          category: string
+          completion_percentage?: number | null
+          contact_email?: string | null
+          created_at?: string | null
+          created_by: string
+          description: string
+          documents?: string[] | null
+          expected_completion_date?: string | null
+          id?: string
+          images?: string[] | null
+          location: string
+          project_manager?: string | null
+          project_status?: string | null
+          raised_amount_fcfa?: number | null
+          start_date?: string | null
+          target_amount_fcfa: number
+          title: string
+          updated_at?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          actual_completion_date?: string | null
+          category?: string
+          completion_percentage?: number | null
+          contact_email?: string | null
+          created_at?: string | null
+          created_by?: string
+          description?: string
+          documents?: string[] | null
+          expected_completion_date?: string | null
+          id?: string
+          images?: string[] | null
+          location?: string
+          project_manager?: string | null
+          project_status?: string | null
+          raised_amount_fcfa?: number | null
+          start_date?: string | null
+          target_amount_fcfa?: number
+          title?: string
+          updated_at?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
+      diaspora_profiles: {
+        Row: {
+          country_of_residence: string
+          created_at: string | null
+          diaspora_association: string | null
+          full_name: string
+          home_village_town_city: string
+          id: string
+          impact_score: number | null
+          preferred_donation_interests: string[] | null
+          profession_sector: string | null
+          total_contributions_fcfa: number | null
+          total_projects_supported: number | null
+          updated_at: string | null
+          user_id: string
+          verification_documents: string[] | null
+          verification_status: string | null
+          verified_by_consulate: boolean | null
+        }
+        Insert: {
+          country_of_residence: string
+          created_at?: string | null
+          diaspora_association?: string | null
+          full_name: string
+          home_village_town_city: string
+          id?: string
+          impact_score?: number | null
+          preferred_donation_interests?: string[] | null
+          profession_sector?: string | null
+          total_contributions_fcfa?: number | null
+          total_projects_supported?: number | null
+          updated_at?: string | null
+          user_id: string
+          verification_documents?: string[] | null
+          verification_status?: string | null
+          verified_by_consulate?: boolean | null
+        }
+        Update: {
+          country_of_residence?: string
+          created_at?: string | null
+          diaspora_association?: string | null
+          full_name?: string
+          home_village_town_city?: string
+          id?: string
+          impact_score?: number | null
+          preferred_donation_interests?: string[] | null
+          profession_sector?: string | null
+          total_contributions_fcfa?: number | null
+          total_projects_supported?: number | null
+          updated_at?: string | null
+          user_id?: string
+          verification_documents?: string[] | null
+          verification_status?: string | null
+          verified_by_consulate?: boolean | null
+        }
+        Relationships: []
+      }
+      diaspora_recognition: {
+        Row: {
+          achievement_date: string | null
+          badge_icon: string | null
+          created_at: string | null
+          diaspora_profile_id: string
+          id: string
+          points_awarded: number | null
+          public_display: boolean | null
+          recognition_description: string | null
+          recognition_level: string | null
+          recognition_title: string
+          recognition_type: string
+        }
+        Insert: {
+          achievement_date?: string | null
+          badge_icon?: string | null
+          created_at?: string | null
+          diaspora_profile_id: string
+          id?: string
+          points_awarded?: number | null
+          public_display?: boolean | null
+          recognition_description?: string | null
+          recognition_level?: string | null
+          recognition_title: string
+          recognition_type: string
+        }
+        Update: {
+          achievement_date?: string | null
+          badge_icon?: string | null
+          created_at?: string | null
+          diaspora_profile_id?: string
+          id?: string
+          points_awarded?: number | null
+          public_display?: boolean | null
+          recognition_description?: string | null
+          recognition_level?: string | null
+          recognition_title?: string
+          recognition_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_recognition_diaspora_profile_id_fkey"
+            columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diaspora_transaction_logs: {
+        Row: {
+          created_at: string | null
+          diaspora_profile_id: string
+          id: string
+          ip_address: unknown | null
+          location_data: Json | null
+          transaction_data: Json
+          transaction_type: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          diaspora_profile_id: string
+          id?: string
+          ip_address?: unknown | null
+          location_data?: Json | null
+          transaction_data: Json
+          transaction_type: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          diaspora_profile_id?: string
+          id?: string
+          ip_address?: unknown | null
+          location_data?: Json | null
+          transaction_data?: Json
+          transaction_type?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_transaction_logs_diaspora_profile_id_fkey"
+            columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       digital_badges: {
         Row: {
           badge_type: string
