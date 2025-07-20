@@ -9,7 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface RatingSystemProps {
-  entityType: 'ministry' | 'council' | 'elected_official' | 'appointed_official' | 'hospital' | 'school' | 'pharmacy' | 'village' | 'project' | 'petition_owner';
+  entityType: 'politician' | 'ministry' | 'government_agency' | 'political_party' | 'civil_society_org' | 'media_outlet' | 'election_event' | 'policy_document' | 'government_statement';
   entityId: string;
   entityName: string;
   region?: string;
