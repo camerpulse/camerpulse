@@ -5550,6 +5550,54 @@ export type Database = {
           },
         ]
       }
+      civic_achievements: {
+        Row: {
+          achievement_description: string | null
+          achievement_title: string
+          achievement_type: string
+          awarded_at: string
+          badge_icon_url: string | null
+          certification_code: string | null
+          created_at: string
+          criteria_met: Json | null
+          expires_at: string | null
+          id: string
+          is_certification: boolean
+          points_awarded: number
+          user_id: string
+        }
+        Insert: {
+          achievement_description?: string | null
+          achievement_title: string
+          achievement_type: string
+          awarded_at?: string
+          badge_icon_url?: string | null
+          certification_code?: string | null
+          created_at?: string
+          criteria_met?: Json | null
+          expires_at?: string | null
+          id?: string
+          is_certification?: boolean
+          points_awarded?: number
+          user_id: string
+        }
+        Update: {
+          achievement_description?: string | null
+          achievement_title?: string
+          achievement_type?: string
+          awarded_at?: string
+          badge_icon_url?: string | null
+          certification_code?: string | null
+          created_at?: string
+          criteria_met?: Json | null
+          expires_at?: string | null
+          id?: string
+          is_certification?: boolean
+          points_awarded?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       civic_alerts: {
         Row: {
           content: string
@@ -5682,6 +5730,39 @@ export type Database = {
           trending_score?: number | null
           updated_at?: string
           verified_status?: string
+        }
+        Relationships: []
+      }
+      civic_content_interactions: {
+        Row: {
+          comment_text: string | null
+          content_id: string
+          created_at: string
+          id: string
+          interaction_data: Json | null
+          interaction_type: string
+          rating: number | null
+          user_id: string
+        }
+        Insert: {
+          comment_text?: string | null
+          content_id: string
+          created_at?: string
+          id?: string
+          interaction_data?: Json | null
+          interaction_type: string
+          rating?: number | null
+          user_id: string
+        }
+        Update: {
+          comment_text?: string | null
+          content_id?: string
+          created_at?: string
+          id?: string
+          interaction_data?: Json | null
+          interaction_type?: string
+          rating?: number | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -5922,6 +6003,162 @@ export type Database = {
           source_type?: Database["public"]["Enums"]["source_type"]
           total_crawls?: number | null
           total_entities_found?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_education_content: {
+        Row: {
+          author_id: string | null
+          author_name: string | null
+          average_rating: number | null
+          categories: string[] | null
+          completion_rate: number | null
+          content_body: string | null
+          content_type: Database["public"]["Enums"]["education_content_type"]
+          content_url: string | null
+          created_at: string
+          difficulty_level: Database["public"]["Enums"]["education_difficulty"]
+          duration_minutes: number | null
+          id: string
+          is_active: boolean
+          is_featured: boolean
+          is_verified: boolean
+          learning_objectives: string[] | null
+          like_count: number
+          metadata: Json | null
+          prerequisites: string[] | null
+          published_at: string | null
+          share_count: number
+          source_organization: string | null
+          summary: string | null
+          tags: string[] | null
+          target_audience: string[] | null
+          thumbnail_url: string | null
+          title: string
+          total_ratings: number
+          updated_at: string
+          view_count: number
+        }
+        Insert: {
+          author_id?: string | null
+          author_name?: string | null
+          average_rating?: number | null
+          categories?: string[] | null
+          completion_rate?: number | null
+          content_body?: string | null
+          content_type: Database["public"]["Enums"]["education_content_type"]
+          content_url?: string | null
+          created_at?: string
+          difficulty_level?: Database["public"]["Enums"]["education_difficulty"]
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          is_verified?: boolean
+          learning_objectives?: string[] | null
+          like_count?: number
+          metadata?: Json | null
+          prerequisites?: string[] | null
+          published_at?: string | null
+          share_count?: number
+          source_organization?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          target_audience?: string[] | null
+          thumbnail_url?: string | null
+          title: string
+          total_ratings?: number
+          updated_at?: string
+          view_count?: number
+        }
+        Update: {
+          author_id?: string | null
+          author_name?: string | null
+          average_rating?: number | null
+          categories?: string[] | null
+          completion_rate?: number | null
+          content_body?: string | null
+          content_type?: Database["public"]["Enums"]["education_content_type"]
+          content_url?: string | null
+          created_at?: string
+          difficulty_level?: Database["public"]["Enums"]["education_difficulty"]
+          duration_minutes?: number | null
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          is_verified?: boolean
+          learning_objectives?: string[] | null
+          like_count?: number
+          metadata?: Json | null
+          prerequisites?: string[] | null
+          published_at?: string | null
+          share_count?: number
+          source_organization?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          target_audience?: string[] | null
+          thumbnail_url?: string | null
+          title?: string
+          total_ratings?: number
+          updated_at?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
+      civic_education_quizzes: {
+        Row: {
+          attempt_count: number
+          average_score: number | null
+          content_id: string | null
+          correct_answers: Json
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          max_attempts: number | null
+          passing_score: number
+          questions: Json
+          randomize_questions: boolean
+          show_correct_answers: boolean
+          time_limit_minutes: number | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          attempt_count?: number
+          average_score?: number | null
+          content_id?: string | null
+          correct_answers?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          max_attempts?: number | null
+          passing_score?: number
+          questions?: Json
+          randomize_questions?: boolean
+          show_correct_answers?: boolean
+          time_limit_minutes?: number | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          attempt_count?: number
+          average_score?: number | null
+          content_id?: string | null
+          correct_answers?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          max_attempts?: number | null
+          passing_score?: number
+          questions?: Json
+          randomize_questions?: boolean
+          show_correct_answers?: boolean
+          time_limit_minutes?: number | null
+          title?: string
           updated_at?: string
         }
         Relationships: []
@@ -6819,6 +7056,120 @@ export type Database = {
           },
         ]
       }
+      civic_learning_paths: {
+        Row: {
+          average_rating: number | null
+          certification_requirements: Json | null
+          completion_count: number
+          content_sequence: Json
+          created_at: string
+          created_by: string | null
+          description: string | null
+          difficulty_level: Database["public"]["Enums"]["education_difficulty"]
+          enrollment_count: number
+          estimated_duration_hours: number | null
+          id: string
+          is_active: boolean
+          is_certification_path: boolean
+          learning_outcomes: string[] | null
+          prerequisites: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          average_rating?: number | null
+          certification_requirements?: Json | null
+          completion_count?: number
+          content_sequence?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: Database["public"]["Enums"]["education_difficulty"]
+          enrollment_count?: number
+          estimated_duration_hours?: number | null
+          id?: string
+          is_active?: boolean
+          is_certification_path?: boolean
+          learning_outcomes?: string[] | null
+          prerequisites?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          average_rating?: number | null
+          certification_requirements?: Json | null
+          completion_count?: number
+          content_sequence?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: Database["public"]["Enums"]["education_difficulty"]
+          enrollment_count?: number
+          estimated_duration_hours?: number | null
+          id?: string
+          is_active?: boolean
+          is_certification_path?: boolean
+          learning_outcomes?: string[] | null
+          prerequisites?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      civic_learning_progress: {
+        Row: {
+          bookmarked: boolean
+          completed_at: string | null
+          completion_percentage: number
+          content_id: string | null
+          created_at: string
+          current_position: number | null
+          id: string
+          last_accessed_at: string | null
+          learning_path_id: string | null
+          notes: string | null
+          progress_type: string
+          quiz_scores: Json | null
+          time_spent_minutes: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bookmarked?: boolean
+          completed_at?: string | null
+          completion_percentage?: number
+          content_id?: string | null
+          created_at?: string
+          current_position?: number | null
+          id?: string
+          last_accessed_at?: string | null
+          learning_path_id?: string | null
+          notes?: string | null
+          progress_type: string
+          quiz_scores?: Json | null
+          time_spent_minutes?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bookmarked?: boolean
+          completed_at?: string | null
+          completion_percentage?: number
+          content_id?: string | null
+          created_at?: string
+          current_position?: number | null
+          id?: string
+          last_accessed_at?: string | null
+          learning_path_id?: string | null
+          notes?: string | null
+          progress_type?: string
+          quiz_scores?: Json | null
+          time_spent_minutes?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       civic_mission_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -7227,6 +7578,48 @@ export type Database = {
           sender_id?: string | null
           title?: string
           type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      civic_quiz_attempts: {
+        Row: {
+          answers: Json
+          attempt_number: number
+          completed_at: string | null
+          created_at: string
+          id: string
+          passed: boolean
+          quiz_id: string
+          score: number
+          started_at: string
+          time_taken_minutes: number | null
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          attempt_number?: number
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          passed?: boolean
+          quiz_id: string
+          score: number
+          started_at?: string
+          time_taken_minutes?: number | null
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          attempt_number?: number
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          passed?: boolean
+          quiz_id?: string
+          score?: number
+          started_at?: string
+          time_taken_minutes?: number | null
           user_id?: string
         }
         Relationships: []
@@ -10609,6 +11002,60 @@ export type Database = {
           politician_id?: string
           public_visibility_score?: number
           score_date?: string
+        }
+        Relationships: []
+      }
+      enhanced_poll_config: {
+        Row: {
+          advanced_analytics: boolean
+          ai_moderation: boolean
+          anonymous_voting: boolean
+          created_at: string
+          custom_fields: Json | null
+          demographic_targeting: Json | null
+          geographic_restrictions: string[] | null
+          id: string
+          max_participants: number | null
+          poll_id: string
+          real_time_results: boolean
+          requires_verification: boolean
+          security_level: Database["public"]["Enums"]["poll_security_level"]
+          updated_at: string
+          weighted_voting: boolean
+        }
+        Insert: {
+          advanced_analytics?: boolean
+          ai_moderation?: boolean
+          anonymous_voting?: boolean
+          created_at?: string
+          custom_fields?: Json | null
+          demographic_targeting?: Json | null
+          geographic_restrictions?: string[] | null
+          id?: string
+          max_participants?: number | null
+          poll_id: string
+          real_time_results?: boolean
+          requires_verification?: boolean
+          security_level?: Database["public"]["Enums"]["poll_security_level"]
+          updated_at?: string
+          weighted_voting?: boolean
+        }
+        Update: {
+          advanced_analytics?: boolean
+          ai_moderation?: boolean
+          anonymous_voting?: boolean
+          created_at?: string
+          custom_fields?: Json | null
+          demographic_targeting?: Json | null
+          geographic_restrictions?: string[] | null
+          id?: string
+          max_participants?: number | null
+          poll_id?: string
+          real_time_results?: boolean
+          requires_verification?: boolean
+          security_level?: Database["public"]["Enums"]["poll_security_level"]
+          updated_at?: string
+          weighted_voting?: boolean
         }
         Relationships: []
       }
@@ -17398,6 +17845,66 @@ export type Database = {
         }
         Relationships: []
       }
+      performance_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          actual_value: number | null
+          alert_data: Json | null
+          alert_description: string | null
+          alert_title: string
+          alert_type: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_acknowledged: boolean
+          metric_type:
+            | Database["public"]["Enums"]["performance_metric_type"]
+            | null
+          politician_id: string
+          severity_level: string
+          threshold_value: number | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          actual_value?: number | null
+          alert_data?: Json | null
+          alert_description?: string | null
+          alert_title: string
+          alert_type: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_acknowledged?: boolean
+          metric_type?:
+            | Database["public"]["Enums"]["performance_metric_type"]
+            | null
+          politician_id: string
+          severity_level?: string
+          threshold_value?: number | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          actual_value?: number | null
+          alert_data?: Json | null
+          alert_description?: string | null
+          alert_title?: string
+          alert_type?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_acknowledged?: boolean
+          metric_type?:
+            | Database["public"]["Enums"]["performance_metric_type"]
+            | null
+          politician_id?: string
+          severity_level?: string
+          threshold_value?: number | null
+        }
+        Relationships: []
+      }
       performance_milestones: {
         Row: {
           achieved_at: string
@@ -18958,6 +19465,87 @@ export type Database = {
           },
         ]
       }
+      politician_performance_comparisons: {
+        Row: {
+          comparison_group: string
+          comparison_metrics: Json | null
+          comparison_period_end: string
+          comparison_period_start: string
+          created_at: string
+          id: string
+          percentile: number | null
+          politician_id: string
+          ranking: number | null
+        }
+        Insert: {
+          comparison_group: string
+          comparison_metrics?: Json | null
+          comparison_period_end: string
+          comparison_period_start: string
+          created_at?: string
+          id?: string
+          percentile?: number | null
+          politician_id: string
+          ranking?: number | null
+        }
+        Update: {
+          comparison_group?: string
+          comparison_metrics?: Json | null
+          comparison_period_end?: string
+          comparison_period_start?: string
+          created_at?: string
+          id?: string
+          percentile?: number | null
+          politician_id?: string
+          ranking?: number | null
+        }
+        Relationships: []
+      }
+      politician_performance_metrics: {
+        Row: {
+          created_at: string
+          data_source: string | null
+          id: string
+          measurement_period_end: string
+          measurement_period_start: string
+          metric_details: Json | null
+          metric_type: Database["public"]["Enums"]["performance_metric_type"]
+          metric_value: number
+          notes: string | null
+          politician_id: string
+          updated_at: string
+          verified: boolean
+        }
+        Insert: {
+          created_at?: string
+          data_source?: string | null
+          id?: string
+          measurement_period_end: string
+          measurement_period_start: string
+          metric_details?: Json | null
+          metric_type: Database["public"]["Enums"]["performance_metric_type"]
+          metric_value: number
+          notes?: string | null
+          politician_id: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Update: {
+          created_at?: string
+          data_source?: string | null
+          id?: string
+          measurement_period_end?: string
+          measurement_period_start?: string
+          metric_details?: Json | null
+          metric_type?: Database["public"]["Enums"]["performance_metric_type"]
+          metric_value?: number
+          notes?: string | null
+          politician_id?: string
+          updated_at?: string
+          verified?: boolean
+        }
+        Relationships: []
+      }
       politician_poll_responses: {
         Row: {
           created_at: string | null
@@ -19094,6 +19682,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      politician_scorecards: {
+        Row: {
+          attendance_score: number | null
+          bill_effectiveness_score: number | null
+          committee_participation_score: number | null
+          created_at: string
+          id: string
+          methodology_version: string | null
+          overall_score: number
+          politician_id: string
+          public_engagement_score: number | null
+          scorecard_period_end: string
+          scorecard_period_start: string
+          transparency_score: number | null
+          updated_at: string
+          voting_alignment_score: number | null
+        }
+        Insert: {
+          attendance_score?: number | null
+          bill_effectiveness_score?: number | null
+          committee_participation_score?: number | null
+          created_at?: string
+          id?: string
+          methodology_version?: string | null
+          overall_score?: number
+          politician_id: string
+          public_engagement_score?: number | null
+          scorecard_period_end: string
+          scorecard_period_start: string
+          transparency_score?: number | null
+          updated_at?: string
+          voting_alignment_score?: number | null
+        }
+        Update: {
+          attendance_score?: number | null
+          bill_effectiveness_score?: number | null
+          committee_participation_score?: number | null
+          created_at?: string
+          id?: string
+          methodology_version?: string | null
+          overall_score?: number
+          politician_id?: string
+          public_engagement_score?: number | null
+          scorecard_period_end?: string
+          scorecard_period_start?: string
+          transparency_score?: number | null
+          updated_at?: string
+          voting_alignment_score?: number | null
+        }
+        Relationships: []
       }
       politician_transparency_scores: {
         Row: {
@@ -19351,6 +19990,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      poll_analytics: {
+        Row: {
+          bias_analysis: Json | null
+          confidence_score: number | null
+          created_at: string
+          demographic_breakdown: Json | null
+          engagement_metrics: Json | null
+          geographic_breakdown: Json | null
+          id: string
+          poll_id: string
+          response_patterns: Json | null
+          sample_quality: number | null
+          statistical_significance: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          bias_analysis?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          demographic_breakdown?: Json | null
+          engagement_metrics?: Json | null
+          geographic_breakdown?: Json | null
+          id?: string
+          poll_id: string
+          response_patterns?: Json | null
+          sample_quality?: number | null
+          statistical_significance?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          bias_analysis?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          demographic_breakdown?: Json | null
+          engagement_metrics?: Json | null
+          geographic_breakdown?: Json | null
+          id?: string
+          poll_id?: string
+          response_patterns?: Json | null
+          sample_quality?: number | null
+          statistical_significance?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       poll_comment_likes: {
         Row: {
@@ -19716,6 +20400,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      poll_participant_verification: {
+        Row: {
+          created_at: string
+          id: string
+          poll_id: string
+          user_id: string | null
+          verification_data: Json | null
+          verification_method: string
+          verification_status: string
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          poll_id: string
+          user_id?: string | null
+          verification_data?: Json | null
+          verification_method: string
+          verification_status?: string
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          poll_id?: string
+          user_id?: string | null
+          verification_data?: Json | null
+          verification_method?: string
+          verification_status?: string
+          verified_at?: string | null
+        }
+        Relationships: []
       }
       poll_reports: {
         Row: {
@@ -26513,6 +27230,14 @@ export type Database = {
       contract_type: "branding" | "exclusivity" | "nda" | "general"
       corruption_tag: "verified" | "alleged" | "cleared" | "under_investigation"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
+      education_content_type:
+        | "article"
+        | "video"
+        | "infographic"
+        | "quiz"
+        | "interactive"
+        | "webinar"
+      education_difficulty: "beginner" | "intermediate" | "advanced"
       engagement_activity_type:
         | "public_appearance"
         | "social_media_post"
@@ -26647,6 +27372,13 @@ export type Database = {
         | "event_organizer"
       payment_method: "mobile_money" | "card" | "paypal" | "crypto"
       payment_status: "pending" | "completed" | "failed" | "refunded"
+      performance_metric_type:
+        | "attendance"
+        | "voting_record"
+        | "bill_sponsorship"
+        | "committee_activity"
+        | "public_engagement"
+        | "transparency"
       pharmacy_type:
         | "registered_pharmacy"
         | "otc_store"
@@ -26663,6 +27395,11 @@ export type Database = {
         | "tiktok"
         | "facebook"
         | "instagram"
+      poll_security_level:
+        | "open"
+        | "verified_only"
+        | "invite_only"
+        | "region_limited"
       pricing_type: "free" | "paid" | "streaming_only"
       product_type:
         | "song"
@@ -27003,6 +27740,15 @@ export const Constants = {
       contract_type: ["branding", "exclusivity", "nda", "general"],
       corruption_tag: ["verified", "alleged", "cleared", "under_investigation"],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
+      education_content_type: [
+        "article",
+        "video",
+        "infographic",
+        "quiz",
+        "interactive",
+        "webinar",
+      ],
+      education_difficulty: ["beginner", "intermediate", "advanced"],
       engagement_activity_type: [
         "public_appearance",
         "social_media_post",
@@ -27152,6 +27898,14 @@ export const Constants = {
       ],
       payment_method: ["mobile_money", "card", "paypal", "crypto"],
       payment_status: ["pending", "completed", "failed", "refunded"],
+      performance_metric_type: [
+        "attendance",
+        "voting_record",
+        "bill_sponsorship",
+        "committee_activity",
+        "public_engagement",
+        "transparency",
+      ],
       pharmacy_type: [
         "registered_pharmacy",
         "otc_store",
@@ -27169,6 +27923,12 @@ export const Constants = {
         "tiktok",
         "facebook",
         "instagram",
+      ],
+      poll_security_level: [
+        "open",
+        "verified_only",
+        "invite_only",
+        "region_limited",
       ],
       pricing_type: ["free", "paid", "streaming_only"],
       product_type: [

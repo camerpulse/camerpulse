@@ -101,6 +101,10 @@ import PetitionAdmin from "./pages/PetitionAdmin";
 import PetitionSecurity from "./pages/PetitionSecurity";
 import PetitionMobile from "./pages/PetitionMobile";
 import PetitionAPI from "./pages/PetitionAPI";
+import CivicTools from "./pages/CivicTools";
+import EnhancedPolls from "./pages/EnhancedPolls";
+import PoliticianPerformance from "./pages/PoliticianPerformance";
+import CivicEducationHub from "./pages/CivicEducationHub";
 import InstitutionDirectory from "./pages/InstitutionDirectory";
 import ClaimModerationDashboard from "./pages/ClaimModerationDashboard";
 import InstitutionOwnerDashboard from "./pages/InstitutionOwnerDashboard";
@@ -255,6 +259,10 @@ const App = () => {
            <Route path="/petitions" element={<PetitionsPlatform />} />
            <Route path="/petitions/:id" element={<PetitionDetail />} />
            <Route path="/petitions/create" element={<CreatePetition />} />
+           <Route path="/civic-tools" element={<CivicTools />} />
+           <Route path="/enhanced-polls" element={<EnhancedPolls />} />
+           <Route path="/politician-performance" element={<PoliticianPerformance />} />
+           <Route path="/civic-education" element={<CivicEducationHub />} />
             <Route path="/admin/petitions" element={<PetitionAdmin />} />
             <Route path="/petitions/security" element={<PetitionSecurity />} />
             <Route path="/petitions/mobile" element={<PetitionMobile />} />
