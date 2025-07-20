@@ -65,14 +65,15 @@ export const LegislationTracker = () => {
     queryFn: async () => {
       const { data, error } = await supabase.rpc('get_legislation_statistics');
       if (error) throw error;
-      return data as {
+      // Return the first item from the array since the function returns a table
+      return data?.[0] as {
         total_bills: number;
         active_bills: number;
         passed_bills: number;
         rejected_bills: number;
         total_citizen_votes: number;
         avg_citizen_engagement: number;
-      };
+      } | null;
     },
   });
 
