@@ -55,6 +55,60 @@ export type Database = {
           },
         ]
       }
+      advanced_sentiment_analysis: {
+        Row: {
+          analysis_metadata: Json | null
+          confidence_score: number
+          content_id: string | null
+          content_source: string
+          content_text: string
+          content_url: string | null
+          created_at: string
+          emotions_detected: Json | null
+          entities_mentioned: Json | null
+          id: string
+          language_detected: string | null
+          processed_by: string | null
+          sentiment_score: number
+          sentiment_value: Database["public"]["Enums"]["sentiment_value"]
+          topics_mentioned: string[] | null
+        }
+        Insert: {
+          analysis_metadata?: Json | null
+          confidence_score: number
+          content_id?: string | null
+          content_source: string
+          content_text: string
+          content_url?: string | null
+          created_at?: string
+          emotions_detected?: Json | null
+          entities_mentioned?: Json | null
+          id?: string
+          language_detected?: string | null
+          processed_by?: string | null
+          sentiment_score: number
+          sentiment_value: Database["public"]["Enums"]["sentiment_value"]
+          topics_mentioned?: string[] | null
+        }
+        Update: {
+          analysis_metadata?: Json | null
+          confidence_score?: number
+          content_id?: string | null
+          content_source?: string
+          content_text?: string
+          content_url?: string | null
+          created_at?: string
+          emotions_detected?: Json | null
+          entities_mentioned?: Json | null
+          id?: string
+          language_detected?: string | null
+          processed_by?: string | null
+          sentiment_score?: number
+          sentiment_value?: Database["public"]["Enums"]["sentiment_value"]
+          topics_mentioned?: string[] | null
+        }
+        Relationships: []
+      }
       agency_action_logs: {
         Row: {
           action_description: string
@@ -241,6 +295,224 @@ export type Database = {
           performance_stats?: Json | null
           scan_sources?: string[] | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      ai_insights: {
+        Row: {
+          actionable_recommendations: string[] | null
+          affected_entities: Json | null
+          confidence_score: number
+          created_at: string
+          data_sources: Json
+          description: string
+          expires_at: string | null
+          feedback_score: number | null
+          id: string
+          insight_metadata: Json | null
+          insight_type: string
+          is_verified: boolean
+          priority_level: string
+          supporting_data: Json | null
+          title: string
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          actionable_recommendations?: string[] | null
+          affected_entities?: Json | null
+          confidence_score?: number
+          created_at?: string
+          data_sources?: Json
+          description: string
+          expires_at?: string | null
+          feedback_score?: number | null
+          id?: string
+          insight_metadata?: Json | null
+          insight_type: string
+          is_verified?: boolean
+          priority_level?: string
+          supporting_data?: Json | null
+          title: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          actionable_recommendations?: string[] | null
+          affected_entities?: Json | null
+          confidence_score?: number
+          created_at?: string
+          data_sources?: Json
+          description?: string
+          expires_at?: string | null
+          feedback_score?: number | null
+          id?: string
+          insight_metadata?: Json | null
+          insight_type?: string
+          is_verified?: boolean
+          priority_level?: string
+          supporting_data?: Json | null
+          title?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
+      analytics_alert_instances: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          acknowledgment_notes: string | null
+          affected_entities: Json | null
+          alert_id: string
+          alert_message: string
+          created_at: string
+          id: string
+          is_acknowledged: boolean
+          severity: Database["public"]["Enums"]["alert_severity"]
+          trigger_data: Json
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          acknowledgment_notes?: string | null
+          affected_entities?: Json | null
+          alert_id: string
+          alert_message: string
+          created_at?: string
+          id?: string
+          is_acknowledged?: boolean
+          severity: Database["public"]["Enums"]["alert_severity"]
+          trigger_data: Json
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          acknowledgment_notes?: string | null
+          affected_entities?: Json | null
+          alert_id?: string
+          alert_message?: string
+          created_at?: string
+          id?: string
+          is_acknowledged?: boolean
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          trigger_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analytics_alert_instances_alert_id_fkey"
+            columns: ["alert_id"]
+            isOneToOne: false
+            referencedRelation: "analytics_alerts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      analytics_alerts: {
+        Row: {
+          alert_description: string | null
+          alert_name: string
+          alert_type: string
+          created_at: string
+          created_by: string
+          data_source_config: Json
+          id: string
+          is_active: boolean
+          last_triggered_at: string | null
+          notification_channels: string[] | null
+          recipients: string[]
+          severity: Database["public"]["Enums"]["alert_severity"]
+          trigger_conditions: Json
+          trigger_count: number
+          updated_at: string
+        }
+        Insert: {
+          alert_description?: string | null
+          alert_name: string
+          alert_type: string
+          created_at?: string
+          created_by: string
+          data_source_config: Json
+          id?: string
+          is_active?: boolean
+          last_triggered_at?: string | null
+          notification_channels?: string[] | null
+          recipients: string[]
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          trigger_conditions: Json
+          trigger_count?: number
+          updated_at?: string
+        }
+        Update: {
+          alert_description?: string | null
+          alert_name?: string
+          alert_type?: string
+          created_at?: string
+          created_by?: string
+          data_source_config?: Json
+          id?: string
+          is_active?: boolean
+          last_triggered_at?: string | null
+          notification_channels?: string[] | null
+          recipients?: string[]
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          trigger_conditions?: Json
+          trigger_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      analytics_dashboards: {
+        Row: {
+          access_permissions: Json | null
+          created_at: string
+          dashboard_name: string
+          dashboard_type: string
+          data_sources: Json | null
+          id: string
+          is_active: boolean
+          is_default: boolean
+          layout_settings: Json | null
+          refresh_interval_minutes: number | null
+          shared_with: string[] | null
+          updated_at: string
+          user_id: string
+          widget_configuration: Json
+        }
+        Insert: {
+          access_permissions?: Json | null
+          created_at?: string
+          dashboard_name: string
+          dashboard_type?: string
+          data_sources?: Json | null
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          layout_settings?: Json | null
+          refresh_interval_minutes?: number | null
+          shared_with?: string[] | null
+          updated_at?: string
+          user_id: string
+          widget_configuration?: Json
+        }
+        Update: {
+          access_permissions?: Json | null
+          created_at?: string
+          dashboard_name?: string
+          dashboard_type?: string
+          data_sources?: Json | null
+          id?: string
+          is_active?: boolean
+          is_default?: boolean
+          layout_settings?: Json | null
+          refresh_interval_minutes?: number | null
+          shared_with?: string[] | null
+          updated_at?: string
+          user_id?: string
+          widget_configuration?: Json
         }
         Relationships: []
       }
@@ -9182,6 +9454,162 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_reports: {
+        Row: {
+          created_at: string
+          data_sources: Json
+          export_format: string[] | null
+          filter_criteria: Json | null
+          generated_count: number
+          id: string
+          is_active: boolean
+          is_scheduled: boolean
+          last_generated_at: string | null
+          next_generation_at: string | null
+          recipients: string[] | null
+          report_description: string | null
+          report_name: string
+          report_type: Database["public"]["Enums"]["report_type"]
+          schedule_settings: Json | null
+          updated_at: string
+          user_id: string
+          visualization_settings: Json | null
+        }
+        Insert: {
+          created_at?: string
+          data_sources?: Json
+          export_format?: string[] | null
+          filter_criteria?: Json | null
+          generated_count?: number
+          id?: string
+          is_active?: boolean
+          is_scheduled?: boolean
+          last_generated_at?: string | null
+          next_generation_at?: string | null
+          recipients?: string[] | null
+          report_description?: string | null
+          report_name: string
+          report_type: Database["public"]["Enums"]["report_type"]
+          schedule_settings?: Json | null
+          updated_at?: string
+          user_id: string
+          visualization_settings?: Json | null
+        }
+        Update: {
+          created_at?: string
+          data_sources?: Json
+          export_format?: string[] | null
+          filter_criteria?: Json | null
+          generated_count?: number
+          id?: string
+          is_active?: boolean
+          is_scheduled?: boolean
+          last_generated_at?: string | null
+          next_generation_at?: string | null
+          recipients?: string[] | null
+          report_description?: string | null
+          report_name?: string
+          report_type?: Database["public"]["Enums"]["report_type"]
+          schedule_settings?: Json | null
+          updated_at?: string
+          user_id?: string
+          visualization_settings?: Json | null
+        }
+        Relationships: []
+      }
+      data_quality_metrics: {
+        Row: {
+          created_at: string
+          data_source: string
+          id: string
+          is_passing: boolean
+          measured_at: string
+          measurement_details: Json | null
+          metric_type: string
+          metric_value: number
+          sample_size: number | null
+          table_name: string
+          threshold_value: number | null
+        }
+        Insert: {
+          created_at?: string
+          data_source: string
+          id?: string
+          is_passing?: boolean
+          measured_at?: string
+          measurement_details?: Json | null
+          metric_type: string
+          metric_value: number
+          sample_size?: number | null
+          table_name: string
+          threshold_value?: number | null
+        }
+        Update: {
+          created_at?: string
+          data_source?: string
+          id?: string
+          is_passing?: boolean
+          measured_at?: string
+          measurement_details?: Json | null
+          metric_type?: string
+          metric_value?: number
+          sample_size?: number | null
+          table_name?: string
+          threshold_value?: number | null
+        }
+        Relationships: []
+      }
+      data_visualizations: {
+        Row: {
+          chart_configuration: Json
+          chart_type: string
+          created_at: string
+          data_source_config: Json
+          embed_settings: Json | null
+          filter_settings: Json | null
+          id: string
+          is_public: boolean
+          is_real_time: boolean
+          refresh_settings: Json | null
+          shared_with: string[] | null
+          updated_at: string
+          user_id: string | null
+          visualization_name: string
+        }
+        Insert: {
+          chart_configuration?: Json
+          chart_type: string
+          created_at?: string
+          data_source_config: Json
+          embed_settings?: Json | null
+          filter_settings?: Json | null
+          id?: string
+          is_public?: boolean
+          is_real_time?: boolean
+          refresh_settings?: Json | null
+          shared_with?: string[] | null
+          updated_at?: string
+          user_id?: string | null
+          visualization_name: string
+        }
+        Update: {
+          chart_configuration?: Json
+          chart_type?: string
+          created_at?: string
+          data_source_config?: Json
+          embed_settings?: Json | null
+          filter_settings?: Json | null
+          id?: string
+          is_public?: boolean
+          is_real_time?: boolean
+          refresh_settings?: Json | null
+          shared_with?: string[] | null
+          updated_at?: string
+          user_id?: string | null
+          visualization_name?: string
+        }
+        Relationships: []
+      }
       debt_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -17905,6 +18333,69 @@ export type Database = {
         }
         Relationships: []
       }
+      performance_forecasts: {
+        Row: {
+          actual_value: number | null
+          confidence_interval_lower: number | null
+          confidence_interval_upper: number | null
+          confidence_score: number
+          contributing_factors: Json | null
+          created_at: string
+          forecast_accuracy: number | null
+          forecast_period_end: string
+          forecast_period_start: string
+          forecast_type: string
+          id: string
+          input_data: Json | null
+          is_resolved: boolean
+          model_used: string | null
+          politician_id: string
+          predicted_value: number
+          scenario_assumptions: Json | null
+          updated_at: string
+        }
+        Insert: {
+          actual_value?: number | null
+          confidence_interval_lower?: number | null
+          confidence_interval_upper?: number | null
+          confidence_score: number
+          contributing_factors?: Json | null
+          created_at?: string
+          forecast_accuracy?: number | null
+          forecast_period_end: string
+          forecast_period_start: string
+          forecast_type: string
+          id?: string
+          input_data?: Json | null
+          is_resolved?: boolean
+          model_used?: string | null
+          politician_id: string
+          predicted_value: number
+          scenario_assumptions?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          actual_value?: number | null
+          confidence_interval_lower?: number | null
+          confidence_interval_upper?: number | null
+          confidence_score?: number
+          contributing_factors?: Json | null
+          created_at?: string
+          forecast_accuracy?: number | null
+          forecast_period_end?: string
+          forecast_period_start?: string
+          forecast_type?: string
+          id?: string
+          input_data?: Json | null
+          is_resolved?: boolean
+          model_used?: string | null
+          politician_id?: string
+          predicted_value?: number
+          scenario_assumptions?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       performance_milestones: {
         Row: {
           achieved_at: string
@@ -20872,6 +21363,137 @@ export type Database = {
           },
         ]
       }
+      prediction_results: {
+        Row: {
+          accuracy_when_resolved: number | null
+          actual_value: number | null
+          created_at: string
+          id: string
+          input_data: Json
+          is_resolved: boolean
+          model_id: string
+          prediction_confidence: number
+          prediction_details: Json | null
+          prediction_period_end: string | null
+          prediction_period_start: string | null
+          prediction_type: Database["public"]["Enums"]["prediction_type"]
+          prediction_value: number
+          resolved_at: string | null
+          target_entity_id: string | null
+          target_entity_type: string
+        }
+        Insert: {
+          accuracy_when_resolved?: number | null
+          actual_value?: number | null
+          created_at?: string
+          id?: string
+          input_data?: Json
+          is_resolved?: boolean
+          model_id: string
+          prediction_confidence: number
+          prediction_details?: Json | null
+          prediction_period_end?: string | null
+          prediction_period_start?: string | null
+          prediction_type: Database["public"]["Enums"]["prediction_type"]
+          prediction_value: number
+          resolved_at?: string | null
+          target_entity_id?: string | null
+          target_entity_type: string
+        }
+        Update: {
+          accuracy_when_resolved?: number | null
+          actual_value?: number | null
+          created_at?: string
+          id?: string
+          input_data?: Json
+          is_resolved?: boolean
+          model_id?: string
+          prediction_confidence?: number
+          prediction_details?: Json | null
+          prediction_period_end?: string | null
+          prediction_period_start?: string | null
+          prediction_type?: Database["public"]["Enums"]["prediction_type"]
+          prediction_value?: number
+          resolved_at?: string | null
+          target_entity_id?: string | null
+          target_entity_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prediction_results_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "predictive_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      predictive_models: {
+        Row: {
+          accuracy_score: number | null
+          created_at: string
+          created_by: string | null
+          f1_score: number | null
+          id: string
+          input_features: Json
+          is_active: boolean
+          last_trained_at: string | null
+          model_description: string | null
+          model_name: string
+          model_parameters: Json | null
+          model_type: Database["public"]["Enums"]["prediction_type"]
+          model_version: string
+          next_training_scheduled: string | null
+          precision_score: number | null
+          recall_score: number | null
+          training_data_period_end: string | null
+          training_data_period_start: string | null
+          updated_at: string
+        }
+        Insert: {
+          accuracy_score?: number | null
+          created_at?: string
+          created_by?: string | null
+          f1_score?: number | null
+          id?: string
+          input_features?: Json
+          is_active?: boolean
+          last_trained_at?: string | null
+          model_description?: string | null
+          model_name: string
+          model_parameters?: Json | null
+          model_type: Database["public"]["Enums"]["prediction_type"]
+          model_version?: string
+          next_training_scheduled?: string | null
+          precision_score?: number | null
+          recall_score?: number | null
+          training_data_period_end?: string | null
+          training_data_period_start?: string | null
+          updated_at?: string
+        }
+        Update: {
+          accuracy_score?: number | null
+          created_at?: string
+          created_by?: string | null
+          f1_score?: number | null
+          id?: string
+          input_features?: Json
+          is_active?: boolean
+          last_trained_at?: string | null
+          model_description?: string | null
+          model_name?: string
+          model_parameters?: Json | null
+          model_type?: Database["public"]["Enums"]["prediction_type"]
+          model_version?: string
+          next_training_scheduled?: string | null
+          precision_score?: number | null
+          recall_score?: number | null
+          training_data_period_end?: string | null
+          training_data_period_start?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       professional_profiles: {
         Row: {
           availability_status: string | null
@@ -22519,6 +23141,107 @@ export type Database = {
           weight?: number | null
         }
         Relationships: []
+      }
+      real_time_data_streams: {
+        Row: {
+          created_at: string
+          data_schema: Json
+          data_source: string
+          data_type: Database["public"]["Enums"]["analytics_data_type"]
+          error_count: number
+          id: string
+          is_active: boolean
+          last_data_point: string | null
+          last_error_message: string | null
+          stream_configuration: Json | null
+          stream_name: string
+          subscribers: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data_schema: Json
+          data_source: string
+          data_type: Database["public"]["Enums"]["analytics_data_type"]
+          error_count?: number
+          id?: string
+          is_active?: boolean
+          last_data_point?: string | null
+          last_error_message?: string | null
+          stream_configuration?: Json | null
+          stream_name: string
+          subscribers?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data_schema?: Json
+          data_source?: string
+          data_type?: Database["public"]["Enums"]["analytics_data_type"]
+          error_count?: number
+          id?: string
+          is_active?: boolean
+          last_data_point?: string | null
+          last_error_message?: string | null
+          stream_configuration?: Json | null
+          stream_name?: string
+          subscribers?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      report_instances: {
+        Row: {
+          created_at: string
+          custom_report_id: string
+          download_count: number
+          error_message: string | null
+          expires_at: string | null
+          file_size_kb: number | null
+          file_url: string | null
+          generated_by: string | null
+          generation_duration_ms: number | null
+          generation_status: string
+          id: string
+          report_data: Json
+        }
+        Insert: {
+          created_at?: string
+          custom_report_id: string
+          download_count?: number
+          error_message?: string | null
+          expires_at?: string | null
+          file_size_kb?: number | null
+          file_url?: string | null
+          generated_by?: string | null
+          generation_duration_ms?: number | null
+          generation_status?: string
+          id?: string
+          report_data: Json
+        }
+        Update: {
+          created_at?: string
+          custom_report_id?: string
+          download_count?: number
+          error_message?: string | null
+          expires_at?: string | null
+          file_size_kb?: number | null
+          file_url?: string | null
+          generated_by?: string | null
+          generation_duration_ms?: number | null
+          generation_status?: string
+          id?: string
+          report_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_instances_custom_report_id_fkey"
+            columns: ["custom_report_id"]
+            isOneToOne: false
+            referencedRelation: "custom_reports"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       revenue_analytics: {
         Row: {
@@ -26575,6 +27298,10 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: string
       }
+      calculate_engagement_metrics: {
+        Args: { p_start_date?: string; p_end_date?: string }
+        Returns: Json
+      }
       calculate_engagement_score: {
         Args: { p_institution_id: string; p_period_days?: number }
         Returns: number
@@ -26764,6 +27491,10 @@ export type Database = {
       generate_audio_fingerprint: {
         Args: { p_track_id: string; p_audio_url: string }
         Returns: string
+      }
+      generate_civic_predictions: {
+        Args: Record<PropertyKey, never>
+        Returns: number
       }
       generate_debt_predictions: {
         Args: { p_years_ahead?: number }
@@ -27150,6 +27881,14 @@ export type Database = {
       }
     }
     Enums: {
+      alert_severity: "low" | "medium" | "high" | "critical"
+      analytics_data_type:
+        | "poll_data"
+        | "sentiment_data"
+        | "engagement_data"
+        | "performance_data"
+        | "civic_education_data"
+        | "user_behavior_data"
       app_role:
         | "admin"
         | "moderator"
@@ -27400,6 +28139,13 @@ export type Database = {
         | "verified_only"
         | "invite_only"
         | "region_limited"
+      prediction_type:
+        | "sentiment_trend"
+        | "engagement_forecast"
+        | "performance_prediction"
+        | "policy_outcome"
+        | "voter_turnout"
+        | "civic_participation"
       pricing_type: "free" | "paid" | "streaming_only"
       product_type:
         | "song"
@@ -27447,6 +28193,13 @@ export type Database = {
         | "approved"
         | "rejected"
         | "published"
+      report_type:
+        | "daily_summary"
+        | "weekly_analysis"
+        | "monthly_report"
+        | "quarterly_review"
+        | "annual_overview"
+        | "custom_analysis"
       royalty_status: "pending" | "processed" | "paid"
       rsvp_status: "interested" | "going" | "not_going"
       school_ownership:
@@ -27462,6 +28215,12 @@ export type Database = {
         | "vocational"
         | "university"
         | "special"
+      sentiment_value:
+        | "very_negative"
+        | "negative"
+        | "neutral"
+        | "positive"
+        | "very_positive"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -27651,6 +28410,15 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      alert_severity: ["low", "medium", "high", "critical"],
+      analytics_data_type: [
+        "poll_data",
+        "sentiment_data",
+        "engagement_data",
+        "performance_data",
+        "civic_education_data",
+        "user_behavior_data",
+      ],
       app_role: [
         "admin",
         "moderator",
@@ -27930,6 +28698,14 @@ export const Constants = {
         "invite_only",
         "region_limited",
       ],
+      prediction_type: [
+        "sentiment_trend",
+        "engagement_forecast",
+        "performance_prediction",
+        "policy_outcome",
+        "voter_turnout",
+        "civic_participation",
+      ],
       pricing_type: ["free", "paid", "streaming_only"],
       product_type: [
         "song",
@@ -27982,6 +28758,14 @@ export const Constants = {
         "rejected",
         "published",
       ],
+      report_type: [
+        "daily_summary",
+        "weekly_analysis",
+        "monthly_report",
+        "quarterly_review",
+        "annual_overview",
+        "custom_analysis",
+      ],
       royalty_status: ["pending", "processed", "paid"],
       rsvp_status: ["interested", "going", "not_going"],
       school_ownership: [
@@ -27998,6 +28782,13 @@ export const Constants = {
         "vocational",
         "university",
         "special",
+      ],
+      sentiment_value: [
+        "very_negative",
+        "negative",
+        "neutral",
+        "positive",
+        "very_positive",
       ],
       source_type: [
         "government_official",
