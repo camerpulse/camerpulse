@@ -101,6 +101,8 @@ import PetitionAdmin from "./pages/PetitionAdmin";
 import PetitionSecurity from "./pages/PetitionSecurity";
 import PetitionMobile from "./pages/PetitionMobile";
 import PetitionAPI from "./pages/PetitionAPI";
+import InstitutionDirectory from "./pages/InstitutionDirectory";
+import ClaimModerationDashboard from "./pages/ClaimModerationDashboard";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -254,7 +256,9 @@ const App = () => {
             <Route path="/admin/petitions" element={<PetitionAdmin />} />
             <Route path="/petitions/security" element={<PetitionSecurity />} />
             <Route path="/petitions/mobile" element={<PetitionMobile />} />
-            <Route path="/petitions/api" element={<PetitionAPI />} />
+             <Route path="/petitions/api" element={<PetitionAPI />} />
+             <Route path="/institutions" element={<InstitutionDirectory />} />
+             <Route path="/admin/claims" element={<ClaimModerationDashboard />} />
                <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
