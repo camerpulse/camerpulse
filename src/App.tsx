@@ -96,6 +96,7 @@ import UnifiedDirectorySearch from "./pages/UnifiedDirectorySearch";
 import InstitutionAnalytics from "./pages/InstitutionAnalytics";
 import PetitionsPlatform from "./pages/PetitionsPlatform";
 import CreatePetition from "./pages/CreatePetition";
+import PetitionDetail from "./pages/PetitionDetail";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -244,6 +245,7 @@ const App = () => {
            <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
            <Route path="/moderators/dashboard" element={<ModerationDashboard />} />
            <Route path="/petitions" element={<PetitionsPlatform />} />
+           <Route path="/petitions/:id" element={<PetitionDetail />} />
            <Route path="/petitions/create" element={<CreatePetition />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
