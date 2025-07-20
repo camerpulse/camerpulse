@@ -12861,6 +12861,147 @@ export type Database = {
         }
         Relationships: []
       }
+      institution_analytics: {
+        Row: {
+          created_at: string
+          id: string
+          institution_id: string
+          institution_type: string
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          recorded_at: string
+          session_id: string | null
+          source_page: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          institution_id: string
+          institution_type: string
+          metadata?: Json | null
+          metric_type: string
+          metric_value?: number
+          recorded_at?: string
+          session_id?: string | null
+          source_page?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          institution_id?: string
+          institution_type?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          recorded_at?: string
+          session_id?: string | null
+          source_page?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      institution_analytics_reports: {
+        Row: {
+          created_at: string
+          download_url: string | null
+          email_sent: boolean | null
+          generated_at: string
+          generated_by: string | null
+          id: string
+          institution_id: string
+          report_data: Json
+          report_period_end: string
+          report_period_start: string
+          report_type: string
+        }
+        Insert: {
+          created_at?: string
+          download_url?: string | null
+          email_sent?: boolean | null
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          institution_id: string
+          report_data?: Json
+          report_period_end: string
+          report_period_start: string
+          report_type: string
+        }
+        Update: {
+          created_at?: string
+          download_url?: string | null
+          email_sent?: boolean | null
+          generated_at?: string
+          generated_by?: string | null
+          id?: string
+          institution_id?: string
+          report_data?: Json
+          report_period_end?: string
+          report_period_start?: string
+          report_type?: string
+        }
+        Relationships: []
+      }
+      institution_analytics_summary: {
+        Row: {
+          average_rating: number | null
+          created_at: string
+          engagement_score: number | null
+          id: string
+          institution_id: string
+          institution_type: string
+          ranking_position: number | null
+          search_appearances: number
+          sentiment_score: number | null
+          summary_date: string
+          total_clicks: number
+          total_messages: number
+          total_ratings: number
+          total_views: number
+          unique_visitors: number
+          updated_at: string
+        }
+        Insert: {
+          average_rating?: number | null
+          created_at?: string
+          engagement_score?: number | null
+          id?: string
+          institution_id: string
+          institution_type: string
+          ranking_position?: number | null
+          search_appearances?: number
+          sentiment_score?: number | null
+          summary_date?: string
+          total_clicks?: number
+          total_messages?: number
+          total_ratings?: number
+          total_views?: number
+          unique_visitors?: number
+          updated_at?: string
+        }
+        Update: {
+          average_rating?: number | null
+          created_at?: string
+          engagement_score?: number | null
+          id?: string
+          institution_id?: string
+          institution_type?: string
+          ranking_position?: number | null
+          search_appearances?: number
+          sentiment_score?: number | null
+          summary_date?: string
+          total_clicks?: number
+          total_messages?: number
+          total_ratings?: number
+          total_views?: number
+          unique_visitors?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       institution_claims: {
         Row: {
           admin_notes: string | null
@@ -24840,6 +24981,10 @@ export type Database = {
       calculate_contribution_level: {
         Args: { p_user_id: string }
         Returns: string
+      }
+      calculate_engagement_score: {
+        Args: { p_institution_id: string; p_period_days?: number }
+        Returns: number
       }
       calculate_fix_trust_score: {
         Args: { p_fix_type: string }

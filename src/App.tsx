@@ -93,6 +93,7 @@ import InteractiveMap from "./pages/InteractiveMap";
 import MonetizationDashboard from "./pages/MonetizationDashboard";
 import ClaimsDashboard from "./pages/ClaimsDashboard";
 import UnifiedDirectorySearch from "./pages/UnifiedDirectorySearch";
+import InstitutionAnalytics from "./pages/InstitutionAnalytics";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -237,6 +238,7 @@ const App = () => {
            <Route path="/directory-search" element={<UnifiedDirectorySearch />} />
            <Route path="/monetization-dashboard" element={<MonetizationDashboard />} />
            <Route path="/claims-dashboard" element={<ClaimsDashboard />} />
+           <Route path="/analytics/:institutionId" element={<InstitutionAnalytics />} />
            <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
            <Route path="/moderators/dashboard" element={<ModerationDashboard />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
