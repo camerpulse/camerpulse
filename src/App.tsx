@@ -164,11 +164,11 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MobileProvider>
-        <PanAfricaProvider>
-          <AuthProvider>
-            <PluginProvider>
-              <TooltipProvider>
+      <TooltipProvider>
+        <MobileProvider>
+          <PanAfricaProvider>
+            <AuthProvider>
+              <PluginProvider>
           <Toaster />
           <Sonner />
           <PWAInstallPrompt />
@@ -319,11 +319,11 @@ const App = () => {
                  <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-            </TooltipProvider>
-            </PluginProvider>
-          </AuthProvider>
-        </PanAfricaProvider>
-      </MobileProvider>
+              </PluginProvider>
+            </AuthProvider>
+          </PanAfricaProvider>
+        </MobileProvider>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 };
