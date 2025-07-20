@@ -68,10 +68,21 @@ export const ProtectionCenter: React.FC<ProtectionCenterProps> = ({ userRole }) 
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { error } = await supabase.rpc('create_user_protection', {
-        p_user_id: user.id,
-        p_activation_reason: 'User requested protection'
-      });
+      // Generate protection alias
+      const protectionAlias = `Shield-${Math.random().toString(36).substr(2, 8).toUpperCase()}`;
+      
+      const { error } = await supabase
+        .from('civic_shield_protection')
+        .insert({
+          user_id: user.id,
+          protection_alias: protectionAlias,
+          activation_reason: 'User requested protection',
+          shield_status: 'active',
+          risk_score: 3,
+          ip_obfuscation_enabled: true,
+          visibility_cloaked: true,
+          auto_protection_triggered: true
+        });
 
       if (error) throw error;
       

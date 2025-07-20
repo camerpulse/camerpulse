@@ -92,28 +92,38 @@ export const WhistleblowerPortal: React.FC<WhistleblowerPortalProps> = ({ system
       // Create IP hash for security (simplified)
       const ipHash = btoa(Date.now().toString() + Math.random().toString());
       
-      const { data, error } = await supabase.rpc('create_whistleblower_submission', {
-        p_disclosure_type: submissionData.disclosure_type,
-        p_title: submissionData.title,
-        p_description: submissionData.description,
-        p_region: submissionData.region,
-        p_urgency_level: submissionData.urgency_level,
-        p_estimated_financial_impact: submissionData.estimated_financial_impact,
-        p_related_entity_type: submissionData.related_entity_type,
-        p_evidence_files: submissionData.evidence_files,
-        p_is_anonymous: submissionData.is_anonymous,
-        p_submitter_ip_hash: ipHash,
-        p_submission_metadata: {
-          submission_timestamp: new Date().toISOString(),
-          user_agent: navigator.userAgent,
-          encryption_enabled: systemConfig.global_encryption_enabled,
-        }
-      });
+      // Generate submission code and pseudonym
+      const submissionCode = `WB-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
+      const pseudonym = submissionData.is_anonymous ? `Anon-${Math.random().toString(36).substr(2, 6)}` : null;
+      
+      const { data, error } = await supabase
+        .from('whistleblower_submissions')
+        .insert({
+          disclosure_type: submissionData.disclosure_type as any,
+          title: submissionData.title,
+          description: submissionData.description,
+          region: submissionData.region,
+          urgency_level: submissionData.urgency_level,
+          estimated_financial_impact: submissionData.estimated_financial_impact,
+          related_entity_type: submissionData.related_entity_type,
+          evidence_files: submissionData.evidence_files,
+          is_anonymous: submissionData.is_anonymous,
+          submitter_ip_hash: ipHash,
+          submission_metadata: {
+            submission_timestamp: new Date().toISOString(),
+            user_agent: navigator.userAgent,
+            encryption_enabled: systemConfig.global_encryption_enabled,
+          },
+          submission_code: submissionCode,
+          pseudonym: pseudonym
+        })
+        .select()
+        .single();
 
       if (error) throw error;
 
-      setSubmissionCode(data.submission_code);
-      setPseudonym(data.pseudonym);
+      setSubmissionCode(submissionCode);
+      setPseudonym(pseudonym || 'Anonymous Reporter');
       setStep(5); // Success step
 
       toast({
