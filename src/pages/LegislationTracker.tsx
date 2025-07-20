@@ -19,6 +19,8 @@ import { LegislativeTimeline } from '@/components/legislation/LegislativeTimelin
 export const LegislationTracker = () => {
   console.log('LegislationTracker component rendering...');
   
+  // Early return for debugging
+  try {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [selectedType, setSelectedType] = useState('');
@@ -323,4 +325,15 @@ export const LegislationTracker = () => {
       </div>
     </div>
   );
+  } catch (error) {
+    console.error('LegislationTracker error:', error);
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-4">Legislative Tracker</h1>
+          <p className="text-red-500">Error loading legislation tracker. Please check the console for details.</p>
+        </div>
+      </div>
+    );
+  }
 };
