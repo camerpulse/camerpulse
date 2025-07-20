@@ -78,6 +78,18 @@ export const Footer = () => {
                 <BarChart3 className="w-3 h-3" />
                 National Trackers
               </Link>
+              <Link to="/petitions" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <FileText className="w-3 h-3" />
+                Petitions
+              </Link>
+              <Link to="/analytics/dashboard" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <TrendingUp className="w-3 h-3" />
+                Analytics
+              </Link>
+              <Link to="/verify-certificate" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Shield className="w-3 h-3" />
+                Verify Certificate
+              </Link>
               <Link to="/calendar" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Calendar className="w-3 h-3" />
                 Event Calendar
