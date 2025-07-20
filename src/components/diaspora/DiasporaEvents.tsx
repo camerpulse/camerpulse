@@ -16,34 +16,15 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { Database } from '@/integrations/supabase/types';
+
+type DiasporaEvent = Database['public']['Tables']['diaspora_events']['Row'];
+type EventRegistration = Database['public']['Tables']['diaspora_event_registrations']['Row'];
 
 interface DiasporaProfile {
   id: string;
   full_name: string;
-}
-
-interface DiasporaEvent {
-  id: string;
-  event_name: string;
-  event_type: string;
-  event_description: string;
-  target_audience: string[];
-  event_date: string;
-  duration_hours: number;
-  is_virtual: boolean;
-  meeting_link?: string;
-  physical_location?: string;
-  organizer_name: string;
-  max_participants?: number;
-  current_participants: number;
-  registration_required: boolean;
-  registration_deadline?: string;
-  event_status: string;
-}
-
-interface EventRegistration {
-  event_id: string;
-  attendance_status: string;
+  home_village_town_city: string;
 }
 
 interface DiasporaEventsProps {
@@ -97,8 +78,8 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
     try {
       const { data, error } = await supabase
         .from('diaspora_event_registrations')
-        .select('event_id, attendance_status')
-        .eq('diaspora_id', diasporaProfile.id);
+        .select('*')
+        .eq('diaspora_profile_id', diasporaProfile.id);
 
       if (error) throw error;
       setRegistrations(data || []);
@@ -114,8 +95,8 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
           .from('diaspora_event_registrations')
           .insert([{
             event_id: eventId,
-            diaspora_id: diasporaProfile.id,
-            attendance_status: 'registered'
+            diaspora_profile_id: diasporaProfile.id,
+            registration_status: 'registered'
           }]);
 
         if (error) throw error;
@@ -129,7 +110,7 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
           .from('diaspora_event_registrations')
           .delete()
           .eq('event_id', eventId)
-          .eq('diaspora_id', diasporaProfile.id);
+          .eq('diaspora_profile_id', diasporaProfile.id);
 
         if (error) throw error;
 
@@ -140,7 +121,7 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
       }
 
       fetchUserRegistrations();
-      fetchEvents(); // Refresh to update participant counts
+      fetchEvents();
     } catch (error: any) {
       console.error('Error with registration:', error);
       toast({
@@ -159,7 +140,7 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
     if (!event.registration_required) return false;
     if (event.event_status !== 'upcoming') return false;
     if (event.registration_deadline && new Date(event.registration_deadline) < new Date()) return false;
-    if (event.max_participants && event.current_participants >= event.max_participants) return false;
+    if (event.max_attendees && event.max_attendees > 0) return true; // Simplified check
     return true;
   };
 
@@ -240,7 +221,7 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
                     <div className="flex justify-between items-start mb-4">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold text-lg">{event.event_name}</h3>
+                          <h3 className="font-semibold text-lg">{event.title}</h3>
                           <Badge className={getEventTypeColor(event.event_type)}>
                             {EVENT_TYPES[event.event_type as keyof typeof EVENT_TYPES] || event.event_type}
                           </Badge>
@@ -253,7 +234,7 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
                         </div>
                         
                         <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                          {event.event_description}
+                          {event.description}
                         </p>
 
                         <div className="space-y-2 text-sm text-muted-foreground">
@@ -264,11 +245,11 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
                           
                           <div className="flex items-center gap-2">
                             <Clock className="h-4 w-4" />
-                            <span>{event.duration_hours} hours</span>
+                            <span>{event.duration_minutes || 60} minutes</span>
                           </div>
 
                           <div className="flex items-center gap-2">
-                            {event.is_virtual ? (
+                            {event.meeting_url ? (
                               <>
                                 <Video className="h-4 w-4" />
                                 <span>Virtual Event</span>
@@ -276,27 +257,17 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
                             ) : (
                               <>
                                 <MapPin className="h-4 w-4" />
-                                <span>{event.physical_location}</span>
+                                <span>Location TBD</span>
                               </>
                             )}
                           </div>
 
-                          <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4" />
-                            <span>
-                              {event.current_participants} participants
-                              {event.max_participants && ` (max ${event.max_participants})`}
-                            </span>
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            <Avatar className="h-6 w-6">
-                              <AvatarFallback className="text-xs">
-                                {event.organizer_name.split(' ').map(n => n[0]).join('')}
-                              </AvatarFallback>
-                            </Avatar>
-                            <span>Organized by {event.organizer_name}</span>
-                          </div>
+                          {event.max_attendees && (
+                            <div className="flex items-center gap-2">
+                              <Users className="h-4 w-4" />
+                              <span>Max {event.max_attendees} participants</span>
+                            </div>
+                          )}
                         </div>
                       </div>
 
@@ -322,9 +293,9 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
                           </Button>
                         )}
 
-                        {event.is_virtual && event.meeting_link && isRegistered(event.id) && (
+                        {event.meeting_url && isRegistered(event.id) && (
                           <Button size="sm" variant="secondary" asChild>
-                            <a href={event.meeting_link} target="_blank" rel="noopener noreferrer">
+                            <a href={event.meeting_url} target="_blank" rel="noopener noreferrer">
                               <Video className="h-4 w-4 mr-1" />
                               Join Meeting
                             </a>

@@ -111,7 +111,7 @@ import CivicTools from "./pages/CivicTools";
 import EnhancedPolls from "./pages/EnhancedPolls";
 import PoliticianPerformance from "./pages/PoliticianPerformance";
 import CivicEducationHub from "./pages/CivicEducationHub";
-import { DiasporaConnect } from "./pages/DiasporaConnect";
+import DiasporaConnect from "./pages/DiasporaConnect";
 import InstitutionDirectory from "./pages/InstitutionDirectory";
 import ClaimModerationDashboard from "./pages/ClaimModerationDashboard";
 import InstitutionOwnerDashboard from "./pages/InstitutionOwnerDashboard";

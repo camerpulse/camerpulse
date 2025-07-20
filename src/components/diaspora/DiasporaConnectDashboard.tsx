@@ -30,9 +30,15 @@ interface DiasporaProfile {
   full_name: string;
   country_of_residence: string;
   home_village_town_city: string;
-  home_region: string;
   profession_sector?: string;
-  is_verified: boolean;
+  diaspora_association?: string;
+  preferred_donation_interests?: string[];
+  verification_status?: string;
+  verified_by_consulate?: boolean;
+  impact_score?: number;
+  total_contributions_fcfa?: number;
+  total_projects_supported?: number;
+  user_id: string;
   created_at: string;
 }
 
@@ -92,19 +98,19 @@ export const DiasporaConnectDashboard: React.FC = () => {
       // Get donations
       const { data: donations } = await supabase
         .from('diaspora_donations')
-        .select('amount_fcfa, target_id')
-        .eq('donor_id', profile?.id)
-        .eq('status', 'completed');
+        .select('amount_fcfa, project_id')
+        .eq('diaspora_profile_id', profile?.id)
+        .eq('donation_status', 'completed');
 
       // Get event registrations
       const { data: events } = await supabase
         .from('diaspora_event_registrations')
         .select('id')
-        .eq('diaspora_id', profile?.id)
-        .eq('attendance_status', 'attended');
+        .eq('diaspora_profile_id', profile?.id)
+        .eq('registration_status', 'attended');
 
       const totalDonations = donations?.reduce((sum, d) => sum + (d.amount_fcfa || 0), 0) || 0;
-      const projectsSupported = new Set(donations?.map(d => d.target_id)).size || 0;
+      const projectsSupported = new Set(donations?.map(d => d.project_id)).size || 0;
 
       setStats({
         totalDonations,
@@ -170,9 +176,9 @@ export const DiasporaConnectDashboard: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   <Heart className="h-4 w-4" />
-                  Home: {profile.home_village_town_city}, {profile.home_region}
+                  Home: {profile.home_village_town_city}
                 </div>
-                {profile.is_verified && (
+                {profile.verification_status === 'verified' && (
                   <Badge variant="secondary" className="flex items-center gap-1">
                     <Star className="h-3 w-3" />
                     Verified
@@ -307,7 +313,7 @@ export const DiasporaConnectDashboard: React.FC = () => {
             {/* Home Region Highlights */}
             <Card>
               <CardHeader>
-                <CardTitle>Highlights from {profile.home_region}</CardTitle>
+                <CardTitle>Highlights from Home Region</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-center py-8 text-muted-foreground">
@@ -324,7 +330,7 @@ export const DiasporaConnectDashboard: React.FC = () => {
           </TabsContent>
 
           <TabsContent value="projects">
-            <ProjectsDirectory homeRegion={profile.home_region} />
+            <ProjectsDirectory homeRegion={profile.home_village_town_city} />
           </TabsContent>
 
           <TabsContent value="events">
