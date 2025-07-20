@@ -12,6 +12,8 @@ import Feed from "./pages/Feed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
 import Directory from "./pages/Directory";
+import MinistryProfile from "./pages/MinistryProfile";
+import CouncilProfile from "./pages/CouncilProfile";
 import Marketplace from "./pages/Marketplace";
 import Polls from "./pages/Polls";
 import PollsLandingPage from "./pages/PollsLandingPage";
@@ -291,6 +293,8 @@ const App = () => {
                <Route path="/moderation-center" element={<ModerationCenter />} />
                <Route path="/social-community" element={<SocialCommunity />} />
             <Route path="/directory" element={<Directory />} />
+            <Route path="/directory/ministry/:id" element={<MinistryProfile />} />
+            <Route path="/directory/council/:id" element={<CouncilProfile />} />
             <Route path="/government-portal" element={<GovernmentPortal />} />
                <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
                <Route path="/notification-campaigns" element={<NotificationCampaigns />} />

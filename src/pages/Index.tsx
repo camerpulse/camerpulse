@@ -4,7 +4,7 @@ import { CivicComplaintForm } from "@/components/Civic/CivicComplaintForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Users, Calendar, GraduationCap, Heart, Pill, Crown } from "lucide-react";
+import { Users, Calendar, GraduationCap, Heart, Pill, Crown, Building } from "lucide-react";
 
 const Index = () => {
   return (
@@ -70,7 +70,25 @@ const Index = () => {
                   <Link to="/politicians">View Politicians</Link>
                 </Button>
               </CardContent>
-            </Card>
+              </Card>
+
+              {/* Directory Card */}
+              <Card className="bg-gradient-to-br from-blue-500/10 to-background border-blue-500/20 hover:shadow-elegant transition-shadow">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-3 responsive-title">
+                    <Building className="h-6 w-6 sm:h-8 sm:w-8 text-blue-600" />
+                    Government Directory
+                  </CardTitle>
+                  <CardDescription className="responsive-text">
+                    Browse ministries, councils, and government entities with detailed profiles
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button asChild className="w-full" variant="outline">
+                    <Link to="/directory">Browse Directory</Link>
+                  </Button>
+                </CardContent>
+              </Card>
 
             {/* Events Card */}
             <Card className="bg-gradient-to-br from-green-500/10 to-background border-green-500/20 hover:shadow-elegant transition-shadow">
