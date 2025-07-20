@@ -2,71 +2,84 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Calendar, 
   Clock, 
+  MapPin, 
   Users, 
+  Globe,
   Video,
-  MapPin,
   UserPlus,
-  UserMinus,
-  Star
+  Filter
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { Database } from '@/integrations/supabase/types';
 import { useToast } from '@/hooks/use-toast';
-import type { Database } from '@/integrations/supabase/types';
 
 type DiasporaEvent = Database['public']['Tables']['diaspora_events']['Row'];
 type EventRegistration = Database['public']['Tables']['diaspora_event_registrations']['Row'];
+type DiasporaProfile = Database['public']['Tables']['diaspora_profiles']['Row'];
 
-interface DiasporaProfile {
-  id: string;
-  full_name: string;
-  home_village_town_city: string;
-}
-
-interface DiasporaEventsProps {
-  diasporaProfile: DiasporaProfile;
-}
-
-const EVENT_TYPES = {
-  town_hall: 'Virtual Town Hall',
-  summit: 'Civic Summit',
-  roundtable: 'Roundtable Discussion',
-  fundraiser: 'Fundraising Event',
-  cultural: 'Cultural Event'
-};
-
-export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile }) => {
+export const DiasporaEvents = () => {
+  const { user } = useAuth();
   const { toast } = useToast();
   const [events, setEvents] = useState<DiasporaEvent[]>([]);
   const [registrations, setRegistrations] = useState<EventRegistration[]>([]);
+  const [diasporaProfile, setDiasporaProfile] = useState<DiasporaProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('upcoming');
+  const [filter, setFilter] = useState('upcoming');
 
   useEffect(() => {
-    fetchEvents();
-    fetchUserRegistrations();
-  }, [activeTab]);
+    fetchData();
+  }, [user, filter]);
 
-  const fetchEvents = async () => {
+  const fetchData = async () => {
     try {
+      // Fetch diaspora profile
+      if (user) {
+        const { data: profileData } = await supabase
+          .from('diaspora_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .single();
+        
+        if (profileData) {
+          setDiasporaProfile(profileData);
+
+          // Fetch user's event registrations
+          const { data: registrationsData } = await supabase
+            .from('diaspora_event_registrations')
+            .select('*')
+            .eq('diaspora_profile_id', profileData.id);
+          
+          if (registrationsData) {
+            setRegistrations(registrationsData);
+          }
+        }
+      }
+
+      // Fetch events based on filter
       let query = supabase
         .from('diaspora_events')
         .select('*')
+        .eq('event_status', 'active')
         .order('event_date', { ascending: true });
 
-      if (activeTab === 'upcoming') {
-        query = query.gte('event_date', new Date().toISOString());
-      } else if (activeTab === 'past') {
-        query = query.lt('event_date', new Date().toISOString());
+      const now = new Date().toISOString();
+      
+      if (filter === 'upcoming') {
+        query = query.gte('event_date', now);
+      } else if (filter === 'past') {
+        query = query.lt('event_date', now);
       }
 
-      const { data, error } = await query;
-      if (error) throw error;
-      setEvents(data || []);
+      const { data: eventsData } = await query;
+      
+      if (eventsData) {
+        setEvents(eventsData);
+      }
     } catch (error) {
       console.error('Error fetching events:', error);
     } finally {
@@ -74,60 +87,56 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
     }
   };
 
-  const fetchUserRegistrations = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('diaspora_event_registrations')
-        .select('*')
-        .eq('diaspora_profile_id', diasporaProfile.id);
-
-      if (error) throw error;
-      setRegistrations(data || []);
-    } catch (error) {
-      console.error('Error fetching registrations:', error);
+  const handleRegister = async (event: DiasporaEvent) => {
+    if (!diasporaProfile) {
+      toast({
+        title: "Profile Required",
+        description: "Please create your diaspora profile first.",
+        variant: "destructive"
+      });
+      return;
     }
-  };
 
-  const handleRegistration = async (eventId: string, action: 'register' | 'unregister') => {
     try {
-      if (action === 'register') {
-        const { error } = await supabase
-          .from('diaspora_event_registrations')
-          .insert([{
-            event_id: eventId,
-            diaspora_profile_id: diasporaProfile.id,
-            registration_status: 'registered'
-          }]);
+      // Check if already registered
+      const existingRegistration = registrations.find(
+        reg => reg.event_id === event.id && reg.diaspora_profile_id === diasporaProfile.id
+      );
 
-        if (error) throw error;
-
+      if (existingRegistration) {
         toast({
-          title: "Registration Successful",
-          description: "You have been registered for this event.",
+          title: "Already Registered",
+          description: "You are already registered for this event.",
+          variant: "destructive"
         });
-      } else {
-        const { error } = await supabase
-          .from('diaspora_event_registrations')
-          .delete()
-          .eq('event_id', eventId)
-          .eq('diaspora_profile_id', diasporaProfile.id);
-
-        if (error) throw error;
-
-        toast({
-          title: "Unregistered",
-          description: "You have been unregistered from this event.",
-        });
+        return;
       }
 
-      fetchUserRegistrations();
-      fetchEvents();
-    } catch (error: any) {
-      console.error('Error with registration:', error);
+      // Register for event
+      const { error } = await supabase
+        .from('diaspora_event_registrations')
+        .insert({
+          diaspora_profile_id: diasporaProfile.id,
+          event_id: event.id,
+          registration_status: 'confirmed'
+        });
+
+      if (error) throw error;
+
       toast({
-        title: "Error",
-        description: error.message || "Failed to update registration.",
-        variant: "destructive",
+        title: "Registration Successful",
+        description: "You have been registered for this event!",
+      });
+
+      // Refresh registrations
+      fetchData();
+
+    } catch (error) {
+      console.error('Error registering for event:', error);
+      toast({
+        title: "Registration Failed",
+        description: "Failed to register for the event. Please try again.",
+        variant: "destructive"
       });
     }
   };
@@ -136,186 +145,189 @@ export const DiasporaEvents: React.FC<DiasporaEventsProps> = ({ diasporaProfile 
     return registrations.some(reg => reg.event_id === eventId);
   };
 
-  const canRegister = (event: DiasporaEvent) => {
-    if (!event.registration_required) return false;
-    if (event.event_status !== 'upcoming') return false;
-    if (event.registration_deadline && new Date(event.registration_deadline) < new Date()) return false;
-    if (event.max_attendees && event.max_attendees > 0) return true; // Simplified check
-    return true;
+  const getEventTypeIcon = (eventType: string) => {
+    switch (eventType) {
+      case 'virtual_townhall':
+        return <Video className="h-4 w-4" />;
+      case 'cultural_event':
+        return <Users className="h-4 w-4" />;
+      case 'networking':
+        return <Globe className="h-4 w-4" />;
+      default:
+        return <Calendar className="h-4 w-4" />;
+    }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
-
-  const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  const getEventTypeColor = (type: string) => {
-    switch (type) {
-      case 'town_hall': return 'bg-blue-100 text-blue-800';
-      case 'summit': return 'bg-purple-100 text-purple-800';
-      case 'roundtable': return 'bg-green-100 text-green-800';
-      case 'fundraiser': return 'bg-red-100 text-red-800';
-      case 'cultural': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+  const getEventTypeBadge = (eventType: string) => {
+    switch (eventType) {
+      case 'virtual_townhall':
+        return 'Virtual Townhall';
+      case 'cultural_event':
+        return 'Cultural Event';
+      case 'networking':
+        return 'Networking';
+      case 'educational':
+        return 'Educational';
+      default:
+        return 'General';
     }
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-lg">Loading events...</div>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold mb-2">Diaspora Events & Community</h2>
-        <p className="text-muted-foreground">
-          Connect with fellow Cameroonians and participate in meaningful discussions
-        </p>
-      </div>
+    <div className="min-h-screen bg-background py-8">
+      <div className="container mx-auto px-4">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-foreground mb-4">
+            Diaspora Events
+          </h1>
+          <p className="text-muted-foreground">
+            Participate in virtual townhalls, cultural events, and networking opportunities
+          </p>
+        </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="upcoming">Upcoming</TabsTrigger>
-          <TabsTrigger value="my-events">My Events</TabsTrigger>
-          <TabsTrigger value="past">Past Events</TabsTrigger>
-        </TabsList>
+        <Tabs value={filter} onValueChange={setFilter} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="upcoming">Upcoming Events</TabsTrigger>
+            <TabsTrigger value="past">Past Events</TabsTrigger>
+            <TabsTrigger value="my-events">My Events</TabsTrigger>
+          </TabsList>
 
-        <TabsContent value={activeTab} className="space-y-4">
-          {events.length === 0 ? (
+          <TabsContent value="upcoming" className="space-y-6">
+            {events.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {events.map((event) => (
+                  <Card key={event.id} className="h-full">
+                    <CardHeader>
+                      <div className="flex items-start justify-between mb-2">
+                        <Badge variant="secondary" className="flex items-center gap-1">
+                          {getEventTypeIcon(event.event_type)}
+                          {getEventTypeBadge(event.event_type)}
+                        </Badge>
+                        <Badge variant={isRegistered(event.id) ? 'default' : 'outline'}>
+                          {isRegistered(event.id) ? 'Registered' : 'Open'}
+                        </Badge>
+                      </div>
+                      <CardTitle className="text-lg">{event.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm text-muted-foreground line-clamp-3">
+                        {event.description}
+                      </p>
+                      
+                      <div className="space-y-2 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4" />
+                          {new Date(event.event_date).toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric'
+                          })}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="h-4 w-4" />
+                          {new Date(event.event_date).toLocaleTimeString('en-US', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })} ({event.duration_minutes} minutes)
+                        </div>
+                        {event.venue && (
+                          <div className="flex items-center gap-2">
+                            <MapPin className="h-4 w-4" />
+                            {event.venue}
+                          </div>
+                        )}
+                        {event.max_attendees && (
+                          <div className="flex items-center gap-2">
+                            <Users className="h-4 w-4" />
+                            Max {event.max_attendees} attendees
+                          </div>
+                        )}
+                      </div>
+
+                      {event.languages && event.languages.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {event.languages.map((language) => (
+                            <Badge key={language} variant="outline" className="text-xs">
+                              {language}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+
+                      <Button 
+                        className="w-full" 
+                        onClick={() => handleRegister(event)}
+                        disabled={isRegistered(event.id) || event.event_status !== 'active'}
+                      >
+                        {isRegistered(event.id) ? (
+                          <>
+                            <Users className="h-4 w-4 mr-2" />
+                            Registered
+                          </>
+                        ) : (
+                          <>
+                            <UserPlus className="h-4 w-4 mr-2" />
+                            Register
+                          </>
+                        )}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <Card>
+                <CardContent className="py-12 text-center">
+                  <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-medium mb-2">No Upcoming Events</h3>
+                  <p className="text-muted-foreground">
+                    Check back later for new events and opportunities to connect with the diaspora community.
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+          </TabsContent>
+
+          <TabsContent value="past">
             <Card>
-              <CardContent className="py-8 text-center">
-                <Calendar className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                <p className="text-muted-foreground">
-                  {activeTab === 'upcoming' ? 'No upcoming events available.' : 
-                   activeTab === 'past' ? 'No past events found.' : 'You haven\'t registered for any events yet.'}
-                </p>
+              <CardHeader>
+                <CardTitle>Past Events</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Past events will be displayed here.</p>
               </CardContent>
             </Card>
-          ) : (
-            <div className="grid gap-4">
-              {events
-                .filter(event => {
-                  if (activeTab === 'my-events') {
-                    return isRegistered(event.id);
-                  }
-                  return true;
-                })
-                .map(event => (
-                <Card key={event.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-2">
-                          <h3 className="font-semibold text-lg">{event.title}</h3>
-                          <Badge className={getEventTypeColor(event.event_type)}>
-                            {EVENT_TYPES[event.event_type as keyof typeof EVENT_TYPES] || event.event_type}
-                          </Badge>
-                          {isRegistered(event.id) && (
-                            <Badge variant="outline">
-                              <Star className="h-3 w-3 mr-1" />
-                              Registered
-                            </Badge>
-                          )}
-                        </div>
-                        
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                          {event.description}
-                        </p>
+          </TabsContent>
 
-                        <div className="space-y-2 text-sm text-muted-foreground">
-                          <div className="flex items-center gap-2">
-                            <Calendar className="h-4 w-4" />
-                            <span>{formatDate(event.event_date)} at {formatTime(event.event_date)}</span>
-                          </div>
-                          
-                          <div className="flex items-center gap-2">
-                            <Clock className="h-4 w-4" />
-                            <span>{event.duration_minutes || 60} minutes</span>
-                          </div>
-
-                          <div className="flex items-center gap-2">
-                            {event.meeting_url ? (
-                              <>
-                                <Video className="h-4 w-4" />
-                                <span>Virtual Event</span>
-                              </>
-                            ) : (
-                              <>
-                                <MapPin className="h-4 w-4" />
-                                <span>Location TBD</span>
-                              </>
-                            )}
-                          </div>
-
-                          {event.max_attendees && (
-                            <div className="flex items-center gap-2">
-                              <Users className="h-4 w-4" />
-                              <span>Max {event.max_attendees} participants</span>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col gap-2 ml-4">
-                        {event.registration_required && canRegister(event) && !isRegistered(event.id) && (
-                          <Button 
-                            size="sm"
-                            onClick={() => handleRegistration(event.id, 'register')}
-                          >
-                            <UserPlus className="h-4 w-4 mr-1" />
-                            Register
-                          </Button>
-                        )}
-
-                        {isRegistered(event.id) && event.event_status === 'upcoming' && (
-                          <Button 
-                            size="sm" 
-                            variant="outline"
-                            onClick={() => handleRegistration(event.id, 'unregister')}
-                          >
-                            <UserMinus className="h-4 w-4 mr-1" />
-                            Unregister
-                          </Button>
-                        )}
-
-                        {event.meeting_url && isRegistered(event.id) && (
-                          <Button size="sm" variant="secondary" asChild>
-                            <a href={event.meeting_url} target="_blank" rel="noopener noreferrer">
-                              <Video className="h-4 w-4 mr-1" />
-                              Join Meeting
-                            </a>
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-
-                    {event.registration_deadline && (
-                      <div className="mt-4 p-3 bg-muted rounded text-sm">
-                        <strong>Registration deadline:</strong> {formatDate(event.registration_deadline)}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
+          <TabsContent value="my-events">
+            <Card>
+              <CardHeader>
+                <CardTitle>My Registered Events</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {registrations.length > 0 ? (
+                  <p className="text-muted-foreground">
+                    You are registered for {registrations.length} event(s).
+                  </p>
+                ) : (
+                  <p className="text-muted-foreground">
+                    You haven't registered for any events yet.
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 };

@@ -27,7 +27,7 @@ const DiasporaConnect: React.FC = () => {
               <p className="text-muted-foreground mb-4">
                 Support verified projects and emergency relief efforts in your home region.
               </p>
-              <Button className="w-full">
+              <Button className="w-full" onClick={() => window.location.href = '/diaspora/donations'}>
                 <DollarSign className="h-4 w-4 mr-2" />
                 Donate Now
               </Button>
@@ -70,7 +70,7 @@ const DiasporaConnect: React.FC = () => {
               Join thousands of Cameroonians worldwide who are actively contributing to the development of their home communities.
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg">
+              <Button size="lg" onClick={() => window.location.href = '/diaspora/auth'}>
                 Create Diaspora Profile
               </Button>
               <Button variant="outline" size="lg">
