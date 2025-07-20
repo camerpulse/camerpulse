@@ -98,6 +98,9 @@ import PetitionsPlatform from "./pages/PetitionsPlatform";
 import CreatePetition from "./pages/CreatePetition";
 import PetitionDetail from "./pages/PetitionDetail";
 import PetitionAdmin from "./pages/PetitionAdmin";
+import PetitionSecurity from "./pages/PetitionSecurity";
+import PetitionMobile from "./pages/PetitionMobile";
+import PetitionAPI from "./pages/PetitionAPI";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -248,8 +251,11 @@ const App = () => {
            <Route path="/petitions" element={<PetitionsPlatform />} />
            <Route path="/petitions/:id" element={<PetitionDetail />} />
            <Route path="/petitions/create" element={<CreatePetition />} />
-           <Route path="/admin/petitions" element={<PetitionAdmin />} />
-              <Route path="*" element={<NotFound />} />
+            <Route path="/admin/petitions" element={<PetitionAdmin />} />
+            <Route path="/petitions/security" element={<PetitionSecurity />} />
+            <Route path="/petitions/mobile" element={<PetitionMobile />} />
+            <Route path="/petitions/api" element={<PetitionAPI />} />
+               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
