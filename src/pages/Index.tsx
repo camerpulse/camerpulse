@@ -41,7 +41,7 @@ const Index = () => {
       description: "Participate in democratic decision-making with secure, transparent polling",
       icon: Vote,
       href: "/polls",
-      gradient: "from-blue-500 to-blue-600",
+      gradient: "from-primary to-primary-glow",
       features: ["Real-time results", "Fraud protection", "Anonymous voting"]
     },
     {
@@ -57,7 +57,7 @@ const Index = () => {
       description: "Monitor bills, laws, and parliamentary activities in real-time",
       icon: FileText,
       href: "/legislation",
-      gradient: "from-purple-500 to-purple-600",
+      gradient: "from-accent to-accent",
       features: ["Bill tracking", "Voting records", "Impact analysis"]
     },
     {
@@ -216,14 +216,14 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { title: "Educational Institutions", icon: GraduationCap, href: "/schools", count: "12,000+", color: "text-blue-600" },
-              { title: "Healthcare Facilities", icon: Heart, href: "/hospitals", count: "3,500+", color: "text-red-500" },
-              { title: "Business Directory", icon: Building, href: "/companies", count: "28,000+", color: "text-green-600" },
-              { title: "Government Services", icon: Shield, href: "/ministries", count: "450+", color: "text-purple-600" },
-              { title: "Traditional Villages", icon: Crown, href: "/villages", count: "2,800+", color: "text-amber-600" },
-              { title: "Pharmacies & Health", icon: Pill, href: "/pharmacies", count: "1,200+", color: "text-emerald-600" },
-              { title: "Local Councils", icon: MapPin, href: "/councils", count: "360+", color: "text-blue-500" },
-              { title: "Entertainment Hub", icon: Star, href: "/camerplay", count: "5,000+", color: "text-pink-600" }
+              { title: "Educational Institutions", icon: GraduationCap, href: "/schools", count: "12,000+", color: "text-directory-school" },
+              { title: "Healthcare Facilities", icon: Heart, href: "/hospitals", count: "3,500+", color: "text-directory-hospital" },
+              { title: "Business Directory", icon: Building, href: "/companies", count: "28,000+", color: "text-primary" },
+              { title: "Government Services", icon: Shield, href: "/ministries", count: "450+", color: "text-accent" },
+              { title: "Traditional Villages", icon: Crown, href: "/villages", count: "2,800+", color: "text-directory-village" },
+              { title: "Pharmacies & Health", icon: Pill, href: "/pharmacies", count: "1,200+", color: "text-directory-pharmacy" },
+              { title: "Local Councils", icon: MapPin, href: "/councils", count: "360+", color: "text-primary" },
+              { title: "Entertainment Hub", icon: Star, href: "/camerplay", count: "5,000+", color: "text-secondary" }
             ].map((directory, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <CardContent className="p-6 text-center">
