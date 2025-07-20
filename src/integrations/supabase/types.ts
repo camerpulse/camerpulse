@@ -28097,6 +28097,13 @@ export type Database = {
         Args: { p_profile_id: string }
         Returns: number
       }
+      calculate_civic_reputation_score: {
+        Args: {
+          p_entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          p_entity_id: string
+        }
+        Returns: undefined
+      }
       calculate_connection_fee: {
         Args: {
           p_company_size: Database["public"]["Enums"]["company_size"]
