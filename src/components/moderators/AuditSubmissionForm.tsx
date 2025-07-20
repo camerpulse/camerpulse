@@ -339,7 +339,12 @@ export const AuditSubmissionForm = () => {
               </div>
             </div>
 
-            <DocumentUpload onFileUpload={handleFileUpload} />
+            <DocumentUpload 
+              userId="moderator"
+              onUploadComplete={handleFileUpload}
+              acceptedTypes={['application/pdf', 'image/jpeg', 'image/png', 'text/csv', 'application/vnd.ms-excel']}
+              maxSizeBytes={50 * 1024 * 1024}
+            />
 
             <div className="space-y-4">
               <FormField
