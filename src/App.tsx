@@ -124,6 +124,8 @@ import AdvancedAnalytics from "./pages/AdvancedAnalytics";
 import NotificationCampaigns from "./pages/NotificationCampaigns";
 import APIIntegrations from "./pages/APIIntegrations";
 import { LegislationTracker } from "./pages/LegislationTracker";
+import MinistriesDirectory from "./pages/MinistriesDirectory";
+import CouncilsDirectory from "./pages/CouncilsDirectory";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -301,6 +303,8 @@ const App = () => {
                 <Route path="/notification-campaigns" element={<NotificationCampaigns />} />
                 <Route path="/api-integrations" element={<APIIntegrations />} />
                 <Route path="/legislation" element={<LegislationTracker />} />
+                <Route path="/ministries" element={<MinistriesDirectory />} />
+                <Route path="/councils" element={<CouncilsDirectory />} />
                  <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

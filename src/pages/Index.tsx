@@ -4,7 +4,7 @@ import { CivicComplaintForm } from "@/components/Civic/CivicComplaintForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { Users, Calendar, GraduationCap, Heart, Pill, Crown, Building, TrendingUp } from "lucide-react";
+import { Users, Calendar, GraduationCap, Heart, Pill, Crown, Building, TrendingUp, MapPin } from "lucide-react";
 
 const Index = () => {
   return (
@@ -243,15 +243,32 @@ const Index = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-3 responsive-title">
                   <Building className="h-6 w-6 text-blue-600" />
-                  Government
+                  Ministries
                 </CardTitle>
                 <CardDescription className="responsive-text">
-                  Ministries, councils, and government entities
+                  National government ministries and departments
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Button asChild className="w-full" variant="outline">
-                  <Link to="/directory">Browse Directory</Link>
+                  <Link to="/ministries">Browse Ministries</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 responsive-title">
+                  <MapPin className="h-6 w-6 text-blue-600" />
+                  Local Councils
+                </CardTitle>
+                <CardDescription className="responsive-text">
+                  Municipal councils and local government
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button asChild className="w-full" variant="outline">
+                  <Link to="/councils">Browse Councils</Link>
                 </Button>
               </CardContent>
             </Card>

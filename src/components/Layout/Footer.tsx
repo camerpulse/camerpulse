@@ -20,7 +20,8 @@ import {
   AlertTriangle,
   DollarSign,
   Globe,
-  Shield
+  Shield,
+  MapPin
 } from "lucide-react";
 
 export const Footer = () => {
@@ -104,9 +105,13 @@ export const Footer = () => {
               Services Directory
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/directory" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/ministries" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Building className="w-3 h-3" />
-                Government Directory
+                Government Ministries
+              </Link>
+              <Link to="/councils" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <MapPin className="w-3 h-3" />
+                Local Councils
               </Link>
               <Link to="/companies" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Briefcase className="w-3 h-3" />
