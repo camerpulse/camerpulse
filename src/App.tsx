@@ -128,6 +128,7 @@ import { LegislationTracker } from "./pages/LegislationTracker";
 import MinistriesDirectory from "./pages/MinistriesDirectory";
 import CouncilsDirectory from "./pages/CouncilsDirectory";
 import BudgetExplorer from "./pages/BudgetExplorer";
+import { PluginManagerDashboard } from "./components/Admin/PluginManager/PluginManagerDashboard";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -137,6 +138,7 @@ import ModerationDashboard from "./pages/ModerationDashboard";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
+import { PluginProvider } from "./contexts/PluginContext";
 
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
@@ -165,7 +167,8 @@ const App = () => {
       <MobileProvider>
         <PanAfricaProvider>
           <AuthProvider>
-            <TooltipProvider>
+            <PluginProvider>
+              <TooltipProvider>
           <Toaster />
           <Sonner />
           <PWAInstallPrompt />
@@ -194,6 +197,11 @@ const App = () => {
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/admin/plugins" element={
+                <div className="min-h-screen bg-background p-6">
+                  <PluginManagerDashboard />
+                </div>
+              } />
               <Route path="/admin/design-core" element={<DesignSystemCore />} />
               <Route path="/admin/core" element={<CamerPulseAdminCore />} />
               <Route path="/admin/whatsapp" element={<AdminPanel />} />
@@ -312,6 +320,7 @@ const App = () => {
             </Routes>
           </BrowserRouter>
             </TooltipProvider>
+            </PluginProvider>
           </AuthProvider>
         </PanAfricaProvider>
       </MobileProvider>

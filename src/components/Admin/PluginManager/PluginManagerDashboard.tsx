@@ -31,32 +31,43 @@ export const PluginManagerDashboard = () => {
   const { data: history } = usePluginHistory();
   const togglePlugin = useTogglePlugin();
 
-  const filteredPlugins = plugins?.filter(plugin => {
-    const matchesSearch = plugin.display_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         plugin.description?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || plugin.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  const getDisplayName = (plugin: Plugin) => {
+    return plugin.metadata?.display_name || plugin.plugin_name.replace('CamerPulse.Plugin.', '');
+  };
 
-  const handleTogglePlugin = async (plugin: Plugin) => {
-    const newStatus = plugin.status === 'enabled' ? 'disabled' : 'enabled';
-    await togglePlugin.mutateAsync({
-      pluginId: plugin.id,
-      newStatus,
-      reason: `Toggled via admin panel`
-    });
+  const getDescription = (plugin: Plugin) => {
+    return plugin.metadata?.description || 'No description available';
+  };
+
+  const filteredPlugins = plugins?.filter(plugin => {
+    const matchesSearch = getDisplayName(plugin).toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         plugin.plugin_name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = statusFilter === 'all' || plugin.plugin_status === statusFilter;
+    return matchesSearch && matchesStatus;
+  }) || [];
+
+  const handleTogglePlugin = async (pluginId: string, newStatus: 'enabled' | 'disabled') => {
+    try {
+      await togglePlugin.mutateAsync({
+        pluginId,
+        newStatus,
+        reason: `Toggled via admin panel`
+      });
+    } catch (error) {
+      toast.error('Failed to toggle plugin');
+    }
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'enabled':
-        return <CheckCircle className="h-4 w-4 text-success" />;
+        return <CheckCircle className="h-4 w-4 text-green-600" />;
       case 'disabled':
-        return <AlertTriangle className="h-4 w-4 text-muted-foreground" />;
+        return <AlertTriangle className="h-4 w-4 text-gray-400" />;
       case 'maintenance':
-        return <Clock className="h-4 w-4 text-warning" />;
+        return <Clock className="h-4 w-4 text-yellow-600" />;
       default:
-        return <AlertTriangle className="h-4 w-4 text-destructive" />;
+        return <AlertTriangle className="h-4 w-4 text-red-600" />;
     }
   };
 
@@ -82,7 +93,7 @@ export const PluginManagerDashboard = () => {
     );
   }
 
-  const enabledCount = plugins?.filter(p => p.status === 'enabled').length || 0;
+  const enabledCount = plugins?.filter(p => p.plugin_status === 'enabled').length || 0;
   const totalCount = plugins?.length || 0;
 
   return (
@@ -119,7 +130,7 @@ export const PluginManagerDashboard = () => {
             <CardTitle className="text-sm font-medium">Enabled</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-success">{enabledCount}</div>
+            <div className="text-2xl font-bold text-green-600">{enabledCount}</div>
           </CardContent>
         </Card>
 
@@ -140,7 +151,7 @@ export const PluginManagerDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-success" />
+              <Zap className="h-4 w-4 text-green-600" />
               <span className="text-sm font-medium">Operational</span>
             </div>
           </CardContent>
@@ -196,22 +207,22 @@ export const PluginManagerDashboard = () => {
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="space-y-1">
-                      <CardTitle className="text-lg">{plugin.display_name}</CardTitle>
+                      <CardTitle className="text-lg">{getDisplayName(plugin)}</CardTitle>
                       <div className="flex items-center gap-2">
-                        {getStatusIcon(plugin.status)}
-                        {getStatusBadge(plugin.status)}
+                        {getStatusIcon(plugin.plugin_status)}
+                        {getStatusBadge(plugin.plugin_status)}
                       </div>
                     </div>
                     <Switch
-                      checked={plugin.status === 'enabled'}
-                      onCheckedChange={() => handleTogglePlugin(plugin)}
+                      checked={plugin.plugin_status === 'enabled'}
+                      onCheckedChange={() => handleTogglePlugin(plugin.id, plugin.plugin_status === 'enabled' ? 'disabled' : 'enabled')}
                       disabled={togglePlugin.isPending}
                     />
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <CardDescription className="text-sm">
-                    {plugin.description || 'No description available'}
+                    {getDescription(plugin)}
                   </CardDescription>
                   
                   <div className="space-y-2">
@@ -224,21 +235,21 @@ export const PluginManagerDashboard = () => {
                     
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Version:</span>
-                      <span>{plugin.version}</span>
+                      <span>{plugin.plugin_version}</span>
                     </div>
 
-                    {plugin.routes.length > 0 && (
+                    {plugin.routes_introduced.length > 0 && (
                       <div className="space-y-1">
                         <span className="text-sm text-muted-foreground">Routes:</span>
                         <div className="flex flex-wrap gap-1">
-                          {plugin.routes.slice(0, 2).map((route, idx) => (
+                          {plugin.routes_introduced.slice(0, 2).map((route, idx) => (
                             <Badge key={idx} variant="outline" className="text-xs">
                               {route}
                             </Badge>
                           ))}
-                          {plugin.routes.length > 2 && (
+                          {plugin.routes_introduced.length > 2 && (
                             <Badge variant="outline" className="text-xs">
-                              +{plugin.routes.length - 2} more
+                              +{plugin.routes_introduced.length - 2} more
                             </Badge>
                           )}
                         </div>
@@ -257,9 +268,9 @@ export const PluginManagerDashboard = () => {
                       Configure
                     </Button>
                     
-                    {plugin.dependencies.length > 0 && (
+                    {plugin.dependencies_used && Object.keys(plugin.dependencies_used).length > 0 && (
                       <Badge variant="secondary" className="text-xs">
-                        {plugin.dependencies.length} deps
+                        {(plugin.dependencies_used.dependencies || []).length} deps
                       </Badge>
                     )}
                   </div>
@@ -296,9 +307,7 @@ export const PluginManagerDashboard = () => {
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline">{entry.action_type}</Badge>
-                        <span className="font-medium">
-                          {entry.plugin_registry?.display_name || 'Unknown Plugin'}
-                        </span>
+                        <span className="font-medium">Plugin Activity</span>
                       </div>
                       <p className="text-sm text-muted-foreground">
                         {entry.reason || 'No reason provided'}
@@ -344,7 +353,7 @@ export const PluginManagerDashboard = () => {
                       All plugins run in isolated environments
                     </p>
                   </div>
-                  <CheckCircle className="h-5 w-5 text-success" />
+                  <CheckCircle className="h-5 w-5 text-green-600" />
                 </div>
 
                 <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -354,7 +363,7 @@ export const PluginManagerDashboard = () => {
                       Plugin access controlled by user permissions
                     </p>
                   </div>
-                  <CheckCircle className="h-5 w-5 text-success" />
+                  <CheckCircle className="h-5 w-5 text-green-600" />
                 </div>
 
                 <div className="flex items-center justify-between p-3 border rounded-lg">
@@ -364,7 +373,7 @@ export const PluginManagerDashboard = () => {
                       Plugin dependencies are validated before activation
                     </p>
                   </div>
-                  <CheckCircle className="h-5 w-5 text-success" />
+                  <CheckCircle className="h-5 w-5 text-green-600" />
                 </div>
               </div>
             </CardContent>

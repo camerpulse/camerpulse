@@ -301,6 +301,10 @@ const Admin = () => {
                     <BookOpen className="h-4 w-4" />
                     Civic Learning
                   </TabsTrigger>
+                  <TabsTrigger value="plugins" className="flex items-center gap-2">
+                    <Puzzle className="h-4 w-4" />
+                    Plugin Manager
+                  </TabsTrigger>
               </TabsList>
             </ScrollArea>
 

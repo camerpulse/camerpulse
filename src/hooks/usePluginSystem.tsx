@@ -6,23 +6,23 @@ import { toast } from 'sonner';
 export interface Plugin {
   id: string;
   plugin_name: string;
-  display_name: string;
-  description?: string;
-  version: string;
-  status: 'enabled' | 'disabled' | 'maintenance';
+  plugin_author: string;
+  plugin_version: string;
+  plugin_status: 'enabled' | 'disabled' | 'maintenance';
   plugin_type: 'feature' | 'service' | 'integration';
-  routes: string[];
-  dependencies: string[];
-  permissions: string[];
-  configuration: Record<string, any>;
+  file_paths: string[];
+  routes_introduced: string[];
+  dependencies_used: Record<string, any>;
+  api_endpoints: string[];
+  database_migrations: string[];
+  global_variables: string[];
+  css_overrides: string[];
+  component_overrides: string[];
   metadata: Record<string, any>;
-  admin_toggle: boolean;
-  auto_load: boolean;
-  sandbox_execution: boolean;
+  plugin_risk_score: number;
+  install_date?: string;
+  last_updated?: string;
   created_at: string;
-  updated_at: string;
-  created_by?: string;
-  last_modified_by?: string;
 }
 
 export interface PluginActivationHistory {
@@ -46,7 +46,7 @@ export const usePlugins = () => {
       const { data, error } = await supabase
         .from('plugin_registry')
         .select('*')
-        .order('display_name');
+        .order('plugin_name');
 
       if (error) throw error;
       return data as Plugin[];
@@ -62,8 +62,8 @@ export const useEnabledPlugins = () => {
       const { data, error } = await supabase
         .from('plugin_registry')
         .select('*')
-        .eq('status', 'enabled')
-        .order('display_name');
+        .eq('plugin_status', 'enabled')
+        .order('plugin_name');
 
       if (error) throw error;
       return data as Plugin[];
@@ -78,7 +78,7 @@ export const usePluginEnabled = (pluginName: string) => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('plugin_registry')
-        .select('status')
+        .select('plugin_status')
         .eq('plugin_name', pluginName)
         .single();
 
@@ -86,7 +86,7 @@ export const usePluginEnabled = (pluginName: string) => {
         if (error.code === 'PGRST116') return false; // Plugin not found
         throw error;
       }
-      return data.status === 'enabled';
+      return data.plugin_status === 'enabled';
     }
   });
 };
@@ -105,11 +105,11 @@ export const useTogglePlugin = () => {
       newStatus: 'enabled' | 'disabled' | 'maintenance'; 
       reason?: string;
     }) => {
-      const { error } = await supabase.rpc('toggle_plugin_status', {
-        p_plugin_id: pluginId,
-        p_new_status: newStatus,
-        p_reason: reason || null
-      });
+      // For now, use direct database update since RPC doesn't exist yet
+      const { error } = await supabase
+        .from('plugin_registry')
+        .update({ plugin_status: newStatus })
+        .eq('id', pluginId);
 
       if (error) throw error;
     },
@@ -126,26 +126,13 @@ export const useTogglePlugin = () => {
   });
 };
 
-// Hook to get plugin activation history
+// Simple history tracking - later can be enhanced with proper audit tables
 export const usePluginHistory = (pluginId?: string) => {
   return useQuery({
-    queryKey: ['plugin-activation-history', pluginId],
+    queryKey: ['plugin-history', pluginId],
     queryFn: async () => {
-      let query = supabase
-        .from('plugin_activation_history')
-        .select(`
-          *,
-          plugin_registry(display_name, plugin_name)
-        `)
-        .order('created_at', { ascending: false });
-
-      if (pluginId) {
-        query = query.eq('plugin_id', pluginId);
-      }
-
-      const { data, error } = await query.limit(100);
-      if (error) throw error;
-      return data as (PluginActivationHistory & { plugin_registry?: { display_name: string; plugin_name: string } })[];
+      // Return empty array for now since we don't have the history table yet
+      return [] as PluginActivationHistory[];
     }
   });
 };
@@ -155,13 +142,15 @@ export const usePluginAccess = (pluginName: string, permission = 'can_access') =
   return useQuery({
     queryKey: ['plugin-access', pluginName, permission],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc('has_plugin_access', {
-        p_plugin_name: pluginName,
-        p_permission: permission
-      });
+      // For now, check if plugin is enabled
+      const { data, error } = await supabase
+        .from('plugin_registry')
+        .select('plugin_status')
+        .eq('plugin_name', pluginName)
+        .single();
 
-      if (error) throw error;
-      return data as boolean;
+      if (error || !data) return false;
+      return data.plugin_status === 'enabled';
     }
   });
 };
@@ -171,7 +160,7 @@ export const useInstallPlugin = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (plugin: Omit<Plugin, 'id' | 'created_at' | 'updated_at' | 'created_by' | 'last_modified_by'>) => {
+    mutationFn: async (plugin: Omit<Plugin, 'id' | 'created_at'>) => {
       const { data, error } = await supabase
         .from('plugin_registry')
         .insert([plugin])
@@ -219,7 +208,7 @@ export const useRouteGuard = () => {
     if (!enabledPlugins) return false;
 
     return enabledPlugins.some(plugin => 
-      plugin.routes.some(route => {
+      plugin.routes_introduced.some(route => {
         const routePattern = route.replace(/\*/g, '.*');
         return new RegExp(`^${routePattern}$`).test(path);
       })

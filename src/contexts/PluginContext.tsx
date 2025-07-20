@@ -19,7 +19,7 @@ export const PluginProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
   const getPluginConfig = (pluginName: string): Record<string, any> | null => {
     const plugin = enabledPlugins.find(p => p.plugin_name === pluginName);
-    return plugin?.configuration || null;
+    return plugin?.metadata || null;
   };
 
   const value: PluginContextType = {
