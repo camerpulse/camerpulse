@@ -70,6 +70,9 @@ export const Header = () => {
               <Link to="/events">Events</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/civic-tools">Civic Tools</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/national-debt">Trackers</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
@@ -164,6 +167,9 @@ export const Header = () => {
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/events" onClick={() => setMobileMenuOpen(false)}>📅 Events</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/civic-tools" onClick={() => setMobileMenuOpen(false)}>🏛️ Civic Tools</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/national-debt" onClick={() => setMobileMenuOpen(false)}>📊 Trackers</Link>
