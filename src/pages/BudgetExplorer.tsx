@@ -29,6 +29,9 @@ import { BudgetOverviewCards } from '@/components/budget/BudgetOverviewCards';
 import { BudgetVisualization } from '@/components/budget/BudgetVisualization';
 import { BudgetTable } from '@/components/budget/BudgetTable';
 import { BudgetFilters } from '@/components/budget/BudgetFilters';
+import { BudgetAnalysis } from '@/components/budget/BudgetAnalysis';
+import { CitizenEngagement } from '@/components/budget/CitizenEngagement';
+import { AnomalyDetection } from '@/components/budget/AnomalyDetection';
 
 const BudgetExplorer: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -39,6 +42,18 @@ const BudgetExplorer: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [sortBy, setSortBy] = useState('allocated_amount');
   const [viewMode, setViewMode] = useState<'overview' | 'visualizations' | 'table' | 'analysis'>('overview');
+  const [engagementModal, setEngagementModal] = useState<{
+    isOpen: boolean;
+    type: 'rate' | 'clarify' | 'petition';
+    projectId: string;
+    projectName: string;
+  }>({
+    isOpen: false,
+    type: 'rate',
+    projectId: '',
+    projectName: ''
+  });
+  const [showAnomalies, setShowAnomalies] = useState(false);
 
   const { toast } = useToast();
 
@@ -111,24 +126,39 @@ const BudgetExplorer: React.FC = () => {
   };
 
   const handleRateProject = (projectId: string) => {
-    toast({
-      title: "Project Rating",
-      description: "Rating form would open for this project.",
-    });
+    const project = budgetData?.find(p => p.id === projectId);
+    if (project) {
+      setEngagementModal({
+        isOpen: true,
+        type: 'rate',
+        projectId,
+        projectName: project.project_name
+      });
+    }
   };
 
   const handleRequestClarification = (projectId: string) => {
-    toast({
-      title: "Clarification Request",
-      description: "Your clarification request has been submitted.",
-    });
+    const project = budgetData?.find(p => p.id === projectId);
+    if (project) {
+      setEngagementModal({
+        isOpen: true,
+        type: 'clarify',
+        projectId,
+        projectName: project.project_name
+      });
+    }
   };
 
   const handleStartPetition = (projectId: string) => {
-    toast({
-      title: "Petition Started",
-      description: "Budget reallocation petition form would open.",
-    });
+    const project = budgetData?.find(p => p.id === projectId);
+    if (project) {
+      setEngagementModal({
+        isOpen: true,
+        type: 'petition',
+        projectId,
+        projectName: project.project_name
+      });
+    }
   };
 
   if (isLoading) {
@@ -182,9 +212,12 @@ const BudgetExplorer: React.FC = () => {
           <Download className="h-4 w-4 mr-2" />
           Download Report
         </Button>
-        <Button variant="outline">
+        <Button 
+          variant="outline"
+          onClick={() => setShowAnomalies(!showAnomalies)}
+        >
           <Shield className="h-4 w-4 mr-2" />
-          View Anomalies
+          {showAnomalies ? 'Hide' : 'View'} Anomalies
         </Button>
         <Button variant="outline">
           <MessageCircle className="h-4 w-4 mr-2" />
@@ -192,23 +225,37 @@ const BudgetExplorer: React.FC = () => {
         </Button>
       </div>
 
-      {/* Filters */}
-      <BudgetFilters
-        searchTerm={searchTerm}
-        onSearchChange={setSearchTerm}
-        selectedYear={selectedYear}
-        onYearChange={setSelectedYear}
-        selectedMinistry={selectedMinistry}
-        onMinistryChange={setSelectedMinistry}
-        selectedSector={selectedSector}
-        onSectorChange={setSelectedSector}
-        selectedRegion={selectedRegion}
-        onRegionChange={setSelectedRegion}
-        selectedStatus={selectedStatus}
-        onStatusChange={setSelectedStatus}
-        sortBy={sortBy}
-        onSortChange={setSortBy}
-      />
+        {/* Anomaly Detection */}
+        {showAnomalies && (
+          <AnomalyDetection 
+            budgetData={budgetData}
+            onViewProject={(projectId) => {
+              // In a real app, this would navigate to project details
+              toast({
+                title: "Project Details",
+                description: `Would navigate to details for project ${projectId}`
+              });
+            }}
+          />
+        )}
+
+        {/* Filters */}
+        <BudgetFilters
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          selectedYear={selectedYear}
+          onYearChange={setSelectedYear}
+          selectedMinistry={selectedMinistry}
+          onMinistryChange={setSelectedMinistry}
+          selectedSector={selectedSector}
+          onSectorChange={setSelectedSector}
+          selectedRegion={selectedRegion}
+          onRegionChange={setSelectedRegion}
+          selectedStatus={selectedStatus}
+          onStatusChange={setSelectedStatus}
+          sortBy={sortBy}
+          onSortChange={setSortBy}
+        />
 
       {/* Navigation Tabs */}
       <Tabs value={viewMode} onValueChange={(value) => setViewMode(value as any)} className="mt-8">
@@ -240,41 +287,18 @@ const BudgetExplorer: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="analysis" className="mt-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Budget Execution Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="text-sm text-muted-foreground">
-                    Analysis of budget execution rates across ministries and sectors
-                  </div>
-                  <div className="h-48 flex items-center justify-center bg-muted/50 rounded">
-                    <span className="text-muted-foreground">Execution Rate Chart</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Risk Assessment</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="text-sm text-muted-foreground">
-                    Corruption risk analysis and transparency scores
-                  </div>
-                  <div className="h-48 flex items-center justify-center bg-muted/50 rounded">
-                    <span className="text-muted-foreground">Risk Analysis Chart</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <BudgetAnalysis budgetData={budgetData} />
         </TabsContent>
       </Tabs>
+
+      {/* Citizen Engagement Modal */}
+      <CitizenEngagement
+        projectId={engagementModal.projectId}
+        projectName={engagementModal.projectName}
+        isOpen={engagementModal.isOpen}
+        onClose={() => setEngagementModal(prev => ({ ...prev, isOpen: false }))}
+        type={engagementModal.type}
+      />
     </div>
   );
 };

@@ -168,7 +168,7 @@ export const BudgetFilters: React.FC<BudgetFiltersProps> = ({
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="allocated_amount_fcfa">Allocation Amount</SelectItem>
+                <SelectItem value="allocated_amount">Allocation Amount</SelectItem>
                 <SelectItem value="execution_percentage">Execution Rate</SelectItem>
                 <SelectItem value="transparency_score">Transparency Score</SelectItem>
                 <SelectItem value="project_name">Project Name</SelectItem>

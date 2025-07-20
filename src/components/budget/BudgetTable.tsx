@@ -90,9 +90,9 @@ export const BudgetTable: React.FC<BudgetTableProps> = ({
                 <Badge className={getStatusColor(item.status)}>
                   {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
                 </Badge>
-                <Badge className={getRiskColor(item.corruption_risk_level)}>
-                  {getRiskIcon(item.corruption_risk_level)}
-                  {item.corruption_risk_level.charAt(0).toUpperCase() + item.corruption_risk_level.slice(1)} Risk
+                <Badge className={getRiskColor(item.transparency_score > 70 ? 'low' : item.transparency_score > 40 ? 'medium' : 'high')}>
+                  {getRiskIcon(item.transparency_score > 70 ? 'low' : item.transparency_score > 40 ? 'medium' : 'high')}
+                  {item.transparency_score > 70 ? 'Low' : item.transparency_score > 40 ? 'Medium' : 'High'} Risk
                 </Badge>
               </div>
             </div>
@@ -101,11 +101,11 @@ export const BudgetTable: React.FC<BudgetTableProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
               <div>
                 <p className="text-sm text-muted-foreground">Allocated</p>
-                <p className="font-semibold">{formatCurrency(item.allocated_amount_fcfa)}</p>
+                <p className="font-semibold">{formatCurrency(item.allocated_amount || 0)}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Spent</p>
-                <p className="font-semibold">{formatCurrency(item.spent_amount_fcfa)}</p>
+                <p className="font-semibold">{formatCurrency(item.spent_amount || 0)}</p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Execution Rate</p>
@@ -125,8 +125,8 @@ export const BudgetTable: React.FC<BudgetTableProps> = ({
 
             <div className="flex items-center justify-between">
               <div className="text-sm text-muted-foreground">
-                <span>Oversight: {item.oversight_mp}</span>
-                <span className="ml-4">FY {item.fiscal_year}</span>
+                <span>Ministry: {item.ministry_department}</span>
+                <span className="ml-4">FY {item.budget_year}</span>
               </div>
               
               <div className="flex items-center gap-2">
