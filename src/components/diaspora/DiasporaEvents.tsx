@@ -239,12 +239,6 @@ export const DiasporaEvents = () => {
                             minute: '2-digit'
                           })} ({event.duration_minutes} minutes)
                         </div>
-                        {event.venue && (
-                          <div className="flex items-center gap-2">
-                            <MapPin className="h-4 w-4" />
-                            {event.venue}
-                          </div>
-                        )}
                         {event.max_attendees && (
                           <div className="flex items-center gap-2">
                             <Users className="h-4 w-4" />
