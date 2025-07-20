@@ -65,6 +65,34 @@
     --sidebar-border: 214 32% 91%;
     --sidebar-ring: 140 90% 28%;
     
+    /* Directory & Services Colors */
+    --directory-school: 217 91% 60%;     /* School blue */
+    --directory-hospital: 0 84% 60%;     /* Hospital red */
+    --directory-pharmacy: 142 71% 45%;   /* Pharmacy green */
+    --directory-village: 38 85% 55%;     /* Village golden ochre */
+    --directory-verified: 123 67% 42%;   /* Verified green */
+    --directory-pending: 38 92% 50%;     /* Pending orange */
+    --directory-rejected: 0 84% 60%;     /* Rejected red */
+    
+    /* Institution Status Colors */
+    --status-active: 123 67% 42%;        /* Active green */
+    --status-inactive: 0 0% 45%;         /* Inactive gray */
+    --status-verified: 217 91% 60%;      /* Verified blue */
+    --status-claimed: 51 100% 50%;       /* Claimed yellow */
+    --status-sponsored: 271 76% 53%;     /* Sponsored purple */
+    
+    /* Message Priority Colors */
+    --message-urgent: 0 84% 60%;         /* Urgent red */
+    --message-normal: 217 91% 60%;       /* Normal blue */
+    --message-support: 123 67% 42%;      /* Support green */
+    
+    /* Rating Colors */
+    --rating-excellent: 123 67% 42%;     /* 5 stars - green */
+    --rating-good: 142 71% 45%;          /* 4 stars - light green */
+    --rating-average: 51 100% 50%;       /* 3 stars - yellow */
+    --rating-poor: 25 95% 53%;           /* 2 stars - orange */
+    --rating-terrible: 0 84% 60%;        /* 1 star - red */
+    
     --radius: 0.75rem;
   }
 
@@ -102,70 +130,6 @@
     --shadow-premium: 0 25px 50px -12px hsl(0 0% 0% / 0.5), 0 0 40px hsl(140 90% 35% / 0.2);
   }
 
-  :root {
-    /* Directory Service Shadows */
-    --shadow-directory-school: 0 8px 25px -8px hsl(var(--directory-school) / 0.3);
-    --shadow-directory-hospital: 0 8px 25px -8px hsl(var(--directory-hospital) / 0.3);
-    --shadow-directory-pharmacy: 0 8px 25px -8px hsl(var(--directory-pharmacy) / 0.3);
-    --shadow-directory-village: 0 8px 25px -8px hsl(var(--directory-village) / 0.3);
-    --shadow-verified: 0 4px 20px -4px hsl(var(--directory-verified) / 0.4);
-    --shadow-sponsored: 0 8px 30px -8px hsl(var(--status-sponsored) / 0.5);
-    
-    /* Lux Aeterna Enhanced Shadows */
-    --shadow-lux-divine: 0 15px 40px -10px hsl(var(--lux-golden) / 0.4), 0 0 50px hsl(var(--lux-primary) / 0.3);
-    --shadow-lux-sacred: 0 8px 30px -8px hsl(var(--lux-sacred) / 0.5), inset 0 1px 0 hsl(var(--lux-golden) / 0.2);
-    --shadow-lux-ethereal: 0 20px 60px -15px hsl(var(--lux-ethereal) / 0.6), 0 0 80px hsl(var(--lux-golden) / 0.2);
-    --shadow-lux-celebration: 0 0 100px hsl(var(--lux-golden) / 0.8), 0 0 150px hsl(var(--cm-green) / 0.3), 0 0 200px hsl(var(--cm-red) / 0.2);
-    
-    /* Ancestral Shadows */
-    --shadow-royal-forest: 0 15px 40px -10px hsl(var(--royal-forest-green) / 0.4), 0 0 50px hsl(var(--royal-golden-ochre) / 0.3);
-    --shadow-ancestral-glow: 0 0 60px hsl(var(--royal-golden-ochre) / 0.6), 0 0 100px hsl(var(--royal-crimson-red) / 0.2);
-    --shadow-sacred-depth: 0 25px 60px -15px hsl(var(--royal-ancestral-black) / 0.8), 0 0 80px hsl(var(--royal-bronze) / 0.4);
-    
-    /* Sidebar Colors */
-    --sidebar-background: 0 0% 98%;      /* Very light gray */
-    --sidebar-foreground: 222 84% 5%;    /* Near black */
-    --sidebar-primary: 142 100% 25%;     /* Cameroon Green */
-    --sidebar-primary-foreground: 0 0% 100%; /* White */
-    --sidebar-accent: 210 40% 96%;       /* Light gray for hover */
-    --sidebar-accent-foreground: 222 84% 5%; /* Near black */
-    --sidebar-border: 214 32% 91%;       /* Light border */
-    --sidebar-ring: 142 69% 32%;         /* Focus ring - primary */
-
-    /* Directory & Services Colors */
-    --directory-school: 217 91% 60%;     /* School blue */
-    --directory-hospital: 0 84% 60%;     /* Hospital red */
-    --directory-pharmacy: 142 71% 45%;   /* Pharmacy green */
-    --directory-village: 38 85% 55%;     /* Village golden ochre */
-    --directory-verified: 123 67% 42%;   /* Verified green */
-    --directory-pending: 38 92% 50%;     /* Pending orange */
-    --directory-rejected: 0 84% 60%;     /* Rejected red */
-    
-    /* Institution Status Colors */
-    --status-active: 123 67% 42%;        /* Active green */
-    --status-inactive: 0 0% 45%;         /* Inactive gray */
-    --status-verified: 217 91% 60%;      /* Verified blue */
-    --status-claimed: 51 100% 50%;       /* Claimed yellow */
-    --status-sponsored: 271 76% 53%;     /* Sponsored purple */
-    
-    /* Message Priority Colors */
-    --message-urgent: 0 84% 60%;         /* Urgent red */
-    --message-normal: 217 91% 60%;       /* Normal blue */
-    --message-support: 123 67% 42%;      /* Support green */
-    
-    /* Rating Colors */
-    --rating-excellent: 123 67% 42%;     /* 5 stars - green */
-    --rating-good: 142 71% 45%;          /* 4 stars - light green */
-    --rating-average: 51 100% 50%;       /* 3 stars - yellow */
-    --rating-poor: 25 95% 53%;           /* 2 stars - orange */
-    --rating-terrible: 0 84% 60%;        /* 1 star - red */
-
-    /* Animations removed for performance */
-    
-    --radius: 0.75rem; /* 12px rounded corners */
-  }
-
-@layer base {
   * {
     @apply border-border;
   }
@@ -174,44 +138,34 @@
     @apply bg-background text-foreground;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
-    /* Optimize for mobile */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    /* Consistent neutral background */
     background-color: hsl(var(--background));
   }
   
-  /* Mobile optimizations */
   html {
-    /* Prevent zoom on input focus in iOS */
     -webkit-text-size-adjust: 100%;
-    /* Enable momentum scrolling */
     -webkit-overflow-scrolling: touch;
   }
   
-  /* Remove tap highlight on mobile */
   * {
     -webkit-tap-highlight-color: transparent;
   }
   
-  /* Better touch targets - mobile optimization */
   button, a[role="button"], input, select, textarea {
     @apply min-h-[44px];
     touch-action: manipulation;
   }
   
-  /* Ensure button minimum width but allow text to flow naturally */
   button {
     @apply min-w-[44px];
   }
   
-  /* Mobile optimized components - static */
   .mobile-card {
     @apply shadow-md;
   }
   
-  /* Responsive text sizing */
   .responsive-text {
     @apply text-sm sm:text-base lg:text-lg;
   }
@@ -224,29 +178,11 @@
     @apply text-2xl sm:text-3xl lg:text-4xl xl:text-5xl;
   }
 
-  /* Animations and interactions disabled */
-
-  /* Remove tap highlights on mobile */
-  * {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  /* Allow text selection where needed */
   input, textarea, [contenteditable], p, span, div[role="text"] {
     -webkit-user-select: text;
     user-select: text;
   }
 
-  /* Font smoothing */
-  body {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
-
-  /* Scrollbar hiding for mobile */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -256,7 +192,6 @@
     display: none;
   }
 
-  /* Line clamping for mobile */
   .line-clamp-1 {
     overflow: hidden;
     display: -webkit-box;
@@ -278,46 +213,14 @@
     -webkit-box-orient: vertical;
   }
 
-  /* Mobile gestures */
   .swipe-indicator {
     @apply absolute inset-x-0 top-2 h-1 w-12 mx-auto bg-muted-foreground/30 rounded-full;
   }
 
-  /* Mobile pull indicator */
   .pull-indicator {
     @apply flex items-center justify-center py-2 text-muted-foreground;
   }
-  
-  /* ANIMATIONS REMOVED - Static mode enabled */
-  /* All @keyframes animations have been disabled for performance */
-  
-  /* ANIMATION CLASSES DISABLED - Static alternatives */
-  .animate-heartbeat { /* disabled */ }
-  .animate-heartbeat-line { /* disabled */ }
-  .animate-pulse-heartbeat { /* disabled */ }
-  .animate-fade-in-up { /* disabled */ }
-  .animate-slide-shine { /* disabled */ }
-  .animate-eternal-glow { /* disabled */ }
-  .animate-patriotic-pulse { /* disabled */ }
-  .animate-hope-rise { /* disabled */ }
-  .animate-golden-shimmer { /* disabled */ }
-  .animate-divine-ascension { /* disabled */ }
-  .animate-sacred-pulse { /* disabled */ }
-  .animate-ethereal-float { /* disabled */ }
-  .animate-celebration-burst { /* disabled */ }
-  
-  /* Dynamic Lux Aeterna variants - animations disabled */
-  :root {
-    --lux-primary-variant: 45 95% 60%;
-    --lux-accent-variant: 355 85% 45%;
-    --lux-celebration-glow: none;
-    --lux-special-animation: none;
-  }
-  
-  .animation-delay-300 { /* disabled */ }
-  .animation-delay-500 { /* disabled */ }
 
-  /* Mobile safe areas */
   .safe-area-padding {
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
@@ -325,57 +228,8 @@
     padding-right: env(safe-area-inset-right);
   }
 
-/* Lux Aeterna Advanced Animations - DISABLED */
-/* @keyframes pulse-celebration - removed */
-/* @keyframes float-golden - removed */
-/* @keyframes shimmer - removed */
-
-/* Lux Aeterna Time-based Variations */
-.lux-aeterna-effects.dawn-mode {
-  --primary: 25 85% 55%;
-  --accent: 15 90% 65%;
-}
-
-.lux-aeterna-effects.day-mode {
-  --primary: 45 95% 60%;
-  --accent: 355 85% 45%;
-}
-
-.lux-aeterna-effects.dusk-mode {
-  --primary: 35 90% 50%;
-  --accent: 280 70% 60%;
-}
-
-.lux-aeterna-effects.night-mode {
-  --primary: 45 70% 40%;
-  --accent: 220 80% 30%;
-}
-
-.lux-aeterna-effects.celebration-mode {
-  /* animation: var(--lux-special-animation); - disabled */
-  box-shadow: var(--lux-celebration-glow);
-}
-
-/* Patriotic gradient backgrounds */
-.bg-gradient-patriotic {
-  background: var(--gradient-patriotic);
-}
-
-.bg-gradient-radial {
-  background: radial-gradient(circle at center, var(--tw-gradient-stops));
-}
-
-/* Golden shimmer effect - DISABLED */
-.shimmer-effect {
-  /* background: linear-gradient( 90deg, transparent 0%, hsl(var(--lux-primary-variant) / 0.4) 50%, transparent 100% ); */
-  /* background-size: 200% 100%; */
-  /* animation: shimmer 3s infinite; - disabled */
-}
-  
-  /* PWA specific styles */
   @media (display-mode: standalone) {
     body {
-      /* Add safe area padding for PWA */
       padding-top: env(safe-area-inset-top);
       padding-bottom: env(safe-area-inset-bottom);
       padding-left: env(safe-area-inset-left);
@@ -385,27 +239,27 @@
 }
 
 @layer utilities {
-  /* Custom Cameroon gradients */
-  .bg-gradient-civic {
-    background: var(--gradient-civic);
+  .bg-gradient-patriotic {
+    background: var(--gradient-patriotic);
   }
   
-  .bg-gradient-flag {
-    background: var(--gradient-flag);
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
   }
   
-  /* Mobile-first responsive text */
+  .bg-gradient-card {
+    background: var(--gradient-card);
+  }
+  
   .text-responsive {
     @apply text-sm sm:text-base lg:text-lg;
   }
   
-  /* Better mobile scrolling */
   .scroll-smooth-mobile {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
   
-  /* Custom shadows */
   .shadow-elegant {
     box-shadow: var(--shadow-elegant);
   }
@@ -414,266 +268,18 @@
     box-shadow: var(--shadow-glow);
   }
   
-  /* Animation delays disabled */
-  
-  /* Native mobile feel */
   .touch-manipulation {
     touch-action: manipulation;
   }
   
-  /* Emergence 2035 specific utilities */
-  .text-gradient-flag {
-    background: linear-gradient(135deg, hsl(12, 100%, 45%), hsl(48, 100%, 50%), hsl(145, 100%, 35%));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  /* Lux Aeterna specific utilities */
   .text-gradient-patriotic {
-    background: linear-gradient(135deg, hsl(220, 90%, 15%), hsl(45, 95%, 60%), hsl(355, 85%, 45%));
+    background: linear-gradient(135deg, hsl(140 90% 28%), hsl(348 85% 47%), hsl(40 95% 55%));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
   }
   
-  .bg-gradient-patriotic {
-    background: linear-gradient(135deg, hsl(220, 90%, 15%), hsl(45, 95%, 60%), hsl(355, 85%, 45%));
-  }
-  
-  .shadow-patriotic {
-    box-shadow: 0 10px 30px -10px hsl(220, 90%, 15%, 0.3), 0 0 40px hsl(45, 95%, 60%, 0.2);
-  }
-  
-  .border-patriotic {
-    border-image: linear-gradient(135deg, hsl(220, 90%, 15%), hsl(45, 95%, 60%), hsl(355, 85%, 45%)) 1;
-  }
-  
-  /* Enhanced Lux Aeterna Utilities */
-  .text-gradient-lux-divine {
-    background: var(--gradient-lux-divine);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  .text-gradient-lux-noble {
-    background: var(--gradient-lux-noble);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  .shadow-lux-divine {
-    box-shadow: var(--shadow-lux-divine);
-  }
-  
-  .shadow-lux-sacred {
-    box-shadow: var(--shadow-lux-sacred);
-  }
-  
-  .shadow-lux-ethereal {
-    box-shadow: var(--shadow-lux-ethereal);
-  }
-  
-  .shadow-lux-celebration {
-    box-shadow: var(--shadow-lux-celebration);
-  }
-  
-  .border-lux-divine {
-    border-image: var(--gradient-lux-divine) 1;
-  }
-  
-  .border-lux-celebration {
-    border-image: var(--gradient-lux-celebration) 1;
-  }
-  
-  /* Ancestral Utilities */
-  .bg-gradient-royal-forest {
-    background: var(--gradient-royal-forest);
-  }
-  
-  .bg-gradient-ancestral {
-    background: var(--gradient-ancestral);
-  }
-  
-  .bg-gradient-sacred-unity {
-    background: var(--gradient-sacred-unity);
-  }
-  
-  .bg-gradient-heritage {
-    background: var(--gradient-heritage);
-  }
-  
-  .text-gradient-ancestral {
-    background: var(--gradient-ancestral);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  .text-gradient-sacred-unity {
-    background: var(--gradient-sacred-unity);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  .shadow-royal-forest {
-    box-shadow: var(--shadow-royal-forest);
-  }
-  
-  .shadow-ancestral-glow {
-    box-shadow: var(--shadow-ancestral-glow);
-  }
-  
-  .shadow-sacred-depth {
-    box-shadow: var(--shadow-sacred-depth);
-  }
-
-  /* Directory Service Utilities */
-  .bg-gradient-directory-schools {
-    background: var(--gradient-directory-schools);
-  }
-
-  .bg-gradient-directory-hospitals {
-    background: var(--gradient-directory-hospitals);
-  }
-
-  .bg-gradient-directory-pharmacies {
-    background: var(--gradient-directory-pharmacies);
-  }
-
-  .bg-gradient-directory-villages {
-    background: var(--gradient-directory-villages);
-  }
-
-  .bg-gradient-verification {
-    background: var(--gradient-verification);
-  }
-
-  .bg-gradient-sponsorship {
-    background: var(--gradient-sponsorship);
-  }
-
-  .shadow-directory-school {
-    box-shadow: var(--shadow-directory-school);
-  }
-
-  .shadow-directory-hospital {
-    box-shadow: var(--shadow-directory-hospital);
-  }
-
-  .shadow-directory-pharmacy {
-    box-shadow: var(--shadow-directory-pharmacy);
-  }
-
-  .shadow-directory-village {
-    box-shadow: var(--shadow-directory-village);
-  }
-
-  .shadow-verified {
-    box-shadow: var(--shadow-verified);
-  }
-
-  .shadow-sponsored {
-    box-shadow: var(--shadow-sponsored);
-  }
-
-  /* Text gradients for directory services */
-  .text-gradient-directory-school {
-    background: var(--gradient-directory-schools);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .text-gradient-directory-hospital {
-    background: var(--gradient-directory-hospitals);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .text-gradient-directory-pharmacy {
-    background: var(--gradient-directory-pharmacies);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .text-gradient-directory-village {
-    background: var(--gradient-directory-villages);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  /* Verification badges */
-  .badge-verified {
-    @apply bg-status-verified text-white shadow-verified;
-  }
-
-  .badge-pending {
-    @apply bg-status-pending text-white;
-  }
-
-  .badge-sponsored {
-    @apply bg-status-sponsored text-white shadow-sponsored;
-  }
-
-  /* Message priority styles */
-  .message-urgent {
-    @apply border-l-4 border-message-urgent bg-red-50;
-  }
-
-  .message-normal {
-    @apply border-l-4 border-message-normal bg-blue-50;
-  }
-
-  .message-support {
-    @apply border-l-4 border-message-support bg-green-50;
-  }
-
-  /* Rating display utilities */
-  .rating-excellent {
-    @apply text-rating-excellent;
-  }
-
-  .rating-good {
-    @apply text-rating-good;
-  }
-
-  .rating-average {
-    @apply text-rating-average;
-  }
-
-  .rating-poor {
-    @apply text-rating-poor;
-  }
-
-  .rating-terrible {
-    @apply text-rating-terrible;
-  }
-
-  /* Directory card animations */
   .directory-card {
     @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
-  }
-
-  .directory-card-school {
-    @apply directory-card hover:shadow-directory-school;
-  }
-
-  .directory-card-hospital {
-    @apply directory-card hover:shadow-directory-hospital;
-  }
-
-  .directory-card-pharmacy {
-    @apply directory-card hover:shadow-directory-pharmacy;
-  }
-
-  .directory-card-village {
-    @apply directory-card hover:shadow-directory-village;
   }
 }
