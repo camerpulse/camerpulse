@@ -24,11 +24,11 @@ import { EventCard } from '@/components/diaspora/EventCard';
 import { RecognitionCard } from '@/components/diaspora/RecognitionCard';
 import { DonationWidget } from '@/components/diaspora/DonationWidget';
 
-const { useState: useStateReact } = React;
+
 
 export const DiasporaConnect = () => {
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useStateReact('overview');
+  const [activeTab, setActiveTab] = useState('overview');
   
   const { data: stats } = useDiasporaStats();
   const { data: profile } = useDiasporaProfile(user?.id);
@@ -107,7 +107,7 @@ export const DiasporaConnect = () => {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6">
+          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>

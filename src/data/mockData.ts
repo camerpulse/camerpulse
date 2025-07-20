@@ -348,3 +348,175 @@ export const mockStats = {
   activePoliticians: 156,
   sentimentScore: 72
 };
+
+// Mock data for Diaspora features
+export const mockDiasporaStats = {
+  totalMembers: 456789,
+  projectsFunded: 234,
+  totalRaised: 12500000,
+  totalProjects: 89
+};
+
+export const mockDiasporaProfiles = [
+  {
+    id: '1',
+    user_id: 'user_1',
+    full_name: 'Jean-Paul Mengue',
+    country_of_residence: 'France',
+    city_of_residence: 'Paris',
+    home_village_town_city: 'Douala',
+    skills_expertise: ['Software Development', 'Project Management'],
+    years_in_diaspora: 8,
+    willing_to_mentor: true,
+    available_for_projects: true,
+    verification_status: 'verified' as const,
+    total_contributions_fcfa: 250000,
+    total_projects_supported: 5,
+    impact_score: 87,
+    created_at: '2024-01-15',
+    updated_at: '2024-01-20'
+  },
+  {
+    id: '2',
+    user_id: 'user_2',
+    full_name: 'Marie-Claire Nkomo',
+    country_of_residence: 'Canada',
+    city_of_residence: 'Toronto',
+    home_village_town_city: 'Yaoundé',
+    skills_expertise: ['Healthcare', 'Public Health'],
+    years_in_diaspora: 12,
+    willing_to_mentor: true,
+    available_for_projects: true,
+    verification_status: 'verified' as const,
+    total_contributions_fcfa: 500000,
+    total_projects_supported: 8,
+    impact_score: 92,
+    created_at: '2023-11-10',
+    updated_at: '2024-01-18'
+  }
+];
+
+export const mockInvestmentProjects = [
+  {
+    id: '1',
+    title: 'Solar Power Initiative - Northwest Region',
+    description: 'Installing solar panels in rural communities to provide sustainable electricity access.',
+    category: 'Energy',
+    funding_goal_fcfa: 25000000,
+    current_funding_fcfa: 18500000,
+    status: 'fundraising' as const,
+    verification_status: 'verified' as const,
+    location: 'Northwest Region',
+    expected_impact: '2,500 households will gain access to clean electricity',
+    timeline_months: 18,
+    project_lead: 'Ministry of Energy',
+    images: [],
+    created_at: '2024-01-10',
+    deadline: '2024-06-30'
+  },
+  {
+    id: '2',
+    title: 'Digital Education Hub - Maroua',
+    description: 'Building a modern computer center to provide digital literacy training for youth.',
+    category: 'Education',
+    funding_goal_fcfa: 15000000,
+    current_funding_fcfa: 8200000,
+    status: 'fundraising' as const,
+    verification_status: 'verified' as const,
+    location: 'Far North Region',
+    expected_impact: '1,000 students trained annually in digital skills',
+    timeline_months: 12,
+    project_lead: 'Local Education Board',
+    images: [],
+    created_at: '2024-01-05',
+    deadline: '2024-09-15'
+  },
+  {
+    id: '3',
+    title: 'Water Well Project - Adamawa',
+    description: 'Drilling clean water wells in remote villages to improve access to safe drinking water.',
+    category: 'Infrastructure',
+    funding_goal_fcfa: 12000000,
+    current_funding_fcfa: 12000000,
+    status: 'completed' as const,
+    verification_status: 'verified' as const,
+    location: 'Adamawa Region',
+    expected_impact: '5 villages with permanent clean water access',
+    timeline_months: 6,
+    project_lead: 'Rural Development Association',
+    images: [],
+    created_at: '2023-10-01',
+    deadline: '2024-03-31'
+  }
+];
+
+export const mockDiasporaEvents = [
+  {
+    id: '1',
+    title: 'Virtual Town Hall: Education Reform Discussion',
+    description: 'Join fellow Cameroonians to discuss proposed education reforms and share your input.',
+    event_type: 'town_hall' as const,
+    start_time: '2024-02-15T19:00:00Z',
+    end_time: '2024-02-15T21:00:00Z',
+    timezone: 'GMT',
+    platform: 'Zoom',
+    meeting_link: 'https://zoom.us/j/123456789',
+    organizer: 'CamerPulse Team',
+    max_participants: 500,
+    current_participants: 247,
+    is_recording: true,
+    created_at: '2024-01-20'
+  },
+  {
+    id: '2',
+    title: 'Investment Opportunities Summit 2024',
+    description: 'Discover high-impact investment opportunities in Cameroon\'s development sectors.',
+    event_type: 'summit' as const,
+    start_time: '2024-03-10T14:00:00Z',
+    end_time: '2024-03-10T18:00:00Z',
+    timezone: 'GMT',
+    platform: 'Teams',
+    meeting_link: 'https://teams.microsoft.com/meet/abc123',
+    organizer: 'Diaspora Investment Group',
+    max_participants: 1000,
+    current_participants: 156,
+    is_recording: true,
+    created_at: '2024-01-25'
+  }
+];
+
+export const mockDiasporaRecognition = [
+  {
+    id: '1',
+    title: 'Top Contributor 2023',
+    description: 'Jean-Paul Mengue donated 500,000 FCFA to education projects',
+    recipient_name: 'Jean-Paul Mengue',
+    recognition_type: 'financial_contribution' as const,
+    amount_fcfa: 500000,
+    project_supported: 'Digital Education Hub - Maroua',
+    date_awarded: '2024-01-01',
+    verified: true
+  },
+  {
+    id: '2',
+    title: 'Community Builder Award',
+    description: 'Marie-Claire Nkomo organized 5 diaspora networking events',
+    recipient_name: 'Marie-Claire Nkomo',
+    recognition_type: 'community_building' as const,
+    events_organized: 5,
+    participants_reached: 250,
+    date_awarded: '2024-01-10',
+    verified: true
+  },
+  {
+    id: '3',
+    title: 'Innovation Champion',
+    description: 'Paul Fotso contributed technical expertise to rural connectivity project',
+    recipient_name: 'Paul Fotso',
+    recognition_type: 'expertise_sharing' as const,
+    skills_contributed: ['Network Engineering', 'Rural Connectivity'],
+    project_supported: 'Rural Internet Access Initiative',
+    date_awarded: '2024-01-15',
+    verified: true
+  }
+];

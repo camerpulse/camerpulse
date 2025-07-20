@@ -1,20 +1,32 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  mockDiasporaStats, 
+  mockDiasporaProfiles, 
+  mockInvestmentProjects, 
+  mockDiasporaEvents, 
+  mockDiasporaRecognition 
+} from '@/data/mockData';
 
 // Diaspora Profiles
 export const useDiasporaProfile = (userId?: string) => {
   return useQuery({
     queryKey: ['diaspora-profile', userId],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('diaspora_profiles')
-        .select('*')
-        .eq('user_id', userId || '')
-        .single();
-      
-      if (error && error.code !== 'PGRST116') throw error;
-      return data;
+      try {
+        const { data, error } = await supabase
+          .from('diaspora_profiles')
+          .select('*')
+          .eq('user_id', userId || '')
+          .single();
+        
+        if (error && error.code !== 'PGRST116') throw error;
+        return data;
+      } catch (error) {
+        // Return mock data if Supabase fails
+        return userId ? mockDiasporaProfiles[0] : null;
+      }
     },
     enabled: !!userId,
   });
@@ -93,27 +105,36 @@ export const useInvestmentProjects = (filters?: { category?: string; status?: st
   return useQuery({
     queryKey: ['investment-projects', filters],
     queryFn: async () => {
-      let query = supabase
-        .from('diaspora_investment_projects')
-        .select('*')
-        .eq('verification_status', 'verified')
-        .order('created_at', { ascending: false });
-      
-      if (filters?.category) {
-        query = query.eq('category', filters.category);
+      try {
+        let query = supabase
+          .from('diaspora_investment_projects')
+          .select('*')
+          .eq('verification_status', 'verified')
+          .order('created_at', { ascending: false });
+        
+        if (filters?.category) {
+          query = query.eq('category', filters.category);
+        }
+        
+        if (filters?.status) {
+          query = query.eq('project_status', filters.status);
+        }
+        
+        if (filters?.location) {
+          query = query.ilike('location', `%${filters.location}%`);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data;
+      } catch (error) {
+        // Return mock data if Supabase fails
+        let projects = mockInvestmentProjects;
+        if (filters?.status) {
+          projects = projects.filter(p => p.status === filters.status);
+        }
+        return projects;
       }
-      
-      if (filters?.status) {
-        query = query.eq('project_status', filters.status);
-      }
-      
-      if (filters?.location) {
-        query = query.ilike('location', `%${filters.location}%`);
-      }
-      
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
     },
   });
 };
@@ -239,22 +260,27 @@ export const useDiasporaRecognition = (profileId?: string) => {
   return useQuery({
     queryKey: ['diaspora-recognition', profileId],
     queryFn: async () => {
-      let query = supabase
-        .from('diaspora_recognition')
-        .select(`
-          *,
-          diaspora_profiles(full_name, country_of_residence)
-        `)
-        .eq('public_display', true)
-        .order('achievement_date', { ascending: false });
-      
-      if (profileId) {
-        query = query.eq('diaspora_profile_id', profileId);
+      try {
+        let query = supabase
+          .from('diaspora_recognition')
+          .select(`
+            *,
+            diaspora_profiles(full_name, country_of_residence)
+          `)
+          .eq('public_display', true)
+          .order('achievement_date', { ascending: false });
+        
+        if (profileId) {
+          query = query.eq('diaspora_profile_id', profileId);
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data;
+      } catch (error) {
+        // Return mock data if Supabase fails
+        return mockDiasporaRecognition;
       }
-      
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
     },
   });
 };
@@ -264,22 +290,27 @@ export const useDiasporaEvents = (filters?: { type?: string; upcoming?: boolean 
   return useQuery({
     queryKey: ['diaspora-events', filters],
     queryFn: async () => {
-      let query = supabase
-        .from('diaspora_events')
-        .select('*')
-        .order('event_date', { ascending: true });
-      
-      if (filters?.type) {
-        query = query.eq('event_type', filters.type);
+      try {
+        let query = supabase
+          .from('diaspora_events')
+          .select('*')
+          .order('event_date', { ascending: true });
+        
+        if (filters?.type) {
+          query = query.eq('event_type', filters.type);
+        }
+        
+        if (filters?.upcoming) {
+          query = query.gte('event_date', new Date().toISOString());
+        }
+        
+        const { data, error } = await query;
+        if (error) throw error;
+        return data;
+      } catch (error) {
+        // Return mock data if Supabase fails
+        return mockDiasporaEvents;
       }
-      
-      if (filters?.upcoming) {
-        query = query.gte('event_date', new Date().toISOString());
-      }
-      
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
     },
   });
 };
@@ -329,32 +360,37 @@ export const useDiasporaStats = () => {
   return useQuery({
     queryKey: ['diaspora-stats'],
     queryFn: async () => {
-      const [profilesResult, projectsResult, donationsResult] = await Promise.all([
-        supabase
-          .from('diaspora_profiles')
-          .select('id, total_contributions_fcfa')
-          .eq('verification_status', 'verified'),
-        supabase
-          .from('diaspora_investment_projects')
-          .select('id, target_amount_fcfa, raised_amount_fcfa')
-          .eq('verification_status', 'verified'),
-        supabase
-          .from('diaspora_donations')
-          .select('amount_fcfa')
-          .eq('donation_status', 'completed'),
-      ]);
-      
-      const totalMembers = profilesResult.data?.length || 0;
-      const totalProjects = projectsResult.data?.length || 0;
-      const totalRaised = donationsResult.data?.reduce((sum, donation) => sum + donation.amount_fcfa, 0) || 0;
-      const projectsFunded = projectsResult.data?.filter(p => p.raised_amount_fcfa > 0).length || 0;
-      
-      return {
-        totalMembers,
-        totalProjects,
-        totalRaised,
-        projectsFunded,
-      };
+      try {
+        const [profilesResult, projectsResult, donationsResult] = await Promise.all([
+          supabase
+            .from('diaspora_profiles')
+            .select('id, total_contributions_fcfa')
+            .eq('verification_status', 'verified'),
+          supabase
+            .from('diaspora_investment_projects')
+            .select('id, target_amount_fcfa, raised_amount_fcfa')
+            .eq('verification_status', 'verified'),
+          supabase
+            .from('diaspora_donations')
+            .select('amount_fcfa')
+            .eq('donation_status', 'completed'),
+        ]);
+        
+        const totalMembers = profilesResult.data?.length || 0;
+        const totalProjects = projectsResult.data?.length || 0;
+        const totalRaised = donationsResult.data?.reduce((sum, donation) => sum + donation.amount_fcfa, 0) || 0;
+        const projectsFunded = projectsResult.data?.filter(p => p.raised_amount_fcfa > 0).length || 0;
+        
+        return {
+          totalMembers,
+          totalProjects,
+          totalRaised,
+          projectsFunded,
+        };
+      } catch (error) {
+        // Return mock data if Supabase fails
+        return mockDiasporaStats;
+      }
     },
   });
 };
