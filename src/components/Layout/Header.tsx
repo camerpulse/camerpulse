@@ -76,6 +76,9 @@ export const Header = () => {
               <Link to="/national-debt">Trackers</Link>
             </Button>
             <Button asChild variant="ghost" className="text-white hover:bg-white/10">
+              <Link to="/analytics/dashboard">Analytics</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-white hover:bg-white/10">
               <Link to="/schools">Services</Link>
             </Button>
           </nav>
@@ -173,6 +176,9 @@ export const Header = () => {
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/national-debt" onClick={() => setMobileMenuOpen(false)}>📊 Trackers</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
+                <Link to="/analytics/dashboard" onClick={() => setMobileMenuOpen(false)}>📊 Analytics</Link>
               </Button>
               <Button asChild variant="ghost" className="text-white hover:bg-white/10 justify-start">
                 <Link to="/schools" onClick={() => setMobileMenuOpen(false)}>🏫 Services</Link>

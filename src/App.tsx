@@ -79,6 +79,9 @@ import CertificateVerificationPage from "./pages/CertificateVerificationPage";
 import VillagesDirectory from "./pages/VillagesDirectory";
 import VillageProfile from "./pages/VillageProfile";
 import { Analytics } from "./pages/Analytics";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
+import SentimentAnalysis from "./pages/SentimentAnalysis";
+import PredictiveAnalytics from "./pages/PredictiveAnalytics";
 import { AdvancedSearchPage } from "./pages/AdvancedSearchPage";
 import { EconomicsPage } from "./pages/EconomicsPage";
 import { CivicParticipationPage } from "./pages/CivicParticipationPage";
@@ -242,8 +245,11 @@ const App = () => {
           <Route path="/economics" element={<EconomicsPage />} />
           <Route path="/civic" element={<CivicParticipationPage />} />
           <Route path="/unity" element={<OneAndIndivisiblePage />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/schools" element={<SchoolsDirectory />} />
+              <Route path="/analytics" element={<Analytics />} />
+              <Route path="/analytics/dashboard" element={<AnalyticsDashboard />} />
+              <Route path="/analytics/sentiment" element={<SentimentAnalysis />} />
+              <Route path="/analytics/predictive" element={<PredictiveAnalytics />} />
+              <Route path="/schools" element={<SchoolsDirectory />} />
           <Route path="/hospitals" element={<HospitalsDirectory />} />
           <Route path="/pharmacies" element={<PharmaciesDirectory />} />
           <Route path="/map" element={<ServicesMap />} />
