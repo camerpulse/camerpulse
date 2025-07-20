@@ -57,7 +57,11 @@ export const DiasporaProfileSetup = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createProfile.mutate(formData);
+    createProfile.mutate(formData, {
+      onSuccess: () => {
+        window.location.href = '/diaspora/dashboard';
+      }
+    });
   };
 
   return (

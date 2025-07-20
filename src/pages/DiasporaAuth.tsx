@@ -42,7 +42,8 @@ export const DiasporaAuth = () => {
           title: "Welcome Back!",
           description: "You have successfully signed in."
         });
-        navigate('/diaspora');
+        // Check if user has diaspora profile, redirect accordingly
+        window.location.href = '/diaspora/dashboard';
       }
     } catch (error) {
       console.error('Sign in error:', error);

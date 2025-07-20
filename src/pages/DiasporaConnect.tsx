@@ -41,7 +41,7 @@ const DiasporaConnect: React.FC = () => {
               <p className="text-muted-foreground mb-4">
                 Discover verified development projects across all regions of Cameroon.
               </p>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" onClick={() => window.location.href = '/diaspora/projects'}>
                 View Projects
               </Button>
             </CardContent>
@@ -54,7 +54,7 @@ const DiasporaConnect: React.FC = () => {
               <p className="text-muted-foreground mb-4">
                 Participate in virtual town halls and community discussions.
               </p>
-              <Button variant="outline" className="w-full">
+              <Button variant="outline" className="w-full" onClick={() => window.location.href = '/diaspora/events'}>
                 View Events
               </Button>
             </CardContent>
@@ -73,7 +73,7 @@ const DiasporaConnect: React.FC = () => {
               <Button size="lg" onClick={() => window.location.href = '/diaspora/auth'}>
                 Create Diaspora Profile
               </Button>
-              <Button variant="outline" size="lg">
+              <Button variant="outline" size="lg" onClick={() => window.location.href = '/diaspora/impact'}>
                 Learn More
               </Button>
             </div>
