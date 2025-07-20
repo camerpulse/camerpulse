@@ -29,7 +29,7 @@ interface InstitutionDashboard {
   messaging_enabled: boolean;
   subscription_tier: string;
   access_permissions: any;
-  institution: {
+  institutions?: {
     name: string;
     institution_type: string;
     is_verified: boolean;
@@ -102,12 +102,12 @@ export default function InstitutionOwnerDashboard() {
       // Load statistics
       const { data: messagesCount } = await supabase
         .from('institution_messages')
-        .select('id, status')
+        .select('id')
         .eq('institution_id', dashboardData.institution_id);
 
       const stats = {
         total_messages: messagesCount?.length || 0,
-        unread_messages: messagesCount?.filter(m => m.status === 'unread').length || 0,
+        unread_messages: 0, // Will be implemented when status field is available
         this_month_views: Math.floor(Math.random() * 1000), // Placeholder
         renewal_status: renewalData?.renewal_status || 'active',
         days_until_renewal: renewalData ? 
@@ -186,20 +186,20 @@ export default function InstitutionOwnerDashboard() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold flex items-center gap-2">
-                {dashboard.institution.name}
-                {dashboard.institution.is_verified && (
+                {dashboard.institutions?.name || 'Institution'}
+                {dashboard.institutions?.is_verified && (
                   <Shield className="h-6 w-6 text-blue-600" />
                 )}
               </h1>
               <p className="text-muted-foreground capitalize">
-                {dashboard.institution.institution_type} Dashboard
+                {dashboard.institutions?.institution_type || 'Institution'} Dashboard
               </p>
             </div>
             <Badge 
-              variant={dashboard.institution.claim_status === 'verified' ? 'default' : 'secondary'}
+              variant={dashboard.institutions?.claim_status === 'verified' ? 'default' : 'secondary'}
               className="capitalize"
             >
-              {dashboard.institution.claim_status}
+              {dashboard.institutions?.claim_status || 'pending'}
             </Badge>
           </div>
         </div>

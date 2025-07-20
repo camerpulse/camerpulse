@@ -12514,6 +12514,144 @@ export type Database = {
           },
         ]
       }
+      government_projects: {
+        Row: {
+          actual_completion_date: string | null
+          alert_timeline_slippage: boolean | null
+          budget_allocated_fcfa: number
+          budget_allocated_usd: number | null
+          budget_utilization_percentage: number | null
+          community_satisfaction_score: number | null
+          completion_percentage: number | null
+          contractor_id: string | null
+          contractor_name: string | null
+          coordinates: Json | null
+          corruption_index: number | null
+          corruption_tag: Database["public"]["Enums"]["corruption_tag"] | null
+          created_at: string | null
+          description: string | null
+          expected_completion_date: string | null
+          funding_partner: string | null
+          funding_source: Database["public"]["Enums"]["funding_source_type"]
+          funds_disbursed_fcfa: number | null
+          id: string
+          implementing_body: string
+          is_verified: boolean | null
+          last_progress_update: string | null
+          locations: Json | null
+          metadata: Json | null
+          ministry_responsible: string | null
+          procurement_entity: string | null
+          project_code: string | null
+          project_documents: Json | null
+          sector: Database["public"]["Enums"]["project_sector"]
+          source_type: string | null
+          source_url: string | null
+          start_date: string | null
+          status: Database["public"]["Enums"]["project_status"] | null
+          submitted_by: string | null
+          supervising_agency: string | null
+          supervising_official: string | null
+          timeline_slippage_days: number | null
+          title: string
+          total_community_reports: number | null
+          transparency_score: number | null
+          updated_at: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          actual_completion_date?: string | null
+          alert_timeline_slippage?: boolean | null
+          budget_allocated_fcfa: number
+          budget_allocated_usd?: number | null
+          budget_utilization_percentage?: number | null
+          community_satisfaction_score?: number | null
+          completion_percentage?: number | null
+          contractor_id?: string | null
+          contractor_name?: string | null
+          coordinates?: Json | null
+          corruption_index?: number | null
+          corruption_tag?: Database["public"]["Enums"]["corruption_tag"] | null
+          created_at?: string | null
+          description?: string | null
+          expected_completion_date?: string | null
+          funding_partner?: string | null
+          funding_source: Database["public"]["Enums"]["funding_source_type"]
+          funds_disbursed_fcfa?: number | null
+          id?: string
+          implementing_body: string
+          is_verified?: boolean | null
+          last_progress_update?: string | null
+          locations?: Json | null
+          metadata?: Json | null
+          ministry_responsible?: string | null
+          procurement_entity?: string | null
+          project_code?: string | null
+          project_documents?: Json | null
+          sector: Database["public"]["Enums"]["project_sector"]
+          source_type?: string | null
+          source_url?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"] | null
+          submitted_by?: string | null
+          supervising_agency?: string | null
+          supervising_official?: string | null
+          timeline_slippage_days?: number | null
+          title: string
+          total_community_reports?: number | null
+          transparency_score?: number | null
+          updated_at?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          actual_completion_date?: string | null
+          alert_timeline_slippage?: boolean | null
+          budget_allocated_fcfa?: number
+          budget_allocated_usd?: number | null
+          budget_utilization_percentage?: number | null
+          community_satisfaction_score?: number | null
+          completion_percentage?: number | null
+          contractor_id?: string | null
+          contractor_name?: string | null
+          coordinates?: Json | null
+          corruption_index?: number | null
+          corruption_tag?: Database["public"]["Enums"]["corruption_tag"] | null
+          created_at?: string | null
+          description?: string | null
+          expected_completion_date?: string | null
+          funding_partner?: string | null
+          funding_source?: Database["public"]["Enums"]["funding_source_type"]
+          funds_disbursed_fcfa?: number | null
+          id?: string
+          implementing_body?: string
+          is_verified?: boolean | null
+          last_progress_update?: string | null
+          locations?: Json | null
+          metadata?: Json | null
+          ministry_responsible?: string | null
+          procurement_entity?: string | null
+          project_code?: string | null
+          project_documents?: Json | null
+          sector?: Database["public"]["Enums"]["project_sector"]
+          source_type?: string | null
+          source_url?: string | null
+          start_date?: string | null
+          status?: Database["public"]["Enums"]["project_status"] | null
+          submitted_by?: string | null
+          supervising_agency?: string | null
+          supervising_official?: string | null
+          timeline_slippage_days?: number | null
+          title?: string
+          total_community_reports?: number | null
+          transparency_score?: number | null
+          updated_at?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       hospital_claims: {
         Row: {
           admin_notes: string | null
@@ -20804,6 +20942,584 @@ export type Database = {
         }
         Relationships: []
       }
+      project_budget_disbursements: {
+        Row: {
+          amount_fcfa: number
+          amount_usd: number | null
+          created_at: string | null
+          created_by: string | null
+          cumulative_disbursed: number | null
+          disbursement_date: string
+          disbursement_method: string | null
+          disbursement_purpose: string | null
+          id: string
+          project_id: string
+          recipient_entity: string | null
+          remaining_budget: number | null
+          supporting_documents: Json | null
+          verification_documents: Json | null
+          verified_by_treasury: boolean | null
+        }
+        Insert: {
+          amount_fcfa: number
+          amount_usd?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          cumulative_disbursed?: number | null
+          disbursement_date: string
+          disbursement_method?: string | null
+          disbursement_purpose?: string | null
+          id?: string
+          project_id: string
+          recipient_entity?: string | null
+          remaining_budget?: number | null
+          supporting_documents?: Json | null
+          verification_documents?: Json | null
+          verified_by_treasury?: boolean | null
+        }
+        Update: {
+          amount_fcfa?: number
+          amount_usd?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          cumulative_disbursed?: number | null
+          disbursement_date?: string
+          disbursement_method?: string | null
+          disbursement_purpose?: string | null
+          id?: string
+          project_id?: string
+          recipient_entity?: string | null
+          remaining_budget?: number | null
+          supporting_documents?: Json | null
+          verification_documents?: Json | null
+          verified_by_treasury?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_budget_disbursements_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "government_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_community_reports: {
+        Row: {
+          community_impact_score: number | null
+          created_at: string | null
+          evidence_photos: Json | null
+          id: string
+          location_coordinates: Json | null
+          moderator_id: string | null
+          moderator_notes: string | null
+          project_id: string
+          public_visibility: boolean | null
+          report_description: string
+          report_severity: string | null
+          report_title: string
+          report_type: string
+          reporter_user_id: string | null
+          satisfaction_rating: number | null
+          status: string | null
+          updated_at: string | null
+          verified_by_moderator: boolean | null
+        }
+        Insert: {
+          community_impact_score?: number | null
+          created_at?: string | null
+          evidence_photos?: Json | null
+          id?: string
+          location_coordinates?: Json | null
+          moderator_id?: string | null
+          moderator_notes?: string | null
+          project_id: string
+          public_visibility?: boolean | null
+          report_description: string
+          report_severity?: string | null
+          report_title: string
+          report_type: string
+          reporter_user_id?: string | null
+          satisfaction_rating?: number | null
+          status?: string | null
+          updated_at?: string | null
+          verified_by_moderator?: boolean | null
+        }
+        Update: {
+          community_impact_score?: number | null
+          created_at?: string | null
+          evidence_photos?: Json | null
+          id?: string
+          location_coordinates?: Json | null
+          moderator_id?: string | null
+          moderator_notes?: string | null
+          project_id?: string
+          public_visibility?: boolean | null
+          report_description?: string
+          report_severity?: string | null
+          report_title?: string
+          report_type?: string
+          reporter_user_id?: string | null
+          satisfaction_rating?: number | null
+          status?: string | null
+          updated_at?: string | null
+          verified_by_moderator?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_community_reports_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "government_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_contractor_assignments: {
+        Row: {
+          contract_end_date: string | null
+          contract_start_date: string | null
+          contract_status: string | null
+          contract_value: number
+          contractor_id: string
+          created_at: string | null
+          id: string
+          payment_schedule: Json | null
+          payments_made: number | null
+          performance_score: number | null
+          project_id: string
+        }
+        Insert: {
+          contract_end_date?: string | null
+          contract_start_date?: string | null
+          contract_status?: string | null
+          contract_value: number
+          contractor_id: string
+          created_at?: string | null
+          id?: string
+          payment_schedule?: Json | null
+          payments_made?: number | null
+          performance_score?: number | null
+          project_id: string
+        }
+        Update: {
+          contract_end_date?: string | null
+          contract_start_date?: string | null
+          contract_status?: string | null
+          contract_value?: number
+          contractor_id?: string
+          created_at?: string | null
+          id?: string
+          payment_schedule?: Json | null
+          payments_made?: number | null
+          performance_score?: number | null
+          project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_contractor_assignments_contractor_id_fkey"
+            columns: ["contractor_id"]
+            isOneToOne: false
+            referencedRelation: "project_contractors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "project_contractor_assignments_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "government_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_contractors: {
+        Row: {
+          average_quality_score: number | null
+          blacklist_reason: string | null
+          blacklisted: boolean | null
+          company_type: string | null
+          contact_information: Json | null
+          contractor_id: string | null
+          contractor_name: string
+          corruption_flags_count: number | null
+          created_at: string | null
+          id: string
+          performance_rating: number | null
+          projects_abandoned: number | null
+          projects_completed: number | null
+          projects_delayed: number | null
+          registration_number: string | null
+          specialization: Json | null
+          total_contracts_value: number | null
+          updated_at: string | null
+          verified_contractor: boolean | null
+        }
+        Insert: {
+          average_quality_score?: number | null
+          blacklist_reason?: string | null
+          blacklisted?: boolean | null
+          company_type?: string | null
+          contact_information?: Json | null
+          contractor_id?: string | null
+          contractor_name: string
+          corruption_flags_count?: number | null
+          created_at?: string | null
+          id?: string
+          performance_rating?: number | null
+          projects_abandoned?: number | null
+          projects_completed?: number | null
+          projects_delayed?: number | null
+          registration_number?: string | null
+          specialization?: Json | null
+          total_contracts_value?: number | null
+          updated_at?: string | null
+          verified_contractor?: boolean | null
+        }
+        Update: {
+          average_quality_score?: number | null
+          blacklist_reason?: string | null
+          blacklisted?: boolean | null
+          company_type?: string | null
+          contact_information?: Json | null
+          contractor_id?: string | null
+          contractor_name?: string
+          corruption_flags_count?: number | null
+          created_at?: string | null
+          id?: string
+          performance_rating?: number | null
+          projects_abandoned?: number | null
+          projects_completed?: number | null
+          projects_delayed?: number | null
+          registration_number?: string | null
+          specialization?: Json | null
+          total_contracts_value?: number | null
+          updated_at?: string | null
+          verified_contractor?: boolean | null
+        }
+        Relationships: []
+      }
+      project_corruption_flags: {
+        Row: {
+          corruption_amount_estimated: number | null
+          created_at: string | null
+          evidence_files: Json | null
+          flag_description: string
+          flag_severity: string | null
+          flag_type: string
+          id: string
+          investigated_by: string | null
+          investigation_notes: string | null
+          investigation_status: string | null
+          project_id: string
+          public_visibility: boolean | null
+          reported_by: string | null
+          reporter_type: string | null
+          resolution_date: string | null
+          resolution_status: string | null
+          updated_at: string | null
+          whistleblower_protected: boolean | null
+        }
+        Insert: {
+          corruption_amount_estimated?: number | null
+          created_at?: string | null
+          evidence_files?: Json | null
+          flag_description: string
+          flag_severity?: string | null
+          flag_type: string
+          id?: string
+          investigated_by?: string | null
+          investigation_notes?: string | null
+          investigation_status?: string | null
+          project_id: string
+          public_visibility?: boolean | null
+          reported_by?: string | null
+          reporter_type?: string | null
+          resolution_date?: string | null
+          resolution_status?: string | null
+          updated_at?: string | null
+          whistleblower_protected?: boolean | null
+        }
+        Update: {
+          corruption_amount_estimated?: number | null
+          created_at?: string | null
+          evidence_files?: Json | null
+          flag_description?: string
+          flag_severity?: string | null
+          flag_type?: string
+          id?: string
+          investigated_by?: string | null
+          investigation_notes?: string | null
+          investigation_status?: string | null
+          project_id?: string
+          public_visibility?: boolean | null
+          reported_by?: string | null
+          reporter_type?: string | null
+          resolution_date?: string | null
+          resolution_status?: string | null
+          updated_at?: string | null
+          whistleblower_protected?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_corruption_flags_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "government_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_documents: {
+        Row: {
+          access_level: string | null
+          created_at: string | null
+          document_date: string | null
+          document_description: string | null
+          document_hash: string | null
+          document_title: string
+          document_type: string
+          file_size_bytes: number | null
+          file_url: string | null
+          id: string
+          language: string | null
+          project_id: string
+          updated_at: string | null
+          uploaded_by: string | null
+          verification_status: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          access_level?: string | null
+          created_at?: string | null
+          document_date?: string | null
+          document_description?: string | null
+          document_hash?: string | null
+          document_title: string
+          document_type: string
+          file_size_bytes?: number | null
+          file_url?: string | null
+          id?: string
+          language?: string | null
+          project_id: string
+          updated_at?: string | null
+          uploaded_by?: string | null
+          verification_status?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          access_level?: string | null
+          created_at?: string | null
+          document_date?: string | null
+          document_description?: string | null
+          document_hash?: string | null
+          document_title?: string
+          document_type?: string
+          file_size_bytes?: number | null
+          file_url?: string | null
+          id?: string
+          language?: string | null
+          project_id?: string
+          updated_at?: string | null
+          uploaded_by?: string | null
+          verification_status?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_documents_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "government_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_milestones: {
+        Row: {
+          actual_date: string | null
+          budget_allocated: number | null
+          budget_used: number | null
+          completion_percentage: number | null
+          created_at: string | null
+          evidence_required: boolean | null
+          evidence_submitted: Json | null
+          id: string
+          is_critical: boolean | null
+          milestone_description: string | null
+          milestone_name: string
+          milestone_order: number | null
+          planned_date: string | null
+          project_id: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          actual_date?: string | null
+          budget_allocated?: number | null
+          budget_used?: number | null
+          completion_percentage?: number | null
+          created_at?: string | null
+          evidence_required?: boolean | null
+          evidence_submitted?: Json | null
+          id?: string
+          is_critical?: boolean | null
+          milestone_description?: string | null
+          milestone_name: string
+          milestone_order?: number | null
+          planned_date?: string | null
+          project_id: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          actual_date?: string | null
+          budget_allocated?: number | null
+          budget_used?: number | null
+          completion_percentage?: number | null
+          created_at?: string | null
+          evidence_required?: boolean | null
+          evidence_submitted?: Json | null
+          id?: string
+          is_critical?: boolean | null
+          milestone_description?: string | null
+          milestone_name?: string
+          milestone_order?: number | null
+          planned_date?: string | null
+          project_id?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_milestones_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "government_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_status_updates: {
+        Row: {
+          budget_update: Json | null
+          completion_percentage: number
+          created_at: string | null
+          evidence_photos: Json | null
+          id: string
+          location_verified: boolean | null
+          new_status: Database["public"]["Enums"]["project_status"]
+          previous_status: Database["public"]["Enums"]["project_status"] | null
+          progress_notes: string | null
+          project_id: string
+          update_description: string | null
+          updated_by: string | null
+          updater_type: string | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          budget_update?: Json | null
+          completion_percentage: number
+          created_at?: string | null
+          evidence_photos?: Json | null
+          id?: string
+          location_verified?: boolean | null
+          new_status: Database["public"]["Enums"]["project_status"]
+          previous_status?: Database["public"]["Enums"]["project_status"] | null
+          progress_notes?: string | null
+          project_id: string
+          update_description?: string | null
+          updated_by?: string | null
+          updater_type?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          budget_update?: Json | null
+          completion_percentage?: number
+          created_at?: string | null
+          evidence_photos?: Json | null
+          id?: string
+          location_verified?: boolean | null
+          new_status?: Database["public"]["Enums"]["project_status"]
+          previous_status?: Database["public"]["Enums"]["project_status"] | null
+          progress_notes?: string | null
+          project_id?: string
+          update_description?: string | null
+          updated_by?: string | null
+          updater_type?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_status_updates_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "government_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_timeline_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_message: string
+          alert_severity: string | null
+          alert_type: string
+          automated: boolean | null
+          created_at: string | null
+          days_overdue: number | null
+          id: string
+          project_id: string
+          resolution_notes: string | null
+          resolved: boolean | null
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_message: string
+          alert_severity?: string | null
+          alert_type: string
+          automated?: boolean | null
+          created_at?: string | null
+          days_overdue?: number | null
+          id?: string
+          project_id: string
+          resolution_notes?: string | null
+          resolved?: boolean | null
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_message?: string
+          alert_severity?: string | null
+          alert_type?: string
+          automated?: boolean | null
+          created_at?: string | null
+          days_overdue?: number | null
+          id?: string
+          project_id?: string
+          resolution_notes?: string | null
+          resolved?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_timeline_alerts_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "government_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       promise_alerts: {
         Row: {
           acknowledged: boolean | null
@@ -25158,6 +25874,10 @@ export type Database = {
         Args: { p_politician_id: string }
         Returns: Json
       }
+      calculate_project_corruption_index: {
+        Args: { p_project_id: string }
+        Returns: number
+      }
       calculate_prompt_similarity: {
         Args: { p_source_content: string; p_target_content: string }
         Returns: number
@@ -25292,6 +26012,10 @@ export type Database = {
       detect_sentiment_spikes: {
         Args: { p_timeline_id: string; p_threshold?: number }
         Returns: Json
+      }
+      detect_timeline_slippage: {
+        Args: Record<PropertyKey, never>
+        Returns: number
       }
       enable_politician_poll_creation: {
         Args: { p_politician_id: string; p_admin_id: string }
@@ -25787,6 +26511,7 @@ export type Database = {
         | "completed"
         | "cancelled"
       contract_type: "branding" | "exclusivity" | "nda" | "general"
+      corruption_tag: "verified" | "alleged" | "cleared" | "under_investigation"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
       engagement_activity_type:
         | "public_appearance"
@@ -25823,6 +26548,15 @@ export type Database = {
         | "event_attendance"
         | "review"
         | "share"
+      funding_source_type:
+        | "national_budget"
+        | "world_bank"
+        | "afdb"
+        | "eu"
+        | "china"
+        | "private"
+        | "ngo"
+        | "other"
       hospital_ownership:
         | "government"
         | "private"
@@ -25950,6 +26684,26 @@ export type Database = {
         | "activist"
         | "camerpulse_official"
         | "moderator"
+      project_sector:
+        | "education"
+        | "health"
+        | "infrastructure"
+        | "agriculture"
+        | "energy"
+        | "water_sanitation"
+        | "transport"
+        | "telecommunications"
+        | "environment"
+        | "social_protection"
+        | "governance"
+        | "other"
+      project_status:
+        | "planned"
+        | "in_progress"
+        | "completed"
+        | "paused"
+        | "failed"
+        | "abandoned"
       release_status:
         | "draft"
         | "pending_review"
@@ -26247,6 +27001,7 @@ export const Constants = {
         "cancelled",
       ],
       contract_type: ["branding", "exclusivity", "nda", "general"],
+      corruption_tag: ["verified", "alleged", "cleared", "under_investigation"],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
       engagement_activity_type: [
         "public_appearance",
@@ -26286,6 +27041,16 @@ export const Constants = {
         "event_attendance",
         "review",
         "share",
+      ],
+      funding_source_type: [
+        "national_budget",
+        "world_bank",
+        "afdb",
+        "eu",
+        "china",
+        "private",
+        "ngo",
+        "other",
       ],
       hospital_ownership: [
         "government",
@@ -26427,6 +27192,28 @@ export const Constants = {
         "activist",
         "camerpulse_official",
         "moderator",
+      ],
+      project_sector: [
+        "education",
+        "health",
+        "infrastructure",
+        "agriculture",
+        "energy",
+        "water_sanitation",
+        "transport",
+        "telecommunications",
+        "environment",
+        "social_protection",
+        "governance",
+        "other",
+      ],
+      project_status: [
+        "planned",
+        "in_progress",
+        "completed",
+        "paused",
+        "failed",
+        "abandoned",
       ],
       release_status: [
         "draft",
