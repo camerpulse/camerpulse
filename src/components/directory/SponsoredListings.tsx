@@ -197,7 +197,7 @@ export const SponsoredListings = () => {
                     <SelectItem key={institution.id} value={institution.id}>
                       <div className="flex items-center gap-2">
                         <span>{institution.name}</span>
-                        <Badge variant="outline">{institution.type}</Badge>
+                        <Badge variant="outline">{institution.institution_type}</Badge>
                         {institution.is_sponsored && (
                           <Badge variant="secondary">Currently Sponsored</Badge>
                         )}

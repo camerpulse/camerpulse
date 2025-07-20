@@ -1,31 +1,8 @@
-export interface Institution {
-  id: string;
-  name: string;
-  institution_type: 'school' | 'hospital' | 'pharmacy' | 'village';
-  description?: string;
-  region?: string;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
-}
+import type { Database } from "@/integrations/supabase/types";
 
-export interface VillageData {
-  id: string;
-  institution_id: string;
-  chief_name?: string;
-  chief_contact?: string;
-  population?: number;
-  development_score: number;
-  culture_score: number;
-  education_score: number;
-  conflict_resolution_score: number;
-  heritage_info?: string;
-  major_projects: string[];
-  fundraising_campaigns: any[];
-  petitions: any[];
-  created_at: string;
-  updated_at: string;
-}
+export type Institution = Database['public']['Tables']['institutions']['Row'];
+
+export type VillageData = Database['public']['Tables']['village_data']['Row'];
 
 export interface InstitutionClaim {
   id: string;

@@ -23,7 +23,7 @@ export const PharmaciesHomepage = () => {
       const { data, error } = await supabase
         .from('institutions')
         .select('*')
-        .eq('type', 'pharmacy')
+        .eq('institution_type', 'pharmacy')
         .order('average_rating', { ascending: false })
         .limit(20);
 

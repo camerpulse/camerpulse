@@ -13156,34 +13156,85 @@ export type Database = {
       }
       institutions: {
         Row: {
+          address: string | null
+          average_rating: number | null
+          city: string | null
+          claim_status: string | null
+          claimed_by: string | null
           created_at: string
           description: string | null
+          email: string | null
           id: string
           institution_type: Database["public"]["Enums"]["institution_type"]
           is_active: boolean
+          is_featured: boolean | null
+          is_sponsored: boolean | null
+          is_verified: boolean | null
+          latitude: number | null
+          longitude: number | null
+          metadata: Json | null
           name: string
+          phone: string | null
           region: string | null
+          sponsored_until: string | null
+          total_reviews: number | null
           updated_at: string
+          views_count: number | null
+          website: string | null
         }
         Insert: {
+          address?: string | null
+          average_rating?: number | null
+          city?: string | null
+          claim_status?: string | null
+          claimed_by?: string | null
           created_at?: string
           description?: string | null
+          email?: string | null
           id?: string
           institution_type: Database["public"]["Enums"]["institution_type"]
           is_active?: boolean
+          is_featured?: boolean | null
+          is_sponsored?: boolean | null
+          is_verified?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          metadata?: Json | null
           name: string
+          phone?: string | null
           region?: string | null
+          sponsored_until?: string | null
+          total_reviews?: number | null
           updated_at?: string
+          views_count?: number | null
+          website?: string | null
         }
         Update: {
+          address?: string | null
+          average_rating?: number | null
+          city?: string | null
+          claim_status?: string | null
+          claimed_by?: string | null
           created_at?: string
           description?: string | null
+          email?: string | null
           id?: string
           institution_type?: Database["public"]["Enums"]["institution_type"]
           is_active?: boolean
+          is_featured?: boolean | null
+          is_sponsored?: boolean | null
+          is_verified?: boolean | null
+          latitude?: number | null
+          longitude?: number | null
+          metadata?: Json | null
           name?: string
+          phone?: string | null
           region?: string | null
+          sponsored_until?: string | null
+          total_reviews?: number | null
           updated_at?: string
+          views_count?: number | null
+          website?: string | null
         }
         Relationships: []
       }
@@ -25432,6 +25483,10 @@ export type Database = {
         | "public_health"
         | "education_ministry"
         | "local_councils"
+        | "school"
+        | "hospital"
+        | "pharmacy"
+        | "village"
       media_source_type:
         | "news_website"
         | "youtube_channel"
@@ -25894,6 +25949,10 @@ export const Constants = {
         "public_health",
         "education_ministry",
         "local_councils",
+        "school",
+        "hospital",
+        "pharmacy",
+        "village",
       ],
       media_source_type: [
         "news_website",

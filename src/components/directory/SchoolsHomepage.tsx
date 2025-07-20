@@ -24,7 +24,7 @@ export const SchoolsHomepage = () => {
       const { data, error } = await supabase
         .from('institutions')
         .select('*')
-        .eq('type', 'school')
+        .eq('institution_type', 'school')
         .order('average_rating', { ascending: false })
         .limit(20);
 

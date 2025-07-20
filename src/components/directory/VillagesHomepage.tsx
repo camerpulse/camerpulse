@@ -40,7 +40,7 @@ export const VillagesHomepage = () => {
       const { data: villagesData, error: villagesError } = await supabase
         .from('institutions')
         .select('*')
-        .eq('type', 'village')
+        .eq('institution_type', 'village')
         .order('average_rating', { ascending: false })
         .limit(20);
 

@@ -24,7 +24,7 @@ export const HospitalsHomepage = () => {
       const { data, error } = await supabase
         .from('institutions')
         .select('*')
-        .eq('type', 'hospital')
+        .eq('institution_type', 'hospital')
         .order('average_rating', { ascending: false })
         .limit(20);
 
