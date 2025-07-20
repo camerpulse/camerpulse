@@ -130,21 +130,25 @@ export const Footer = () => {
               Governance & Transparency
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/legal" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/government-projects" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Scale className="w-3 h-3" />
-                Legal Framework
+                Government Projects
               </Link>
-              <Link to="/transparency" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <FileText className="w-3 h-3" />
-                Transparency Reports
+              <Link to="/billionaires" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Crown className="w-3 h-3" />
+                Billionaire Tracker
               </Link>
-              <Link to="/accountability" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <AlertTriangle className="w-3 h-3" />
-                Accountability
+              <Link to="/election-forecast" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <TrendingUp className="w-3 h-3" />
+                Election Forecast
               </Link>
-              <Link to="/budget" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <DollarSign className="w-3 h-3" />
-                Budget Tracking
+              <Link to="/companies" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Briefcase className="w-3 h-3" />
+                Companies Directory
+              </Link>
+              <Link to="/camerplay" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Music className="w-3 h-3" />
+                CamerPlay Music
               </Link>
               <Link to="/civic-education" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Globe className="w-3 h-3" />
