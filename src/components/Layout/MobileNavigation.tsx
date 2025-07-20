@@ -12,7 +12,8 @@ import {
   Vote,
   Activity,
   Calendar,
-  MapPin
+  MapPin,
+  Shield
 } from 'lucide-react';
 
 interface NavItem {
@@ -60,6 +61,12 @@ const navItems: NavItem[] = [
     label: 'Polls',
     icon: Vote,
     path: '/polls',
+  },
+  {
+    id: 'civic-shield',
+    label: 'Shield',
+    icon: Shield,
+    path: '/civic-shield',
   },
   {
     id: 'marketplace',
