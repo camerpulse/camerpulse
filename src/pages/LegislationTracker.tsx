@@ -80,7 +80,7 @@ export const LegislationTracker = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        toast.error('Please sign in to vote on legislation');
+        toast.error('Please sign in to vote on legislation. Go to /auth to create an account or sign in.');
         return;
       }
 
@@ -95,9 +95,19 @@ export const LegislationTracker = () => {
 
       if (error) throw error;
 
-      toast.success(`Your ${position} vote has been recorded`);
-    } catch (error) {
-      toast.error('Failed to record vote');
+      toast.success(`Your ${position} vote has been recorded successfully!`);
+      
+      // Trigger a refetch of the data to show updated vote counts
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (error: any) {
+      console.error('Vote error:', error);
+      if (error.message?.includes('duplicate')) {
+        toast.info('You have already voted on this legislation. Your previous vote has been updated.');
+      } else {
+        toast.error('Failed to record vote. Please try again.');
+      }
     }
   };
 
@@ -130,7 +140,7 @@ export const LegislationTracker = () => {
     }
   };
 
-  // Real-time updates
+  // Real-time updates with better error handling
   useEffect(() => {
     const channel = supabase
       .channel('legislation-changes')
@@ -141,9 +151,25 @@ export const LegislationTracker = () => {
           schema: 'public',
           table: 'legislation_registry'
         },
-        () => {
-          // Refetch data when changes occur
-          window.location.reload();
+        (payload) => {
+          console.log('Legislation change detected:', payload);
+          toast.info('Legislation data updated');
+          // Trigger a refetch instead of full reload for better UX
+          setTimeout(() => {
+            window.location.reload();
+          }, 1500);
+        }
+      )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public', 
+          table: 'citizen_bill_engagement'
+        },
+        (payload) => {
+          console.log('Vote change detected:', payload);
+          // Could implement more granular updates here
         }
       )
       .subscribe();

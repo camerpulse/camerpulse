@@ -29240,7 +29240,14 @@ export type Database = {
       }
       get_legislation_statistics: {
         Args: Record<PropertyKey, never>
-        Returns: Json
+        Returns: {
+          total_bills: number
+          active_bills: number
+          passed_bills: number
+          rejected_bills: number
+          total_citizen_votes: number
+          avg_citizen_engagement: number
+        }[]
       }
       get_mesh_status_overview: {
         Args: Record<PropertyKey, never>
