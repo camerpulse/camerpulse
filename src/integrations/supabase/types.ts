@@ -3771,6 +3771,132 @@ export type Database = {
           },
         ]
       }
+      automated_moderation: {
+        Row: {
+          ai_model_used: string
+          appeal_reason: string | null
+          appeal_status: string | null
+          confidence_score: number
+          content_id: string
+          content_text: string | null
+          content_type: string
+          created_at: string
+          flagged_keywords: string[] | null
+          human_review_required: boolean
+          id: string
+          moderation_action: Database["public"]["Enums"]["moderation_action"]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sentiment_score: number | null
+          spam_probability: number | null
+          toxicity_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          ai_model_used?: string
+          appeal_reason?: string | null
+          appeal_status?: string | null
+          confidence_score: number
+          content_id: string
+          content_text?: string | null
+          content_type: string
+          created_at?: string
+          flagged_keywords?: string[] | null
+          human_review_required?: boolean
+          id?: string
+          moderation_action: Database["public"]["Enums"]["moderation_action"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sentiment_score?: number | null
+          spam_probability?: number | null
+          toxicity_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          ai_model_used?: string
+          appeal_reason?: string | null
+          appeal_status?: string | null
+          confidence_score?: number
+          content_id?: string
+          content_text?: string | null
+          content_type?: string
+          created_at?: string
+          flagged_keywords?: string[] | null
+          human_review_required?: boolean
+          id?: string
+          moderation_action?: Database["public"]["Enums"]["moderation_action"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sentiment_score?: number | null
+          spam_probability?: number | null
+          toxicity_score?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      automated_reports: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          data_sources: string[]
+          error_count: number
+          generation_count: number
+          id: string
+          is_active: boolean
+          last_generated_at: string | null
+          metadata: Json | null
+          next_generation_at: string | null
+          output_format: string
+          recipients: string[]
+          report_name: string
+          report_type: string
+          report_url: string | null
+          schedule_pattern: string
+          template_config: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          data_sources: string[]
+          error_count?: number
+          generation_count?: number
+          id?: string
+          is_active?: boolean
+          last_generated_at?: string | null
+          metadata?: Json | null
+          next_generation_at?: string | null
+          output_format?: string
+          recipients: string[]
+          report_name: string
+          report_type: string
+          report_url?: string | null
+          schedule_pattern: string
+          template_config: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          data_sources?: string[]
+          error_count?: number
+          generation_count?: number
+          id?: string
+          is_active?: boolean
+          last_generated_at?: string | null
+          metadata?: Json | null
+          next_generation_at?: string | null
+          output_format?: string
+          recipients?: string[]
+          report_name?: string
+          report_type?: string
+          report_url?: string | null
+          schedule_pattern?: string
+          template_config?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       autonomous_poll_config: {
         Row: {
           config_key: string
@@ -10699,6 +10825,72 @@ export type Database = {
         }
         Relationships: []
       }
+      early_warning_system: {
+        Row: {
+          affected_demographics: string[] | null
+          affected_regions: string[] | null
+          created_at: string
+          created_by: string | null
+          current_indicators: Json
+          description: string
+          escalation_level: number
+          id: string
+          resolution_timeline: string | null
+          resolved_at: string | null
+          response_actions: Json | null
+          severity: Database["public"]["Enums"]["alert_severity"]
+          stakeholders_notified: string[] | null
+          status: string
+          threshold_reached: boolean
+          title: string
+          trigger_conditions: Json
+          updated_at: string
+          warning_type: string
+        }
+        Insert: {
+          affected_demographics?: string[] | null
+          affected_regions?: string[] | null
+          created_at?: string
+          created_by?: string | null
+          current_indicators: Json
+          description: string
+          escalation_level?: number
+          id?: string
+          resolution_timeline?: string | null
+          resolved_at?: string | null
+          response_actions?: Json | null
+          severity: Database["public"]["Enums"]["alert_severity"]
+          stakeholders_notified?: string[] | null
+          status?: string
+          threshold_reached?: boolean
+          title: string
+          trigger_conditions: Json
+          updated_at?: string
+          warning_type: string
+        }
+        Update: {
+          affected_demographics?: string[] | null
+          affected_regions?: string[] | null
+          created_at?: string
+          created_by?: string | null
+          current_indicators?: Json
+          description?: string
+          escalation_level?: number
+          id?: string
+          resolution_timeline?: string | null
+          resolved_at?: string | null
+          response_actions?: Json | null
+          severity?: Database["public"]["Enums"]["alert_severity"]
+          stakeholders_notified?: string[] | null
+          status?: string
+          threshold_reached?: boolean
+          title?: string
+          trigger_conditions?: Json
+          updated_at?: string
+          warning_type?: string
+        }
+        Relationships: []
+      }
       economic_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -15114,6 +15306,77 @@ export type Database = {
         }
         Relationships: []
       }
+      live_polling_sessions: {
+        Row: {
+          comment_stream_enabled: boolean
+          created_at: string
+          created_by: string | null
+          current_active_users: number
+          ended_at: string | null
+          engagement_metrics: Json | null
+          id: string
+          is_live: boolean
+          live_results_enabled: boolean
+          max_concurrent_users: number
+          moderation_enabled: boolean
+          poll_id: string | null
+          session_name: string
+          started_at: string | null
+          streamer_ids: string[] | null
+          total_participants: number
+          updated_at: string
+          viewer_analytics: Json | null
+        }
+        Insert: {
+          comment_stream_enabled?: boolean
+          created_at?: string
+          created_by?: string | null
+          current_active_users?: number
+          ended_at?: string | null
+          engagement_metrics?: Json | null
+          id?: string
+          is_live?: boolean
+          live_results_enabled?: boolean
+          max_concurrent_users?: number
+          moderation_enabled?: boolean
+          poll_id?: string | null
+          session_name: string
+          started_at?: string | null
+          streamer_ids?: string[] | null
+          total_participants?: number
+          updated_at?: string
+          viewer_analytics?: Json | null
+        }
+        Update: {
+          comment_stream_enabled?: boolean
+          created_at?: string
+          created_by?: string | null
+          current_active_users?: number
+          ended_at?: string | null
+          engagement_metrics?: Json | null
+          id?: string
+          is_live?: boolean
+          live_results_enabled?: boolean
+          max_concurrent_users?: number
+          moderation_enabled?: boolean
+          poll_id?: string | null
+          session_name?: string
+          started_at?: string | null
+          streamer_ids?: string[] | null
+          total_participants?: number
+          updated_at?: string
+          viewer_analytics?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_polling_sessions_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       local_businesses: {
         Row: {
           address: string | null
@@ -16737,6 +17000,57 @@ export type Database = {
           subtitle?: string | null
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      monitoring_dashboards: {
+        Row: {
+          access_roles: string[]
+          alert_thresholds: Json | null
+          auto_refresh_enabled: boolean
+          created_at: string
+          created_by: string | null
+          dashboard_name: string
+          dashboard_type: string
+          id: string
+          is_public: boolean
+          metadata: Json | null
+          refresh_interval_seconds: number
+          shared_with: string[] | null
+          updated_at: string
+          widget_configuration: Json
+        }
+        Insert: {
+          access_roles?: string[]
+          alert_thresholds?: Json | null
+          auto_refresh_enabled?: boolean
+          created_at?: string
+          created_by?: string | null
+          dashboard_name: string
+          dashboard_type: string
+          id?: string
+          is_public?: boolean
+          metadata?: Json | null
+          refresh_interval_seconds?: number
+          shared_with?: string[] | null
+          updated_at?: string
+          widget_configuration: Json
+        }
+        Update: {
+          access_roles?: string[]
+          alert_thresholds?: Json | null
+          auto_refresh_enabled?: boolean
+          created_at?: string
+          created_by?: string | null
+          dashboard_name?: string
+          dashboard_type?: string
+          id?: string
+          is_public?: boolean
+          metadata?: Json | null
+          refresh_interval_seconds?: number
+          shared_with?: string[] | null
+          updated_at?: string
+          widget_configuration?: Json
         }
         Relationships: []
       }
@@ -23190,6 +23504,174 @@ export type Database = {
         }
         Relationships: []
       }
+      realtime_activity_feed: {
+        Row: {
+          action_description: string
+          activity_data: Json | null
+          activity_type: string
+          actor_id: string | null
+          actor_name: string | null
+          created_at: string
+          engagement_count: number
+          geographic_context: string | null
+          id: string
+          impact_score: number | null
+          reaction_summary: Json | null
+          target_id: string | null
+          target_type: string | null
+          visibility: string
+        }
+        Insert: {
+          action_description: string
+          activity_data?: Json | null
+          activity_type: string
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          engagement_count?: number
+          geographic_context?: string | null
+          id?: string
+          impact_score?: number | null
+          reaction_summary?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+          visibility?: string
+        }
+        Update: {
+          action_description?: string
+          activity_data?: Json | null
+          activity_type?: string
+          actor_id?: string | null
+          actor_name?: string | null
+          created_at?: string
+          engagement_count?: number
+          geographic_context?: string | null
+          id?: string
+          impact_score?: number | null
+          reaction_summary?: Json | null
+          target_id?: string | null
+          target_type?: string | null
+          visibility?: string
+        }
+        Relationships: []
+      }
+      realtime_notifications: {
+        Row: {
+          acknowledged_by: string[] | null
+          action_url: string | null
+          created_at: string
+          created_by: string | null
+          delivery_channels: string[]
+          delivery_status: Json | null
+          expires_at: string | null
+          id: string
+          message: string
+          metadata: Json | null
+          notification_type: string
+          priority: Database["public"]["Enums"]["alert_severity"]
+          read_by: string[] | null
+          sent_at: string | null
+          target_audience: string
+          target_users: string[] | null
+          title: string
+        }
+        Insert: {
+          acknowledged_by?: string[] | null
+          action_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          delivery_channels?: string[]
+          delivery_status?: Json | null
+          expires_at?: string | null
+          id?: string
+          message: string
+          metadata?: Json | null
+          notification_type: string
+          priority?: Database["public"]["Enums"]["alert_severity"]
+          read_by?: string[] | null
+          sent_at?: string | null
+          target_audience?: string
+          target_users?: string[] | null
+          title: string
+        }
+        Update: {
+          acknowledged_by?: string[] | null
+          action_url?: string | null
+          created_at?: string
+          created_by?: string | null
+          delivery_channels?: string[]
+          delivery_status?: Json | null
+          expires_at?: string | null
+          id?: string
+          message?: string
+          metadata?: Json | null
+          notification_type?: string
+          priority?: Database["public"]["Enums"]["alert_severity"]
+          read_by?: string[] | null
+          sent_at?: string | null
+          target_audience?: string
+          target_users?: string[] | null
+          title?: string
+        }
+        Relationships: []
+      }
+      realtime_streams: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          data_retention_days: number
+          description: string | null
+          endpoint_url: string | null
+          error_count: number
+          id: string
+          is_active: boolean
+          last_update: string | null
+          max_errors: number
+          metadata: Json | null
+          refresh_interval_seconds: number
+          stream_name: string
+          stream_type: Database["public"]["Enums"]["stream_type"]
+          subscribers_count: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          data_retention_days?: number
+          description?: string | null
+          endpoint_url?: string | null
+          error_count?: number
+          id?: string
+          is_active?: boolean
+          last_update?: string | null
+          max_errors?: number
+          metadata?: Json | null
+          refresh_interval_seconds?: number
+          stream_name: string
+          stream_type: Database["public"]["Enums"]["stream_type"]
+          subscribers_count?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          data_retention_days?: number
+          description?: string | null
+          endpoint_url?: string | null
+          error_count?: number
+          id?: string
+          is_active?: boolean
+          last_update?: string | null
+          max_errors?: number
+          metadata?: Json | null
+          refresh_interval_seconds?: number
+          stream_name?: string
+          stream_type?: Database["public"]["Enums"]["stream_type"]
+          subscribers_count?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       report_instances: {
         Row: {
           created_at: string
@@ -24617,6 +25099,44 @@ export type Database = {
           },
         ]
       }
+      stream_data: {
+        Row: {
+          data_point: Json
+          id: string
+          metadata: Json | null
+          processing_status: string | null
+          source_identifier: string | null
+          stream_id: string
+          timestamp: string
+        }
+        Insert: {
+          data_point: Json
+          id?: string
+          metadata?: Json | null
+          processing_status?: string | null
+          source_identifier?: string | null
+          stream_id: string
+          timestamp?: string
+        }
+        Update: {
+          data_point?: Json
+          id?: string
+          metadata?: Json | null
+          processing_status?: string | null
+          source_identifier?: string | null
+          stream_id?: string
+          timestamp?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stream_data_stream_id_fkey"
+            columns: ["stream_id"]
+            isOneToOne: false
+            referencedRelation: "realtime_streams"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscribers: {
         Row: {
           created_at: string
@@ -25022,6 +25542,69 @@ export type Database = {
           platform?: string
           track_id?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      trend_detection: {
+        Row: {
+          affected_demographics: Json | null
+          alert_generated: boolean
+          category: string
+          confidence_level: number
+          data_sources: string[]
+          description: string | null
+          first_detected_at: string
+          geographic_scope: string[] | null
+          growth_rate: number | null
+          id: string
+          keywords: string[]
+          last_updated_at: string
+          momentum_score: number
+          peak_timestamp: string | null
+          related_entities: Json | null
+          status: string
+          trend_name: string
+          trend_type: Database["public"]["Enums"]["trend_type"]
+        }
+        Insert: {
+          affected_demographics?: Json | null
+          alert_generated?: boolean
+          category: string
+          confidence_level: number
+          data_sources: string[]
+          description?: string | null
+          first_detected_at?: string
+          geographic_scope?: string[] | null
+          growth_rate?: number | null
+          id?: string
+          keywords: string[]
+          last_updated_at?: string
+          momentum_score?: number
+          peak_timestamp?: string | null
+          related_entities?: Json | null
+          status?: string
+          trend_name: string
+          trend_type: Database["public"]["Enums"]["trend_type"]
+        }
+        Update: {
+          affected_demographics?: Json | null
+          alert_generated?: boolean
+          category?: string
+          confidence_level?: number
+          data_sources?: string[]
+          description?: string | null
+          first_detected_at?: string
+          geographic_scope?: string[] | null
+          growth_rate?: number | null
+          id?: string
+          keywords?: string[]
+          last_updated_at?: string
+          momentum_score?: number
+          peak_timestamp?: string | null
+          related_entities?: Json | null
+          status?: string
+          trend_name?: string
+          trend_type?: Database["public"]["Enums"]["trend_type"]
         }
         Relationships: []
       }
@@ -27442,6 +28025,14 @@ export type Database = {
         }
         Returns: string
       }
+      detect_data_trends: {
+        Args: { p_category: string; p_time_window?: unknown }
+        Returns: {
+          trend_name: string
+          momentum_score: number
+          confidence_level: number
+        }[]
+      }
       detect_fraud_patterns: {
         Args: { p_poll_id: string }
         Returns: undefined
@@ -27490,6 +28081,15 @@ export type Database = {
       }
       generate_audio_fingerprint: {
         Args: { p_track_id: string; p_audio_url: string }
+        Returns: string
+      }
+      generate_automated_alert: {
+        Args: {
+          p_alert_type: string
+          p_title: string
+          p_message: string
+          p_severity?: Database["public"]["Enums"]["alert_severity"]
+        }
         Returns: string
       }
       generate_civic_predictions: {
@@ -27833,6 +28433,14 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_live_polling_metrics: {
+        Args: {
+          p_session_id: string
+          p_active_users?: number
+          p_new_participant?: boolean
+        }
+        Returns: undefined
+      }
       update_plugin_request_status: {
         Args: {
           p_request_id: string
@@ -28056,6 +28664,12 @@ export type Database = {
         | "radio_stream"
         | "blog"
         | "social_feed"
+      moderation_action:
+        | "approved"
+        | "flagged"
+        | "removed"
+        | "quarantine"
+        | "escalated"
       moderator_role:
         | "admin"
         | "senior_moderator"
@@ -28067,6 +28681,7 @@ export type Database = {
         | "rejected"
         | "suspended"
         | "inactive"
+      monitoring_status: "active" | "paused" | "error" | "maintenance"
       nomination_status: "pending" | "approved" | "rejected"
       notification_channel: "email" | "in_app" | "push" | "sms" | "whatsapp"
       notification_event_type:
@@ -28232,6 +28847,14 @@ export type Database = {
         | "international_org"
         | "academic"
         | "unknown"
+      stream_type:
+        | "civic_activity"
+        | "poll_results"
+        | "sentiment_analysis"
+        | "news_feed"
+        | "government_updates"
+        | "user_activity"
+        | "system_metrics"
       submission_status:
         | "pending"
         | "approved"
@@ -28253,6 +28876,7 @@ export type Database = {
         | "donation"
         | "subscription"
         | "refund"
+      trend_type: "rising" | "declining" | "viral" | "anomaly" | "normal"
       user_type: "artist" | "fan" | "admin" | "event_attendee"
       verification_status: "pending" | "verified" | "rejected" | "under_review"
       verification_status_enum:
@@ -28605,6 +29229,13 @@ export const Constants = {
         "blog",
         "social_feed",
       ],
+      moderation_action: [
+        "approved",
+        "flagged",
+        "removed",
+        "quarantine",
+        "escalated",
+      ],
       moderator_role: [
         "admin",
         "senior_moderator",
@@ -28618,6 +29249,7 @@ export const Constants = {
         "suspended",
         "inactive",
       ],
+      monitoring_status: ["active", "paused", "error", "maintenance"],
       nomination_status: ["pending", "approved", "rejected"],
       notification_channel: ["email", "in_app", "push", "sms", "whatsapp"],
       notification_event_type: [
@@ -28802,6 +29434,15 @@ export const Constants = {
         "academic",
         "unknown",
       ],
+      stream_type: [
+        "civic_activity",
+        "poll_results",
+        "sentiment_analysis",
+        "news_feed",
+        "government_updates",
+        "user_activity",
+        "system_metrics",
+      ],
       submission_status: [
         "pending",
         "approved",
@@ -28826,6 +29467,7 @@ export const Constants = {
         "subscription",
         "refund",
       ],
+      trend_type: ["rising", "declining", "viral", "anomaly", "normal"],
       user_type: ["artist", "fan", "admin", "event_attendee"],
       verification_status: ["pending", "verified", "rejected", "under_review"],
       verification_status_enum: [
