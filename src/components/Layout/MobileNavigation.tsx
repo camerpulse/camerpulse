@@ -13,7 +13,8 @@ import {
   Activity,
   Calendar,
   MapPin,
-  Shield
+  Shield,
+  BookOpen
 } from 'lucide-react';
 
 interface NavItem {
@@ -55,6 +56,12 @@ const navItems: NavItem[] = [
     label: 'Calendar',
     icon: Calendar,
     path: '/calendar',
+  },
+  {
+    id: 'education',
+    label: 'Civics',
+    icon: BookOpen,
+    path: '/civic-education',
   },
   {
     id: 'polls',
