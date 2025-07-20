@@ -66,33 +66,33 @@ export const Footer = () => {
                 <Vote className="w-3 h-3" />
                 Polls & Voting
               </Link>
+              <Link to="/legislation" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Scale className="w-3 h-3" />
+                Legislative Tracker
+              </Link>
               <Link to="/politicians" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Users className="w-3 h-3" />
                 Politicians
-              </Link>
-              <Link to="/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Calendar className="w-3 h-3" />
-                Civic Events
-              </Link>
-              <Link to="/national-debt" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <BarChart3 className="w-3 h-3" />
-                National Trackers
               </Link>
               <Link to="/petitions" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <FileText className="w-3 h-3" />
                 Petitions
               </Link>
-              <Link to="/analytics/dashboard" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Calendar className="w-3 h-3" />
+                Civic Events
+              </Link>
+              <Link to="/government-projects" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Target className="w-3 h-3" />
+                Gov Projects
+              </Link>
+              <Link to="/analytics" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <TrendingUp className="w-3 h-3" />
                 Analytics
               </Link>
-              <Link to="/verify-certificate" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Shield className="w-3 h-3" />
-                Verify Certificate
-              </Link>
-              <Link to="/calendar" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Calendar className="w-3 h-3" />
-                Event Calendar
+              <Link to="/civic-education" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Globe className="w-3 h-3" />
+                Civic Education
               </Link>
             </div>
           </div>
@@ -104,6 +104,14 @@ export const Footer = () => {
               Services Directory
             </h3>
             <div className="space-y-2 text-sm">
+              <Link to="/directory" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Building className="w-3 h-3" />
+                Government Directory
+              </Link>
+              <Link to="/companies" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Briefcase className="w-3 h-3" />
+                Companies
+              </Link>
               <Link to="/schools" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Building className="w-3 h-3" />
                 Schools
@@ -120,6 +128,10 @@ export const Footer = () => {
                 <Crown className="w-3 h-3" />
                 Villages
               </Link>
+              <Link to="/institutions" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Building className="w-3 h-3" />
+                Institutions
+              </Link>
             </div>
           </div>
 
@@ -130,9 +142,9 @@ export const Footer = () => {
               Governance & Transparency
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/government-projects" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Scale className="w-3 h-3" />
-                Government Projects
+              <Link to="/national-debt" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <BarChart3 className="w-3 h-3" />
+                National Debt
               </Link>
               <Link to="/billionaires" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Crown className="w-3 h-3" />
@@ -142,17 +154,17 @@ export const Footer = () => {
                 <TrendingUp className="w-3 h-3" />
                 Election Forecast
               </Link>
-              <Link to="/companies" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Briefcase className="w-3 h-3" />
-                Companies Directory
+              <Link to="/political-parties" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                Political Parties
               </Link>
               <Link to="/camerplay" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Music className="w-3 h-3" />
                 CamerPlay Music
               </Link>
-              <Link to="/civic-education" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Globe className="w-3 h-3" />
-                Civic Education
+              <Link to="/rewards" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <DollarSign className="w-3 h-3" />
+                Rewards Center
               </Link>
             </div>
           </div>

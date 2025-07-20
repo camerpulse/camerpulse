@@ -29,12 +29,7 @@ export const LegislationTracker = () => {
     queryFn: async () => {
       let query = supabase
         .from('legislation_registry')
-        .select(`
-          *,
-          bill_comments(count),
-          bill_followers(count),
-          citizen_bill_engagement(count)
-        `);
+        .select('*');
 
       if (searchTerm) {
         query = query.or(`bill_title.ilike.%${searchTerm}%,legislative_summary.ilike.%${searchTerm}%`);
