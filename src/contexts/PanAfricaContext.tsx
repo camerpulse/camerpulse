@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { createContext, useContext, useState } from 'react';
 
 interface Country {
   country_code: string;
@@ -21,8 +21,6 @@ interface PanAfricaContextType {
   getCountryData: (countryCode: string) => Country | undefined;
   getCountriesByRegion: (region: string) => Country[];
 }
-
-const { createContext, useContext, useState } = React;
 
 const PanAfricaContext = createContext<PanAfricaContextType | undefined>(undefined);
 

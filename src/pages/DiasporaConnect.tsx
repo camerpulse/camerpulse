@@ -26,6 +26,9 @@ import { DonationWidget } from '@/components/diaspora/DonationWidget';
 import { VirtualTownHalls } from '@/components/diaspora/VirtualTownHalls';
 import { SecurityControls } from '@/components/diaspora/SecurityControls';
 import { CrossPlatformIntegration } from '@/components/diaspora/CrossPlatformIntegration';
+import { NotificationSystem } from '@/components/diaspora/NotificationSystem';
+import { FileUploadManager } from '@/components/diaspora/FileUploadManager';
+import { AdvancedAnalytics } from '@/components/diaspora/AdvancedAnalytics';
 
 
 
@@ -110,7 +113,7 @@ export const DiasporaConnect = () => {
 
         {/* Main Content Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 lg:grid-cols-9">
+          <TabsList className="grid w-full grid-cols-3 sm:grid-cols-6 lg:grid-cols-12">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="events">Events</TabsTrigger>
@@ -119,6 +122,9 @@ export const DiasporaConnect = () => {
             <TabsTrigger value="donate">Donate</TabsTrigger>
             <TabsTrigger value="security">Security</TabsTrigger>
             <TabsTrigger value="integration">Integration</TabsTrigger>
+            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            <TabsTrigger value="files">Files</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           </TabsList>
 
@@ -333,6 +339,24 @@ export const DiasporaConnect = () => {
 
           <TabsContent value="integration">
             <CrossPlatformIntegration profile={profile} />
+          </TabsContent>
+
+          <TabsContent value="notifications">
+            <NotificationSystem />
+          </TabsContent>
+
+          <TabsContent value="files">
+            <FileUploadManager 
+              category="project_documents"
+              maxFiles={20}
+              maxFileSize={25}
+              allowedTypes={['image/*', 'application/pdf', '.doc', '.docx', '.xlsx', '.ppt', '.pptx']}
+              onFilesUploaded={(files) => console.log('Files uploaded:', files)}
+            />
+          </TabsContent>
+
+          <TabsContent value="analytics">
+            <AdvancedAnalytics />
           </TabsContent>
         </Tabs>
       </div>
