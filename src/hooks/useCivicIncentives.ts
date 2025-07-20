@@ -249,21 +249,12 @@ export const useCivicLeaderboards = (type?: string, category?: string) => {
   return useQuery({
     queryKey: ['civic-leaderboards', type, category],
     queryFn: async () => {
-      let query = supabase
+      const { data, error } = await supabase
         .from('civic_leaderboards')
         .select('*')
         .eq('is_active', true)
         .order('created_at', { ascending: false });
 
-      if (type) {
-        query = query.eq('leaderboard_type', type);
-      }
-
-      if (category) {
-        query = query.eq('category', category);
-      }
-
-      const { data, error } = await query;
       if (error) throw error;
       return data;
     }
@@ -274,7 +265,7 @@ export const useCivicLeaderboards = (type?: string, category?: string) => {
 export const useTopCivicPerformers = (category: string = 'overall', limit: number = 10) => {
   return useQuery({
     queryKey: ['top-civic-performers', category, limit],
-    queryFn: async () => {
+    queryFn: async (): Promise<UserCivicMetrics[]> => {
       const { data, error } = await supabase
         .from('user_civic_metrics')
         .select('*')
@@ -282,7 +273,7 @@ export const useTopCivicPerformers = (category: string = 'overall', limit: numbe
         .limit(limit);
 
       if (error) throw error;
-      return data;
+      return data as UserCivicMetrics[];
     }
   });
 };
