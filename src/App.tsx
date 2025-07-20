@@ -97,6 +97,7 @@ import InstitutionAnalytics from "./pages/InstitutionAnalytics";
 import PetitionsPlatform from "./pages/PetitionsPlatform";
 import CreatePetition from "./pages/CreatePetition";
 import PetitionDetail from "./pages/PetitionDetail";
+import PetitionAdmin from "./pages/PetitionAdmin";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -247,6 +248,7 @@ const App = () => {
            <Route path="/petitions" element={<PetitionsPlatform />} />
            <Route path="/petitions/:id" element={<PetitionDetail />} />
            <Route path="/petitions/create" element={<CreatePetition />} />
+           <Route path="/admin/petitions" element={<PetitionAdmin />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
