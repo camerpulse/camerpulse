@@ -94,6 +94,8 @@ import MonetizationDashboard from "./pages/MonetizationDashboard";
 import ClaimsDashboard from "./pages/ClaimsDashboard";
 import UnifiedDirectorySearch from "./pages/UnifiedDirectorySearch";
 import InstitutionAnalytics from "./pages/InstitutionAnalytics";
+import PetitionsPlatform from "./pages/PetitionsPlatform";
+import CreatePetition from "./pages/CreatePetition";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -241,7 +243,8 @@ const App = () => {
            <Route path="/analytics/:institutionId" element={<InstitutionAnalytics />} />
            <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
            <Route path="/moderators/dashboard" element={<ModerationDashboard />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+           <Route path="/petitions" element={<PetitionsPlatform />} />
+           <Route path="/petitions/create" element={<CreatePetition />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
