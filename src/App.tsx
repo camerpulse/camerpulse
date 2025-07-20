@@ -289,7 +289,8 @@ const App = () => {
                <Route path="/civic-participation-hub" element={<CivicParticipationHub />} />
                <Route path="/moderation-center" element={<ModerationCenter />} />
                <Route path="/social-community" element={<SocialCommunity />} />
-               <Route path="/government-portal" element={<GovernmentPortal />} />
+            <Route path="/directory" element={<Directory />} />
+            <Route path="/government-portal" element={<GovernmentPortal />} />
                <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
                <Route path="/notification-campaigns" element={<NotificationCampaigns />} />
                <Route path="/api-integrations" element={<APIIntegrations />} />
