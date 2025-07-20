@@ -276,8 +276,16 @@ const App = () => {
              <Route path="/institutions" element={<InstitutionDirectory />} />
               <Route path="/admin/claims" element={<ClaimModerationDashboard />} />
               <Route path="/institution/dashboard" element={<InstitutionOwnerDashboard />} />
-              <Route path="/government-projects" element={<GovProjectTracker />} />
-               <Route path="*" element={<NotFound />} />
+               <Route path="/government-projects" element={<GovProjectTracker />} />
+               <Route path="/user-management" element={<UserManagement />} />
+               <Route path="/civic-participation-hub" element={<CivicParticipationHub />} />
+               <Route path="/moderation-center" element={<ModerationCenter />} />
+               <Route path="/social-community" element={<SocialCommunity />} />
+               <Route path="/government-portal" element={<GovernmentPortal />} />
+               <Route path="/advanced-analytics" element={<AdvancedAnalytics />} />
+               <Route path="/notification-campaigns" element={<NotificationCampaigns />} />
+               <Route path="/api-integrations" element={<APIIntegrations />} />
+                <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </TooltipProvider>
