@@ -31,12 +31,12 @@ export const BudgetOverviewCards: React.FC<BudgetOverviewCardsProps> = ({ statis
   };
 
   const sectorBreakdown = budgetData?.reduce((acc, item) => {
-    acc[item.sector] = (acc[item.sector] || 0) + item.allocated_amount_fcfa;
+    acc[item.sector] = (acc[item.sector] || 0) + (item.allocated_amount || 0);
     return acc;
   }, {} as Record<string, number>);
 
   const topSectors = Object.entries(sectorBreakdown || {})
-    .sort(([,a], [,b]) => b - a)
+    .sort(([,a], [,b]) => (b as number) - (a as number))
     .slice(0, 5);
 
   return (
@@ -112,9 +112,9 @@ export const BudgetOverviewCards: React.FC<BudgetOverviewCardsProps> = ({ statis
                 <div key={sector} className="flex items-center justify-between">
                   <span className="text-sm font-medium">{sector}</span>
                   <div className="text-right">
-                    <div className="text-sm font-bold">{formatCurrency(amount)}</div>
+                    <div className="text-sm font-bold">{formatCurrency(amount as number)}</div>
                     <div className="text-xs text-muted-foreground">
-                      {Math.round((amount / statistics.totalAllocated) * 100)}%
+                      {Math.round(((amount as number) / statistics.totalAllocated) * 100)}%
                     </div>
                   </div>
                 </div>

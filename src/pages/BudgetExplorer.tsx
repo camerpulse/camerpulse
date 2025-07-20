@@ -37,7 +37,7 @@ const BudgetExplorer: React.FC = () => {
   const [selectedSector, setSelectedSector] = useState('all');
   const [selectedRegion, setSelectedRegion] = useState('all');
   const [selectedStatus, setSelectedStatus] = useState('all');
-  const [sortBy, setSortBy] = useState('allocated_amount_fcfa');
+  const [sortBy, setSortBy] = useState('allocated_amount');
   const [viewMode, setViewMode] = useState<'overview' | 'visualizations' | 'table' | 'analysis'>('overview');
 
   const { toast } = useToast();
@@ -51,11 +51,11 @@ const BudgetExplorer: React.FC = () => {
         .select('*');
 
       if (selectedYear !== 'all') {
-        query = query.eq('fiscal_year', parseInt(selectedYear));
+        query = query.eq('budget_year', parseInt(selectedYear));
       }
 
       if (selectedMinistry !== 'all') {
-        query = query.eq('ministry_id', selectedMinistry);
+        query = query.eq('ministry_department', selectedMinistry);
       }
 
       if (selectedSector !== 'all') {
@@ -74,7 +74,7 @@ const BudgetExplorer: React.FC = () => {
         query = query.or(`project_name.ilike.%${searchTerm}%,ministry_name.ilike.%${searchTerm}%,project_description.ilike.%${searchTerm}%`);
       }
 
-      query = query.order(sortBy, { ascending: false });
+      query = query.order('allocated_amount', { ascending: false });
 
       const { data, error } = await query;
       if (error) throw error;
@@ -86,10 +86,10 @@ const BudgetExplorer: React.FC = () => {
   const statistics = useMemo(() => {
     if (!budgetData) return null;
 
-    const totalAllocated = budgetData.reduce((sum, item) => sum + item.allocated_amount_fcfa, 0);
-    const totalSpent = budgetData.reduce((sum, item) => sum + item.spent_amount_fcfa, 0);
-    const avgExecution = budgetData.reduce((sum, item) => sum + item.execution_percentage, 0) / budgetData.length;
-    const highRiskProjects = budgetData.filter(item => item.corruption_risk_level === 'high' || item.corruption_risk_level === 'critical').length;
+    const totalAllocated = budgetData.reduce((sum, item) => sum + (item.allocated_amount || 0), 0);
+    const totalSpent = budgetData.reduce((sum, item) => sum + (item.spent_amount || 0), 0);
+    const avgExecution = budgetData.reduce((sum, item) => sum + (item.execution_percentage || 0), 0) / budgetData.length;
+    const highRiskProjects = budgetData.filter(item => (item.transparency_score || 0) < 30).length;
     const completedProjects = budgetData.filter(item => item.status === 'completed').length;
 
     return {
