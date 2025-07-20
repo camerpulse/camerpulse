@@ -6561,6 +6561,63 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_entity_ratings: {
+        Row: {
+          comment: string | null
+          created_at: string
+          engagement_rating: number | null
+          entity_id: string
+          entity_name: string
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          id: string
+          ip_address: unknown | null
+          is_verified: boolean
+          overall_rating: number
+          performance_rating: number | null
+          region: string | null
+          transparency_rating: number | null
+          updated_at: string
+          user_id: string
+          verified_by: string | null
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          engagement_rating?: number | null
+          entity_id: string
+          entity_name: string
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          id?: string
+          ip_address?: unknown | null
+          is_verified?: boolean
+          overall_rating: number
+          performance_rating?: number | null
+          region?: string | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id: string
+          verified_by?: string | null
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          engagement_rating?: number | null
+          entity_id?: string
+          entity_name?: string
+          entity_type?: Database["public"]["Enums"]["civic_entity_type"]
+          id?: string
+          ip_address?: unknown | null
+          is_verified?: boolean
+          overall_rating?: number
+          performance_rating?: number | null
+          region?: string | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id?: string
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       civic_entity_relationships: {
         Row: {
           confidence_score: number | null
@@ -7454,6 +7511,51 @@ export type Database = {
           },
         ]
       }
+      civic_leaderboards: {
+        Row: {
+          category: string
+          created_at: string
+          entity_id: string
+          entity_name: string
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          id: string
+          period_end: string
+          period_start: string
+          period_type: string
+          rank_position: number
+          region: string | null
+          score: number
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          entity_id: string
+          entity_name: string
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          id?: string
+          period_end: string
+          period_start: string
+          period_type?: string
+          rank_position: number
+          region?: string | null
+          score: number
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          entity_id?: string
+          entity_name?: string
+          entity_type?: Database["public"]["Enums"]["civic_entity_type"]
+          id?: string
+          period_end?: string
+          period_start?: string
+          period_type?: string
+          rank_position?: number
+          region?: string | null
+          score?: number
+        }
+        Relationships: []
+      }
       civic_learning_paths: {
         Row: {
           average_rating: number | null
@@ -8019,6 +8121,131 @@ export type Database = {
           started_at?: string
           time_taken_minutes?: number | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      civic_rating_abuse_reports: {
+        Row: {
+          abuse_type: string
+          action_taken: string | null
+          created_at: string
+          id: string
+          reason: string | null
+          reported_rating_id: string
+          reporter_user_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+        }
+        Insert: {
+          abuse_type: string
+          action_taken?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          reported_rating_id: string
+          reporter_user_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Update: {
+          abuse_type?: string
+          action_taken?: string | null
+          created_at?: string
+          id?: string
+          reason?: string | null
+          reported_rating_id?: string
+          reporter_user_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "civic_rating_abuse_reports_reported_rating_id_fkey"
+            columns: ["reported_rating_id"]
+            isOneToOne: false
+            referencedRelation: "civic_entity_ratings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      civic_reputation_scores: {
+        Row: {
+          average_rating: number
+          citizen_rating_score: number
+          created_at: string
+          engagement_score: number
+          entity_id: string
+          entity_name: string
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          five_star_count: number
+          four_star_count: number
+          id: string
+          last_calculated_at: string
+          negative_flags_penalty: number
+          one_star_count: number
+          performance_score: number
+          region: string | null
+          reputation_badge: Database["public"]["Enums"]["reputation_badge"]
+          response_speed_score: number
+          three_star_count: number
+          total_ratings: number
+          total_score: number
+          transparency_score: number
+          two_star_count: number
+          updated_at: string
+        }
+        Insert: {
+          average_rating?: number
+          citizen_rating_score?: number
+          created_at?: string
+          engagement_score?: number
+          entity_id: string
+          entity_name: string
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          five_star_count?: number
+          four_star_count?: number
+          id?: string
+          last_calculated_at?: string
+          negative_flags_penalty?: number
+          one_star_count?: number
+          performance_score?: number
+          region?: string | null
+          reputation_badge?: Database["public"]["Enums"]["reputation_badge"]
+          response_speed_score?: number
+          three_star_count?: number
+          total_ratings?: number
+          total_score?: number
+          transparency_score?: number
+          two_star_count?: number
+          updated_at?: string
+        }
+        Update: {
+          average_rating?: number
+          citizen_rating_score?: number
+          created_at?: string
+          engagement_score?: number
+          entity_id?: string
+          entity_name?: string
+          entity_type?: Database["public"]["Enums"]["civic_entity_type"]
+          five_star_count?: number
+          four_star_count?: number
+          id?: string
+          last_calculated_at?: string
+          negative_flags_penalty?: number
+          one_star_count?: number
+          performance_score?: number
+          region?: string | null
+          reputation_badge?: Database["public"]["Enums"]["reputation_badge"]
+          response_speed_score?: number
+          three_star_count?: number
+          total_ratings?: number
+          total_score?: number
+          transparency_score?: number
+          two_star_count?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -28815,6 +29042,7 @@ export type Database = {
         | "quarterly_review"
         | "annual_overview"
         | "custom_analysis"
+      reputation_badge: "excellent" | "trusted" | "under_watch" | "flagged"
       royalty_status: "pending" | "processed" | "paid"
       rsvp_status: "interested" | "going" | "not_going"
       school_ownership:
@@ -29398,6 +29626,7 @@ export const Constants = {
         "annual_overview",
         "custom_analysis",
       ],
+      reputation_badge: ["excellent", "trusted", "under_watch", "flagged"],
       royalty_status: ["pending", "processed", "paid"],
       rsvp_status: ["interested", "going", "not_going"],
       school_ownership: [
