@@ -12861,6 +12861,50 @@ export type Database = {
         }
         Relationships: []
       }
+      institution_access_logs: {
+        Row: {
+          access_type: string
+          action_performed: string
+          created_at: string | null
+          id: string
+          institution_id: string
+          ip_address: unknown | null
+          session_data: Json | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_type: string
+          action_performed: string
+          created_at?: string | null
+          id?: string
+          institution_id: string
+          ip_address?: unknown | null
+          session_data?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_type?: string
+          action_performed?: string
+          created_at?: string | null
+          id?: string
+          institution_id?: string
+          ip_address?: unknown | null
+          session_data?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "institution_access_logs_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       institution_analytics: {
         Row: {
           created_at: string
@@ -13002,6 +13046,66 @@ export type Database = {
         }
         Relationships: []
       }
+      institution_claim_renewals: {
+        Row: {
+          auto_renewed: boolean | null
+          created_at: string | null
+          grace_period_expires: string | null
+          id: string
+          original_claim_id: string
+          reminder_sent_1_day: boolean | null
+          reminder_sent_30_days: boolean | null
+          reminder_sent_7_days: boolean | null
+          renewal_claim_id: string | null
+          renewal_due_date: string
+          renewal_status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_renewed?: boolean | null
+          created_at?: string | null
+          grace_period_expires?: string | null
+          id?: string
+          original_claim_id: string
+          reminder_sent_1_day?: boolean | null
+          reminder_sent_30_days?: boolean | null
+          reminder_sent_7_days?: boolean | null
+          renewal_claim_id?: string | null
+          renewal_due_date: string
+          renewal_status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_renewed?: boolean | null
+          created_at?: string | null
+          grace_period_expires?: string | null
+          id?: string
+          original_claim_id?: string
+          reminder_sent_1_day?: boolean | null
+          reminder_sent_30_days?: boolean | null
+          reminder_sent_7_days?: boolean | null
+          renewal_claim_id?: string | null
+          renewal_due_date?: string
+          renewal_status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "institution_claim_renewals_original_claim_id_fkey"
+            columns: ["original_claim_id"]
+            isOneToOne: false
+            referencedRelation: "institution_claims"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "institution_claim_renewals_renewal_claim_id_fkey"
+            columns: ["renewal_claim_id"]
+            isOneToOne: false
+            referencedRelation: "institution_claims"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       institution_claims: {
         Row: {
           admin_notes: string | null
@@ -13064,6 +13168,62 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      institution_dashboards: {
+        Row: {
+          access_permissions: Json | null
+          analytics_enabled: boolean | null
+          created_at: string | null
+          custom_branding: Json | null
+          dashboard_config: Json | null
+          id: string
+          institution_id: string
+          messaging_enabled: boolean | null
+          owner_user_id: string
+          payment_processing_enabled: boolean | null
+          review_management_enabled: boolean | null
+          subscription_tier: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          access_permissions?: Json | null
+          analytics_enabled?: boolean | null
+          created_at?: string | null
+          custom_branding?: Json | null
+          dashboard_config?: Json | null
+          id?: string
+          institution_id: string
+          messaging_enabled?: boolean | null
+          owner_user_id: string
+          payment_processing_enabled?: boolean | null
+          review_management_enabled?: boolean | null
+          subscription_tier?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          access_permissions?: Json | null
+          analytics_enabled?: boolean | null
+          created_at?: string | null
+          custom_branding?: Json | null
+          dashboard_config?: Json | null
+          id?: string
+          institution_id?: string
+          messaging_enabled?: boolean | null
+          owner_user_id?: string
+          payment_processing_enabled?: boolean | null
+          review_management_enabled?: boolean | null
+          subscription_tier?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "institution_dashboards_institution_id_fkey"
+            columns: ["institution_id"]
+            isOneToOne: false
+            referencedRelation: "institutions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       institution_messages: {
         Row: {
@@ -25002,6 +25162,13 @@ export type Database = {
         Args: { p_source_content: string; p_target_content: string }
         Returns: number
       }
+      check_claim_renewals: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          renewals_processed: number
+          reminders_sent: number
+        }[]
+      }
       check_constitutional_compliance: {
         Args: { p_document_id: string; p_document_text: string }
         Returns: Json
@@ -25467,6 +25634,10 @@ export type Database = {
           p_icon?: string
           p_expires_at?: string
         }
+        Returns: string
+      }
+      setup_renewal_cron_job: {
+        Args: Record<PropertyKey, never>
         Returns: string
       }
       sync_platform_data: {
