@@ -12030,6 +12030,51 @@ export type Database = {
         }
         Relationships: []
       }
+      developer_payouts: {
+        Row: {
+          commission_deducted: number
+          created_at: string
+          developer_id: string
+          id: string
+          payout_amount: number
+          payout_data: Json | null
+          payout_method: string | null
+          period_end: string
+          period_start: string
+          status: string
+          total_earnings: number
+          updated_at: string
+        }
+        Insert: {
+          commission_deducted: number
+          created_at?: string
+          developer_id: string
+          id?: string
+          payout_amount: number
+          payout_data?: Json | null
+          payout_method?: string | null
+          period_end: string
+          period_start: string
+          status?: string
+          total_earnings: number
+          updated_at?: string
+        }
+        Update: {
+          commission_deducted?: number
+          created_at?: string
+          developer_id?: string
+          id?: string
+          payout_amount?: number
+          payout_data?: Json | null
+          payout_method?: string | null
+          period_end?: string
+          period_start?: string
+          status?: string
+          total_earnings?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       development_projects: {
         Row: {
           actual_completion_date: string | null
@@ -21139,6 +21184,36 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_gateway_config: {
+        Row: {
+          commission_percentage: number
+          config_data: Json
+          created_at: string
+          gateway_name: string
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          commission_percentage?: number
+          config_data?: Json
+          created_at?: string
+          gateway_name: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          commission_percentage?: number
+          config_data?: Json
+          created_at?: string
+          gateway_name?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_gateway_configs: {
         Row: {
           configuration: Json
@@ -22200,6 +22275,101 @@ export type Database = {
           },
         ]
       }
+      plugin_license_keys: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          license_id: string
+          license_key: string
+          metadata: Json | null
+          status: string
+          updated_at: string
+          usage_count: number | null
+          usage_limit: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          license_id: string
+          license_key: string
+          metadata?: Json | null
+          status?: string
+          updated_at?: string
+          usage_count?: number | null
+          usage_limit?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          license_id?: string
+          license_key?: string
+          metadata?: Json | null
+          status?: string
+          updated_at?: string
+          usage_count?: number | null
+          usage_limit?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_license_keys_license_id_fkey"
+            columns: ["license_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_licenses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      plugin_licenses: {
+        Row: {
+          billing_interval: string | null
+          created_at: string
+          currency: string
+          features_included: Json | null
+          id: string
+          is_active: boolean
+          license_type: string
+          plugin_id: string
+          price_amount: number
+          trial_period_days: number | null
+          updated_at: string
+          usage_limits: Json | null
+        }
+        Insert: {
+          billing_interval?: string | null
+          created_at?: string
+          currency?: string
+          features_included?: Json | null
+          id?: string
+          is_active?: boolean
+          license_type: string
+          plugin_id: string
+          price_amount: number
+          trial_period_days?: number | null
+          updated_at?: string
+          usage_limits?: Json | null
+        }
+        Update: {
+          billing_interval?: string | null
+          created_at?: string
+          currency?: string
+          features_included?: Json | null
+          id?: string
+          is_active?: boolean
+          license_type?: string
+          plugin_id?: string
+          price_amount?: number
+          trial_period_days?: number | null
+          updated_at?: string
+          usage_limits?: Json | null
+        }
+        Relationships: []
+      }
       plugin_marketplace: {
         Row: {
           author_email: string | null
@@ -22307,6 +22477,68 @@ export type Database = {
           version?: string
         }
         Relationships: []
+      }
+      plugin_purchases: {
+        Row: {
+          amount: number
+          commission_amount: number
+          created_at: string
+          currency: string
+          developer_payout: number
+          id: string
+          license_id: string
+          payment_data: Json | null
+          payment_gateway: string
+          payment_method: string | null
+          plugin_id: string
+          status: string
+          transaction_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          commission_amount: number
+          created_at?: string
+          currency?: string
+          developer_payout: number
+          id?: string
+          license_id: string
+          payment_data?: Json | null
+          payment_gateway: string
+          payment_method?: string | null
+          plugin_id: string
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          commission_amount?: number
+          created_at?: string
+          currency?: string
+          developer_payout?: number
+          id?: string
+          license_id?: string
+          payment_data?: Json | null
+          payment_gateway?: string
+          payment_method?: string | null
+          plugin_id?: string
+          status?: string
+          transaction_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_purchases_license_id_fkey"
+            columns: ["license_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_licenses"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       plugin_ratings: {
         Row: {
@@ -22703,6 +22935,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      plugin_usage_logs: {
+        Row: {
+          created_at: string
+          id: string
+          license_key_id: string
+          metadata: Json | null
+          plugin_id: string
+          usage_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          license_key_id: string
+          metadata?: Json | null
+          plugin_id: string
+          usage_type?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          license_key_id?: string
+          metadata?: Json | null
+          plugin_id?: string
+          usage_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_usage_logs_license_key_id_fkey"
+            columns: ["license_key_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_license_keys"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       plugin_versions: {
         Row: {
@@ -31604,6 +31874,10 @@ export type Database = {
           regions_processed: number
           parties_processed: number
         }[]
+      }
+      generate_license_key: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       generate_protection_alias: {
         Args: Record<PropertyKey, never>
