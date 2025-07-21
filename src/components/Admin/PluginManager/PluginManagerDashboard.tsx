@@ -17,9 +17,16 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  Zap
+  Zap,
+  Package,
+  Network,
+  BarChart3,
+  TestTube
 } from 'lucide-react';
 import { usePlugins, useTogglePlugin, usePluginHistory, Plugin } from '@/hooks/usePluginSystem';
+import { PluginIntelligenceDashboard } from '../PluginIntelligence/PluginIntelligenceDashboard';
+import { PluginDependencyVisualizer } from '../PluginIntelligence/PluginDependencyVisualizer';
+import { PluginSandbox } from '../PluginIntelligence/PluginSandbox';
 import { toast } from 'sonner';
 
 export const PluginManagerDashboard = () => {
@@ -105,9 +112,9 @@ export const PluginManagerDashboard = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Plugin Manager</h1>
+          <h1 className="text-3xl font-bold">Plugin Management System</h1>
           <p className="text-muted-foreground">
-            Manage CamerPulse system modules and features
+            Comprehensive plugin management with intelligence monitoring
           </p>
         </div>
         <div className="flex items-center gap-4">
@@ -177,18 +184,30 @@ export const PluginManagerDashboard = () => {
       </div>
 
       <Tabs defaultValue="plugins" className="space-y-4">
-        <TabsList>
-          <TabsTrigger value="plugins">
-            <Settings className="h-4 w-4 mr-2" />
-            Plugins
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="plugins" className="flex items-center space-x-1">
+            <Package className="h-4 w-4" />
+            <span className="hidden sm:inline">Registry</span>
           </TabsTrigger>
-          <TabsTrigger value="history">
-            <Activity className="h-4 w-4 mr-2" />
-            Activity History
+          <TabsTrigger value="intelligence" className="flex items-center space-x-1">
+            <Activity className="h-4 w-4" />
+            <span className="hidden sm:inline">Intelligence</span>
           </TabsTrigger>
-          <TabsTrigger value="security">
-            <Shield className="h-4 w-4 mr-2" />
-            Security & Permissions
+          <TabsTrigger value="dependencies" className="flex items-center space-x-1">
+            <Network className="h-4 w-4" />
+            <span className="hidden sm:inline">Dependencies</span>
+          </TabsTrigger>
+          <TabsTrigger value="sandbox" className="flex items-center space-x-1">
+            <TestTube className="h-4 w-4" />
+            <span className="hidden sm:inline">Sandbox</span>
+          </TabsTrigger>
+          <TabsTrigger value="history" className="flex items-center space-x-1">
+            <Clock className="h-4 w-4" />
+            <span className="hidden sm:inline">History</span>
+          </TabsTrigger>
+          <TabsTrigger value="security" className="flex items-center space-x-1">
+            <Shield className="h-4 w-4" />
+            <span className="hidden sm:inline">Security</span>
           </TabsTrigger>
         </TabsList>
 
@@ -308,6 +327,18 @@ export const PluginManagerDashboard = () => {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        <TabsContent value="intelligence">
+          <PluginIntelligenceDashboard />
+        </TabsContent>
+
+        <TabsContent value="dependencies">
+          <PluginDependencyVisualizer />
+        </TabsContent>
+
+        <TabsContent value="sandbox">
+          <PluginSandbox />
         </TabsContent>
 
         <TabsContent value="history" className="space-y-4">
