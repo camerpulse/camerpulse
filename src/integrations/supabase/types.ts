@@ -21892,6 +21892,45 @@ export type Database = {
         }
         Relationships: []
       }
+      plugin_activation_history: {
+        Row: {
+          action_type: string
+          admin_id: string | null
+          admin_name: string | null
+          created_at: string
+          id: string
+          metadata: Json | null
+          new_status: string
+          plugin_id: string
+          previous_status: string | null
+          reason: string | null
+        }
+        Insert: {
+          action_type: string
+          admin_id?: string | null
+          admin_name?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          new_status: string
+          plugin_id: string
+          previous_status?: string | null
+          reason?: string | null
+        }
+        Update: {
+          action_type?: string
+          admin_id?: string | null
+          admin_name?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          new_status?: string
+          plugin_id?: string
+          previous_status?: string | null
+          reason?: string | null
+        }
+        Relationships: []
+      }
       plugin_blocklist: {
         Row: {
           affected_regions: string[] | null
@@ -22501,6 +22540,33 @@ export type Database = {
           },
         ]
       }
+      plugin_snapshots: {
+        Row: {
+          created_at: string
+          created_before_update: boolean
+          id: string
+          plugin_id: string
+          snapshot_data: Json
+          version_id: string
+        }
+        Insert: {
+          created_at?: string
+          created_before_update?: boolean
+          id?: string
+          plugin_id: string
+          snapshot_data: Json
+          version_id: string
+        }
+        Update: {
+          created_at?: string
+          created_before_update?: boolean
+          id?: string
+          plugin_id?: string
+          snapshot_data?: Json
+          version_id?: string
+        }
+        Relationships: []
+      }
       plugin_stress_tests: {
         Row: {
           cpu_usage_percent: number | null
@@ -22635,6 +22701,51 @@ export type Database = {
           submitter_id?: string
           submitter_name?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      plugin_versions: {
+        Row: {
+          bundle_url: string | null
+          changelog: string
+          compatibility_info: Json
+          created_at: string
+          download_count: number
+          id: string
+          is_current: boolean
+          manifest_data: Json
+          plugin_id: string
+          released_on: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          bundle_url?: string | null
+          changelog: string
+          compatibility_info?: Json
+          created_at?: string
+          download_count?: number
+          id?: string
+          is_current?: boolean
+          manifest_data?: Json
+          plugin_id: string
+          released_on?: string
+          updated_at?: string
+          version: string
+        }
+        Update: {
+          bundle_url?: string | null
+          changelog?: string
+          compatibility_info?: Json
+          created_at?: string
+          download_count?: number
+          id?: string
+          is_current?: boolean
+          manifest_data?: Json
+          plugin_id?: string
+          released_on?: string
+          updated_at?: string
+          version?: string
         }
         Relationships: []
       }
