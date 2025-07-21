@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 
 export interface PluginVersion {
   id: string;
@@ -12,12 +12,7 @@ export interface PluginVersion {
   manifest_data: any;
   bundle_url?: string;
   download_count: number;
-  compatibility_info: {
-    min_app_version: string;
-    max_app_version?: string;
-    deprecated_apis: string[];
-    breaking_changes: boolean;
-  };
+  compatibility_info: any;
   created_at: string;
 }
 
@@ -52,7 +47,7 @@ export const usePluginVersions = (pluginId: string) => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as PluginVersion[];
+      return data as any[];
     },
     enabled: !!pluginId
   });
@@ -61,6 +56,7 @@ export const usePluginVersions = (pluginId: string) => {
 // Hook to check for plugin updates
 export const usePluginUpdateChecker = () => {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const checkForUpdates = useQuery({
     queryKey: ['plugin-update-check'],
@@ -109,13 +105,23 @@ export const usePluginUpdateChecker = () => {
     onSuccess: (result) => {
       const updates = result.data?.length || 0;
       if (updates > 0) {
-        toast.success(`Found ${updates} plugin update(s) available`);
+        toast({
+          title: "Updates Available",
+          description: `Found ${updates} plugin update(s) available`,
+        });
       } else {
-        toast.success('All plugins are up to date');
+        toast({
+          title: "All Up to Date",
+          description: "All plugins are up to date",
+        });
       }
     },
     onError: () => {
-      toast.error('Failed to check for updates');
+      toast({
+        title: "Error",
+        description: "Failed to check for updates",
+        variant: "destructive"
+      });
     }
   });
 
@@ -130,6 +136,7 @@ export const usePluginUpdateChecker = () => {
 // Hook to update a plugin
 export const usePluginUpdate = () => {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async ({ 
@@ -178,10 +185,7 @@ export const usePluginUpdate = () => {
         .update({
           plugin_version: newVersion.version,
           last_updated: new Date().toISOString(),
-          metadata: {
-            ...newVersion.manifest_data,
-            updated_from: 'version_control'
-          }
+          metadata: newVersion.manifest_data
         })
         .eq('id', pluginId);
 
@@ -209,10 +213,17 @@ export const usePluginUpdate = () => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['plugins'] });
       queryClient.invalidateQueries({ queryKey: ['plugin-update-check'] });
-      toast.success(`Plugin updated to version ${data.version}`);
+      toast({
+        title: "Plugin Updated",
+        description: `Plugin updated to version ${data.version}`,
+      });
     },
     onError: (error) => {
-      toast.error(`Failed to update plugin: ${error.message}`);
+      toast({
+        title: "Update Failed",
+        description: `Failed to update plugin: ${error.message}`,
+        variant: "destructive"
+      });
     }
   });
 };
@@ -220,6 +231,7 @@ export const usePluginUpdate = () => {
 // Hook to rollback a plugin
 export const usePluginRollback = () => {
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async ({ pluginId }: { pluginId: string }) => {
@@ -241,13 +253,8 @@ export const usePluginRollback = () => {
       const { error: rollbackError } = await supabase
         .from('plugin_registry')
         .update({
-          ...snapshot.snapshot_data,
-          last_updated: new Date().toISOString(),
-          metadata: {
-            ...snapshot.snapshot_data.metadata,
-            rolled_back_at: new Date().toISOString(),
-            rolled_back_from_snapshot: snapshot.id
-          }
+          ...(snapshot.snapshot_data as any),
+          last_updated: new Date().toISOString()
         })
         .eq('id', pluginId);
 
@@ -264,7 +271,7 @@ export const usePluginRollback = () => {
           metadata: {
             rollback: true,
             snapshot_id: snapshot.id,
-            restored_version: snapshot.snapshot_data.plugin_version
+            restored_version: (snapshot.snapshot_data as any)?.plugin_version
           }
         });
 
@@ -272,16 +279,23 @@ export const usePluginRollback = () => {
 
       return { 
         success: true, 
-        restoredVersion: snapshot.snapshot_data.plugin_version 
+        restoredVersion: (snapshot.snapshot_data as any)?.plugin_version
       };
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['plugins'] });
       queryClient.invalidateQueries({ queryKey: ['plugin-update-check'] });
-      toast.success(`Plugin rolled back to version ${data.restoredVersion}`);
+      toast({
+        title: "Plugin Rolled Back",
+        description: `Plugin rolled back to version ${data.restoredVersion}`,
+      });
     },
     onError: (error) => {
-      toast.error(`Failed to rollback plugin: ${error.message}`);
+      toast({
+        title: "Rollback Failed", 
+        description: `Failed to rollback plugin: ${error.message}`,
+        variant: "destructive"
+      });
     }
   });
 };
@@ -298,7 +312,7 @@ export const usePluginSnapshots = (pluginId: string) => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data as PluginSnapshot[];
+      return data as any[];
     },
     enabled: !!pluginId
   });
@@ -335,27 +349,28 @@ export const useVersionCompatibility = () => {
 
       // Check compatibility
       const issues: string[] = [];
+      const compatInfo = version.compatibility_info as any;
       
       // Check breaking changes
-      if (version.compatibility_info.breaking_changes) {
+      if (compatInfo?.breaking_changes) {
         issues.push('This update contains breaking changes');
       }
 
       // Check deprecated APIs
-      if (version.compatibility_info.deprecated_apis?.length > 0) {
-        issues.push(`Uses deprecated APIs: ${version.compatibility_info.deprecated_apis.join(', ')}`);
+      if (compatInfo?.deprecated_apis?.length > 0) {
+        issues.push(`Uses deprecated APIs: ${compatInfo.deprecated_apis.join(', ')}`);
       }
 
       // Check app version compatibility
       const currentAppVersion = '1.0.0'; // This would come from app config
-      if (version.compatibility_info.min_app_version > currentAppVersion) {
-        issues.push(`Requires app version ${version.compatibility_info.min_app_version} or higher`);
+      if (compatInfo?.min_app_version > currentAppVersion) {
+        issues.push(`Requires app version ${compatInfo.min_app_version} or higher`);
       }
 
       return {
         compatible: issues.length === 0,
         issues,
-        canUpdate: issues.length === 0 || !version.compatibility_info.breaking_changes
+        canUpdate: issues.length === 0 || !compatInfo?.breaking_changes
       };
     }
   });

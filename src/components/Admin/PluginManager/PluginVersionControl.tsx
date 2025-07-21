@@ -6,6 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { useToast } from '@/hooks/use-toast';
 import { 
   RefreshCw, 
   Download, 
@@ -28,6 +29,7 @@ import { usePlugins } from '@/hooks/usePluginSystem';
 import { formatDistanceToNow } from 'date-fns';
 
 export const PluginVersionControl = () => {
+  const { toast } = useToast();
   const [selectedPlugin, setSelectedPlugin] = useState<string | null>(null);
   const [showUpdateDialog, setShowUpdateDialog] = useState(false);
   const [showRollbackDialog, setShowRollbackDialog] = useState(false);
@@ -265,10 +267,10 @@ export const PluginVersionControl = () => {
                     <div className="space-y-3">
                       {snapshots?.map((snapshot) => (
                         <div key={snapshot.id} className="border rounded p-3">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className="font-medium">
-                              v{snapshot.snapshot_data.plugin_version}
-                            </span>
+                           <div className="flex items-center justify-between mb-2">
+                             <span className="font-medium">
+                               v{(snapshot.snapshot_data as any)?.plugin_version || 'Unknown'}
+                             </span>
                             <Button
                               size="sm"
                               variant="outline"
