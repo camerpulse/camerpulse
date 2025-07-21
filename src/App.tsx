@@ -132,6 +132,7 @@ import { PluginManagerDashboard } from "./components/Admin/PluginManager/PluginM
 import { PluginRoute } from "./components/Plugin/PluginWrapper";
 import { PluginMarketplace } from "./components/Admin/PluginMarketplace/PluginMarketplace";
 import { DeveloperConsole } from "./components/Admin/PluginMarketplace/DeveloperConsole";
+import { PluginDeveloperHub } from "./components/Developer/PluginDeveloperHub";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -212,6 +213,11 @@ const App = () => {
                   <div className="min-h-screen bg-background p-6">
                     <PluginMarketplace />
                   </div>
+                </PluginRoute>
+              } />
+              <Route path="/developer/hub" element={
+                <PluginRoute pluginName="CamerPulse.PluginSubmissionAndDevDocs">
+                  <PluginDeveloperHub />
                 </PluginRoute>
               } />
               <Route path="/developer/console" element={
