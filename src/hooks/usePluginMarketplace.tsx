@@ -88,7 +88,7 @@ const fetchMarketplacePlugins = async (filters?: {
 
   const { data, error } = await query;
   if (error) throw error;
-  return data || [];
+  return (data || []) as MarketplacePlugin[];
 };
 
 // Fetch plugin submissions
@@ -99,7 +99,7 @@ const fetchPluginSubmissions = async (): Promise<PluginSubmission[]> => {
     .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return data || [];
+  return (data || []) as PluginSubmission[];
 };
 
 // Fetch security scans
@@ -115,7 +115,7 @@ const fetchSecurityScans = async (pluginId?: string): Promise<SecurityScan[]> =>
 
   const { data, error } = await query;
   if (error) throw error;
-  return data || [];
+  return (data || []) as SecurityScan[];
 };
 
 export const usePluginMarketplace = () => {
@@ -159,11 +159,10 @@ export const usePluginMarketplace = () => {
       if (trackError) throw trackError;
 
       // Update install count
-      const { error: updateError } = await supabase.rpc('increment', {
-        table_name: 'plugin_marketplace',
-        row_id: pluginId,
-        column_name: 'install_count'
-      });
+      const { error: updateError } = await supabase
+        .from('plugin_marketplace')
+        .update({ install_count: supabase.raw('install_count + 1') })
+        .eq('plugin_id', pluginId);
 
       if (updateError) throw updateError;
 

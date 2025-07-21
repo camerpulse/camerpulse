@@ -130,6 +130,8 @@ import CouncilsDirectory from "./pages/CouncilsDirectory";
 import BudgetExplorer from "./pages/BudgetExplorer";
 import { PluginManagerDashboard } from "./components/Admin/PluginManager/PluginManagerDashboard";
 import { PluginRoute } from "./components/Plugin/PluginWrapper";
+import { PluginMarketplace } from "./components/Admin/PluginMarketplace/PluginMarketplace";
+import { DeveloperConsole } from "./components/Admin/PluginMarketplace/DeveloperConsole";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -202,6 +204,20 @@ const App = () => {
                 <PluginRoute pluginName="CamerPulse.Admin.PluginManager" adminAccess>
                   <div className="min-h-screen bg-background p-6">
                     <PluginManagerDashboard />
+                  </div>
+                </PluginRoute>
+              } />
+              <Route path="/marketplace/plugins" element={
+                <PluginRoute pluginName="CamerPulse.PluginMarketplaceAndRemoteLoader">
+                  <div className="min-h-screen bg-background p-6">
+                    <PluginMarketplace />
+                  </div>
+                </PluginRoute>
+              } />
+              <Route path="/developer/console" element={
+                <PluginRoute pluginName="CamerPulse.PluginMarketplaceAndRemoteLoader">
+                  <div className="min-h-screen bg-background p-6">
+                    <DeveloperConsole />
                   </div>
                 </PluginRoute>
               } />
