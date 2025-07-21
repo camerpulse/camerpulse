@@ -21892,6 +21892,51 @@ export type Database = {
         }
         Relationships: []
       }
+      plugin_blocklist: {
+        Row: {
+          affected_regions: string[] | null
+          block_scope: string | null
+          block_type: string
+          blocked_by: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          plugin_id: string
+          reason: string
+          severity: string | null
+          updated_at: string
+        }
+        Insert: {
+          affected_regions?: string[] | null
+          block_scope?: string | null
+          block_type: string
+          blocked_by: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          plugin_id: string
+          reason: string
+          severity?: string | null
+          updated_at?: string
+        }
+        Update: {
+          affected_regions?: string[] | null
+          block_scope?: string | null
+          block_type?: string
+          blocked_by?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          plugin_id?: string
+          reason?: string
+          severity?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       plugin_conflicts: {
         Row: {
           affected_resources: string[] | null
@@ -21955,6 +22000,114 @@ export type Database = {
           },
         ]
       }
+      plugin_developers: {
+        Row: {
+          average_rating: number | null
+          bio: string | null
+          created_at: string
+          developer_name: string
+          display_name: string | null
+          github_username: string | null
+          id: string
+          is_partner: boolean | null
+          is_verified: boolean | null
+          notification_preferences: Json | null
+          partner_tier: string | null
+          revenue_share_agreement: boolean | null
+          total_downloads: number | null
+          total_plugins: number | null
+          twitter_handle: string | null
+          updated_at: string
+          user_id: string
+          website: string | null
+        }
+        Insert: {
+          average_rating?: number | null
+          bio?: string | null
+          created_at?: string
+          developer_name: string
+          display_name?: string | null
+          github_username?: string | null
+          id?: string
+          is_partner?: boolean | null
+          is_verified?: boolean | null
+          notification_preferences?: Json | null
+          partner_tier?: string | null
+          revenue_share_agreement?: boolean | null
+          total_downloads?: number | null
+          total_plugins?: number | null
+          twitter_handle?: string | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+        }
+        Update: {
+          average_rating?: number | null
+          bio?: string | null
+          created_at?: string
+          developer_name?: string
+          display_name?: string | null
+          github_username?: string | null
+          id?: string
+          is_partner?: boolean | null
+          is_verified?: boolean | null
+          notification_preferences?: Json | null
+          partner_tier?: string | null
+          revenue_share_agreement?: boolean | null
+          total_downloads?: number | null
+          total_plugins?: number | null
+          twitter_handle?: string | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      plugin_downloads: {
+        Row: {
+          created_at: string
+          download_type: string
+          error_message: string | null
+          id: string
+          installation_source: string | null
+          ip_address: unknown | null
+          plugin_id: string
+          referrer: string | null
+          success: boolean | null
+          user_agent: string | null
+          user_id: string | null
+          user_platform: string | null
+        }
+        Insert: {
+          created_at?: string
+          download_type: string
+          error_message?: string | null
+          id?: string
+          installation_source?: string | null
+          ip_address?: unknown | null
+          plugin_id: string
+          referrer?: string | null
+          success?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+          user_platform?: string | null
+        }
+        Update: {
+          created_at?: string
+          download_type?: string
+          error_message?: string | null
+          id?: string
+          installation_source?: string | null
+          ip_address?: unknown | null
+          plugin_id?: string
+          referrer?: string | null
+          success?: boolean | null
+          user_agent?: string | null
+          user_id?: string | null
+          user_platform?: string | null
+        }
+        Relationships: []
+      }
       plugin_installation_guards: {
         Row: {
           admin_override_by: string | null
@@ -22007,6 +22160,150 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      plugin_marketplace: {
+        Row: {
+          author_email: string | null
+          author_id: string | null
+          author_name: string
+          bundle_url: string | null
+          category: string
+          compatibility_version: string | null
+          created_at: string
+          dependencies: Json | null
+          description: string | null
+          detailed_description: string | null
+          digital_signature: string | null
+          display_name: string
+          download_count: number | null
+          github_repo: string | null
+          id: string
+          install_count: number | null
+          is_featured: boolean | null
+          is_official: boolean | null
+          last_updated: string
+          permissions_required: Json | null
+          plugin_id: string
+          plugin_name: string
+          published_at: string | null
+          rating_average: number | null
+          rating_count: number | null
+          security_scan_results: Json | null
+          security_scan_status: string | null
+          source_type: string
+          source_url: string | null
+          status: string
+          supported_platforms: string[] | null
+          tags: string[] | null
+          version: string
+        }
+        Insert: {
+          author_email?: string | null
+          author_id?: string | null
+          author_name: string
+          bundle_url?: string | null
+          category: string
+          compatibility_version?: string | null
+          created_at?: string
+          dependencies?: Json | null
+          description?: string | null
+          detailed_description?: string | null
+          digital_signature?: string | null
+          display_name: string
+          download_count?: number | null
+          github_repo?: string | null
+          id?: string
+          install_count?: number | null
+          is_featured?: boolean | null
+          is_official?: boolean | null
+          last_updated?: string
+          permissions_required?: Json | null
+          plugin_id: string
+          plugin_name: string
+          published_at?: string | null
+          rating_average?: number | null
+          rating_count?: number | null
+          security_scan_results?: Json | null
+          security_scan_status?: string | null
+          source_type: string
+          source_url?: string | null
+          status?: string
+          supported_platforms?: string[] | null
+          tags?: string[] | null
+          version: string
+        }
+        Update: {
+          author_email?: string | null
+          author_id?: string | null
+          author_name?: string
+          bundle_url?: string | null
+          category?: string
+          compatibility_version?: string | null
+          created_at?: string
+          dependencies?: Json | null
+          description?: string | null
+          detailed_description?: string | null
+          digital_signature?: string | null
+          display_name?: string
+          download_count?: number | null
+          github_repo?: string | null
+          id?: string
+          install_count?: number | null
+          is_featured?: boolean | null
+          is_official?: boolean | null
+          last_updated?: string
+          permissions_required?: Json | null
+          plugin_id?: string
+          plugin_name?: string
+          published_at?: string | null
+          rating_average?: number | null
+          rating_count?: number | null
+          security_scan_results?: Json | null
+          security_scan_status?: string | null
+          source_type?: string
+          source_url?: string | null
+          status?: string
+          supported_platforms?: string[] | null
+          tags?: string[] | null
+          version?: string
+        }
+        Relationships: []
+      }
+      plugin_ratings: {
+        Row: {
+          created_at: string
+          helpful_votes: number | null
+          id: string
+          plugin_id: string
+          rating: number
+          review_text: string | null
+          updated_at: string
+          user_id: string
+          version_reviewed: string | null
+        }
+        Insert: {
+          created_at?: string
+          helpful_votes?: number | null
+          id?: string
+          plugin_id: string
+          rating: number
+          review_text?: string | null
+          updated_at?: string
+          user_id: string
+          version_reviewed?: string | null
+        }
+        Update: {
+          created_at?: string
+          helpful_votes?: number | null
+          id?: string
+          plugin_id?: string
+          rating?: number
+          review_text?: string | null
+          updated_at?: string
+          user_id?: string
+          version_reviewed?: string | null
+        }
+        Relationships: []
       }
       plugin_registry: {
         Row: {
@@ -22130,6 +22427,80 @@ export type Database = {
           },
         ]
       }
+      plugin_security_scans: {
+        Row: {
+          code_quality_score: number | null
+          completed_at: string | null
+          created_at: string
+          dependency_vulnerabilities: Json | null
+          id: string
+          malicious_patterns_found: Json | null
+          manual_review_notes: string | null
+          manual_review_reason: string | null
+          manual_reviewer_id: string | null
+          overall_score: number | null
+          permission_analysis: Json | null
+          plugin_id: string
+          requires_manual_review: boolean | null
+          scan_duration_ms: number | null
+          scan_engine_version: string | null
+          scan_type: string
+          scanned_files: string[] | null
+          status: string
+          submission_id: string | null
+        }
+        Insert: {
+          code_quality_score?: number | null
+          completed_at?: string | null
+          created_at?: string
+          dependency_vulnerabilities?: Json | null
+          id?: string
+          malicious_patterns_found?: Json | null
+          manual_review_notes?: string | null
+          manual_review_reason?: string | null
+          manual_reviewer_id?: string | null
+          overall_score?: number | null
+          permission_analysis?: Json | null
+          plugin_id: string
+          requires_manual_review?: boolean | null
+          scan_duration_ms?: number | null
+          scan_engine_version?: string | null
+          scan_type: string
+          scanned_files?: string[] | null
+          status: string
+          submission_id?: string | null
+        }
+        Update: {
+          code_quality_score?: number | null
+          completed_at?: string | null
+          created_at?: string
+          dependency_vulnerabilities?: Json | null
+          id?: string
+          malicious_patterns_found?: Json | null
+          manual_review_notes?: string | null
+          manual_review_reason?: string | null
+          manual_reviewer_id?: string | null
+          overall_score?: number | null
+          permission_analysis?: Json | null
+          plugin_id?: string
+          requires_manual_review?: boolean | null
+          scan_duration_ms?: number | null
+          scan_engine_version?: string | null
+          scan_type?: string
+          scanned_files?: string[] | null
+          status?: string
+          submission_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_security_scans_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plugin_stress_tests: {
         Row: {
           cpu_usage_percent: number | null
@@ -22209,6 +22580,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      plugin_submissions: {
+        Row: {
+          approved_at: string | null
+          created_at: string
+          id: string
+          manifest_data: Json
+          plugin_data: Json
+          plugin_id: string
+          rejected_at: string | null
+          rejection_reason: string | null
+          reviewer_id: string | null
+          reviewer_notes: string | null
+          source_files_url: string | null
+          status: string
+          submission_type: string
+          submitter_id: string
+          submitter_name: string
+          updated_at: string
+        }
+        Insert: {
+          approved_at?: string | null
+          created_at?: string
+          id?: string
+          manifest_data: Json
+          plugin_data: Json
+          plugin_id: string
+          rejected_at?: string | null
+          rejection_reason?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          source_files_url?: string | null
+          status?: string
+          submission_type: string
+          submitter_id: string
+          submitter_name: string
+          updated_at?: string
+        }
+        Update: {
+          approved_at?: string | null
+          created_at?: string
+          id?: string
+          manifest_data?: Json
+          plugin_data?: Json
+          plugin_id?: string
+          rejected_at?: string | null
+          rejection_reason?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          source_files_url?: string | null
+          status?: string
+          submission_type?: string
+          submitter_id?: string
+          submitter_name?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       points_transactions: {
         Row: {
@@ -26260,6 +26688,51 @@ export type Database = {
           stream_type?: Database["public"]["Enums"]["stream_type"]
           subscribers_count?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      remote_plugin_cache: {
+        Row: {
+          bundle_content: string | null
+          bundle_size_bytes: number | null
+          cached_at: string
+          compression_type: string | null
+          content_hash: string
+          expires_at: string | null
+          id: string
+          is_valid: boolean | null
+          last_validated: string | null
+          manifest_data: Json
+          plugin_id: string
+          source_url: string
+        }
+        Insert: {
+          bundle_content?: string | null
+          bundle_size_bytes?: number | null
+          cached_at?: string
+          compression_type?: string | null
+          content_hash: string
+          expires_at?: string | null
+          id?: string
+          is_valid?: boolean | null
+          last_validated?: string | null
+          manifest_data: Json
+          plugin_id: string
+          source_url: string
+        }
+        Update: {
+          bundle_content?: string | null
+          bundle_size_bytes?: number | null
+          cached_at?: string
+          compression_type?: string | null
+          content_hash?: string
+          expires_at?: string | null
+          id?: string
+          is_valid?: boolean | null
+          last_validated?: string | null
+          manifest_data?: Json
+          plugin_id?: string
+          source_url?: string
         }
         Relationships: []
       }
