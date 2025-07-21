@@ -21,12 +21,14 @@ import {
   Package,
   Network,
   BarChart3,
-  TestTube
+  TestTube,
+  GitBranch
 } from 'lucide-react';
 import { usePlugins, useTogglePlugin, usePluginHistory, Plugin } from '@/hooks/usePluginSystem';
 import { PluginIntelligenceDashboard } from '../PluginIntelligence/PluginIntelligenceDashboard';
 import { PluginDependencyVisualizer } from '../PluginIntelligence/PluginDependencyVisualizer';
 import { PluginSandbox } from '../PluginIntelligence/PluginSandbox';
+import { PluginVersionControl } from './PluginVersionControl';
 import { toast } from 'sonner';
 
 export const PluginManagerDashboard = () => {
@@ -184,10 +186,14 @@ export const PluginManagerDashboard = () => {
       </div>
 
       <Tabs defaultValue="plugins" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="plugins" className="flex items-center space-x-1">
             <Package className="h-4 w-4" />
             <span className="hidden sm:inline">Registry</span>
+          </TabsTrigger>
+          <TabsTrigger value="versions" className="flex items-center space-x-1">
+            <GitBranch className="h-4 w-4" />
+            <span className="hidden sm:inline">Versions</span>
           </TabsTrigger>
           <TabsTrigger value="intelligence" className="flex items-center space-x-1">
             <Activity className="h-4 w-4" />
@@ -327,6 +333,10 @@ export const PluginManagerDashboard = () => {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        <TabsContent value="versions">
+          <PluginVersionControl />
         </TabsContent>
 
         <TabsContent value="intelligence">
