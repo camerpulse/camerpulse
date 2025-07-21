@@ -158,13 +158,21 @@ export const usePluginMarketplace = () => {
 
       if (trackError) throw trackError;
 
-      // Update install count
-      const { error: updateError } = await supabase
+      // Update install count manually
+      const { data: currentPlugin } = await supabase
         .from('plugin_marketplace')
-        .update({ install_count: supabase.raw('install_count + 1') })
-        .eq('plugin_id', pluginId);
-
-      if (updateError) throw updateError;
+        .select('install_count')
+        .eq('plugin_id', pluginId)
+        .single();
+      
+      if (currentPlugin) {
+        const { error: updateError } = await supabase
+          .from('plugin_marketplace')
+          .update({ install_count: (currentPlugin.install_count || 0) + 1 })
+          .eq('plugin_id', pluginId);
+        
+        if (updateError) throw updateError;
+      }
 
       return { success: true };
     },
