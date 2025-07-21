@@ -60,6 +60,21 @@
         "api_endpoints_linked": ["/api/notifications", "/api/notification-settings", "/api/campaigns"],
         "data_models_used": ["notifications", "notification_settings", "notification_campaigns"],
         "last_updated": "2024-01-14"
+      },
+      {
+        "plugin_id": "CamerPulse.Core.UserAuth",
+        "plugin_name": "User Authentication & Profiles",
+        "status": "enabled",
+        "category": "core",
+        "version": "2.5.0",
+        "description": "Core authentication system with user profiles, roles, and session management",
+        "roles_allowed": ["All"],
+        "dependencies": [],
+        "routes_linked": ["/auth", "/login", "/register", "/profile", "/settings"],
+        "components_linked": ["Auth", "LoginForm", "RegisterForm", "UserProfile", "UserSettings"],
+        "api_endpoints_linked": ["/api/auth", "/api/profile", "/api/user-settings"],
+        "data_models_used": ["profiles", "user_roles", "user_settings"],
+        "last_updated": "2024-01-18"
       }
     ],
     "governance": [
@@ -122,6 +137,36 @@
         "api_endpoints_linked": ["/api/reputation", "/api/civic-scores"],
         "data_models_used": ["civic_reputation_scores", "civic_entity_ratings"],
         "last_updated": "2024-01-09"
+      },
+      {
+        "plugin_id": "CamerPulse.Governance.GrantsScholarships",
+        "plugin_name": "Grants & Scholarships Platform",
+        "status": "enabled",
+        "category": "governance",
+        "version": "1.4.0",
+        "description": "Government grants and scholarships management with application tracking",
+        "roles_allowed": ["Citizen", "Admin", "Government"],
+        "dependencies": ["CamerPulse.Core.UserAuth", "CamerPulse.Payment.Processing"],
+        "routes_linked": ["/grants", "/scholarships", "/applications/*"],
+        "components_linked": ["GrantsPage", "ScholarshipsPage", "ApplicationsPage"],
+        "api_endpoints_linked": ["/api/grants", "/api/scholarships", "/api/applications"],
+        "data_models_used": ["grants", "scholarship_programs", "grant_applications"],
+        "last_updated": "2024-01-14"
+      },
+      {
+        "plugin_id": "CamerPulse.Governance.LocalSentiment",
+        "plugin_name": "Local Sentiment Tracking",
+        "status": "enabled",
+        "category": "governance",
+        "version": "1.1.0",
+        "description": "Track local community sentiment and feedback on governance",
+        "roles_allowed": ["Citizen", "Admin", "Government"],
+        "dependencies": ["CamerPulse.Core.UserAuth", "CamerPulse.Analytics.Intelligence"],
+        "routes_linked": ["/local-sentiment", "/community-feedback"],
+        "components_linked": ["LocalSentimentTracker", "CommunityFeedback"],
+        "api_endpoints_linked": ["/api/local-sentiment"],
+        "data_models_used": ["local_sentiment_data", "community_feedback"],
+        "last_updated": "2024-01-11"
       }
     ],
     "economy": [
@@ -184,6 +229,21 @@
         "api_endpoints_linked": ["/api/national-debt", "/api/fiscal-data"],
         "data_models_used": ["debt_records", "debt_thresholds", "debt_alerts"],
         "last_updated": "2024-01-04"
+      },
+      {
+        "plugin_id": "CamerPulse.Economy.TradingPlatform",
+        "plugin_name": "Trading & Investment Platform",
+        "status": "enabled",
+        "category": "economy",
+        "version": "1.2.0",
+        "description": "Investment tracking, portfolio management, and trading insights",
+        "roles_allowed": ["Citizen", "Admin"],
+        "dependencies": ["CamerPulse.Core.UserAuth", "CamerPulse.Payment.Processing"],
+        "routes_linked": ["/trading", "/investments", "/portfolio"],
+        "components_linked": ["TradingDashboard", "InvestmentTracker", "PortfolioManager"],
+        "api_endpoints_linked": ["/api/trading", "/api/investments"],
+        "data_models_used": ["investment_portfolios", "trading_history"],
+        "last_updated": "2024-01-09"
       }
     ],
     "analytics": [
@@ -231,6 +291,21 @@
         "api_endpoints_linked": ["/api/institution-analytics", "/api/performance-metrics"],
         "data_models_used": ["institution_analytics", "performance_metrics", "regional_data"],
         "last_updated": "2024-01-10"
+      },
+      {
+        "plugin_id": "CamerPulse.Analytics.MediaMonitoring",
+        "plugin_name": "Media Monitoring & Analysis",
+        "status": "enabled",
+        "category": "analytics",
+        "version": "1.0.0",
+        "description": "Monitor media sources for bias, misinformation, and content analysis",
+        "roles_allowed": ["Admin", "Government"],
+        "dependencies": ["CamerPulse.Analytics.Intelligence"],
+        "routes_linked": ["/media-monitoring", "/content-analysis"],
+        "components_linked": ["MediaMonitoring", "ContentAnalysis"],
+        "api_endpoints_linked": ["/api/media-analysis"],
+        "data_models_used": ["media_sources", "media_content_analysis", "media_alerts"],
+        "last_updated": "2024-01-08"
       }
     ],
     "entertainment": [
@@ -278,6 +353,21 @@
         "api_endpoints_linked": ["/api/events", "/api/calendar", "/api/certificates"],
         "data_models_used": ["events", "event_calendar", "event_certificates"],
         "last_updated": "2024-01-13"
+      },
+      {
+        "plugin_id": "CamerPulse.Entertainment.GamingPlatform",
+        "plugin_name": "Gaming & Esports Platform",
+        "status": "enabled",
+        "category": "entertainment",
+        "version": "1.0.0",
+        "description": "Gaming tournaments, esports events, and gaming community",
+        "roles_allowed": ["Citizen", "Admin"],
+        "dependencies": ["CamerPulse.Core.UserAuth", "CamerPulse.Entertainment.EventsCalendar"],
+        "routes_linked": ["/gaming", "/esports", "/tournaments"],
+        "components_linked": ["GamingPlatform", "EsportsEvents", "TournamentManager"],
+        "api_endpoints_linked": ["/api/gaming", "/api/tournaments"],
+        "data_models_used": ["gaming_tournaments", "esports_events"],
+        "last_updated": "2024-01-10"
       }
     ],
     "directories": [
@@ -340,6 +430,21 @@
         "api_endpoints_linked": ["/api/pharmacies"],
         "data_models_used": ["pharmacies", "pharmacy_services"],
         "last_updated": "2024-01-06"
+      },
+      {
+        "plugin_id": "CamerPulse.Directories.CommunityDirectory",
+        "plugin_name": "Community Organizations Directory",
+        "status": "enabled",
+        "category": "directories",
+        "version": "1.0.0",
+        "description": "Directory of NGOs, community groups, and local organizations",
+        "roles_allowed": ["Citizen", "Moderator", "Admin"],
+        "dependencies": ["CamerPulse.Core.UserAuth"],
+        "routes_linked": ["/organizations", "/community-groups"],
+        "components_linked": ["CommunityDirectory", "OrganizationProfile"],
+        "api_endpoints_linked": ["/api/organizations"],
+        "data_models_used": ["community_organizations", "organization_profiles"],
+        "last_updated": "2024-01-12"
       }
     ],
     "diaspora": [
@@ -372,6 +477,21 @@
         "api_endpoints_linked": ["/api/cross-border-projects"],
         "data_models_used": ["cross_border_projects", "project_funding"],
         "last_updated": "2024-01-05"
+      },
+      {
+        "plugin_id": "CamerPulse.Diaspora.RemittanceTracker",
+        "plugin_name": "Remittance & Transfer Tracking",
+        "status": "enabled",
+        "category": "diaspora",
+        "version": "1.0.0",
+        "description": "Track remittances and money transfers to homeland",
+        "roles_allowed": ["Diaspora", "Admin"],
+        "dependencies": ["CamerPulse.Diaspora.DiasporaConnect", "CamerPulse.Payment.Processing"],
+        "routes_linked": ["/remittances", "/money-transfers"],
+        "components_linked": ["RemittanceTracker", "TransferHistory"],
+        "api_endpoints_linked": ["/api/remittances"],
+        "data_models_used": ["remittance_records", "transfer_history"],
+        "last_updated": "2024-01-08"
       }
     ],
     "security": [
@@ -419,6 +539,21 @@
         "api_endpoints_linked": ["/api/ashen", "/api/system-health"],
         "data_models_used": ["ashen_auto_healing_history", "ashen_autonomous_operations"],
         "last_updated": "2024-01-10"
+      },
+      {
+        "plugin_id": "CamerPulse.Security.EncryptionVault",
+        "plugin_name": "Encryption & Data Vault",
+        "status": "enabled",
+        "category": "security",
+        "version": "1.2.0",
+        "description": "End-to-end encryption and secure data storage",
+        "roles_allowed": ["Admin"],
+        "dependencies": ["CamerPulse.Core.UserAuth"],
+        "routes_linked": ["/security/vault", "/encryption-settings"],
+        "components_linked": ["EncryptionVault", "SecuritySettings"],
+        "api_endpoints_linked": ["/api/encryption", "/api/vault"],
+        "data_models_used": ["encrypted_data", "security_keys"],
+        "last_updated": "2024-01-13"
       }
     ],
     "legal": [
@@ -451,6 +586,21 @@
         "api_endpoints_linked": ["/api/constitution-audit"],
         "data_models_used": ["constitutional_articles", "legal_document_analysis"],
         "last_updated": "2024-01-06"
+      },
+      {
+        "plugin_id": "CamerPulse.Legal.DocumentManagement",
+        "plugin_name": "Legal Document Management",
+        "status": "enabled",
+        "category": "legal",
+        "version": "1.1.0",
+        "description": "Manage legal documents, contracts, and legislative files",
+        "roles_allowed": ["Admin", "Government"],
+        "dependencies": ["CamerPulse.Legal.ComplianceTracker"],
+        "routes_linked": ["/legal-documents", "/contracts"],
+        "components_linked": ["LegalDocuments", "ContractManager"],
+        "api_endpoints_linked": ["/api/legal-documents"],
+        "data_models_used": ["legal_documents", "document_processing"],
+        "last_updated": "2024-01-07"
       }
     ],
     "admin_tools": [
@@ -513,13 +663,109 @@
         "api_endpoints_linked": ["/api/pwa-config"],
         "data_models_used": ["pwa_settings", "mobile_configs"],
         "last_updated": "2024-01-13"
+      },
+      {
+        "plugin_id": "CamerPulse.Admin.SystemMonitoring",
+        "plugin_name": "System Monitoring & Health",
+        "status": "enabled",
+        "category": "admin_tools",
+        "version": "1.3.0",
+        "description": "Real-time system monitoring, performance tracking, and health checks",
+        "roles_allowed": ["Admin"],
+        "dependencies": ["CamerPulse.Core.UserAuth"],
+        "routes_linked": ["/admin/monitoring", "/system-status", "/performance"],
+        "components_linked": ["SystemMonitoring", "PerformanceDashboard", "HealthCheck"],
+        "api_endpoints_linked": ["/api/system-monitoring", "/api/health-check"],
+        "data_models_used": ["system_metrics", "performance_logs"],
+        "last_updated": "2024-01-14"
+      }
+    ],
+    "payment": [
+      {
+        "plugin_id": "CamerPulse.Payment.Processing",
+        "plugin_name": "Payment Processing System",
+        "status": "enabled",
+        "category": "payment",
+        "version": "1.4.0",
+        "description": "Secure payment processing with multiple providers and mobile money",
+        "roles_allowed": ["Citizen", "Admin"],
+        "dependencies": ["CamerPulse.Core.UserAuth", "CamerPulse.Security.EncryptionVault"],
+        "routes_linked": ["/payments", "/checkout", "/payment-history"],
+        "components_linked": ["PaymentProcessor", "CheckoutPage", "PaymentHistory"],
+        "api_endpoints_linked": ["/api/payments", "/api/checkout"],
+        "data_models_used": ["payments", "payment_methods", "payment_configs"],
+        "last_updated": "2024-01-16"
+      }
+    ],
+    "ai": [
+      {
+        "plugin_id": "CamerPulse.AI.Processing",
+        "plugin_name": "AI Processing Engine",
+        "status": "enabled",
+        "category": "ai",
+        "version": "1.8.0",
+        "description": "Core AI processing engine for machine learning and natural language processing",
+        "roles_allowed": ["Admin"],
+        "dependencies": ["CamerPulse.Core.UserAuth"],
+        "routes_linked": ["/ai-dashboard", "/ai-models"],
+        "components_linked": ["AIDashboard", "ModelManager"],
+        "api_endpoints_linked": ["/api/ai-processing", "/api/ml-models"],
+        "data_models_used": ["ai_models", "ai_training_data"],
+        "last_updated": "2024-01-17"
+      }
+    ],
+    "communication": [
+      {
+        "plugin_id": "CamerPulse.Communication.MessengerSystem",
+        "plugin_name": "Secure Messenger System",
+        "status": "enabled",
+        "category": "communication",
+        "version": "1.6.0",
+        "description": "End-to-end encrypted messaging with file sharing and group chats",
+        "roles_allowed": ["Citizen", "Moderator", "Admin"],
+        "dependencies": ["CamerPulse.Core.UserAuth", "CamerPulse.Security.EncryptionVault"],
+        "routes_linked": ["/messenger", "/chat", "/conversations"],
+        "components_linked": ["MessengerApp", "ChatInterface", "ConversationList"],
+        "api_endpoints_linked": ["/api/messenger", "/api/conversations"],
+        "data_models_used": ["conversations", "messages", "messenger_media_files"],
+        "last_updated": "2024-01-15"
+      },
+      {
+        "plugin_id": "CamerPulse.Communication.LivePolling",
+        "plugin_name": "Live Polling & Sessions",
+        "status": "enabled",
+        "category": "communication",
+        "version": "1.2.0",
+        "description": "Real-time live polling sessions with audience participation",
+        "roles_allowed": ["Citizen", "Moderator", "Admin"],
+        "dependencies": ["CamerPulse.Core.PollsSystem", "CamerPulse.Core.Notifications"],
+        "routes_linked": ["/live-polling", "/polling-sessions"],
+        "components_linked": ["LivePollingInterface", "PollingSessionManager"],
+        "api_endpoints_linked": ["/api/live-polling"],
+        "data_models_used": ["live_polling_sessions", "live_poll_responses"],
+        "last_updated": "2024-01-11"
       }
     ]
   },
   "metadata": {
-    "total_plugins": 31,
-    "categories": 10,
-    "last_updated": "2024-01-17T10:00:00Z",
-    "schema_version": "1.0.0"
+    "total_plugins": 39,
+    "categories": 12,
+    "last_updated": "2024-01-18T12:00:00Z",
+    "schema_version": "2.0.0",
+    "category_counts": {
+      "core": 5,
+      "governance": 6,
+      "economy": 5,
+      "analytics": 4,
+      "entertainment": 4,
+      "directories": 5,
+      "diaspora": 3,
+      "security": 4,
+      "legal": 3,
+      "admin_tools": 5,
+      "payment": 1,
+      "ai": 1,
+      "communication": 2
+    }
   }
 }
