@@ -129,6 +129,7 @@ import MinistriesDirectory from "./pages/MinistriesDirectory";
 import CouncilsDirectory from "./pages/CouncilsDirectory";
 import BudgetExplorer from "./pages/BudgetExplorer";
 import { PluginManagerDashboard } from "./components/Admin/PluginManager/PluginManagerDashboard";
+import { PluginRoute } from "./components/Plugin/PluginWrapper";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -198,9 +199,11 @@ const App = () => {
               <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/admin/plugins" element={
-                <div className="min-h-screen bg-background p-6">
-                  <PluginManagerDashboard />
-                </div>
+                <PluginRoute pluginName="CamerPulse.Admin.PluginManager" adminAccess>
+                  <div className="min-h-screen bg-background p-6">
+                    <PluginManagerDashboard />
+                  </div>
+                </PluginRoute>
               } />
               <Route path="/admin/design-core" element={<DesignSystemCore />} />
               <Route path="/admin/core" element={<CamerPulseAdminCore />} />
@@ -241,9 +244,21 @@ const App = () => {
             <Route path="/camerplay/awards" element={<CamerPlayAwards />} />
             <Route path="/camerplay/rankings" element={<CamerPlayRankings />} />
             <Route path="/camerplay/submit-artist" element={<ArtistSubmissionPage />} />
-          <Route path="/camerplay" element={<CamerPlayHome />} />
-          <Route path="/ecosystem" element={<EcosystemDashboard />} />
-          <Route path="/fan-portal" element={<FanPortal />} />
+              <Route path="/camerplay" element={
+                <PluginRoute pluginName="CamerPulse.Entertainment.CamerPlayMusic">
+                  <CamerPlayHome />
+                </PluginRoute>
+              } />
+              <Route path="/ecosystem" element={
+                <PluginRoute pluginName="CamerPulse.Entertainment.ArtistEcosystem">
+                  <EcosystemDashboard />
+                </PluginRoute>
+              } />
+              <Route path="/fan-portal" element={
+                <PluginRoute pluginName="CamerPulse.Entertainment.ArtistEcosystem">
+                  <FanPortal />
+                </PluginRoute>
+              } />
           <Route path="/billionaires" element={<BillionaireTracker />} />
           <Route path="/billionaires/apply" element={<BillionaireApplication />} />
           <Route path="/billionaires/:id" element={<BillionaireProfile />} />

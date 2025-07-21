@@ -95,6 +95,10 @@ export const PluginManagerDashboard = () => {
 
   const enabledCount = plugins?.filter(p => p.plugin_status === 'enabled').length || 0;
   const totalCount = plugins?.length || 0;
+  const corePlugins = plugins?.filter(p => p.metadata?.category === 'core').length || 0;
+  const governancePlugins = plugins?.filter(p => p.metadata?.category === 'governance').length || 0;
+  const economyPlugins = plugins?.filter(p => p.metadata?.category === 'economy').length || 0;
+  const entertainmentPlugins = plugins?.filter(p => p.metadata?.category === 'entertainment').length || 0;
 
   return (
     <div className="space-y-6">
@@ -147,12 +151,26 @@ export const PluginManagerDashboard = () => {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium">System Health</CardTitle>
+            <CardTitle className="text-sm font-medium">Categories</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-green-600" />
-              <span className="text-sm font-medium">Operational</span>
+            <div className="space-y-1 text-sm">
+              <div className="flex justify-between">
+                <span>Core:</span>
+                <span className="font-medium">{corePlugins}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Governance:</span>
+                <span className="font-medium">{governancePlugins}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Economy:</span>
+                <span className="font-medium">{economyPlugins}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Entertainment:</span>
+                <span className="font-medium">{entertainmentPlugins}</span>
+              </div>
             </div>
           </CardContent>
         </Card>
