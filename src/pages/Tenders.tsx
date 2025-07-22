@@ -89,12 +89,12 @@ export default function Tenders() {
 
   const [filters, setFilters] = useState<FilterState>({
     keyword: '',
-    category: '',
-    region: '',
-    tenderType: '',
-    status: '',
+    category: 'all',
+    region: 'all', 
+    tenderType: 'all',
+    status: 'all',
     budgetRange: [0, 100000000],
-    deadlineRange: '',
+    deadlineRange: 'all',
     publishingEntity: ''
   });
 
@@ -194,22 +194,22 @@ export default function Tenders() {
     }
 
     // Apply category filter
-    if (filters.category) {
+    if (filters.category && filters.category !== 'all') {
       filtered = filtered.filter(tender => tender.category === filters.category);
     }
 
     // Apply region filter
-    if (filters.region) {
+    if (filters.region && filters.region !== 'all') {
       filtered = filtered.filter(tender => tender.region === filters.region);
     }
 
     // Apply tender type filter
-    if (filters.tenderType) {
+    if (filters.tenderType && filters.tenderType !== 'all') {
       filtered = filtered.filter(tender => tender.tender_type === filters.tenderType);
     }
 
     // Apply status filter
-    if (filters.status) {
+    if (filters.status && filters.status !== 'all') {
       filtered = filtered.filter(tender => tender.status === filters.status);
     }
 
@@ -260,12 +260,12 @@ export default function Tenders() {
   const clearFilters = () => {
     setFilters({
       keyword: '',
-      category: '',
-      region: '',
-      tenderType: '',
-      status: '',
+      category: 'all',
+      region: 'all',
+      tenderType: 'all',
+      status: 'all',
       budgetRange: [0, 100000000],
-      deadlineRange: '',
+      deadlineRange: 'all',
       publishingEntity: ''
     });
   };
@@ -273,11 +273,11 @@ export default function Tenders() {
   const getActiveFiltersCount = () => {
     let count = 0;
     if (filters.keyword) count++;
-    if (filters.category) count++;
-    if (filters.region) count++;
-    if (filters.tenderType) count++;
-    if (filters.status) count++;
-    if (filters.deadlineRange) count++;
+    if (filters.category && filters.category !== 'all') count++;
+    if (filters.region && filters.region !== 'all') count++;
+    if (filters.tenderType && filters.tenderType !== 'all') count++;
+    if (filters.status && filters.status !== 'all') count++;
+    if (filters.deadlineRange && filters.deadlineRange !== 'all') count++;
     if (filters.budgetRange[0] > 0 || filters.budgetRange[1] < 100000000) count++;
     return count;
   };

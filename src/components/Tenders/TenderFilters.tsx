@@ -112,36 +112,36 @@ export const TenderFilters: React.FC<TenderFiltersProps> = ({
           </CardHeader>
           <CardContent className="pt-0">
             <div className="flex flex-wrap gap-2">
-              {filters.category && (
+              {filters.category && filters.category !== 'all' && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Tag className="h-3 w-3" />
                   {filters.category}
                   <button
-                    onClick={() => updateFilter('category', '')}
+                    onClick={() => updateFilter('category', 'all')}
                     className="ml-1 hover:text-destructive"
                   >
                     <X className="h-3 w-3" />
                   </button>
                 </Badge>
               )}
-              {filters.region && (
+              {filters.region && filters.region !== 'all' && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <MapPin className="h-3 w-3" />
                   {filters.region}
                   <button
-                    onClick={() => updateFilter('region', '')}
+                    onClick={() => updateFilter('region', 'all')}
                     className="ml-1 hover:text-destructive"
                   >
                     <X className="h-3 w-3" />
                   </button>
                 </Badge>
               )}
-              {filters.tenderType && (
+              {filters.tenderType && filters.tenderType !== 'all' && (
                 <Badge variant="secondary" className="flex items-center gap-1">
                   <Building2 className="h-3 w-3" />
                   {filters.tenderType}
                   <button
-                    onClick={() => updateFilter('tenderType', '')}
+                    onClick={() => updateFilter('tenderType', 'all')}
                     className="ml-1 hover:text-destructive"
                   >
                     <X className="h-3 w-3" />
@@ -168,12 +168,12 @@ export const TenderFilters: React.FC<TenderFiltersProps> = ({
               <Tag className="h-4 w-4" />
               Category
             </Label>
-            <Select value={filters.category} onValueChange={(value) => updateFilter('category', value)}>
+            <Select value={filters.category} onValueChange={(value) => updateFilter('category', value)} defaultValue="all">
               <SelectTrigger>
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 {CATEGORIES.map((category) => (
                   <SelectItem key={category} value={category}>
                     {category}
@@ -191,12 +191,12 @@ export const TenderFilters: React.FC<TenderFiltersProps> = ({
               <MapPin className="h-4 w-4" />
               Region
             </Label>
-            <Select value={filters.region} onValueChange={(value) => updateFilter('region', value)}>
+            <Select value={filters.region} onValueChange={(value) => updateFilter('region', value)} defaultValue="all">
               <SelectTrigger>
                 <SelectValue placeholder="All Regions" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Regions</SelectItem>
+                <SelectItem value="all">All Regions</SelectItem>
                 {REGIONS.map((region) => (
                   <SelectItem key={region} value={region}>
                     {region}
@@ -214,12 +214,12 @@ export const TenderFilters: React.FC<TenderFiltersProps> = ({
               <Building2 className="h-4 w-4" />
               Tender Type
             </Label>
-            <Select value={filters.tenderType} onValueChange={(value) => updateFilter('tenderType', value)}>
+            <Select value={filters.tenderType} onValueChange={(value) => updateFilter('tenderType', value)} defaultValue="all">
               <SelectTrigger>
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Types</SelectItem>
+                <SelectItem value="all">All Types</SelectItem>
                 {TENDER_TYPES.map((type) => (
                   <SelectItem key={type} value={type}>
                     {type}
@@ -234,12 +234,12 @@ export const TenderFilters: React.FC<TenderFiltersProps> = ({
           {/* Status Filter */}
           <div className="space-y-3">
             <Label className="text-sm font-medium">Status</Label>
-            <Select value={filters.status} onValueChange={(value) => updateFilter('status', value)}>
+            <Select value={filters.status} onValueChange={(value) => updateFilter('status', value)} defaultValue="all">
               <SelectTrigger>
                 <SelectValue placeholder="All Statuses" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
                 {STATUS_OPTIONS.map((status) => (
                   <SelectItem key={status} value={status}>
                     {status}
@@ -281,12 +281,12 @@ export const TenderFilters: React.FC<TenderFiltersProps> = ({
               <Calendar className="h-4 w-4" />
               Deadline
             </Label>
-            <Select value={filters.deadlineRange} onValueChange={(value) => updateFilter('deadlineRange', value)}>
+            <Select value={filters.deadlineRange} onValueChange={(value) => updateFilter('deadlineRange', value)} defaultValue="all">
               <SelectTrigger>
                 <SelectValue placeholder="Any deadline" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">Any deadline</SelectItem>
+                <SelectItem value="all">Any deadline</SelectItem>
                 <SelectItem value="today">Due today</SelectItem>
                 <SelectItem value="week">Due this week</SelectItem>
                 <SelectItem value="month">Due this month</SelectItem>
