@@ -196,10 +196,11 @@ const CreateTender = () => {
       setIsSubmitting(true);
       
       // First create the tender
+      const { documents, ...tenderFormData } = formData;
       const { data: tenderData, error: tenderError } = await supabase
         .from('tenders')
         .insert({
-          ...formData,
+          ...tenderFormData,
           published_by_user_id: user.id,
           payment_plan_id: plan.id,
           payment_status: 'pending_payment',
@@ -255,10 +256,11 @@ const CreateTender = () => {
     try {
       setIsSubmitting(true);
       
+      const { documents, ...tenderFormData } = formData;
       const { data, error } = await supabase
         .from('tenders')
         .insert({
-          ...formData,
+          ...tenderFormData,
           published_by_user_id: user.id,
           payment_status: 'free',
           status: 'active'

@@ -24,6 +24,8 @@ import Social from "./pages/Social";
 import News from "./pages/News";
 import Admin from "./pages/Admin";
 import DesignSystemCore from "./pages/DesignSystemCore";
+import BusinessVerification from './pages/BusinessVerification';
+import AdminModeration from './pages/AdminModeration';
 import CamerPulseAdminCore from "./pages/CamerPulseAdminCore";
 import PoliticalParties from "./pages/PoliticalParties";
 import PoliticalPartyDetail from "./pages/PoliticalPartyDetail";
@@ -374,6 +376,8 @@ const App = () => {
         <Route path="/tenders" element={<Tenders />} />
         <Route path="/tenders/create" element={<CreateTender />} />
         <Route path="/tenders/:id" element={<TenderDetail />} />
+        <Route path="/business-verification" element={<BusinessVerification />} />
+        <Route path="/admin/moderation" element={<AdminModeration />} />
                  <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
