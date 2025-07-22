@@ -30582,6 +30582,105 @@ export type Database = {
           },
         ]
       }
+      tender_payment_plans: {
+        Row: {
+          created_at: string
+          duration_days: number
+          features: Json
+          id: string
+          is_active: boolean
+          plan_name: string
+          plan_type: string
+          price_fcfa: number
+          price_usd: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          duration_days?: number
+          features?: Json
+          id?: string
+          is_active?: boolean
+          plan_name: string
+          plan_type: string
+          price_fcfa: number
+          price_usd: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          duration_days?: number
+          features?: Json
+          id?: string
+          is_active?: boolean
+          plan_name?: string
+          plan_type?: string
+          price_fcfa?: number
+          price_usd?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tender_payments: {
+        Row: {
+          amount_fcfa: number
+          amount_usd: number
+          created_at: string
+          currency: string
+          id: string
+          payment_method: string | null
+          payment_status: string
+          plan_id: string | null
+          stripe_session_id: string | null
+          tender_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_fcfa: number
+          amount_usd: number
+          created_at?: string
+          currency?: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string
+          plan_id?: string | null
+          stripe_session_id?: string | null
+          tender_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_fcfa?: number
+          amount_usd?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          payment_method?: string | null
+          payment_status?: string
+          plan_id?: string | null
+          stripe_session_id?: string | null
+          tender_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_payments_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "tender_payment_plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tender_payments_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenders: {
         Row: {
           award_amount: number | null
@@ -30602,6 +30701,8 @@ export type Database = {
           id: string
           instructions: string | null
           is_featured: boolean
+          payment_plan_id: string | null
+          payment_status: string | null
           published_by_company_id: string | null
           published_by_user_id: string
           region: string
@@ -30630,6 +30731,8 @@ export type Database = {
           id?: string
           instructions?: string | null
           is_featured?: boolean
+          payment_plan_id?: string | null
+          payment_status?: string | null
           published_by_company_id?: string | null
           published_by_user_id: string
           region: string
@@ -30658,6 +30761,8 @@ export type Database = {
           id?: string
           instructions?: string | null
           is_featured?: boolean
+          payment_plan_id?: string | null
+          payment_status?: string | null
           published_by_company_id?: string | null
           published_by_user_id?: string
           region?: string
@@ -30667,7 +30772,15 @@ export type Database = {
           updated_at?: string
           views_count?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "tenders_payment_plan_id_fkey"
+            columns: ["payment_plan_id"]
+            isOneToOne: false
+            referencedRelation: "tender_payment_plans"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ticket_purchases: {
         Row: {

@@ -155,3 +155,6 @@ verify_jwt = false
 
 [functions.data-import-scheduler]
 verify_jwt = false
+
+[functions.create-tender-payment]
+verify_jwt = true

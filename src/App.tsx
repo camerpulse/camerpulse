@@ -129,6 +129,7 @@ import APIIntegrations from "./pages/APIIntegrations";
 import { LegislationTracker } from "./pages/LegislationTracker";
 import Tenders from "./pages/Tenders";
 import TenderDetail from "./pages/TenderDetail";
+import CreateTender from "./pages/CreateTender";
 import MinistriesDirectory from "./pages/MinistriesDirectory";
 import CouncilsDirectory from "./pages/CouncilsDirectory";
 import BudgetExplorer from "./pages/BudgetExplorer";
@@ -370,8 +371,9 @@ const App = () => {
                 <Route path="/budget-explorer" element={<BudgetExplorer />} />
               <Route path="/officials" element={<Officials />} />
               <Route path="/judiciary" element={<Judiciary />} />
-              <Route path="/tenders" element={<Tenders />} />
-              <Route path="/tenders/:id" element={<TenderDetail />} />
+        <Route path="/tenders" element={<Tenders />} />
+        <Route path="/tenders/create" element={<CreateTender />} />
+        <Route path="/tenders/:id" element={<TenderDetail />} />
                  <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
