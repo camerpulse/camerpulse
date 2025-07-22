@@ -13,6 +13,9 @@ import { useSenatorFollowing, useToggleSenatorFollow } from '@/hooks/useSenatorE
 import { SenatorClaimDialog } from './SenatorClaimDialog';
 import { SenatorReportDialog } from './SenatorReportDialog';
 import { SenatorMessageDialog } from './SenatorMessageDialog';
+import { SenatorShareDialog } from './SenatorShareDialog';
+import { exportSenatorToPDF, SenatorPDFData } from '@/utils/pdfExport';
+import { toast } from 'sonner';
 
 interface SenatorActionsProps {
   senator: Senator;

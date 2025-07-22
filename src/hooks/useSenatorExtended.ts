@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { useAuth } from './useAuth';
+import { toast } from 'sonner';
 
 // Extended interfaces for the new senator system
 export interface SenatorClaim {
@@ -109,12 +110,11 @@ export const useSenatorFollowing = (senatorId: string) => {
 
 // Hook for following/unfollowing senators
 export const useToggleSenatorFollow = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async ({ senatorId, isFollowing }: { senatorId: string; isFollowing: boolean }) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('You must be logged in to follow senators');
 
       if (isFollowing) {
@@ -145,19 +145,10 @@ export const useToggleSenatorFollow = () => {
       queryClient.invalidateQueries({ queryKey: ['senator-following', variables.senatorId] });
       queryClient.invalidateQueries({ queryKey: ['senators'] });
       
-      toast({
-        title: data.action === 'follow' ? "Now Following" : "Unfollowed",
-        description: data.action === 'follow' 
-          ? "You'll receive updates about this senator" 
-          : "You won't receive updates anymore",
-      });
+      toast.success(data.action === 'follow' ? "Now following senator" : "Unfollowed senator");
     },
     onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message,
-        variant: "destructive"
-      });
+      toast.error(`Failed to ${error.message.includes('follow') ? 'follow' : 'unfollow'} senator`);
     }
   });
 };
@@ -183,12 +174,11 @@ export const useSenatorClaims = (senatorId?: string) => {
 
 // Hook for creating senator claims
 export const useCreateSenatorClaim = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async (claim: Partial<SenatorClaim>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('You must be logged in to claim a senator profile');
 
       const { data, error } = await supabase
@@ -205,17 +195,10 @@ export const useCreateSenatorClaim = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['senator-claims'] });
-      toast({
-        title: "Claim Submitted",
-        description: "Your senator profile claim has been submitted for review",
-      });
+      toast.success("Your senator profile claim has been submitted for review");
     },
     onError: (error) => {
-      toast({
-        title: "Claim Failed",
-        description: error.message,
-        variant: "destructive"
-      });
+      toast.error(`Claim failed: ${error.message}`);
     }
   });
 };
@@ -241,12 +224,11 @@ export const useSenatorReports = (senatorId?: string) => {
 
 // Hook for creating senator reports
 export const useCreateSenatorReport = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async (report: Partial<SenatorReport>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('You must be logged in to report misconduct');
 
       const { data, error } = await supabase
@@ -263,17 +245,10 @@ export const useCreateSenatorReport = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['senator-reports'] });
-      toast({
-        title: "Report Submitted",
-        description: "Your misconduct report has been submitted for review",
-      });
+      toast.success("Your misconduct report has been submitted for review");
     },
     onError: (error) => {
-      toast({
-        title: "Report Failed",
-        description: error.message,
-        variant: "destructive"
-      });
+      toast.error(`Report failed: ${error.message}`);
     }
   });
 };
@@ -299,12 +274,11 @@ export const useSenatorMessages = (senatorId?: string) => {
 
 // Hook for sending messages to senators
 export const useSendSenatorMessage = () => {
-  const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async (message: Partial<SenatorMessage>) => {
-      const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('You must be logged in to send messages');
 
       const { data, error } = await supabase
@@ -321,17 +295,10 @@ export const useSendSenatorMessage = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['senator-messages'] });
-      toast({
-        title: "Message Sent",
-        description: "Your message has been sent to the senator",
-      });
+      toast.success("Your message has been sent to the senator");
     },
     onError: (error) => {
-      toast({
-        title: "Message Failed",
-        description: error.message,
-        variant: "destructive"
-      });
+      toast.error(`Message failed: ${error.message}`);
     }
   });
 };
@@ -356,8 +323,6 @@ export const useSenatorAnalytics = (senatorId: string) => {
 
 // Hook for calculating senator trust score
 export const useCalculateSenatorScore = () => {
-  const { toast } = useToast();
-
   return useMutation({
     mutationFn: async (senatorId: string) => {
       const { data, error } = await supabase.rpc('calculate_enhanced_senator_scores', {
@@ -368,17 +333,10 @@ export const useCalculateSenatorScore = () => {
       return data;
     },
     onSuccess: () => {
-      toast({
-        title: "Score Calculated",
-        description: "Senator scores have been updated",
-      });
+      toast.success("Senator scores have been updated");
     },
     onError: (error) => {
-      toast({
-        title: "Calculation Failed",
-        description: error.message,
-        variant: "destructive"
-      });
+      toast.error(`Calculation failed: ${error.message}`);
     }
   });
 };

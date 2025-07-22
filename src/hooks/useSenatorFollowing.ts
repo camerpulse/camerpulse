@@ -26,7 +26,7 @@ export const useSenatorFollowing = (senatorId: string) => {
       if (!user) return false;
       
       const { data } = await supabase
-        .from('senator_followers')
+        .from('senator_following')
         .select('id')
         .eq('user_id', user.id)
         .eq('senator_id', senatorId)
@@ -42,7 +42,7 @@ export const useSenatorFollowing = (senatorId: string) => {
     queryKey: ['senator-follower-count', senatorId],
     queryFn: async () => {
       const { count } = await supabase
-        .from('senator_followers')
+        .from('senator_following')
         .select('*', { count: 'exact', head: true })
         .eq('senator_id', senatorId);
         
@@ -57,10 +57,11 @@ export const useSenatorFollowing = (senatorId: string) => {
       if (!user) throw new Error('User not authenticated');
       
       const { error } = await supabase
-        .from('senator_followers')
+        .from('senator_following')
         .insert({
           user_id: user.id,
-          senator_id: senatorId
+          senator_id: senatorId,
+          notifications_enabled: true
         });
         
       if (error) throw error;
@@ -82,7 +83,7 @@ export const useSenatorFollowing = (senatorId: string) => {
       if (!user) throw new Error('User not authenticated');
       
       const { error } = await supabase
-        .from('senator_followers')
+        .from('senator_following')
         .delete()
         .eq('user_id', user.id)
         .eq('senator_id', senatorId);
