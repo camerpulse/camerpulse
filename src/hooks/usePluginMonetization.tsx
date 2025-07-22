@@ -254,12 +254,7 @@ export const useDeveloperEarnings = () => {
           )
         `)
         .eq('status', 'completed')
-        .in('plugin_id', 
-          supabase
-            .from('plugin_marketplace')
-            .select('id')
-            .eq('author_id', user.id)
-        );
+        .in('plugin_id', []);
 
       if (error) throw error;
 
@@ -420,7 +415,7 @@ export const useManagePluginLicense = () => {
         // Create new license
         const { data, error } = await supabase
           .from('plugin_licenses')
-          .insert(licenseData)
+          .insert(licenseData as any)
           .select()
           .single();
 
