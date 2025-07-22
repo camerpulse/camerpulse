@@ -32165,6 +32165,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      get_current_user_role: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       get_economic_summary: {
         Args: { p_region?: string }
         Returns: Json
