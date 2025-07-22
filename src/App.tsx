@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import { LegislationTracker } from "./pages/LegislationTracker";
 import HospitalsDirectory from "./pages/HospitalsDirectory";
+import Tenders from "./pages/Tenders";
 import DiasporaConnect from "./pages/DiasporaConnect";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -49,6 +50,7 @@ const App = () => {
                     <Route path="/auth" element={<Auth />} />
                     <Route path="/legislation" element={<LegislationTracker />} />
                     <Route path="/hospitals" element={<HospitalsDirectory />} />
+                    <Route path="/tenders" element={<Tenders />} />
                     <Route path="/diaspora-connect" element={<DiasporaConnect />} />
                   </Routes>
                 </BrowserRouter>
