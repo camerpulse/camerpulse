@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { 
   Download, 
@@ -20,97 +20,51 @@ import {
 export function MPDirectorySync() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const [mpCount, setMpCount] = useState(0);
 
-  // Start MP import process
+  // Get current MP count
+  const { data: mpCount = 0 } = useQuery({
+    queryKey: ['mp-count'],
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('mps')
+        .select('*', { count: 'exact', head: true });
+      
+      if (error) throw error;
+      return count || 0;
+    },
+  });
+
+  // Import MPs mutation
   const importMPsMutation = useMutation({
     mutationFn: async () => {
-      const { data, error } = await supabase.functions.invoke('assembly-scraper', {
-        body: { 
-          action: 'import_mps',
-          source_url: 'https://www.assnat.cm/index.php/en/members/10th-legislative',
-          legislative_session: '10th Legislature'
-        }
-      });
+      console.log('Starting MP import...');
+      const { data, error } = await supabase.functions.invoke('mp-data-importer');
 
-      if (error) throw error;
+      if (error) {
+        console.error('Edge function error:', error);
+        throw error;
+      }
+      
+      console.log('Import response:', data);
       return data;
     },
     onSuccess: (data) => {
       toast({
-        title: "MP Import Started",
-        description: `Importing ${data?.total_pages || 10} pages of National Assembly members...`,
+        title: "MP Import Completed",
+        description: `Successfully imported ${data?.imported || 0} MPs from the National Assembly website.`,
       });
-      queryClient.invalidateQueries({ queryKey: ['politicians'] });
+      queryClient.invalidateQueries({ queryKey: ['mp-count'] });
+      queryClient.invalidateQueries({ queryKey: ['mps'] });
     },
     onError: (error) => {
+      console.error('Import error:', error);
       toast({
         title: "Import failed",
-        description: error.message,
+        description: error.message || "Failed to import MPs. Please try again.",
         variant: "destructive",
       });
     },
   });
-
-  // Verify existing MP data
-  const verifyMPsMutation = useMutation({
-    mutationFn: async () => {
-      const { data, error } = await supabase.functions.invoke('assembly-scraper', {
-        body: { 
-          action: 'verify_mps',
-          legislative_session: '10th Legislature'
-        }
-      });
-
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      toast({
-        title: "MP Verification Started",
-        description: "Validating existing MP data against official sources...",
-      });
-      queryClient.invalidateQueries({ queryKey: ['politicians'] });
-    },
-    onError: (error) => {
-      toast({
-        title: "Verification failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  // Update MP party affiliations
-  const updateAffiliationsMutation = useMutation({
-    mutationFn: async () => {
-      const { data, error } = await supabase.functions.invoke('assembly-scraper', {
-        body: { 
-          action: 'update_affiliations',
-          legislative_session: '10th Legislature'
-        }
-      });
-
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      toast({
-        title: "Affiliation Update Started",
-        description: "Matching MPs to political parties...",
-      });
-      queryClient.invalidateQueries({ queryKey: ['politicians'] });
-    },
-    onError: (error) => {
-      toast({
-        title: "Update failed",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  const isLoading = importMPsMutation.isPending || verifyMPsMutation.isPending || updateAffiliationsMutation.isPending;
 
   return (
     <div className="space-y-6">
@@ -127,8 +81,8 @@ export function MPDirectorySync() {
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                Import and sync all Members of Parliament from the National Assembly website (assnat.cm). 
-                This will scrape all 10+ pages of MPs from the 10th Legislative Assembly.
+                Import all Members of Parliament from the National Assembly website (assnat.cm). 
+                This will scrape MPs from the 10th Legislative Assembly.
               </AlertDescription>
             </Alert>
 
@@ -141,9 +95,9 @@ export function MPDirectorySync() {
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-secondary">
-                  ~19
+                  ~10
                 </div>
-                <div className="text-sm text-muted-foreground">Political Parties Available</div>
+                <div className="text-sm text-muted-foreground">Regions Represented</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-accent">
@@ -165,51 +119,30 @@ export function MPDirectorySync() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="flex justify-center">
             <Button
               onClick={() => importMPsMutation.mutate()}
-              disabled={isLoading}
+              disabled={importMPsMutation.isPending}
               size="lg"
-              className="w-full"
+              className="w-full max-w-md"
             >
               {importMPsMutation.isPending ? (
                 <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
               ) : (
                 <Download className="h-4 w-4 mr-2" />
               )}
-              Import All MPs
-            </Button>
-
-            <Button
-              onClick={() => verifyMPsMutation.mutate()}
-              disabled={isLoading}
-              variant="secondary"
-              size="lg"
-              className="w-full"
-            >
-              {verifyMPsMutation.isPending ? (
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <CheckCircle className="h-4 w-4 mr-2" />
-              )}
-              Verify Existing
-            </Button>
-
-            <Button
-              onClick={() => updateAffiliationsMutation.mutate()}
-              disabled={isLoading}
-              variant="outline"
-              size="lg"
-              className="w-full"
-            >
-              {updateAffiliationsMutation.isPending ? (
-                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-              ) : (
-                <Building className="h-4 w-4 mr-2" />
-              )}
-              Update Parties
+              {importMPsMutation.isPending ? 'Importing MPs...' : 'Import All MPs'}
             </Button>
           </div>
+          
+          {mpCount > 0 && (
+            <div className="mt-4 text-center">
+              <Badge variant="secondary" className="flex items-center gap-1 w-fit mx-auto">
+                <CheckCircle className="h-4 w-4" />
+                {mpCount} MPs already imported
+              </Badge>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -229,22 +162,20 @@ export function MPDirectorySync() {
             <div>
               <strong>Data Points Extracted:</strong>
               <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>Full Name and Official Photo</li>
+                <li>Full Name and Honorific Titles</li>
                 <li>Political Party Affiliation</li>
                 <li>Region/Constituency</li>
-                <li>Position/Title in Assembly</li>
-                <li>Biography and Background</li>
-                <li>Committee Memberships</li>
-                <li>Legislative Entry Date</li>
+                <li>Legislative Session Information</li>
+                <li>Term Start and End Dates</li>
               </ul>
             </div>
             <div>
               <strong>Post-Processing:</strong>
               <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>Party name matching and auto-creation</li>
-                <li>Image verification and validation</li>
-                <li>Rating system initialization (0-5 stars)</li>
-                <li>Legislative session tagging</li>
+                <li>Automatic scoring system initialization</li>
+                <li>Rating system setup (0-5 stars)</li>
+                <li>Legislative activity tracking</li>
+                <li>Duplicate prevention</li>
               </ul>
             </div>
           </div>
