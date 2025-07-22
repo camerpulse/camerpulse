@@ -1,114 +1,102 @@
-/**
- * RatingStars Component
- * 
- * Interactive rating component for civic evaluations and feedback
- */
-
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Star } from 'lucide-react';
-import { ComponentSize } from './types';
+import { cn } from '@/lib/utils';
 
 interface RatingStarsProps {
   rating: number;
   maxRating?: number;
-  size?: 'sm' | 'default' | 'lg';
-  readOnly?: boolean;
+  size?: 'sm' | 'md' | 'lg';
   showLabel?: boolean;
-  className?: string;
   onRatingChange?: (rating: number) => void;
+  disabled?: boolean;
+  className?: string;
 }
 
-const sizeClasses = {
-  sm: 'w-4 h-4',
-  default: 'w-5 h-5',
-  lg: 'w-6 h-6'
-};
-
-export const RatingStars: React.FC<RatingStarsProps> = ({
+export function RatingStars({
   rating,
   maxRating = 5,
-  size = 'default',
-  readOnly = false,
+  size = 'md',
   showLabel = false,
-  className = '',
-  onRatingChange
-}) => {
+  onRatingChange,
+  disabled = false,
+  className
+}: RatingStarsProps) {
   const [hoverRating, setHoverRating] = useState(0);
-  const [isHovering, setIsHovering] = useState(false);
-
-  const displayRating = isHovering ? hoverRating : rating;
-
-  const handleStarClick = (selectedRating: number) => {
-    if (readOnly) return;
-    onRatingChange?.(selectedRating);
+  
+  const isInteractive = !!onRatingChange && !disabled;
+  
+  const sizeClasses = {
+    sm: 'h-4 w-4',
+    md: 'h-5 w-5',
+    lg: 'h-6 w-6'
   };
 
-  const handleStarHover = (selectedRating: number) => {
-    if (readOnly) return;
-    setHoverRating(selectedRating);
-    setIsHovering(true);
+  const getRatingLabel = (value: number) => {
+    const labels = ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent'];
+    return labels[value - 1] || 'Not Rated';
+  };
+
+  const handleClick = (value: number) => {
+    if (isInteractive) {
+      onRatingChange(value);
+    }
+  };
+
+  const handleMouseEnter = (value: number) => {
+    if (isInteractive) {
+      setHoverRating(value);
+    }
   };
 
   const handleMouseLeave = () => {
-    if (readOnly) return;
-    setIsHovering(false);
-    setHoverRating(0);
+    if (isInteractive) {
+      setHoverRating(0);
+    }
   };
 
-  const getRatingColor = (rating: number) => {
-    if (rating >= 4) return 'text-cm-green';
-    if (rating >= 2.5) return 'text-cm-yellow';
-    return 'text-cm-red';
-  };
-
-  const stars = Array.from({ length: maxRating }, (_, index) => {
-    const starValue = index + 1;
-    const isFilled = starValue <= displayRating;
-    const isPartiallyFilled = !isFilled && starValue - 0.5 <= displayRating;
-
-    return (
-      <button
-        key={index}
-        type="button"
-        className={`${readOnly ? 'cursor-default' : 'cursor-pointer hover:scale-110'} 
-                   transition-all duration-200 ${sizeClasses[size]} relative`}
-        onClick={() => handleStarClick(starValue)}
-        onMouseEnter={() => handleStarHover(starValue)}
-        disabled={readOnly}
-      >
-        <Star
-          className={`${sizeClasses[size]} transition-colors duration-200 ${
-            isFilled 
-              ? `${getRatingColor(displayRating)} fill-current` 
-              : isPartiallyFilled
-                ? `${getRatingColor(displayRating)} fill-current opacity-50`
-                : 'text-muted-foreground'
-          }`}
-        />
-      </button>
-    );
-  });
+  const displayRating = hoverRating || rating;
 
   return (
-    <div 
-      className={`flex items-center gap-1 ${className}`}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="flex items-center gap-1">
-        {stars}
+    <div className={cn('flex items-center gap-2', className)}>
+      <div className="flex items-center">
+        {Array.from({ length: maxRating }, (_, index) => {
+          const starValue = index + 1;
+          const isFilled = starValue <= displayRating;
+          const isHalfFilled = starValue === Math.ceil(displayRating) && displayRating % 1 !== 0;
+          
+          return (
+            <button
+              key={index}
+              type="button"
+              disabled={disabled}
+              className={cn(
+                sizeClasses[size],
+                'text-muted-foreground transition-colors',
+                isInteractive && 'hover:text-yellow-400 cursor-pointer',
+                isFilled && 'text-yellow-400 fill-yellow-400',
+                disabled && 'cursor-not-allowed opacity-50'
+              )}
+              onClick={() => handleClick(starValue)}
+              onMouseEnter={() => handleMouseEnter(starValue)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Star 
+                className={cn(
+                  'transition-all duration-200',
+                  isFilled && 'fill-current',
+                  isHalfFilled && 'fill-current opacity-50'
+                )}
+              />
+            </button>
+          );
+        })}
       </div>
       
       {showLabel && (
-        <span className={`ml-2 text-sm font-medium ${getRatingColor(displayRating)}`}>
-          {displayRating.toFixed(1)}
-        </span>
-      )}
-      
-      {!readOnly && isHovering && (
-        <span className="ml-2 text-xs text-muted-foreground">
-          Cliquez pour noter
+        <span className="text-sm text-muted-foreground">
+          {rating > 0 ? `${rating}/5 - ${getRatingLabel(Math.round(rating))}` : 'Not Rated'}
         </span>
       )}
     </div>
   );
-};
+}
