@@ -178,11 +178,11 @@ const App = () => {
           <PanAfricaProvider>
             <AuthProvider>
               <PluginProvider>
-          <Toaster />
-          <Sonner />
-          <PWAInstallPrompt />
-          <OfflineIndicator />
-          <BrowserRouter>
+                <Toaster />
+                <Sonner />
+                <PWAInstallPrompt />
+                <OfflineIndicator />
+                <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
