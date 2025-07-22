@@ -146,3 +146,12 @@ verify_jwt = false
 
 [functions.test-dummy-module]
 verify_jwt = false
+
+[functions.mp-data-importer]
+verify_jwt = false
+
+[functions.minister-data-importer]
+verify_jwt = false
+
+[functions.data-import-scheduler]
+verify_jwt = false
