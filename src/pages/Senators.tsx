@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { SenatorCard } from '@/components/Senators/SenatorCard';
 import { useSenators, useImportSenators } from '@/hooks/useSenators';
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Search, Download, Users } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function SenatorsPage() {
   const { data: senators, isLoading } = useSenators();
@@ -15,6 +16,22 @@ export default function SenatorsPage() {
   const importSenators = useImportSenators();
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState('rating');
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    const checkAdminRole = async () => {
+      if (user) {
+        const { data } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id)
+          .eq('role', 'admin')
+          .single();
+        setIsAdmin(!!data);
+      }
+    };
+    checkAdminRole();
+  }, [user]);
 
   const filteredSenators = senators?.filter(senator =>
     senator.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -34,8 +51,6 @@ export default function SenatorsPage() {
         return 0;
     }
   });
-
-  const isAdmin = user?.email === 'admin@camerpulse.com'; // Simple admin check
 
   return (
     <AppLayout>
