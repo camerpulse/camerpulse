@@ -98,11 +98,11 @@ export default function HospitalsDirectory() {
         query = query.or(`name.ilike.%${searchQuery}%,village_or_city.ilike.%${searchQuery}%,division.ilike.%${searchQuery}%`);
       }
 
-      if (selectedRegion) {
+      if (selectedRegion && selectedRegion !== 'all') {
         query = query.eq('region', selectedRegion);
       }
 
-      if (selectedType) {
+      if (selectedType && selectedType !== 'all') {
         query = query.eq('type', selectedType as any);
       }
 
@@ -311,7 +311,7 @@ export default function HospitalsDirectory() {
                     <SelectValue placeholder="All Regions" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Regions</SelectItem>
+                    <SelectItem value="all">All Regions</SelectItem>
                     {cameroonRegions.map((region) => (
                       <SelectItem key={region} value={region}>
                         {region}
@@ -325,7 +325,7 @@ export default function HospitalsDirectory() {
                     <SelectValue placeholder="All Types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">All Types</SelectItem>
+                    <SelectItem value="all">All Types</SelectItem>
                     {hospitalTypes.map((type) => (
                       <SelectItem key={type.value} value={type.value}>
                         {type.icon} {type.label}
