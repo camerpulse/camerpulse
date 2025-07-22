@@ -16556,6 +16556,36 @@ export type Database = {
         }
         Relationships: []
       }
+      import_logs: {
+        Row: {
+          created_at: string
+          id: string
+          import_type: string
+          imported_at: string
+          results: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          import_type: string
+          imported_at?: string
+          results?: Json | null
+          status: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          import_type?: string
+          imported_at?: string
+          results?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       institution_access_logs: {
         Row: {
           access_type: string
