@@ -318,7 +318,7 @@ export default function Tenders() {
             <h1 className="text-3xl font-bold text-gray-900 mb-2">CamerTenders</h1>
             <p className="text-gray-600">Discover and apply for public procurement opportunities across Cameroon</p>
           </div>
-          <Link to="/create-tender">
+          <Link to="/tenders/create">
             <Button className="flex items-center gap-2">
               <Plus className="h-4 w-4" />
               Post a Tender
