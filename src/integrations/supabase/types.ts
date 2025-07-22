@@ -32222,6 +32222,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      get_security_status: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       get_sentiment_timeline: {
         Args: {
           p_subject_type?: string
@@ -32248,14 +32252,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      identify_security_definer_views: {
-        Args: Record<PropertyKey, never>
-        Returns: {
-          view_schema: string
-          view_name: string
-          needs_fix: boolean
-        }[]
-      }
       increment_usage_count: {
         Args: { license_key_id: string }
         Returns: undefined
@@ -32268,6 +32264,13 @@ export type Database = {
           p_problem_description: string
         }
         Returns: string
+      }
+      list_unsecured_functions: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          function_name: string
+          needs_attention: boolean
+        }[]
       }
       log_autonomous_operation: {
         Args: {
