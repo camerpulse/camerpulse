@@ -31837,10 +31837,12 @@ export type Database = {
         Returns: number
       }
       calculate_civic_reputation_score: {
-        Args: {
-          p_entity_type: Database["public"]["Enums"]["civic_entity_type"]
-          p_entity_id: string
-        }
+        Args:
+          | {
+              p_entity_type: Database["public"]["Enums"]["civic_entity_type"]
+              p_entity_id: string
+            }
+          | { p_entity_type: string; p_entity_id: string }
         Returns: undefined
       }
       calculate_civic_risk_score: {
