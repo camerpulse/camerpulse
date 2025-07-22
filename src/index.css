@@ -93,6 +93,15 @@
     --rating-poor: 25 95% 53%;           /* 2 stars - orange */
     --rating-terrible: 0 84% 60%;        /* 1 star - red */
     
+    
+    /* Cameroonian Flag Colors */
+    --cm-green: 140 90% 28%;
+    --cm-green-light: 140 90% 35%;
+    --cm-red: 348 85% 47%;
+    --cm-red-light: 348 85% 55%;
+    --cm-yellow: 40 95% 55%;
+    --cm-yellow-light: 40 95% 65%;
+
     --radius: 0.75rem;
   }
 
