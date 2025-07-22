@@ -20,7 +20,7 @@ export default function SenatorsPage() {
   const { user } = useAuth();
   const importSenators = useImportSenators();
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState('performance_score');
+  const [sortBy, setSortBy] = useState('position_order');
   const [filterRegion, setFilterRegion] = useState('all');
   const [filterParty, setFilterParty] = useState('all');
   const [filterPosition, setFilterPosition] = useState('all');
@@ -92,14 +92,24 @@ export default function SenatorsPage() {
       case 'most_bills_passed':
         return (b.bills_passed_count || 0) - (a.bills_passed_count || 0);
       case 'position_order':
-        const positionOrder = ['President', 'Vice President', 'Secretary', 'Questor', 'Rapporteur', 'Member'];
         const getPositionOrder = (pos: string) => {
           if (pos.includes('Président du Sénat')) return 0;
-          if (pos.includes('Vice-président')) return 1;
-          if (pos.includes('Secrétaire')) return 2;
-          if (pos.includes('Questeur')) return 3;
-          if (pos.includes('Rapporteur')) return 4;
-          return 5;
+          if (pos.includes('1er Vice président')) return 1;
+          if (pos.includes('Vice-président au Bureau du Sénat')) return 2;
+          if (pos.includes('Vice-président') && !pos.includes('au Bureau')) return 3;
+          if (pos.includes('Secrétaire au Bureau du Sénat') || pos.includes('Secrétaire au bureau du sénat')) return 4;
+          if (pos.includes('Secrétaire') && !pos.includes('au Bureau')) return 5;
+          if (pos.includes('Questeur au Bureau du Sénat')) return 6;
+          if (pos.includes('Rapporteur général')) return 7;
+          if (pos.includes('Président de la Commission')) return 8;
+          if (pos.includes('Présidente de la commission')) return 9;
+          if (pos.includes('Vice-président de la commission')) return 10;
+          if (pos.includes('Vice-présidente de la commission')) return 11;
+          if (pos.includes('Secrétaire de la Commission') || pos.includes('Secrétaire de la commission')) return 12;
+          if (pos.includes('Président du groupe parlementaire') || pos.includes('Présidente Adjoint du Groupe Parlementaire')) return 13;
+          if (pos.includes('Membre de') || pos.includes('membre de')) return 14;
+          if (pos.includes('membre du bureau d\'âge')) return 15;
+          return 16; // For other positions or empty positions
         };
         return getPositionOrder(a.position) - getPositionOrder(b.position);
       case 'name':
