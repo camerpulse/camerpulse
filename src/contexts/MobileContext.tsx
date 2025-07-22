@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useMobileDetection } from '@/hooks/useMobileDetection'
 
 interface MobileContextType {
@@ -34,7 +34,7 @@ interface MobileProviderProps {
 export const MobileProvider: React.FC<MobileProviderProps> = ({ children }) => {
   const detection = useMobileDetection()
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait')
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true)
   const [connectionType, setConnectionType] = useState('unknown')
   const [showMobileUI, setShowMobileUI] = useState(true)
 
