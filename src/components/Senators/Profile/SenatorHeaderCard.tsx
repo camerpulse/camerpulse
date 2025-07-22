@@ -2,17 +2,19 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { QrCode, UserPlus, ExternalLink } from 'lucide-react';
+import { QrCode, UserPlus, ExternalLink, Download, Eye } from 'lucide-react';
 import { QRCodeModal } from '@/components/camerpulse/QRCodeModal';
+import { SenatorExportModal } from '../SenatorExportModal';
+import { SenatorPresenceIndicator } from '../SenatorPresenceIndicator';
+import { useSenatorFollowing } from '@/hooks/useSenatorFollowing';
 import { Senator } from '@/hooks/useSenators';
 
 interface SenatorHeaderCardProps {
   senator: Senator;
-  onFollow?: () => void;
-  isFollowing?: boolean;
 }
 
-export function SenatorHeaderCard({ senator, onFollow, isFollowing }: SenatorHeaderCardProps) {
+export function SenatorHeaderCard({ senator }: SenatorHeaderCardProps) {
+  const { isFollowing, follow, unfollow, isFollowPending, isUnfollowPending, followerCount } = useSenatorFollowing(senator.id);
   const getInitials = (name: string) => {
     return name
       .split(' ')
@@ -113,15 +115,20 @@ export function SenatorHeaderCard({ senator, onFollow, isFollowing }: SenatorHea
           </div>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-3 items-center">
+            <SenatorPresenceIndicator senatorId={senator.id} />
+            
             <Button 
-              onClick={onFollow}
+              onClick={isFollowing ? unfollow : follow}
+              disabled={isFollowPending || isUnfollowPending}
               variant={isFollowing ? "outline" : "default"}
               className="flex items-center gap-2"
             >
               <UserPlus className="h-4 w-4" />
-              {isFollowing ? 'Following' : 'Follow Senator'}
+              {isFollowing ? `Following (${followerCount})` : 'Follow Senator'}
             </Button>
+            
+            <SenatorExportModal senator={senator} />
             
             <QRCodeModal
               url={getProfileUrl()}

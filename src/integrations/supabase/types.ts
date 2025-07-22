@@ -27879,6 +27879,123 @@ export type Database = {
         }
         Relationships: []
       }
+      senator_analytics: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+          senator_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+          senator_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          period_end?: string
+          period_start?: string
+          senator_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senator_analytics_senator_id_fkey"
+            columns: ["senator_id"]
+            isOneToOne: false
+            referencedRelation: "senators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      senator_followers: {
+        Row: {
+          created_at: string
+          id: string
+          notification_preferences: Json
+          senator_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          notification_preferences?: Json
+          senator_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          notification_preferences?: Json
+          senator_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senator_followers_senator_id_fkey"
+            columns: ["senator_id"]
+            isOneToOne: false
+            referencedRelation: "senators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      senator_notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          is_read: boolean
+          message: string
+          notification_type: string
+          senator_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean
+          message: string
+          notification_type: string
+          senator_id: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          notification_type?: string
+          senator_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senator_notifications_senator_id_fkey"
+            columns: ["senator_id"]
+            isOneToOne: false
+            referencedRelation: "senators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       senator_ratings: {
         Row: {
           comment: string | null
