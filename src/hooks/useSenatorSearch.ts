@@ -23,9 +23,9 @@ export const useSenatorSearch = (filters: SearchFilters) => {
         .from('senators')
         .select('*');
 
-      // Text search
+      // Text search - using actual Senator table columns
       if (debouncedQuery.trim()) {
-        query = query.or(`name.ilike.%${debouncedQuery}%,region.ilike.%${debouncedQuery}%,party.ilike.%${debouncedQuery}%`);
+        query = query.or(`name.ilike.%${debouncedQuery}%,region.ilike.%${debouncedQuery}%,political_party.ilike.%${debouncedQuery}%`);
       }
 
       // Region filter
@@ -35,25 +35,14 @@ export const useSenatorSearch = (filters: SearchFilters) => {
 
       // Party filter
       if (filters.party) {
-        query = query.eq('party', filters.party);
+        query = query.eq('political_party', filters.party);
       }
 
-      // Status filter
-      if (filters.status) {
-        switch (filters.status) {
-          case 'active':
-            query = query.eq('is_active', true);
-            break;
-          case 'claimed':
-            query = query.eq('is_profile_claimed', true);
-            break;
-          case 'verified':
-            query = query.eq('is_verified', true);
-            break;
-          case 'inactive':
-            query = query.eq('is_active', false);
-            break;
-        }
+      // Status filter - simplified to work with actual schema
+      if (filters.status === 'active') {
+        query = query.eq('status', 'active');
+      } else if (filters.status === 'inactive') {
+        query = query.neq('status', 'active');
       }
 
       // Trust score filter
@@ -86,7 +75,13 @@ export const useSenatorSearch = (filters: SearchFilters) => {
         throw error;
       }
 
-      return data || [];
+      // Transform data to ensure proper types
+      return (data || []).map((senator: any) => ({
+        ...senator,
+        committee_memberships: Array.isArray(senator.committee_memberships) 
+          ? senator.committee_memberships 
+          : JSON.parse(senator.committee_memberships || '[]')
+      })) as Senator[];
     },
     enabled: true, // Always enabled, will return all senators if no filters
   });
@@ -105,14 +100,15 @@ export const useSenatorSearch = (filters: SearchFilters) => {
         return acc;
       }, {} as Record<string, number>),
       partyCounts: results.reduce((acc, senator) => {
-        acc[senator.party] = (acc[senator.party] || 0) + 1;
+        const party = senator.political_party || 'Independent';
+        acc[party] = (acc[party] || 0) + 1;
         return acc;
       }, {} as Record<string, number>),
       statusCounts: {
-        active: results.filter(s => s.is_active).length,
-        claimed: results.filter(s => s.is_profile_claimed).length,
-        verified: results.filter(s => s.is_verified).length,
-        inactive: results.filter(s => !s.is_active).length,
+        active: results.filter(s => s.status === 'active').length,
+        claimed: results.filter(s => (s as any).profile_claimed === true).length,
+        verified: results.filter(s => s.is_verified === true).length,
+        inactive: results.filter(s => s.status !== 'active').length,
       }
     };
   }, [searchQuery.data]);

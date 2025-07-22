@@ -28,11 +28,18 @@ interface TrendData {
   trend_direction: 'improving' | 'declining' | 'stable' | 'volatile';
 }
 
+interface WhistleblowerStats {
+  total_reports: number;
+  average_score: number;
+  high_risk_reports: number;
+  protection_active: number;
+}
+
 interface AnalyticsData {
   corruption_trends: TrendData[];
   regional_stats: any[];
   investigation_metrics: any[];
-  whistleblower_stats: any[];
+  whistleblower_stats: WhistleblowerStats;
 }
 
 export const AdvancedAnalytics: React.FC = () => {
@@ -40,7 +47,12 @@ export const AdvancedAnalytics: React.FC = () => {
     corruption_trends: [],
     regional_stats: [],
     investigation_metrics: [],
-    whistleblower_stats: []
+    whistleblower_stats: {
+      total_reports: 0,
+      average_score: 0,
+      high_risk_reports: 0,
+      protection_active: 0
+    }
   });
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [timeRange, setTimeRange] = useState<string>('12_months');
@@ -92,7 +104,12 @@ export const AdvancedAnalytics: React.FC = () => {
       const whistleblowerStats = calculateWhistleblowerStats(regionalData || []);
 
       setAnalyticsData({
-        corruption_trends: trendsData || [],
+        corruption_trends: (trendsData || []).map((trend: any) => ({
+          ...trend,
+          trend_direction: trend.trend_direction === 'improving' || trend.trend_direction === 'declining' || 
+                          trend.trend_direction === 'stable' || trend.trend_direction === 'volatile' 
+                          ? trend.trend_direction : 'stable'
+        })),
         regional_stats: processedRegionalStats,
         investigation_metrics: investigationMetrics,
         whistleblower_stats: whistleblowerStats

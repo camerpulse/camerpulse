@@ -5,7 +5,8 @@ import { useToast } from '@/hooks/use-toast';
 export interface AuditWatchlist {
   id: string;
   audit_id: string;
-  notification_preferences: {
+  user_id: string;
+  notification_preferences?: {
     email: boolean;
     in_app: boolean;
     sms: boolean;
@@ -54,20 +55,11 @@ export const useAuditWatchlist = () => {
     }
   };
 
-  // Fetch user's notifications
+  // Fetch user's notifications - placeholder for now since table doesn't exist
   const fetchNotifications = async () => {
     try {
-      const { data, error } = await supabase
-        .from('audit_notifications')
-        .select(`
-          *,
-          audit_registry!inner(document_title)
-        `)
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (error) throw error;
-      setNotifications(data || []);
+      // TODO: Implement when audit_notifications table is created
+      setNotifications([]);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     }
@@ -79,11 +71,14 @@ export const useAuditWatchlist = () => {
     preferences = { email: true, in_app: true, sms: false }
   ): Promise<boolean> => {
     try {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user?.user?.id) throw new Error('User not authenticated');
+
       const { error } = await supabase
         .from('audit_watchlists')
         .insert({
           audit_id: auditId,
-          notification_preferences: preferences
+          user_id: user.user.id
         });
 
       if (error) throw error;
@@ -145,25 +140,17 @@ export const useAuditWatchlist = () => {
     }
   };
 
-  // Update notification preferences
+  // Update notification preferences - placeholder since preferences not implemented yet
   const updateNotificationPreferences = async (
     auditId: string,
     preferences: { email: boolean; in_app: boolean; sms: boolean }
   ): Promise<boolean> => {
     try {
-      const { error } = await supabase
-        .from('audit_watchlists')
-        .update({ notification_preferences: preferences })
-        .eq('audit_id', auditId);
-
-      if (error) throw error;
-
+      // TODO: Implement when notification_preferences column is added
       toast({
-        title: "Preferences Updated",
-        description: "Your notification preferences have been updated."
+        title: "Feature Coming Soon",
+        description: "Notification preferences will be available soon."
       });
-
-      await fetchWatchlist();
       return true;
     } catch (error) {
       console.error('Error updating preferences:', error);
@@ -176,17 +163,10 @@ export const useAuditWatchlist = () => {
     }
   };
 
-  // Mark notification as read
+  // Mark notification as read - placeholder
   const markAsRead = async (notificationId: string): Promise<boolean> => {
     try {
-      const { error } = await supabase
-        .from('audit_notifications')
-        .update({ is_read: true })
-        .eq('id', notificationId);
-
-      if (error) throw error;
-
-      // Update local state
+      // TODO: Implement when audit_notifications table is created
       setNotifications(prev => 
         prev.map(notification => 
           notification.id === notificationId 
@@ -194,7 +174,6 @@ export const useAuditWatchlist = () => {
             : notification
         )
       );
-
       return true;
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -202,26 +181,18 @@ export const useAuditWatchlist = () => {
     }
   };
 
-  // Mark all notifications as read
+  // Mark all notifications as read - placeholder
   const markAllAsRead = async (): Promise<boolean> => {
     try {
-      const { error } = await supabase
-        .from('audit_notifications')
-        .update({ is_read: true })
-        .eq('is_read', false);
-
-      if (error) throw error;
-
-      // Update local state
+      // TODO: Implement when audit_notifications table is created
       setNotifications(prev => 
         prev.map(notification => ({ ...notification, is_read: true }))
       );
 
       toast({
-        title: "All Notifications Read",
+        title: "All Notifications Read", 
         description: "All notifications have been marked as read."
       });
-
       return true;
     } catch (error) {
       console.error('Error marking all as read:', error);
@@ -256,18 +227,14 @@ export const useAuditWatchlist = () => {
       )
       .subscribe();
 
-    // Subscribe to notification changes
-    const notificationsChannel = supabase
-      .channel('audit_notifications_changes')
-      .on('postgres_changes',
-        { event: '*', schema: 'public', table: 'audit_notifications' },
-        () => fetchNotifications()
-      )
-      .subscribe();
+    // TODO: Subscribe to notification changes when table is created
+    const notificationsChannel = null;
 
     return () => {
       supabase.removeChannel(watchlistChannel);
-      supabase.removeChannel(notificationsChannel);
+      if (notificationsChannel) {
+        supabase.removeChannel(notificationsChannel);
+      }
     };
   }, []);
 

@@ -81,6 +81,7 @@ export const InvestigationWorkflow: React.FC<InvestigationWorkflowProps> = ({
 
     const success = await createRequest({
       ...formData,
+      status: 'pending',
       evidence_files: [],
       metadata: {}
     });
