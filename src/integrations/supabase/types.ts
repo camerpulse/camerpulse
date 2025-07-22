@@ -3872,6 +3872,66 @@ export type Database = {
           },
         ]
       }
+      audit_analytics_trends: {
+        Row: {
+          change_percentage: number | null
+          confidence_level: number | null
+          created_at: string | null
+          data_points: number | null
+          entity_type: string | null
+          id: string
+          metadata: Json | null
+          methodology: string | null
+          period_end: string
+          period_start: string
+          previous_value: number | null
+          region: string
+          time_period: string
+          trend_direction: string | null
+          trend_type: string
+          trend_value: number
+          updated_at: string | null
+        }
+        Insert: {
+          change_percentage?: number | null
+          confidence_level?: number | null
+          created_at?: string | null
+          data_points?: number | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          methodology?: string | null
+          period_end: string
+          period_start: string
+          previous_value?: number | null
+          region: string
+          time_period: string
+          trend_direction?: string | null
+          trend_type: string
+          trend_value: number
+          updated_at?: string | null
+        }
+        Update: {
+          change_percentage?: number | null
+          confidence_level?: number | null
+          created_at?: string | null
+          data_points?: number | null
+          entity_type?: string | null
+          id?: string
+          metadata?: Json | null
+          methodology?: string | null
+          period_end?: string
+          period_start?: string
+          previous_value?: number | null
+          region?: string
+          time_period?: string
+          trend_direction?: string | null
+          trend_type?: string
+          trend_value?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       audit_comments: {
         Row: {
           audit_id: string
@@ -4014,6 +4074,148 @@ export type Database = {
           },
         ]
       }
+      audit_geographic_coverage: {
+        Row: {
+          affected_population: number | null
+          audit_id: string
+          coverage_type: string
+          created_at: string | null
+          description: string | null
+          division: string | null
+          id: string
+          impact_severity: string | null
+          latitude: number | null
+          longitude: number | null
+          region: string
+          subdivision: string | null
+        }
+        Insert: {
+          affected_population?: number | null
+          audit_id: string
+          coverage_type: string
+          created_at?: string | null
+          description?: string | null
+          division?: string | null
+          id?: string
+          impact_severity?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          region: string
+          subdivision?: string | null
+        }
+        Update: {
+          affected_population?: number | null
+          audit_id?: string
+          coverage_type?: string
+          created_at?: string | null
+          description?: string | null
+          division?: string | null
+          id?: string
+          impact_severity?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          region?: string
+          subdivision?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_geographic_coverage_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "audit_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      audit_investigation_requests: {
+        Row: {
+          actual_duration_days: number | null
+          approval_notes: string | null
+          assigned_to: string | null
+          audit_id: string
+          budget_approved: number | null
+          budget_estimate: number | null
+          completed_at: string | null
+          created_at: string | null
+          description: string
+          due_date: string | null
+          estimated_duration_days: number | null
+          evidence_files: Json | null
+          findings: string | null
+          id: string
+          investigation_notes: string | null
+          metadata: Json | null
+          priority: string
+          recommendations: string | null
+          rejection_reason: string | null
+          request_type: string
+          requester_id: string
+          status: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          actual_duration_days?: number | null
+          approval_notes?: string | null
+          assigned_to?: string | null
+          audit_id: string
+          budget_approved?: number | null
+          budget_estimate?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          description: string
+          due_date?: string | null
+          estimated_duration_days?: number | null
+          evidence_files?: Json | null
+          findings?: string | null
+          id?: string
+          investigation_notes?: string | null
+          metadata?: Json | null
+          priority?: string
+          recommendations?: string | null
+          rejection_reason?: string | null
+          request_type: string
+          requester_id: string
+          status?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          actual_duration_days?: number | null
+          approval_notes?: string | null
+          assigned_to?: string | null
+          audit_id?: string
+          budget_approved?: number | null
+          budget_estimate?: number | null
+          completed_at?: string | null
+          created_at?: string | null
+          description?: string
+          due_date?: string | null
+          estimated_duration_days?: number | null
+          evidence_files?: Json | null
+          findings?: string | null
+          id?: string
+          investigation_notes?: string | null
+          metadata?: Json | null
+          priority?: string
+          recommendations?: string | null
+          rejection_reason?: string | null
+          request_type?: string
+          requester_id?: string
+          status?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_investigation_requests_audit_id_fkey"
+            columns: ["audit_id"]
+            isOneToOne: false
+            referencedRelation: "audit_registry"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       audit_registry: {
         Row: {
           approved_at: string | null
@@ -4032,6 +4234,7 @@ export type Database = {
           fiscal_year: string | null
           flag_count: number | null
           id: string
+          investigation_count: number | null
           is_anonymous_submission: boolean | null
           is_sensitive: boolean | null
           linked_institutions: Json | null
@@ -4064,6 +4267,7 @@ export type Database = {
           fiscal_year?: string | null
           flag_count?: number | null
           id?: string
+          investigation_count?: number | null
           is_anonymous_submission?: boolean | null
           is_sensitive?: boolean | null
           linked_institutions?: Json | null
@@ -4096,6 +4300,7 @@ export type Database = {
           fiscal_year?: string | null
           flag_count?: number | null
           id?: string
+          investigation_count?: number | null
           is_anonymous_submission?: boolean | null
           is_sensitive?: boolean | null
           linked_institutions?: Json | null
@@ -31984,6 +32189,21 @@ export type Database = {
       calculate_contribution_level: {
         Args: { p_user_id: string }
         Returns: string
+      }
+      calculate_corruption_trends: {
+        Args: {
+          p_region?: string
+          p_time_period?: string
+          p_lookback_months?: number
+        }
+        Returns: {
+          region: string
+          trend_type: string
+          current_value: number
+          previous_value: number
+          change_percentage: number
+          trend_direction: string
+        }[]
       }
       calculate_engagement_metrics: {
         Args: { p_start_date?: string; p_end_date?: string }
