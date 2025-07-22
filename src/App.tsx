@@ -11,7 +11,6 @@ import HospitalsDirectory from "./pages/HospitalsDirectory";
 import Tenders from "./pages/Tenders";
 import DiasporaConnect from "./pages/DiasporaConnect";
 import { AuthProvider } from "./contexts/AuthContext";
-import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { PluginProvider } from "./contexts/PluginContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
@@ -37,27 +36,25 @@ const App = () => {
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
-        <PanAfricaProvider>
-          <AuthProvider>
-            <PluginProvider>
-              <TooltipProvider>
-                <Toaster />
-                <Sonner />
-                <OfflineIndicator />
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/auth" element={<Auth />} />
-                    <Route path="/legislation" element={<LegislationTracker />} />
-                    <Route path="/hospitals" element={<HospitalsDirectory />} />
-                    <Route path="/tenders" element={<Tenders />} />
-                    <Route path="/diaspora-connect" element={<DiasporaConnect />} />
-                  </Routes>
-                </BrowserRouter>
-              </TooltipProvider>
-            </PluginProvider>
-          </AuthProvider>
-        </PanAfricaProvider>
+        <AuthProvider>
+          <PluginProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <OfflineIndicator />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/auth" element={<Auth />} />
+                  <Route path="/legislation" element={<LegislationTracker />} />
+                  <Route path="/hospitals" element={<HospitalsDirectory />} />
+                  <Route path="/tenders" element={<Tenders />} />
+                  <Route path="/diaspora-connect" element={<DiasporaConnect />} />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </PluginProvider>
+        </AuthProvider>
       </QueryClientProvider>
     </ErrorBoundary>
   );
