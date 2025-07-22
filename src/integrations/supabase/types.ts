@@ -5056,6 +5056,47 @@ export type Database = {
         }
         Relationships: []
       }
+      bid_moderation: {
+        Row: {
+          bid_id: string
+          created_at: string
+          flagged_content: Json | null
+          id: string
+          moderation_action: string
+          moderation_notes: string | null
+          moderation_reason: string | null
+          moderator_id: string
+        }
+        Insert: {
+          bid_id: string
+          created_at?: string
+          flagged_content?: Json | null
+          id?: string
+          moderation_action: string
+          moderation_notes?: string | null
+          moderation_reason?: string | null
+          moderator_id: string
+        }
+        Update: {
+          bid_id?: string
+          created_at?: string
+          flagged_content?: Json | null
+          id?: string
+          moderation_action?: string
+          moderation_notes?: string | null
+          moderation_reason?: string | null
+          moderator_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bid_moderation_bid_id_fkey"
+            columns: ["bid_id"]
+            isOneToOne: false
+            referencedRelation: "tender_bids"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       bill_comments: {
         Row: {
           comment_text: string
@@ -5730,6 +5771,72 @@ export type Database = {
           status?: string | null
           transparency_score?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      business_verifications: {
+        Row: {
+          business_address: string
+          company_name: string
+          company_type: string
+          created_at: string
+          documents_submitted: Json | null
+          email: string
+          id: string
+          industry_sector: string
+          phone_number: string
+          registration_number: string
+          rejection_reason: string | null
+          tax_identification_number: string | null
+          updated_at: string
+          user_id: string
+          verification_level: string
+          verification_notes: string | null
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          business_address: string
+          company_name: string
+          company_type: string
+          created_at?: string
+          documents_submitted?: Json | null
+          email: string
+          id?: string
+          industry_sector: string
+          phone_number: string
+          registration_number: string
+          rejection_reason?: string | null
+          tax_identification_number?: string | null
+          updated_at?: string
+          user_id: string
+          verification_level?: string
+          verification_notes?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          business_address?: string
+          company_name?: string
+          company_type?: string
+          created_at?: string
+          documents_submitted?: Json | null
+          email?: string
+          id?: string
+          industry_sector?: string
+          phone_number?: string
+          registration_number?: string
+          rejection_reason?: string | null
+          tax_identification_number?: string | null
+          updated_at?: string
+          user_id?: string
+          verification_level?: string
+          verification_notes?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Relationships: []
       }
@@ -13138,6 +13245,69 @@ export type Database = {
             columns: ["discussion_id"]
             isOneToOne: false
             referencedRelation: "village_discussions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      document_uploads: {
+        Row: {
+          business_verification_id: string | null
+          created_at: string
+          document_category: string
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+          tender_id: string | null
+          updated_at: string
+          upload_status: string
+          user_id: string
+          virus_scan_status: string | null
+        }
+        Insert: {
+          business_verification_id?: string | null
+          created_at?: string
+          document_category: string
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+          tender_id?: string | null
+          updated_at?: string
+          upload_status?: string
+          user_id: string
+          virus_scan_status?: string | null
+        }
+        Update: {
+          business_verification_id?: string | null
+          created_at?: string
+          document_category?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+          tender_id?: string | null
+          updated_at?: string
+          upload_status?: string
+          user_id?: string
+          virus_scan_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "document_uploads_business_verification_id_fkey"
+            columns: ["business_verification_id"]
+            isOneToOne: false
+            referencedRelation: "business_verifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "document_uploads_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
             referencedColumns: ["id"]
           },
         ]
@@ -30531,6 +30701,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "tender_bookmarks_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tender_moderation: {
+        Row: {
+          created_at: string
+          flagged_content: Json | null
+          id: string
+          moderation_action: string
+          moderation_notes: string | null
+          moderation_reason: string | null
+          moderator_id: string
+          new_status: string | null
+          previous_status: string | null
+          tender_id: string
+        }
+        Insert: {
+          created_at?: string
+          flagged_content?: Json | null
+          id?: string
+          moderation_action: string
+          moderation_notes?: string | null
+          moderation_reason?: string | null
+          moderator_id: string
+          new_status?: string | null
+          previous_status?: string | null
+          tender_id: string
+        }
+        Update: {
+          created_at?: string
+          flagged_content?: Json | null
+          id?: string
+          moderation_action?: string
+          moderation_notes?: string | null
+          moderation_reason?: string | null
+          moderator_id?: string
+          new_status?: string | null
+          previous_status?: string | null
+          tender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_moderation_tender_id_fkey"
             columns: ["tender_id"]
             isOneToOne: false
             referencedRelation: "tenders"

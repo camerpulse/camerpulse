@@ -132,7 +132,7 @@ const CreateTender = () => {
         .order('price_usd', { ascending: true });
 
       if (error) throw error;
-      setPaymentPlans(data || []);
+      setPaymentPlans((data as any) || []);
     } catch (error) {
       console.error('Error fetching payment plans:', error);
       toast.error('Failed to load payment plans');
