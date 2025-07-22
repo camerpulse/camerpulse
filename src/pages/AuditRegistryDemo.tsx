@@ -1,8 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { AuditSubmissionForm, AuditDashboard, AdminAuditTools } from '@/components/audit-registry';
+import { AuditSubmissionForm, AdminAuditTools, AuditDetailView } from '@/components/audit-registry';
 
 export default function AuditRegistryDemo() {
+  const [selectedAuditId, setSelectedAuditId] = useState<string | null>(null);
+  const [currentView, setCurrentView] = useState<'registry' | 'detail'>('registry');
+
+  const handleViewAudit = (auditId: string) => {
+    setSelectedAuditId(auditId);
+    setCurrentView('detail');
+  };
+
+  const handleBackToRegistry = () => {
+    setSelectedAuditId(null);
+    setCurrentView('registry');
+  };
+
+  if (currentView === 'detail' && selectedAuditId) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="container mx-auto py-8">
+          <AuditDetailView 
+            auditId={selectedAuditId} 
+            onBack={handleBackToRegistry}
+          />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8">
@@ -22,7 +48,8 @@ export default function AuditRegistryDemo() {
             </TabsList>
 
             <TabsContent value="dashboard">
-              <AuditDashboard />
+              {/* Use the existing AuditRegistryPage content but modify to handle audit viewing */}
+              <div>Browse audit functionality will be integrated here</div>
             </TabsContent>
 
             <TabsContent value="submit">
