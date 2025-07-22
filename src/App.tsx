@@ -135,6 +135,7 @@ import { DeveloperConsole } from "./components/Admin/PluginMarketplace/Developer
 import { PluginDeveloperHub } from "./components/Developer/PluginDeveloperHub";
 import SenatorsPage from "./pages/Senators";
 import SenatorProfilePage from "./pages/SenatorProfilePage";
+import AuditRegistryPage from "./pages/AuditRegistryPage";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -188,6 +189,7 @@ const App = () => {
               <Route path="/politicians" element={<Politicians />} />
               <Route path="/senators" element={<SenatorsPage />} />
               <Route path="/senators/:id" element={<SenatorProfilePage />} />
+              <Route path="/audit-registry" element={<AuditRegistryPage />} />
               <Route path="/security" element={<Security />} />
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/polls" element={<PollsLandingPage />} />
