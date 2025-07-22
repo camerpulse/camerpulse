@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 export interface Senator {
   id: string;
   name: string;
+  full_name?: string;
   position: string;
   photo_url?: string;
   about?: string;
@@ -13,6 +14,7 @@ export interface Senator {
   region?: string;
   constituency?: string;
   party_affiliation?: string;
+  political_party?: string;
   years_of_service: number;
   committee_memberships: any[];
   social_media_links: any;
@@ -20,6 +22,16 @@ export interface Senator {
   status: string;
   average_rating: number;
   total_ratings: number;
+  performance_score?: number;
+  transparency_score?: number;
+  civic_engagement_score?: number;
+  badges?: string[];
+  bills_proposed_count?: number;
+  bills_passed_count?: number;
+  career_history?: any[];
+  education?: any[];
+  date_of_birth?: string;
+  official_senate_url?: string;
   created_at: string;
   updated_at: string;
 }

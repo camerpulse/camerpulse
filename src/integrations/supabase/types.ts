@@ -27935,67 +27935,157 @@ export type Database = {
           },
         ]
       }
+      senator_update_schedule: {
+        Row: {
+          created_at: string | null
+          data_issues_found: Json | null
+          duplicates_removed: number | null
+          id: string
+          last_update_check: string | null
+          new_senators_found: number | null
+          next_scheduled_update: string | null
+          senators_updated: number | null
+          update_log: Json | null
+          update_status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          data_issues_found?: Json | null
+          duplicates_removed?: number | null
+          id?: string
+          last_update_check?: string | null
+          new_senators_found?: number | null
+          next_scheduled_update?: string | null
+          senators_updated?: number | null
+          update_log?: Json | null
+          update_status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          data_issues_found?: Json | null
+          duplicates_removed?: number | null
+          id?: string
+          last_update_check?: string | null
+          new_senators_found?: number | null
+          next_scheduled_update?: string | null
+          senators_updated?: number | null
+          update_log?: Json | null
+          update_status?: string | null
+        }
+        Relationships: []
+      }
       senators: {
         Row: {
           about: string | null
+          auto_update_enabled: boolean | null
           average_rating: number | null
+          badges: Json | null
+          bills_passed: Json | null
+          bills_passed_count: number | null
+          bills_proposed_count: number | null
+          career_history: Json | null
+          civic_engagement_score: number | null
           committee_memberships: Json | null
           constituency: string | null
           created_at: string | null
+          data_verification_status: string | null
+          date_of_birth: string | null
+          education: Json | null
           email: string | null
+          full_name: string | null
           id: string
           is_verified: boolean | null
+          last_profile_update: string | null
           name: string
+          official_senate_url: string | null
           party_affiliation: string | null
+          performance_score: number | null
           phone: string | null
           photo_url: string | null
+          political_party: string | null
           position: string
           region: string | null
           social_media_links: Json | null
+          source_page_url: string | null
           status: string | null
           total_ratings: number | null
+          transparency_score: number | null
           updated_at: string | null
           years_of_service: number | null
         }
         Insert: {
           about?: string | null
+          auto_update_enabled?: boolean | null
           average_rating?: number | null
+          badges?: Json | null
+          bills_passed?: Json | null
+          bills_passed_count?: number | null
+          bills_proposed_count?: number | null
+          career_history?: Json | null
+          civic_engagement_score?: number | null
           committee_memberships?: Json | null
           constituency?: string | null
           created_at?: string | null
+          data_verification_status?: string | null
+          date_of_birth?: string | null
+          education?: Json | null
           email?: string | null
+          full_name?: string | null
           id?: string
           is_verified?: boolean | null
+          last_profile_update?: string | null
           name: string
+          official_senate_url?: string | null
           party_affiliation?: string | null
+          performance_score?: number | null
           phone?: string | null
           photo_url?: string | null
+          political_party?: string | null
           position: string
           region?: string | null
           social_media_links?: Json | null
+          source_page_url?: string | null
           status?: string | null
           total_ratings?: number | null
+          transparency_score?: number | null
           updated_at?: string | null
           years_of_service?: number | null
         }
         Update: {
           about?: string | null
+          auto_update_enabled?: boolean | null
           average_rating?: number | null
+          badges?: Json | null
+          bills_passed?: Json | null
+          bills_passed_count?: number | null
+          bills_proposed_count?: number | null
+          career_history?: Json | null
+          civic_engagement_score?: number | null
           committee_memberships?: Json | null
           constituency?: string | null
           created_at?: string | null
+          data_verification_status?: string | null
+          date_of_birth?: string | null
+          education?: Json | null
           email?: string | null
+          full_name?: string | null
           id?: string
           is_verified?: boolean | null
+          last_profile_update?: string | null
           name?: string
+          official_senate_url?: string | null
           party_affiliation?: string | null
+          performance_score?: number | null
           phone?: string | null
           photo_url?: string | null
+          political_party?: string | null
           position?: string
           region?: string | null
           social_media_links?: Json | null
+          source_page_url?: string | null
           status?: string | null
           total_ratings?: number | null
+          transparency_score?: number | null
           updated_at?: string | null
           years_of_service?: number | null
         }
@@ -31808,6 +31898,10 @@ export type Database = {
         Args: { p_source_content: string; p_target_content: string }
         Returns: number
       }
+      calculate_senator_performance_score: {
+        Args: { p_senator_id: string }
+        Returns: number
+      }
       check_claim_renewals: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -32419,6 +32513,10 @@ export type Database = {
       }
       update_profile_analytics: {
         Args: { p_profile_id: string }
+        Returns: undefined
+      }
+      update_senator_badges: {
+        Args: { p_senator_id: string }
         Returns: undefined
       }
       update_trending_search: {
