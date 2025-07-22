@@ -1,105 +1,149 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { TenderCard } from "@/components/Tenders/TenderCard";
+import { TenderFilters } from "@/components/Tenders/TenderFilters";
 import { 
-  Search, 
-  Filter, 
-  Plus, 
   Calendar, 
   MapPin, 
-  Building2, 
-  FileText, 
+  Search, 
+  Plus, 
+  Building, 
+  DollarSign, 
   Clock, 
-  Eye,
-  Bookmark,
-  Users,
-  DollarSign,
+  Users, 
+  TrendingUp,
   Award,
-  TrendingUp
-} from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
-import { Link } from 'react-router-dom';
+  Eye,
+  Grid3X3,
+  List,
+  Construction,
+  Computer,
+  Leaf,
+  Heart,
+  Users2,
+  Building2
+} from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 interface Tender {
   id: string;
   title: string;
   description: string;
-  tender_type: string;
   category: string;
   region: string;
+  tender_type: string;
   budget_min: number;
   budget_max: number;
-  currency: string;
-  deadline: string;
+  submission_deadline: string;
   status: string;
-  views_count: number;
+  published_by: string;
   bids_count: number;
-  is_featured: boolean;
   created_at: string;
 }
 
-const Tenders = () => {
-  const [tenders, setTenders] = useState<Tender[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedType, setSelectedType] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedRegion, setSelectedRegion] = useState('all');
+interface FilterState {
+  keyword: string;
+  category: string;
+  region: string;
+  tenderType: string;
+  status: string;
+  budgetRange: [number, number];
+  deadlineRange: string;
+  publishingEntity: string;
+}
 
-  const tenderTypes = [
-    { value: 'public', label: 'Public Tenders' },
-    { value: 'private', label: 'Private Tenders' },
-    { value: 'ngo_donor', label: 'NGO/Donor-Funded' },
-    { value: 'international', label: 'International Bids' },
-    { value: 'service_contract', label: 'Service Contracts' },
-    { value: 'construction', label: 'Construction Projects' },
-    { value: 'supply_order', label: 'Supply Orders' },
-    { value: 'ict_software', label: 'ICT/Software Projects' }
-  ];
+const CATEGORY_ICONS = {
+  'Construction': Construction,
+  'ICT': Computer,
+  'Agriculture': Leaf,
+  'Medical': Heart,
+  'NGO': Users2,
+  'Government': Building2,
+  'Education': Building,
+  'Transportation': Building,
+  'Energy': Building,
+  'Environment': Leaf,
+  'Finance': DollarSign,
+  'Other': Building
+};
+
+export default function Tenders() {
+  const [tenders, setTenders] = useState<Tender[]>([]);
+  const [filteredTenders, setFilteredTenders] = useState<Tender[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [sortBy, setSortBy] = useState('created_at');
+  const [stats, setStats] = useState({
+    totalTenders: 0,
+    totalBids: 0,
+    avgBudget: 0,
+    weeklyTenders: 0
+  });
+
+  const [filters, setFilters] = useState<FilterState>({
+    keyword: '',
+    category: '',
+    region: '',
+    tenderType: '',
+    status: '',
+    budgetRange: [0, 100000000],
+    deadlineRange: '',
+    publishingEntity: ''
+  });
 
   const categories = [
-    'Construction', 'IT & Technology', 'Medical & Healthcare', 'Education',
-    'Agriculture', 'Transport', 'Energy', 'Water & Sanitation', 'Consulting',
-    'Security', 'Telecommunications', 'Finance', 'Other'
+    'Construction', 'ICT', 'Agriculture', 'Medical', 'NGO', 'Government',
+    'Education', 'Transportation', 'Energy', 'Environment', 'Finance', 'Other'
   ];
 
   const regions = [
-    'Adamawa', 'Centre', 'East', 'Far North', 'Littoral',
-    'North', 'Northwest', 'South', 'Southwest', 'West'
+    'Adamawa', 'Centre', 'East', 'Far North', 'Littoral', 'North',
+    'Northwest', 'South', 'Southwest', 'West'
   ];
 
   useEffect(() => {
     fetchTenders();
-  }, [selectedType, selectedCategory, selectedRegion]);
+    fetchStats();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [tenders, filters, sortBy]);
 
   const fetchTenders = async () => {
     try {
-      let query = supabase
+      const { data, error } = await supabase
         .from('tenders')
         .select('*')
-        .eq('status', 'active')
         .order('created_at', { ascending: false });
 
-      if (selectedType !== 'all') {
-        query = query.eq('tender_type', selectedType);
-      }
-      if (selectedCategory !== 'all') {
-        query = query.eq('category', selectedCategory);
-      }
-      if (selectedRegion !== 'all') {
-        query = query.eq('region', selectedRegion);
-      }
-
-      const { data, error } = await query;
-
       if (error) throw error;
-      setTenders(data || []);
+      
+      // Map database fields to our interface, handling potential field name differences
+      const mappedTenders: Tender[] = (data || []).map((tender: any) => ({
+        id: tender.id,
+        title: tender.title,
+        description: tender.description,
+        category: tender.category,
+        region: tender.region,
+        tender_type: tender.tender_type,
+        budget_min: tender.budget_min,
+        budget_max: tender.budget_max,
+        submission_deadline: tender.submission_deadline || tender.deadline || '',
+        status: tender.status,
+        published_by: tender.published_by || '',
+        bids_count: tender.bids_count || 0,
+        created_at: tender.created_at
+      }));
+      
+      setTenders(mappedTenders);
     } catch (error) {
       console.error('Error fetching tenders:', error);
       toast.error('Failed to load tenders');
@@ -108,296 +152,426 @@ const Tenders = () => {
     }
   };
 
-  const formatBudget = (min: number, max: number, currency: string) => {
-    const formatAmount = (amount: number) => {
-      if (amount >= 1000000000) return `${(amount / 1000000000).toFixed(1)}B`;
-      if (amount >= 1000000) return `${(amount / 1000000).toFixed(1)}M`;
-      if (amount >= 1000) return `${(amount / 1000).toFixed(1)}K`;
-      return amount.toString();
-    };
+  const fetchStats = async () => {
+    try {
+      // Get total tenders and total bids
+      const { data: tendersData } = await supabase
+        .from('tenders')
+        .select('bids_count, budget_min, budget_max, created_at');
 
-    if (min && max) {
-      return `${formatAmount(min)} - ${formatAmount(max)} ${currency}`;
-    } else if (min) {
-      return `From ${formatAmount(min)} ${currency}`;
-    } else if (max) {
-      return `Up to ${formatAmount(max)} ${currency}`;
+      if (tendersData) {
+        const totalBids = tendersData.reduce((sum, tender) => sum + (tender.bids_count || 0), 0);
+        const avgBudget = tendersData.reduce((sum, tender) => sum + ((tender.budget_min + tender.budget_max) / 2), 0) / tendersData.length;
+        
+        // Count tenders from this week
+        const oneWeekAgo = new Date();
+        oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+        const weeklyTenders = tendersData.filter(tender => 
+          new Date(tender.created_at) >= oneWeekAgo
+        ).length;
+
+        setStats({
+          totalTenders: tendersData.length,
+          totalBids,
+          avgBudget: avgBudget || 0,
+          weeklyTenders
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching stats:', error);
     }
-    return 'Budget not specified';
   };
 
-  const getTypeLabel = (type: string) => {
-    return tenderTypes.find(t => t.value === type)?.label || type;
+  const applyFilters = () => {
+    let filtered = [...tenders];
+
+    // Apply keyword filter
+    if (filters.keyword) {
+      filtered = filtered.filter(tender =>
+        tender.title.toLowerCase().includes(filters.keyword.toLowerCase()) ||
+        tender.description.toLowerCase().includes(filters.keyword.toLowerCase())
+      );
+    }
+
+    // Apply category filter
+    if (filters.category) {
+      filtered = filtered.filter(tender => tender.category === filters.category);
+    }
+
+    // Apply region filter
+    if (filters.region) {
+      filtered = filtered.filter(tender => tender.region === filters.region);
+    }
+
+    // Apply tender type filter
+    if (filters.tenderType) {
+      filtered = filtered.filter(tender => tender.tender_type === filters.tenderType);
+    }
+
+    // Apply status filter
+    if (filters.status) {
+      filtered = filtered.filter(tender => tender.status === filters.status);
+    }
+
+    // Apply budget range filter
+    filtered = filtered.filter(tender => {
+      const avgBudget = (tender.budget_min + tender.budget_max) / 2;
+      return avgBudget >= filters.budgetRange[0] && avgBudget <= filters.budgetRange[1];
+    });
+
+    // Apply deadline range filter
+    if (filters.deadlineRange) {
+      const today = new Date();
+      filtered = filtered.filter(tender => {
+        if (!tender.submission_deadline) return false;
+        const deadline = new Date(tender.submission_deadline);
+        const diffDays = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+        
+        switch (filters.deadlineRange) {
+          case 'today': return diffDays === 0;
+          case 'week': return diffDays <= 7 && diffDays >= 0;
+          case 'month': return diffDays <= 30 && diffDays >= 0;
+          case 'quarter': return diffDays <= 90 && diffDays >= 0;
+          default: return true;
+        }
+      });
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'submission_deadline':
+          if (!a.submission_deadline || !b.submission_deadline) return 0;
+          return new Date(a.submission_deadline).getTime() - new Date(b.submission_deadline).getTime();
+        case 'budget_max':
+          return b.budget_max - a.budget_max;
+        case 'budget_min':
+          return a.budget_min - b.budget_min;
+        case 'bids_count':
+          return b.bids_count - a.bids_count;
+        default:
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+      }
+    });
+
+    setFilteredTenders(filtered);
   };
 
-  const getTypeColor = (type: string) => {
-    const colors: Record<string, string> = {
-      'public': 'bg-blue-100 text-blue-800',
-      'private': 'bg-green-100 text-green-800',
-      'ngo_donor': 'bg-purple-100 text-purple-800',
-      'international': 'bg-orange-100 text-orange-800',
-      'construction': 'bg-yellow-100 text-yellow-800',
-      'ict_software': 'bg-cyan-100 text-cyan-800'
-    };
-    return colors[type] || 'bg-gray-100 text-gray-800';
+  const clearFilters = () => {
+    setFilters({
+      keyword: '',
+      category: '',
+      region: '',
+      tenderType: '',
+      status: '',
+      budgetRange: [0, 100000000],
+      deadlineRange: '',
+      publishingEntity: ''
+    });
   };
 
-  const filteredTenders = tenders.filter(tender =>
-    tender.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tender.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tender.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    if (filters.keyword) count++;
+    if (filters.category) count++;
+    if (filters.region) count++;
+    if (filters.tenderType) count++;
+    if (filters.status) count++;
+    if (filters.deadlineRange) count++;
+    if (filters.budgetRange[0] > 0 || filters.budgetRange[1] < 100000000) count++;
+    return count;
+  };
 
-  if (loading) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        </div>
-      </div>
-    );
-  }
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'XAF',
+      minimumFractionDigits: 0,
+      notation: 'compact'
+    }).format(amount);
+  };
+
+  // Get featured tenders (for now, just the most recent ones with highest bids)
+  const featuredTenders = tenders
+    .filter(t => t.status === 'active')
+    .sort((a, b) => b.bids_count - a.bids_count)
+    .slice(0, 3);
+
+  // Get upcoming deadlines (tenders closing within 7 days)
+  const upcomingDeadlines = tenders
+    .filter(t => {
+      if (!t.submission_deadline) return false;
+      const deadline = new Date(t.submission_deadline);
+      const today = new Date();
+      const diffDays = Math.ceil((deadline.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+      return diffDays <= 7 && diffDays > 0 && t.status === 'active';
+    })
+    .sort((a, b) => new Date(a.submission_deadline).getTime() - new Date(b.submission_deadline).getTime())
+    .slice(0, 5);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary/90 to-primary text-primary-foreground py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              CamerTenders
-            </h1>
-            <p className="text-xl mb-8 opacity-90">
-              Cameroon's premier tender and bidding platform connecting businesses with opportunities
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" asChild>
-                <Link to="/tenders/create">
-                  <Plus className="h-5 w-5 mr-2" />
-                  Post a Tender
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20" asChild>
-                <Link to="/business-verification">
-                  <Building2 className="h-5 w-5 mr-2" />
-                  Register Business
-                </Link>
-              </Button>
-            </div>
+    <div className="container mx-auto px-4 py-8">
+      {/* Header */}
+      <div className="mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">CamerTenders</h1>
+            <p className="text-gray-600">Discover and apply for public procurement opportunities across Cameroon</p>
           </div>
+          <Link to="/create-tender">
+            <Button className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              Post a Tender
+            </Button>
+          </Link>
         </div>
-      </div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Statistics Cards */}
+        {/* Statistics Widget */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="bg-primary/10 p-2 rounded-lg">
-                  <FileText className="h-5 w-5 text-primary" />
+                <div className="p-2 bg-primary/10 rounded-lg">
+                  <Building className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-primary">{tenders.length}</p>
-                  <p className="text-sm text-muted-foreground">Active Tenders</p>
+                  <p className="text-sm text-muted-foreground">Total Tenders</p>
+                  <p className="text-xl font-bold">{stats.totalTenders}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
+          
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="bg-green-100 p-2 rounded-lg">
-                  <Building2 className="h-5 w-5 text-green-600" />
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Users className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-green-600">1,200+</p>
-                  <p className="text-sm text-muted-foreground">Registered Businesses</p>
+                  <p className="text-sm text-muted-foreground">Total Bids</p>
+                  <p className="text-xl font-bold">{stats.totalBids}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
+          
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="bg-blue-100 p-2 rounded-lg">
-                  <Award className="h-5 w-5 text-blue-600" />
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <DollarSign className="h-5 w-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-blue-600">850+</p>
-                  <p className="text-sm text-muted-foreground">Contracts Awarded</p>
+                  <p className="text-sm text-muted-foreground">Avg. Budget</p>
+                  <p className="text-xl font-bold">{formatCurrency(stats.avgBudget)}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
+          
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="bg-orange-100 p-2 rounded-lg">
+                <div className="p-2 bg-orange-100 rounded-lg">
                   <TrendingUp className="h-5 w-5 text-orange-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold text-orange-600">45B+</p>
-                  <p className="text-sm text-muted-foreground">FCFA Contract Value</p>
+                  <p className="text-sm text-muted-foreground">This Week</p>
+                  <p className="text-xl font-bold">{stats.weeklyTenders}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Search and Filters */}
+        {/* Tender Categories Grid */}
         <Card className="mb-8">
-          <CardContent className="p-6">
-            <div className="flex flex-col lg:flex-row gap-4">
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                  <Input
-                    placeholder="Search tenders by title, description, or category..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
-              </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Select value={selectedType} onValueChange={setSelectedType}>
-                  <SelectTrigger className="w-full sm:w-[180px]">
-                    <SelectValue placeholder="Tender Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    {tenderTypes.map(type => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                  <SelectTrigger className="w-full sm:w-[180px]">
-                    <SelectValue placeholder="Category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Categories</SelectItem>
-                    {categories.map(category => (
-                      <SelectItem key={category} value={category}>
-                        {category}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                  <SelectTrigger className="w-full sm:w-[180px]">
-                    <SelectValue placeholder="Region" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Regions</SelectItem>
-                    {regions.map(region => (
-                      <SelectItem key={region} value={region}>
-                        {region}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          <CardHeader>
+            <CardTitle>Browse by Category</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {categories.map((category) => {
+                const Icon = CATEGORY_ICONS[category] || Building;
+                const categoryCount = tenders.filter(t => t.category === category).length;
+                
+                return (
+                  <button
+                    key={category}
+                    onClick={() => setFilters(prev => ({ ...prev, category }))}
+                    className="flex flex-col items-center p-4 rounded-lg border border-border hover:bg-muted/50 transition-colors group"
+                  >
+                    <div className="p-3 bg-primary/10 rounded-lg mb-2 group-hover:bg-primary/20 transition-colors">
+                      <Icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-center">{category}</span>
+                    <span className="text-xs text-muted-foreground">{categoryCount} tenders</span>
+                  </button>
+                );
+              })}
             </div>
           </CardContent>
         </Card>
 
-        {/* Tenders Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-          {filteredTenders.map((tender) => (
-            <Card key={tender.id} className="hover:shadow-lg transition-shadow duration-200">
-              <CardHeader className="pb-4">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="flex-1">
-                    <CardTitle className="text-lg leading-tight mb-2">
-                      {tender.title}
-                    </CardTitle>
-                    <div className="flex flex-wrap gap-2 mb-3">
-                      <Badge className={getTypeColor(tender.tender_type)}>
-                        {getTypeLabel(tender.tender_type)}
-                      </Badge>
-                      <Badge variant="outline">{tender.category}</Badge>
-                      {tender.is_featured && (
-                        <Badge className="bg-yellow-100 text-yellow-800">Featured</Badge>
-                      )}
-                    </div>
-                  </div>
-                  <Button variant="ghost" size="sm">
-                    <Bookmark className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <CardDescription className="mb-4 line-clamp-2">
-                  {tender.description}
-                </CardDescription>
-                
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-sm">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>{tender.region} Region</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-sm">
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    <span>{formatBudget(tender.budget_min, tender.budget_max, tender.currency)}</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-sm">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span>Deadline: {format(new Date(tender.deadline), 'MMM dd, yyyy')}</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between text-sm text-muted-foreground">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-1">
-                        <Eye className="h-4 w-4" />
-                        <span>{tender.views_count}</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Users className="h-4 w-4" />
-                        <span>{tender.bids_count} bids</span>
-                      </div>
-                    </div>
-                    <span>{format(new Date(tender.created_at), 'MMM dd')}</span>
-                  </div>
-                </div>
-                
-                <div className="flex gap-2 mt-6">
-                  <Button asChild className="flex-1">
-                    <Link to={`/tenders/${tender.id}`}>
-                      View Details
-                    </Link>
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <FileText className="h-4 w-4" />
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {/* Featured Tenders */}
+        {featuredTenders.length > 0 && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Award className="h-5 w-5" />
+                Featured Tenders
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {featuredTenders.map((tender) => (
+                  <TenderCard key={tender.id} tender={tender} variant="grid" />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
-        {filteredTenders.length === 0 && (
-          <Card>
-            <CardContent className="p-12 text-center">
-              <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">No tenders found</h3>
-              <p className="text-muted-foreground mb-4">
-                Try adjusting your search criteria or check back later for new opportunities.
-              </p>
-              <Button asChild>
-                <Link to="/tenders/create">Post a Tender</Link>
-              </Button>
+        {/* Upcoming Deadlines */}
+        {upcomingDeadlines.length > 0 && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Clock className="h-5 w-5" />
+                Closing Soon
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {upcomingDeadlines.map((tender) => {
+                  const daysRemaining = Math.ceil((new Date(tender.submission_deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+                  return (
+                    <div key={tender.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
+                      <div className="flex-1 min-w-0">
+                        <Link to={`/tenders/${tender.id}`} className="font-medium hover:text-primary transition-colors line-clamp-1">
+                          {tender.title}
+                        </Link>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
+                          <span className="flex items-center gap-1">
+                            <MapPin className="h-3 w-3" />
+                            {tender.region}
+                          </span>
+                          <span>{tender.category}</span>
+                        </div>
+                      </div>
+                      <div className="text-right ml-4">
+                        <Badge variant={daysRemaining <= 1 ? 'destructive' : daysRemaining <= 3 ? 'secondary' : 'outline'}>
+                          {daysRemaining} day{daysRemaining !== 1 ? 's' : ''} left
+                        </Badge>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </CardContent>
           </Card>
         )}
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        {/* Filters Sidebar */}
+        <div className="lg:col-span-1">
+          <TenderFilters
+            filters={filters}
+            onFiltersChange={setFilters}
+            onClearFilters={clearFilters}
+            activeFiltersCount={getActiveFiltersCount()}
+          />
+        </div>
+
+        {/* Main Content */}
+        <div className="lg:col-span-3">
+          {/* Controls */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+            <div>
+              <p className="text-sm text-muted-foreground">
+                {filteredTenders.length} tender{filteredTenders.length !== 1 ? 's' : ''} found
+                {getActiveFiltersCount() > 0 && ` (${getActiveFiltersCount()} filter${getActiveFiltersCount() !== 1 ? 's' : ''} applied)`}
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <div className="flex items-center border rounded-lg p-1">
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`p-2 rounded ${viewMode === 'grid' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
+                >
+                  <Grid3X3 className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`p-2 rounded ${viewMode === 'list' ? 'bg-primary text-primary-foreground' : 'hover:bg-muted'}`}
+                >
+                  <List className="h-4 w-4" />
+                </button>
+              </div>
+              
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-48">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="created_at">Newest First</SelectItem>
+                  <SelectItem value="submission_deadline">Closing Soon</SelectItem>
+                  <SelectItem value="budget_max">Budget: High to Low</SelectItem>
+                  <SelectItem value="budget_min">Budget: Low to High</SelectItem>
+                  <SelectItem value="bids_count">Most Competitive</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          {/* Tender Listings */}
+          {loading ? (
+            <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}>
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="bg-gray-200 rounded-lg h-64"></div>
+                </div>
+              ))}
+            </div>
+          ) : filteredTenders.length === 0 ? (
+            <div className="text-center py-12">
+              <Building className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No tenders found</h3>
+              <p className="text-gray-600 mb-6">
+                {getActiveFiltersCount() > 0 
+                  ? 'Try adjusting your filters to find more opportunities.'
+                  : 'Check back later for new opportunities.'
+                }
+              </p>
+              {getActiveFiltersCount() > 0 ? (
+                <Button variant="outline" onClick={clearFilters}>
+                  Clear Filters
+                </Button>
+              ) : (
+                <Link to="/create-tender">
+                  <Button>Post the First Tender</Button>
+                </Link>
+              )}
+            </div>
+          ) : (
+            <div className={viewMode === 'grid' 
+              ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6' 
+              : 'space-y-4'
+            }>
+              {filteredTenders.map((tender) => (
+                <TenderCard 
+                  key={tender.id} 
+                  tender={tender} 
+                  variant={viewMode}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
-};
-
-export default Tenders;
+}

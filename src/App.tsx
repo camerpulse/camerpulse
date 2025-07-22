@@ -374,10 +374,10 @@ const App = () => {
               <Route path="/officials" element={<Officials />} />
               <Route path="/judiciary" element={<Judiciary />} />
         <Route path="/tenders" element={<Tenders />} />
-        <Route path="/tenders/create" element={<CreateTender />} />
         <Route path="/tenders/:id" element={<TenderDetail />} />
+        <Route path="/create-tender" element={<CreateTender />} />
         <Route path="/business-verification" element={<BusinessVerification />} />
-        <Route path="/admin/moderation" element={<AdminModeration />} />
+        <Route path="/admin-moderation" element={<AdminModeration />} />
                  <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
