@@ -157,7 +157,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { PluginProvider } from "./contexts/PluginContext";
 
-import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
+import ErrorBoundary from "./components/ErrorBoundary";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
 
@@ -180,13 +180,13 @@ const App = () => {
   }, []);
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <PanAfricaProvider>
-        <AuthProvider>
-          <PluginProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <PanAfricaProvider>
+          <AuthProvider>
+            <PluginProvider>
                 <Toaster />
                 <Sonner />
-                <PWAInstallPrompt />
                 <OfflineIndicator />
                 <BrowserRouter>
             <Routes>
@@ -383,7 +383,8 @@ const App = () => {
             </PluginProvider>
           </AuthProvider>
         </PanAfricaProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 };
 
