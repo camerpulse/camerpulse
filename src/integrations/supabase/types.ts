@@ -30708,6 +30708,54 @@ export type Database = {
           },
         ]
       }
+      tender_comments: {
+        Row: {
+          comment_text: string
+          created_at: string
+          id: string
+          is_public: boolean
+          parent_comment_id: string | null
+          tender_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          comment_text: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          parent_comment_id?: string | null
+          tender_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          comment_text?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          parent_comment_id?: string | null
+          tender_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "tender_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tender_comments_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tender_moderation: {
         Row: {
           created_at: string
@@ -30891,6 +30939,50 @@ export type Database = {
           },
           {
             foreignKeyName: "tender_payments_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tender_updates: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string
+          id: string
+          is_public: boolean
+          tender_id: string
+          title: string
+          update_type: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by: string
+          id?: string
+          is_public?: boolean
+          tender_id: string
+          title: string
+          update_type?: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          is_public?: boolean
+          tender_id?: string
+          title?: string
+          update_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_updates_tender_id_fkey"
             columns: ["tender_id"]
             isOneToOne: false
             referencedRelation: "tenders"

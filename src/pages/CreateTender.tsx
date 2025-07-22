@@ -104,14 +104,12 @@ export default function CreateTender() {
           currency: formData.currency,
           deadline: formData.deadline?.toISOString(),
           region: formData.location,
-          contact_email: formData.contact_email,
-          contact_phone: formData.contact_phone,
+          tender_type: 'public',
+          published_by_user_id: 'temp-user-id', // Will be replaced with actual user ID when auth is implemented
+          status: 'active',
           eligibility_criteria: formData.eligibility_criteria,
           evaluation_criteria: formData.evaluation_criteria,
-          submission_guidelines: formData.submission_guidelines,
-          payment_terms: formData.payment_terms,
-          contract_duration: formData.contract_duration,
-          required_experience_years: formData.required_experience_years ? parseInt(formData.required_experience_years) : null
+          instructions: formData.submission_guidelines
         })
         .select()
         .single();

@@ -1,111 +1,139 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { 
   Calendar, 
   MapPin, 
   DollarSign, 
-  Building, 
   Clock, 
   Eye, 
-  FileText, 
-  Upload, 
-  Send, 
-  Download, 
-  MessageSquare, 
-  Flag, 
-  Share2,
-  Bookmark,
+  Users, 
+  Building, 
+  Send,
   ArrowLeft,
-  CheckCircle,
+  Award,
+  FileText,
   AlertCircle,
-  User,
-  Mail,
-  Phone,
-  Target,
-  FileCheck,
-  Users
-} from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+  MessageCircle,
+  Info
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
+// Define interfaces based on actual database schema
 interface TenderDetail {
   id: string;
   title: string;
   description: string;
-  requirements: string;
+  tender_type: string;
   category: string;
   region: string;
-  tender_type: string;
-  budget_min: number;
-  budget_max: number;
-  submission_deadline: string;
-  publication_date: string;
+  published_by_company_id?: string;
+  published_by_user_id: string;
+  budget_min?: number;
+  budget_max?: number;
+  currency: string;
+  deadline: string;
+  bid_opening_date?: string;
+  eligibility_criteria?: string;
+  instructions?: string;
+  evaluation_criteria?: string;
+  documents?: any;
   status: string;
-  published_by: string;
-  contact_email: string;
-  contact_phone: string;
-  document_attachments: any[];
-  evaluation_criteria: any[];
-  bidding_instructions: string;
+  is_featured: boolean;
   views_count: number;
   bids_count: number;
+  awarded_to_company_id?: string;
+  awarded_at?: string;
+  award_amount?: number;
   created_at: string;
+  updated_at: string;
+  payment_plan_id?: string;
+  payment_status?: string;
+}
+
+interface TenderBid {
+  id: string;
+  tender_id: string;
+  company_id: string;
+  user_id: string;
+  technical_proposal: string;
+  financial_proposal: any;
+  bid_amount: number;
+  currency: string;
+  documents?: any;
+  status: string;
+  notes?: string;
+  submitted_at: string;
+  reviewed_at?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 interface Comment {
   id: string;
+  tender_id: string;
   user_id: string;
   comment_text: string;
-  is_question: boolean;
+  parent_comment_id?: string;
+  is_public: boolean;
   created_at: string;
-  profiles?: { email?: string };
+  updated_at: string;
 }
 
 interface TenderUpdate {
   id: string;
+  tender_id: string;
   update_type: string;
   title: string;
-  description: string;
+  content: string;
+  is_public: boolean;
+  created_by: string;
   created_at: string;
+  updated_at: string;
 }
 
 export default function TenderDetail() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  
   const [tender, setTender] = useState<TenderDetail | null>(null);
+  const [bids, setBids] = useState<TenderBid[]>([]);
   const [comments, setComments] = useState<Comment[]>([]);
   const [updates, setUpdates] = useState<TenderUpdate[]>([]);
   const [loading, setLoading] = useState(true);
-  const [submittingBid, setSubmittingBid] = useState(false);
-  const [newComment, setNewComment] = useState('');
-  const [isQuestion, setIsQuestion] = useState(false);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-
+  const [activeTab, setActiveTab] = useState('overview');
+  
   // Bid form state
   const [bidForm, setBidForm] = useState({
-    company_name: '',
+    technical_proposal: '',
     bid_amount: '',
-    proposal_text: '',
-    contact_email: '',
-    contact_phone: '',
-    experience_years: '',
-    attachments: [] as File[]
+    currency: 'FCFA',
+    notes: ''
   });
+  
+  // Comment form state
+  const [newComment, setNewComment] = useState('');
+  const [isSubmittingBid, setIsSubmittingBid] = useState(false);
+  const [isSubmittingComment, setIsSubmittingComment] = useState(false);
 
   useEffect(() => {
     if (id) {
       fetchTenderDetails();
+      fetchBids();
       fetchComments();
       fetchUpdates();
-      incrementViewCount();
+      incrementViews();
     }
   }, [id]);
 
@@ -115,15 +143,34 @@ export default function TenderDetail() {
         .from('tenders')
         .select('*')
         .eq('id', id)
-        .maybeSingle();
+        .single();
 
       if (error) throw error;
       setTender(data);
     } catch (error) {
-      console.error('Error fetching tender details:', error);
-      toast.error('Failed to load tender details');
+      console.error('Error fetching tender:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load tender details.",
+        variant: "destructive"
+      });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchBids = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tender_bids')
+        .select('*')
+        .eq('tender_id', id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setBids(data || []);
+    } catch (error) {
+      console.error('Error fetching bids:', error);
     }
   };
 
@@ -131,17 +178,17 @@ export default function TenderDetail() {
     try {
       const { data, error } = await supabase
         .from('tender_comments')
-        .select(`
-          *,
-          profiles(email)
-        `)
+        .select('*')
         .eq('tender_id', id)
+        .eq('is_public', true)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
       setComments(data || []);
     } catch (error) {
       console.error('Error fetching comments:', error);
+      // Set empty array if table doesn't exist yet or other error
+      setComments([]);
     }
   };
 
@@ -158,141 +205,150 @@ export default function TenderDetail() {
       setUpdates(data || []);
     } catch (error) {
       console.error('Error fetching updates:', error);
+      // Set empty array if table doesn't exist yet or other error
+      setUpdates([]);
     }
   };
 
-  const incrementViewCount = async () => {
+  const incrementViews = async () => {
     try {
-      await supabase.rpc('increment_tender_views', { tender_id: id });
+      if (tender) {
+        await supabase
+          .from('tenders')
+          .update({ views_count: tender.views_count + 1 })
+          .eq('id', id);
+      }
     } catch (error) {
-      console.error('Error incrementing view count:', error);
+      console.error('Error incrementing views:', error);
     }
   };
 
-  const handleBidSubmission = async () => {
-    if (!bidForm.company_name || !bidForm.bid_amount || !bidForm.proposal_text) {
-      toast.error('Please fill in all required fields');
+  const handleBidSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!bidForm.technical_proposal || !bidForm.bid_amount) {
+      toast({
+        title: "Missing Required Fields",
+        description: "Please fill in all required bid fields.",
+        variant: "destructive"
+      });
       return;
     }
 
-    setSubmittingBid(true);
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast.error('Please log in to submit a bid');
-        return;
-      }
+    setIsSubmittingBid(true);
 
+    try {
       const { error } = await supabase
         .from('tender_bids')
         .insert({
-          tender_id: id,
-          bidder_user_id: user.id,
-          company_name: bidForm.company_name,
+          tender_id: id!,
+          user_id: 'temp-user-id', // Will be replaced with actual user ID when auth is implemented
+          company_id: 'temp-company-id',
+          technical_proposal: bidForm.technical_proposal,
+          financial_proposal: { details: 'Financial proposal details' },
           bid_amount: parseInt(bidForm.bid_amount),
-          proposal_text: bidForm.proposal_text,
-          contact_email: bidForm.contact_email,
-          contact_phone: bidForm.contact_phone,
-          experience_years: bidForm.experience_years ? parseInt(bidForm.experience_years) : null
+          currency: bidForm.currency,
+          notes: bidForm.notes,
+          status: 'submitted'
         });
 
       if (error) throw error;
 
-      toast.success('Bid submitted successfully!');
-      setBidForm({
-        company_name: '',
-        bid_amount: '',
-        proposal_text: '',
-        contact_email: '',
-        contact_phone: '',
-        experience_years: '',
-        attachments: []
+      toast({
+        title: "Bid Submitted Successfully",
+        description: "Your bid has been submitted and is under review."
       });
-      
-      // Refresh tender to update bid count
-      fetchTenderDetails();
-    } catch (error) {
-      console.error('Error submitting bid:', error);
-      toast.error('Failed to submit bid');
+
+      setBidForm({
+        technical_proposal: '',
+        bid_amount: '',
+        currency: 'FCFA',
+        notes: ''
+      });
+
+      fetchBids();
+    } catch (error: any) {
+      toast({
+        title: "Error Submitting Bid",
+        description: error.message || "An unexpected error occurred.",
+        variant: "destructive"
+      });
     } finally {
-      setSubmittingBid(false);
+      setIsSubmittingBid(false);
     }
   };
 
-  const handleCommentSubmission = async () => {
+  const handleCommentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
     if (!newComment.trim()) return;
 
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast.error('Please log in to comment');
-        return;
-      }
+    setIsSubmittingComment(true);
 
+    try {
       const { error } = await supabase
         .from('tender_comments')
         .insert({
-          tender_id: id,
-          user_id: user.id,
-          comment_text: newComment,
-          is_question: isQuestion
+          tender_id: id!,
+          user_id: 'temp-user-id', // Will be replaced with actual user ID when auth is implemented
+          comment_text: newComment.trim(),
+          is_public: true
         });
 
       if (error) throw error;
 
+      toast({
+        title: "Comment Added",
+        description: "Your comment has been posted."
+      });
+
       setNewComment('');
-      setIsQuestion(false);
       fetchComments();
-      toast.success('Comment posted successfully!');
-    } catch (error) {
-      console.error('Error posting comment:', error);
-      toast.error('Failed to post comment');
+    } catch (error: any) {
+      toast({
+        title: "Error Adding Comment",
+        description: "Could not add comment at this time.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsSubmittingComment(false);
     }
   };
 
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number, currency: string = 'FCFA') => {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
-      currency: 'XAF',
+      currency: currency === 'FCFA' ? 'XAF' : currency,
       minimumFractionDigits: 0,
       notation: 'compact'
     }).format(amount);
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'active': return 'bg-green-100 text-green-800 border-green-200';
+      case 'closed': return 'bg-red-100 text-red-800 border-red-200';
+      case 'awarded': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'cancelled': return 'bg-gray-100 text-gray-800 border-gray-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
   };
 
   const getDaysRemaining = (deadline: string) => {
-    const days = Math.ceil((new Date(deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
-    return days;
-  };
-
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'open': return 'bg-green-100 text-green-800';
-      case 'closed': return 'bg-red-100 text-red-800';
-      case 'awarded': return 'bg-blue-100 text-blue-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
+    const today = new Date();
+    const deadlineDate = new Date(deadline);
+    const diffTime = deadlineDate.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return diffDays;
   };
 
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-muted rounded w-1/3"></div>
-          <div className="h-64 bg-muted rounded"></div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-6">
-              <div className="h-48 bg-muted rounded"></div>
-              <div className="h-32 bg-muted rounded"></div>
-            </div>
-            <div className="h-96 bg-muted rounded"></div>
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary mx-auto"></div>
+            <p className="mt-4 text-muted-foreground">Loading tender details...</p>
           </div>
         </div>
       </div>
@@ -303,400 +359,337 @@ export default function TenderDetail() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground mb-4">Tender Not Found</h1>
+          <AlertCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+          <h1 className="text-2xl font-bold mb-2">Tender Not Found</h1>
           <p className="text-muted-foreground mb-4">The tender you're looking for doesn't exist or has been removed.</p>
-          <Button onClick={() => navigate('/tenders')}>
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Tenders
-          </Button>
+          <Button onClick={() => navigate('/tenders')}>Back to Tenders</Button>
         </div>
       </div>
     );
   }
 
-  const daysRemaining = getDaysRemaining(tender.submission_deadline);
+  const daysRemaining = getDaysRemaining(tender.deadline);
   const isExpired = daysRemaining < 0;
 
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-6">
-        <Button variant="ghost" onClick={() => navigate('/tenders')}>
+      <div className="mb-6">
+        <Button
+          variant="ghost"
+          onClick={() => navigate('/tenders')}
+          className="mb-4"
+        >
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Tenders
         </Button>
-        <div className="flex items-center gap-2 ml-auto">
-          <Button variant="outline" size="sm">
-            <Share2 className="h-4 w-4 mr-2" />
-            Share
-          </Button>
-          <Button variant="outline" size="sm">
-            <Bookmark className="h-4 w-4 mr-2" />
-            Bookmark
-          </Button>
-          <Button variant="outline" size="sm">
-            <Flag className="h-4 w-4 mr-2" />
-            Report
-          </Button>
+
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <Badge className={getStatusColor(tender.status)}>
+                {tender.status.toUpperCase()}
+              </Badge>
+              {tender.is_featured && (
+                <Badge variant="secondary" className="bg-yellow-100 text-yellow-800 border-yellow-200">
+                  <Award className="h-3 w-3 mr-1" />
+                  Featured
+                </Badge>
+              )}
+            </div>
+            <h1 className="text-3xl font-bold text-foreground mb-2">{tender.title}</h1>
+            <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+              <span className="flex items-center gap-1">
+                <MapPin className="h-4 w-4" />
+                {tender.region}
+              </span>
+              <span className="flex items-center gap-1">
+                <Building className="h-4 w-4" />
+                {tender.category}
+              </span>
+              <span className="flex items-center gap-1">
+                <Eye className="h-4 w-4" />
+                {tender.views_count} views
+              </span>
+              <span className="flex items-center gap-1">
+                <Users className="h-4 w-4" />
+                {tender.bids_count} bids
+              </span>
+            </div>
+          </div>
+
+          <div className="text-right">
+            <div className="text-2xl font-bold text-foreground mb-1">
+              {tender.budget_min && tender.budget_max 
+                ? `${formatCurrency(tender.budget_min)} - ${formatCurrency(tender.budget_max, tender.currency)}`
+                : 'Budget TBD'
+              }
+            </div>
+            <div className="flex items-center gap-2 text-sm">
+              <Clock className="h-4 w-4" />
+              {isExpired ? (
+                <span className="text-red-600 font-medium">Expired</span>
+              ) : (
+                <span className="text-green-600 font-medium">
+                  {daysRemaining} day{daysRemaining !== 1 ? 's' : ''} remaining
+                </span>
+              )}
+            </div>
+            <div className="text-xs text-muted-foreground mt-1">
+              Deadline: {format(new Date(tender.deadline), 'PPP')}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column - Main Content */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Tender Header */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="space-y-2">
-                  <h1 className="text-2xl font-bold">{tender.title}</h1>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <Building className="h-4 w-4" />
-                      {tender.category}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <MapPin className="h-4 w-4" />
-                      {tender.region}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Eye className="h-4 w-4" />
-                      {tender.views_count} views
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Users className="h-4 w-4" />
-                      {tender.bids_count} bids
-                    </div>
-                  </div>
-                </div>
-                <Badge className={getStatusColor(tender.status)}>
-                  {tender.status.toUpperCase()}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="flex items-center gap-2">
-                  <DollarSign className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Budget Range</p>
-                    <p className="font-semibold">
-                      {formatCurrency(tender.budget_min)} - {formatCurrency(tender.budget_max)}
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Submission Deadline</p>
-                    <p className="font-semibold">{formatDate(tender.submission_deadline)}</p>
-                    {!isExpired && (
-                      <p className="text-sm text-orange-600">{daysRemaining} days remaining</p>
-                    )}
-                    {isExpired && (
-                      <p className="text-sm text-red-600">Expired</p>
-                    )}
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-sm text-muted-foreground">Published</p>
-                    <p className="font-semibold">{formatDate(tender.publication_date)}</p>
-                    <p className="text-sm text-muted-foreground">by {tender.published_by}</p>
-                  </div>
-                </div>
-              </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="bid">Submit Bid</TabsTrigger>
+          <TabsTrigger value="discussion">Discussion ({comments.length})</TabsTrigger>
+          <TabsTrigger value="updates">Updates ({updates.length})</TabsTrigger>
+        </TabsList>
 
-              {isExpired && (
-                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
-                  <AlertCircle className="h-5 w-5 text-red-600" />
-                  <p className="text-red-800 font-medium">This tender has expired and is no longer accepting bids.</p>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
+        <TabsContent value="overview" className="space-y-6">
           {/* Description */}
           <Card>
             <CardHeader>
               <CardTitle>Description</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="prose max-w-none">
-                <p className="whitespace-pre-wrap">{tender.description}</p>
-              </div>
+              <p className="text-foreground whitespace-pre-wrap">{tender.description}</p>
             </CardContent>
           </Card>
 
-          {/* Requirements */}
-          {tender.requirements && (
+          {/* Requirements & Criteria */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {tender.eligibility_criteria && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Eligibility Criteria</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-foreground whitespace-pre-wrap">{tender.eligibility_criteria}</p>
+                </CardContent>
+              </Card>
+            )}
+
+            {tender.evaluation_criteria && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Evaluation Criteria</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-foreground whitespace-pre-wrap">{tender.evaluation_criteria}</p>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+
+          {/* Submission Instructions */}
+          {tender.instructions && (
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" />
-                  Requirements
-                </CardTitle>
+                <CardTitle>Submission Instructions</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="prose max-w-none">
-                  <p className="whitespace-pre-wrap">{tender.requirements}</p>
-                </div>
+                <p className="text-foreground whitespace-pre-wrap">{tender.instructions}</p>
               </CardContent>
             </Card>
           )}
+        </TabsContent>
 
-          {/* Evaluation Criteria */}
-          {tender.evaluation_criteria && tender.evaluation_criteria.length > 0 && (
+        <TabsContent value="bid" className="space-y-6">
+          {isExpired ? (
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileCheck className="h-5 w-5" />
-                  Evaluation Criteria
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {tender.evaluation_criteria.map((criteria, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
-                      <span>{criteria}</span>
-                    </li>
-                  ))}
-                </ul>
+              <CardContent className="pt-6">
+                <div className="text-center">
+                  <AlertCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">Bidding Closed</h3>
+                  <p className="text-muted-foreground">The deadline for this tender has passed.</p>
+                </div>
               </CardContent>
             </Card>
-          )}
-
-          {/* Comments Section */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MessageSquare className="h-5 w-5" />
-                Comments & Questions ({comments.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {/* Add Comment Form */}
-              <div className="space-y-3">
-                <Textarea
-                  placeholder="Ask a question or leave a comment..."
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                />
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      id="isQuestion"
-                      checked={isQuestion}
-                      onChange={(e) => setIsQuestion(e.target.checked)}
-                    />
-                    <Label htmlFor="isQuestion" className="text-sm">Mark as question</Label>
-                  </div>
-                  <Button onClick={handleCommentSubmission} disabled={!newComment.trim()}>
-                    <Send className="h-4 w-4 mr-2" />
-                    Post Comment
-                  </Button>
-                </div>
-              </div>
-
-              <Separator />
-
-              {/* Comments List */}
-              <div className="space-y-4">
-                {comments.map((comment) => (
-                  <div key={comment.id} className="space-y-2">
-                    <div className="flex items-start gap-3">
-                      <Avatar className="h-8 w-8">
-                        <AvatarFallback>
-                          <User className="h-4 w-4" />
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="font-medium text-sm">
-                            {comment.profiles?.email || 'Anonymous User'}
-                          </span>
-                          {comment.is_question && (
-                            <Badge variant="outline" className="text-xs">Question</Badge>
-                          )}
-                          <span className="text-xs text-muted-foreground">
-                            {formatDate(comment.created_at)}
-                          </span>
-                        </div>
-                        <p className="text-sm">{comment.comment_text}</p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {comments.length === 0 && (
-                  <p className="text-center text-muted-foreground py-8">
-                    No comments yet. Be the first to ask a question or leave a comment!
-                  </p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Right Column - Bid Form & Contact Info */}
-        <div className="space-y-6">
-          {/* Bid Submission Form */}
-          {!isExpired && tender.status.toLowerCase() === 'open' && (
+          ) : (
             <Card>
               <CardHeader>
                 <CardTitle>Submit Your Bid</CardTitle>
+                <CardDescription>
+                  Please provide your technical and financial proposal for this tender.
+                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="company">Company Name *</Label>
-                  <Input
-                    id="company"
-                    value={bidForm.company_name}
-                    onChange={(e) => setBidForm(prev => ({ ...prev, company_name: e.target.value }))}
-                    placeholder="Your company name"
-                  />
-                </div>
+              <CardContent>
+                <form onSubmit={handleBidSubmit} className="space-y-6">
+                  <div>
+                    <Label htmlFor="technical_proposal">Technical Proposal *</Label>
+                    <Textarea
+                      id="technical_proposal"
+                      value={bidForm.technical_proposal}
+                      onChange={(e) => setBidForm(prev => ({ ...prev, technical_proposal: e.target.value }))}
+                      placeholder="Describe your approach, methodology, and technical solution..."
+                      className="mt-1 min-h-32"
+                      required
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="amount">Bid Amount (XAF) *</Label>
-                  <Input
-                    id="amount"
-                    type="number"
-                    value={bidForm.bid_amount}
-                    onChange={(e) => setBidForm(prev => ({ ...prev, bid_amount: e.target.value }))}
-                    placeholder="Enter your bid amount"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="proposal">Proposal *</Label>
-                  <Textarea
-                    id="proposal"
-                    value={bidForm.proposal_text}
-                    onChange={(e) => setBidForm(prev => ({ ...prev, proposal_text: e.target.value }))}
-                    placeholder="Describe your proposal and approach..."
-                    rows={4}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">Contact Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={bidForm.contact_email}
-                    onChange={(e) => setBidForm(prev => ({ ...prev, contact_email: e.target.value }))}
-                    placeholder="your.email@example.com"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Contact Phone</Label>
-                  <Input
-                    id="phone"
-                    value={bidForm.contact_phone}
-                    onChange={(e) => setBidForm(prev => ({ ...prev, contact_phone: e.target.value }))}
-                    placeholder="+237 XXX XXX XXX"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="experience">Years of Experience</Label>
-                  <Input
-                    id="experience"
-                    type="number"
-                    value={bidForm.experience_years}
-                    onChange={(e) => setBidForm(prev => ({ ...prev, experience_years: e.target.value }))}
-                    placeholder="Years in business"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Attachments</Label>
-                  <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4">
-                    <div className="text-center">
-                      <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
-                      <p className="text-sm text-muted-foreground mb-2">
-                        Upload supporting documents (PDF, DOC, XLS)
-                      </p>
-                      <Button variant="outline" size="sm">
-                        Choose Files
-                      </Button>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="bid_amount">Bid Amount *</Label>
+                      <Input
+                        id="bid_amount"
+                        type="number"
+                        value={bidForm.bid_amount}
+                        onChange={(e) => setBidForm(prev => ({ ...prev, bid_amount: e.target.value }))}
+                        placeholder="Enter your bid amount"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="currency">Currency</Label>
+                      <select
+                        id="currency"
+                        value={bidForm.currency}
+                        onChange={(e) => setBidForm(prev => ({ ...prev, currency: e.target.value }))}
+                        className="mt-1 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      >
+                        <option value="FCFA">FCFA</option>
+                        <option value="USD">USD</option>
+                        <option value="EUR">EUR</option>
+                      </select>
                     </div>
                   </div>
-                </div>
 
-                <Button 
-                  className="w-full" 
-                  onClick={handleBidSubmission}
-                  disabled={submittingBid}
-                >
-                  {submittingBid ? 'Submitting...' : 'Submit Bid'}
-                </Button>
+                  <div>
+                    <Label htmlFor="notes">Additional Notes</Label>
+                    <Textarea
+                      id="notes"
+                      value={bidForm.notes}
+                      onChange={(e) => setBidForm(prev => ({ ...prev, notes: e.target.value }))}
+                      placeholder="Any additional information or clarifications..."
+                      className="mt-1"
+                    />
+                  </div>
 
-                <p className="text-xs text-muted-foreground">
-                  By submitting a bid, you agree to the terms and conditions of this tender.
-                </p>
+                  <div className="flex justify-end">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button type="button" disabled={isSubmittingBid}>
+                          <Send className="h-4 w-4 mr-2" />
+                          Submit Bid
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Confirm Bid Submission</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Are you sure you want to submit this bid? Once submitted, you may not be able to modify it.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleBidSubmit}>
+                            Yes, Submit Bid
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </div>
+                </form>
               </CardContent>
             </Card>
           )}
+        </TabsContent>
 
-          {/* Contact Information */}
+        <TabsContent value="discussion" className="space-y-6">
+          {/* Add Comment Form */}
           <Card>
             <CardHeader>
-              <CardTitle>Contact Information</CardTitle>
+              <CardTitle>Join the Discussion</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex items-center gap-2">
-                <Building className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">{tender.published_by}</span>
-              </div>
-              {tender.contact_email && (
-                <div className="flex items-center gap-2">
-                  <Mail className="h-4 w-4 text-muted-foreground" />
-                  <a href={`mailto:${tender.contact_email}`} className="text-sm text-primary hover:underline">
-                    {tender.contact_email}
-                  </a>
+            <CardContent>
+              <form onSubmit={handleCommentSubmit} className="space-y-4">
+                <Textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Share your thoughts or ask questions about this tender..."
+                  className="min-h-24"
+                />
+                <div className="flex justify-end">
+                  <Button type="submit" disabled={isSubmittingComment || !newComment.trim()}>
+                    <MessageCircle className="h-4 w-4 mr-2" />
+                    Post Comment
+                  </Button>
                 </div>
-              )}
-              {tender.contact_phone && (
-                <div className="flex items-center gap-2">
-                  <Phone className="h-4 w-4 text-muted-foreground" />
-                  <a href={`tel:${tender.contact_phone}`} className="text-sm text-primary hover:underline">
-                    {tender.contact_phone}
-                  </a>
-                </div>
-              )}
+              </form>
             </CardContent>
           </Card>
 
-          {/* Quick Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Tender Statistics</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Total Views</span>
-                <span className="font-medium">{tender.views_count}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Bids Submitted</span>
-                <span className="font-medium">{tender.bids_count}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-sm text-muted-foreground">Days Published</span>
-                <span className="font-medium">
-                  {Math.floor((new Date().getTime() - new Date(tender.publication_date).getTime()) / (1000 * 60 * 60 * 24))}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+          {/* Comments List */}
+          {comments.length > 0 ? (
+            <div className="space-y-4">
+              {comments.map((comment) => (
+                <Card key={comment.id}>
+                  <CardContent className="pt-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <span className="font-medium">Anonymous User</span>
+                      <span className="text-xs text-muted-foreground">
+                        {format(new Date(comment.created_at), 'PPp')}
+                      </span>
+                    </div>
+                    <p className="text-foreground">{comment.comment_text}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="text-center">
+                  <MessageCircle className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">No Comments Yet</h3>
+                  <p className="text-muted-foreground">Be the first to start the discussion!</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="updates" className="space-y-6">
+          {updates.length > 0 ? (
+            <div className="space-y-4">
+              {updates.map((update) => (
+                <Card key={update.id}>
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <CardTitle className="text-lg">{update.title}</CardTitle>
+                      <Badge variant="outline">{update.update_type}</Badge>
+                    </div>
+                    <CardDescription>
+                      {format(new Date(update.created_at), 'PPp')}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-foreground whitespace-pre-wrap">{update.content}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="pt-6">
+                <div className="text-center">
+                  <Info className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">No Updates Yet</h3>
+                  <p className="text-muted-foreground">Updates and announcements will appear here.</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
