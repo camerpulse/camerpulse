@@ -133,6 +133,8 @@ import { PluginRoute } from "./components/Plugin/PluginWrapper";
 import { PluginMarketplace } from "./components/Admin/PluginMarketplace/PluginMarketplace";
 import { DeveloperConsole } from "./components/Admin/PluginMarketplace/DeveloperConsole";
 import { PluginDeveloperHub } from "./components/Developer/PluginDeveloperHub";
+import Senators from "./pages/Senators";
+import SenatorDetail from "./pages/SenatorDetail";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -184,6 +186,8 @@ const App = () => {
               <Route path="/feed" element={<Feed />} />
               <Route path="/civic-feed" element={<CivicFeed />} />
               <Route path="/politicians" element={<Politicians />} />
+              <Route path="/senators" element={<Senators />} />
+              <Route path="/senators/:id" element={<SenatorDetail />} />
               <Route path="/security" element={<Security />} />
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/polls" element={<PollsLandingPage />} />

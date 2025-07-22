@@ -27879,6 +27879,128 @@ export type Database = {
         }
         Relationships: []
       }
+      senator_ratings: {
+        Row: {
+          comment: string | null
+          created_at: string | null
+          effectiveness_rating: number | null
+          id: string
+          ip_address: unknown | null
+          is_anonymous: boolean | null
+          leadership_rating: number | null
+          overall_rating: number
+          responsiveness_rating: number | null
+          senator_id: string
+          transparency_rating: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string | null
+          effectiveness_rating?: number | null
+          id?: string
+          ip_address?: unknown | null
+          is_anonymous?: boolean | null
+          leadership_rating?: number | null
+          overall_rating: number
+          responsiveness_rating?: number | null
+          senator_id: string
+          transparency_rating?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string | null
+          effectiveness_rating?: number | null
+          id?: string
+          ip_address?: unknown | null
+          is_anonymous?: boolean | null
+          leadership_rating?: number | null
+          overall_rating?: number
+          responsiveness_rating?: number | null
+          senator_id?: string
+          transparency_rating?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senator_ratings_senator_id_fkey"
+            columns: ["senator_id"]
+            isOneToOne: false
+            referencedRelation: "senators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      senators: {
+        Row: {
+          about: string | null
+          average_rating: number | null
+          committee_memberships: Json | null
+          constituency: string | null
+          created_at: string | null
+          email: string | null
+          id: string
+          is_verified: boolean | null
+          name: string
+          party_affiliation: string | null
+          phone: string | null
+          photo_url: string | null
+          position: string
+          region: string | null
+          social_media_links: Json | null
+          status: string | null
+          total_ratings: number | null
+          updated_at: string | null
+          years_of_service: number | null
+        }
+        Insert: {
+          about?: string | null
+          average_rating?: number | null
+          committee_memberships?: Json | null
+          constituency?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          is_verified?: boolean | null
+          name: string
+          party_affiliation?: string | null
+          phone?: string | null
+          photo_url?: string | null
+          position: string
+          region?: string | null
+          social_media_links?: Json | null
+          status?: string | null
+          total_ratings?: number | null
+          updated_at?: string | null
+          years_of_service?: number | null
+        }
+        Update: {
+          about?: string | null
+          average_rating?: number | null
+          committee_memberships?: Json | null
+          constituency?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          is_verified?: boolean | null
+          name?: string
+          party_affiliation?: string | null
+          phone?: string | null
+          photo_url?: string | null
+          position?: string
+          region?: string | null
+          social_media_links?: Json | null
+          status?: string | null
+          total_ratings?: number | null
+          updated_at?: string | null
+          years_of_service?: number | null
+        }
+        Relationships: []
+      }
       sentiment_annotations: {
         Row: {
           annotated_by: string
