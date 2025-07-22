@@ -174,10 +174,11 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MobileProvider>
-        <PanAfricaProvider>
-          <AuthProvider>
-            <PluginProvider>
+      <TooltipProvider>
+        <MobileProvider>
+          <PanAfricaProvider>
+            <AuthProvider>
+              <PluginProvider>
                 <Toaster />
                 <Sonner />
                 <PWAInstallPrompt />
@@ -371,6 +372,7 @@ const App = () => {
             </AuthProvider>
           </PanAfricaProvider>
         </MobileProvider>
+      </TooltipProvider>
     </QueryClientProvider>
   );
 };
