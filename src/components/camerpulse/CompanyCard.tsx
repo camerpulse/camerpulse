@@ -86,7 +86,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
           
           <div className="text-right">
             <div className="mb-2">
-              <RatingStars rating={company.rating} size="sm" readOnly showLabel />
+              <RatingStars rating={company.rating} size="sm" disabled showLabel />
             </div>
             <p className="text-xs text-muted-foreground">
               {company.totalReviews} avis
