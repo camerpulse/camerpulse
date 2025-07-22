@@ -153,7 +153,7 @@ import ModeratorPortal from "./pages/ModeratorPortal";
 import ModeratorOnboarding from "./pages/ModeratorOnboarding";
 import ModerationDashboard from "./pages/ModerationDashboard";
 import { AuthProvider } from "./contexts/AuthContext";
-import { MobileProvider } from "./contexts/MobileContext";
+
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { PluginProvider } from "./contexts/PluginContext";
 
@@ -181,10 +181,9 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MobileProvider>
-        <PanAfricaProvider>
-          <AuthProvider>
-            <PluginProvider>
+      <PanAfricaProvider>
+        <AuthProvider>
+          <PluginProvider>
                 <Toaster />
                 <Sonner />
                 <PWAInstallPrompt />
@@ -381,10 +380,9 @@ const App = () => {
                  <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-              </PluginProvider>
-            </AuthProvider>
-          </PanAfricaProvider>
-        </MobileProvider>
+            </PluginProvider>
+          </AuthProvider>
+        </PanAfricaProvider>
     </QueryClientProvider>
   );
 };
