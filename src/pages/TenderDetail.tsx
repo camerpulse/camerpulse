@@ -1,63 +1,111 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
+import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { DocumentManager } from "@/components/Tenders/DocumentManager";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
   Calendar, 
   MapPin, 
-  Building2, 
   DollarSign, 
-  FileText, 
+  Building, 
   Clock, 
+  Eye, 
+  FileText, 
+  Upload, 
+  Send, 
+  Download, 
+  MessageSquare, 
+  Flag, 
+  Share2,
   Bookmark,
-  Download,
-  Flag,
-  Users,
-  CheckCircle2
+  ArrowLeft,
+  CheckCircle,
+  AlertCircle,
+  User,
+  Mail,
+  Phone,
+  Target,
+  FileCheck,
+  Users
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
-interface Tender {
+interface TenderDetail {
   id: string;
   title: string;
   description: string;
+  requirements: string;
   category: string;
   region: string;
   tender_type: string;
   budget_min: number;
   budget_max: number;
   submission_deadline: string;
-  requirements?: string;
-  evaluation_criteria?: string;
+  publication_date: string;
   status: string;
   published_by: string;
+  contact_email: string;
+  contact_phone: string;
+  document_attachments: any[];
+  evaluation_criteria: any[];
+  bidding_instructions: string;
+  views_count: number;
   bids_count: number;
   created_at: string;
-  // Additional database fields that might be present
-  award_amount?: number;
-  awarded_at?: string;
-  awarded_to_company_id?: string;
-  bid_opening_date?: string;
-  views_count?: number;
+}
+
+interface Comment {
+  id: string;
+  user_id: string;
+  comment_text: string;
+  is_question: boolean;
+  created_at: string;
+  profiles?: { email?: string };
+}
+
+interface TenderUpdate {
+  id: string;
+  update_type: string;
+  title: string;
+  description: string;
+  created_at: string;
 }
 
 export default function TenderDetail() {
   const { id } = useParams();
-  const [tender, setTender] = useState<Tender | null>(null);
+  const navigate = useNavigate();
+  const [tender, setTender] = useState<TenderDetail | null>(null);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [updates, setUpdates] = useState<TenderUpdate[]>([]);
   const [loading, setLoading] = useState(true);
+  const [submittingBid, setSubmittingBid] = useState(false);
+  const [newComment, setNewComment] = useState('');
+  const [isQuestion, setIsQuestion] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [showBidModal, setShowBidModal] = useState(false);
+
+  // Bid form state
+  const [bidForm, setBidForm] = useState({
+    company_name: '',
+    bid_amount: '',
+    proposal_text: '',
+    contact_email: '',
+    contact_phone: '',
+    experience_years: '',
+    attachments: [] as File[]
+  });
 
   useEffect(() => {
     if (id) {
       fetchTenderDetails();
-      checkBookmarkStatus();
+      fetchComments();
+      fetchUpdates();
+      incrementViewCount();
     }
   }, [id]);
 
@@ -70,101 +118,135 @@ export default function TenderDetail() {
         .maybeSingle();
 
       if (error) throw error;
-      if (!data) {
-        setTender(null);
-        return;
-      }
-
-      // Map the database fields to our interface structure safely
-      const mappedTender: Tender = {
-        id: data.id,
-        title: data.title,
-        description: data.description,
-        category: data.category,
-        region: data.region,
-        tender_type: data.tender_type,
-        budget_min: data.budget_min,
-        budget_max: data.budget_max,
-        submission_deadline: (data as any).submission_deadline || (data as any).deadline || '',
-        requirements: (data as any).requirements || '',
-        evaluation_criteria: (data as any).evaluation_criteria || '',
-        status: data.status,
-        published_by: (data as any).published_by || '',
-        bids_count: data.bids_count || 0,
-        created_at: data.created_at,
-        award_amount: (data as any).award_amount,
-        awarded_at: (data as any).awarded_at,
-        awarded_to_company_id: (data as any).awarded_to_company_id,
-        bid_opening_date: (data as any).bid_opening_date,
-        views_count: (data as any).views_count
-      };
-      
-      setTender(mappedTender);
+      setTender(data);
     } catch (error) {
-      console.error('Error fetching tender:', error);
+      console.error('Error fetching tender details:', error);
       toast.error('Failed to load tender details');
     } finally {
       setLoading(false);
     }
   };
 
-  const checkBookmarkStatus = async () => {
+  const fetchComments = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data } = await supabase
-        .from('tender_bookmarks')
-        .select('id')
+      const { data, error } = await supabase
+        .from('tender_comments')
+        .select(`
+          *,
+          profiles(email)
+        `)
         .eq('tender_id', id)
-        .eq('user_id', user.id)
-        .single();
+        .order('created_at', { ascending: false });
 
-      setIsBookmarked(!!data);
+      if (error) throw error;
+      setComments(data || []);
     } catch (error) {
-      // User not logged in or bookmark doesn't exist
+      console.error('Error fetching comments:', error);
     }
   };
 
-  const toggleBookmark = async () => {
+  const fetchUpdates = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tender_updates')
+        .select('*')
+        .eq('tender_id', id)
+        .eq('is_public', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setUpdates(data || []);
+    } catch (error) {
+      console.error('Error fetching updates:', error);
+    }
+  };
+
+  const incrementViewCount = async () => {
+    try {
+      await supabase.rpc('increment_tender_views', { tender_id: id });
+    } catch (error) {
+      console.error('Error incrementing view count:', error);
+    }
+  };
+
+  const handleBidSubmission = async () => {
+    if (!bidForm.company_name || !bidForm.bid_amount || !bidForm.proposal_text) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    setSubmittingBid(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
-        toast.error('Please log in to bookmark tenders');
+        toast.error('Please log in to submit a bid');
         return;
       }
 
-      if (isBookmarked) {
-        await supabase
-          .from('tender_bookmarks')
-          .delete()
-          .eq('tender_id', id)
-          .eq('user_id', user.id);
-        setIsBookmarked(false);
-        toast.success('Bookmark removed');
-      } else {
-        await supabase
-          .from('tender_bookmarks')
-          .insert({
-            tender_id: id,
-            user_id: user.id
-          });
-        setIsBookmarked(true);
-        toast.success('Tender bookmarked');
-      }
+      const { error } = await supabase
+        .from('tender_bids')
+        .insert({
+          tender_id: id,
+          bidder_user_id: user.id,
+          company_name: bidForm.company_name,
+          bid_amount: parseInt(bidForm.bid_amount),
+          proposal_text: bidForm.proposal_text,
+          contact_email: bidForm.contact_email,
+          contact_phone: bidForm.contact_phone,
+          experience_years: bidForm.experience_years ? parseInt(bidForm.experience_years) : null
+        });
+
+      if (error) throw error;
+
+      toast.success('Bid submitted successfully!');
+      setBidForm({
+        company_name: '',
+        bid_amount: '',
+        proposal_text: '',
+        contact_email: '',
+        contact_phone: '',
+        experience_years: '',
+        attachments: []
+      });
+      
+      // Refresh tender to update bid count
+      fetchTenderDetails();
     } catch (error) {
-      console.error('Error toggling bookmark:', error);
-      toast.error('Failed to update bookmark');
+      console.error('Error submitting bid:', error);
+      toast.error('Failed to submit bid');
+    } finally {
+      setSubmittingBid(false);
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'active': return 'bg-green-500';
-      case 'closed': return 'bg-red-500';
-      case 'draft': return 'bg-yellow-500';
-      case 'awarded': return 'bg-blue-500';
-      default: return 'bg-gray-500';
+  const handleCommentSubmission = async () => {
+    if (!newComment.trim()) return;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast.error('Please log in to comment');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('tender_comments')
+        .insert({
+          tender_id: id,
+          user_id: user.id,
+          comment_text: newComment,
+          is_question: isQuestion
+        });
+
+      if (error) throw error;
+
+      setNewComment('');
+      setIsQuestion(false);
+      fetchComments();
+      toast.success('Comment posted successfully!');
+    } catch (error) {
+      console.error('Error posting comment:', error);
+      toast.error('Failed to post comment');
     }
   };
 
@@ -172,26 +254,45 @@ export default function TenderDetail() {
     return new Intl.NumberFormat('fr-FR', {
       style: 'currency',
       currency: 'XAF',
-      minimumFractionDigits: 0
+      minimumFractionDigits: 0,
+      notation: 'compact'
     }).format(amount);
   };
 
-  const calculateDaysRemaining = (deadline: string) => {
-    const today = new Date();
-    const deadlineDate = new Date(deadline);
-    const diffTime = deadlineDate.getTime() - today.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  };
+
+  const getDaysRemaining = (deadline: string) => {
+    const days = Math.ceil((new Date(deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24));
+    return days;
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'open': return 'bg-green-100 text-green-800';
+      case 'closed': return 'bg-red-100 text-red-800';
+      case 'awarded': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
   };
 
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-gray-200 rounded w-3/4"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            <div className="h-32 bg-gray-200 rounded"></div>
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-muted rounded w-1/3"></div>
+          <div className="h-64 bg-muted rounded"></div>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="h-48 bg-muted rounded"></div>
+              <div className="h-32 bg-muted rounded"></div>
+            </div>
+            <div className="h-96 bg-muted rounded"></div>
           </div>
         </div>
       </div>
@@ -201,259 +302,400 @@ export default function TenderDetail() {
   if (!tender) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Tender Not Found</h1>
-          <p className="text-gray-600 mb-6">The tender you're looking for doesn't exist or has been removed.</p>
-          <Link to="/tenders">
-            <Button>Back to Tenders</Button>
-          </Link>
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Tender Not Found</h1>
+          <p className="text-muted-foreground mb-4">The tender you're looking for doesn't exist or has been removed.</p>
+          <Button onClick={() => navigate('/tenders')}>
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Tenders
+          </Button>
         </div>
       </div>
     );
   }
 
-  const daysRemaining = calculateDaysRemaining(tender.submission_deadline);
+  const daysRemaining = getDaysRemaining(tender.submission_deadline);
+  const isExpired = daysRemaining < 0;
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Tender Summary Banner */}
-        <Card className="mb-8">
-          <CardHeader>
-            <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <Badge className={`${getStatusColor(tender.status)} text-white`}>
-                    {tender.status.toUpperCase()}
-                  </Badge>
-                  <Badge variant="outline">{tender.tender_type}</Badge>
-                </div>
-                <CardTitle className="text-2xl lg:text-3xl mb-4">{tender.title}</CardTitle>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
-                  <div className="flex items-center gap-2">
-                    <DollarSign className="h-4 w-4 text-muted-foreground" />
-                    <span>{formatCurrency(tender.budget_min)} - {formatCurrency(tender.budget_max)}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>{tender.region}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span>{daysRemaining > 0 ? `${daysRemaining} days left` : 'Expired'}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-muted-foreground" />
-                    <span>{tender.bids_count} bids</span>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="flex flex-col gap-2 lg:min-w-[200px]">
-                <Dialog open={showBidModal} onOpenChange={setShowBidModal}>
-                  <DialogTrigger asChild>
-                    <Button size="lg" className="w-full" disabled={daysRemaining <= 0}>
-                      {daysRemaining <= 0 ? 'Deadline Passed' : 'Submit Bid'}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Submit Your Bid</DialogTitle>
-                    </DialogHeader>
-                    <div className="p-4">
-                      <p className="text-center text-muted-foreground">
-                        Bid submission form will be implemented here
-                      </p>
+      {/* Header */}
+      <div className="flex items-center gap-4 mb-6">
+        <Button variant="ghost" onClick={() => navigate('/tenders')}>
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to Tenders
+        </Button>
+        <div className="flex items-center gap-2 ml-auto">
+          <Button variant="outline" size="sm">
+            <Share2 className="h-4 w-4 mr-2" />
+            Share
+          </Button>
+          <Button variant="outline" size="sm">
+            <Bookmark className="h-4 w-4 mr-2" />
+            Bookmark
+          </Button>
+          <Button variant="outline" size="sm">
+            <Flag className="h-4 w-4 mr-2" />
+            Report
+          </Button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Left Column - Main Content */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Tender Header */}
+          <Card>
+            <CardHeader>
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <h1 className="text-2xl font-bold">{tender.title}</h1>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-1">
+                      <Building className="h-4 w-4" />
+                      {tender.category}
                     </div>
-                  </DialogContent>
-                </Dialog>
-                
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={toggleBookmark}
-                    className="flex-1"
-                  >
-                    <Bookmark className={`h-4 w-4 mr-1 ${isBookmarked ? 'fill-current' : ''}`} />
-                    {isBookmarked ? 'Saved' : 'Save'}
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Download className="h-4 w-4" />
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Flag className="h-4 w-4" />
-                  </Button>
+                    <div className="flex items-center gap-1">
+                      <MapPin className="h-4 w-4" />
+                      {tender.region}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Eye className="h-4 w-4" />
+                      {tender.views_count} views
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Users className="h-4 w-4" />
+                      {tender.bids_count} bids
+                    </div>
+                  </div>
+                </div>
+                <Badge className={getStatusColor(tender.status)}>
+                  {tender.status.toUpperCase()}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div className="flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Budget Range</p>
+                    <p className="font-semibold">
+                      {formatCurrency(tender.budget_min)} - {formatCurrency(tender.budget_max)}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Submission Deadline</p>
+                    <p className="font-semibold">{formatDate(tender.submission_deadline)}</p>
+                    {!isExpired && (
+                      <p className="text-sm text-orange-600">{daysRemaining} days remaining</p>
+                    )}
+                    {isExpired && (
+                      <p className="text-sm text-red-600">Expired</p>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Published</p>
+                    <p className="font-semibold">{formatDate(tender.publication_date)}</p>
+                    <p className="text-sm text-muted-foreground">by {tender.published_by}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardHeader>
-        </Card>
 
-        {/* Tabbed Content */}
-        <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="documents">Documents</TabsTrigger>
-            <TabsTrigger value="eligibility">Eligibility</TabsTrigger>
-            <TabsTrigger value="criteria">Criteria</TabsTrigger>
-            <TabsTrigger value="issuer">Issuer</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-          </TabsList>
+              {isExpired && (
+                <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg mb-4">
+                  <AlertCircle className="h-5 w-5 text-red-600" />
+                  <p className="text-red-800 font-medium">This tender has expired and is no longer accepting bids.</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
 
-          <TabsContent value="overview">
+          {/* Description */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Description</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="prose max-w-none">
+                <p className="whitespace-pre-wrap">{tender.description}</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Requirements */}
+          {tender.requirements && (
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5" />
-                  Tender Overview
+                  <Target className="h-5 w-5" />
+                  Requirements
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="prose max-w-none">
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                    {tender.description}
-                  </p>
-                </div>
-                
-                <Separator className="my-6" />
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h4 className="font-semibold mb-2">Tender Details</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Category:</span>
-                        <span>{tender.category}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Type:</span>
-                        <span>{tender.tender_type}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Published:</span>
-                        <span>{new Date(tender.created_at).toLocaleDateString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Deadline:</span>
-                        <span>{new Date(tender.submission_deadline).toLocaleDateString()}</span>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <h4 className="font-semibold mb-2">Budget Information</h4>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Minimum:</span>
-                        <span>{formatCurrency(tender.budget_min)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Maximum:</span>
-                        <span>{formatCurrency(tender.budget_max)}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-muted-foreground">Currency:</span>
-                        <span>XAF (CFA Franc)</span>
-                      </div>
-                    </div>
-                  </div>
+                  <p className="whitespace-pre-wrap">{tender.requirements}</p>
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
+          )}
 
-          <TabsContent value="documents">
+          {/* Evaluation Criteria */}
+          {tender.evaluation_criteria && tender.evaluation_criteria.length > 0 && (
             <Card>
               <CardHeader>
-                <CardTitle>Documents & Attachments</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <FileCheck className="h-5 w-5" />
+                  Evaluation Criteria
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <DocumentManager 
-                  bucket="tender-documents" 
-                  folder={`tender-${tender.id}`}
-                  allowUpload={false}
-                  allowDelete={false}
+                <ul className="space-y-2">
+                  {tender.evaluation_criteria.map((criteria, index) => (
+                    <li key={index} className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-600 mt-0.5" />
+                      <span>{criteria}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Comments Section */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5" />
+                Comments & Questions ({comments.length})
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {/* Add Comment Form */}
+              <div className="space-y-3">
+                <Textarea
+                  placeholder="Ask a question or leave a comment..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
                 />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="eligibility">
-            <Card>
-              <CardHeader>
-                <CardTitle>Eligibility & Instructions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="prose max-w-none">
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                    {tender.requirements || 'No specific eligibility requirements have been provided for this tender.'}
-                  </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      id="isQuestion"
+                      checked={isQuestion}
+                      onChange={(e) => setIsQuestion(e.target.checked)}
+                    />
+                    <Label htmlFor="isQuestion" className="text-sm">Mark as question</Label>
+                  </div>
+                  <Button onClick={handleCommentSubmission} disabled={!newComment.trim()}>
+                    <Send className="h-4 w-4 mr-2" />
+                    Post Comment
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              </div>
 
-          <TabsContent value="criteria">
-            <Card>
-              <CardHeader>
-                <CardTitle>Bid Evaluation Criteria</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="prose max-w-none">
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
-                    {tender.evaluation_criteria || 'No evaluation criteria have been specified for this tender.'}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+              <Separator />
 
-          <TabsContent value="issuer">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Building2 className="h-5 w-5" />
-                  Issuer Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-8 text-muted-foreground">
-                  <Building2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                  <p>Issuer profile information will be displayed here</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="activity">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
-                  Bidder Activity
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-muted/50 rounded-lg">
-                    <div className="flex items-center gap-3">
-                      <Users className="h-5 w-5 text-muted-foreground" />
-                      <span className="font-medium">Total Bids</span>
+              {/* Comments List */}
+              <div className="space-y-4">
+                {comments.map((comment) => (
+                  <div key={comment.id} className="space-y-2">
+                    <div className="flex items-start gap-3">
+                      <Avatar className="h-8 w-8">
+                        <AvatarFallback>
+                          <User className="h-4 w-4" />
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="font-medium text-sm">
+                            {comment.profiles?.email || 'Anonymous User'}
+                          </span>
+                          {comment.is_question && (
+                            <Badge variant="outline" className="text-xs">Question</Badge>
+                          )}
+                          <span className="text-xs text-muted-foreground">
+                            {formatDate(comment.created_at)}
+                          </span>
+                        </div>
+                        <p className="text-sm">{comment.comment_text}</p>
+                      </div>
                     </div>
-                    <Badge variant="secondary">{tender.bids_count}</Badge>
                   </div>
-                  
-                  <div className="text-center py-8 text-muted-foreground">
-                    <CheckCircle2 className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                    <p>Detailed bidder activity and comments will be shown here</p>
+                ))}
+                {comments.length === 0 && (
+                  <p className="text-center text-muted-foreground py-8">
+                    No comments yet. Be the first to ask a question or leave a comment!
+                  </p>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right Column - Bid Form & Contact Info */}
+        <div className="space-y-6">
+          {/* Bid Submission Form */}
+          {!isExpired && tender.status.toLowerCase() === 'open' && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Submit Your Bid</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="company">Company Name *</Label>
+                  <Input
+                    id="company"
+                    value={bidForm.company_name}
+                    onChange={(e) => setBidForm(prev => ({ ...prev, company_name: e.target.value }))}
+                    placeholder="Your company name"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="amount">Bid Amount (XAF) *</Label>
+                  <Input
+                    id="amount"
+                    type="number"
+                    value={bidForm.bid_amount}
+                    onChange={(e) => setBidForm(prev => ({ ...prev, bid_amount: e.target.value }))}
+                    placeholder="Enter your bid amount"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="proposal">Proposal *</Label>
+                  <Textarea
+                    id="proposal"
+                    value={bidForm.proposal_text}
+                    onChange={(e) => setBidForm(prev => ({ ...prev, proposal_text: e.target.value }))}
+                    placeholder="Describe your proposal and approach..."
+                    rows={4}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Contact Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={bidForm.contact_email}
+                    onChange={(e) => setBidForm(prev => ({ ...prev, contact_email: e.target.value }))}
+                    placeholder="your.email@example.com"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Contact Phone</Label>
+                  <Input
+                    id="phone"
+                    value={bidForm.contact_phone}
+                    onChange={(e) => setBidForm(prev => ({ ...prev, contact_phone: e.target.value }))}
+                    placeholder="+237 XXX XXX XXX"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="experience">Years of Experience</Label>
+                  <Input
+                    id="experience"
+                    type="number"
+                    value={bidForm.experience_years}
+                    onChange={(e) => setBidForm(prev => ({ ...prev, experience_years: e.target.value }))}
+                    placeholder="Years in business"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Attachments</Label>
+                  <div className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-4">
+                    <div className="text-center">
+                      <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Upload supporting documents (PDF, DOC, XLS)
+                      </p>
+                      <Button variant="outline" size="sm">
+                        Choose Files
+                      </Button>
+                    </div>
                   </div>
                 </div>
+
+                <Button 
+                  className="w-full" 
+                  onClick={handleBidSubmission}
+                  disabled={submittingBid}
+                >
+                  {submittingBid ? 'Submitting...' : 'Submit Bid'}
+                </Button>
+
+                <p className="text-xs text-muted-foreground">
+                  By submitting a bid, you agree to the terms and conditions of this tender.
+                </p>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
+          )}
+
+          {/* Contact Information */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Contact Information</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex items-center gap-2">
+                <Building className="h-4 w-4 text-muted-foreground" />
+                <span className="text-sm">{tender.published_by}</span>
+              </div>
+              {tender.contact_email && (
+                <div className="flex items-center gap-2">
+                  <Mail className="h-4 w-4 text-muted-foreground" />
+                  <a href={`mailto:${tender.contact_email}`} className="text-sm text-primary hover:underline">
+                    {tender.contact_email}
+                  </a>
+                </div>
+              )}
+              {tender.contact_phone && (
+                <div className="flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-muted-foreground" />
+                  <a href={`tel:${tender.contact_phone}`} className="text-sm text-primary hover:underline">
+                    {tender.contact_phone}
+                  </a>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Quick Stats */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Tender Statistics</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Total Views</span>
+                <span className="font-medium">{tender.views_count}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Bids Submitted</span>
+                <span className="font-medium">{tender.bids_count}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-sm text-muted-foreground">Days Published</span>
+                <span className="font-medium">
+                  {Math.floor((new Date().getTime() - new Date(tender.publication_date).getTime()) / (1000 * 60 * 60 * 24))}
+                </span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

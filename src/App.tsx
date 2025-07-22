@@ -9,6 +9,7 @@ import Auth from "./pages/Auth";
 import { LegislationTracker } from "./pages/LegislationTracker";
 import HospitalsDirectory from "./pages/HospitalsDirectory";
 import Tenders from "./pages/Tenders";
+import TenderDetail from "./pages/TenderDetail";
 import TenderIssuerDashboard from "./pages/TenderIssuerDashboard";
 import BidderDashboard from "./pages/BidderDashboard";
 import DiasporaConnect from "./pages/DiasporaConnect";
@@ -51,6 +52,7 @@ const App = () => {
                   <Route path="/legislation" element={<LegislationTracker />} />
                   <Route path="/hospitals" element={<HospitalsDirectory />} />
                   <Route path="/tenders" element={<Tenders />} />
+                  <Route path="/tenders/:id" element={<TenderDetail />} />
                   <Route path="/dashboard/tenders" element={<TenderIssuerDashboard />} />
                   <Route path="/my-bids" element={<BidderDashboard />} />
                   <Route path="/diaspora-connect" element={<DiasporaConnect />} />
