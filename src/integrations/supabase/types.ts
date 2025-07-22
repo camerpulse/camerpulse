@@ -32246,6 +32246,14 @@ export type Database = {
         }
         Returns: boolean
       }
+      identify_security_definer_views: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          view_schema: string
+          view_name: string
+          needs_fix: boolean
+        }[]
+      }
       increment_usage_count: {
         Args: { license_key_id: string }
         Returns: undefined
