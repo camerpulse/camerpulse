@@ -6542,6 +6542,56 @@ export type Database = {
         }
         Relationships: []
       }
+      case_comments: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          case_id: string | null
+          comment_text: string
+          created_at: string
+          flagged_count: number | null
+          id: string
+          is_approved: boolean | null
+          is_hidden: boolean | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          case_id?: string | null
+          comment_text: string
+          created_at?: string
+          flagged_count?: number | null
+          id?: string
+          is_approved?: boolean | null
+          is_hidden?: boolean | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          case_id?: string | null
+          comment_text?: string
+          created_at?: string
+          flagged_count?: number | null
+          id?: string
+          is_approved?: boolean | null
+          is_hidden?: boolean | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_comments_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "legal_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       certificate_templates: {
         Row: {
           created_at: string | null
@@ -17682,6 +17732,339 @@ export type Database = {
           title?: string
         }
         Relationships: []
+      }
+      judicial_misconduct_reports: {
+        Row: {
+          case_id: string | null
+          created_at: string
+          description: string
+          evidence_files: Json | null
+          id: string
+          incident_date: string | null
+          investigated_by: string | null
+          investigation_notes: string | null
+          investigation_status: string | null
+          is_anonymous: boolean | null
+          judiciary_member_id: string | null
+          report_type: string
+          reporter_user_id: string | null
+          resolved_at: string | null
+          severity_level: string | null
+          updated_at: string
+        }
+        Insert: {
+          case_id?: string | null
+          created_at?: string
+          description: string
+          evidence_files?: Json | null
+          id?: string
+          incident_date?: string | null
+          investigated_by?: string | null
+          investigation_notes?: string | null
+          investigation_status?: string | null
+          is_anonymous?: boolean | null
+          judiciary_member_id?: string | null
+          report_type: string
+          reporter_user_id?: string | null
+          resolved_at?: string | null
+          severity_level?: string | null
+          updated_at?: string
+        }
+        Update: {
+          case_id?: string | null
+          created_at?: string
+          description?: string
+          evidence_files?: Json | null
+          id?: string
+          incident_date?: string | null
+          investigated_by?: string | null
+          investigation_notes?: string | null
+          investigation_status?: string | null
+          is_anonymous?: boolean | null
+          judiciary_member_id?: string | null
+          report_type?: string
+          reporter_user_id?: string | null
+          resolved_at?: string | null
+          severity_level?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "judicial_misconduct_reports_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "legal_cases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "judicial_misconduct_reports_judiciary_member_id_fkey"
+            columns: ["judiciary_member_id"]
+            isOneToOne: false
+            referencedRelation: "judiciary_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      judicial_performance_metrics: {
+        Row: {
+          average_case_duration_days: number | null
+          cases_completed: number | null
+          cases_pending: number | null
+          citizen_satisfaction_score: number | null
+          created_at: string
+          id: string
+          judiciary_member_id: string | null
+          misconduct_reports_count: number | null
+          period_end: string
+          period_start: string
+          transparency_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          average_case_duration_days?: number | null
+          cases_completed?: number | null
+          cases_pending?: number | null
+          citizen_satisfaction_score?: number | null
+          created_at?: string
+          id?: string
+          judiciary_member_id?: string | null
+          misconduct_reports_count?: number | null
+          period_end: string
+          period_start: string
+          transparency_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          average_case_duration_days?: number | null
+          cases_completed?: number | null
+          cases_pending?: number | null
+          citizen_satisfaction_score?: number | null
+          created_at?: string
+          id?: string
+          judiciary_member_id?: string | null
+          misconduct_reports_count?: number | null
+          period_end?: string
+          period_start?: string
+          transparency_score?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "judicial_performance_metrics_judiciary_member_id_fkey"
+            columns: ["judiciary_member_id"]
+            isOneToOne: false
+            referencedRelation: "judiciary_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      judicial_ratings: {
+        Row: {
+          case_handling_rating: number | null
+          comment: string | null
+          created_at: string
+          ethical_conduct_rating: number | null
+          id: string
+          is_verified: boolean | null
+          judiciary_member_id: string | null
+          neutrality_rating: number | null
+          overall_rating: number | null
+          public_trust_rating: number | null
+          timeliness_rating: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          case_handling_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          ethical_conduct_rating?: number | null
+          id?: string
+          is_verified?: boolean | null
+          judiciary_member_id?: string | null
+          neutrality_rating?: number | null
+          overall_rating?: number | null
+          public_trust_rating?: number | null
+          timeliness_rating?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          case_handling_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          ethical_conduct_rating?: number | null
+          id?: string
+          is_verified?: boolean | null
+          judiciary_member_id?: string | null
+          neutrality_rating?: number | null
+          overall_rating?: number | null
+          public_trust_rating?: number | null
+          timeliness_rating?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "judicial_ratings_judiciary_member_id_fkey"
+            columns: ["judiciary_member_id"]
+            isOneToOne: false
+            referencedRelation: "judiciary_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      judiciary_members: {
+        Row: {
+          career_background: string | null
+          cases_handled: number | null
+          claimed_by_user: boolean | null
+          court_level: Database["public"]["Enums"]["court_level"]
+          created_at: string
+          district: string | null
+          education_background: string | null
+          id: string
+          integrity_score: number | null
+          is_active: boolean | null
+          is_verified: boolean | null
+          name: string
+          photo_url: string | null
+          position_title: string
+          region: string | null
+          term_end_date: string | null
+          term_start_date: string | null
+          updated_at: string
+          user_id: string | null
+          verified_source_url: string | null
+        }
+        Insert: {
+          career_background?: string | null
+          cases_handled?: number | null
+          claimed_by_user?: boolean | null
+          court_level: Database["public"]["Enums"]["court_level"]
+          created_at?: string
+          district?: string | null
+          education_background?: string | null
+          id?: string
+          integrity_score?: number | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          name: string
+          photo_url?: string | null
+          position_title: string
+          region?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          updated_at?: string
+          user_id?: string | null
+          verified_source_url?: string | null
+        }
+        Update: {
+          career_background?: string | null
+          cases_handled?: number | null
+          claimed_by_user?: boolean | null
+          court_level?: Database["public"]["Enums"]["court_level"]
+          created_at?: string
+          district?: string | null
+          education_background?: string | null
+          id?: string
+          integrity_score?: number | null
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          name?: string
+          photo_url?: string | null
+          position_title?: string
+          region?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          updated_at?: string
+          user_id?: string | null
+          verified_source_url?: string | null
+        }
+        Relationships: []
+      }
+      legal_cases: {
+        Row: {
+          case_documents: Json | null
+          case_reference: string
+          case_status: Database["public"]["Enums"]["case_status"]
+          case_summary: string | null
+          case_title: string
+          case_type: Database["public"]["Enums"]["case_type"]
+          citizen_comments_count: number | null
+          closed_date: string | null
+          court_id: string | null
+          court_level: Database["public"]["Enums"]["court_level"]
+          created_at: string
+          defendant: string | null
+          id: string
+          is_high_profile: boolean | null
+          media_coverage_count: number | null
+          plaintiff: string | null
+          public_interest_score: number | null
+          region: string | null
+          started_date: string | null
+          timeline_events: Json | null
+          updated_at: string
+          verdict: string | null
+        }
+        Insert: {
+          case_documents?: Json | null
+          case_reference: string
+          case_status?: Database["public"]["Enums"]["case_status"]
+          case_summary?: string | null
+          case_title: string
+          case_type: Database["public"]["Enums"]["case_type"]
+          citizen_comments_count?: number | null
+          closed_date?: string | null
+          court_id?: string | null
+          court_level: Database["public"]["Enums"]["court_level"]
+          created_at?: string
+          defendant?: string | null
+          id?: string
+          is_high_profile?: boolean | null
+          media_coverage_count?: number | null
+          plaintiff?: string | null
+          public_interest_score?: number | null
+          region?: string | null
+          started_date?: string | null
+          timeline_events?: Json | null
+          updated_at?: string
+          verdict?: string | null
+        }
+        Update: {
+          case_documents?: Json | null
+          case_reference?: string
+          case_status?: Database["public"]["Enums"]["case_status"]
+          case_summary?: string | null
+          case_title?: string
+          case_type?: Database["public"]["Enums"]["case_type"]
+          citizen_comments_count?: number | null
+          closed_date?: string | null
+          court_id?: string | null
+          court_level?: Database["public"]["Enums"]["court_level"]
+          created_at?: string
+          defendant?: string | null
+          id?: string
+          is_high_profile?: boolean | null
+          media_coverage_count?: number | null
+          plaintiff?: string | null
+          public_interest_score?: number | null
+          region?: string | null
+          started_date?: string | null
+          timeline_events?: Json | null
+          updated_at?: string
+          verdict?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "legal_cases_court_id_fkey"
+            columns: ["court_id"]
+            isOneToOne: false
+            referencedRelation: "judiciary_members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       legal_document_processing: {
         Row: {
@@ -33703,6 +34086,16 @@ export type Database = {
         | "awareness"
         | "sponsorship"
         | "content_creation"
+      case_status: "ongoing" | "closed" | "delayed" | "appeal" | "suspended"
+      case_type:
+        | "landmark_ruling"
+        | "human_rights"
+        | "anti_corruption"
+        | "constitutional"
+        | "military"
+        | "political_prosecution"
+        | "civil"
+        | "criminal"
       certificate_status: "pending" | "issued" | "claimed" | "revoked"
       certificate_template: "modern" | "classic" | "official"
       certificate_type:
@@ -33744,6 +34137,14 @@ export type Database = {
         | "cancelled"
       contract_type: "branding" | "exclusivity" | "nda" | "general"
       corruption_tag: "verified" | "alleged" | "cleared" | "under_investigation"
+      court_level:
+        | "supreme_court"
+        | "constitutional_council"
+        | "court_of_appeal"
+        | "high_court"
+        | "military_tribunal"
+        | "magistrate_court"
+        | "district_court"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
       disclosure_type:
         | "corruption"
@@ -34325,6 +34726,17 @@ export const Constants = {
         "sponsorship",
         "content_creation",
       ],
+      case_status: ["ongoing", "closed", "delayed", "appeal", "suspended"],
+      case_type: [
+        "landmark_ruling",
+        "human_rights",
+        "anti_corruption",
+        "constitutional",
+        "military",
+        "political_prosecution",
+        "civil",
+        "criminal",
+      ],
       certificate_status: ["pending", "issued", "claimed", "revoked"],
       certificate_template: ["modern", "classic", "official"],
       certificate_type: [
@@ -34370,6 +34782,15 @@ export const Constants = {
       ],
       contract_type: ["branding", "exclusivity", "nda", "general"],
       corruption_tag: ["verified", "alleged", "cleared", "under_investigation"],
+      court_level: [
+        "supreme_court",
+        "constitutional_council",
+        "court_of_appeal",
+        "high_court",
+        "military_tribunal",
+        "magistrate_court",
+        "district_court",
+      ],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
       disclosure_type: [
         "corruption",

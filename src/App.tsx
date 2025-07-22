@@ -36,6 +36,7 @@ import ArtistLanding from "./pages/ArtistLanding";
 import ArtistRegister from "./pages/ArtistRegister";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import Officials from '@/pages/Officials';
+import Judiciary from '@/pages/Judiciary';
 import CamerPlayUpload from "./pages/CamerPlayUpload";
 import CamerPlayPlayer from "./pages/CamerPlayPlayer";
 import CamerPlaySearch from "./pages/CamerPlaySearch";
@@ -366,6 +367,7 @@ const App = () => {
                 <Route path="/councils" element={<CouncilsDirectory />} />
                 <Route path="/budget-explorer" element={<BudgetExplorer />} />
                 <Route path="/officials" element={<Officials />} />
+                <Route path="/judiciary" element={<Judiciary />} />
                  <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
