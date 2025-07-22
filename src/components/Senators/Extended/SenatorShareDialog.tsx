@@ -138,9 +138,9 @@ export const SenatorShareDialog = ({ senator, trigger }: SenatorShareDialogProps
           <Card>
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                {senator.profile_image && (
+                {senator.photo_url && (
                   <img
-                    src={senator.profile_image}
+                    src={senator.photo_url}
                     alt={senator.name}
                     className="w-12 h-12 rounded-full object-cover"
                   />
