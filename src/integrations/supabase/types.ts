@@ -28125,6 +28125,47 @@ export type Database = {
           },
         ]
       }
+      senator_claims: {
+        Row: {
+          claim_reason: string | null
+          claim_type: string
+          created_at: string
+          id: string
+          senator_id: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string
+          id?: string
+          senator_id: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string
+          id?: string
+          senator_id?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senator_claims_senator_id_fkey"
+            columns: ["senator_id"]
+            isOneToOne: false
+            referencedRelation: "senators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       senator_followers: {
         Row: {
           created_at: string
@@ -28150,6 +28191,82 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "senator_followers_senator_id_fkey"
+            columns: ["senator_id"]
+            isOneToOne: false
+            referencedRelation: "senators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      senator_following: {
+        Row: {
+          followed_at: string
+          id: string
+          notifications_enabled: boolean | null
+          senator_id: string
+          user_id: string
+        }
+        Insert: {
+          followed_at?: string
+          id?: string
+          notifications_enabled?: boolean | null
+          senator_id: string
+          user_id: string
+        }
+        Update: {
+          followed_at?: string
+          id?: string
+          notifications_enabled?: boolean | null
+          senator_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senator_following_senator_id_fkey"
+            columns: ["senator_id"]
+            isOneToOne: false
+            referencedRelation: "senators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      senator_messages: {
+        Row: {
+          created_at: string
+          id: string
+          message_content: string
+          message_type: string | null
+          senator_id: string
+          sender_user_id: string
+          status: string | null
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_content: string
+          message_type?: string | null
+          senator_id: string
+          sender_user_id: string
+          status?: string | null
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_content?: string
+          message_type?: string | null
+          senator_id?: string
+          sender_user_id?: string
+          status?: string | null
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senator_messages_senator_id_fkey"
             columns: ["senator_id"]
             isOneToOne: false
             referencedRelation: "senators"
@@ -28257,6 +28374,53 @@ export type Database = {
           },
         ]
       }
+      senator_reports: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          report_category: string
+          report_type: string
+          reporter_user_id: string
+          senator_id: string
+          severity: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          report_category: string
+          report_type: string
+          reporter_user_id: string
+          senator_id: string
+          severity?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          report_category?: string
+          report_type?: string
+          reporter_user_id?: string
+          senator_id?: string
+          severity?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "senator_reports_senator_id_fkey"
+            columns: ["senator_id"]
+            isOneToOne: false
+            referencedRelation: "senators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       senator_update_schedule: {
         Row: {
           created_at: string | null
@@ -28305,8 +28469,11 @@ export type Database = {
           bills_passed: Json | null
           bills_passed_count: number | null
           bills_proposed_count: number | null
+          can_receive_messages: boolean | null
           career_history: Json | null
           civic_engagement_score: number | null
+          claimed_at: string | null
+          claimed_by: string | null
           committee_memberships: Json | null
           constituency: string | null
           created_at: string | null
@@ -28314,10 +28481,16 @@ export type Database = {
           date_of_birth: string | null
           education: Json | null
           email: string | null
+          engagement_score: number | null
+          follower_count: number | null
           full_name: string | null
           id: string
+          is_claimable: boolean | null
+          is_claimed: boolean | null
           is_verified: boolean | null
           last_profile_update: string | null
+          message_response_time_hours: number | null
+          misconduct_reports_count: number | null
           name: string
           official_senate_url: string | null
           party_affiliation: string | null
@@ -28332,6 +28505,7 @@ export type Database = {
           status: string | null
           total_ratings: number | null
           transparency_score: number | null
+          trust_score: number | null
           updated_at: string | null
           years_of_service: number | null
         }
@@ -28343,8 +28517,11 @@ export type Database = {
           bills_passed?: Json | null
           bills_passed_count?: number | null
           bills_proposed_count?: number | null
+          can_receive_messages?: boolean | null
           career_history?: Json | null
           civic_engagement_score?: number | null
+          claimed_at?: string | null
+          claimed_by?: string | null
           committee_memberships?: Json | null
           constituency?: string | null
           created_at?: string | null
@@ -28352,10 +28529,16 @@ export type Database = {
           date_of_birth?: string | null
           education?: Json | null
           email?: string | null
+          engagement_score?: number | null
+          follower_count?: number | null
           full_name?: string | null
           id?: string
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
           is_verified?: boolean | null
           last_profile_update?: string | null
+          message_response_time_hours?: number | null
+          misconduct_reports_count?: number | null
           name: string
           official_senate_url?: string | null
           party_affiliation?: string | null
@@ -28370,6 +28553,7 @@ export type Database = {
           status?: string | null
           total_ratings?: number | null
           transparency_score?: number | null
+          trust_score?: number | null
           updated_at?: string | null
           years_of_service?: number | null
         }
@@ -28381,8 +28565,11 @@ export type Database = {
           bills_passed?: Json | null
           bills_passed_count?: number | null
           bills_proposed_count?: number | null
+          can_receive_messages?: boolean | null
           career_history?: Json | null
           civic_engagement_score?: number | null
+          claimed_at?: string | null
+          claimed_by?: string | null
           committee_memberships?: Json | null
           constituency?: string | null
           created_at?: string | null
@@ -28390,10 +28577,16 @@ export type Database = {
           date_of_birth?: string | null
           education?: Json | null
           email?: string | null
+          engagement_score?: number | null
+          follower_count?: number | null
           full_name?: string | null
           id?: string
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
           is_verified?: boolean | null
           last_profile_update?: string | null
+          message_response_time_hours?: number | null
+          misconduct_reports_count?: number | null
           name?: string
           official_senate_url?: string | null
           party_affiliation?: string | null
@@ -28408,6 +28601,7 @@ export type Database = {
           status?: string | null
           total_ratings?: number | null
           transparency_score?: number | null
+          trust_score?: number | null
           updated_at?: string | null
           years_of_service?: number | null
         }

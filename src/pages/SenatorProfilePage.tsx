@@ -4,7 +4,7 @@ import { useSenator, useSenatorRatings } from '@/hooks/useSenators';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, Loader2 } from 'lucide-react';
 
-// Import all the new profile components
+// Import all the existing profile components
 import { SenatorHeaderCard } from '@/components/Senators/Profile/SenatorHeaderCard';
 import { ContactInfoBlock } from '@/components/Senators/Profile/ContactInfoBlock';
 import { BioAndCareer } from '@/components/Senators/Profile/BioAndCareer';
@@ -14,6 +14,9 @@ import { CitizenFeedbackWall } from '@/components/Senators/Profile/CitizenFeedba
 import { SenatorBadgesDisplay } from '@/components/Senators/Profile/SenatorBadgesDisplay';
 import { RelatedEntities } from '@/components/Senators/Profile/RelatedEntities';
 import { SenatorRatingForm } from '@/components/Senators/SenatorRatingForm';
+
+// Import new Extended Senator System components
+import { SenatorActions } from '@/components/Senators/Extended/SenatorActions';
 
 export default function SenatorProfilePage() {
   const { id } = useParams<{ id: string }>();
@@ -89,6 +92,9 @@ export default function SenatorProfilePage() {
 
             {/* Sidebar - 1/3 width */}
             <div className="space-y-6">
+              {/* Extended Senator Actions */}
+              <SenatorActions senator={senator} hasProAccess={hasProAccess} showInline={true} />
+              
               {/* Civic Ratings */}
               <CivicRatingsWidget senator={senator} />
               
