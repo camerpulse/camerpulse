@@ -274,24 +274,32 @@ async function importMinisters(): Promise<{ success: boolean; imported: number; 
           .maybeSingle();
         
         if (!existing) {
-          const { error } = await supabase
-            .from('ministers')
-            .insert({
-              ...minister,
-              average_rating: 0,
-              total_ratings: 0,
-              transparency_score: 0,
-              civic_engagement_score: 0,
-              crisis_response_score: 0,
-              promise_delivery_score: 0,
-              performance_score: 0,
-              view_count: 0,
-              follower_count: 0,
-              career_timeline: [],
-              can_receive_messages: true,
-              is_claimed: false,
-              is_verified: false
-            });
+            const { error } = await supabase
+              .from('ministers')
+              .insert({
+                full_name: minister.full_name,
+                position_title: minister.position_title,
+                ministry: minister.ministry,
+                political_party: minister.political_party,
+                region: minister.region,
+                profile_picture_url: minister.profile_picture_url,
+                official_profile_url: minister.official_profile_url,
+                term_start_date: minister.term_start_date,
+                term_end_date: minister.term_end_date,
+                average_rating: 0,
+                total_ratings: 0,
+                transparency_score: 0,
+                civic_engagement_score: 0,
+                crisis_response_score: 0,
+                promise_delivery_score: 0,
+                performance_score: 0,
+                view_count: 0,
+                follower_count: 0,
+                career_timeline: [],
+                can_receive_messages: true,
+                is_claimed: false,
+                is_verified: false
+              });
           
           if (error) {
             console.error(`Error inserting Minister ${minister.full_name}:`, error);

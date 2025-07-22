@@ -152,26 +152,33 @@ async function importMPs(): Promise<{ success: boolean; imported: number; errors
           .maybeSingle();
         
         if (!existing) {
-          const { error } = await supabase
-            .from('mps')
-            .insert({
-              ...mp,
-              average_rating: 0,
-              total_ratings: 0,
-              transparency_score: 0,
-              civic_engagement_score: 0,
-              crisis_response_score: 0,
-              promise_delivery_score: 0,
-              legislative_activity_score: 0,
-              view_count: 0,
-              follower_count: 0,
-              bills_sponsored: 0,
-              parliament_attendance: Math.floor(Math.random() * 100), // Random for demo
-              career_timeline: [],
-              can_receive_messages: true,
-              is_claimed: false,
-              is_verified: false
-            });
+            const { error } = await supabase
+              .from('mps')
+              .insert({
+                full_name: mp.full_name,
+                constituency: mp.constituency,
+                political_party: mp.political_party,
+                region: mp.region,
+                profile_picture_url: mp.profile_picture_url,
+                official_profile_url: mp.official_profile_url,
+                term_start_date: mp.term_start_date,
+                term_end_date: mp.term_end_date,
+                average_rating: 0,
+                total_ratings: 0,
+                transparency_score: 0,
+                civic_engagement_score: 0,
+                crisis_response_score: 0,
+                promise_delivery_score: 0,
+                legislative_activity_score: 0,
+                view_count: 0,
+                follower_count: 0,
+                bills_sponsored: 0,
+                parliament_attendance: Math.floor(Math.random() * 100),
+                career_timeline: [],
+                can_receive_messages: true,
+                is_claimed: false,
+                is_verified: false
+              });
           
           if (error) {
             console.error(`Error inserting MP ${mp.full_name}:`, error);
