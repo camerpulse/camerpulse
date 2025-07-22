@@ -3,6 +3,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { QrCode, UserPlus, ExternalLink } from 'lucide-react';
+import { QRCodeModal } from '@/components/camerpulse/QRCodeModal';
 import { Senator } from '@/hooks/useSenators';
 
 interface SenatorHeaderCardProps {
@@ -29,6 +30,10 @@ export function SenatorHeaderCard({ senator, onFollow, isFollowing }: SenatorHea
       'UNDP': '/party-logos/undp.png',
     };
     return partyLogos[party] || null;
+  };
+
+  const getProfileUrl = () => {
+    return `${window.location.origin}/senator/${senator.id}`;
   };
 
   return (
@@ -92,7 +97,15 @@ export function SenatorHeaderCard({ senator, onFollow, isFollowing }: SenatorHea
                   <p className="text-sm text-muted-foreground">Political Party</p>
                   <p className="font-semibold">{senator.political_party || senator.party_affiliation}</p>
                 </div>
-                <Button variant="ghost" size="sm" className="ml-auto">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="ml-auto"
+                  onClick={() => {
+                    // Navigate to party page when implemented
+                    console.log('Navigate to party:', senator.political_party || senator.party_affiliation);
+                  }}
+                >
                   <ExternalLink className="h-4 w-4" />
                 </Button>
               </div>
@@ -110,9 +123,15 @@ export function SenatorHeaderCard({ senator, onFollow, isFollowing }: SenatorHea
               {isFollowing ? 'Following' : 'Follow Senator'}
             </Button>
             
-            <Button variant="outline" size="icon" title="QR Code">
-              <QrCode className="h-4 w-4" />
-            </Button>
+            <QRCodeModal
+              url={getProfileUrl()}
+              title={senator.full_name || senator.name}
+              description={`${senator.position} - ${senator.region}`}
+            >
+              <Button variant="outline" size="icon" title="QR Code">
+                <QrCode className="h-4 w-4" />
+              </Button>
+            </QRCodeModal>
           </div>
         </div>
       </CardContent>
