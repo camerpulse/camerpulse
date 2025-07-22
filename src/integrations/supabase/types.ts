@@ -18925,6 +18925,249 @@ export type Database = {
         }
         Relationships: []
       }
+      minister_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_reason: string | null
+          claim_type: string
+          created_at: string
+          evidence_files: string[] | null
+          id: string
+          minister_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          minister_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          minister_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "minister_claims_minister_id_fkey"
+            columns: ["minister_id"]
+            isOneToOne: false
+            referencedRelation: "ministers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      minister_followers: {
+        Row: {
+          created_at: string
+          id: string
+          minister_id: string
+          notification_preferences: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          minister_id: string
+          notification_preferences?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          minister_id?: string
+          notification_preferences?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "minister_followers_minister_id_fkey"
+            columns: ["minister_id"]
+            isOneToOne: false
+            referencedRelation: "ministers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      minister_ratings: {
+        Row: {
+          civic_engagement_rating: number | null
+          comment: string | null
+          created_at: string
+          crisis_response_rating: number | null
+          id: string
+          is_anonymous: boolean | null
+          minister_id: string
+          overall_rating: number
+          performance_rating: number | null
+          promise_delivery_rating: number | null
+          transparency_rating: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          civic_engagement_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          crisis_response_rating?: number | null
+          id?: string
+          is_anonymous?: boolean | null
+          minister_id: string
+          overall_rating: number
+          performance_rating?: number | null
+          promise_delivery_rating?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          civic_engagement_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          crisis_response_rating?: number | null
+          id?: string
+          is_anonymous?: boolean | null
+          minister_id?: string
+          overall_rating?: number
+          performance_rating?: number | null
+          promise_delivery_rating?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "minister_ratings_minister_id_fkey"
+            columns: ["minister_id"]
+            isOneToOne: false
+            referencedRelation: "ministers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ministers: {
+        Row: {
+          average_rating: number | null
+          can_receive_messages: boolean | null
+          career_timeline: Json | null
+          civic_engagement_score: number | null
+          claimed_by: string | null
+          created_at: string
+          crisis_response_score: number | null
+          date_of_birth: string | null
+          education: string | null
+          email: string | null
+          follower_count: number | null
+          full_name: string
+          id: string
+          is_claimed: boolean | null
+          is_verified: boolean | null
+          ministry: string
+          official_profile_url: string | null
+          performance_score: number | null
+          phone: string | null
+          political_party: string | null
+          position_title: string
+          profile_picture_url: string | null
+          promise_delivery_score: number | null
+          region: string | null
+          term_end_date: string | null
+          term_start_date: string | null
+          total_ratings: number | null
+          transparency_score: number | null
+          updated_at: string
+          view_count: number | null
+          village_hometown: string | null
+        }
+        Insert: {
+          average_rating?: number | null
+          can_receive_messages?: boolean | null
+          career_timeline?: Json | null
+          civic_engagement_score?: number | null
+          claimed_by?: string | null
+          created_at?: string
+          crisis_response_score?: number | null
+          date_of_birth?: string | null
+          education?: string | null
+          email?: string | null
+          follower_count?: number | null
+          full_name: string
+          id?: string
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          ministry: string
+          official_profile_url?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          political_party?: string | null
+          position_title: string
+          profile_picture_url?: string | null
+          promise_delivery_score?: number | null
+          region?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+          view_count?: number | null
+          village_hometown?: string | null
+        }
+        Update: {
+          average_rating?: number | null
+          can_receive_messages?: boolean | null
+          career_timeline?: Json | null
+          civic_engagement_score?: number | null
+          claimed_by?: string | null
+          created_at?: string
+          crisis_response_score?: number | null
+          date_of_birth?: string | null
+          education?: string | null
+          email?: string | null
+          follower_count?: number | null
+          full_name?: string
+          id?: string
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          ministry?: string
+          official_profile_url?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          political_party?: string | null
+          position_title?: string
+          profile_picture_url?: string | null
+          promise_delivery_score?: number | null
+          region?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+          view_count?: number | null
+          village_hometown?: string | null
+        }
+        Relationships: []
+      }
       moderation_actions: {
         Row: {
           action_type: string
@@ -19746,6 +19989,91 @@ export type Database = {
         }
         Relationships: []
       }
+      mp_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_reason: string | null
+          claim_type: string
+          created_at: string
+          evidence_files: string[] | null
+          id: string
+          mp_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          mp_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          mp_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mp_claims_mp_id_fkey"
+            columns: ["mp_id"]
+            isOneToOne: false
+            referencedRelation: "mps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mp_followers: {
+        Row: {
+          created_at: string
+          id: string
+          mp_id: string
+          notification_preferences: Json | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mp_id: string
+          notification_preferences?: Json | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mp_id?: string
+          notification_preferences?: Json | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mp_followers_mp_id_fkey"
+            columns: ["mp_id"]
+            isOneToOne: false
+            referencedRelation: "mps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mp_legislative_stats: {
         Row: {
           attendance_rate: number | null
@@ -19799,6 +20127,62 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      mp_ratings: {
+        Row: {
+          civic_engagement_rating: number | null
+          comment: string | null
+          created_at: string
+          crisis_response_rating: number | null
+          id: string
+          is_anonymous: boolean | null
+          legislative_activity_rating: number | null
+          mp_id: string
+          overall_rating: number
+          promise_delivery_rating: number | null
+          transparency_rating: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          civic_engagement_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          crisis_response_rating?: number | null
+          id?: string
+          is_anonymous?: boolean | null
+          legislative_activity_rating?: number | null
+          mp_id: string
+          overall_rating: number
+          promise_delivery_rating?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          civic_engagement_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          crisis_response_rating?: number | null
+          id?: string
+          is_anonymous?: boolean | null
+          legislative_activity_rating?: number | null
+          mp_id?: string
+          overall_rating?: number
+          promise_delivery_rating?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mp_ratings_mp_id_fkey"
+            columns: ["mp_id"]
+            isOneToOne: false
+            referencedRelation: "mps"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mp_votes: {
         Row: {
@@ -19855,6 +20239,114 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mps: {
+        Row: {
+          average_rating: number | null
+          bills_sponsored: number | null
+          can_receive_messages: boolean | null
+          career_timeline: Json | null
+          civic_engagement_score: number | null
+          claimed_by: string | null
+          constituency: string | null
+          created_at: string
+          crisis_response_score: number | null
+          date_of_birth: string | null
+          education: string | null
+          email: string | null
+          follower_count: number | null
+          full_name: string
+          id: string
+          is_claimed: boolean | null
+          is_verified: boolean | null
+          legislative_activity_score: number | null
+          media_appearances: number | null
+          official_profile_url: string | null
+          parliament_attendance: number | null
+          phone: string | null
+          political_party: string | null
+          profile_picture_url: string | null
+          promise_delivery_score: number | null
+          region: string | null
+          term_end_date: string | null
+          term_start_date: string | null
+          total_ratings: number | null
+          transparency_score: number | null
+          updated_at: string
+          view_count: number | null
+          village_hometown: string | null
+        }
+        Insert: {
+          average_rating?: number | null
+          bills_sponsored?: number | null
+          can_receive_messages?: boolean | null
+          career_timeline?: Json | null
+          civic_engagement_score?: number | null
+          claimed_by?: string | null
+          constituency?: string | null
+          created_at?: string
+          crisis_response_score?: number | null
+          date_of_birth?: string | null
+          education?: string | null
+          email?: string | null
+          follower_count?: number | null
+          full_name: string
+          id?: string
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          legislative_activity_score?: number | null
+          media_appearances?: number | null
+          official_profile_url?: string | null
+          parliament_attendance?: number | null
+          phone?: string | null
+          political_party?: string | null
+          profile_picture_url?: string | null
+          promise_delivery_score?: number | null
+          region?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+          view_count?: number | null
+          village_hometown?: string | null
+        }
+        Update: {
+          average_rating?: number | null
+          bills_sponsored?: number | null
+          can_receive_messages?: boolean | null
+          career_timeline?: Json | null
+          civic_engagement_score?: number | null
+          claimed_by?: string | null
+          constituency?: string | null
+          created_at?: string
+          crisis_response_score?: number | null
+          date_of_birth?: string | null
+          education?: string | null
+          email?: string | null
+          follower_count?: number | null
+          full_name?: string
+          id?: string
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          legislative_activity_score?: number | null
+          media_appearances?: number | null
+          official_profile_url?: string | null
+          parliament_attendance?: number | null
+          phone?: string | null
+          political_party?: string | null
+          profile_picture_url?: string | null
+          promise_delivery_score?: number | null
+          region?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+          view_count?: number | null
+          village_hometown?: string | null
+        }
+        Relationships: []
       }
       music_releases: {
         Row: {

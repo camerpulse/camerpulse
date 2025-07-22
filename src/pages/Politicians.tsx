@@ -34,7 +34,8 @@ import {
   CheckCircle,
   XCircle,
   Clock,
-  ArrowUpDown
+  ArrowUpDown,
+  Building
 } from 'lucide-react';
 
 interface Politician {
@@ -405,6 +406,28 @@ const Politicians = () => {
           <div className="mb-6 lg:mb-8">
             <h1 className="responsive-heading font-bold text-foreground mb-2">Politicians of Cameroon</h1>
             <p className="responsive-text text-muted-foreground">Discover, follow and evaluate your political representatives</p>
+            
+            {/* Navigation Links */}
+            <div className="flex gap-3 mt-4">
+              <Button asChild variant="outline" size="sm">
+                <a href="/senators">
+                  <Users className="h-4 w-4 mr-2" />
+                  Senators
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <a href="/mps">
+                  <Users className="h-4 w-4 mr-2" />
+                  MPs
+                </a>
+              </Button>
+              <Button asChild variant="outline" size="sm">
+                <a href="/ministers">
+                  <Building className="h-4 w-4 mr-2" />
+                  Ministers
+                </a>
+              </Button>
+            </div>
           </div>
 
           {/* Search and Filter Controls */}
