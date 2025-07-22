@@ -137,6 +137,7 @@ import SenatorsPage from "./pages/Senators";
 import SenatorProfilePage from "./pages/SenatorProfilePage";
 import MPsPage from "./pages/MPsPage";
 import MinistersPage from "./pages/MinistersPage";
+import AdminDataImport from "./pages/AdminDataImport";
 import AuditRegistryPage from "./pages/AuditRegistryPage";
 
 import AddVillage from "./pages/AddVillage";
@@ -193,6 +194,7 @@ const App = () => {
               <Route path="/senators/:id" element={<SenatorProfilePage />} />
               <Route path="/mps" element={<MPsPage />} />
               <Route path="/ministers" element={<MinistersPage />} />
+              <Route path="/admin/data-import" element={<AdminDataImport />} />
               <Route path="/audit-registry" element={<AuditRegistryPage />} />
               <Route path="/security" element={<Security />} />
               <Route path="/marketplace" element={<Marketplace />} />
