@@ -67,11 +67,7 @@ export default function SenatorProfilePage() {
 
           {/* Senator Header */}
           <div className="mb-8">
-            <SenatorHeaderCard 
-              senator={senator} 
-              onFollow={handleFollow}
-              isFollowing={false}
-            />
+            <SenatorHeaderCard senator={senator} />
           </div>
 
           {/* Two-column layout */}

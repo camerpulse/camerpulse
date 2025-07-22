@@ -119,7 +119,7 @@ export function SenatorHeaderCard({ senator }: SenatorHeaderCardProps) {
             <SenatorPresenceIndicator senatorId={senator.id} />
             
             <Button 
-              onClick={isFollowing ? unfollow : follow}
+              onClick={() => isFollowing ? unfollow() : follow()}
               disabled={isFollowPending || isUnfollowPending}
               variant={isFollowing ? "outline" : "default"}
               className="flex items-center gap-2"
