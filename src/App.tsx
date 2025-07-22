@@ -4,7 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import SimpleTest from "./pages/SimpleTest";
 import Auth from "./pages/Auth";
 import CivicFeed from "./pages/CivicFeed";
 import PulseFeed from "./pages/PulseFeed";
@@ -190,7 +190,7 @@ const App = () => {
                 <OfflineIndicator />
                 <BrowserRouter>
             <Routes>
-              <Route path="/" element={<Index />} />
+              <Route path="/" element={<SimpleTest />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/civic-feed" element={<CivicFeed />} />
