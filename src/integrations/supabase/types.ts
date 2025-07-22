@@ -28166,6 +28166,42 @@ export type Database = {
           },
         ]
       }
+      senator_email_preferences: {
+        Row: {
+          created_at: string
+          email_frequency: string | null
+          general_notifications: boolean | null
+          id: string
+          senator_claim_notifications: boolean | null
+          senator_message_notifications: boolean | null
+          senator_report_notifications: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_frequency?: string | null
+          general_notifications?: boolean | null
+          id?: string
+          senator_claim_notifications?: boolean | null
+          senator_message_notifications?: boolean | null
+          senator_report_notifications?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_frequency?: string | null
+          general_notifications?: boolean | null
+          id?: string
+          senator_claim_notifications?: boolean | null
+          senator_message_notifications?: boolean | null
+          senator_report_notifications?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       senator_followers: {
         Row: {
           created_at: string
