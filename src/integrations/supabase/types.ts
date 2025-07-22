@@ -30406,6 +30406,269 @@ export type Database = {
         }
         Relationships: []
       }
+      tender_analytics: {
+        Row: {
+          created_at: string
+          date_recorded: string
+          id: string
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          tender_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_recorded?: string
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          metric_value?: number
+          tender_id: string
+        }
+        Update: {
+          created_at?: string
+          date_recorded?: string
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          tender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_analytics_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tender_bids: {
+        Row: {
+          bid_amount: number
+          company_id: string
+          created_at: string
+          currency: string
+          documents: Json | null
+          financial_proposal: Json
+          id: string
+          notes: string | null
+          reviewed_at: string | null
+          status: string
+          submitted_at: string
+          technical_proposal: string | null
+          tender_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bid_amount: number
+          company_id: string
+          created_at?: string
+          currency?: string
+          documents?: Json | null
+          financial_proposal: Json
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string
+          technical_proposal?: string | null
+          tender_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bid_amount?: number
+          company_id?: string
+          created_at?: string
+          currency?: string
+          documents?: Json | null
+          financial_proposal?: Json
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string
+          technical_proposal?: string | null
+          tender_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_bids_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tender_bookmarks: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          id: string
+          tender_id: string
+          user_id: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          tender_id: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          tender_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_bookmarks_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tender_notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          is_read: boolean
+          message: string
+          notification_type: string
+          tender_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean
+          message: string
+          notification_type: string
+          tender_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          notification_type?: string
+          tender_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_notifications_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenders: {
+        Row: {
+          award_amount: number | null
+          awarded_at: string | null
+          awarded_to_company_id: string | null
+          bid_opening_date: string | null
+          bids_count: number
+          budget_max: number | null
+          budget_min: number | null
+          category: string
+          created_at: string
+          currency: string
+          deadline: string
+          description: string | null
+          documents: Json | null
+          eligibility_criteria: string | null
+          evaluation_criteria: string | null
+          id: string
+          instructions: string | null
+          is_featured: boolean
+          published_by_company_id: string | null
+          published_by_user_id: string
+          region: string
+          status: string
+          tender_type: string
+          title: string
+          updated_at: string
+          views_count: number
+        }
+        Insert: {
+          award_amount?: number | null
+          awarded_at?: string | null
+          awarded_to_company_id?: string | null
+          bid_opening_date?: string | null
+          bids_count?: number
+          budget_max?: number | null
+          budget_min?: number | null
+          category: string
+          created_at?: string
+          currency?: string
+          deadline: string
+          description?: string | null
+          documents?: Json | null
+          eligibility_criteria?: string | null
+          evaluation_criteria?: string | null
+          id?: string
+          instructions?: string | null
+          is_featured?: boolean
+          published_by_company_id?: string | null
+          published_by_user_id: string
+          region: string
+          status?: string
+          tender_type: string
+          title: string
+          updated_at?: string
+          views_count?: number
+        }
+        Update: {
+          award_amount?: number | null
+          awarded_at?: string | null
+          awarded_to_company_id?: string | null
+          bid_opening_date?: string | null
+          bids_count?: number
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string
+          created_at?: string
+          currency?: string
+          deadline?: string
+          description?: string | null
+          documents?: Json | null
+          eligibility_criteria?: string | null
+          evaluation_criteria?: string | null
+          id?: string
+          instructions?: string | null
+          is_featured?: boolean
+          published_by_company_id?: string | null
+          published_by_user_id?: string
+          region?: string
+          status?: string
+          tender_type?: string
+          title?: string
+          updated_at?: string
+          views_count?: number
+        }
+        Relationships: []
+      }
       ticket_purchases: {
         Row: {
           buyer_email: string
