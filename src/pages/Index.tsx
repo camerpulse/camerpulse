@@ -24,7 +24,8 @@ import {
   Star,
   ArrowRight,
   CheckCircle,
-  Sparkles
+  Sparkles,
+  Scale
 } from "lucide-react";
 
 const Index = () => {
@@ -59,6 +60,14 @@ const Index = () => {
       href: "/legislation",
       gradient: "from-accent to-accent",
       features: ["Bill tracking", "Voting records", "Impact analysis"]
+    },
+    {
+      title: "Judiciary System",
+      description: "Transparent judicial oversight, court tracking, and legal case monitoring",
+      icon: Scale,
+      href: "/judiciary",
+      gradient: "from-cm-red to-red-600",
+      features: ["Court transparency", "Judge ratings", "Case tracking"]
     },
     {
       title: "Politician Tracker",
@@ -153,7 +162,11 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8 mb-16"
+            style={{
+              gridTemplateColumns: coreFeatures.length === 5 ? 'repeat(auto-fit, minmax(320px, 1fr))' : undefined
+            }}
+          >
             {coreFeatures.map((feature, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-300 border-0">
                 <CardHeader className="pb-4">
@@ -220,6 +233,8 @@ const Index = () => {
               { title: "Healthcare Facilities", icon: Heart, href: "/hospitals", count: "3,500+", color: "text-directory-hospital" },
               { title: "Business Directory", icon: Building, href: "/companies", count: "28,000+", color: "text-primary" },
               { title: "Government Services", icon: Shield, href: "/ministries", count: "450+", color: "text-accent" },
+              { title: "Officials Directory", icon: Users, href: "/officials", count: "1,200+", color: "text-primary" },
+              { title: "Judiciary System", icon: Scale, href: "/judiciary", count: "320+", color: "text-cm-red" },
               { title: "Traditional Villages", icon: Crown, href: "/villages", count: "2,800+", color: "text-directory-village" },
               { title: "Pharmacies & Health", icon: Pill, href: "/pharmacies", count: "1,200+", color: "text-directory-pharmacy" },
               { title: "Local Councils", icon: MapPin, href: "/councils", count: "360+", color: "text-primary" },
