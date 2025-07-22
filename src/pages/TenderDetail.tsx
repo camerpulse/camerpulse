@@ -39,6 +39,12 @@ interface Tender {
   published_by: string;
   bids_count: number;
   created_at: string;
+  // Additional database fields that might be present
+  award_amount?: number;
+  awarded_at?: string;
+  awarded_to_company_id?: string;
+  bid_opening_date?: string;
+  views_count?: number;
 }
 
 export default function TenderDetail() {
@@ -61,10 +67,39 @@ export default function TenderDetail() {
         .from('tenders')
         .select('*')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
-      setTender(data);
+      if (!data) {
+        setTender(null);
+        return;
+      }
+
+      // Map the database fields to our interface structure safely
+      const mappedTender: Tender = {
+        id: data.id,
+        title: data.title,
+        description: data.description,
+        category: data.category,
+        region: data.region,
+        tender_type: data.tender_type,
+        budget_min: data.budget_min,
+        budget_max: data.budget_max,
+        submission_deadline: (data as any).submission_deadline || (data as any).deadline || '',
+        requirements: (data as any).requirements || '',
+        evaluation_criteria: (data as any).evaluation_criteria || '',
+        status: data.status,
+        published_by: (data as any).published_by || '',
+        bids_count: data.bids_count || 0,
+        created_at: data.created_at,
+        award_amount: (data as any).award_amount,
+        awarded_at: (data as any).awarded_at,
+        awarded_to_company_id: (data as any).awarded_to_company_id,
+        bid_opening_date: (data as any).bid_opening_date,
+        views_count: (data as any).views_count
+      };
+      
+      setTender(mappedTender);
     } catch (error) {
       console.error('Error fetching tender:', error);
       toast.error('Failed to load tender details');
