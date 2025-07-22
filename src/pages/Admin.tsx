@@ -249,6 +249,10 @@ const Admin = () => {
                   <TrendingUp className="h-4 w-4" />
                   Analytics
                 </TabsTrigger>
+                <TabsTrigger value="moderation" className="flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  Moderation
+                </TabsTrigger>
                 <TabsTrigger value="themes" className="flex items-center gap-2">
                   <Monitor className="h-4 w-4" />
                   Themes
@@ -1331,6 +1335,46 @@ const Admin = () => {
                           <Badge variant="secondary">Active</Badge>
                         </div>
                       </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="moderation">
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Shield className="h-5 w-5" />
+                      Content Moderation
+                    </CardTitle>
+                    <CardDescription>
+                      Manage and moderate platform content including tenders, bids, and business verifications
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <Button asChild variant="outline" className="justify-start h-auto p-4">
+                        <Link to="/admin/moderation">
+                          <div className="text-left">
+                            <div className="font-medium">Moderation Dashboard</div>
+                            <div className="text-sm text-muted-foreground">Review pending tenders, bids, and verifications</div>
+                          </div>
+                        </Link>
+                      </Button>
+                      <Button variant="outline" className="justify-start h-auto p-4">
+                        <div className="text-left">
+                          <div className="font-medium">Auto-Moderation Rules</div>
+                          <div className="text-sm text-muted-foreground">Configure automatic content filtering</div>
+                        </div>
+                      </Button>
+                      <Button variant="outline" className="justify-start h-auto p-4">
+                        <div className="text-left">
+                          <div className="font-medium">Moderation Reports</div>
+                          <div className="text-sm text-muted-foreground">View moderation activity and statistics</div>
+                        </div>
+                      </Button>
                     </div>
                   </CardContent>
                 </Card>

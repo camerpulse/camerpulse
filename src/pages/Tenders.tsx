@@ -177,9 +177,11 @@ const Tenders = () => {
                   Post a Tender
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-                <Building2 className="h-5 w-5 mr-2" />
-                Register Business
+              <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20" asChild>
+                <Link to="/business-verification">
+                  <Building2 className="h-5 w-5 mr-2" />
+                  Register Business
+                </Link>
               </Button>
             </div>
           </div>

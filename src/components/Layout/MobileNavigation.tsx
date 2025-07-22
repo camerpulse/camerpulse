@@ -15,7 +15,8 @@ import {
   MapPin,
   Shield,
   BookOpen,
-  Globe
+  Globe,
+  FileText
 } from 'lucide-react';
 
 interface NavItem {
@@ -75,6 +76,12 @@ const navItems: NavItem[] = [
     label: 'Shield',
     icon: Shield,
     path: '/civic-shield',
+  },
+  {
+    id: 'tenders',
+    label: 'Tenders',
+    icon: FileText,
+    path: '/tenders',
   },
   {
     id: 'diaspora',

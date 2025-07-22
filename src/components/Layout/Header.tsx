@@ -130,6 +130,12 @@ export const Header = () => {
                       Profile
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/business-verification" className="cursor-pointer">
+                      <Settings className="mr-2 h-4 w-4" />
+                      Business Verification
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
@@ -188,6 +194,9 @@ export const Header = () => {
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/tenders" onClick={() => setMobileMenuOpen(false)}>📄 Tenders</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
+                <Link to="/business-verification" onClick={() => setMobileMenuOpen(false)}>🏢 Business Verification</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/analytics" onClick={() => setMobileMenuOpen(false)}>📊 Analytics</Link>
