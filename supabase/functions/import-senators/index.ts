@@ -25,26 +25,15 @@ async function scrapeSenators(): Promise<SenatorData[]> {
     
     const senators: SenatorData[] = [];
     
-    // Parse HTML to extract senator information
-    const senatorPattern = /## ([^#\n]+)\n\n#### ([^\n]+)\n(?:\n([^#\n\[]*))?/g;
+    // Extract senator blocks - each contains image, name, position, and description
+    const senatorBlockPattern = /\[\!\[Senateurs\]\((https:\/\/senat\.cm\/wp-content\/uploads\/[^)]+)\)\]\([^)]*\)\s*\n\n## ([^#\n]+)\s*\n\n#### ([^\n]+)\s*(?:\n\n([^#\n\[]*(?:\n(?!##|\[)[^\n]*)*)?)?/g;
     let match;
     
-    // Also extract image URLs
-    const imagePattern = /\[(.*?)\]\((https:\/\/senat\.cm\/wp-content\/uploads\/[^)]+)\)/g;
-    const images: string[] = [];
-    let imageMatch;
-    
-    while ((imageMatch = imagePattern.exec(html)) !== null) {
-      if (imageMatch[2]) {
-        images.push(imageMatch[2]);
-      }
-    }
-    
-    let imageIndex = 0;
-    while ((match = senatorPattern.exec(html)) !== null) {
-      const name = match[1]?.trim();
-      const position = match[2]?.trim();
-      const about = match[3]?.trim() || '';
+    while ((match = senatorBlockPattern.exec(html)) !== null) {
+      const photoUrl = match[1]?.trim();
+      const name = match[2]?.trim();
+      const position = match[3]?.trim();
+      const about = match[4]?.trim() || '';
       
       if (name && position) {
         // Skip if it's just "Senateurs" header
@@ -53,20 +42,16 @@ async function scrapeSenators(): Promise<SenatorData[]> {
         const senator: SenatorData = {
           name,
           position,
+          photo_url: photoUrl,
           about: about || ''
         };
         
-        // Assign photo if available
-        if (imageIndex < images.length) {
-          senator.photo_url = images[imageIndex];
-          imageIndex++;
-        }
-        
         senators.push(senator);
+        console.log(`Scraped senator: ${name} - ${position}`);
       }
     }
     
-    console.log(`Scraped ${senators.length} senators`);
+    console.log(`Total scraped senators: ${senators.length}`);
     return senators;
   } catch (error) {
     console.error('Error scraping senators:', error);
