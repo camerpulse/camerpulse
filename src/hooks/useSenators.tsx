@@ -34,6 +34,35 @@ export interface Senator {
   official_senate_url?: string;
   created_at: string;
   updated_at: string;
+  
+  // Extended senator fields
+  is_claimable?: boolean;
+  is_claimed?: boolean;
+  claimed_at?: string;
+  claimed_by?: string;
+  claim_fee_paid?: boolean;
+  claim_payment_reference?: string;
+  claim_documents_url?: string[];
+  claim_status?: 'unclaimed' | 'pending' | 'approved' | 'rejected';
+  verification_notes?: string;
+  last_scraped_at?: string;
+  scrape_source?: string;
+  trust_score?: number;
+  misconduct_reports_count?: number;
+  profile_completeness_score?: number;
+  last_activity_at?: string;
+  follower_count?: number;
+  engagement_score?: number;
+  response_rate?: number;
+  senate_id?: string;
+  term_start_date?: string;
+  term_end_date?: string;
+  timeline_events?: any[];
+  achievements?: any[];
+  media_mentions_count?: number;
+  can_receive_messages?: boolean;
+  message_response_time_hours?: number;
+  auto_imported?: boolean;
 }
 
 export interface SenatorRating {
