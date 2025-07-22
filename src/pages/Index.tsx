@@ -68,6 +68,7 @@ const Index = () => {
       href: "/judiciary",
       gradient: "from-cm-red to-red-600",
       features: ["Court transparency", "Judge ratings", "Case tracking"]
+    },
     {
       title: "Tenders & Bidding",
       description: "National tender platform connecting businesses with public and private opportunities",
