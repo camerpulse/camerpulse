@@ -28,6 +28,7 @@ import { NotFoundPage } from './components/NotFoundPage';
 import { CreateTender } from './components/CreateTender';
 import { TenderManagementDashboard } from './components/TenderManagementDashboard';
 import { UserManagementDashboard } from './components/UserManagement/UserManagementDashboard';
+import { DocumentVerificationDashboard } from './components/Documents/DocumentVerificationDashboard';
 
 import TenderAnalytics from "./pages/TenderAnalytics";
 import SearchInterface from "./components/SearchInterface";
@@ -82,6 +83,7 @@ const App = () => {
                       <Route path="dashboard" element={<UserDashboard />} />
                       <Route path="tender-management" element={<TenderManagementDashboard />} />
                       <Route path="user-management" element={<UserManagementDashboard />} />
+                      <Route path="document-verification" element={<DocumentVerificationDashboard />} />
                       <Route path="search-interface" element={<SearchInterface />} />
                       <Route path="analytics" element={<TenderAnalytics />} />
                       <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />

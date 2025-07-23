@@ -30857,6 +30857,54 @@ export type Database = {
           },
         ]
       }
+      tender_document_verification: {
+        Row: {
+          created_at: string
+          document_id: string
+          document_name: string
+          document_url: string
+          file_size: number | null
+          file_type: string | null
+          id: string
+          tender_id: string
+          updated_at: string
+          verification_notes: string | null
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_id: string
+          document_name: string
+          document_url: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          tender_id: string
+          updated_at?: string
+          verification_notes?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_id?: string
+          document_name?: string
+          document_url?: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          tender_id?: string
+          updated_at?: string
+          verification_notes?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       tender_moderation: {
         Row: {
           created_at: string
