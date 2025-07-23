@@ -153,6 +153,12 @@ export const EnhancedTenderList: React.FC = () => {
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-semibold">{tender.title}</h3>
                         {getStatusBadge(tender.status)}
+                        {/* Show credibility badge if tender is completed */}
+                        {tender.status === 'awarded' && (
+                          <Badge variant="outline" className="text-xs">
+                            📊 Rated
+                          </Badge>
+                        )}
                       </div>
                       <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
                         {tender.description}
@@ -172,9 +178,16 @@ export const EnhancedTenderList: React.FC = () => {
                         </span>
                       </div>
                     </div>
-                    <Button size="sm" variant="outline">
-                      View Details
-                    </Button>
+                    <div className="flex flex-col gap-2">
+                      <Button size="sm" variant="outline">
+                        View Details
+                      </Button>
+                      {tender.status === 'awarded' && (
+                        <Button size="sm" variant="outline" className="text-xs">
+                          Rate Execution
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
