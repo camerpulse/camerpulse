@@ -22,6 +22,8 @@ import { LegislationTracker } from "./pages/LegislationTracker";
 import HospitalsDirectory from "./pages/HospitalsDirectory";
 import Tenders from "./pages/Tenders";
 import TenderDetail from "./pages/TenderDetail";
+import { BidSubmissionForm } from './components/BidSubmissionForm';
+import { UserDashboard } from './components/UserDashboard';
 import CreateTender from "./pages/CreateTender";
 import TenderAnalytics from "./pages/TenderAnalytics";
 import SearchInterface from "./components/SearchInterface";
@@ -71,7 +73,9 @@ const App = () => {
                       <Route path="tenders" element={<Tenders />} />
                       <Route path="tenders/create" element={<CreateTender />} />
                       <Route path="tenders/:id" element={<TenderDetail />} />
+                      <Route path="tenders/:id/bid" element={<BidSubmissionForm />} />
                       <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
+                      <Route path="dashboard" element={<UserDashboard />} />
                       <Route path="search-interface" element={<SearchInterface />} />
                       <Route path="analytics" element={<TenderAnalytics />} />
                       <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />
