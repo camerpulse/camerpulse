@@ -27,6 +27,7 @@ import TopPoliticiansPage from "@/pages/rankings/TopPoliticiansPage";
 import TrustedMayorsPage from "@/pages/rankings/TrustedMayorsPage";
 import FallingReputationPage from "@/pages/rankings/FallingReputationPage";
 import CivicModerationPage from "@/pages/admin/CivicModerationPage";
+import AdminSettingsPanel from "@/pages/admin/AdminSettingsPanel";
 import HospitalsDirectory from "./pages/HospitalsDirectory";
 import Tenders from "./pages/Tenders";
 import TenderDetail from "./pages/TenderDetail";
@@ -117,6 +118,7 @@ const App = () => {
                       <Route path="rankings/trusted-mayors" element={<TrustedMayorsPage />} />
                       <Route path="rankings/falling-reputation" element={<FallingReputationPage />} />
                       <Route path="admin/civic-moderation" element={<CivicModerationPage />} />
+                      <Route path="admin/reputation-settings" element={<AdminSettingsPanel />} />
                       <Route path="*" element={<NotFoundPage />} />
                     </Route>
                     <Route path="/auth" element={<Layout showFooter={false} />}>
