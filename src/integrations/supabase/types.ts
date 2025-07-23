@@ -10803,6 +10803,111 @@ export type Database = {
         }
         Relationships: []
       }
+      contract_payments: {
+        Row: {
+          contract_id: string
+          created_at: string
+          currency: string
+          due_date: string
+          id: string
+          invoice_number: string | null
+          milestone_reference: string | null
+          payment_amount: number
+          payment_date: string | null
+          payment_description: string | null
+          payment_reference: string | null
+          payment_status: string
+          payment_type: string
+          updated_at: string
+        }
+        Insert: {
+          contract_id: string
+          created_at?: string
+          currency?: string
+          due_date: string
+          id?: string
+          invoice_number?: string | null
+          milestone_reference?: string | null
+          payment_amount: number
+          payment_date?: string | null
+          payment_description?: string | null
+          payment_reference?: string | null
+          payment_status?: string
+          payment_type: string
+          updated_at?: string
+        }
+        Update: {
+          contract_id?: string
+          created_at?: string
+          currency?: string
+          due_date?: string
+          id?: string
+          invoice_number?: string | null
+          milestone_reference?: string | null
+          payment_amount?: number
+          payment_date?: string | null
+          payment_description?: string | null
+          payment_reference?: string | null
+          payment_status?: string
+          payment_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      contracts: {
+        Row: {
+          awarded_company_id: string
+          contract_amount: number
+          contract_number: string
+          contract_status: string
+          contract_terms: Json | null
+          created_at: string
+          currency: string
+          deliverables: Json | null
+          end_date: string
+          id: string
+          milestones: Json | null
+          signed_at: string | null
+          start_date: string
+          tender_id: string
+          updated_at: string
+        }
+        Insert: {
+          awarded_company_id: string
+          contract_amount: number
+          contract_number: string
+          contract_status?: string
+          contract_terms?: Json | null
+          created_at?: string
+          currency?: string
+          deliverables?: Json | null
+          end_date: string
+          id?: string
+          milestones?: Json | null
+          signed_at?: string | null
+          start_date: string
+          tender_id: string
+          updated_at?: string
+        }
+        Update: {
+          awarded_company_id?: string
+          contract_amount?: number
+          contract_number?: string
+          contract_status?: string
+          contract_terms?: Json | null
+          created_at?: string
+          currency?: string
+          deliverables?: Json | null
+          end_date?: string
+          id?: string
+          milestones?: Json | null
+          signed_at?: string | null
+          start_date?: string
+          tender_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       conversation_participants: {
         Row: {
           conversation_id: string | null
@@ -30642,6 +30747,51 @@ export type Database = {
         }
         Relationships: []
       }
+      tender_ai_suggestions: {
+        Row: {
+          admin_notes: string | null
+          confidence_score: number
+          created_at: string
+          id: string
+          priority_level: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          suggestion_data: Json
+          suggestion_type: string
+          tender_id: string
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          confidence_score?: number
+          created_at?: string
+          id?: string
+          priority_level?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggestion_data?: Json
+          suggestion_type: string
+          tender_id: string
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          confidence_score?: number
+          created_at?: string
+          id?: string
+          priority_level?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggestion_data?: Json
+          suggestion_type?: string
+          tender_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tender_analytics: {
         Row: {
           created_at: string
@@ -30679,6 +30829,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tender_analytics_cache: {
+        Row: {
+          calculated_at: string
+          category: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          metric_data: Json
+          metric_period: string
+          metric_type: string
+          region: string | null
+        }
+        Insert: {
+          calculated_at?: string
+          category?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metric_data?: Json
+          metric_period: string
+          metric_type: string
+          region?: string | null
+        }
+        Update: {
+          calculated_at?: string
+          category?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metric_data?: Json
+          metric_period?: string
+          metric_type?: string
+          region?: string | null
+        }
+        Relationships: []
       }
       tender_audit_logs: {
         Row: {
@@ -30776,6 +30962,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tender_bonds: {
+        Row: {
+          bond_amount: number
+          bond_document_url: string | null
+          bond_number: string
+          bond_provider: string
+          bond_type: string
+          company_id: string
+          created_at: string
+          currency: string
+          expiry_date: string
+          id: string
+          issue_date: string
+          status: string
+          tender_id: string
+          updated_at: string
+        }
+        Insert: {
+          bond_amount: number
+          bond_document_url?: string | null
+          bond_number: string
+          bond_provider: string
+          bond_type: string
+          company_id: string
+          created_at?: string
+          currency?: string
+          expiry_date: string
+          id?: string
+          issue_date: string
+          status?: string
+          tender_id: string
+          updated_at?: string
+        }
+        Update: {
+          bond_amount?: number
+          bond_document_url?: string | null
+          bond_number?: string
+          bond_provider?: string
+          bond_type?: string
+          company_id?: string
+          created_at?: string
+          currency?: string
+          expiry_date?: string
+          id?: string
+          issue_date?: string
+          status?: string
+          tender_id?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       tender_bookmarks: {
         Row: {
@@ -30952,6 +31189,51 @@ export type Database = {
           },
         ]
       }
+      tender_moderators: {
+        Row: {
+          activity_log: Json | null
+          assigned_at: string
+          assigned_by: string | null
+          assigned_categories: string[]
+          assigned_regions: string[]
+          created_at: string
+          id: string
+          is_active: boolean
+          performance_metrics: Json | null
+          permissions: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activity_log?: Json | null
+          assigned_at?: string
+          assigned_by?: string | null
+          assigned_categories?: string[]
+          assigned_regions?: string[]
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          performance_metrics?: Json | null
+          permissions?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activity_log?: Json | null
+          assigned_at?: string
+          assigned_by?: string | null
+          assigned_categories?: string[]
+          assigned_regions?: string[]
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          performance_metrics?: Json | null
+          permissions?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tender_notifications: {
         Row: {
           created_at: string
@@ -31094,6 +31376,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tender_receipts_vault: {
+        Row: {
+          created_at: string
+          document_name: string
+          document_type: string
+          document_url: string
+          file_size: number | null
+          file_type: string | null
+          id: string
+          metadata: Json | null
+          tender_id: string
+          updated_at: string
+          uploaded_at: string
+          uploaded_by: string | null
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_name: string
+          document_type: string
+          document_url: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          metadata?: Json | null
+          tender_id: string
+          updated_at?: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_name?: string
+          document_type?: string
+          document_url?: string
+          file_size?: number | null
+          file_type?: string | null
+          id?: string
+          metadata?: Json | null
+          tender_id?: string
+          updated_at?: string
+          uploaded_at?: string
+          uploaded_by?: string | null
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
       }
       tender_statistics: {
         Row: {
@@ -34342,6 +34678,15 @@ export type Database = {
         Args: { p_senator_id: string }
         Returns: number
       }
+      calculate_tender_analytics: {
+        Args: {
+          p_metric_type: string
+          p_period?: string
+          p_region?: string
+          p_category?: string
+        }
+        Returns: Json
+      }
       check_claim_renewals: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -34558,6 +34903,12 @@ export type Database = {
       generate_submission_code: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      generate_tender_ai_suggestions: {
+        Args: { p_tender_id: string }
+        Returns: {
+          suggestion_count: number
+        }[]
       }
       generate_ticket_number: {
         Args: Record<PropertyKey, never>
@@ -34968,6 +35319,10 @@ export type Database = {
       }
       update_senator_badges: {
         Args: { p_senator_id: string }
+        Returns: undefined
+      }
+      update_tender_analytics_cache: {
+        Args: Record<PropertyKey, never>
         Returns: undefined
       }
       update_trending_search: {
