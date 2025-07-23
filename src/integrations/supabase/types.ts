@@ -21364,6 +21364,39 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          message: string
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          message: string
+          read?: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          message?: string
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       official_change_log: {
         Row: {
           admin_notes: string | null
@@ -30614,6 +30647,41 @@ export type Database = {
           },
         ]
       }
+      tender_audit_logs: {
+        Row: {
+          action: string
+          action_by: string
+          created_at: string
+          details: Json | null
+          id: string
+          tender_id: string
+        }
+        Insert: {
+          action: string
+          action_by: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          tender_id: string
+        }
+        Update: {
+          action?: string
+          action_by?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          tender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_audit_logs_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tender_bids: {
         Row: {
           bid_amount: number
@@ -30945,6 +31013,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tender_statistics: {
+        Row: {
+          automatic_closures: number
+          created_at: string
+          date: string
+          last_run: string | null
+          manual_closures: number
+          total_closed: number
+          updated_at: string
+        }
+        Insert: {
+          automatic_closures?: number
+          created_at?: string
+          date: string
+          last_run?: string | null
+          manual_closures?: number
+          total_closed?: number
+          updated_at?: string
+        }
+        Update: {
+          automatic_closures?: number
+          created_at?: string
+          date?: string
+          last_run?: string | null
+          manual_closures?: number
+          total_closed?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       tender_updates: {
         Row: {
