@@ -31299,6 +31299,74 @@ export type Database = {
         }
         Relationships: []
       }
+      tender_invoices: {
+        Row: {
+          amount_fcfa: number
+          amount_usd: number
+          billing_address: Json | null
+          created_at: string | null
+          currency: string | null
+          due_date: string
+          id: string
+          invoice_number: string
+          issued_at: string | null
+          notes: string | null
+          paid_at: string | null
+          payment_id: string
+          status: string | null
+          subtotal_fcfa: number
+          tax_amount: number | null
+          tax_percentage: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount_fcfa: number
+          amount_usd: number
+          billing_address?: Json | null
+          created_at?: string | null
+          currency?: string | null
+          due_date: string
+          id?: string
+          invoice_number: string
+          issued_at?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          payment_id: string
+          status?: string | null
+          subtotal_fcfa: number
+          tax_amount?: number | null
+          tax_percentage?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount_fcfa?: number
+          amount_usd?: number
+          billing_address?: Json | null
+          created_at?: string | null
+          currency?: string | null
+          due_date?: string
+          id?: string
+          invoice_number?: string
+          issued_at?: string | null
+          notes?: string | null
+          paid_at?: string | null
+          payment_id?: string
+          status?: string | null
+          subtotal_fcfa?: number
+          tax_amount?: number | null
+          tax_percentage?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_invoices_payment_id_fkey"
+            columns: ["payment_id"]
+            isOneToOne: false
+            referencedRelation: "tender_payments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tender_moderation: {
         Row: {
           created_at: string
