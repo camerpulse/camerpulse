@@ -527,6 +527,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
   };
 
   const fetchWalletData = async () => {
+    console.log('Fetching wallet data for user:', userId);
     try {
       // First try to get wallet data
       const { data: wallet, error: walletError } = await supabase
@@ -555,6 +556,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
         return;
       }
 
+      console.log('Wallet transactions found:', transactions?.length || 0);
       setWalletTransactions(transactions || []);
 
       // Calculate balances
@@ -574,7 +576,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
         .reduce((total, tx) => total + tx.amount, 0) || 0;
 
       // Create wallet summary
-      setWalletData({
+      const walletSummary = {
         id: userId,
         user_id: userId,
         balance_fcfa: balance,
@@ -585,7 +587,10 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
         total_earned_fcfa: totalEarned,
         last_transaction_at: transactions?.[0]?.created_at,
         created_at: transactions?.[transactions.length - 1]?.created_at || new Date().toISOString()
-      });
+      };
+      
+      console.log('Wallet summary created:', walletSummary);
+      setWalletData(walletSummary);
     } catch (error) {
       console.error('Error fetching wallet data:', error);
     }
@@ -899,6 +904,14 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                        {walletData.balance_fcfa.toLocaleString()} FCFA
                      </div>
                    </div>
+                 </div>
+               )}
+               
+               {/* Debug wallet state - remove in production */}
+               {user?.id === userId && (
+                 <div className="text-xs text-muted-foreground mt-2">
+                   Debug: Wallet data exists: {walletData ? 'Yes' : 'No'}, 
+                   Transactions: {walletTransactions.length}
                  </div>
                )}
 
