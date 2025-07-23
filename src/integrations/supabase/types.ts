@@ -32778,6 +32778,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_tender_watchlist: {
+        Row: {
+          alert_enabled: boolean
+          created_at: string
+          id: string
+          notification_preferences: Json | null
+          tender_id: string
+          user_id: string
+        }
+        Insert: {
+          alert_enabled?: boolean
+          created_at?: string
+          id?: string
+          notification_preferences?: Json | null
+          tender_id: string
+          user_id: string
+        }
+        Update: {
+          alert_enabled?: boolean
+          created_at?: string
+          id?: string
+          notification_preferences?: Json | null
+          tender_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_trust_feedback: {
         Row: {
           comment: string | null

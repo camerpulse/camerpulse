@@ -80,8 +80,28 @@ export const CivicTenderWatchlist: React.FC = () => {
   // Watch/Unwatch tender mutation
   const toggleWatchMutation = useMutation({
     mutationFn: async ({ tenderId, isWatched }: { tenderId: string; isWatched: boolean }) => {
-      // In real implementation, this would update a user_tender_watchlist table
-      console.log('Toggle watch for tender:', tenderId, 'watched:', !isWatched);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+
+      if (isWatched) {
+        // Remove from watchlist
+        const { error } = await supabase
+          .from('user_tender_watchlist')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('tender_id', tenderId);
+        if (error) throw error;
+      } else {
+        // Add to watchlist
+        const { error } = await supabase
+          .from('user_tender_watchlist')
+          .insert({
+            user_id: user.id,
+            tender_id: tenderId,
+            alert_enabled: true
+          });
+        if (error) throw error;
+      }
     },
     onSuccess: () => {
       toast({ 
@@ -95,7 +115,35 @@ export const CivicTenderWatchlist: React.FC = () => {
   // Enable/Disable alerts mutation
   const toggleAlertMutation = useMutation({
     mutationFn: async ({ tenderId, alertEnabled }: { tenderId: string; alertEnabled: boolean }) => {
-      console.log('Toggle alerts for tender:', tenderId, 'enabled:', !alertEnabled);
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+
+      const { error } = await supabase
+        .from('user_tender_watchlist')
+        .update({ alert_enabled: !alertEnabled })
+        .eq('user_id', user.id)
+        .eq('tender_id', tenderId);
+      
+      if (error) throw error;
+
+      // Send notification if alert is enabled
+      if (!alertEnabled) {
+        // Get user email from auth metadata
+        const userEmail = user.email;
+
+        if (userEmail) {
+          await supabase.functions.invoke('send-tender-notifications', {
+            body: {
+              user_id: user.id,
+              tender_id: tenderId,
+              notification_type: 'watchlist_alert',
+              email: userEmail,
+              tender_title: 'Tender Alert Enabled',
+              channels: ['email', 'push']
+            }
+          });
+        }
+      }
     },
     onSuccess: () => {
       toast({ 
