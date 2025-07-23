@@ -24,6 +24,7 @@ import Tenders from "./pages/Tenders";
 import TenderDetail from "./pages/TenderDetail";
 import { BidSubmissionForm } from './components/BidSubmissionForm';
 import { UserDashboard } from './components/UserDashboard';
+import { NotFoundPage } from './components/NotFoundPage';
 import CreateTender from "./pages/CreateTender";
 import TenderAnalytics from "./pages/TenderAnalytics";
 import SearchInterface from "./components/SearchInterface";
@@ -81,6 +82,7 @@ const App = () => {
                       <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />
                       <Route path="my-bids" element={<BidderDashboard />} />
                       <Route path="diaspora-connect" element={<DiasporaConnect />} />
+                      <Route path="*" element={<NotFoundPage />} />
                     </Route>
                     <Route path="/auth" element={<Layout showFooter={false} />}>
                       <Route index element={<Auth />} />

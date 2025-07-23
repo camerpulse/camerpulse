@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { ArrowLeft, DollarSign, FileText, Upload, Loader2 } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
-import { useAuth } from "@/hooks/useAuth"
+import { useAuth } from "@/contexts/AuthContext"
 
 interface TenderInfo {
   id: string
