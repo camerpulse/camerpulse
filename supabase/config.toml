@@ -167,3 +167,6 @@ verify_jwt = true
 
 [functions.conflict-of-interest-detector]
 verify_jwt = true
+
+[functions.tender-ai-analysis]
+verify_jwt = false

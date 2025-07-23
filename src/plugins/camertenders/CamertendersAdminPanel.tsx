@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -9,8 +9,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { useToast } from '@/hooks/use-toast';
 import {
   Shield, AlertTriangle, FileText, Users, TrendingUp, Eye, Ban,
-  Flag, CheckCircle, XCircle, Download, Search, Filter, MoreHorizontal
+  Flag, CheckCircle, XCircle, Download, Search, Filter, MoreHorizontal,
+  Brain, BarChart3, UserCheck, Activity
 } from 'lucide-react';
+import { TenderReceiptsVault } from './TenderReceiptsVault';
+import { TenderModeratorManager } from './TenderModeratorManager';
+import { AdvancedTenderAnalytics } from './AdvancedTenderAnalytics';
+import { SmartAISuggestions } from './SmartAISuggestions';
+import { TenderNotificationCenter } from './TenderNotificationCenter';
 
 interface TenderStats {
   total_tenders: number;
@@ -41,6 +47,55 @@ export const CamertendersAdminPanel: React.FC = () => {
   const queryClient = useQueryClient();
   const [selectedTender, setSelectedTender] = useState<TenderItem | null>(null);
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [enhancedStats, setEnhancedStats] = useState<any>({});
+
+  // Enhanced statistics with real-time updates
+  useEffect(() => {
+    const fetchEnhancedStats = async () => {
+      try {
+        // Fetch from new analytics tables
+        const [documentsCount, moderatorsCount, aiSuggestionsCount] = await Promise.all([
+          supabase.from('tender_receipts_vault').select('id', { count: 'exact', head: true }),
+          supabase.from('tender_moderators').select('id', { count: 'exact', head: true }).eq('is_active', true),
+          supabase.from('tender_ai_suggestions').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+        ]);
+
+        setEnhancedStats({
+          documents: documentsCount.count || 0,
+          moderators: moderatorsCount.count || 0,
+          aiSuggestions: aiSuggestionsCount.count || 0
+        });
+      } catch (error) {
+        console.error('Error fetching enhanced stats:', error);
+      }
+    };
+
+    fetchEnhancedStats();
+    
+    // Set up real-time subscription
+    const channel = supabase
+      .channel('admin-stats-updates')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'tender_receipts_vault'
+      }, () => fetchEnhancedStats())
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'tender_moderators'
+      }, () => fetchEnhancedStats())
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'tender_ai_suggestions'
+      }, () => fetchEnhancedStats())
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   // Fetch dashboard statistics
   const { data: stats, isLoading: statsLoading } = useQuery({
@@ -131,10 +186,22 @@ export const CamertendersAdminPanel: React.FC = () => {
       color: "text-green-600",
     },
     {
-      title: "Total Bids",
-      value: stats?.total_bids || 0,
-      icon: TrendingUp,
+      title: "Active Moderators",
+      value: enhancedStats.moderators || 0,
+      icon: UserCheck,
       color: "text-blue-600",
+    },
+    {
+      title: "Archived Documents",
+      value: enhancedStats.documents || 0,
+      icon: Shield,
+      color: "text-purple-600",
+    },
+    {
+      title: "AI Suggestions",
+      value: enhancedStats.aiSuggestions || 0,
+      icon: Brain,
+      color: "text-orange-600",
     },
     {
       title: "Flagged This Week",
@@ -163,20 +230,21 @@ export const CamertendersAdminPanel: React.FC = () => {
           <h1 className="text-3xl font-bold text-primary">CamerTenders Admin Panel</h1>
           <p className="text-muted-foreground">Comprehensive tender management and oversight</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <TenderNotificationCenter />
           <Button variant="outline">
             <Download className="h-4 w-4 mr-2" />
             Export Data
           </Button>
           <Button variant="outline">
             <Users className="h-4 w-4 mr-2" />
-            Manage Moderators
+            Quick Actions
           </Button>
         </div>
       </div>
 
       {/* Dashboard Stats */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-6">
         {statCards.map((stat, index) => (
           <Card key={index} className="bg-gradient-to-br from-background to-muted/20">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -196,11 +264,12 @@ export const CamertendersAdminPanel: React.FC = () => {
       </div>
 
       <Tabs defaultValue="management" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="management">Tender Management</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="management">Management</TabsTrigger>
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="receipts">Receipts Vault</TabsTrigger>
           <TabsTrigger value="moderators">Moderators</TabsTrigger>
+          <TabsTrigger value="ai-suggestions">AI Suggestions</TabsTrigger>
         </TabsList>
 
         <TabsContent value="management">
@@ -320,71 +389,19 @@ export const CamertendersAdminPanel: React.FC = () => {
         </TabsContent>
 
         <TabsContent value="analytics">
-          <Card>
-            <CardHeader>
-              <CardTitle>Analytics Dashboard</CardTitle>
-              <CardDescription>Platform insights and tender statistics</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="p-4 border rounded-lg">
-                  <h5 className="font-medium mb-2">Top Categories</h5>
-                  <ul className="text-sm space-y-1">
-                    <li>Infrastructure: 45%</li>
-                    <li>Technology: 28%</li>
-                    <li>Services: 17%</li>
-                    <li>Healthcare: 10%</li>
-                  </ul>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h5 className="font-medium mb-2">Regional Activity</h5>
-                  <ul className="text-sm space-y-1">
-                    <li>Centre: 35%</li>
-                    <li>Littoral: 25%</li>
-                    <li>West: 20%</li>
-                    <li>Other: 20%</li>
-                  </ul>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h5 className="font-medium mb-2">Success Rates</h5>
-                  <ul className="text-sm space-y-1">
-                    <li>Completed: 78%</li>
-                    <li>In Progress: 15%</li>
-                    <li>Cancelled: 4%</li>
-                    <li>Disputed: 3%</li>
-                  </ul>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <AdvancedTenderAnalytics />
         </TabsContent>
 
         <TabsContent value="receipts">
-          <Card>
-            <CardHeader>
-              <CardTitle>Tender Receipts Vault</CardTitle>
-              <CardDescription>Secure archive of all tender documentation</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-center py-8">
-                Receipts vault feature coming soon - will archive bid receipts, award certificates, and compliance documents
-              </p>
-            </CardContent>
-          </Card>
+          <TenderReceiptsVault />
         </TabsContent>
 
         <TabsContent value="moderators">
-          <Card>
-            <CardHeader>
-              <CardTitle>Moderator Management</CardTitle>
-              <CardDescription>Manage tender moderators and their permissions</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground text-center py-8">
-                Moderator management interface - assign regional responsibilities and track activity
-              </p>
-            </CardContent>
-          </Card>
+          <TenderModeratorManager />
+        </TabsContent>
+
+        <TabsContent value="ai-suggestions">
+          <SmartAISuggestions />
         </TabsContent>
       </Tabs>
     </div>
