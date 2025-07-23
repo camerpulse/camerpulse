@@ -1,13 +1,14 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Navigation from '@/components/Navigation';
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 import MobileNavigation from '@/components/MobileNavigation';
 import Breadcrumbs from '@/components/Breadcrumbs';
-import NotificationBell from '@/components/NotificationBell';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface LayoutProps {
   showBreadcrumbs?: boolean;
+  showFooter?: boolean;
   breadcrumbItems?: Array<{
     label: string;
     path?: string;
@@ -18,37 +19,20 @@ interface LayoutProps {
 
 export default function Layout({ 
   showBreadcrumbs = true, 
+  showFooter = true,
   breadcrumbItems,
   userRole = 'citizen'
 }: LayoutProps) {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Desktop Navigation */}
-      <div className="hidden md:block">
-        <Navigation />
-      </div>
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* Enhanced Header */}
+      <Header />
       
-      {/* Mobile Navigation */}
-      <div className="md:hidden bg-background border-b sticky top-0 z-40">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">CT</span>
-              </div>
-              <span className="text-lg font-bold">CamerTenders</span>
-            </div>
-            
-            {/* Mobile Menu & Notifications */}
-            <div className="flex items-center space-x-2">
-              {user && <div className="mr-2"><NotificationBell /></div>}
-              <MobileNavigation userRole={userRole} user={user} />
-            </div>
-          </div>
-        </div>
+      {/* Mobile Navigation Fallback - Only show if needed */}
+      <div className="md:hidden">
+        <MobileNavigation userRole={userRole} user={user} />
       </div>
 
       {/* Breadcrumbs */}
@@ -64,6 +48,9 @@ export default function Layout({
       <main className="flex-1">
         <Outlet />
       </main>
+
+      {/* Footer */}
+      {showFooter && <Footer />}
     </div>
   );
 }

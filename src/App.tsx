@@ -4,9 +4,20 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Navigation from "@/components/Navigation";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
+import { AuthProvider } from "./contexts/AuthContext";
+import { PluginProvider } from "./contexts/PluginContext";
+import { RealtimeProvider } from "./contexts/RealtimeContext";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
+import Layout from '@/components/Layout';
+import TenderHomePage from '@/components/TenderHomePage';
+import Auth from './pages/Auth';
+import { AdvancedSearch } from '@/components/AdvancedSearch';
+import { VerificationCenter } from '@/components/VerificationCenter';
+import { RecommendationEngine } from '@/components/RecommendationEngine';
+import UserProfilePage from '@/pages/UserProfilePage';
+import CompanyDashboard from '@/pages/CompanyDashboard';
+// import DiasporaAuth from '@/pages/DiasporaAuth';
 import { LegislationTracker } from "./pages/LegislationTracker";
 import HospitalsDirectory from "./pages/HospitalsDirectory";
 import Tenders from "./pages/Tenders";
@@ -17,11 +28,6 @@ import SearchInterface from "./components/SearchInterface";
 import TenderIssuerDashboard from "./pages/TenderIssuerDashboard";
 import BidderDashboard from "./pages/BidderDashboard";
 import DiasporaConnect from "./pages/DiasporaConnect";
-import { AuthProvider } from "./contexts/AuthContext";
-import { PluginProvider } from "./contexts/PluginContext";
-import { RealtimeProvider } from "./contexts/RealtimeContext";
-import ErrorBoundary from "./components/ErrorBoundary";
-import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 
 const queryClient = new QueryClient();
 
@@ -51,24 +57,35 @@ const App = () => {
                 <Toaster />
                 <Sonner />
                 <OfflineIndicator />
-              <BrowserRouter>
-                <Navigation />
-                <Routes>
-                  <Route path="/" element={<Index />} />
-                  <Route path="/auth" element={<Auth />} />
-                  <Route path="/legislation" element={<LegislationTracker />} />
-                  <Route path="/hospitals" element={<HospitalsDirectory />} />
-                  <Route path="/tenders" element={<Tenders />} />
-                  <Route path="/tenders/create" element={<CreateTender />} />
-                  <Route path="/tenders/:id" element={<TenderDetail />} />
-                  <Route path="/tenders/:id/analytics" element={<TenderAnalytics />} />
-                  <Route path="/search" element={<SearchInterface />} />
-                  <Route path="/analytics" element={<TenderAnalytics />} />
-                  <Route path="/dashboard/tenders" element={<TenderIssuerDashboard />} />
-                  <Route path="/my-bids" element={<BidderDashboard />} />
-                  <Route path="/diaspora-connect" element={<DiasporaConnect />} />
-                </Routes>
-              </BrowserRouter>
+                <BrowserRouter>
+                  <Routes>
+                    <Route path="/" element={<Layout />}>
+                      <Route index element={<TenderHomePage />} />
+                      <Route path="search" element={<AdvancedSearch />} />
+                      <Route path="verification" element={<VerificationCenter />} />
+                      <Route path="recommendations" element={<RecommendationEngine />} />
+                      <Route path="profile/:userId" element={<UserProfilePage />} />
+                      <Route path="company" element={<CompanyDashboard />} />
+                      <Route path="legislation" element={<LegislationTracker />} />
+                      <Route path="hospitals" element={<HospitalsDirectory />} />
+                      <Route path="tenders" element={<Tenders />} />
+                      <Route path="tenders/create" element={<CreateTender />} />
+                      <Route path="tenders/:id" element={<TenderDetail />} />
+                      <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
+                      <Route path="search-interface" element={<SearchInterface />} />
+                      <Route path="analytics" element={<TenderAnalytics />} />
+                      <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />
+                      <Route path="my-bids" element={<BidderDashboard />} />
+                      <Route path="diaspora-connect" element={<DiasporaConnect />} />
+                    </Route>
+                    <Route path="/auth" element={<Layout showFooter={false} />}>
+                      <Route index element={<Auth />} />
+                    </Route>
+                    <Route path="/diaspora-auth" element={<Layout showFooter={false} />}>
+                      <Route index element={<div>Diaspora Auth Page</div>} />
+                    </Route>
+                  </Routes>
+                </BrowserRouter>
               </TooltipProvider>
             </RealtimeProvider>
           </PluginProvider>
