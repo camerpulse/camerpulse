@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Globe, Heart, Users, Calendar, DollarSign, Building, Shield, Settings } from 'lucide-react';
+import { Globe, Heart, Users, Calendar, DollarSign, Building, Shield, Settings, Smartphone } from 'lucide-react';
 
 const DiasporaConnect: React.FC = () => {
   return (
@@ -22,6 +22,10 @@ const DiasporaConnect: React.FC = () => {
             <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin/approvals'}>
               <Shield className="h-4 w-4 mr-2" />
               Approvals
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => window.location.href = '/mobile-features'}>
+              <Smartphone className="h-4 w-4 mr-2" />
+              Mobile App
             </Button>
           </div>
         </div>

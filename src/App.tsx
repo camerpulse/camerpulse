@@ -39,6 +39,8 @@ import DiasporaConnect from "./pages/DiasporaConnect";
 import { TenderPlatformDashboard } from "./components/Admin/TenderPlatformDashboard";
 import { UserModerationTools } from "./components/Admin/UserModerationTools";
 import { TenderApprovalWorkflow } from "./components/Admin/TenderApprovalWorkflow";
+import { MobileAppFeatures } from "./components/ui/mobile-app-features";
+import { EnhancedTenderList } from "./components/enhanced/EnhancedTenderList";
 
 const queryClient = new QueryClient();
 
@@ -97,6 +99,8 @@ const App = () => {
                       <Route path="admin/platform" element={<TenderPlatformDashboard />} />
                       <Route path="admin/moderation" element={<UserModerationTools />} />
                       <Route path="admin/approvals" element={<TenderApprovalWorkflow />} />
+                      <Route path="mobile-features" element={<MobileAppFeatures />} />
+                      <Route path="enhanced-list" element={<EnhancedTenderList />} />
                       <Route path="*" element={<NotFoundPage />} />
                     </Route>
                     <Route path="/auth" element={<Layout showFooter={false} />}>
