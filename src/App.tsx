@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navigation from "@/components/Navigation";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import { LegislationTracker } from "./pages/LegislationTracker";
@@ -11,6 +12,8 @@ import HospitalsDirectory from "./pages/HospitalsDirectory";
 import Tenders from "./pages/Tenders";
 import TenderDetail from "./pages/TenderDetail";
 import CreateTender from "./pages/CreateTender";
+import TenderAnalytics from "./pages/TenderAnalytics";
+import SearchInterface from "./components/SearchInterface";
 import TenderIssuerDashboard from "./pages/TenderIssuerDashboard";
 import BidderDashboard from "./pages/BidderDashboard";
 import DiasporaConnect from "./pages/DiasporaConnect";
@@ -47,6 +50,7 @@ const App = () => {
               <Sonner />
               <OfflineIndicator />
               <BrowserRouter>
+                <Navigation />
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
@@ -55,6 +59,9 @@ const App = () => {
                   <Route path="/tenders" element={<Tenders />} />
                   <Route path="/tenders/create" element={<CreateTender />} />
                   <Route path="/tenders/:id" element={<TenderDetail />} />
+                  <Route path="/tenders/:id/analytics" element={<TenderAnalytics />} />
+                  <Route path="/search" element={<SearchInterface />} />
+                  <Route path="/analytics" element={<TenderAnalytics />} />
                   <Route path="/dashboard/tenders" element={<TenderIssuerDashboard />} />
                   <Route path="/my-bids" element={<BidderDashboard />} />
                   <Route path="/diaspora-connect" element={<DiasporaConnect />} />
