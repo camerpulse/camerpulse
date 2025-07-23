@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ProfileEditDialog } from '@/components/profile/ProfileEditDialog';
 import { ProfileQRCode } from '@/components/profile/ProfileQRCode';
 import { ProfileComparison } from '@/components/profile/ProfileComparison';
+import { WalletTopup } from '@/components/Wallet/WalletTopup';
 import { 
   MapPin, 
   Calendar, 
@@ -1203,6 +1204,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                             <div className="text-center py-8 text-muted-foreground">
                               <CreditCard className="w-12 h-12 mx-auto mb-2 opacity-50" />
                               <p>No transactions yet</p>
+                              <p className="text-xs mt-1">Make your first transaction to see it here</p>
                             </div>
                           ) : (
                             <div className="space-y-3">
@@ -1241,6 +1243,9 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                           )}
                         </CardContent>
                       </Card>
+
+                      {/* Wallet Top-up */}
+                      <WalletTopup onSuccess={fetchWalletData} />
                     </div>
                   ) : (
                     <div className="text-center py-8 text-muted-foreground">

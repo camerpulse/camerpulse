@@ -13,13 +13,13 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    // Create Supabase client using the anon key for user authentication
-    const supabaseClient = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
-    );
+  // Initialize Supabase client using the anon key for user authentication
+  const supabaseClient = createClient(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+  );
 
+  try {
     // Retrieve authenticated user
     const authHeader = req.headers.get("Authorization")!;
     const token = authHeader.replace("Bearer ", "");
@@ -27,8 +27,12 @@ serve(async (req) => {
     const user = data.user;
     if (!user?.email) throw new Error("User not authenticated or email not available");
 
-    // Get request body
-    const { planId, tenderId, amount, currency } = await req.json();
+    // Parse request body
+    const { planId, tenderId, amount, currency = "XAF" } = await req.json();
+    
+    if (!planId || !tenderId || !amount) {
+      throw new Error("Missing required parameters: planId, tenderId, or amount");
+    }
 
     // Initialize Stripe
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -42,22 +46,18 @@ serve(async (req) => {
       customerId = customers.data[0].id;
     }
 
-    // Get plan details for session creation
-    const supabaseService = createClient(
-      Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-      { auth: { persistSession: false } }
-    );
-
-    const { data: plan, error: planError } = await supabaseService
+    // Get payment plan details
+    const { data: paymentPlan, error: planError } = await supabaseClient
       .from("tender_payment_plans")
       .select("*")
       .eq("id", planId)
       .single();
 
-    if (planError) throw new Error("Plan not found");
+    if (planError || !paymentPlan) {
+      throw new Error("Payment plan not found");
+    }
 
-    // Create a one-time payment session
+    // Create a one-time payment session for tender payment
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
       customer_email: customerId ? undefined : user.email,
@@ -66,37 +66,31 @@ serve(async (req) => {
           price_data: {
             currency: currency.toLowerCase(),
             product_data: { 
-              name: `CamerTenders - ${plan.plan_name}`,
-              description: `${plan.duration_days} days tender visibility`
+              name: `${paymentPlan.plan_name} - Tender Payment`,
+              description: `Payment for tender participation: ${tenderId}`
             },
-            unit_amount: amount,
+            unit_amount: amount, // Amount should be in centimes for XAF
           },
           quantity: 1,
         },
       ],
       mode: "payment",
       success_url: `${req.headers.get("origin")}/tenders/${tenderId}?payment=success`,
-      cancel_url: `${req.headers.get("origin")}/tenders/create?payment=cancelled`,
+      cancel_url: `${req.headers.get("origin")}/tenders/${tenderId}?payment=canceled`,
       metadata: {
-        tender_id: tenderId,
-        plan_id: planId,
-        user_id: user.id
+        planId,
+        tenderId,
+        userId: user.id,
+        paymentType: "tender_payment"
       }
     });
-
-    // Update payment record with Stripe session ID
-    await supabaseService
-      .from("tender_payments")
-      .update({ stripe_session_id: session.id })
-      .eq("tender_id", tenderId)
-      .eq("plan_id", planId);
 
     return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 200,
     });
   } catch (error) {
-    console.error("Error creating payment session:", error);
+    console.error("Error in create-tender-payment:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
       status: 500,
