@@ -36,6 +36,9 @@ import SearchInterface from "./components/SearchInterface";
 import TenderIssuerDashboard from "./pages/TenderIssuerDashboard";
 import BidderDashboard from "./pages/BidderDashboard";
 import DiasporaConnect from "./pages/DiasporaConnect";
+import { TenderPlatformDashboard } from "./components/Admin/TenderPlatformDashboard";
+import { UserModerationTools } from "./components/Admin/UserModerationTools";
+import { TenderApprovalWorkflow } from "./components/Admin/TenderApprovalWorkflow";
 
 const queryClient = new QueryClient();
 
@@ -91,6 +94,9 @@ const App = () => {
                       <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />
                       <Route path="my-bids" element={<BidderDashboard />} />
                       <Route path="diaspora-connect" element={<DiasporaConnect />} />
+                      <Route path="admin/platform" element={<TenderPlatformDashboard />} />
+                      <Route path="admin/moderation" element={<UserModerationTools />} />
+                      <Route path="admin/approvals" element={<TenderApprovalWorkflow />} />
                       <Route path="*" element={<NotFoundPage />} />
                     </Route>
                     <Route path="/auth" element={<Layout showFooter={false} />}>
