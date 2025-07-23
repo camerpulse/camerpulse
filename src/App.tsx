@@ -14,6 +14,7 @@ import TenderHomePage from '@/components/TenderHomePage';
 import Auth from './pages/Auth';
 import { AdvancedSearch } from '@/components/AdvancedSearch';
 import { VerificationCenter } from '@/components/VerificationCenter';
+import { BusinessLogicDashboard } from '@/components/business-logic/BusinessLogicDashboard';
 import { RecommendationEngine } from '@/components/RecommendationEngine';
 import UserProfilePage from '@/pages/UserProfilePage';
 import CompanyDashboard from '@/pages/CompanyDashboard';
@@ -87,6 +88,7 @@ const App = () => {
                       <Route path="tenders/:id/bid" element={<BidSubmissionForm />} />
                       <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
                       <Route path="dashboard" element={<UserDashboard />} />
+                      <Route path="business-logic" element={<BusinessLogicDashboard />} />
                       <Route path="tender-management" element={<TenderManagementDashboard />} />
                       <Route path="user-management" element={<UserManagementDashboard />} />
                       <Route path="document-verification" element={<DocumentVerificationDashboard />} />

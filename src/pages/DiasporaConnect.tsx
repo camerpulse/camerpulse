@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Globe, Heart, Users, Calendar, DollarSign, Building, Shield, Settings, Smartphone } from 'lucide-react';
+import { Globe, Heart, Users, Calendar, DollarSign, Building, Shield, Settings, Smartphone, BarChart3, FileCheck, Zap } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const DiasporaConnect: React.FC = () => {
   return (
@@ -11,21 +12,35 @@ const DiasporaConnect: React.FC = () => {
         {/* Admin Access */}
         <div className="flex justify-end mb-4">
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin/platform'}>
-              <Shield className="h-4 w-4 mr-2" />
-              Platform Admin
+            <Button asChild variant="outline" size="sm">
+              <Link to="/admin/platform">
+                <BarChart3 className="h-4 w-4 mr-2" />
+                Platform Admin
+              </Link>
             </Button>
-            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin/moderation'}>
-              <Settings className="h-4 w-4 mr-2" />
-              Moderation
+            <Button asChild variant="outline" size="sm">
+              <Link to="/admin/moderation">
+                <Shield className="h-4 w-4 mr-2" />
+                Moderation
+              </Link>
             </Button>
-            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin/approvals'}>
-              <Shield className="h-4 w-4 mr-2" />
-              Approvals
+            <Button asChild variant="outline" size="sm">
+              <Link to="/admin/approvals">
+                <FileCheck className="h-4 w-4 mr-2" />
+                Approvals
+              </Link>
             </Button>
-            <Button variant="outline" size="sm" onClick={() => window.location.href = '/mobile-features'}>
-              <Smartphone className="h-4 w-4 mr-2" />
-              Mobile App
+            <Button asChild variant="outline" size="sm">
+              <Link to="/business-logic">
+                <Zap className="h-4 w-4 mr-2" />
+                Business Logic
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/mobile-features">
+                <Smartphone className="h-4 w-4 mr-2" />
+                Mobile App
+              </Link>
             </Button>
           </div>
         </div>

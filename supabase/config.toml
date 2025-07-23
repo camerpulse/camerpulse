@@ -158,3 +158,12 @@ verify_jwt = false
 
 [functions.create-tender-payment]
 verify_jwt = true
+
+[functions.tender-status-updater]
+verify_jwt = false
+
+[functions.bidder-qualification-checker]
+verify_jwt = true
+
+[functions.conflict-of-interest-detector]
+verify_jwt = true
