@@ -1,12 +1,31 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Globe, Heart, Users, Calendar, DollarSign, Building } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Globe, Heart, Users, Calendar, DollarSign, Building, Shield, Settings } from 'lucide-react';
 
 const DiasporaConnect: React.FC = () => {
   return (
     <div className="min-h-screen bg-background py-8">
       <div className="container mx-auto px-4">
+        {/* Admin Access */}
+        <div className="flex justify-end mb-4">
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin/platform'}>
+              <Shield className="h-4 w-4 mr-2" />
+              Platform Admin
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin/moderation'}>
+              <Settings className="h-4 w-4 mr-2" />
+              Moderation
+            </Button>
+            <Button variant="outline" size="sm" onClick={() => window.location.href = '/admin/approvals'}>
+              <Shield className="h-4 w-4 mr-2" />
+              Approvals
+            </Button>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="text-center mb-8">
           <Globe className="mx-auto h-16 w-16 text-primary mb-4" />
