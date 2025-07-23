@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { Progress } from '@/components/ui/progress';
 import { 
   Calendar, 
   MapPin, 
@@ -23,7 +24,14 @@ import {
   FileText,
   AlertCircle,
   MessageCircle,
-  Info
+  Info,
+  Upload,
+  X,
+  Download,
+  File,
+  Check,
+  Loader2,
+  Paperclip
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
@@ -59,6 +67,15 @@ interface TenderDetail {
   updated_at: string;
   payment_plan_id?: string;
   payment_status?: string;
+}
+
+interface UploadedFile {
+  id: string;
+  name: string;
+  size: number;
+  type: string;
+  url: string;
+  uploadProgress?: number;
 }
 
 interface TenderBid {
@@ -121,6 +138,11 @@ export default function TenderDetail() {
     currency: 'FCFA',
     notes: ''
   });
+  
+  // File upload state
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Comment form state
   const [newComment, setNewComment] = useState('');
@@ -223,6 +245,115 @@ export default function TenderDetail() {
     }
   };
 
+  const handleFileUpload = async (files: FileList) => {
+    if (!files.length) return;
+
+    setIsUploading(true);
+    const newFiles: UploadedFile[] = [];
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Validate file
+        if (file.size > 10 * 1024 * 1024) { // 10MB limit
+          toast({
+            title: "File Too Large",
+            description: `${file.name} exceeds 10MB limit.`,
+            variant: "destructive"
+          });
+          continue;
+        }
+
+        const allowedTypes = [
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'application/vnd.ms-excel',
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          'image/jpeg',
+          'image/png',
+          'image/gif'
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+          toast({
+            title: "Invalid File Type",
+            description: `${file.name} is not a supported file type.`,
+            variant: "destructive"
+          });
+          continue;
+        }
+
+        // Create file record
+        const fileId = crypto.randomUUID();
+        const fileName = `tender-documents/${id}/${fileId}-${file.name}`;
+        
+        // Upload to Supabase Storage
+        const { data, error: uploadError } = await supabase.storage
+          .from('tender-documents')
+          .upload(fileName, file);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        // Get public URL
+        const { data: { publicUrl } } = supabase.storage
+          .from('tender-documents')
+          .getPublicUrl(fileName);
+
+        const uploadedFile: UploadedFile = {
+          id: fileId,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          url: publicUrl,
+          uploadProgress: 100
+        };
+
+        newFiles.push(uploadedFile);
+      }
+
+      setUploadedFiles(prev => [...prev, ...newFiles]);
+      
+      if (newFiles.length > 0) {
+        toast({
+          title: "Files Uploaded",
+          description: `${newFiles.length} file(s) uploaded successfully.`
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Upload Error",
+        description: error.message || "Failed to upload files.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const removeFile = (fileId: string) => {
+    setUploadedFiles(prev => prev.filter(file => file.id !== fileId));
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const getFileIcon = (type: string) => {
+    if (type.includes('pdf')) return <FileText className="h-4 w-4 text-red-500" />;
+    if (type.includes('word')) return <FileText className="h-4 w-4 text-blue-500" />;
+    if (type.includes('excel') || type.includes('sheet')) return <FileText className="h-4 w-4 text-green-500" />;
+    if (type.includes('image')) return <FileText className="h-4 w-4 text-purple-500" />;
+    return <File className="h-4 w-4 text-gray-500" />;
+  };
+
   const handleBidSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -238,6 +369,16 @@ export default function TenderDetail() {
     setIsSubmittingBid(true);
 
     try {
+      const documentsData = uploadedFiles.length > 0 ? {
+        files: uploadedFiles.map(file => ({
+          id: file.id,
+          name: file.name,
+          url: file.url,
+          type: file.type,
+          size: file.size
+        }))
+      } : null;
+
       const { error } = await supabase
         .from('tender_bids')
         .insert({
@@ -245,9 +386,14 @@ export default function TenderDetail() {
           user_id: 'temp-user-id', // Will be replaced with actual user ID when auth is implemented
           company_id: 'temp-company-id',
           technical_proposal: bidForm.technical_proposal,
-          financial_proposal: { details: 'Financial proposal details' },
+          financial_proposal: { 
+            bid_amount: parseInt(bidForm.bid_amount),
+            currency: bidForm.currency,
+            details: 'Financial proposal details'
+          },
           bid_amount: parseInt(bidForm.bid_amount),
           currency: bidForm.currency,
+          documents: documentsData,
           notes: bidForm.notes,
           status: 'submitted'
         });
@@ -265,6 +411,7 @@ export default function TenderDetail() {
         currency: 'FCFA',
         notes: ''
       });
+      setUploadedFiles([]);
 
       fetchBids();
     } catch (error: any) {
@@ -487,6 +634,39 @@ export default function TenderDetail() {
             )}
           </div>
 
+          {/* Tender Documents */}
+          {tender.documents && Object.keys(tender.documents).length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Tender Documents</CardTitle>
+                <CardDescription>Download required documents and specifications</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {tender.documents.files?.map((doc: any, index: number) => (
+                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center gap-3">
+                        {getFileIcon(doc.type || 'application/pdf')}
+                        <div>
+                          <p className="font-medium">{doc.name || `Document ${index + 1}`}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {doc.size ? formatFileSize(doc.size) : 'Unknown size'}
+                          </p>
+                        </div>
+                      </div>
+                      <Button variant="outline" size="sm" asChild>
+                        <a href={doc.url} target="_blank" rel="noopener noreferrer">
+                          <Download className="h-4 w-4 mr-2" />
+                          Download
+                        </a>
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Submission Instructions */}
           {tender.instructions && (
             <Card>
@@ -498,6 +678,37 @@ export default function TenderDetail() {
               </CardContent>
             </Card>
           )}
+
+          {/* Key Dates */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Important Dates</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center gap-3">
+                  <Calendar className="h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="font-medium">Submission Deadline</p>
+                    <p className="text-sm text-muted-foreground">
+                      {format(new Date(tender.deadline), 'PPP')} at {format(new Date(tender.deadline), 'p')}
+                    </p>
+                  </div>
+                </div>
+                {tender.bid_opening_date && (
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <p className="font-medium">Bid Opening</p>
+                      <p className="text-sm text-muted-foreground">
+                        {format(new Date(tender.bid_opening_date), 'PPP')} at {format(new Date(tender.bid_opening_date), 'p')}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="bid" className="space-y-6">
@@ -559,6 +770,78 @@ export default function TenderDetail() {
                         <option value="USD">USD</option>
                         <option value="EUR">EUR</option>
                       </select>
+                    </div>
+                  </div>
+
+                  {/* File Upload Section */}
+                  <div>
+                    <Label>Supporting Documents</Label>
+                    <div className="mt-2 space-y-4">
+                      {/* Upload Area */}
+                      <div 
+                        className="border-2 border-dashed border-muted-foreground/25 rounded-lg p-6 text-center hover:border-muted-foreground/50 transition-colors cursor-pointer"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Upload className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                        <p className="text-sm text-muted-foreground mb-1">
+                          Click to upload or drag and drop
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          PDF, DOC, XLS, Images (Max 10MB each)
+                        </p>
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          multiple
+                          className="hidden"
+                          accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png,.gif"
+                          onChange={(e) => e.target.files && handleFileUpload(e.target.files)}
+                        />
+                      </div>
+
+                      {/* Uploaded Files List */}
+                      {uploadedFiles.length > 0 && (
+                        <div className="space-y-2">
+                          <Label className="text-sm font-medium">Uploaded Files ({uploadedFiles.length})</Label>
+                          {uploadedFiles.map((file) => (
+                            <div key={file.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+                              <div className="flex items-center gap-3">
+                                {getFileIcon(file.type)}
+                                <div>
+                                  <p className="text-sm font-medium truncate max-w-48">{file.name}</p>
+                                  <p className="text-xs text-muted-foreground">{formatFileSize(file.size)}</p>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {file.uploadProgress !== undefined && file.uploadProgress < 100 ? (
+                                  <div className="flex items-center gap-2">
+                                    <Progress value={file.uploadProgress} className="w-16" />
+                                    <span className="text-xs text-muted-foreground">{file.uploadProgress}%</span>
+                                  </div>
+                                ) : (
+                                  <Check className="h-4 w-4 text-green-500" />
+                                )}
+                                <Button
+                                  type="button"
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeFile(file.id)}
+                                  className="h-6 w-6 p-0"
+                                >
+                                  <X className="h-3 w-3" />
+                                </Button>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {isUploading && (
+                        <div className="flex items-center justify-center gap-2 p-4">
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <span className="text-sm text-muted-foreground">Uploading files...</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
