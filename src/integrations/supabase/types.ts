@@ -5774,6 +5774,65 @@ export type Database = {
         }
         Relationships: []
       }
+      business_tender_eligibility: {
+        Row: {
+          can_bid_on_tenders: boolean | null
+          can_post_tenders: boolean | null
+          company_id: string | null
+          created_at: string | null
+          id: string
+          last_verification_check: string | null
+          membership_active: boolean | null
+          membership_expires_at: string | null
+          updated_at: string | null
+          user_id: string
+          verification_notes: string | null
+          verification_status:
+            | Database["public"]["Enums"]["business_verification_status"]
+            | null
+        }
+        Insert: {
+          can_bid_on_tenders?: boolean | null
+          can_post_tenders?: boolean | null
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_verification_check?: string | null
+          membership_active?: boolean | null
+          membership_expires_at?: string | null
+          updated_at?: string | null
+          user_id: string
+          verification_notes?: string | null
+          verification_status?:
+            | Database["public"]["Enums"]["business_verification_status"]
+            | null
+        }
+        Update: {
+          can_bid_on_tenders?: boolean | null
+          can_post_tenders?: boolean | null
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          last_verification_check?: string | null
+          membership_active?: boolean | null
+          membership_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string
+          verification_notes?: string | null
+          verification_status?:
+            | Database["public"]["Enums"]["business_verification_status"]
+            | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "business_tender_eligibility_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       business_verifications: {
         Row: {
           business_address: string
@@ -31419,46 +31478,74 @@ export type Database = {
         Row: {
           amount_fcfa: number
           amount_usd: number
+          company_id: string | null
           created_at: string
           currency: string
+          expires_at: string | null
           id: string
+          paid_at: string | null
+          payment_gateway_response: Json | null
           payment_method: string | null
           payment_status: string
           plan_id: string | null
+          refund_reason: string | null
+          refunded_at: string | null
           stripe_session_id: string | null
           tender_id: string | null
+          transaction_reference: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           amount_fcfa: number
           amount_usd: number
+          company_id?: string | null
           created_at?: string
           currency?: string
+          expires_at?: string | null
           id?: string
+          paid_at?: string | null
+          payment_gateway_response?: Json | null
           payment_method?: string | null
           payment_status?: string
           plan_id?: string | null
+          refund_reason?: string | null
+          refunded_at?: string | null
           stripe_session_id?: string | null
           tender_id?: string | null
+          transaction_reference?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           amount_fcfa?: number
           amount_usd?: number
+          company_id?: string | null
           created_at?: string
           currency?: string
+          expires_at?: string | null
           id?: string
+          paid_at?: string | null
+          payment_gateway_response?: Json | null
           payment_method?: string | null
           payment_status?: string
           plan_id?: string | null
+          refund_reason?: string | null
+          refunded_at?: string | null
           stripe_session_id?: string | null
           tender_id?: string | null
+          transaction_reference?: string | null
           updated_at?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "tender_payments_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "tender_payments_plan_id_fkey"
             columns: ["plan_id"]
@@ -34812,6 +34899,10 @@ export type Database = {
         }
         Returns: Json
       }
+      check_business_tender_eligibility: {
+        Args: { p_user_id: string; p_action: string }
+        Returns: Json
+      }
       check_claim_renewals: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -35530,6 +35621,11 @@ export type Database = {
         | "event_attendee"
       bias_level: "none" | "mild" | "moderate" | "high"
       brand_ambassador_status: "available" | "not_available" | "negotiable"
+      business_verification_status:
+        | "unverified"
+        | "pending"
+        | "verified"
+        | "rejected"
       campaign_type:
         | "event"
         | "product_launch"
@@ -36169,6 +36265,12 @@ export const Constants = {
       ],
       bias_level: ["none", "mild", "moderate", "high"],
       brand_ambassador_status: ["available", "not_available", "negotiable"],
+      business_verification_status: [
+        "unverified",
+        "pending",
+        "verified",
+        "rejected",
+      ],
       campaign_type: [
         "event",
         "product_launch",
