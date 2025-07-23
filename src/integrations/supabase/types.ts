@@ -13968,6 +13968,39 @@ export type Database = {
           },
         ]
       }
+      email_verification_tokens: {
+        Row: {
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          token: string
+          token_type: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          token: string
+          token_type?: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          token?: string
+          token_type?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       encrypted_messages: {
         Row: {
           created_at: string | null
@@ -32208,6 +32241,108 @@ export type Database = {
           last_updated?: string
           preferred_regions?: string[] | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_profile_extensions: {
+        Row: {
+          account_verification_level: number | null
+          address_line1: string | null
+          address_line2: string | null
+          city: string | null
+          country: string | null
+          created_at: string
+          date_of_birth: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relationship: string | null
+          facebook_url: string | null
+          gender: string | null
+          id: string
+          id_document_number: string | null
+          id_document_type: string | null
+          id_document_url: string | null
+          id_verified_at: string | null
+          linkedin_url: string | null
+          notification_preferences: Json | null
+          occupation: string | null
+          organization: string | null
+          phone_number: string | null
+          postal_code: string | null
+          preferred_language: string | null
+          privacy_settings: Json | null
+          region: string | null
+          timezone: string | null
+          twitter_url: string | null
+          updated_at: string
+          user_id: string
+          website_url: string | null
+        }
+        Insert: {
+          account_verification_level?: number | null
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
+          facebook_url?: string | null
+          gender?: string | null
+          id?: string
+          id_document_number?: string | null
+          id_document_type?: string | null
+          id_document_url?: string | null
+          id_verified_at?: string | null
+          linkedin_url?: string | null
+          notification_preferences?: Json | null
+          occupation?: string | null
+          organization?: string | null
+          phone_number?: string | null
+          postal_code?: string | null
+          preferred_language?: string | null
+          privacy_settings?: Json | null
+          region?: string | null
+          timezone?: string | null
+          twitter_url?: string | null
+          updated_at?: string
+          user_id: string
+          website_url?: string | null
+        }
+        Update: {
+          account_verification_level?: number | null
+          address_line1?: string | null
+          address_line2?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relationship?: string | null
+          facebook_url?: string | null
+          gender?: string | null
+          id?: string
+          id_document_number?: string | null
+          id_document_type?: string | null
+          id_document_url?: string | null
+          id_verified_at?: string | null
+          linkedin_url?: string | null
+          notification_preferences?: Json | null
+          occupation?: string | null
+          organization?: string | null
+          phone_number?: string | null
+          postal_code?: string | null
+          preferred_language?: string | null
+          privacy_settings?: Json | null
+          region?: string | null
+          timezone?: string | null
+          twitter_url?: string | null
+          updated_at?: string
+          user_id?: string
+          website_url?: string | null
         }
         Relationships: []
       }
