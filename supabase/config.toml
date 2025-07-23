@@ -173,3 +173,9 @@ verify_jwt = false
 
 [functions.send-tender-notifications]
 verify_jwt = false
+
+[functions.validate-tender-issuer]
+verify_jwt = false
+
+[functions.audit-registry-check]
+verify_jwt = false
