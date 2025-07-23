@@ -54,20 +54,78 @@ export const TenderComments: React.FC<TenderCommentsProps> = ({ tenderId, readon
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Fetch comments using SQL query to avoid type issues
+  // Fetch comments using direct table queries
   const { data: comments, isLoading } = useQuery({
     queryKey: ['tender_comments', tenderId],
     queryFn: async (): Promise<Comment[]> => {
       // Get main comments
       const { data: mainComments, error } = await supabase
-        .rpc('get_tender_comments', { p_tender_id: tenderId });
+        .from('tender_comments')
+        .select('*')
+        .eq('tender_id', tenderId)
+        .is('parent_comment_id', null)
+        .order('created_at', { ascending: false });
 
       if (error) {
         console.error('Error fetching comments:', error);
         return [];
       }
 
-      return mainComments || [];
+      if (!mainComments) return [];
+
+      // Transform and get replies for each comment
+      const commentsWithReplies: Comment[] = await Promise.all(
+        mainComments.map(async (comment) => {
+          const { data: replies } = await supabase
+            .from('tender_comments')
+            .select('*')
+            .eq('parent_comment_id', comment.id)
+            .order('created_at', { ascending: true });
+
+          return {
+            id: comment.id,
+            tender_id: comment.tender_id,
+            user_id: comment.user_id,
+            comment_text: comment.comment_text,
+            comment_type: 'public',
+            parent_comment_id: comment.parent_comment_id,
+            is_public: comment.is_public,
+            is_verified_bidder: false,
+            upvotes: 0,
+            downvotes: 0,
+            flagged_count: 0,
+            is_hidden: false,
+            created_at: comment.created_at,
+            updated_at: comment.updated_at,
+            user_profile: {
+              username: 'Anonymous User',
+              verified: false
+            },
+            replies: (replies || []).map(reply => ({
+              id: reply.id,
+              tender_id: reply.tender_id,
+              user_id: reply.user_id,
+              comment_text: reply.comment_text,
+              comment_type: 'public',
+              parent_comment_id: reply.parent_comment_id,
+              is_public: reply.is_public,
+              is_verified_bidder: false,
+              upvotes: 0,
+              downvotes: 0,
+              flagged_count: 0,
+              is_hidden: false,
+              created_at: reply.created_at,
+              updated_at: reply.updated_at,
+              user_profile: {
+                username: 'Anonymous User',
+                verified: false
+              }
+            }))
+          };
+        })
+      );
+
+      return commentsWithReplies;
     },
   });
 
@@ -78,11 +136,13 @@ export const TenderComments: React.FC<TenderCommentsProps> = ({ tenderId, readon
       if (!user) throw new Error('User not authenticated');
 
       const { error } = await supabase
-        .rpc('create_tender_comment', {
-          p_tender_id: tenderId,
-          p_user_id: user.id,
-          p_comment_text: text,
-          p_parent_comment_id: parentId || null
+        .from('tender_comments')
+        .insert({
+          tender_id: tenderId,
+          user_id: user.id,
+          comment_text: text,
+          parent_comment_id: parentId || null,
+          is_public: true
         });
 
       if (error) throw error;
@@ -109,17 +169,18 @@ export const TenderComments: React.FC<TenderCommentsProps> = ({ tenderId, readon
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('User not authenticated');
 
-      const { error } = await supabase
-        .rpc('vote_on_comment', {
-          p_comment_id: commentId,
-          p_user_id: user.id,
-          p_vote_type: voteType
-        });
-
-      if (error) throw error;
+      // For now, we'll just show a toast since the voting functionality requires the vote tables to be properly set up
+      throw new Error('Voting functionality will be available soon');
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tender_comments', tenderId] });
+    },
+    onError: (error) => {
+      toast({ 
+        title: "Voting unavailable", 
+        description: "Comment voting will be available soon",
+        variant: "default" 
+      });
     }
   });
 
