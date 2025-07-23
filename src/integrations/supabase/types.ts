@@ -5097,6 +5097,60 @@ export type Database = {
           },
         ]
       }
+      bidder_credibility_scores: {
+        Row: {
+          average_rating: number | null
+          badges: Json | null
+          bidder_id: string
+          bidder_name: string
+          bids_submitted: number | null
+          bids_won: number | null
+          civic_participation_score: number | null
+          complaints_count: number | null
+          created_at: string
+          credibility_score: number | null
+          delivery_success_rate: number | null
+          id: string
+          last_calculated_at: string | null
+          updated_at: string
+          win_ratio: number | null
+        }
+        Insert: {
+          average_rating?: number | null
+          badges?: Json | null
+          bidder_id: string
+          bidder_name: string
+          bids_submitted?: number | null
+          bids_won?: number | null
+          civic_participation_score?: number | null
+          complaints_count?: number | null
+          created_at?: string
+          credibility_score?: number | null
+          delivery_success_rate?: number | null
+          id?: string
+          last_calculated_at?: string | null
+          updated_at?: string
+          win_ratio?: number | null
+        }
+        Update: {
+          average_rating?: number | null
+          badges?: Json | null
+          bidder_id?: string
+          bidder_name?: string
+          bids_submitted?: number | null
+          bids_won?: number | null
+          civic_participation_score?: number | null
+          complaints_count?: number | null
+          created_at?: string
+          credibility_score?: number | null
+          delivery_success_rate?: number | null
+          id?: string
+          last_calculated_at?: string | null
+          updated_at?: string
+          win_ratio?: number | null
+        }
+        Relationships: []
+      }
       bill_comments: {
         Row: {
           comment_text: string
@@ -15991,6 +16045,60 @@ export type Database = {
           },
         ]
       }
+      flagged_tender_entities: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_name: string
+          entity_type: string
+          evidence: string | null
+          flag_reason: string
+          flag_type: string
+          flagged_by: string
+          id: string
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_name: string
+          entity_type: string
+          evidence?: string | null
+          flag_reason: string
+          flag_type: string
+          flagged_by: string
+          id?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_name?: string
+          entity_type?: string
+          evidence?: string | null
+          flag_reason?: string
+          flag_type?: string
+          flagged_by?: string
+          id?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string | null
@@ -18097,6 +18205,60 @@ export type Database = {
           severity?: string
           source_system?: string
           title?: string
+        }
+        Relationships: []
+      }
+      issuer_credibility_scores: {
+        Row: {
+          average_rating: number | null
+          complaints_count: number | null
+          created_at: string
+          credibility_level: string | null
+          credibility_score: number | null
+          delivery_success_rate: number | null
+          fraud_flags_count: number | null
+          id: string
+          issuer_id: string
+          issuer_name: string
+          issuer_type: string
+          last_calculated_at: string | null
+          tenders_awarded: number | null
+          tenders_posted: number | null
+          updated_at: string
+        }
+        Insert: {
+          average_rating?: number | null
+          complaints_count?: number | null
+          created_at?: string
+          credibility_level?: string | null
+          credibility_score?: number | null
+          delivery_success_rate?: number | null
+          fraud_flags_count?: number | null
+          id?: string
+          issuer_id: string
+          issuer_name: string
+          issuer_type: string
+          last_calculated_at?: string | null
+          tenders_awarded?: number | null
+          tenders_posted?: number | null
+          updated_at?: string
+        }
+        Update: {
+          average_rating?: number | null
+          complaints_count?: number | null
+          created_at?: string
+          credibility_level?: string | null
+          credibility_score?: number | null
+          delivery_success_rate?: number | null
+          fraud_flags_count?: number | null
+          id?: string
+          issuer_id?: string
+          issuer_name?: string
+          issuer_type?: string
+          last_calculated_at?: string | null
+          tenders_awarded?: number | null
+          tenders_posted?: number | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -31203,6 +31365,33 @@ export type Database = {
           },
         ]
       }
+      tender_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       tender_comments: {
         Row: {
           comment_text: string
@@ -31250,6 +31439,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tender_credibility_aggregates: {
+        Row: {
+          average_budget_fidelity: number | null
+          average_quality: number | null
+          average_timeliness: number | null
+          average_transparency: number | null
+          created_at: string
+          credibility_status: string | null
+          fraud_flags_count: number | null
+          id: string
+          last_updated_at: string | null
+          overall_average: number | null
+          tender_id: string
+          total_ratings: number | null
+        }
+        Insert: {
+          average_budget_fidelity?: number | null
+          average_quality?: number | null
+          average_timeliness?: number | null
+          average_transparency?: number | null
+          created_at?: string
+          credibility_status?: string | null
+          fraud_flags_count?: number | null
+          id?: string
+          last_updated_at?: string | null
+          overall_average?: number | null
+          tender_id: string
+          total_ratings?: number | null
+        }
+        Update: {
+          average_budget_fidelity?: number | null
+          average_quality?: number | null
+          average_timeliness?: number | null
+          average_transparency?: number | null
+          created_at?: string
+          credibility_status?: string | null
+          fraud_flags_count?: number | null
+          id?: string
+          last_updated_at?: string | null
+          overall_average?: number | null
+          tender_id?: string
+          total_ratings?: number | null
+        }
+        Relationships: []
       }
       tender_document_verification: {
         Row: {
@@ -31630,6 +31864,54 @@ export type Database = {
           },
         ]
       }
+      tender_ratings: {
+        Row: {
+          budget_fidelity_rating: number | null
+          comment: string | null
+          created_at: string
+          fraud_evidence: string | null
+          fraud_flag: boolean | null
+          id: string
+          overall_rating: number | null
+          quality_rating: number | null
+          tender_id: string
+          timeliness_rating: number | null
+          transparency_rating: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          budget_fidelity_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          fraud_evidence?: string | null
+          fraud_flag?: boolean | null
+          id?: string
+          overall_rating?: number | null
+          quality_rating?: number | null
+          tender_id: string
+          timeliness_rating?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          budget_fidelity_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          fraud_evidence?: string | null
+          fraud_flag?: boolean | null
+          id?: string
+          overall_rating?: number | null
+          quality_rating?: number | null
+          tender_id?: string
+          timeliness_rating?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tender_receipts_vault: {
         Row: {
           created_at: string
@@ -31768,7 +32050,9 @@ export type Database = {
           budget_max: number | null
           budget_min: number | null
           category: string
+          category_id: string | null
           created_at: string
+          created_by: string | null
           currency: string
           deadline: string
           description: string | null
@@ -31778,10 +32062,12 @@ export type Database = {
           id: string
           instructions: string | null
           is_featured: boolean
+          organization_name: string | null
           payment_plan_id: string | null
           payment_status: string | null
           published_by_company_id: string | null
           published_by_user_id: string
+          reference_number: string | null
           region: string
           status: string
           tender_type: string
@@ -31798,7 +32084,9 @@ export type Database = {
           budget_max?: number | null
           budget_min?: number | null
           category: string
+          category_id?: string | null
           created_at?: string
+          created_by?: string | null
           currency?: string
           deadline: string
           description?: string | null
@@ -31808,10 +32096,12 @@ export type Database = {
           id?: string
           instructions?: string | null
           is_featured?: boolean
+          organization_name?: string | null
           payment_plan_id?: string | null
           payment_status?: string | null
           published_by_company_id?: string | null
           published_by_user_id: string
+          reference_number?: string | null
           region: string
           status?: string
           tender_type: string
@@ -31828,7 +32118,9 @@ export type Database = {
           budget_max?: number | null
           budget_min?: number | null
           category?: string
+          category_id?: string | null
           created_at?: string
+          created_by?: string | null
           currency?: string
           deadline?: string
           description?: string | null
@@ -31838,10 +32130,12 @@ export type Database = {
           id?: string
           instructions?: string | null
           is_featured?: boolean
+          organization_name?: string | null
           payment_plan_id?: string | null
           payment_status?: string | null
           published_by_company_id?: string | null
           published_by_user_id?: string
+          reference_number?: string | null
           region?: string
           status?: string
           tender_type?: string
@@ -34871,6 +35165,10 @@ export type Database = {
         Args: { p_nomination_id: string }
         Returns: undefined
       }
+      calculate_bidder_credibility_score: {
+        Args: { p_bidder_id: string }
+        Returns: undefined
+      }
       calculate_civic_influence_score: {
         Args: { p_profile_id: string }
         Returns: number
@@ -34933,6 +35231,10 @@ export type Database = {
       calculate_fix_trust_score: {
         Args: { p_fix_type: string }
         Returns: number
+      }
+      calculate_issuer_credibility_score: {
+        Args: { p_issuer_id: string; p_issuer_type: string }
+        Returns: undefined
       }
       calculate_mp_legislative_performance: {
         Args: { p_mp_id: string }
