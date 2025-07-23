@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import NotificationBell from '@/components/NotificationBell';
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -156,42 +157,8 @@ export default function Navigation() {
               </Link>
             </Button>
             
-            {/* Notifications */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="relative">
-                  <Bell className="h-4 w-4" />
-                  <Badge className="absolute -top-2 -right-2 h-5 w-5 flex items-center justify-center p-0 text-xs">
-                    3
-                  </Badge>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80">
-                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <div className="flex flex-col gap-1">
-                    <div className="font-medium">New bid submitted</div>
-                    <div className="text-sm text-muted-foreground">Road Construction Project - Douala</div>
-                    <div className="text-xs text-muted-foreground">2 minutes ago</div>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <div className="flex flex-col gap-1">
-                    <div className="font-medium">Tender deadline approaching</div>
-                    <div className="text-sm text-muted-foreground">Hospital Equipment Supply</div>
-                    <div className="text-xs text-muted-foreground">1 hour ago</div>
-                  </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <div className="flex flex-col gap-1">
-                    <div className="font-medium">Bid awarded</div>
-                    <div className="text-sm text-muted-foreground">School Renovation Project</div>
-                    <div className="text-xs text-muted-foreground">3 hours ago</div>
-                  </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Notifications - Replace with NotificationBell */}
+            <NotificationBell />
             
             {/* User Menu */}
             <DropdownMenu>
