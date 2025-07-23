@@ -32,10 +32,7 @@ export default function AdminTenderRatingsPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tender_ratings')
-        .select(`
-          *,
-          tenders (title, issuer_name)
-        `)
+        .select('*')
         .order('created_at', { ascending: false })
         .limit(20);
       
@@ -160,28 +157,28 @@ export default function AdminTenderRatingsPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {recentRatings?.map((rating) => (
-                <div key={rating.id} className="border rounded-lg p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="font-semibold">{rating.tenders?.title}</h3>
-                      <p className="text-sm text-muted-foreground">by {rating.tenders?.issuer_name}</p>
-                      <div className="flex items-center gap-4 mt-2 text-sm">
-                        <span>Overall: {rating.overall_rating}/5</span>
-                        <span>Quality: {rating.quality_rating}/5</span>
-                        <span>Budget: {rating.budget_fidelity_rating}/5</span>
-                        {rating.fraud_flag && <Badge variant="destructive">Fraud Flagged</Badge>}
+                  <div key={rating.id} className="border rounded-lg p-4">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h3 className="font-semibold">Rating for Tender #{rating.tender_id}</h3>
+                        <p className="text-sm text-muted-foreground">User Rating Submission</p>
+                        <div className="flex items-center gap-4 mt-2 text-sm">
+                          <span>Overall: {rating.overall_rating}/5</span>
+                          <span>Quality: {rating.quality_rating}/5</span>
+                          <span>Budget: {rating.budget_fidelity_rating}/5</span>
+                          {rating.fraud_flag && <Badge variant="destructive">Fraud Flagged</Badge>}
+                        </div>
+                        {rating.comment && <p className="text-sm mt-1">"{rating.comment}"</p>}
                       </div>
-                      {rating.comment && <p className="text-sm mt-1">"{rating.comment}"</p>}
+                      <Button 
+                        size="sm" 
+                        variant="outline"
+                        onClick={() => deleteRatingMutation.mutate(rating.id)}
+                      >
+                        Remove
+                      </Button>
                     </div>
-                    <Button 
-                      size="sm" 
-                      variant="outline"
-                      onClick={() => deleteRatingMutation.mutate(rating.id)}
-                    >
-                      Remove
-                    </Button>
                   </div>
-                </div>
               ))}
             </CardContent>
           </Card>

@@ -90,7 +90,7 @@ export const TenderDiscovery: React.FC<TenderDiscoveryProps> = ({
     if (error) {
       console.error('Error fetching tenders:', error);
     } else {
-      setTenders(data || []);
+      setTenders((data as any) || []);
     }
     
     setLoading(false);

@@ -83,19 +83,36 @@ export const TenderCreationForm: React.FC<TenderCreationFormProps> = ({ onSucces
       const referenceNumber = `TND-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
 
       const tenderData = {
-        ...data,
+        title: data.title,
+        description: data.description,
+        category: data.category_id || 'general',
+        tender_type: 'open',
+        region: data.region || 'nationwide',
+        budget_min: data.estimated_value_fcfa ? data.estimated_value_fcfa * 0.8 : null,
+        budget_max: data.estimated_value_fcfa || null,
+        deadline: new Date(data.submission_deadline).toISOString(),
+        published_by_user_id: user.id,
+        issuer_id: user.id,
+        issuer_name: data.organization_name,
+        issuer_type: 'business',
         reference_number: referenceNumber,
-        created_by: user.id,
         status: 'draft',
         submission_deadline: new Date(data.submission_deadline).toISOString(),
-        opening_date: data.opening_date ? new Date(data.opening_date).toISOString() : null,
+        bid_opening_date: data.opening_date ? new Date(data.opening_date).toISOString() : null,
         project_start_date: data.project_start_date ? new Date(data.project_start_date).toISOString() : null,
         project_end_date: data.project_end_date ? new Date(data.project_end_date).toISOString() : null,
+        minimum_qualification: data.minimum_qualification,
+        evaluation_criteria: data.evaluation_criteria,
+        contact_information: JSON.stringify({
+          person: data.contact_person,
+          phone: data.contact_phone,
+          email: data.organization_email,
+        }),
       };
 
       const { data: tender, error } = await supabase
         .from('tenders')
-        .insert([tenderData])
+        .insert(tenderData)
         .select()
         .single();
 

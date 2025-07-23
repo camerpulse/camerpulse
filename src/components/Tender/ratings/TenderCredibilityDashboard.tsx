@@ -55,16 +55,7 @@ export function TenderCredibilityDashboard() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tender_credibility_aggregates')
-        .select(`
-          *,
-          tenders (
-            id,
-            title,
-            category,
-            status,
-            issuer_name
-          )
-        `)
+        .select('*')
         .gte('total_ratings', 3) // Only tenders with meaningful ratings
         .order('overall_average', { ascending: false })
         .limit(10);
@@ -267,7 +258,7 @@ export function TenderCredibilityDashboard() {
                     </div>
                     <CredibilityScoreCard
                       score={issuer.credibility_score}
-                      level={issuer.credibility_level}
+                      level={issuer.credibility_level as 'high' | 'moderate' | 'low'}
                       entityType="issuer"
                       entityName={issuer.issuer_name}
                       stats={{
@@ -314,7 +305,7 @@ export function TenderCredibilityDashboard() {
                         win_ratio: bidder.win_ratio,
                         complaints_count: bidder.complaints_count,
                         average_rating: bidder.average_rating,
-                        badges: bidder.badges || [],
+                        badges: Array.isArray(bidder.badges) ? (bidder.badges as string[]) : [],
                       }}
                       compact={true}
                     />
@@ -348,13 +339,13 @@ export function TenderCredibilityDashboard() {
                           <span className="flex items-center justify-center w-6 h-6 rounded-full bg-primary/10 text-primary font-bold text-xs">
                             {index + 1}
                           </span>
-                          <h3 className="font-semibold">{tender.tenders?.title}</h3>
+                          <h3 className="font-semibold">Tender #{tender.tender_id}</h3>
                           <Badge variant={tender.credibility_status === 'excellent' ? 'default' : 'secondary'}>
                             {tender.credibility_status}
                           </Badge>
                         </div>
                         <p className="text-sm text-muted-foreground mb-2">
-                          Issued by: {tender.tenders?.issuer_name}
+                          Credibility Score: {tender.overall_average}/5
                         </p>
                         <div className="flex items-center gap-4 text-sm">
                           <div className="flex items-center gap-1">
@@ -365,7 +356,7 @@ export function TenderCredibilityDashboard() {
                             {tender.total_ratings} rating{tender.total_ratings !== 1 ? 's' : ''}
                           </span>
                           <span className="text-muted-foreground">
-                            Category: {tender.tenders?.category}
+                            Quality: {tender.average_quality}/5
                           </span>
                         </div>
                       </div>

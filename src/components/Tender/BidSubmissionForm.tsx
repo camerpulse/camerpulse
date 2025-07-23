@@ -148,15 +148,29 @@ export const BidSubmissionForm: React.FC<BidSubmissionFormProps> = ({ tenderId: 
 
       const bidData = {
         tender_id: tenderId,
-        bidder_user_id: user.id,
-        ...data,
+        user_id: user.id,
+        bidder_id: user.id,
+        company_id: user.id, // Using user ID as company ID for now
+        company_name: data.company_name,
+        contact_person: data.contact_person,
+        contact_email: data.contact_email,
+        contact_phone: data.contact_phone,
+        bid_amount: data.bid_amount_fcfa || 0,
+        currency: 'XAF',
+        financial_proposal: {
+          bid_amount_fcfa: data.bid_amount_fcfa,
+          proposal_summary: data.proposal_summary,
+          technical_approach: data.technical_approach,
+          timeline_weeks: data.timeline_weeks,
+          additional_notes: data.additional_notes,
+        },
         documents: uploadedFiles,
         status: 'submitted',
       };
 
       const { error } = await supabase
         .from('tender_bids')
-        .insert([bidData]);
+        .insert(bidData);
 
       if (error) {
         console.error('Error submitting bid:', error);
