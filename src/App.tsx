@@ -26,6 +26,7 @@ import CivicReputationPage from "@/pages/CivicReputationPage";
 import TopPoliticiansPage from "@/pages/rankings/TopPoliticiansPage";
 import TrustedMayorsPage from "@/pages/rankings/TrustedMayorsPage";
 import FallingReputationPage from "@/pages/rankings/FallingReputationPage";
+import CivicModerationPage from "@/pages/admin/CivicModerationPage";
 import HospitalsDirectory from "./pages/HospitalsDirectory";
 import Tenders from "./pages/Tenders";
 import TenderDetail from "./pages/TenderDetail";
@@ -111,6 +112,11 @@ const App = () => {
                       <Route path="admin/approvals" element={<TenderApprovalWorkflow />} />
                       <Route path="mobile-features" element={<MobileAppFeatures />} />
                       <Route path="enhanced-list" element={<EnhancedTenderList />} />
+                      <Route path="civic-reputation" element={<CivicReputationPage />} />
+                      <Route path="rankings/top-politicians" element={<TopPoliticiansPage />} />
+                      <Route path="rankings/trusted-mayors" element={<TrustedMayorsPage />} />
+                      <Route path="rankings/falling-reputation" element={<FallingReputationPage />} />
+                      <Route path="admin/civic-moderation" element={<CivicModerationPage />} />
                       <Route path="*" element={<NotFoundPage />} />
                     </Route>
                     <Route path="/auth" element={<Layout showFooter={false} />}>
