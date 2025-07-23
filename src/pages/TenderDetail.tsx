@@ -36,6 +36,7 @@ import {
 import { format } from 'date-fns';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { PetitionConnections } from '@/plugins/camertenders/components/PetitionConnections';
 
 // Define interfaces based on actual database schema
 interface TenderDetail {
@@ -591,10 +592,11 @@ export default function TenderDetail() {
 
       {/* Main Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="bid">Submit Bid</TabsTrigger>
           <TabsTrigger value="discussion">Discussion ({comments.length})</TabsTrigger>
+          <TabsTrigger value="petitions">Petitions</TabsTrigger>
           <TabsTrigger value="updates">Updates ({updates.length})</TabsTrigger>
         </TabsList>
 
@@ -938,6 +940,10 @@ export default function TenderDetail() {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        <TabsContent value="petitions" className="space-y-6">
+          <PetitionConnections tenderId={id!} />
         </TabsContent>
 
         <TabsContent value="updates" className="space-y-6">

@@ -171,6 +171,9 @@ verify_jwt = true
 [functions.tender-ai-analysis]
 verify_jwt = false
 
+[functions.petition-engine-sync]
+verify_jwt = false
+
 [functions.send-tender-notifications]
 verify_jwt = false
 

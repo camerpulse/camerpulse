@@ -22871,6 +22871,104 @@ export type Database = {
           },
         ]
       }
+      petition_alerts: {
+        Row: {
+          alert_message: string
+          alert_title: string
+          alert_type: string
+          created_at: string
+          id: string
+          is_sent: boolean
+          petition_connection_id: string | null
+          sent_at: string | null
+          votes_threshold: number | null
+        }
+        Insert: {
+          alert_message: string
+          alert_title: string
+          alert_type: string
+          created_at?: string
+          id?: string
+          is_sent?: boolean
+          petition_connection_id?: string | null
+          sent_at?: string | null
+          votes_threshold?: number | null
+        }
+        Update: {
+          alert_message?: string
+          alert_title?: string
+          alert_type?: string
+          created_at?: string
+          id?: string
+          is_sent?: boolean
+          petition_connection_id?: string | null
+          sent_at?: string | null
+          votes_threshold?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_alerts_petition_connection_id_fkey"
+            columns: ["petition_connection_id"]
+            isOneToOne: false
+            referencedRelation: "petition_connections"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      petition_connections: {
+        Row: {
+          auto_created: boolean
+          connection_type: string
+          created_at: string
+          created_by: string | null
+          id: string
+          last_synced_at: string | null
+          petition_deadline: string | null
+          petition_description: string | null
+          petition_id: string
+          petition_status: string
+          petition_title: string
+          petition_url: string | null
+          petition_votes: number
+          tender_id: string
+          updated_at: string
+        }
+        Insert: {
+          auto_created?: boolean
+          connection_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          last_synced_at?: string | null
+          petition_deadline?: string | null
+          petition_description?: string | null
+          petition_id: string
+          petition_status?: string
+          petition_title: string
+          petition_url?: string | null
+          petition_votes?: number
+          tender_id: string
+          updated_at?: string
+        }
+        Update: {
+          auto_created?: boolean
+          connection_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          last_synced_at?: string | null
+          petition_deadline?: string | null
+          petition_description?: string | null
+          petition_id?: string
+          petition_status?: string
+          petition_title?: string
+          petition_url?: string | null
+          petition_votes?: number
+          tender_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       petition_signatures: {
         Row: {
           comment: string | null
@@ -35282,6 +35380,10 @@ export type Database = {
       setup_renewal_cron_job: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      sync_petition_data: {
+        Args: { p_petition_id: string }
+        Returns: Json
       }
       sync_platform_data: {
         Args: { p_connection_id: string }
