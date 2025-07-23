@@ -22,11 +22,10 @@ interface Tender {
   deadline: string;
   status: string;
   created_at: string;
-  created_by: string;
   category: string;
   location?: string;
-  requirements?: string[];
-  documents?: string[];
+  requirements?: any;
+  documents?: any;
   approval_notes?: string;
   rejection_reason?: string;
   approved_at?: string;
@@ -305,10 +304,10 @@ export const TenderApprovalWorkflow: React.FC = () => {
                               <Building className="h-4 w-4 text-purple-600" />
                               <span>{tender.category}</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <User className="h-4 w-4 text-orange-600" />
-                              <span>ID: {tender.created_by.slice(0, 8)}</span>
-                            </div>
+                                            <div className="flex items-center gap-1">
+                                              <User className="h-4 w-4 text-orange-600" />
+                                              <span>Created: {new Date(tender.created_at).toLocaleDateString()}</span>
+                                            </div>
                           </div>
                         </div>
                         <div className="flex flex-col gap-2 ml-4">

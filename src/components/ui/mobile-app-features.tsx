@@ -151,7 +151,7 @@ export const MobileAppFeatures: React.FC = () => {
           }
         } else {
           // Fallback to clipboard
-          await navigator.clipboard.writeText(window.location.href);
+          await (navigator as any).clipboard?.writeText(window.location.href);
           toast({
             title: "Link Copied",
             description: "Link copied to clipboard for sharing.",

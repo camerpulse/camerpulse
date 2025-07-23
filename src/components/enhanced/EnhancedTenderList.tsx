@@ -14,12 +14,13 @@ interface Tender {
   id: string;
   title: string;
   description: string;
-  budget: number;
+  budget_min?: number;
+  budget_max?: number;
   deadline: string;
   status: string;
   category: string;
-  location: string;
   created_at: string;
+  [key: string]: any; // Allow additional fields from database
 }
 
 export const EnhancedTenderList: React.FC = () => {
@@ -158,7 +159,7 @@ export const EnhancedTenderList: React.FC = () => {
                       </p>
                       <div className="flex items-center gap-4 text-sm">
                         <span className="text-green-600 font-medium">
-                          ${tender.budget?.toLocaleString()}
+                          ${(tender.budget_min || 0).toLocaleString()} - ${(tender.budget_max || 0).toLocaleString()}
                         </span>
                         <span className="text-muted-foreground">
                           Deadline: {new Date(tender.deadline).toLocaleDateString()}
@@ -167,7 +168,7 @@ export const EnhancedTenderList: React.FC = () => {
                           {tender.category}
                         </span>
                         <span className="text-muted-foreground">
-                          {tender.location}
+                          {(tender as any).location || 'Not specified'}
                         </span>
                       </div>
                     </div>

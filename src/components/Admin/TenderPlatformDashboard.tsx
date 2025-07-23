@@ -28,24 +28,21 @@ export const TenderPlatformDashboard: React.FC = () => {
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['platform_stats'],
     queryFn: async (): Promise<PlatformStats> => {
-      const [tendersRes, bidsRes, usersRes, contractsRes] = await Promise.all([
-        supabase.from('tenders').select('id, tender_value, status', { count: 'exact' }),
-        supabase.from('bids').select('id', { count: 'exact' }),
-        supabase.from('profiles').select('id', { count: 'exact' }),
-        supabase.from('contracts').select('contract_value')
+      const [tendersRes, usersRes] = await Promise.all([
+        supabase.from('tenders').select('id, status', { count: 'exact' }),
+        supabase.from('profiles').select('id', { count: 'exact' })
       ]);
 
-      const totalValue = contractsRes.data?.reduce((sum, contract) => sum + (contract.contract_value || 0), 0) || 0;
       const activeTenders = tendersRes.data?.filter(t => t.status === 'open').length || 0;
       const pendingApprovals = tendersRes.data?.filter(t => t.status === 'draft').length || 0;
 
       return {
         totalTenders: tendersRes.count || 0,
         activeTenders,
-        totalBids: bidsRes.count || 0,
+        totalBids: 0, // Mock data since bids table doesn't exist
         totalUsers: usersRes.count || 0,
         pendingApprovals,
-        totalValue
+        totalValue: 0 // Mock data since contracts table doesn't exist
       };
     },
     refetchInterval: 30000,
@@ -57,7 +54,7 @@ export const TenderPlatformDashboard: React.FC = () => {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('tenders')
-        .select('id, title, created_at, status, created_by')
+        .select('id, title, created_at, status')
         .order('created_at', { ascending: false })
         .limit(10);
 
@@ -229,7 +226,7 @@ export const TenderPlatformDashboard: React.FC = () => {
                       <div className="flex-1">
                         <h4 className="font-medium">{tender.title}</h4>
                         <p className="text-sm text-muted-foreground">
-                          Budget: ${tender.budget?.toLocaleString()}
+                          Budget: ${(tender.budget_min || 0).toLocaleString()} - ${(tender.budget_max || 0).toLocaleString()}
                         </p>
                         <p className="text-sm text-muted-foreground">
                           Submitted: {new Date(tender.created_at).toLocaleDateString()}
