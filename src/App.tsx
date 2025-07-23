@@ -19,6 +19,7 @@ import BidderDashboard from "./pages/BidderDashboard";
 import DiasporaConnect from "./pages/DiasporaConnect";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PluginProvider } from "./contexts/PluginContext";
+import { RealtimeProvider } from "./contexts/RealtimeContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 
@@ -45,10 +46,11 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <PluginProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <OfflineIndicator />
+            <RealtimeProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
+                <OfflineIndicator />
               <BrowserRouter>
                 <Navigation />
                 <Routes>
@@ -67,7 +69,8 @@ const App = () => {
                   <Route path="/diaspora-connect" element={<DiasporaConnect />} />
                 </Routes>
               </BrowserRouter>
-            </TooltipProvider>
+              </TooltipProvider>
+            </RealtimeProvider>
           </PluginProvider>
         </AuthProvider>
       </QueryClientProvider>
