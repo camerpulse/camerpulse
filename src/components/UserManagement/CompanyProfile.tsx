@@ -11,34 +11,8 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Building2, Upload, FileText, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 
-interface Company {
-  id?: string;
-  company_name: string;
-  company_registration_number?: string;
-  company_type: string;
-  industry_sector?: string;
-  company_size: string;
-  website_url?: string;
-  phone_number?: string;
-  address_line1?: string;
-  address_line2?: string;
-  city?: string;
-  region?: string;
-  postal_code?: string;
-  country: string;
-  business_description?: string;
-  tax_id?: string;
-  verification_status: string;
-  annual_revenue_fcfa?: number;
-  employee_count?: number;
-  founding_year?: number;
-  contact_person_name?: string;
-  contact_person_position?: string;
-  contact_person_email?: string;
-  contact_person_phone?: string;
-  can_bid: boolean;
-  can_issue_tenders: boolean;
-}
+// Use flexible type to work with existing database schema
+type Company = any;
 
 const INDUSTRY_SECTORS = [
   'Construction & Infrastructure',
@@ -61,26 +35,12 @@ const INDUSTRY_SECTORS = [
   'Other'
 ];
 
-const COMPANY_SIZES = [
-  'micro', 'small', 'medium', 'large', 'enterprise'
-];
-
-const COMPANY_TYPES = [
-  'private', 'public', 'partnership', 'sole_proprietorship', 'cooperative', 'ngo', 'government'
-];
-
 export const CompanyProfile: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [company, setCompany] = useState<Company>({
-    company_name: '',
-    company_type: 'private',
-    company_size: 'small',
-    country: 'Cameroon',
-    verification_status: 'pending',
-    can_bid: false,
-    can_issue_tenders: false
+  const [company, setCompany] = useState<any>({
+    company_name: ''
   });
   const [isEditing, setIsEditing] = useState(false);
   const [hasCompany, setHasCompany] = useState(false);
@@ -151,7 +111,7 @@ export const CompanyProfile: React.FC = () => {
     }
   };
 
-  const updateField = (field: keyof Company, value: any) => {
+  const updateField = (field: string, value: any) => {
     setCompany(prev => ({ ...prev, [field]: value }));
   };
 
@@ -178,19 +138,10 @@ export const CompanyProfile: React.FC = () => {
               Create Company Profile
             </CardTitle>
             <CardDescription>
-              Create a company profile to participate in the tender platform as a bidder or issuer
+              Create a company profile to participate in the tender platform
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">
-            <p className="text-muted-foreground mb-6">
-              You haven't created a company profile yet. Create one to:
-            </p>
-            <ul className="text-left max-w-md mx-auto space-y-2 mb-6">
-              <li>• Submit bids on tenders</li>
-              <li>• Issue your own tenders</li>
-              <li>• Get verified as a legitimate business</li>
-              <li>• Access advanced features</li>
-            </ul>
             <Button onClick={() => setIsEditing(true)} size="lg">
               <Building2 className="h-4 w-4 mr-2" />
               Create Company Profile
@@ -210,17 +161,12 @@ export const CompanyProfile: React.FC = () => {
               <Building2 className="h-8 w-8 mr-3 text-primary" />
               Company Profile
             </h1>
-            <p className="text-muted-foreground">Manage your company information and verification status</p>
+            <p className="text-muted-foreground">Manage your company information</p>
           </div>
-          {hasCompany && (
-            <div className="flex items-center space-x-3">
-              {getVerificationStatusBadge(company.verification_status)}
-              {!isEditing && (
-                <Button onClick={() => setIsEditing(true)}>
-                  Edit Profile
-                </Button>
-              )}
-            </div>
+          {hasCompany && !isEditing && (
+            <Button onClick={() => setIsEditing(true)}>
+              Edit Profile
+            </Button>
           )}
         </div>
       </div>
@@ -229,97 +175,46 @@ export const CompanyProfile: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle>Company Information</CardTitle>
-            <CardDescription>Basic company details and contact information</CardDescription>
+            <CardDescription>Basic company details</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="company_name">Company Name *</Label>
-                <Input
-                  id="company_name"
-                  value={company.company_name}
-                  onChange={(e) => updateField('company_name', e.target.value)}
-                  disabled={!isEditing}
-                  required
-                />
-              </div>
-              <div>
-                <Label htmlFor="company_registration_number">Registration Number</Label>
-                <Input
-                  id="company_registration_number"
-                  value={company.company_registration_number || ''}
-                  onChange={(e) => updateField('company_registration_number', e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="company_type">Company Type</Label>
-                <Select 
-                  value={company.company_type} 
-                  onValueChange={(value) => updateField('company_type', value)}
-                  disabled={!isEditing}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {COMPANY_TYPES.map(type => (
-                      <SelectItem key={type} value={type}>
-                        {type.charAt(0).toUpperCase() + type.slice(1).replace('_', ' ')}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="company_size">Company Size</Label>
-                <Select 
-                  value={company.company_size} 
-                  onValueChange={(value) => updateField('company_size', value)}
-                  disabled={!isEditing}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {COMPANY_SIZES.map(size => (
-                      <SelectItem key={size} value={size}>
-                        {size.charAt(0).toUpperCase() + size.slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="industry_sector">Industry Sector</Label>
-                <Select 
-                  value={company.industry_sector || ''} 
-                  onValueChange={(value) => updateField('industry_sector', value)}
-                  disabled={!isEditing}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select sector" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {INDUSTRY_SECTORS.map(sector => (
-                      <SelectItem key={sector} value={sector}>
-                        {sector}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+            <div>
+              <Label htmlFor="company_name">Company Name *</Label>
+              <Input
+                id="company_name"
+                value={company.company_name || ''}
+                onChange={(e) => updateField('company_name', e.target.value)}
+                disabled={!isEditing}
+                required
+              />
             </div>
 
             <div>
-              <Label htmlFor="business_description">Business Description</Label>
+              <Label htmlFor="industry_sector">Industry Sector</Label>
+              <Select 
+                value={company.industry_sector || ''} 
+                onValueChange={(value) => updateField('industry_sector', value)}
+                disabled={!isEditing}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Select sector" />
+                </SelectTrigger>
+                <SelectContent>
+                  {INDUSTRY_SECTORS.map(sector => (
+                    <SelectItem key={sector} value={sector}>
+                      {sector}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div>
+              <Label htmlFor="description">Business Description</Label>
               <Textarea
-                id="business_description"
-                value={company.business_description || ''}
-                onChange={(e) => updateField('business_description', e.target.value)}
+                id="description"
+                value={company.description || ''}
+                onChange={(e) => updateField('description', e.target.value)}
                 disabled={!isEditing}
                 rows={3}
               />
@@ -337,186 +232,26 @@ export const CompanyProfile: React.FC = () => {
                 />
               </div>
               <div>
-                <Label htmlFor="phone_number">Phone Number</Label>
+                <Label htmlFor="phone">Phone Number</Label>
                 <Input
-                  id="phone_number"
-                  value={company.phone_number || ''}
-                  onChange={(e) => updateField('phone_number', e.target.value)}
+                  id="phone"
+                  value={company.phone || ''}
+                  onChange={(e) => updateField('phone', e.target.value)}
                   disabled={!isEditing}
                 />
               </div>
             </div>
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Address Information</CardTitle>
-            <CardDescription>Company physical address and location details</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
             <div>
-              <Label htmlFor="address_line1">Address Line 1</Label>
-              <Input
-                id="address_line1"
-                value={company.address_line1 || ''}
-                onChange={(e) => updateField('address_line1', e.target.value)}
+              <Label htmlFor="physical_address">Address</Label>
+              <Textarea
+                id="physical_address"
+                value={company.physical_address || ''}
+                onChange={(e) => updateField('physical_address', e.target.value)}
                 disabled={!isEditing}
+                rows={2}
               />
             </div>
-            <div>
-              <Label htmlFor="address_line2">Address Line 2</Label>
-              <Input
-                id="address_line2"
-                value={company.address_line2 || ''}
-                onChange={(e) => updateField('address_line2', e.target.value)}
-                disabled={!isEditing}
-              />
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <Label htmlFor="city">City</Label>
-                <Input
-                  id="city"
-                  value={company.city || ''}
-                  onChange={(e) => updateField('city', e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-              <div>
-                <Label htmlFor="region">Region</Label>
-                <Select 
-                  value={company.region || ''} 
-                  onValueChange={(value) => updateField('region', value)}
-                  disabled={!isEditing}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select region" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="adamawa">Adamawa</SelectItem>
-                    <SelectItem value="centre">Centre</SelectItem>
-                    <SelectItem value="east">East</SelectItem>
-                    <SelectItem value="far_north">Far North</SelectItem>
-                    <SelectItem value="littoral">Littoral</SelectItem>
-                    <SelectItem value="north">North</SelectItem>
-                    <SelectItem value="northwest">Northwest</SelectItem>
-                    <SelectItem value="south">South</SelectItem>
-                    <SelectItem value="southwest">Southwest</SelectItem>
-                    <SelectItem value="west">West</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label htmlFor="postal_code">Postal Code</Label>
-                <Input
-                  id="postal_code"
-                  value={company.postal_code || ''}
-                  onChange={(e) => updateField('postal_code', e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Contact Person</CardTitle>
-            <CardDescription>Primary contact person for this company</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="contact_person_name">Contact Person Name</Label>
-                <Input
-                  id="contact_person_name"
-                  value={company.contact_person_name || ''}
-                  onChange={(e) => updateField('contact_person_name', e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-              <div>
-                <Label htmlFor="contact_person_position">Position</Label>
-                <Input
-                  id="contact_person_position"
-                  value={company.contact_person_position || ''}
-                  onChange={(e) => updateField('contact_person_position', e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="contact_person_email">Contact Email</Label>
-                <Input
-                  id="contact_person_email"
-                  type="email"
-                  value={company.contact_person_email || ''}
-                  onChange={(e) => updateField('contact_person_email', e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-              <div>
-                <Label htmlFor="contact_person_phone">Contact Phone</Label>
-                <Input
-                  id="contact_person_phone"
-                  value={company.contact_person_phone || ''}
-                  onChange={(e) => updateField('contact_person_phone', e.target.value)}
-                  disabled={!isEditing}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Verification & Permissions</CardTitle>
-            <CardDescription>Company verification status and platform permissions</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
-              <div>
-                <p className="font-medium">Verification Status</p>
-                <p className="text-sm text-muted-foreground">
-                  {company.verification_status === 'verified' && 'Your company has been verified and can participate in tenders.'}
-                  {company.verification_status === 'pending' && 'Your company verification is pending review.'}
-                  {company.verification_status === 'rejected' && 'Your company verification was rejected. Please contact support.'}
-                </p>
-              </div>
-              {getVerificationStatusBadge(company.verification_status)}
-            </div>
-
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 border rounded-lg">
-                <div>
-                  <p className="font-medium">Can Submit Bids</p>
-                  <p className="text-sm text-muted-foreground">Ability to bid on tenders</p>
-                </div>
-                <Badge variant={company.can_bid ? 'default' : 'secondary'}>
-                  {company.can_bid ? 'Enabled' : 'Disabled'}
-                </Badge>
-              </div>
-              <div className="flex items-center justify-between p-3 border rounded-lg">
-                <div>
-                  <p className="font-medium">Can Issue Tenders</p>
-                  <p className="text-sm text-muted-foreground">Ability to create and manage tenders</p>
-                </div>
-                <Badge variant={company.can_issue_tenders ? 'default' : 'secondary'}>
-                  {company.can_issue_tenders ? 'Enabled' : 'Disabled'}
-                </Badge>
-              </div>
-            </div>
-
-            {company.verification_status === 'pending' && (
-              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                <p className="text-sm text-blue-800">
-                  <FileText className="h-4 w-4 inline mr-1" />
-                  Your company verification is under review. You'll be notified once the review is complete.
-                </p>
-              </div>
-            )}
           </CardContent>
         </Card>
 

@@ -35,6 +35,7 @@ interface ProfileExtension {
   timezone?: string;
   notification_preferences?: any;
   privacy_settings?: any;
+  account_verification_level?: number;
 }
 
 export const ProfileEdit: React.FC = () => {

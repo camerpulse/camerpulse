@@ -14,38 +14,17 @@ import {
   Users, DollarSign, Calendar, TrendingUp, Eye, MessageSquare 
 } from 'lucide-react';
 
-interface Bid {
-  id: string;
-  tender_id: string;
-  bidder_company_id: string;
-  bid_amount_fcfa: number;
-  proposal_summary: string;
-  status: string;
-  submitted_at: string;
-  evaluation_score?: number;
-  evaluation_notes?: string;
-  companies?: {
-    company_name: string;
-    industry_sector: string;
-  };
-}
-
-interface Tender {
-  id: string;
-  title: string;
-  budget_min_fcfa: number;
-  budget_max_fcfa: number;
-  closing_date: string;
-  status: string;
-}
+// Use flexible types to work with existing database schema
+type Bid = any;
+type Tender = any;
 
 export const BidEvaluationInterface: React.FC<{ tenderId?: string }> = ({ tenderId }) => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [bids, setBids] = useState<Bid[]>([]);
-  const [tender, setTender] = useState<Tender | null>(null);
+  const [bids, setBids] = useState<any[]>([]);
+  const [tender, setTender] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedBid, setSelectedBid] = useState<Bid | null>(null);
+  const [selectedBid, setSelectedBid] = useState<any>(null);
   const [evaluationData, setEvaluationData] = useState({
     score: 0,
     notes: '',
@@ -80,7 +59,7 @@ export const BidEvaluationInterface: React.FC<{ tenderId?: string }> = ({ tender
           companies(company_name, industry_sector)
         `)
         .eq('tender_id', tenderId)
-        .order('submitted_at', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (bidsError) throw bidsError;
       setBids(bidsData || []);
@@ -213,8 +192,8 @@ export const BidEvaluationInterface: React.FC<{ tenderId?: string }> = ({ tender
               {tender.title}
             </CardTitle>
             <CardDescription>
-              Budget: {tender.budget_min_fcfa.toLocaleString()} - {tender.budget_max_fcfa.toLocaleString()} FCFA
-              • Closing: {new Date(tender.closing_date).toLocaleDateString()}
+              Budget: {tender.budget_min?.toLocaleString() || 'N/A'} - {tender.budget_max?.toLocaleString() || 'N/A'} FCFA
+              • Closing: {tender.submission_deadline ? new Date(tender.submission_deadline).toLocaleDateString() : 'N/A'}
             </CardDescription>
           </CardHeader>
         </Card>
@@ -251,11 +230,11 @@ export const BidEvaluationInterface: React.FC<{ tenderId?: string }> = ({ tender
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                       <div className="flex items-center">
                         <DollarSign className="h-4 w-4 text-muted-foreground mr-2" />
-                        <span className="font-medium">{bid.bid_amount_fcfa.toLocaleString()} FCFA</span>
+                        <span className="font-medium">{bid.bid_amount.toLocaleString()} FCFA</span>
                       </div>
                       <div className="flex items-center">
                         <Calendar className="h-4 w-4 text-muted-foreground mr-2" />
-                        <span className="text-sm">{new Date(bid.submitted_at).toLocaleDateString()}</span>
+                        <span className="text-sm">{new Date(bid.created_at).toLocaleDateString()}</span>
                       </div>
                       {bid.evaluation_score && (
                         <div className="flex items-center">
@@ -265,7 +244,7 @@ export const BidEvaluationInterface: React.FC<{ tenderId?: string }> = ({ tender
                       )}
                     </div>
 
-                    <p className="text-sm text-muted-foreground mb-4">{bid.proposal_summary}</p>
+                    <p className="text-sm text-muted-foreground mb-4">{bid.notes}</p>
 
                     <div className="flex space-x-2">
                       <Button 
@@ -316,10 +295,10 @@ export const BidEvaluationInterface: React.FC<{ tenderId?: string }> = ({ tender
                     {bids.map(bid => (
                       <tr key={bid.id} className="border-b hover:bg-muted/50">
                         <td className="p-2 font-medium">{bid.companies?.company_name}</td>
-                        <td className="p-2">{bid.bid_amount_fcfa.toLocaleString()}</td>
+                        <td className="p-2">{bid.bid_amount.toLocaleString()}</td>
                         <td className="p-2">{bid.evaluation_score || 'N/A'}</td>
                         <td className="p-2">{getStatusBadge(bid.status)}</td>
-                        <td className="p-2">{new Date(bid.submitted_at).toLocaleDateString()}</td>
+                        <td className="p-2">{new Date(bid.created_at).toLocaleDateString()}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -24,8 +24,6 @@ interface User {
 const ROLES = [
   { value: 'admin', label: 'Administrator', description: 'Full system access and management capabilities' },
   { value: 'moderator', label: 'Moderator', description: 'Content moderation and user management' },
-  { value: 'issuer', label: 'Tender Issuer', description: 'Can create and manage tender postings' },
-  { value: 'bidder', label: 'Bidder', description: 'Can submit bids on tenders' },
   { value: 'user', label: 'Standard User', description: 'Basic platform access' }
 ];
 
@@ -65,43 +63,43 @@ export const RoleManagement: React.FC = () => {
   const fetchUsers = async () => {
     setLoading(true);
     try {
+      // Fetch all profiles first
       let query = supabase
         .from('profiles')
-        .select(`
-          user_id,
-          username,
-          display_name,
-          user_roles!inner(role)
-        `);
+        .select('user_id, username, display_name');
 
       if (searchTerm) {
         query = query.or(`username.ilike.%${searchTerm}%,display_name.ilike.%${searchTerm}%`);
       }
 
-      if (roleFilter !== 'all') {
-        query = query.eq('user_roles.role', roleFilter);
-      }
-
       const { data: profileData, error: profileError } = await query;
-
       if (profileError) throw profileError;
 
-      // Get user emails from auth metadata
-      const { data: authData, error: authError } = await supabase.auth.admin.listUsers();
-      if (authError) throw authError;
+      // Get roles for each user
+      const usersWithAuth: User[] = [];
+      
+      for (const profile of profileData || []) {
+        const { data: roleData } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', profile.user_id)
+          .single();
 
-      const usersWithAuth = profileData?.map(profile => {
-        const authUser = authData.users.find(u => u.id === profile.user_id);
-        return {
+        // Filter by role if specified
+        if (roleFilter !== 'all' && (!roleData || roleData.role !== roleFilter)) {
+          continue;
+        }
+
+        usersWithAuth.push({
           id: profile.user_id,
-          email: authUser?.email || 'Unknown',
-          user_roles: profile.user_roles,
+          email: 'Email not available', // We can't access auth emails easily
+          user_roles: roleData ? { role: roleData.role } : { role: 'user' },
           profiles: {
             username: profile.username,
             display_name: profile.display_name
           }
-        };
-      }) || [];
+        });
+      }
 
       setUsers(usersWithAuth);
     } catch (error: any) {
@@ -120,7 +118,7 @@ export const RoleManagement: React.FC = () => {
     try {
       const { error } = await supabase
         .from('user_roles')
-        .upsert({ user_id: userId, role: newRole });
+        .upsert({ user_id: userId, role: newRole as any });
 
       if (error) throw error;
 
@@ -145,10 +143,6 @@ export const RoleManagement: React.FC = () => {
         return 'destructive';
       case 'moderator':
         return 'secondary';
-      case 'issuer':
-        return 'default';
-      case 'bidder':
-        return 'outline';
       default:
         return 'outline';
     }
