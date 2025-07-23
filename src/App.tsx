@@ -25,7 +25,9 @@ import TenderDetail from "./pages/TenderDetail";
 import { BidSubmissionForm } from './components/BidSubmissionForm';
 import { UserDashboard } from './components/UserDashboard';
 import { NotFoundPage } from './components/NotFoundPage';
-import CreateTender from "./pages/CreateTender";
+import { CreateTender } from './components/CreateTender';
+import { TenderManagementDashboard } from './components/TenderManagementDashboard';
+
 import TenderAnalytics from "./pages/TenderAnalytics";
 import SearchInterface from "./components/SearchInterface";
 import TenderIssuerDashboard from "./pages/TenderIssuerDashboard";
@@ -77,6 +79,7 @@ const App = () => {
                       <Route path="tenders/:id/bid" element={<BidSubmissionForm />} />
                       <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
                       <Route path="dashboard" element={<UserDashboard />} />
+                      <Route path="tender-management" element={<TenderManagementDashboard />} />
                       <Route path="search-interface" element={<SearchInterface />} />
                       <Route path="analytics" element={<TenderAnalytics />} />
                       <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />
