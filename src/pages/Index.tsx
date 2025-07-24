@@ -70,14 +70,6 @@ const Index = () => {
       features: ["Court transparency", "Judge ratings", "Case tracking"]
     },
     {
-      title: "Tenders & Bidding",
-      description: "National tender platform connecting businesses with public and private opportunities",
-      icon: FileText,
-      href: "/tenders", 
-      gradient: "from-blue-500 to-blue-600",
-      features: ["Tender discovery", "Bid tracking", "Business verification"]
-    },
-    {
       title: "Politician Tracker",
       description: "Track performance, promises, and accountability of elected officials",
       icon: Users,
