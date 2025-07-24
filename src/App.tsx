@@ -164,6 +164,8 @@ import RegionalHiringLeaderboard from "./pages/jobs/RegionalHiringLeaderboard";
 import CampaignDashboard from "./pages/jobs/CampaignDashboard";
 import CampaignPublicPage from "./pages/jobs/CampaignPublicPage";
 import SponsorAnalyticsDashboard from "./pages/jobs/SponsorAnalyticsDashboard";
+import PublicWorkforceDashboard from "./pages/transparency/PublicWorkforceDashboard";
+import PolicyImpactDashboard from "./pages/transparency/PolicyImpactDashboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
 import { ExpertPortal } from "./pages/experts/ExpertPortal";
 import { ProfilePage } from "./pages/profile/ProfilePage";
@@ -202,6 +204,8 @@ const App = () => {
           <Route path="/jobs/campaigns" element={<CampaignDashboard />} />
           <Route path="/jobs/campaigns/:campaignId" element={<CampaignPublicPage />} />
           <Route path="/jobs/analytics" element={<SponsorAnalyticsDashboard />} />
+          <Route path="/transparency/workforce" element={<PublicWorkforceDashboard />} />
+          <Route path="/transparency/policy-impact" element={<PolicyImpactDashboard />} />
           <Route path="/experts" element={<ExpertMarketplace />} />
           <Route path="/experts/portal" element={<ExpertPortal />} />
           <Route path="/profile" element={<ProfilePage />} />
