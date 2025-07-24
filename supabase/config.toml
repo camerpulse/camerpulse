@@ -156,28 +156,7 @@ verify_jwt = false
 [functions.data-import-scheduler]
 verify_jwt = false
 
-[functions.create-tender-payment]
-verify_jwt = true
-
-[functions.tender-status-updater]
-verify_jwt = false
-
-[functions.bidder-qualification-checker]
-verify_jwt = true
-
-[functions.conflict-of-interest-detector]
-verify_jwt = true
-
-[functions.tender-ai-analysis]
-verify_jwt = false
-
 [functions.petition-engine-sync]
-verify_jwt = false
-
-[functions.send-tender-notifications]
-verify_jwt = false
-
-[functions.validate-tender-issuer]
 verify_jwt = false
 
 [functions.audit-registry-check]

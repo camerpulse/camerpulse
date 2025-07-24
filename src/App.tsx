@@ -187,7 +187,7 @@ const App = () => {
                        <Route path="pharmacies" element={<PharmaciesPage />} />
                        <Route path="legislation" element={<LegislationTracker />} />
                        <Route path="hospitals" element={<HospitalsDirectory />} />
-                        <Route path="tenders" element={<div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Tenders (Disabled)</h1><p>The CamerTenders system has been disabled due to technical issues.</p></div>} />
+                        
                        <Route path="dashboard" element={<UserDashboard />} />
                        <Route path="business-logic" element={<BusinessLogicDashboard />} />
                         <Route path="admin" element={<Admin />} />

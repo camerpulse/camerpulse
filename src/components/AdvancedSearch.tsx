@@ -261,7 +261,7 @@ export const AdvancedSearch: React.FC = () => {
               <div className="flex space-x-4">
                 <div className="flex-1">
                   <Input
-                    placeholder="Search tenders, contracts, businesses..."
+                    placeholder="Search businesses, opportunities..."
                     value={criteria.query}
                     onChange={(e) => setCriteria(prev => ({...prev, query: e.target.value}))}
                     className="text-lg"

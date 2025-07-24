@@ -32,17 +32,8 @@ const Header = () => {
   
   const isActive = (path: string) => location.pathname === path;
   
-  // Only show CamerTenders branding on tenders-specific pages
-  const isTendersSection = location.pathname.startsWith('/tenders') || 
-                          location.pathname === '/my-bids' || 
-                          location.pathname === '/dashboard/tenders';
-  
-  // Default to CamerPulse branding everywhere except tenders section
-  const brandingConfig = isTendersSection ? {
-    title: "CamerTenders",
-    subtitle: "Government Procurement Platform",
-    href: "/tenders"
-  } : {
+  // CamerPulse branding
+  const brandingConfig = {
     title: "CamerPulse",
     subtitle: "Civic Engagement Platform",
     href: "/"
@@ -102,14 +93,6 @@ const Header = () => {
                 }`}
               >
                 Judiciary
-              </Link>
-              <Link 
-                to="/tenders" 
-                className={`text-sm font-medium transition-colors hover:text-primary ${
-                  isActive('/tenders') ? 'text-primary' : 'text-muted-foreground'
-                }`}
-              >
-                Tenders
               </Link>
               <Link 
                 to="/analytics" 
@@ -213,7 +196,7 @@ const Header = () => {
             <Link to="/politicians" className="py-2 text-sm hover:text-primary">Politicians</Link>
             <Link to="/legislation" className="py-2 text-sm hover:text-primary">Legislation</Link>
             <Link to="/judiciary" className="py-2 text-sm hover:text-primary">Judiciary</Link>
-            <Link to="/tenders" className="py-2 text-sm hover:text-primary">Tenders</Link>
+            
             <Link to="/analytics" className="py-2 text-sm hover:text-primary">Analytics</Link>
             <Link to="/schools" className="py-2 text-sm hover:text-primary">Services</Link>
             <Link to="/diaspora-connect" className="py-2 text-sm hover:text-primary">Diaspora</Link>

@@ -43,13 +43,10 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
 
   const getSegmentLabel = (segment: string, allSegments: string[], index: number): string => {
     // Special cases for dynamic routes
-    if (allSegments[index - 1] === 'tenders' && segment !== 'create' && segment !== 'analytics') {
-      return 'Tender Details';
-    }
     
     // Common path mappings
     const pathMappings: Record<string, string> = {
-      'tenders': 'Tenders',
+      
       'create': 'Create New',
       'analytics': 'Analytics',
       'dashboard': 'Dashboard',
@@ -103,27 +100,15 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
 
 // Predefined breadcrumb configurations for common pages
 export const CommonBreadcrumbs = {
-  tenderDetail: (tenderTitle: string, tenderId: string): BreadcrumbItem[] => [
-    { label: 'Home', path: '/', icon: Home },
-    { label: 'Tenders', path: '/tenders' },
-    { label: tenderTitle || `Tender ${tenderId}` }
-  ],
-  
-  createTender: (): BreadcrumbItem[] => [
-    { label: 'Home', path: '/', icon: Home },
-    { label: 'Dashboard', path: '/dashboard/tenders' },
-    { label: 'Create New Tender' }
-  ],
   
   myBids: (): BreadcrumbItem[] => [
     { label: 'Home', path: '/', icon: Home },
     { label: 'My Bids' }
   ],
   
-  analytics: (tenderId?: string): BreadcrumbItem[] => [
+  analytics: (): BreadcrumbItem[] => [
     { label: 'Home', path: '/', icon: Home },
-    { label: 'Dashboard', path: '/dashboard/tenders' },
-    ...(tenderId ? [{ label: 'Tender Analytics' }] : [{ label: 'Analytics' }])
+    { label: 'Analytics' }
   ],
   
   search: (): BreadcrumbItem[] => [

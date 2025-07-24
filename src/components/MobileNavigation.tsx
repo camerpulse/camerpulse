@@ -38,13 +38,13 @@ export default function MobileNavigation({ userRole = 'citizen', user }: MobileN
   const getNavigationItems = () => {
     const baseItems = [
       { path: '/', label: 'Home', icon: Home, roles: ['citizen', 'bidder', 'issuer', 'admin', 'government'] },
-      { path: '/tenders', label: 'Browse Tenders', icon: FileText, roles: ['citizen', 'bidder', 'issuer', 'admin', 'government'] },
+      
       { path: '/search', label: 'Advanced Search', icon: Search, roles: ['citizen', 'bidder', 'issuer', 'admin', 'government'] }
     ];
 
     const authenticatedItems = [
       { path: '/my-bids', label: 'My Bids', icon: Users, roles: ['bidder'] },
-      { path: '/dashboard/tenders', label: 'My Tenders', icon: BarChart3, roles: ['issuer'] },
+      
       { path: '/analytics', label: 'Analytics', icon: BarChart3, roles: ['issuer', 'admin'] },
       { path: '/verification', label: 'Business Verification', icon: Shield, roles: ['bidder', 'issuer'] },
       { path: '/admin', label: 'Admin Panel', icon: Settings, roles: ['admin'] },
@@ -82,7 +82,7 @@ export default function MobileNavigation({ userRole = 'citizen', user }: MobileN
               </div>
               <div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-lg font-bold">CamerTenders</span>
+                  <span className="text-lg font-bold">CamerPulse</span>
                   {userRole !== 'citizen' && (
                     <Badge variant="secondary" className="text-xs">
                       {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
@@ -115,19 +115,6 @@ export default function MobileNavigation({ userRole = 'citizen', user }: MobileN
                 </Link>
               ))}
 
-              {user && (userRole === 'issuer' || userRole === 'admin') && (
-                <>
-                  <Separator className="my-4" />
-                  <Link 
-                    to="/tenders/create"
-                    onClick={handleLinkClick}
-                    className="flex items-center space-x-3 px-3 py-3 rounded-md text-sm bg-primary text-primary-foreground hover:bg-primary/90 transition-colors w-full"
-                  >
-                    <Plus className="w-5 h-5" />
-                    <span>Post New Tender</span>
-                  </Link>
-                </>
-              )}
             </div>
 
             {/* Footer Actions */}
