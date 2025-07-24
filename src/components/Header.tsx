@@ -45,6 +45,23 @@ export default function Header() {
   const { user, profile, signOut } = useAuth();
   
   const isActive = (path: string) => location.pathname === path;
+  
+  // Determine if we're in the tenders section
+  const isTendersSection = location.pathname.startsWith('/tenders') || 
+                          location.pathname === '/my-bids' || 
+                          location.pathname === '/verification' || 
+                          location.pathname === '/analytics';
+  
+  // Dynamic branding based on section
+  const brandingConfig = isTendersSection ? {
+    title: "CamerTenders",
+    subtitle: "Government Procurement Platform",
+    href: "/tenders"
+  } : {
+    title: "CamerPulse",
+    subtitle: "Civic Engagement Platform",
+    href: "/"
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -56,13 +73,13 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo & Branding */}
           <div className="flex items-center gap-6">
-            <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
+            <Link to={brandingConfig.href} className="flex items-center gap-2 hover:opacity-90 transition-opacity">
               <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
                 <Building className="h-5 w-5 text-primary-foreground" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-foreground">CamerTenders</span>
-                <span className="text-xs text-muted-foreground hidden sm:block">Government Procurement Platform</span>
+                <span className="text-xl font-bold text-foreground">{brandingConfig.title}</span>
+                <span className="text-xs text-muted-foreground hidden sm:block">{brandingConfig.subtitle}</span>
               </div>
             </Link>
             
