@@ -159,6 +159,7 @@ import ModerationDashboard from "./pages/ModerationDashboard";
 import TestPage from "./pages/TestPage";
 import JobsHome from "./pages/jobs/JobsHome";
 import JobBoard from "./pages/jobs/JobBoard";
+import { CompanyPortal } from "./pages/jobs/CompanyPortal";
 import JobsSetupTest from "./tests/JobsSetupTest";
 
 import { MobileProvider } from "./contexts/MobileContext";
@@ -189,6 +190,7 @@ const App = () => {
                     <Route path="/test" element={<TestPage />} />
           <Route path="/jobs" element={<JobsHome />} />
           <Route path="/jobs/board" element={<JobBoard />} />
+          <Route path="/jobs/company" element={<CompanyPortal />} />
           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />

@@ -15,26 +15,39 @@ export interface JobCategory {
 
 export interface Company {
   id: string;
-  user_id: string;
+  user_id?: string;
   company_name: string;
+  company_type: string;
+  sector: string;
+  description?: string;
   company_description?: string;
-  website_url?: string;
-  company_logo_url?: string;
   industry?: string;
-  company_size?: '1-10' | '11-50' | '51-200' | '201-500' | '500+';
+  company_size?: string;
   location?: string;
-  region?: string;
-  contact_email?: string;
-  contact_phone?: string;
-  is_verified: boolean;
-  verification_documents: any[];
-  social_links: Record<string, string>;
-  founded_year?: number;
-  average_rating: number;
-  total_reviews: number;
-  total_jobs_posted: number;
-  total_hires: number;
-  is_active: boolean;
+  physical_address: string;
+  region: string;
+  division: string;
+  phone_number: string;
+  email: string;
+  website_url?: string;
+  social_media_links?: Record<string, string>;
+  employee_count_range: string;
+  past_management?: string;
+  tax_identification_number: string;
+  estimated_net_worth?: number;
+  logo_url?: string;
+  company_logo_url?: string;
+  cover_photo_url?: string;
+  average_rating?: number;
+  total_ratings?: number;
+  profile_views?: number;
+  status?: string;
+  payment_status?: string;
+  payment_amount?: number;
+  payment_date?: string;
+  approved_by?: string;
+  approved_at?: string;
+  is_featured?: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -91,17 +104,24 @@ export interface Job {
 export interface JobApplication {
   id: string;
   job_id: string;
-  applicant_id: string;
+  applicant_id?: string;
+  applicant_name?: string;
+  applicant_email?: string;
+  applicant_phone?: string;
   cover_letter?: string;
   cv_url?: string;
   portfolio_url?: string;
   status: 'pending' | 'reviewed' | 'shortlisted' | 'interviewed' | 'hired' | 'rejected';
+  application_status?: string;
   notes?: string;
   applied_at: string;
   updated_at: string;
+  meta_data?: any;
   
   // Relations
   job?: Job;
+  jobs?: Job;
+  profiles?: any;
 }
 
 export interface ExpertProfile {
