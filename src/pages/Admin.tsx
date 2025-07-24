@@ -9,6 +9,8 @@ import { DailyReportGenerator } from "@/components/AI/DailyReportGenerator";
 import { CivicAlertSystem } from "@/components/Security/CivicAlertSystem";
 import { RoleControlSystem } from "@/components/Security/RoleControlSystem";
 import { LocalizationSettings } from "@/components/Admin/LocalizationSettings";
+import PluginManager from "@/components/Admin/PluginManager";
+import SystemHealthReport from "@/components/Admin/SystemHealthReport";
 import { CacheManagementDashboard } from "@/components/Admin/CacheManagementDashboard";
 import { CacheStatusMonitor } from "@/components/Admin/CacheStatusMonitor";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -38,6 +40,8 @@ import {
   Bot,
   Power,
   Settings,
+  Puzzle,
+  Activity,
   BookOpen,
   GraduationCap,
   Volume2,
@@ -256,6 +260,14 @@ const Admin = () => {
                 <TabsTrigger value="themes" className="flex items-center gap-2">
                   <Monitor className="h-4 w-4" />
                   Themes
+                </TabsTrigger>
+                <TabsTrigger value="plugins" className="flex items-center gap-2">
+                  <Puzzle className="h-4 w-4" />
+                  Plugin Manager
+                </TabsTrigger>
+                <TabsTrigger value="health" className="flex items-center gap-2">
+                  <Activity className="h-4 w-4" />
+                  System Health
                 </TabsTrigger>
                 <TabsTrigger value="settings" className="flex items-center gap-2">
                   <Settings className="h-4 w-4" />

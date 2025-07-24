@@ -79,14 +79,14 @@ import { EconomicsPage } from "./pages/EconomicsPage";
 import CompanyDashboard from "./pages/CompanyDashboard";
 import UserProfilePage from "./pages/UserProfilePage";
 import BusinessVerification from "./pages/BusinessVerification";
+import MinistersPage from "./pages/MinistersPage";
+import SenatorsPage from "./pages/Senators";
+import AdvancedDirectory from "./pages/AdvancedDirectory";
 
 // Missing page imports that need to be created
 const ChurchesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Churches Directory</h1><p>Coming soon...</p></div>;
 const TraditionalLeadersPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Traditional Leaders</h1><p>Coming soon...</p></div>;
 const VideosPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Video Center</h1><p>Coming soon...</p></div>;
-const SenatorsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Senators</h1><p>Coming soon...</p></div>;
-const MPsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">MPs (Members of Parliament)</h1><p>Coming soon...</p></div>;
-const MinistersPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Ministers</h1><p>Coming soon...</p></div>;
 const CouncilsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Councils</h1><p>Coming soon...</p></div>;
 const ProjectsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Government Projects</h1><p>Coming soon...</p></div>;
 const PetitionsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Petitions</h1><p>Coming soon...</p></div>;
@@ -163,7 +163,7 @@ const App = () => {
                        
                         {/* Government & Officials */}
                         <Route path="senators" element={<SenatorsPage />} />
-                        <Route path="mps" element={<MPsPage />} />
+                        <Route path="mps" element={<AdvancedDirectory />} />
                         <Route path="ministers" element={<MinistersPage />} />
                         <Route path="mayors" element={<TrustedMayorsPage />} />
                         <Route path="governors" element={<TopPoliticiansPage />} />
@@ -207,8 +207,9 @@ const App = () => {
                        <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
                        <Route path="dashboard" element={<UserDashboard />} />
                        <Route path="business-logic" element={<BusinessLogicDashboard />} />
-                       <Route path="admin" element={<Admin />} />
-                       <Route path="admin/tenders" element={<CamertendersAdminPanel />} />
+                        <Route path="admin" element={<Admin />} />
+                        <Route path="admin/plugins" element={<div className="container mx-auto px-4 py-8"><div className="mb-8"><h1 className="text-3xl font-bold">Plugin Manager</h1></div></div>} />
+                        <Route path="admin/tenders" element={<CamertendersAdminPanel />} />
                        <Route path="tenders/watchlist" element={<CivicTenderWatchlist />} />
                        <Route path="tender-management" element={<TenderManagementDashboard />} />
                        <Route path="user-management" element={<UserManagementDashboard />} />
