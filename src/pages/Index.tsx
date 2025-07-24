@@ -33,7 +33,7 @@ import {
 } from "lucide-react";
 
 const Index = () => {
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, loading } = useAuth();
 
   const handleSignOut = async () => {
     await signOut();
