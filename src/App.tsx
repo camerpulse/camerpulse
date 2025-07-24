@@ -166,6 +166,7 @@ import CampaignPublicPage from "./pages/jobs/CampaignPublicPage";
 import SponsorAnalyticsDashboard from "./pages/jobs/SponsorAnalyticsDashboard";
 import WorkforceEcosystemHub from "./pages/jobs/WorkforceEcosystemHub";
 import TransparencyHub from "./pages/transparency/TransparencyHub";
+import { GovernmentTransparency } from "./pages/transparency/GovernmentTransparency";
 import PublicWorkforceDashboard from "./pages/transparency/PublicWorkforceDashboard";
 import PolicyImpactDashboard from "./pages/transparency/PolicyImpactDashboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
@@ -207,7 +208,8 @@ const App = () => {
           <Route path="/jobs/campaigns" element={<CampaignDashboard />} />
           <Route path="/jobs/campaigns/:campaignId" element={<CampaignPublicPage />} />
           <Route path="/jobs/analytics" element={<SponsorAnalyticsDashboard />} />
-           <Route path="/transparency" element={<TransparencyHub />} />
+        <Route path="/transparency" element={<TransparencyHub />} />
+        <Route path="/transparency/government" element={<GovernmentTransparency />} />
            <Route path="/transparency/workforce" element={<PublicWorkforceDashboard />} />
            <Route path="/transparency/policy-impact" element={<PolicyImpactDashboard />} />
           <Route path="/experts" element={<ExpertMarketplace />} />
