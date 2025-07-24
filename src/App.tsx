@@ -56,10 +56,10 @@ import { UserModerationTools } from "./components/Admin/UserModerationTools";
 import { TenderApprovalWorkflow } from "./components/Admin/TenderApprovalWorkflow";
 import { MobileAppFeatures } from "./components/ui/mobile-app-features";
 import { EnhancedTenderList } from "./components/enhanced/EnhancedTenderList";
-import PollsPage from "./pages/PollsPage";
+import PollsDashboard from "./pages/PollsDashboard";
 import PoliticiansPage from "./pages/PoliticiansPage";
 import VillagesPage from "./pages/VillagesPage";
-import PulsePage from "./pages/PulsePage";
+import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import ProfilePage from "./pages/ProfilePage";
 import SettingsPage from "./pages/SettingsPage";
 import SupportPage from "./pages/SupportPage";
@@ -74,8 +74,8 @@ import VillagesSearchPage from "./pages/VillagesSearchPage";
 const ChurchesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Churches Directory</h1><p>Coming soon...</p></div>;
 const TraditionalLeadersPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Traditional Leaders</h1><p>Coming soon...</p></div>;
 const BillionairesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Billionaires Directory</h1><p>Coming soon...</p></div>;
-const CamerPlayPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">CamerPlay Music</h1><p>Coming soon...</p></div>;
-const ArtistsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Artist Directory</h1><p>Coming soon...</p></div>;
+import CamerPlayHome from "./pages/CamerPlayHome";
+import ArtistDashboard from "./pages/ArtistDashboard";
 const VideosPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Video Center</h1><p>Coming soon...</p></div>;
 const SenatorsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Senators</h1><p>Coming soon...</p></div>;
 const MPsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">MPs (Members of Parliament)</h1><p>Coming soon...</p></div>;
@@ -131,11 +131,11 @@ const App = () => {
                   <Routes>
                      <Route path="/" element={<Layout />}>
                        <Route index element={<CamerPulseHome />} />
-                       <Route path="polls" element={<PollsPage />} />
-                       <Route path="politicians" element={<PoliticiansPage />} />
-                       <Route path="villages" element={<VillagesPage />} />
-                       <Route path="villages/search" element={<VillagesSearchPage />} />
-                       <Route path="pulse" element={<PulsePage />} />
+                        <Route path="polls" element={<PollsDashboard />} />
+                        <Route path="politicians" element={<PoliticiansPage />} />
+                        <Route path="villages" element={<VillagesPage />} />
+                        <Route path="villages/search" element={<VillagesSearchPage />} />
+                        <Route path="pulse" element={<AnalyticsDashboard />} />
                        <Route path="profile" element={<ProfilePage />} />
                        <Route path="settings" element={<SettingsPage />} />
                        <Route path="support" element={<SupportPage />} />
@@ -143,7 +143,7 @@ const App = () => {
                        <Route path="terms" element={<TermsPage />} />
                        <Route path="cookies" element={<CookiesPage />} />
                        <Route path="judiciary" element={<JudiciaryPage />} />
-                       <Route path="analytics" element={<AnalyticsPage />} />
+                       <Route path="analytics" element={<AnalyticsDashboard />} />
                        
                        {/* Civic Directories */}
                        <Route path="churches" element={<ChurchesPage />} />
@@ -152,10 +152,10 @@ const App = () => {
                        {/* Businesses */}
                        <Route path="billionaires" element={<BillionairesPage />} />
                        
-                       {/* Media & Engagement */}
-                       <Route path="camerplay" element={<CamerPlayPage />} />
-                       <Route path="events" element={<EventsPage />} />
-                       <Route path="artists" element={<ArtistsPage />} />
+                        {/* Media & Engagement */}
+                        <Route path="camerplay" element={<CamerPlayHome />} />
+                        <Route path="events" element={<EventsPage />} />
+                        <Route path="artists" element={<ArtistDashboard />} />
                        <Route path="videos" element={<VideosPage />} />
                        
                        {/* Government & Officials */}
