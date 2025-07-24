@@ -15,8 +15,7 @@ import {
   MapPin,
   Shield,
   BookOpen,
-  Globe,
-  FileText
+  Globe
 } from 'lucide-react';
 
 interface NavItem {

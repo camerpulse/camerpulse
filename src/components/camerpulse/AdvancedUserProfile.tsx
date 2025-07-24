@@ -18,7 +18,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ProfileEditDialog } from '@/components/profile/ProfileEditDialog';
 import { ProfileQRCode } from '@/components/profile/ProfileQRCode';
 import { ProfileComparison } from '@/components/profile/ProfileComparison';
-
 import { 
   MapPin, 
   Calendar, 
@@ -62,11 +61,7 @@ import {
   Trash,
   Download,
   MessageSquare,
-  AlertCircle,
-  Wallet,
-  CreditCard,
-  ArrowUpRight,
-  ArrowDownLeft
+  AlertCircle
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -177,29 +172,6 @@ interface ProfileBadge {
   awarded_at: string;
 }
 
-interface WalletData {
-  id: string;
-  user_id: string;
-  balance_fcfa: number;
-  balance_usd: number;
-  pending_balance_fcfa: number;
-  pending_balance_usd: number;
-  total_spent_fcfa: number;
-  total_earned_fcfa: number;
-  last_transaction_at?: string;
-  created_at: string;
-}
-
-interface WalletTransaction {
-  id: string;
-  user_id: string;
-  transaction_type: string;
-  amount: number;
-  description: string;
-  reference_id?: string;
-  created_at: string;
-}
-
 export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({ 
   userId, 
   isOpen = true, 
@@ -221,8 +193,6 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
   const [achievements, setAchievements] = useState<UserAchievement[]>([]);
   const [savedContent, setSavedContent] = useState<SavedContent[]>([]);
   const [profileSettings, setProfileSettings] = useState<ProfileSettings | null>(null);
-  const [walletData, setWalletData] = useState<WalletData | null>(null);
-  const [walletTransactions, setWalletTransactions] = useState<WalletTransaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
@@ -238,7 +208,6 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
       fetchProfileSettings();
       if (user?.id === userId) {
         fetchSavedContent();
-        fetchWalletData();
       }
       incrementProfileViews();
     }
@@ -524,76 +493,6 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
         description: "Failed to submit verification request",
         variant: "destructive"
       });
-    }
-  };
-
-  const fetchWalletData = async () => {
-    console.log('Fetching wallet data for user:', userId);
-    try {
-      // First try to get wallet data
-      const { data: wallet, error: walletError } = await supabase
-        .from('wallet_transactions')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .single();
-
-      if (walletError && walletError.code !== 'PGRST116') {
-        console.error('Error fetching wallet:', walletError);
-        return;
-      }
-
-      // Calculate wallet balance from transactions
-      const { data: transactions, error: txError } = await supabase
-        .from('wallet_transactions')
-        .select('*')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(50);
-
-      if (txError) {
-        console.error('Error fetching transactions:', txError);
-        return;
-      }
-
-      console.log('Wallet transactions found:', transactions?.length || 0);
-      setWalletTransactions(transactions || []);
-
-      // Calculate balances
-      const balance = transactions?.reduce((total, tx) => {
-        if (tx.transaction_type === 'credit') {
-          return total + tx.amount;
-        } else if (tx.transaction_type === 'debit') {
-          return total - tx.amount;
-        }
-        return total;
-      }, 0) || 0;
-
-      const totalSpent = transactions?.filter(tx => tx.transaction_type === 'debit')
-        .reduce((total, tx) => total + tx.amount, 0) || 0;
-
-      const totalEarned = transactions?.filter(tx => tx.transaction_type === 'credit')
-        .reduce((total, tx) => total + tx.amount, 0) || 0;
-
-      // Create wallet summary
-      const walletSummary = {
-        id: userId,
-        user_id: userId,
-        balance_fcfa: balance,
-        balance_usd: balance / 600, // Rough conversion
-        pending_balance_fcfa: 0,
-        pending_balance_usd: 0,
-        total_spent_fcfa: totalSpent,
-        total_earned_fcfa: totalEarned,
-        last_transaction_at: transactions?.[0]?.created_at,
-        created_at: transactions?.[transactions.length - 1]?.created_at || new Date().toISOString()
-      };
-      
-      console.log('Wallet summary created:', walletSummary);
-      setWalletData(walletSummary);
-    } catch (error) {
-      console.error('Error fetching wallet data:', error);
     }
   };
 
@@ -892,32 +791,11 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                     <Eye className="h-4 w-4" />
                     <span>{profile?.profile_views || 0} views</span>
                   </div>
-                 </div>
-               </div>
+                </div>
+              </div>
 
-               {/* Wallet Balance - Only for profile owner */}
-               {user?.id === userId && walletData && (
-                 <div className="flex items-center gap-2 mt-4 p-3 bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg">
-                   <Wallet className="h-5 w-5 text-primary" />
-                   <div>
-                     <div className="text-sm text-muted-foreground">Wallet Balance</div>
-                     <div className="font-bold text-lg text-primary">
-                       {walletData.balance_fcfa.toLocaleString()} FCFA
-                     </div>
-                   </div>
-                 </div>
-               )}
-               
-               {/* Debug wallet state - remove in production */}
-               {user?.id === userId && (
-                 <div className="text-xs text-muted-foreground mt-2">
-                   Debug: Wallet data exists: {walletData ? 'Yes' : 'No'}, 
-                   Transactions: {walletTransactions.length}
-                 </div>
-               )}
-
-               {/* Quick Stats */}
-               <div className="grid grid-cols-3 gap-4 text-center mt-4 md:mt-0">
+              {/* Quick Stats */}
+              <div className="grid grid-cols-3 gap-4 text-center mt-4 md:mt-0">
                 <div>
                   <div className="font-bold text-lg">{stats.followers_count}</div>
                   <div className="text-xs text-muted-foreground">Followers</div>
@@ -960,7 +838,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-9 md:grid-cols-9">
+            <TabsList className="grid w-full grid-cols-8 md:grid-cols-8">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="posts">Posts</TabsTrigger>
               <TabsTrigger value="polls">Polls</TabsTrigger>
@@ -968,7 +846,6 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
               <TabsTrigger value="ratings">Ratings</TabsTrigger>
               <TabsTrigger value="following">Following</TabsTrigger>
               <TabsTrigger value="followers">Followers</TabsTrigger>
-              {user?.id === userId && <TabsTrigger value="wallet">Wallet</TabsTrigger>}
               {user?.id === userId && <TabsTrigger value="saved">Saved</TabsTrigger>}
             </TabsList>
 
@@ -1140,120 +1017,6 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                           </CardContent>
                         </Card>
                       ))}
-                    </div>
-                  )}
-                </TabsContent>
-              )}
-
-              {user?.id === userId && (
-                <TabsContent value="wallet" className="space-y-4">
-                  {walletData ? (
-                    <div className="space-y-4">
-                      {/* Wallet Overview */}
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <Card>
-                          <CardContent className="pt-4">
-                            <div className="flex items-center gap-2 mb-2">
-                              <Wallet className="h-5 w-5 text-primary" />
-                              <span className="font-medium">Available Balance</span>
-                            </div>
-                            <div className="text-2xl font-bold text-primary">
-                              {walletData.balance_fcfa.toLocaleString()} FCFA
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              ≈ ${walletData.balance_usd.toFixed(2)} USD
-                            </div>
-                          </CardContent>
-                        </Card>
-
-                        <Card>
-                          <CardContent className="pt-4">
-                            <div className="flex items-center gap-2 mb-2">
-                              <ArrowUpRight className="h-5 w-5 text-green-600" />
-                              <span className="font-medium">Total Earned</span>
-                            </div>
-                            <div className="text-2xl font-bold text-green-600">
-                              {walletData.total_earned_fcfa.toLocaleString()} FCFA
-                            </div>
-                          </CardContent>
-                        </Card>
-
-                        <Card>
-                          <CardContent className="pt-4">
-                            <div className="flex items-center gap-2 mb-2">
-                              <ArrowDownLeft className="h-5 w-5 text-red-600" />
-                              <span className="font-medium">Total Spent</span>
-                            </div>
-                            <div className="text-2xl font-bold text-red-600">
-                              {walletData.total_spent_fcfa.toLocaleString()} FCFA
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-
-                      {/* Recent Transactions */}
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="flex items-center gap-2">
-                            <CreditCard className="h-5 w-5" />
-                            Recent Transactions
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          {walletTransactions.length === 0 ? (
-                            <div className="text-center py-8 text-muted-foreground">
-                              <CreditCard className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                              <p>No transactions yet</p>
-                              <p className="text-xs mt-1">Make your first transaction to see it here</p>
-                            </div>
-                          ) : (
-                            <div className="space-y-3">
-                              {walletTransactions.slice(0, 10).map((transaction) => (
-                                <div key={transaction.id} className="flex items-center justify-between p-3 border rounded-lg">
-                                  <div className="flex items-center gap-3">
-                                    <div className={`p-2 rounded-full ${
-                                      transaction.transaction_type === 'credit' 
-                                        ? 'bg-green-100 text-green-600' 
-                                        : 'bg-red-100 text-red-600'
-                                    }`}>
-                                      {transaction.transaction_type === 'credit' ? (
-                                        <ArrowUpRight className="h-4 w-4" />
-                                      ) : (
-                                        <ArrowDownLeft className="h-4 w-4" />
-                                      )}
-                                    </div>
-                                    <div>
-                                      <div className="font-medium">{transaction.description}</div>
-                                      <div className="text-sm text-muted-foreground">
-                                        {formatDistanceToNow(new Date(transaction.created_at), { addSuffix: true })}
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div className={`font-bold ${
-                                    transaction.transaction_type === 'credit' 
-                                      ? 'text-green-600' 
-                                      : 'text-red-600'
-                                  }`}>
-                                    {transaction.transaction_type === 'credit' ? '+' : '-'}
-                                    {transaction.amount.toLocaleString()} FCFA
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-
-                      {/* Wallet Top-up */}
-                      <div className="text-center py-4 text-muted-foreground">
-                        Wallet feature coming soon
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="text-center py-8 text-muted-foreground">
-                      <Wallet className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                      <p>Wallet not set up yet</p>
-                      <p className="text-xs mt-1">Complete a transaction to initialize your wallet</p>
                     </div>
                   )}
                 </TabsContent>

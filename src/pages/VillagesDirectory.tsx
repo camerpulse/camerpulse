@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Plus, Filter, MapPin, Star, Users, Crown, X, SlidersHorizontal, CheckCircle, GraduationCap, Heart, Globe, ChevronRight, TrendingUp, Award, Building, DollarSign, FileText, User } from 'lucide-react';
-
+import { ServicesLayout } from '@/components/Layout/ServicesLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -504,7 +504,8 @@ const VillagesDirectory = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <ServicesLayout serviceType="villages">
+      <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <div className="relative bg-gradient-civic py-16 text-white">
           <div className="container mx-auto px-4">
@@ -826,6 +827,7 @@ const VillagesDirectory = () => {
           )}
         </div>
       </div>
+    </ServicesLayout>
   );
 };
 

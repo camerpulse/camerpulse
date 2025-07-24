@@ -1,50 +1,12 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Globe, Heart, Users, Calendar, DollarSign, Building, Shield, Settings, Smartphone, BarChart3, FileCheck, Zap } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Globe, Heart, Users, Calendar, DollarSign, Building } from 'lucide-react';
 
 const DiasporaConnect: React.FC = () => {
   return (
     <div className="min-h-screen bg-background py-8">
       <div className="container mx-auto px-4">
-        {/* Admin Access */}
-        <div className="flex justify-end mb-4">
-          <div className="flex gap-2">
-            <Button asChild variant="outline" size="sm">
-              <Link to="/admin/platform">
-                <BarChart3 className="h-4 w-4 mr-2" />
-                Platform Admin
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm">
-              <Link to="/admin/moderation">
-                <Shield className="h-4 w-4 mr-2" />
-                Moderation
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm">
-              <Link to="/admin/approvals">
-                <FileCheck className="h-4 w-4 mr-2" />
-                Approvals
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm">
-              <Link to="/business-logic">
-                <Zap className="h-4 w-4 mr-2" />
-                Business Logic
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="sm">
-              <Link to="/mobile-features">
-                <Smartphone className="h-4 w-4 mr-2" />
-                Mobile App
-              </Link>
-            </Button>
-          </div>
-        </div>
-
         {/* Header */}
         <div className="text-center mb-8">
           <Globe className="mx-auto h-16 w-16 text-primary mb-4" />

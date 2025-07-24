@@ -69,12 +69,12 @@ export const LegislationFilters: React.FC<LegislationFiltersProps> = ({
 
         <div>
           <Label>Status</Label>
-          <Select value={selectedStatus} onValueChange={onStatusChange} defaultValue="all">
+          <Select value={selectedStatus} onValueChange={onStatusChange}>
             <SelectTrigger>
               <SelectValue placeholder="All statuses" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
+              <SelectItem value="">All statuses</SelectItem>
               {lawStatuses.map((status) => (
                 <SelectItem key={status} value={status}>
                   {status.replace('_', ' ').toUpperCase()}
@@ -86,12 +86,12 @@ export const LegislationFilters: React.FC<LegislationFiltersProps> = ({
 
         <div>
           <Label>Type</Label>
-          <Select value={selectedType} onValueChange={onTypeChange} defaultValue="all">
+          <Select value={selectedType} onValueChange={onTypeChange}>
             <SelectTrigger>
               <SelectValue placeholder="All types" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All types</SelectItem>
+              <SelectItem value="">All types</SelectItem>
               {lawTypes.map((type) => (
                 <SelectItem key={type} value={type}>
                   {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -103,12 +103,12 @@ export const LegislationFilters: React.FC<LegislationFiltersProps> = ({
 
         <div>
           <Label>Sector</Label>
-          <Select value={selectedSector} onValueChange={onSectorChange} defaultValue="all">
+          <Select value={selectedSector} onValueChange={onSectorChange}>
             <SelectTrigger>
               <SelectValue placeholder="All sectors" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All sectors</SelectItem>
+              <SelectItem value="">All sectors</SelectItem>
               {sectors.map((sector) => (
                 <SelectItem key={sector} value={sector}>
                   {sector}

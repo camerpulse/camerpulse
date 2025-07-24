@@ -9,9 +9,6 @@ import { DailyReportGenerator } from "@/components/AI/DailyReportGenerator";
 import { CivicAlertSystem } from "@/components/Security/CivicAlertSystem";
 import { RoleControlSystem } from "@/components/Security/RoleControlSystem";
 import { LocalizationSettings } from "@/components/Admin/LocalizationSettings";
-import PluginManager from "@/components/Admin/PluginManager";
-import ComprehensiveAdminPanel from "@/components/Admin/ComprehensiveAdminPanel";
-import SystemHealthReport from "@/components/Admin/SystemHealthReport";
 import { CacheManagementDashboard } from "@/components/Admin/CacheManagementDashboard";
 import { CacheStatusMonitor } from "@/components/Admin/CacheStatusMonitor";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -41,8 +38,6 @@ import {
   Bot,
   Power,
   Settings,
-  Puzzle,
-  Activity,
   BookOpen,
   GraduationCap,
   Volume2,
@@ -57,7 +52,9 @@ import {
   Newspaper,
   FileText,
   Lock,
+  Activity,
   Globe,
+  Puzzle,
   Mail,
   CreditCard,
   Download,
@@ -73,12 +70,7 @@ import {
   Building2,
   Star,
   FileCode,
-  ExternalLink,
-  Vote,
-  Music,
-  MapPin,
-  Building,
-  Video
+  ExternalLink
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import PartyDirectorySync from "@/components/AI/PartyDirectorySync";
@@ -212,27 +204,107 @@ const Admin = () => {
 
           <Tabs value={selectedTab} onValueChange={setSelectedTab}>
             <ScrollArea className="w-full">
-              <TabsList className="mb-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 h-auto p-1">
+              <TabsList className="mb-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-1 h-auto p-1">
                 <TabsTrigger value="overview" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
                   Overview
                 </TabsTrigger>
-                <TabsTrigger value="feature-control" className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  Feature Control Center
-                </TabsTrigger>
-                <TabsTrigger value="plugins" className="flex items-center gap-2">
-                  <Puzzle className="h-4 w-4" />
-                  Plugin Manager
+                <TabsTrigger value="security" className="flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  Security
                 </TabsTrigger>
                 <TabsTrigger value="users" className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
-                  User Management
+                  Users
                 </TabsTrigger>
-                <TabsTrigger value="security" className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  Security & Health
+                <TabsTrigger value="politicians" className="flex items-center gap-2">
+                  <UserCheck className="h-4 w-4" />
+                  Politicians
                 </TabsTrigger>
+                <TabsTrigger value="term-validation" className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  Term Validation
+                </TabsTrigger>
+                <TabsTrigger value="marketplace" className="flex items-center gap-2">
+                  <ShoppingBag className="h-4 w-4" />
+                  Marketplace
+                </TabsTrigger>
+                <TabsTrigger value="ai-control" className="flex items-center gap-2">
+                  <Bot className="h-4 w-4" />
+                  Politica AI
+                </TabsTrigger>
+                <TabsTrigger value="civic-intelligence" className="flex items-center gap-2">
+                  <Activity className="h-4 w-4" />
+                  Civic Intelligence
+                </TabsTrigger>
+                <TabsTrigger value="news" className="flex items-center gap-2">
+                  <Newspaper className="h-4 w-4" />
+                  News
+                </TabsTrigger>
+                <TabsTrigger value="finance" className="flex items-center gap-2">
+                  <DollarSign className="h-4 w-4" />
+                  Finance
+                </TabsTrigger>
+                <TabsTrigger value="analytics" className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4" />
+                  Analytics
+                </TabsTrigger>
+                <TabsTrigger value="themes" className="flex items-center gap-2">
+                  <Monitor className="h-4 w-4" />
+                  Themes
+                </TabsTrigger>
+                <TabsTrigger value="settings" className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  System Settings
+                </TabsTrigger>
+                <TabsTrigger value="pan-africa" className="flex items-center gap-2">
+                  <Globe className="h-4 w-4" />
+                  Pan-Africa
+                </TabsTrigger>
+                <TabsTrigger value="civic-control" className="flex items-center gap-2">
+                  <Eye className="h-4 w-4" />
+                  Portal Control
+                </TabsTrigger>
+                <TabsTrigger value="localization" className="flex items-center gap-2">
+                  <Languages className="h-4 w-4" />
+                  Localization
+                </TabsTrigger>
+                 <TabsTrigger value="cache-management" className="flex items-center gap-2">
+                   <Database className="h-4 w-4" />
+                   Cache Management
+                 </TabsTrigger>
+                 <TabsTrigger value="system-health" className="flex items-center gap-2">
+                   <Activity className="h-4 w-4" />
+                   System Health
+                 </TabsTrigger>
+                 <TabsTrigger value="ashen-debug" className="flex items-center gap-2">
+                   <Bot className="h-4 w-4" />
+                   Ashen Debug
+                 </TabsTrigger>
+                  <TabsTrigger value="code-health" className="flex items-center gap-2">
+                    <FileCode className="h-4 w-4" />
+                    Code Health
+                  </TabsTrigger>
+                  <TabsTrigger value="ux-simulation" className="flex items-center gap-2">
+                    <Activity className="h-4 w-4" />
+                    UX Simulation
+                  </TabsTrigger>
+                  <TabsTrigger value="activity-timeline" className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Activity Timeline
+                  </TabsTrigger>
+                  <TabsTrigger value="integrity-monitor" className="flex items-center gap-2">
+                    <Shield className="h-4 w-4" />
+                    Ashen Quill
+                  </TabsTrigger>
+                  <TabsTrigger value="civic-learning" className="flex items-center gap-2">
+                    <BookOpen className="h-4 w-4" />
+                    Civic Learning
+                  </TabsTrigger>
+                  <TabsTrigger value="plugins" className="flex items-center gap-2">
+                    <Puzzle className="h-4 w-4" />
+                    Plugin Manager
+                  </TabsTrigger>
               </TabsList>
             </ScrollArea>
 
@@ -1259,345 +1331,6 @@ const Admin = () => {
                           <Badge variant="secondary">Active</Badge>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* Feature Control Center Tab */}
-            <TabsContent value="feature-control">
-              <div className="space-y-6">
-                {/* System Overview */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-2">
-                        <Users className="h-5 w-5 text-blue-600" />
-                        <div>
-                          <p className="text-2xl font-bold">250K+</p>
-                          <p className="text-xs text-muted-foreground">Total Users</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-2">
-                        <Puzzle className="h-5 w-5 text-green-600" />
-                        <div>
-                          <p className="text-2xl font-bold">24</p>
-                          <p className="text-xs text-muted-foreground">Active Features</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-2">
-                        <Vote className="h-5 w-5 text-purple-600" />
-                        <div>
-                          <p className="text-2xl font-bold">15.4K</p>
-                          <p className="text-xs text-muted-foreground">Total Polls</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card>
-                    <CardContent className="p-4">
-                      <div className="flex items-center space-x-2">
-                        <Activity className="h-5 w-5 text-red-600" />
-                        <div>
-                          <p className="text-2xl font-bold">94%</p>
-                          <p className="text-xs text-muted-foreground">System Health</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Feature Management */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Settings className="h-5 w-5" />
-                      Platform Features & Plugin Management
-                    </CardTitle>
-                    <p className="text-sm text-muted-foreground">
-                      Enable or disable platform features and manage functionality
-                    </p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                       {/* CamerProjects Feature */}
-                       <Card className="border">
-                         <CardHeader className="pb-3">
-                           <div className="flex items-center justify-between">
-                             <div className="flex items-center gap-2">
-                               <FileText className="h-4 w-4" />
-                               <div>
-                                 <CardTitle className="text-sm">CamerProjects</CardTitle>
-                                 <p className="text-xs text-muted-foreground">Civic Project Management</p>
-                               </div>
-                             </div>
-                             <Switch defaultChecked />
-                           </div>
-                         </CardHeader>
-                         <CardContent className="pt-0">
-                           <div className="space-y-2">
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Status</span>
-                              <Badge variant="default" className="text-xs">Active</Badge>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Usage</span>
-                              <span>78%</span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Routes</span>
-                              <span>4 pages</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* CamerPlay Feature */}
-                      <Card className="border">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <Music className="h-4 w-4" />
-                              <div>
-                                <CardTitle className="text-sm">CamerPlay Music</CardTitle>
-                                <p className="text-xs text-muted-foreground">Music & Entertainment</p>
-                              </div>
-                            </div>
-                            <Switch defaultChecked />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Status</span>
-                              <Badge variant="default" className="text-xs">Active</Badge>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Usage</span>
-                              <span>83%</span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Routes</span>
-                              <span>3 pages</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Villages Directory */}
-                      <Card className="border">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <MapPin className="h-4 w-4" />
-                              <div>
-                                <CardTitle className="text-sm">Village Registry</CardTitle>
-                                <p className="text-xs text-muted-foreground">Community Directory</p>
-                              </div>
-                            </div>
-                            <Switch defaultChecked />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Status</span>
-                              <Badge variant="default" className="text-xs">Active</Badge>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Usage</span>
-                              <span>91%</span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Routes</span>
-                              <span>2 pages</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Pulse Messenger */}
-                      <Card className="border opacity-60">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <MessageCircle className="h-4 w-4" />
-                              <div>
-                                <CardTitle className="text-sm">Pulse Messenger</CardTitle>
-                                <p className="text-xs text-muted-foreground">Secure Communication</p>
-                              </div>
-                            </div>
-                            <Switch />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Status</span>
-                              <Badge variant="secondary" className="text-xs">Disabled</Badge>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Usage</span>
-                              <span>0%</span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Routes</span>
-                              <span>1 page</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Business Directory */}
-                      <Card className="border">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <Building className="h-4 w-4" />
-                              <div>
-                                <CardTitle className="text-sm">Business Directory</CardTitle>
-                                <p className="text-xs text-muted-foreground">Companies & Verification</p>
-                              </div>
-                            </div>
-                            <Switch defaultChecked />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Status</span>
-                              <Badge variant="default" className="text-xs">Active</Badge>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Usage</span>
-                              <span>65%</span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Routes</span>
-                              <span>3 pages</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-
-                      {/* Video Center */}
-                      <Card className="border opacity-60">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <Video className="h-4 w-4" />
-                              <div>
-                                <CardTitle className="text-sm">Video Center</CardTitle>
-                                <p className="text-xs text-muted-foreground">Media Streaming</p>
-                              </div>
-                            </div>
-                            <Switch />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="space-y-2">
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Status</span>
-                              <Badge variant="secondary" className="text-xs">Disabled</Badge>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Usage</span>
-                              <span>0%</span>
-                            </div>
-                            <div className="flex items-center justify-between text-xs">
-                              <span>Routes</span>
-                              <span>1 page</span>
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Quick Actions */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardContent className="p-6 text-center">
-                      <Users className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                      <h3 className="font-semibold mb-1">User Management</h3>
-                      <p className="text-sm text-muted-foreground">Manage users and permissions</p>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardContent className="p-6 text-center">
-                      <BarChart3 className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                      <h3 className="font-semibold mb-1">Analytics</h3>
-                      <p className="text-sm text-muted-foreground">Platform insights and data</p>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardContent className="p-6 text-center">
-                      <Shield className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                      <h3 className="font-semibold mb-1">Security</h3>
-                      <p className="text-sm text-muted-foreground">Security and monitoring</p>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                    <CardContent className="p-6 text-center">
-                      <Database className="h-8 w-8 mx-auto mb-2 text-amber-600" />
-                      <h3 className="font-semibold mb-1">Database</h3>
-                      <p className="text-sm text-muted-foreground">Data management and backup</p>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="moderation">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Shield className="h-5 w-5" />
-                      Content Moderation
-                    </CardTitle>
-                    <CardDescription>
-                      Manage and moderate platform content including tenders, bids, and business verifications
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      <Button asChild variant="outline" className="justify-start h-auto p-4">
-                        <Link to="/admin/moderation">
-                          <div className="text-left">
-                            <div className="font-medium">Moderation Dashboard</div>
-                            <div className="text-sm text-muted-foreground">Review pending tenders, bids, and verifications</div>
-                          </div>
-                        </Link>
-                      </Button>
-                      <Button variant="outline" className="justify-start h-auto p-4">
-                        <div className="text-left">
-                          <div className="font-medium">Auto-Moderation Rules</div>
-                          <div className="text-sm text-muted-foreground">Configure automatic content filtering</div>
-                        </div>
-                      </Button>
-                      <Button variant="outline" className="justify-start h-auto p-4">
-                        <div className="text-left">
-                          <div className="font-medium">Moderation Reports</div>
-                          <div className="text-sm text-muted-foreground">View moderation activity and statistics</div>
-                        </div>
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>

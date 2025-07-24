@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, MapPin, Filter, Phone, Globe, Clock, Heart, Users, Building, Star, AlertTriangle, Ambulance, Shield, TrendingUp, ChevronRight, Eye } from 'lucide-react';
+import { ServicesLayout } from '@/components/Layout/ServicesLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -97,11 +98,11 @@ export default function HospitalsDirectory() {
         query = query.or(`name.ilike.%${searchQuery}%,village_or_city.ilike.%${searchQuery}%,division.ilike.%${searchQuery}%`);
       }
 
-      if (selectedRegion && selectedRegion !== 'all') {
+      if (selectedRegion) {
         query = query.eq('region', selectedRegion);
       }
 
-      if (selectedType && selectedType !== 'all') {
+      if (selectedType) {
         query = query.eq('type', selectedType as any);
       }
 
@@ -246,7 +247,8 @@ export default function HospitalsDirectory() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <ServicesLayout serviceType="hospitals">
+      <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-red-600 to-red-500 text-white py-16">
           <div className="container mx-auto px-4">
@@ -309,7 +311,7 @@ export default function HospitalsDirectory() {
                     <SelectValue placeholder="All Regions" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Regions</SelectItem>
+                    <SelectItem value="">All Regions</SelectItem>
                     {cameroonRegions.map((region) => (
                       <SelectItem key={region} value={region}>
                         {region}
@@ -323,7 +325,7 @@ export default function HospitalsDirectory() {
                     <SelectValue placeholder="All Types" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="">All Types</SelectItem>
                     {hospitalTypes.map((type) => (
                       <SelectItem key={type.value} value={type.value}>
                         {type.icon} {type.label}
@@ -629,5 +631,6 @@ export default function HospitalsDirectory() {
           </>
         )}
       </div>
+    </ServicesLayout>
   );
 }

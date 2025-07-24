@@ -5056,93 +5056,6 @@ export type Database = {
         }
         Relationships: []
       }
-      bid_moderation: {
-        Row: {
-          bid_id: string
-          created_at: string
-          flagged_content: Json | null
-          id: string
-          moderation_action: string
-          moderation_notes: string | null
-          moderation_reason: string | null
-          moderator_id: string
-        }
-        Insert: {
-          bid_id: string
-          created_at?: string
-          flagged_content?: Json | null
-          id?: string
-          moderation_action: string
-          moderation_notes?: string | null
-          moderation_reason?: string | null
-          moderator_id: string
-        }
-        Update: {
-          bid_id?: string
-          created_at?: string
-          flagged_content?: Json | null
-          id?: string
-          moderation_action?: string
-          moderation_notes?: string | null
-          moderation_reason?: string | null
-          moderator_id?: string
-        }
-        Relationships: []
-      }
-      bidder_credibility_scores: {
-        Row: {
-          average_rating: number | null
-          badges: Json | null
-          bidder_id: string
-          bidder_name: string
-          bids_submitted: number | null
-          bids_won: number | null
-          civic_participation_score: number | null
-          complaints_count: number | null
-          created_at: string
-          credibility_score: number | null
-          delivery_success_rate: number | null
-          id: string
-          last_calculated_at: string | null
-          updated_at: string
-          win_ratio: number | null
-        }
-        Insert: {
-          average_rating?: number | null
-          badges?: Json | null
-          bidder_id: string
-          bidder_name: string
-          bids_submitted?: number | null
-          bids_won?: number | null
-          civic_participation_score?: number | null
-          complaints_count?: number | null
-          created_at?: string
-          credibility_score?: number | null
-          delivery_success_rate?: number | null
-          id?: string
-          last_calculated_at?: string | null
-          updated_at?: string
-          win_ratio?: number | null
-        }
-        Update: {
-          average_rating?: number | null
-          badges?: Json | null
-          bidder_id?: string
-          bidder_name?: string
-          bids_submitted?: number | null
-          bids_won?: number | null
-          civic_participation_score?: number | null
-          complaints_count?: number | null
-          created_at?: string
-          credibility_score?: number | null
-          delivery_success_rate?: number | null
-          id?: string
-          last_calculated_at?: string | null
-          updated_at?: string
-          win_ratio?: number | null
-        }
-        Relationships: []
-      }
       bill_comments: {
         Row: {
           comment_text: string
@@ -5817,72 +5730,6 @@ export type Database = {
           status?: string | null
           transparency_score?: number | null
           updated_at?: string
-        }
-        Relationships: []
-      }
-      business_verifications: {
-        Row: {
-          business_address: string
-          company_name: string
-          company_type: string
-          created_at: string
-          documents_submitted: Json | null
-          email: string
-          id: string
-          industry_sector: string
-          phone_number: string
-          registration_number: string
-          rejection_reason: string | null
-          tax_identification_number: string | null
-          updated_at: string
-          user_id: string
-          verification_level: string
-          verification_notes: string | null
-          verification_status: string
-          verified_at: string | null
-          verified_by: string | null
-        }
-        Insert: {
-          business_address: string
-          company_name: string
-          company_type: string
-          created_at?: string
-          documents_submitted?: Json | null
-          email: string
-          id?: string
-          industry_sector: string
-          phone_number: string
-          registration_number: string
-          rejection_reason?: string | null
-          tax_identification_number?: string | null
-          updated_at?: string
-          user_id: string
-          verification_level?: string
-          verification_notes?: string | null
-          verification_status?: string
-          verified_at?: string | null
-          verified_by?: string | null
-        }
-        Update: {
-          business_address?: string
-          company_name?: string
-          company_type?: string
-          created_at?: string
-          documents_submitted?: Json | null
-          email?: string
-          id?: string
-          industry_sector?: string
-          phone_number?: string
-          registration_number?: string
-          rejection_reason?: string | null
-          tax_identification_number?: string | null
-          updated_at?: string
-          user_id?: string
-          verification_level?: string
-          verification_notes?: string | null
-          verification_status?: string
-          verified_at?: string | null
-          verified_by?: string | null
         }
         Relationships: []
       }
@@ -10594,53 +10441,6 @@ export type Database = {
           },
         ]
       }
-      company_team_members: {
-        Row: {
-          company_id: string
-          created_at: string
-          id: string
-          invited_at: string | null
-          invited_by: string | null
-          is_active: boolean
-          joined_at: string | null
-          permissions: Json | null
-          role: string
-          user_id: string
-        }
-        Insert: {
-          company_id: string
-          created_at?: string
-          id?: string
-          invited_at?: string | null
-          invited_by?: string | null
-          is_active?: boolean
-          joined_at?: string | null
-          permissions?: Json | null
-          role?: string
-          user_id: string
-        }
-        Update: {
-          company_id?: string
-          created_at?: string
-          id?: string
-          invited_at?: string | null
-          invited_by?: string | null
-          is_active?: boolean
-          joined_at?: string | null
-          permissions?: Json | null
-          role?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "company_team_members_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       company_updates: {
         Row: {
           company_id: string | null
@@ -10893,111 +10693,6 @@ export type Database = {
           tag_name?: string
           updated_at?: string
           usage_count?: number | null
-        }
-        Relationships: []
-      }
-      contract_payments: {
-        Row: {
-          contract_id: string
-          created_at: string
-          currency: string
-          due_date: string
-          id: string
-          invoice_number: string | null
-          milestone_reference: string | null
-          payment_amount: number
-          payment_date: string | null
-          payment_description: string | null
-          payment_reference: string | null
-          payment_status: string
-          payment_type: string
-          updated_at: string
-        }
-        Insert: {
-          contract_id: string
-          created_at?: string
-          currency?: string
-          due_date: string
-          id?: string
-          invoice_number?: string | null
-          milestone_reference?: string | null
-          payment_amount: number
-          payment_date?: string | null
-          payment_description?: string | null
-          payment_reference?: string | null
-          payment_status?: string
-          payment_type: string
-          updated_at?: string
-        }
-        Update: {
-          contract_id?: string
-          created_at?: string
-          currency?: string
-          due_date?: string
-          id?: string
-          invoice_number?: string | null
-          milestone_reference?: string | null
-          payment_amount?: number
-          payment_date?: string | null
-          payment_description?: string | null
-          payment_reference?: string | null
-          payment_status?: string
-          payment_type?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      contracts: {
-        Row: {
-          awarded_company_id: string
-          contract_amount: number
-          contract_number: string
-          contract_status: string
-          contract_terms: Json | null
-          created_at: string
-          currency: string
-          deliverables: Json | null
-          end_date: string
-          id: string
-          milestones: Json | null
-          signed_at: string | null
-          start_date: string
-          tender_id: string
-          updated_at: string
-        }
-        Insert: {
-          awarded_company_id: string
-          contract_amount: number
-          contract_number: string
-          contract_status?: string
-          contract_terms?: Json | null
-          created_at?: string
-          currency?: string
-          deliverables?: Json | null
-          end_date: string
-          id?: string
-          milestones?: Json | null
-          signed_at?: string | null
-          start_date: string
-          tender_id: string
-          updated_at?: string
-        }
-        Update: {
-          awarded_company_id?: string
-          contract_amount?: number
-          contract_number?: string
-          contract_status?: string
-          contract_terms?: Json | null
-          created_at?: string
-          currency?: string
-          deliverables?: Json | null
-          end_date?: string
-          id?: string
-          milestones?: Json | null
-          signed_at?: string | null
-          start_date?: string
-          tender_id?: string
-          updated_at?: string
         }
         Relationships: []
       }
@@ -13447,62 +13142,6 @@ export type Database = {
           },
         ]
       }
-      document_uploads: {
-        Row: {
-          business_verification_id: string | null
-          created_at: string
-          document_category: string
-          file_name: string
-          file_path: string
-          file_size: number
-          file_type: string
-          id: string
-          tender_id: string | null
-          updated_at: string
-          upload_status: string
-          user_id: string
-          virus_scan_status: string | null
-        }
-        Insert: {
-          business_verification_id?: string | null
-          created_at?: string
-          document_category: string
-          file_name: string
-          file_path: string
-          file_size: number
-          file_type: string
-          id?: string
-          tender_id?: string | null
-          updated_at?: string
-          upload_status?: string
-          user_id: string
-          virus_scan_status?: string | null
-        }
-        Update: {
-          business_verification_id?: string | null
-          created_at?: string
-          document_category?: string
-          file_name?: string
-          file_path?: string
-          file_size?: number
-          file_type?: string
-          id?: string
-          tender_id?: string | null
-          updated_at?: string
-          upload_status?: string
-          user_id?: string
-          virus_scan_status?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "document_uploads_business_verification_id_fkey"
-            columns: ["business_verification_id"]
-            isOneToOne: false
-            referencedRelation: "business_verifications"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       donations: {
         Row: {
           amount: number
@@ -14158,39 +13797,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      email_verification_tokens: {
-        Row: {
-          created_at: string
-          email: string
-          expires_at: string
-          id: string
-          token: string
-          token_type: string
-          used_at: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          expires_at: string
-          id?: string
-          token: string
-          token_type?: string
-          used_at?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          expires_at?: string
-          id?: string
-          token?: string
-          token_type?: string
-          used_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
       }
       encrypted_messages: {
         Row: {
@@ -18127,398 +17733,6 @@ export type Database = {
         }
         Relationships: []
       }
-      issuer_credibility_scores: {
-        Row: {
-          average_rating: number | null
-          complaints_count: number | null
-          created_at: string
-          credibility_level: string | null
-          credibility_score: number | null
-          delivery_success_rate: number | null
-          fraud_flags_count: number | null
-          id: string
-          issuer_id: string
-          issuer_name: string
-          issuer_type: string
-          last_calculated_at: string | null
-          tenders_awarded: number | null
-          tenders_posted: number | null
-          updated_at: string
-        }
-        Insert: {
-          average_rating?: number | null
-          complaints_count?: number | null
-          created_at?: string
-          credibility_level?: string | null
-          credibility_score?: number | null
-          delivery_success_rate?: number | null
-          fraud_flags_count?: number | null
-          id?: string
-          issuer_id: string
-          issuer_name: string
-          issuer_type: string
-          last_calculated_at?: string | null
-          tenders_awarded?: number | null
-          tenders_posted?: number | null
-          updated_at?: string
-        }
-        Update: {
-          average_rating?: number | null
-          complaints_count?: number | null
-          created_at?: string
-          credibility_level?: string | null
-          credibility_score?: number | null
-          delivery_success_rate?: number | null
-          fraud_flags_count?: number | null
-          id?: string
-          issuer_id?: string
-          issuer_name?: string
-          issuer_type?: string
-          last_calculated_at?: string | null
-          tenders_awarded?: number | null
-          tenders_posted?: number | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      job_applications: {
-        Row: {
-          applicant_email: string
-          applicant_name: string
-          applicant_phone: string | null
-          application_status: string
-          applied_at: string
-          cover_letter: string | null
-          id: string
-          job_id: string
-          meta_data: Json | null
-          notes: string | null
-          resume_url: string | null
-          reviewed_at: string | null
-          user_id: string
-        }
-        Insert: {
-          applicant_email: string
-          applicant_name: string
-          applicant_phone?: string | null
-          application_status?: string
-          applied_at?: string
-          cover_letter?: string | null
-          id?: string
-          job_id: string
-          meta_data?: Json | null
-          notes?: string | null
-          resume_url?: string | null
-          reviewed_at?: string | null
-          user_id: string
-        }
-        Update: {
-          applicant_email?: string
-          applicant_name?: string
-          applicant_phone?: string | null
-          application_status?: string
-          applied_at?: string
-          cover_letter?: string | null
-          id?: string
-          job_id?: string
-          meta_data?: Json | null
-          notes?: string | null
-          resume_url?: string | null
-          reviewed_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_applications_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      job_bookmarks: {
-        Row: {
-          created_at: string
-          id: string
-          job_id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          job_id: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          job_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_bookmarks_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      job_categories: {
-        Row: {
-          color: string | null
-          created_at: string
-          description: string | null
-          icon: string | null
-          id: string
-          is_active: boolean
-          job_count: number | null
-          name: string
-          slug: string
-          updated_at: string
-        }
-        Insert: {
-          color?: string | null
-          created_at?: string
-          description?: string | null
-          icon?: string | null
-          id?: string
-          is_active?: boolean
-          job_count?: number | null
-          name: string
-          slug: string
-          updated_at?: string
-        }
-        Update: {
-          color?: string | null
-          created_at?: string
-          description?: string | null
-          icon?: string | null
-          id?: string
-          is_active?: boolean
-          job_count?: number | null
-          name?: string
-          slug?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      job_posting_analytics: {
-        Row: {
-          applications_count: number | null
-          bookmarks_count: number | null
-          company_id: string
-          conversion_rate: number | null
-          created_at: string
-          id: string
-          job_id: string
-          metric_date: string
-          shares_count: number | null
-          views_count: number | null
-        }
-        Insert: {
-          applications_count?: number | null
-          bookmarks_count?: number | null
-          company_id: string
-          conversion_rate?: number | null
-          created_at?: string
-          id?: string
-          job_id: string
-          metric_date?: string
-          shares_count?: number | null
-          views_count?: number | null
-        }
-        Update: {
-          applications_count?: number | null
-          bookmarks_count?: number | null
-          company_id?: string
-          conversion_rate?: number | null
-          created_at?: string
-          id?: string
-          job_id?: string
-          metric_date?: string
-          shares_count?: number | null
-          views_count?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_posting_analytics_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "job_posting_analytics_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      job_views: {
-        Row: {
-          id: string
-          ip_address: unknown | null
-          job_id: string
-          user_agent: string | null
-          user_id: string | null
-          viewed_at: string
-        }
-        Insert: {
-          id?: string
-          ip_address?: unknown | null
-          job_id: string
-          user_agent?: string | null
-          user_id?: string | null
-          viewed_at?: string
-        }
-        Update: {
-          id?: string
-          ip_address?: unknown | null
-          job_id?: string
-          user_agent?: string | null
-          user_id?: string | null
-          viewed_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "job_views_job_id_fkey"
-            columns: ["job_id"]
-            isOneToOne: false
-            referencedRelation: "jobs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      jobs: {
-        Row: {
-          application_email: string | null
-          applications_count: number | null
-          benefits: string | null
-          category_id: string | null
-          company_id: string | null
-          company_logo: string | null
-          company_name: string
-          created_at: string
-          created_by: string | null
-          deadline: string | null
-          description: string
-          education_level: string | null
-          experience_level: string
-          expires_at: string | null
-          external_url: string | null
-          how_to_apply: string | null
-          id: string
-          is_featured: boolean
-          is_remote: boolean
-          is_urgent: boolean
-          job_type: string
-          location: string
-          meta_data: Json | null
-          published_at: string | null
-          region: string
-          requirements: string | null
-          salary_currency: string | null
-          salary_max: number | null
-          salary_min: number | null
-          salary_period: string | null
-          slug: string
-          status: string
-          tags: string[] | null
-          title: string
-          updated_at: string
-          views_count: number | null
-        }
-        Insert: {
-          application_email?: string | null
-          applications_count?: number | null
-          benefits?: string | null
-          category_id?: string | null
-          company_id?: string | null
-          company_logo?: string | null
-          company_name: string
-          created_at?: string
-          created_by?: string | null
-          deadline?: string | null
-          description: string
-          education_level?: string | null
-          experience_level?: string
-          expires_at?: string | null
-          external_url?: string | null
-          how_to_apply?: string | null
-          id?: string
-          is_featured?: boolean
-          is_remote?: boolean
-          is_urgent?: boolean
-          job_type?: string
-          location: string
-          meta_data?: Json | null
-          published_at?: string | null
-          region: string
-          requirements?: string | null
-          salary_currency?: string | null
-          salary_max?: number | null
-          salary_min?: number | null
-          salary_period?: string | null
-          slug: string
-          status?: string
-          tags?: string[] | null
-          title: string
-          updated_at?: string
-          views_count?: number | null
-        }
-        Update: {
-          application_email?: string | null
-          applications_count?: number | null
-          benefits?: string | null
-          category_id?: string | null
-          company_id?: string | null
-          company_logo?: string | null
-          company_name?: string
-          created_at?: string
-          created_by?: string | null
-          deadline?: string | null
-          description?: string
-          education_level?: string | null
-          experience_level?: string
-          expires_at?: string | null
-          external_url?: string | null
-          how_to_apply?: string | null
-          id?: string
-          is_featured?: boolean
-          is_remote?: boolean
-          is_urgent?: boolean
-          job_type?: string
-          location?: string
-          meta_data?: Json | null
-          published_at?: string | null
-          region?: string
-          requirements?: string | null
-          salary_currency?: string | null
-          salary_max?: number | null
-          salary_min?: number | null
-          salary_period?: string | null
-          slug?: string
-          status?: string
-          tags?: string[] | null
-          title?: string
-          updated_at?: string
-          views_count?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "jobs_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "job_categories"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       judicial_misconduct_reports: {
         Row: {
           case_id: string | null
@@ -21980,39 +21194,6 @@ export type Database = {
         }
         Relationships: []
       }
-      notifications: {
-        Row: {
-          created_at: string
-          data: Json | null
-          id: string
-          message: string
-          read: boolean
-          title: string
-          type: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          data?: Json | null
-          id?: string
-          message: string
-          read?: boolean
-          title: string
-          type: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          data?: Json | null
-          id?: string
-          message?: string
-          read?: boolean
-          title?: string
-          type?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       official_change_log: {
         Row: {
           admin_notes: string | null
@@ -23348,104 +22529,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      petition_alerts: {
-        Row: {
-          alert_message: string
-          alert_title: string
-          alert_type: string
-          created_at: string
-          id: string
-          is_sent: boolean
-          petition_connection_id: string | null
-          sent_at: string | null
-          votes_threshold: number | null
-        }
-        Insert: {
-          alert_message: string
-          alert_title: string
-          alert_type: string
-          created_at?: string
-          id?: string
-          is_sent?: boolean
-          petition_connection_id?: string | null
-          sent_at?: string | null
-          votes_threshold?: number | null
-        }
-        Update: {
-          alert_message?: string
-          alert_title?: string
-          alert_type?: string
-          created_at?: string
-          id?: string
-          is_sent?: boolean
-          petition_connection_id?: string | null
-          sent_at?: string | null
-          votes_threshold?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "petition_alerts_petition_connection_id_fkey"
-            columns: ["petition_connection_id"]
-            isOneToOne: false
-            referencedRelation: "petition_connections"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      petition_connections: {
-        Row: {
-          auto_created: boolean
-          connection_type: string
-          created_at: string
-          created_by: string | null
-          id: string
-          last_synced_at: string | null
-          petition_deadline: string | null
-          petition_description: string | null
-          petition_id: string
-          petition_status: string
-          petition_title: string
-          petition_url: string | null
-          petition_votes: number
-          tender_id: string
-          updated_at: string
-        }
-        Insert: {
-          auto_created?: boolean
-          connection_type?: string
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          last_synced_at?: string | null
-          petition_deadline?: string | null
-          petition_description?: string | null
-          petition_id: string
-          petition_status?: string
-          petition_title: string
-          petition_url?: string | null
-          petition_votes?: number
-          tender_id: string
-          updated_at?: string
-        }
-        Update: {
-          auto_created?: boolean
-          connection_type?: string
-          created_at?: string
-          created_by?: string | null
-          id?: string
-          last_synced_at?: string | null
-          petition_deadline?: string | null
-          petition_description?: string | null
-          petition_id?: string
-          petition_status?: string
-          petition_title?: string
-          petition_url?: string | null
-          petition_votes?: number
-          tender_id?: string
-          updated_at?: string
-        }
-        Relationships: []
       }
       petition_signatures: {
         Row: {
@@ -31323,6 +30406,269 @@ export type Database = {
         }
         Relationships: []
       }
+      tender_analytics: {
+        Row: {
+          created_at: string
+          date_recorded: string
+          id: string
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          tender_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_recorded?: string
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          metric_value?: number
+          tender_id: string
+        }
+        Update: {
+          created_at?: string
+          date_recorded?: string
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          tender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_analytics_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tender_bids: {
+        Row: {
+          bid_amount: number
+          company_id: string
+          created_at: string
+          currency: string
+          documents: Json | null
+          financial_proposal: Json
+          id: string
+          notes: string | null
+          reviewed_at: string | null
+          status: string
+          submitted_at: string
+          technical_proposal: string | null
+          tender_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bid_amount: number
+          company_id: string
+          created_at?: string
+          currency?: string
+          documents?: Json | null
+          financial_proposal: Json
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string
+          technical_proposal?: string | null
+          tender_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bid_amount?: number
+          company_id?: string
+          created_at?: string
+          currency?: string
+          documents?: Json | null
+          financial_proposal?: Json
+          id?: string
+          notes?: string | null
+          reviewed_at?: string | null
+          status?: string
+          submitted_at?: string
+          technical_proposal?: string | null
+          tender_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_bids_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tender_bookmarks: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          id: string
+          tender_id: string
+          user_id: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          tender_id: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          id?: string
+          tender_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_bookmarks_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tender_notifications: {
+        Row: {
+          created_at: string
+          data: Json | null
+          id: string
+          is_read: boolean
+          message: string
+          notification_type: string
+          tender_id: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean
+          message: string
+          notification_type: string
+          tender_id?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          notification_type?: string
+          tender_id?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tender_notifications_tender_id_fkey"
+            columns: ["tender_id"]
+            isOneToOne: false
+            referencedRelation: "tenders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenders: {
+        Row: {
+          award_amount: number | null
+          awarded_at: string | null
+          awarded_to_company_id: string | null
+          bid_opening_date: string | null
+          bids_count: number
+          budget_max: number | null
+          budget_min: number | null
+          category: string
+          created_at: string
+          currency: string
+          deadline: string
+          description: string | null
+          documents: Json | null
+          eligibility_criteria: string | null
+          evaluation_criteria: string | null
+          id: string
+          instructions: string | null
+          is_featured: boolean
+          published_by_company_id: string | null
+          published_by_user_id: string
+          region: string
+          status: string
+          tender_type: string
+          title: string
+          updated_at: string
+          views_count: number
+        }
+        Insert: {
+          award_amount?: number | null
+          awarded_at?: string | null
+          awarded_to_company_id?: string | null
+          bid_opening_date?: string | null
+          bids_count?: number
+          budget_max?: number | null
+          budget_min?: number | null
+          category: string
+          created_at?: string
+          currency?: string
+          deadline: string
+          description?: string | null
+          documents?: Json | null
+          eligibility_criteria?: string | null
+          evaluation_criteria?: string | null
+          id?: string
+          instructions?: string | null
+          is_featured?: boolean
+          published_by_company_id?: string | null
+          published_by_user_id: string
+          region: string
+          status?: string
+          tender_type: string
+          title: string
+          updated_at?: string
+          views_count?: number
+        }
+        Update: {
+          award_amount?: number | null
+          awarded_at?: string | null
+          awarded_to_company_id?: string | null
+          bid_opening_date?: string | null
+          bids_count?: number
+          budget_max?: number | null
+          budget_min?: number | null
+          category?: string
+          created_at?: string
+          currency?: string
+          deadline?: string
+          description?: string | null
+          documents?: Json | null
+          eligibility_criteria?: string | null
+          evaluation_criteria?: string | null
+          id?: string
+          instructions?: string | null
+          is_featured?: boolean
+          published_by_company_id?: string | null
+          published_by_user_id?: string
+          region?: string
+          status?: string
+          tender_type?: string
+          title?: string
+          updated_at?: string
+          views_count?: number
+        }
+        Relationships: []
+      }
       ticket_purchases: {
         Row: {
           buyer_email: string
@@ -32342,108 +31688,6 @@ export type Database = {
           last_updated?: string
           preferred_regions?: string[] | null
           user_id?: string
-        }
-        Relationships: []
-      }
-      user_profile_extensions: {
-        Row: {
-          account_verification_level: number | null
-          address_line1: string | null
-          address_line2: string | null
-          city: string | null
-          country: string | null
-          created_at: string
-          date_of_birth: string | null
-          emergency_contact_name: string | null
-          emergency_contact_phone: string | null
-          emergency_contact_relationship: string | null
-          facebook_url: string | null
-          gender: string | null
-          id: string
-          id_document_number: string | null
-          id_document_type: string | null
-          id_document_url: string | null
-          id_verified_at: string | null
-          linkedin_url: string | null
-          notification_preferences: Json | null
-          occupation: string | null
-          organization: string | null
-          phone_number: string | null
-          postal_code: string | null
-          preferred_language: string | null
-          privacy_settings: Json | null
-          region: string | null
-          timezone: string | null
-          twitter_url: string | null
-          updated_at: string
-          user_id: string
-          website_url: string | null
-        }
-        Insert: {
-          account_verification_level?: number | null
-          address_line1?: string | null
-          address_line2?: string | null
-          city?: string | null
-          country?: string | null
-          created_at?: string
-          date_of_birth?: string | null
-          emergency_contact_name?: string | null
-          emergency_contact_phone?: string | null
-          emergency_contact_relationship?: string | null
-          facebook_url?: string | null
-          gender?: string | null
-          id?: string
-          id_document_number?: string | null
-          id_document_type?: string | null
-          id_document_url?: string | null
-          id_verified_at?: string | null
-          linkedin_url?: string | null
-          notification_preferences?: Json | null
-          occupation?: string | null
-          organization?: string | null
-          phone_number?: string | null
-          postal_code?: string | null
-          preferred_language?: string | null
-          privacy_settings?: Json | null
-          region?: string | null
-          timezone?: string | null
-          twitter_url?: string | null
-          updated_at?: string
-          user_id: string
-          website_url?: string | null
-        }
-        Update: {
-          account_verification_level?: number | null
-          address_line1?: string | null
-          address_line2?: string | null
-          city?: string | null
-          country?: string | null
-          created_at?: string
-          date_of_birth?: string | null
-          emergency_contact_name?: string | null
-          emergency_contact_phone?: string | null
-          emergency_contact_relationship?: string | null
-          facebook_url?: string | null
-          gender?: string | null
-          id?: string
-          id_document_number?: string | null
-          id_document_type?: string | null
-          id_document_url?: string | null
-          id_verified_at?: string | null
-          linkedin_url?: string | null
-          notification_preferences?: Json | null
-          occupation?: string | null
-          organization?: string | null
-          phone_number?: string | null
-          postal_code?: string | null
-          preferred_language?: string | null
-          privacy_settings?: Json | null
-          region?: string | null
-          timezone?: string | null
-          twitter_url?: string | null
-          updated_at?: string
-          user_id?: string
-          website_url?: string | null
         }
         Relationships: []
       }
@@ -33968,6 +33212,36 @@ export type Database = {
         }
         Relationships: []
       }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          description: string | null
+          id: string
+          reference_id: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          reference_id?: string | null
+          transaction_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       whatsapp_message_logs: {
         Row: {
           delivered_at: string | null
@@ -34224,6 +33498,14 @@ export type Database = {
         Args: { application_id: string }
         Returns: Json
       }
+      assign_license_key: {
+        Args: {
+          p_license_id: string
+          p_user_id: string
+          p_trial_mode?: boolean
+        }
+        Returns: string
+      }
       auto_assign_moderator: {
         Args: { p_submission_id: string; p_region: string }
         Returns: string
@@ -34291,6 +33573,10 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: number
       }
+      calculate_commission: {
+        Args: { amount: number; gateway_name: string }
+        Returns: number
+      }
       calculate_connection_fee: {
         Args: {
           p_company_size: Database["public"]["Enums"]["company_size"]
@@ -34352,15 +33638,6 @@ export type Database = {
       calculate_senator_performance_score: {
         Args: { p_senator_id: string }
         Returns: number
-      }
-      calculate_tender_analytics: {
-        Args: {
-          p_metric_type: string
-          p_period?: string
-          p_region?: string
-          p_category?: string
-        }
-        Returns: Json
       }
       check_claim_renewals: {
         Args: Record<PropertyKey, never>
@@ -34563,8 +33840,8 @@ export type Database = {
           parties_processed: number
         }[]
       }
-      generate_job_slug: {
-        Args: { job_title: string; company_name: string }
+      generate_license_key: {
+        Args: Record<PropertyKey, never>
         Returns: string
       }
       generate_protection_alias: {
@@ -34710,6 +33987,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_usage_count: {
+        Args: { license_key_id: string }
+        Returns: undefined
+      }
       learn_from_manual_fix: {
         Args: {
           p_file_path: string
@@ -34788,6 +34069,14 @@ export type Database = {
           p_result_data?: Json
         }
         Returns: string
+      }
+      process_payment_success: {
+        Args: {
+          p_purchase_id: string
+          p_transaction_id: string
+          p_payment_data?: Json
+        }
+        Returns: undefined
       }
       process_wallet_transaction: {
         Args: {
@@ -34912,10 +34201,6 @@ export type Database = {
       setup_renewal_cron_job: {
         Args: Record<PropertyKey, never>
         Returns: string
-      }
-      sync_petition_data: {
-        Args: { p_petition_id: string }
-        Returns: Json
       }
       sync_platform_data: {
         Args: { p_connection_id: string }

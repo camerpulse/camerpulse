@@ -155,9 +155,3 @@ verify_jwt = false
 
 [functions.data-import-scheduler]
 verify_jwt = false
-
-[functions.petition-engine-sync]
-verify_jwt = false
-
-[functions.audit-registry-check]
-verify_jwt = false
