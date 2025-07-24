@@ -148,6 +148,9 @@ const PluginManager: React.FC = () => {
         : p
     ));
 
+    // Show success message
+    alert(`Plugin ${plugin?.name} has been ${newState ? 'enabled' : 'disabled'} successfully!`);
+
     // Here you would call your actual plugin management API
     console.log(`Plugin ${pluginId} ${newState ? 'enabled' : 'disabled'}`);
   };
