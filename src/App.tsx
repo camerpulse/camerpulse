@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -156,6 +156,7 @@ import VillageLeaderboards from "./pages/VillageLeaderboards";
 import ModeratorPortal from "./pages/ModeratorPortal";
 import ModeratorOnboarding from "./pages/ModeratorOnboarding";
 import ModerationDashboard from "./pages/ModerationDashboard";
+import TestPage from "./pages/TestPage";
 
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -169,30 +170,10 @@ import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
 const queryClient = new QueryClient();
 
 const App = () => {
-  useEffect(() => {
-    // Register service worker for PWA functionality
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then((registration) => {
-            console.log('SW registered: ', registration);
-          })
-          .catch((registrationError) => {
-            console.log('SW registration failed: ', registrationError);
-          });
-      });
-    }
-  }, []);
-
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <BrowserRouter>
-          <Toaster />
-          <Sonner />
-          <PWAInstallPrompt />
-          <OfflineIndicator />
-          <Routes>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/test" element={<TestPage />} />
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/feed" element={<Feed />} />
@@ -383,10 +364,8 @@ const App = () => {
               <Route path="/officials" element={<Officials />} />
               <Route path="/judiciary" element={<Judiciary />} />
                  <Route path="*" element={<NotFound />} />
-             </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
-    </QueryClientProvider>
+      </Routes>
+    </BrowserRouter>
   );
 };
 
