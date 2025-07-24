@@ -158,3 +158,6 @@ verify_jwt = false
 
 [functions.data-import-scheduler]
 verify_jwt = false
+
+[functions.export-sponsor-data]
+verify_jwt = false
