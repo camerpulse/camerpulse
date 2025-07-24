@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { MessagingModal } from './MessagingModal';
+import { RatingModal } from './RatingModal';
 import { cn } from '@/lib/utils';
 
 interface UnifiedPoliticalCardProps {
@@ -54,6 +55,7 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
 }) => {
   const navigate = useNavigate();
   const [showMessaging, setShowMessaging] = useState(false);
+  const [showRating, setShowRating] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
 
   const getInitials = (name: string) => {
@@ -252,7 +254,14 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
               </Button>
               
               <div className="flex gap-1">
-                <Button variant="ghost" size="sm">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowRating(true);
+                  }}
+                >
                   <Star className="w-4 h-4" />
                 </Button>
                 <Button variant="ghost" size="sm">
@@ -272,6 +281,17 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
           recipientId={id}
           recipientName={name}
           recipientType={type}
+        />
+      )}
+
+      {/* Rating Modal */}
+      {showRating && (
+        <RatingModal
+          open={showRating}
+          onClose={() => setShowRating(false)}
+          entityId={id}
+          entityName={name}
+          entityType={type}
         />
       )}
     </>

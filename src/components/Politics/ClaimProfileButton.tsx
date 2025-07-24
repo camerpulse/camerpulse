@@ -22,12 +22,6 @@ export const ClaimProfileButton = ({
   className
 }: ClaimProfileButtonProps) => {
   const [showModal, setShowModal] = useState(false);
-  
-  const claimFee = type === 'politician' ? 500000 : 1000000;
-  
-  const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat('en-US').format(amount) + ' FCFA';
-  };
 
   if (isClaimed) {
     return (
@@ -47,6 +41,9 @@ export const ClaimProfileButton = ({
     );
   }
 
+  // Convert type to match the modal interface
+  const profileType = type === 'politician' ? 'politician' : 'politician'; // For now, map party to politician
+
   return (
     <>
       <Button
@@ -56,18 +53,14 @@ export const ClaimProfileButton = ({
       >
         <Shield className="h-4 w-4" />
         Claim This {type === 'politician' ? 'Profile' : 'Page'}
-        <Badge variant="secondary" className="ml-1">
-          {formatAmount(claimFee)}
-        </Badge>
       </Button>
 
       <ClaimProfileModal
         open={showModal}
         onClose={() => setShowModal(false)}
-        type={type}
-        targetName={targetName}
-        targetId={targetId}
-        claimFee={claimFee}
+        profileId={targetId}
+        profileName={targetName}
+        profileType={profileType}
       />
     </>
   );
