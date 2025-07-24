@@ -22,10 +22,6 @@ import {
   Building
 } from "lucide-react";
 
-interface Profile {
-  full_name?: string;
-  avatar_url?: string;
-}
 
 const Header = () => {
   const location = useLocation();
@@ -161,7 +157,7 @@ const Header = () => {
                       </AvatarFallback>
                     </Avatar>
                     <span className="hidden sm:block text-sm">
-                      {profile?.full_name || user.email}
+                      {profile?.display_name || user.email}
                     </span>
                     <ChevronDown className="h-4 w-4" />
                   </Button>
