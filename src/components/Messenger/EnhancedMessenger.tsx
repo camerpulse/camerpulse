@@ -73,6 +73,49 @@ export const EnhancedMessenger: React.FC<EnhancedMessengerProps> = ({ className 
   const [showNewChatDialog, setShowNewChatDialog] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
+  // Handle URL parameter for starting conversations
+  useEffect(() => {
+    const handleStartConversation = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const startConversationUserId = urlParams.get('startConversation');
+      
+      if (startConversationUserId && user) {
+        try {
+          // Check if conversation already exists
+          const existingConv = conversations.find(conv => 
+            conv.participants?.some(p => p.user_id === startConversationUserId)
+          );
+          
+          if (existingConv) {
+            setActiveConversation(existingConv);
+            await fetchMessages(existingConv.id);
+          } else {
+            // Create new conversation
+            const newConv = await createConversation([startConversationUserId], 'Direct Message');
+            if (newConv) {
+              setActiveConversation(newConv);
+            }
+          }
+          
+          // Clean URL
+          const newUrl = window.location.pathname;
+          window.history.replaceState({}, '', newUrl);
+        } catch (error) {
+          console.error('Error starting conversation:', error);
+          toast({
+            title: "Error",
+            description: "Failed to start conversation",
+            variant: "destructive"
+          });
+        }
+      }
+    };
+
+    if (conversations.length > 0) {
+      handleStartConversation();
+    }
+  }, [conversations, user, createConversation, fetchMessages, setActiveConversation]);
+
   // Filter conversations based on search
   const filteredConversations = conversations.filter(conv =>
     conv.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

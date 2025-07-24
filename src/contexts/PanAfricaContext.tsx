@@ -37,8 +37,8 @@ interface PanAfricaProviderProps {
 }
 
 export const PanAfricaProvider: React.FC<PanAfricaProviderProps> = ({ children }) => {
-  const [selectedCountry, setSelectedCountry] = useState<string>('CM'); // Default to Cameroon
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [selectedCountry, setSelectedCountry] = React.useState<string>('CM'); // Default to Cameroon
+  const [countries, setCountries] = React.useState<Country[]>([]);
 
   const getCountryData = (countryCode: string): Country | undefined => {
     return countries.find(country => country.country_code === countryCode);
