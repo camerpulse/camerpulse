@@ -3,6 +3,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { AppLayout } from '@/components/Layout/AppLayout';
+import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
+import { PoliticalNavigation } from '@/components/Navigation/PoliticalNavigation';
 import { EnhancedPoliticalGrid } from '@/components/Politics/EnhancedPoliticalGrid';
 
 interface PoliticalEntity {
@@ -103,6 +105,8 @@ const Politicians = () => {
   return (
     <AppLayout>
       <div className="container mx-auto px-4 py-8">
+        <NavigationBreadcrumb />
+        <PoliticalNavigation />
         <EnhancedPoliticalGrid
           entities={politicians}
           loading={loading}

@@ -84,10 +84,13 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
 
   return (
     <>
-      <Card className={cn(
-        "group h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-2 cursor-pointer rounded-xl overflow-hidden",
-        className
-      )}>
+      <Card 
+        className={cn(
+          "group h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-2 cursor-pointer rounded-xl overflow-hidden",
+          className
+        )}
+        onClick={() => navigate(`${getRoutePrefix()}/${id}`)}
+      >
         <CardContent className="p-0">
           {/* Image Container */}
           <div className="relative aspect-square overflow-hidden">
