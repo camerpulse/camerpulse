@@ -33,7 +33,7 @@ interface TestResult {
 }
 
 export const ProfileFeatureTest: React.FC = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [running, setRunning] = useState(false);
   const [testProfile, setTestProfile] = useState<any>(null);
@@ -226,6 +226,23 @@ export const ProfileFeatureTest: React.FC = () => {
     
     addResult({ test: 'Test Suite', status: 'pending', message: 'Starting profile feature validation...' });
     
+    // Test 0: Authentication Check
+    if (!user) {
+      addResult({ 
+        test: 'Authentication', 
+        status: 'fail', 
+        message: '❌ User not authenticated - please log in first' 
+      });
+      setRunning(false);
+      return;
+    }
+    
+    addResult({ 
+      test: 'Authentication', 
+      status: 'pass', 
+      message: `✅ User authenticated: ${user.email}` 
+    });
+    
     // Test 1: Profile Data Loading
     await testProfileData();
     
@@ -246,8 +263,32 @@ export const ProfileFeatureTest: React.FC = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="text-muted-foreground">Loading authentication...</div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {!user && (
+        <Card className="border-destructive">
+          <CardHeader>
+            <CardTitle className="text-destructive">Authentication Required</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground mb-4">
+              You must be logged in to test profile features. Please authenticate first.
+            </p>
+            <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+              Go to Login
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+      
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -257,7 +298,7 @@ export const ProfileFeatureTest: React.FC = () => {
           <div className="flex gap-2">
             <Button 
               onClick={runAllTests} 
-              disabled={running}
+              disabled={running || !user}
               size="sm"
             >
               {running ? 'Running Tests...' : 'Run All Tests'}

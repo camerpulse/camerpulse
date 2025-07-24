@@ -114,7 +114,7 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
   isModal = false,
   onClose
 }) => {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
   
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -350,7 +350,7 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
     return icons[platform.toLowerCase()] || ExternalLink;
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>

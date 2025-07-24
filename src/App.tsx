@@ -80,6 +80,7 @@ import UserProfilePage from "./pages/UserProfilePage";
 import ProfileSlugPage from "./pages/ProfileSlugPage";
 import { ProfileValidationTest } from "./components/Profile/ProfileValidationTest";
 import { ProfileFeatureTest } from "./components/Profile/ProfileFeatureTest";
+import { AuthPage } from "./pages/AuthPage";
 import Events from "./pages/Events";
 import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
@@ -310,6 +311,7 @@ const App = () => {
               <Route path="/@:slug" element={<ProfileSlugPage />} />
         <Route path="/profile-test" element={<ProfileValidationTest />} />
         <Route path="/feature-test" element={<ProfileFeatureTest />} />
+        <Route path="/auth" element={<AuthPage />} />
           <Route path="/events" element={<Events />} />
           <Route path="/calendar" element={<EventCalendarPage />} />
           <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
