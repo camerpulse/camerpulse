@@ -43,7 +43,7 @@ const mockAuditDetail = {
   document_title: 'Ministry of Health Financial Audit 2023',
   entity_audited: 'Ministry of Health',
   fiscal_year: 2023,
-  audit_summary: 'Comprehensive financial audit revealing budget allocation discrepancies and procurement irregularities. The audit found significant variances in budget execution, particularly in the procurement of medical equipment and pharmaceuticals. Several contracts were awarded without proper tender processes, resulting in inflated costs estimated at 2.4 billion FCFA.',
+  audit_summary: 'Comprehensive financial audit revealing budget allocation discrepancies and procurement irregularities. The audit found significant variances in budget execution, particularly in the procurement of medical equipment and pharmaceuticals. Several contracts were awarded without proper competitive bidding processes, resulting in inflated costs estimated at 2.4 billion FCFA.',
   detailed_findings: `
     Key Findings:
     • Procurement irregularities: 15 contracts totaling 2.4 billion FCFA awarded without competitive bidding

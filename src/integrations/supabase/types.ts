@@ -34408,15 +34408,6 @@ export type Database = {
         Args: { p_senator_id: string }
         Returns: number
       }
-      calculate_tender_analytics: {
-        Args: {
-          p_metric_type: string
-          p_period?: string
-          p_region?: string
-          p_category?: string
-        }
-        Returns: Json
-      }
       check_claim_renewals: {
         Args: Record<PropertyKey, never>
         Returns: {
