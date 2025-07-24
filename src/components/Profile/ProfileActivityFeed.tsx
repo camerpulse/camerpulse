@@ -17,16 +17,9 @@ import {
   ExternalLink
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import type { Database } from '@/integrations/supabase/types';
 
-interface ActivityItem {
-  id: string;
-  activity_type: string;
-  activity_title: string;
-  activity_description?: string;
-  activity_data: any;
-  is_public: boolean;
-  created_at: string;
-}
+type ActivityItem = Database['public']['Tables']['profile_activities']['Row'];
 
 interface ProfileActivityFeedProps {
   userId: string;

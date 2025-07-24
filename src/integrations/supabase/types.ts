@@ -27879,6 +27879,42 @@ export type Database = {
         }
         Relationships: []
       }
+      profile_activities: {
+        Row: {
+          activity_data: Json | null
+          activity_description: string | null
+          activity_title: string
+          activity_type: string
+          created_at: string
+          id: string
+          is_public: boolean
+          profile_id: string
+          updated_at: string
+        }
+        Insert: {
+          activity_data?: Json | null
+          activity_description?: string | null
+          activity_title: string
+          activity_type: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          profile_id: string
+          updated_at?: string
+        }
+        Update: {
+          activity_data?: Json | null
+          activity_description?: string | null
+          activity_title?: string
+          activity_type?: string
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          profile_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profile_activity_feed: {
         Row: {
           activity_data: Json | null
@@ -34867,17 +34903,6 @@ export type Database = {
       }
     }
     Functions: {
-      add_profile_activity: {
-        Args: {
-          p_profile_id: string
-          p_activity_type: string
-          p_activity_title: string
-          p_activity_description?: string
-          p_activity_data?: Json
-          p_is_public?: boolean
-        }
-        Returns: string
-      }
       analyze_dev_request: {
         Args: {
           p_request_id: string
