@@ -10,6 +10,7 @@ import { CivicAlertSystem } from "@/components/Security/CivicAlertSystem";
 import { RoleControlSystem } from "@/components/Security/RoleControlSystem";
 import { LocalizationSettings } from "@/components/Admin/LocalizationSettings";
 import PluginManager from "@/components/Admin/PluginManager";
+import ComprehensiveAdminPanel from "@/components/Admin/ComprehensiveAdminPanel";
 import SystemHealthReport from "@/components/Admin/SystemHealthReport";
 import { CacheManagementDashboard } from "@/components/Admin/CacheManagementDashboard";
 import { CacheStatusMonitor } from "@/components/Admin/CacheStatusMonitor";
@@ -259,9 +260,9 @@ const Admin = () => {
                   <Monitor className="h-4 w-4" />
                   Themes
                 </TabsTrigger>
-                <TabsTrigger value="plugins" className="flex items-center gap-2">
-                  <Puzzle className="h-4 w-4" />
-                  Plugin Manager
+                <TabsTrigger value="comprehensive-admin" className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Feature Control Center
                 </TabsTrigger>
                 <TabsTrigger value="health" className="flex items-center gap-2">
                   <Activity className="h-4 w-4" />
@@ -1349,6 +1350,11 @@ const Admin = () => {
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
+
+            {/* NEW: Comprehensive Admin Panel */}
+            <TabsContent value="comprehensive-admin">
+              <ComprehensiveAdminPanel />
             </TabsContent>
 
             <TabsContent value="moderation">
