@@ -51,10 +51,10 @@ export default function Footer() {
                 <Phone className="h-4 w-4" />
                 <span>+237 6XX XXX XXX</span>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                <Mail className="h-4 w-4" />
-                <span>support@camertenders.cm</span>
-              </div>
+               <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                 <Mail className="h-4 w-4" />
+                 <span>support@camerpulse.cm</span>
+               </div>
             </div>
           </div>
 
