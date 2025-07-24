@@ -202,7 +202,8 @@ const App = () => {
                   <OfflineIndicator />
                   <Routes>
                     <Route path="/test" element={<TestPage />} />
-          <Route path="/jobs" element={<WorkforceEcosystemHub />} />
+          <Route path="/jobs" element={<JobBoard />} />
+          <Route path="/jobs/ecosystem" element={<WorkforceEcosystemHub />} />
           <Route path="/jobs/home" element={<JobsHome />} />
           <Route path="/jobs/ecosystem" element={<WorkforceEcosystemHub />} />
           <Route path="/jobs/company" element={<CompanyPortal />} />
