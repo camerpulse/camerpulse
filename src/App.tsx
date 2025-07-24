@@ -186,16 +186,13 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <MobileProvider>
-        <PanAfricaProvider>
-          <AuthProvider>
-            <PluginProvider>
-                <Toaster />
-                <Sonner />
-                <PWAInstallPrompt />
-                <OfflineIndicator />
-                <BrowserRouter>
-            <Routes>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Toaster />
+          <Sonner />
+          <PWAInstallPrompt />
+          <OfflineIndicator />
+          <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/feed" element={<Feed />} />
@@ -386,12 +383,9 @@ const App = () => {
               <Route path="/officials" element={<Officials />} />
               <Route path="/judiciary" element={<Judiciary />} />
                  <Route path="*" element={<NotFound />} />
-            </Routes>
+             </Routes>
           </BrowserRouter>
-              </PluginProvider>
-            </AuthProvider>
-          </PanAfricaProvider>
-        </MobileProvider>
+        </TooltipProvider>
     </QueryClientProvider>
   );
 };

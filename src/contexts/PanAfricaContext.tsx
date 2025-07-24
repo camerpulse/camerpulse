@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface Country {
   country_code: string;
@@ -33,10 +33,10 @@ export const usePanAfrica = () => {
 };
 
 interface PanAfricaProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-export const PanAfricaProvider: React.FC<PanAfricaProviderProps> = ({ children }) => {
+export const PanAfricaProvider = ({ children }: PanAfricaProviderProps) => {
   const [selectedCountry, setSelectedCountry] = useState<string>('CM'); // Default to Cameroon
   const [countries, setCountries] = useState<Country[]>([]);
 
