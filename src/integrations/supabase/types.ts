@@ -13873,6 +13873,51 @@ export type Database = {
         }
         Relationships: []
       }
+      edit_suggestions: {
+        Row: {
+          admin_notes: string | null
+          change_reason: string | null
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          suggested_changes: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          change_reason?: string | null
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggested_changes: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          change_reason?: string | null
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          suggested_changes?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       election_calendars: {
         Row: {
           affected_regions: string[] | null
@@ -28120,6 +28165,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      profile_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_reason: string | null
+          claim_type: string
+          created_at: string
+          entity_id: string
+          entity_type: string
+          evidence_files: string[] | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          evidence_files?: string[] | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          evidence_files?: string[] | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profile_comparisons: {
         Row: {

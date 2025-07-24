@@ -147,6 +147,7 @@ import { MPDetailPage } from "./pages/MPDetailPage";
 import { MinisterDetailPage } from "./pages/MinisterDetailPage";
 import { PoliticianDetailPage } from "./pages/PoliticianDetailPage";
 import { SenatorDetailPage } from "./pages/SenatorDetailPage";
+import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataImport from "./pages/AdminDataImport";
 import AuditRegistryPage from "./pages/AuditRegistryPage";
 
@@ -207,6 +208,7 @@ const App = () => {
               <Route path="/mps/:id" element={<MPDetailPage />} />
               <Route path="/ministers" element={<MinistersPage />} />
               <Route path="/ministers/:id" element={<MinisterDetailPage />} />
+              <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/data-import" element={<AdminDataImport />} />
               <Route path="/audit-registry" element={<AuditRegistryPage />} />
               <Route path="/security" element={<Security />} />

@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useClaimProfile } from '@/hooks/useProfileClaims';
 
 interface ClaimProfileModalProps {
   open: boolean;
@@ -22,6 +23,7 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
   profileType
 }) => {
   const { toast } = useToast();
+  const claimProfile = useClaimProfile();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -53,11 +55,16 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
 
     setLoading(true);
     try {
-      // TODO: Submit claim request to database
-      toast({
-        title: "Claim Request Submitted",
-        description: "Your profile claim request has been submitted for review. You will be notified once it's processed.",
+      const evidenceUrls = formData.evidenceFiles.map(file => file.name); // In production, upload files first
+      
+      await claimProfile.mutateAsync({
+        entity_type: profileType as 'senator' | 'mp' | 'minister' | 'politician',
+        entity_id: profileId,
+        claim_type: 'ownership',
+        claim_reason: formData.verificationReason,
+        evidence_files: evidenceUrls
       });
+      
       onClose();
       setFormData({
         fullName: '',
@@ -68,11 +75,7 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
         evidenceFiles: []
       });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit claim request",
-        variant: "destructive"
-      });
+      // Error handling is done in the hook
     } finally {
       setLoading(false);
     }
@@ -210,8 +213,8 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Cancel
             </Button>
-            <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? 'Submitting...' : 'Submit Claim'}
+            <Button type="submit" disabled={loading || claimProfile.isPending} className="flex-1">
+              {loading || claimProfile.isPending ? 'Submitting...' : 'Submit Claim'}
             </Button>
           </div>
         </form>

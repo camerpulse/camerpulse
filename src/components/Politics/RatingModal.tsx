@@ -4,6 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useRateSenator } from '@/hooks/useSenators';
+import { useRateMP } from '@/hooks/useMPs';
+import { useRateMinister } from '@/hooks/useMinisterRatings';
 
 interface RatingModalProps {
   open: boolean;
@@ -21,6 +24,9 @@ export const RatingModal: React.FC<RatingModalProps> = ({
   entityType
 }) => {
   const { toast } = useToast();
+  const rateSenator = useRateSenator();
+  const rateMP = useRateMP();
+  const rateMinister = useRateMinister();
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -42,20 +48,34 @@ export const RatingModal: React.FC<RatingModalProps> = ({
 
     setLoading(true);
     try {
-      // TODO: Submit rating to database
-      toast({
-        title: "Rating Submitted",
-        description: `Thank you for rating ${entityName}`,
-      });
+      if (entityType === 'senator') {
+        await rateSenator.mutateAsync({
+          senator_id: entityId,
+          overall_rating: rating,
+          comment,
+          is_anonymous: false
+        });
+      } else if (entityType === 'mp') {
+        await rateMP.mutateAsync({
+          mp_id: entityId,
+          overall_rating: rating,
+          comment,
+          is_anonymous: false
+        });
+      } else if (entityType === 'minister') {
+        await rateMinister.mutateAsync({
+          minister_id: entityId,
+          overall_rating: rating,
+          comment,
+          is_anonymous: false
+        });
+      }
+      
       onClose();
       setRating(0);
       setComment('');
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit rating",
-        variant: "destructive"
-      });
+      // Error handling is done in the hooks
     } finally {
       setLoading(false);
     }

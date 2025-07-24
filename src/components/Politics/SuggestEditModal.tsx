@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Edit3, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useSuggestEdit } from '@/hooks/useEditSuggestions';
 
 interface SuggestEditModalProps {
   open: boolean;
@@ -23,6 +24,7 @@ export const SuggestEditModal: React.FC<SuggestEditModalProps> = ({
   profileType
 }) => {
   const { toast } = useToast();
+  const suggestEdit = useSuggestEdit();
   const [formData, setFormData] = useState({
     editType: '',
     fieldToEdit: '',
@@ -74,11 +76,19 @@ export const SuggestEditModal: React.FC<SuggestEditModalProps> = ({
 
     setLoading(true);
     try {
-      // TODO: Submit edit suggestion to database
-      toast({
-        title: "Edit Suggestion Submitted",
-        description: "Your edit suggestion has been submitted for review by administrators.",
+      await suggestEdit.mutateAsync({
+        entity_type: profileType as 'senator' | 'mp' | 'minister' | 'politician',
+        entity_id: profileId,
+        suggested_changes: {
+          edit_type: formData.editType,
+          field_to_edit: formData.fieldToEdit,
+          current_value: formData.currentValue,
+          suggested_value: formData.suggestedValue,
+          source: formData.source
+        },
+        change_reason: formData.reason
       });
+      
       onClose();
       setFormData({
         editType: '',
@@ -90,11 +100,7 @@ export const SuggestEditModal: React.FC<SuggestEditModalProps> = ({
         evidenceFiles: []
       });
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to submit edit suggestion",
-        variant: "destructive"
-      });
+      // Error handling is done in the hook
     } finally {
       setLoading(false);
     }
@@ -255,8 +261,8 @@ export const SuggestEditModal: React.FC<SuggestEditModalProps> = ({
             <Button type="button" variant="outline" onClick={onClose} className="flex-1">
               Cancel
             </Button>
-            <Button type="submit" disabled={loading} className="flex-1">
-              {loading ? 'Submitting...' : 'Submit Suggestion'}
+            <Button type="submit" disabled={loading || suggestEdit.isPending} className="flex-1">
+              {loading || suggestEdit.isPending ? 'Submitting...' : 'Submit Suggestion'}
             </Button>
           </div>
         </form>
