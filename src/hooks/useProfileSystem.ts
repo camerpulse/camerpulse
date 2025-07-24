@@ -305,15 +305,29 @@ export const useProfileSystem = () => {
     isPublic = true
   ) => {
     try {
+      // Get profile ID first
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', profileId)
+        .single();
+
+      if (!profile) {
+        throw new Error('Profile not found');
+      }
+
       const { data: result, error } = await supabase
-        .rpc('add_profile_activity', {
-          p_profile_id: profileId,
-          p_activity_type: activityType,
-          p_activity_title: title,
-          p_activity_description: description,
-          p_activity_data: activityData || {},
-          p_is_public: isPublic
-        });
+        .from('profile_activities')
+        .insert({
+          profile_id: profile.id,
+          activity_type: activityType,
+          activity_title: title,
+          activity_description: description,
+          activity_data: activityData || {},
+          is_public: isPublic
+        })
+        .select()
+        .single();
 
       if (error) throw error;
       return result;

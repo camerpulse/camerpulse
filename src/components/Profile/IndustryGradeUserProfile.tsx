@@ -25,6 +25,9 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { FollowButton } from '@/components/camerpulse/FollowButton';
+import { ProfileAnalytics } from '@/components/Profile/ProfileAnalytics';
+import { ProfileActivityFeed } from '@/components/Profile/ProfileActivityFeed';
+import { ProfileSocialFeatures } from '@/components/Profile/ProfileSocialFeatures';
 import { useToast } from '@/hooks/use-toast';
 import { 
   MapPin, 
@@ -572,11 +575,13 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
 
           {/* Tabs for Additional Information */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="contact">Contact</TabsTrigger>
               <TabsTrigger value="activity">Activity</TabsTrigger>
               <TabsTrigger value="about">About</TabsTrigger>
+              {user?.id === userId && <TabsTrigger value="analytics">Analytics</TabsTrigger>}
+              <TabsTrigger value="social">Social</TabsTrigger>
             </TabsList>
 
             <TabsContent value="overview" className="space-y-4 mt-4">
@@ -682,10 +687,24 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
             </TabsContent>
 
             <TabsContent value="activity" className="space-y-4 mt-4">
-              <div className="text-center py-8 text-muted-foreground">
-                <TrendingUp className="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <p>Recent activity will appear here</p>
-              </div>
+              <ProfileActivityFeed userId={userId} isOwnProfile={user?.id === userId} />
+            </TabsContent>
+
+            {/* Analytics Tab - Only for own profile */}
+            {user?.id === userId && (
+              <TabsContent value="analytics" className="space-y-4 mt-4">
+                <ProfileAnalytics profileId={userId} isOwnProfile={true} />
+              </TabsContent>
+            )}
+
+            {/* Social Features Tab */}
+            <TabsContent value="social" className="space-y-4 mt-4">
+              <ProfileSocialFeatures 
+                userId={userId} 
+                username={profile.username}
+                profileData={profile}
+                isOwnProfile={user?.id === userId}
+              />
             </TabsContent>
 
             <TabsContent value="about" className="space-y-4 mt-4">

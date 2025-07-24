@@ -95,7 +95,7 @@ export const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = ({
   };
 
   const renderActivityContent = (activity: ActivityItem) => {
-    const data = activity.activity_data || {};
+    const data = activity.activity_data as any || {};
     
     switch (activity.activity_type) {
       case 'post_liked':
@@ -115,11 +115,11 @@ export const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = ({
           <div className="flex items-center space-x-3">
             <Avatar className="w-8 h-8">
               <AvatarImage src={data.followed_user_avatar} />
-              <AvatarFallback>{data.followed_user_name?.[0]}</AvatarFallback>
+              <AvatarFallback>{data.followed_user_name?.[0] || '?'}</AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-sm font-medium">{data.followed_user_name}</p>
-              <p className="text-xs text-muted-foreground">@{data.followed_user_username}</p>
+              <p className="text-sm font-medium">{data.followed_user_name || 'Unknown User'}</p>
+              <p className="text-xs text-muted-foreground">@{data.followed_user_username || 'unknown'}</p>
             </div>
           </div>
         );
@@ -129,10 +129,10 @@ export const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = ({
           <div className="space-y-2">
             <div className="flex items-center space-x-2">
               <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
-                {data.achievement_name}
+                {data.achievement_name || 'Achievement'}
               </Badge>
             </div>
-            <p className="text-sm text-gray-600">{data.achievement_description}</p>
+            <p className="text-sm text-gray-600">{data.achievement_description || activity.activity_description}</p>
           </div>
         );
       
@@ -144,11 +144,11 @@ export const ProfileActivityFeed: React.FC<ProfileActivityFeedProps> = ({
                 {[...Array(5)].map((_, i) => (
                   <Star 
                     key={i} 
-                    className={`w-4 h-4 ${i < data.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'}`} 
+                    className={`w-4 h-4 ${i < (data.rating || 0) ? 'text-yellow-500 fill-current' : 'text-gray-300'}`} 
                   />
                 ))}
               </div>
-              <span className="text-sm font-medium">{data.rating}/5</span>
+              <span className="text-sm font-medium">{data.rating || 0}/5</span>
             </div>
             <p className="text-sm">{activity.activity_description}</p>
             {data.comment && (
