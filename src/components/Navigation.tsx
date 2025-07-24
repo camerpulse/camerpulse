@@ -46,7 +46,7 @@ export default function Navigation() {
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2">
               <Building className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold">CamerTenders</span>
+              <span className="text-xl font-bold">CamerPulse</span>
             </Link>
             
             {/* Main Navigation */}

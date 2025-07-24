@@ -61,7 +61,7 @@ export default function Header() {
                 <Building className="h-5 w-5 text-primary-foreground" />
               </div>
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-foreground">CamerTenders</span>
+                <span className="text-xl font-bold text-foreground">CamerPulse</span>
                 <span className="text-xs text-muted-foreground hidden sm:block">Government Procurement Platform</span>
               </div>
             </Link>

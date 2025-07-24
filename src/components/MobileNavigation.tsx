@@ -82,7 +82,7 @@ export default function MobileNavigation({ userRole = 'citizen', user }: MobileN
               </div>
               <div>
                 <div className="flex items-center space-x-2">
-                  <span className="text-lg font-bold">CamerTenders</span>
+                  <span className="text-lg font-bold">CamerPulse</span>
                   {userRole !== 'citizen' && (
                     <Badge variant="secondary" className="text-xs">
                       {userRole.charAt(0).toUpperCase() + userRole.slice(1)}
