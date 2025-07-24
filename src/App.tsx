@@ -73,6 +73,8 @@ import VillagesSearchPage from "./pages/VillagesSearchPage";
 import CamerPlayHome from "./pages/CamerPlayHome";
 import ArtistDashboard from "./pages/ArtistDashboard";
 import BillionaireTracker from "./pages/BillionaireTracker";
+import CamerPlayEvents from "./pages/CamerPlayEvents";
+import EventCalendarPage from "./pages/EventCalendarPage";
 
 // Missing page imports that need to be created
 const ChurchesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Churches Directory</h1><p>Coming soon...</p></div>;
@@ -97,7 +99,6 @@ const PartnershipsPage = () => <div className="container mx-auto px-4 py-8"><h1 
 const PressPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Press</h1><p>Coming soon...</p></div>;
 const DonatePage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Donate</h1><p>Coming soon...</p></div>;
 const ReportBugPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Report a Bug</h1><p>Coming soon...</p></div>;
-const EventsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Events</h1><p>Coming soon...</p></div>;
 
 
 const queryClient = new QueryClient();
@@ -155,7 +156,7 @@ const App = () => {
                        
                         {/* Media & Engagement */}
                         <Route path="camerplay" element={<CamerPlayHome />} />
-                        <Route path="events" element={<EventsPage />} />
+                        <Route path="events" element={<EventCalendarPage />} />
                         <Route path="artists" element={<ArtistDashboard />} />
                        <Route path="videos" element={<VideosPage />} />
                        
