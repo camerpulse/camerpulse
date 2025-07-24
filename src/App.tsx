@@ -16,6 +16,7 @@ import { AdvancedSearch } from '@/components/AdvancedSearch';
 import { VerificationCenter } from '@/components/VerificationCenter';
 import { BusinessLogicDashboard } from '@/components/business-logic/BusinessLogicDashboard';
 import { CamertendersAdminPanel } from '@/plugins/camertenders/CamertendersAdminPanel';
+import Admin from './pages/Admin';
 import { CivicTenderWatchlist } from '@/plugins/camertenders/CivicTenderWatchlist';
 import { RecommendationEngine } from '@/components/RecommendationEngine';
 import UserProfilePage from '@/pages/UserProfilePage';
@@ -134,7 +135,7 @@ const App = () => {
                        <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
                        <Route path="dashboard" element={<UserDashboard />} />
                        <Route path="business-logic" element={<BusinessLogicDashboard />} />
-                       <Route path="admin" element={<CamertendersAdminPanel />} />
+                       <Route path="admin" element={<Admin />} />
                        <Route path="admin/tenders" element={<CamertendersAdminPanel />} />
                        <Route path="tenders/watchlist" element={<CivicTenderWatchlist />} />
                        <Route path="tender-management" element={<TenderManagementDashboard />} />
