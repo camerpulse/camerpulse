@@ -162,6 +162,7 @@ import JobBoard from "./pages/jobs/JobBoard";
 import { CompanyPortal } from "./pages/jobs/CompanyPortal";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
 import { ExpertPortal } from "./pages/experts/ExpertPortal";
+import { ProfilePage } from "./pages/profile/ProfilePage";
 import JobsSetupTest from "./tests/JobsSetupTest";
 
 import { MobileProvider } from "./contexts/MobileContext";
@@ -195,6 +196,8 @@ const App = () => {
           <Route path="/jobs/company" element={<CompanyPortal />} />
           <Route path="/experts" element={<ExpertMarketplace />} />
           <Route path="/experts/portal" element={<ExpertPortal />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />

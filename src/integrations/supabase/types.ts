@@ -28411,6 +28411,39 @@ export type Database = {
           },
         ]
       }
+      profile_connections: {
+        Row: {
+          connection_type: string
+          created_at: string
+          id: string
+          message: string | null
+          receiver_id: string
+          requester_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          connection_type?: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          receiver_id: string
+          requester_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          connection_type?: string
+          created_at?: string
+          id?: string
+          message?: string | null
+          receiver_id?: string
+          requester_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profile_ratings: {
         Row: {
           comment: string | null
@@ -28725,6 +28758,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      profile_views: {
+        Row: {
+          id: string
+          profile_user_id: string
+          referrer: string | null
+          user_agent: string | null
+          viewed_at: string
+          viewer_ip: unknown | null
+          viewer_user_id: string | null
+        }
+        Insert: {
+          id?: string
+          profile_user_id: string
+          referrer?: string | null
+          user_agent?: string | null
+          viewed_at?: string
+          viewer_ip?: unknown | null
+          viewer_user_id?: string | null
+        }
+        Update: {
+          id?: string
+          profile_user_id?: string
+          referrer?: string | null
+          user_agent?: string | null
+          viewed_at?: string
+          viewer_ip?: unknown | null
+          viewer_user_id?: string | null
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
@@ -33558,6 +33621,126 @@ export type Database = {
         }
         Relationships: []
       }
+      user_profiles: {
+        Row: {
+          achievements: Json | null
+          allow_friend_requests: boolean | null
+          allow_messages: boolean | null
+          bio: string | null
+          country: string | null
+          cover_image_url: string | null
+          created_at: string
+          date_of_birth: string | null
+          display_name: string | null
+          education: Json | null
+          first_name: string | null
+          gender: string | null
+          id: string
+          interests: string[] | null
+          is_verified: boolean | null
+          languages: string[] | null
+          last_active: string | null
+          last_name: string | null
+          location: string | null
+          phone_number: string | null
+          portfolio_items: Json | null
+          profile_completion_score: number | null
+          profile_picture_url: string | null
+          profile_visibility: string | null
+          region: string | null
+          show_email: boolean | null
+          show_location: boolean | null
+          show_phone: boolean | null
+          skills: string[] | null
+          social_media_links: Json | null
+          updated_at: string
+          user_id: string
+          username: string | null
+          verification_date: string | null
+          verification_type: string | null
+          website_url: string | null
+          work_experience: Json | null
+        }
+        Insert: {
+          achievements?: Json | null
+          allow_friend_requests?: boolean | null
+          allow_messages?: boolean | null
+          bio?: string | null
+          country?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          display_name?: string | null
+          education?: Json | null
+          first_name?: string | null
+          gender?: string | null
+          id?: string
+          interests?: string[] | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          last_active?: string | null
+          last_name?: string | null
+          location?: string | null
+          phone_number?: string | null
+          portfolio_items?: Json | null
+          profile_completion_score?: number | null
+          profile_picture_url?: string | null
+          profile_visibility?: string | null
+          region?: string | null
+          show_email?: boolean | null
+          show_location?: boolean | null
+          show_phone?: boolean | null
+          skills?: string[] | null
+          social_media_links?: Json | null
+          updated_at?: string
+          user_id: string
+          username?: string | null
+          verification_date?: string | null
+          verification_type?: string | null
+          website_url?: string | null
+          work_experience?: Json | null
+        }
+        Update: {
+          achievements?: Json | null
+          allow_friend_requests?: boolean | null
+          allow_messages?: boolean | null
+          bio?: string | null
+          country?: string | null
+          cover_image_url?: string | null
+          created_at?: string
+          date_of_birth?: string | null
+          display_name?: string | null
+          education?: Json | null
+          first_name?: string | null
+          gender?: string | null
+          id?: string
+          interests?: string[] | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          last_active?: string | null
+          last_name?: string | null
+          location?: string | null
+          phone_number?: string | null
+          portfolio_items?: Json | null
+          profile_completion_score?: number | null
+          profile_picture_url?: string | null
+          profile_visibility?: string | null
+          region?: string | null
+          show_email?: boolean | null
+          show_location?: boolean | null
+          show_phone?: boolean | null
+          skills?: string[] | null
+          social_media_links?: Json | null
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+          verification_date?: string | null
+          verification_type?: string | null
+          website_url?: string | null
+          work_experience?: Json | null
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           granted_at: string | null
@@ -35440,6 +35623,10 @@ export type Database = {
       calculate_politician_engagement_score: {
         Args: { p_politician_id: string }
         Returns: Json
+      }
+      calculate_profile_completion_score: {
+        Args: { p_user_id: string }
+        Returns: number
       }
       calculate_project_corruption_index: {
         Args: { p_project_id: string }
