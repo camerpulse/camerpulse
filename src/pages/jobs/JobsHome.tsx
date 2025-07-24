@@ -113,19 +113,50 @@ const JobsHome = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
-                Experts for Hire
+                Campaign Management
               </CardTitle>
               <CardDescription>
-                Connect with verified professionals available for projects
+                Create and manage hiring campaigns for social impact
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="secondary" className="w-full" asChild>
-                <a href="/experts">Find Experts</a>
+                <a href="/jobs/campaigns">Manage Campaigns</a>
               </Button>
             </CardContent>
           </Card>
         </div>
+
+        {/* Featured Campaign */}
+        <Card className="mb-8 bg-gradient-to-r from-purple-50 to-pink-50 border-purple-200">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              🎯 Featured Campaign: STEM 500 Initiative
+            </CardTitle>
+            <CardDescription>UNDP Cameroon is hiring 500 STEM professionals across 10 regions</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-600">212</div>
+                  <p className="text-xs text-muted-foreground">Hired</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600">500</div>
+                  <p className="text-xs text-muted-foreground">Target</p>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-orange-600">42%</div>
+                  <p className="text-xs text-muted-foreground">Complete</p>
+                </div>
+              </div>
+              <Button asChild>
+                <a href="/jobs/campaigns">View Campaign</a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Live Leaderboard Preview */}
         <Card className="mb-8 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
