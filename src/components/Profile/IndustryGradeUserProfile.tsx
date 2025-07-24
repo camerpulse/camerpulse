@@ -131,21 +131,33 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
 
   useEffect(() => {
     if (userId) {
+      console.log('Fetching profile for userId:', userId);
       fetchProfile();
       fetchProfileStats();
-      incrementProfileViews();
     }
   }, [userId]);
 
+  useEffect(() => {
+    if (profile && user?.id !== userId) {
+      incrementProfileViews();
+    }
+  }, [profile, user, userId]);
+
   const fetchProfile = async () => {
     try {
+      console.log('Fetching profile for user_id:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
         .eq('user_id', userId)
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Profile fetch error:', error);
+        throw error;
+      }
+      
+      console.log('Profile data:', data);
       setProfile(data);
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -161,6 +173,7 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
 
   const fetchProfileStats = async () => {
     try {
+      console.log('Fetching stats for userId:', userId, 'currentUser:', user?.id);
       const [followersResult, followingResult, followStatusResult] = await Promise.all([
         supabase
           .from('follows')
@@ -177,6 +190,12 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
           .eq('following_id', userId)
           .maybeSingle() : { data: null }
       ]);
+
+      console.log('Stats results:', {
+        followers: followersResult.count,
+        following: followingResult.count,
+        isFollowing: !!followStatusResult.data
+      });
 
       setStats(prev => ({
         ...prev,
@@ -196,7 +215,7 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
       await supabase
         .from('profiles')
         .update({ profile_views: (profile.profile_views || 0) + 1 })
-        .eq('id', profile.id);
+        .eq('user_id', userId);
     } catch (error) {
       console.error('Error incrementing views:', error);
     }
