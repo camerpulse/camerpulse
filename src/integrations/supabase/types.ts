@@ -19957,6 +19957,96 @@ export type Database = {
           },
         ]
       }
+      message_edit_history: {
+        Row: {
+          edit_reason: string | null
+          edited_at: string
+          edited_by: string
+          edited_content: string
+          id: string
+          message_id: string
+          original_content: string
+        }
+        Insert: {
+          edit_reason?: string | null
+          edited_at?: string
+          edited_by: string
+          edited_content: string
+          id?: string
+          message_id: string
+          original_content: string
+        }
+        Update: {
+          edit_reason?: string | null
+          edited_at?: string
+          edited_by?: string
+          edited_content?: string
+          id?: string
+          message_id?: string
+          original_content?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_edit_history_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_forwards: {
+        Row: {
+          created_at: string
+          forward_context: string | null
+          forwarded_by: string
+          forwarded_message_id: string
+          forwarded_to_conversation_id: string
+          id: string
+          original_message_id: string
+        }
+        Insert: {
+          created_at?: string
+          forward_context?: string | null
+          forwarded_by: string
+          forwarded_message_id: string
+          forwarded_to_conversation_id: string
+          id?: string
+          original_message_id: string
+        }
+        Update: {
+          created_at?: string
+          forward_context?: string | null
+          forwarded_by?: string
+          forwarded_message_id?: string
+          forwarded_to_conversation_id?: string
+          id?: string
+          original_message_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_forwards_forwarded_message_id_fkey"
+            columns: ["forwarded_message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_forwards_forwarded_to_conversation_id_fkey"
+            columns: ["forwarded_to_conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_forwards_original_message_id_fkey"
+            columns: ["original_message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       message_reactions: {
         Row: {
           created_at: string
@@ -19989,6 +20079,41 @@ export type Database = {
           },
         ]
       }
+      message_reactions_enhanced: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          reaction_type: string
+          reaction_value: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          reaction_type: string
+          reaction_value: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          reaction_type?: string
+          reaction_value?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reactions_enhanced_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       message_read_status: {
         Row: {
           id: string
@@ -20011,6 +20136,51 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "message_read_status_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_search_index: {
+        Row: {
+          content_preview: string | null
+          conversation_id: string
+          created_at: string
+          id: string
+          message_id: string
+          search_vector: unknown | null
+          sender_id: string
+        }
+        Insert: {
+          content_preview?: string | null
+          conversation_id: string
+          created_at?: string
+          id?: string
+          message_id: string
+          search_vector?: unknown | null
+          sender_id: string
+        }
+        Update: {
+          content_preview?: string | null
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          message_id?: string
+          search_vector?: unknown | null
+          sender_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_search_index_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_search_index_message_id_fkey"
             columns: ["message_id"]
             isOneToOne: false
             referencedRelation: "messages"
@@ -34578,6 +34748,14 @@ export type Database = {
         }
         Returns: string
       }
+      forward_message: {
+        Args: {
+          p_original_message_id: string
+          p_target_conversation_id: string
+          p_forward_context?: string
+        }
+        Returns: string
+      }
       generate_artist_id: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -34922,6 +35100,23 @@ export type Database = {
           region: string
           application_status: string
           similarity_score: number
+        }[]
+      }
+      search_messages: {
+        Args: {
+          p_user_id: string
+          p_search_query: string
+          p_conversation_id?: string
+          p_limit?: number
+          p_offset?: number
+        }
+        Returns: {
+          message_id: string
+          conversation_id: string
+          sender_id: string
+          content_preview: string
+          created_at: string
+          rank: number
         }[]
       }
       search_villages: {
