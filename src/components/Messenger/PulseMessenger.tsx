@@ -32,7 +32,11 @@ import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { MediaUpload, MediaPreview } from './MediaUpload';
 import { MediaMessage } from './MediaMessage';
+import { MessageReactions } from './MessageReactions';
+import { MessageOptions } from './MessageOptions';
+import { TypingIndicator } from './TypingIndicator';
 import { useMediaUpload } from '@/hooks/useMediaUpload';
+import { useTyping } from '@/hooks/useTyping';
 import { supabase } from '@/integrations/supabase/client';
 
 interface PulseMessengerProps {
@@ -55,6 +59,7 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
   } = useMessenger();
   
   const { uploadFile, uploading } = useMediaUpload();
+  const { isTyping, typingMessage, handleTyping } = useTyping(activeConversation?.id || null);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [newMessage, setNewMessage] = useState('');
@@ -335,13 +340,13 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
                     <div
                       key={message.id}
                       className={cn(
-                        'flex',
+                        'flex group',
                         message.sender_id === user?.id ? 'justify-end' : 'justify-start'
                       )}
                     >
                       <div
                         className={cn(
-                          'max-w-[70%] rounded-lg px-3 py-2',
+                          'max-w-[70%] rounded-lg px-3 py-2 relative',
                           message.sender_id === user?.id
                             ? 'bg-primary text-primary-foreground'
                             : 'bg-muted'
@@ -352,7 +357,12 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
                             {message.sender_email}
                           </p>
                         )}
-                        <p className="text-sm">{message.content}</p>
+                        <p className="text-sm">
+                          {message.content}
+                          {message.edited_at && (
+                            <span className="text-xs opacity-50 ml-2">(edited)</span>
+                          )}
+                        </p>
                         
                         {/* Media attachments */}
                         <MediaMessage 
@@ -361,19 +371,35 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
                           className="mt-2"
                         />
                         
+                        {/* Message reactions */}
+                        <MessageReactions messageId={message.id} />
+                        
                         <div className="flex items-center justify-between mt-1">
                           <span className="text-xs opacity-70">
                             {formatMessageTime(message.created_at)}
                           </span>
-                          {message.sender_id === user?.id && (
-                            <span className="text-xs opacity-70">
-                              {message.is_read ? '✓✓' : '✓'}
-                            </span>
-                          )}
+                          <div className="flex items-center space-x-1">
+                            {message.sender_id === user?.id && (
+                              <span className="text-xs opacity-70">
+                                {message.is_read ? '✓✓' : '✓'}
+                              </span>
+                            )}
+                            <MessageOptions
+                              messageId={message.id}
+                              content={message.content}
+                              isOwn={message.sender_id === user?.id}
+                              onMessageUpdate={() => fetchMessages(activeConversation.id)}
+                            />
+                          </div>
                         </div>
                       </div>
                     </div>
                   ))
+                )}
+                
+                {/* Typing indicator */}
+                {isTyping && (
+                  <TypingIndicator message={typingMessage} />
                 )}
               </div>
             </ScrollArea>
@@ -404,7 +430,10 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
                 <Textarea
                   placeholder="Type your message..."
                   value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
+                  onChange={(e) => {
+                    setNewMessage(e.target.value);
+                    handleTyping();
+                  }}
                   onKeyPress={handleKeyPress}
                   disabled={uploading}
                   className="min-h-[40px] max-h-32 resize-none flex-1"

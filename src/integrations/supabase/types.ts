@@ -11036,6 +11036,38 @@ export type Database = {
           },
         ]
       }
+      conversation_typing: {
+        Row: {
+          conversation_id: string
+          id: string
+          is_typing: boolean
+          last_activity: string
+          user_id: string
+        }
+        Insert: {
+          conversation_id: string
+          id?: string
+          is_typing?: boolean
+          last_activity?: string
+          user_id: string
+        }
+        Update: {
+          conversation_id?: string
+          id?: string
+          is_typing?: boolean
+          last_activity?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_typing_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversations: {
         Row: {
           created_at: string | null
@@ -19937,6 +19969,38 @@ export type Database = {
           },
         ]
       }
+      message_reactions: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          reaction_emoji: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          reaction_emoji: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          reaction_emoji?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_reactions_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       message_read_status: {
         Row: {
           id: string
@@ -19971,6 +20035,8 @@ export type Database = {
           content: string
           conversation_id: string | null
           created_at: string
+          deleted_at: string | null
+          edited_at: string | null
           id: string
           is_deleted: boolean | null
           is_read: boolean | null
@@ -19985,6 +20051,8 @@ export type Database = {
           content: string
           conversation_id?: string | null
           created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
           id?: string
           is_deleted?: boolean | null
           is_read?: boolean | null
@@ -19999,6 +20067,8 @@ export type Database = {
           content?: string
           conversation_id?: string | null
           created_at?: string
+          deleted_at?: string | null
+          edited_at?: string | null
           id?: string
           is_deleted?: boolean | null
           is_read?: boolean | null
@@ -34401,6 +34471,10 @@ export type Database = {
         Returns: undefined
       }
       cleanup_old_profile_activities: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_old_typing_indicators: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
