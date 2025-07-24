@@ -78,12 +78,6 @@ const navItems: NavItem[] = [
     path: '/civic-shield',
   },
   {
-    id: 'tenders',
-    label: 'Tenders',
-    icon: FileText,
-    path: '/tenders',
-  },
-  {
     id: 'diaspora',
     label: 'Diaspora',
     icon: Globe,

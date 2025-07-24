@@ -6,14 +6,12 @@ import { Download, FileText, Award, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface PDFCertificateGeneratorProps {
-  type: 'bid_receipt' | 'award_certificate' | 'participation_certificate';
+  type: 'completion_certificate' | 'achievement_certificate' | 'participation_certificate';
   data: {
-    tenderId: string;
-    tenderTitle: string;
-    bidderName: string;
-    bidAmount?: number;
-    currency?: string;
-    submissionDate: string;
+    projectId: string;
+    projectTitle: string;
+    participantName: string;
+    completionDate: string;
     awardDate?: string;
     certificateNumber: string;
   };
@@ -80,12 +78,12 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
 
   const getCertificateTitle = () => {
     switch (type) {
-      case 'bid_receipt':
-        return 'Bid Submission Receipt';
-      case 'award_certificate':
-        return 'Tender Award Certificate';
+      case 'completion_certificate':
+        return 'Project Completion Certificate';
+      case 'achievement_certificate':
+        return 'Achievement Award Certificate';
       case 'participation_certificate':
-        return 'Tender Participation Certificate';
+        return 'Participation Certificate';
       default:
         return 'Certificate';
     }
@@ -93,9 +91,9 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
 
   const getCertificateIcon = () => {
     switch (type) {
-      case 'bid_receipt':
+      case 'completion_certificate':
         return <FileText className="w-8 h-8 text-blue-600" />;
-      case 'award_certificate':
+      case 'achievement_certificate':
         return <Award className="w-8 h-8 text-yellow-600" />;
       case 'participation_certificate':
         return <CheckCircle className="w-8 h-8 text-green-600" />;
@@ -106,9 +104,9 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
 
   const getCertificateColor = () => {
     switch (type) {
-      case 'bid_receipt':
+      case 'completion_certificate':
         return 'border-blue-200 bg-blue-50';
-      case 'award_certificate':
+      case 'achievement_certificate':
         return 'border-yellow-200 bg-yellow-50';
       case 'participation_certificate':
         return 'border-green-200 bg-green-50';
@@ -117,7 +115,7 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
     }
   };
 
-  const verificationUrl = `https://camertenders.com/verify/${data.certificateNumber}`;
+  const verificationUrl = `https://camerpulse.org/verify/${data.certificateNumber}`;
   const qrCodeUrl = generateQRCode(verificationUrl);
 
   return (
@@ -149,10 +147,10 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
                 {getCertificateIcon()}
               </div>
               <h1 className="text-3xl font-bold text-gray-800 mb-2">
-                CamerTenders
+                CamerPulse
               </h1>
               <p className="text-lg text-gray-600 mb-4">
-                Republic of Cameroon - Digital Tender Platform
+                Republic of Cameroon - Civic Engagement Platform
               </p>
               <hr className="border-gray-300 mx-auto w-1/2" />
             </div>
@@ -163,49 +161,39 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
                 {getCertificateTitle()}
               </h2>
               
-              {type === 'award_certificate' && (
+              {type === 'achievement_certificate' && (
                 <p className="text-lg text-gray-700 mb-4">
                   This is to certify that
                 </p>
               )}
               
               <div className="text-xl font-semibold text-gray-800 bg-white p-4 rounded-lg shadow-sm border">
-                {data.bidderName}
+                {data.participantName}
               </div>
             </div>
 
             {/* Certificate Content */}
             <div className="space-y-6 mb-8">
-              {type === 'bid_receipt' && (
+              {type === 'completion_certificate' && (
                 <div className="text-center">
                   <p className="text-lg text-gray-700 mb-4">
-                    has successfully submitted a bid for the tender:
+                    has successfully completed the project:
                   </p>
                   <div className="bg-white p-4 rounded-lg shadow-sm border">
-                    <h3 className="font-semibold text-gray-800">{data.tenderTitle}</h3>
-                    <p className="text-gray-600 mt-2">Tender ID: {data.tenderId}</p>
-                    {data.bidAmount && (
-                      <p className="text-gray-600">
-                        Bid Amount: {data.bidAmount.toLocaleString()} {data.currency}
-                      </p>
-                    )}
+                    <h3 className="font-semibold text-gray-800">{data.projectTitle}</h3>
+                    <p className="text-gray-600 mt-2">Project ID: {data.projectId}</p>
                   </div>
                 </div>
               )}
 
-              {type === 'award_certificate' && (
+              {type === 'achievement_certificate' && (
                 <div className="text-center">
                   <p className="text-lg text-gray-700 mb-4">
-                    has been awarded the contract for:
+                    has achieved excellence in:
                   </p>
                   <div className="bg-white p-4 rounded-lg shadow-sm border">
-                    <h3 className="font-semibold text-gray-800">{data.tenderTitle}</h3>
-                    <p className="text-gray-600 mt-2">Tender ID: {data.tenderId}</p>
-                    {data.bidAmount && (
-                      <p className="text-gray-600">
-                        Contract Value: {data.bidAmount.toLocaleString()} {data.currency}
-                      </p>
-                    )}
+                    <h3 className="font-semibold text-gray-800">{data.projectTitle}</h3>
+                    <p className="text-gray-600 mt-2">Project ID: {data.projectId}</p>
                   </div>
                 </div>
               )}
@@ -213,11 +201,11 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
               {type === 'participation_certificate' && (
                 <div className="text-center">
                   <p className="text-lg text-gray-700 mb-4">
-                    participated in the tender process for:
+                    has actively participated in:
                   </p>
                   <div className="bg-white p-4 rounded-lg shadow-sm border">
-                    <h3 className="font-semibold text-gray-800">{data.tenderTitle}</h3>
-                    <p className="text-gray-600 mt-2">Tender ID: {data.tenderId}</p>
+                    <h3 className="font-semibold text-gray-800">{data.projectTitle}</h3>
+                    <p className="text-gray-600 mt-2">Project ID: {data.projectId}</p>
                   </div>
                 </div>
               )}
@@ -225,8 +213,8 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
               {/* Dates */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="text-center">
-                  <p className="text-sm text-gray-600">Submission Date</p>
-                  <p className="font-semibold">{new Date(data.submissionDate).toLocaleDateString()}</p>
+                  <p className="text-sm text-gray-600">Completion Date</p>
+                  <p className="font-semibold">{new Date(data.completionDate).toLocaleDateString()}</p>
                 </div>
                 {data.awardDate && (
                   <div className="text-center">
@@ -255,7 +243,7 @@ export default function PDFCertificateGenerator({ type, data }: PDFCertificateGe
               <div className="text-right">
                 <div className="border-t border-gray-400 pt-2 w-48">
                   <p className="text-sm font-semibold">Digital Signature</p>
-                  <p className="text-xs text-gray-600">CamerTenders Platform</p>
+                  <p className="text-xs text-gray-600">CamerPulse Platform</p>
                 </div>
               </div>
             </div>

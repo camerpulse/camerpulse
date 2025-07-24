@@ -13,10 +13,7 @@ import Layout from '@/components/Layout';
 import CamerPulseHome from '@/pages/CamerPulseHome';
 import Auth from './pages/Auth';
 import { AdvancedSearch } from '@/components/AdvancedSearch';
-import { VerificationCenter } from '@/components/VerificationCenter';
-import { BusinessLogicDashboard } from '@/components/business-logic/BusinessLogicDashboard';
 import Admin from './pages/Admin';
-import { RecommendationEngine } from '@/components/RecommendationEngine';
 import JobsPage from '@/pages/JobsPage';
 import AboutPage from '@/pages/AboutPage';
 import ActivityPage from '@/pages/ActivityPage';
@@ -32,7 +29,7 @@ import CivicModerationPage from "@/pages/admin/CivicModerationPage";
 import AdminSettingsPanel from "@/pages/admin/AdminSettingsPanel";
 import HospitalsDirectory from "./pages/HospitalsDirectory";
 import { UserDashboard } from './components/UserDashboard';
-import { NotFoundPage } from './components/NotFoundPage';
+
 import { UserManagementDashboard } from './components/UserManagement/UserManagementDashboard';
 
 import { NotificationCenter } from './components/Notifications/NotificationCenter';
@@ -176,9 +173,7 @@ const App = () => {
                        <Route path="report-bug" element={<ReportBugPage />} />
                        
                        {/* Existing Routes */}
-                       <Route path="search" element={<AdvancedSearch />} />
-                       <Route path="verification" element={<VerificationCenter />} />
-                       <Route path="recommendations" element={<RecommendationEngine />} />
+                        <Route path="search" element={<AdvancedSearch />} />
                         <Route path="profile/:userId" element={<UserProfilePage />} />
                        <Route path="jobs" element={<JobsPage />} />
                        <Route path="about" element={<AboutPage />} />
@@ -189,7 +184,7 @@ const App = () => {
                        <Route path="hospitals" element={<HospitalsDirectory />} />
                         
                        <Route path="dashboard" element={<UserDashboard />} />
-                       <Route path="business-logic" element={<BusinessLogicDashboard />} />
+                       
                         <Route path="admin" element={<Admin />} />
                         <Route path="admin/plugins" element={<div className="container mx-auto px-4 py-8"><div className="mb-8"><h1 className="text-3xl font-bold">Plugin Manager</h1></div></div>} />
                        <Route path="user-management" element={<UserManagementDashboard />} />
@@ -205,7 +200,7 @@ const App = () => {
                        <Route path="rankings/falling-reputation" element={<FallingReputationPage />} />
                        <Route path="admin/civic-moderation" element={<CivicModerationPage />} />
                        <Route path="admin/reputation-settings" element={<AdminSettingsPanel />} />
-                       <Route path="*" element={<NotFoundPage />} />
+                       <Route path="*" element={<div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Page Not Found</h1><p>The page you are looking for does not exist.</p></div>} />
                     </Route>
                     <Route path="/auth" element={<Layout showFooter={false} />}>
                       <Route index element={<Auth />} />

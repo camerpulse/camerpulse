@@ -34,14 +34,14 @@ interface FileItem {
 }
 
 interface FileManagementSystemProps {
-  tenderId?: string;
+  projectId?: string;
   allowedTypes?: string[];
   maxFileSize?: number; // in MB
   onFileSelect?: (file: FileItem) => void;
 }
 
 export default function FileManagementSystem({ 
-  tenderId,
+  projectId,
   allowedTypes = ['.pdf', '.doc', '.docx', '.jpg', '.png', '.mp4'],
   maxFileSize = 10,
   onFileSelect
@@ -52,7 +52,7 @@ export default function FileManagementSystem({
   const [files, setFiles] = useState<FileItem[]>([
     {
       id: '1',
-      name: 'Tender_Specifications.pdf',
+      name: 'Project_Specifications.pdf',
       type: 'application/pdf',
       size: 2.5 * 1024 * 1024,
       uploadDate: '2024-01-15',

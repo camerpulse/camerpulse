@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Bell, BellRing } from 'lucide-react';
 import { useRealtime } from '@/contexts/RealtimeContext';
-import NotificationCenter from '@/components/NotificationCenter';
+import { NotificationCenter } from '@/components/Notifications/NotificationCenter';
 
 export default function NotificationBell() {
   const { notifications, isConnected } = useRealtime();
@@ -44,10 +44,7 @@ export default function NotificationBell() {
         </Button>
       </div>
       
-      <NotificationCenter 
-        isOpen={showNotifications}
-        onClose={() => setShowNotifications(false)}
-      />
+      {showNotifications && <NotificationCenter />}
     </>
   );
 }

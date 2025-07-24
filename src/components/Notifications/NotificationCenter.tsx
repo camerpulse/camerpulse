@@ -15,18 +15,15 @@ interface Notification {
   data: any;
   is_read: boolean;
   created_at: string;
-  tender_id?: string;
-  bid_id?: string;
 }
 
 interface NotificationPreferences {
   email_notifications: boolean;
   push_notifications: boolean;
   sms_notifications: boolean;
-  bid_updates: boolean;
-  deadline_reminders: boolean;
-  award_notifications: boolean;
-  tender_updates: boolean;
+  project_updates: boolean;
+  civic_updates: boolean;
+  achievement_notifications: boolean;
 }
 
 export const NotificationCenter: React.FC = () => {
@@ -35,10 +32,9 @@ export const NotificationCenter: React.FC = () => {
     email_notifications: true,
     push_notifications: true,
     sms_notifications: false,
-    bid_updates: true,
-    deadline_reminders: true,
-    award_notifications: true,
-    tender_updates: true
+    project_updates: true,
+    civic_updates: true,
+    achievement_notifications: true
   });
   const [loading, setLoading] = useState(true);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -72,8 +68,6 @@ export const NotificationCenter: React.FC = () => {
         data: item.data,
         is_read: item.is_read || item.read || false,
         created_at: item.created_at,
-        tender_id: item.tender_id,
-        bid_id: item.bid_id
       })));
       setUnreadCount((data || []).filter((n: any) => !n.is_read && !n.read).length);
     } catch (error: any) {
@@ -107,10 +101,9 @@ export const NotificationCenter: React.FC = () => {
           email_notifications: data.email_notifications ?? true,
           push_notifications: data.push_notifications ?? true,
           sms_notifications: data.sms_notifications ?? false,
-          bid_updates: data.bid_updates ?? true,
-          deadline_reminders: data.deadline_reminders ?? true,
-          award_notifications: data.award_notifications ?? true,
-          tender_updates: data.tender_updates ?? true
+          project_updates: data.project_updates ?? true,
+          civic_updates: data.civic_updates ?? true,
+          achievement_notifications: data.achievement_notifications ?? true
         });
       }
     } catch (error: any) {
@@ -370,34 +363,26 @@ export const NotificationCenter: React.FC = () => {
               <h4 className="font-medium">Notification Types</h4>
               
               <div className="flex items-center justify-between">
-                <span>Bid Updates</span>
+                <span>Project Updates</span>
                 <Switch
-                  checked={preferences.bid_updates}
-                  onCheckedChange={(checked) => updatePreferences({ bid_updates: checked })}
+                  checked={preferences.project_updates}
+                  onCheckedChange={(checked) => updatePreferences({ project_updates: checked })}
                 />
               </div>
               
               <div className="flex items-center justify-between">
-                <span>Deadline Reminders</span>
+                <span>Civic Updates</span>
                 <Switch
-                  checked={preferences.deadline_reminders}
-                  onCheckedChange={(checked) => updatePreferences({ deadline_reminders: checked })}
+                  checked={preferences.civic_updates}
+                  onCheckedChange={(checked) => updatePreferences({ civic_updates: checked })}
                 />
               </div>
               
               <div className="flex items-center justify-between">
-                <span>Award Notifications</span>
+                <span>Achievement Notifications</span>
                 <Switch
-                  checked={preferences.award_notifications}
-                  onCheckedChange={(checked) => updatePreferences({ award_notifications: checked })}
-                />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <span>Tender Updates</span>
-                <Switch
-                  checked={preferences.tender_updates}
-                  onCheckedChange={(checked) => updatePreferences({ tender_updates: checked })}
+                  checked={preferences.achievement_notifications}
+                  onCheckedChange={(checked) => updatePreferences({ achievement_notifications: checked })}
                 />
               </div>
             </div>

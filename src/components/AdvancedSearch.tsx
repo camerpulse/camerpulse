@@ -348,7 +348,7 @@ export const AdvancedSearch: React.FC = () => {
               <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
               <h3 className="text-lg font-medium mb-2">Ready to Search</h3>
               <p className="text-muted-foreground">
-                Enter your search criteria and click Search to find relevant tenders and opportunities
+                Enter your search criteria and click Search to find relevant opportunities and resources
               </p>
             </CardContent>
           </Card>
@@ -368,7 +368,7 @@ export const AdvancedSearch: React.FC = () => {
                 <Label htmlFor="saveName">Search Name</Label>
                 <Input
                   id="saveName"
-                  placeholder="e.g., IT Tenders in Yaoundé"
+                  placeholder="e.g., IT Opportunities in Yaoundé"
                   value={saveName}
                   onChange={(e) => setSaveName(e.target.value)}
                 />

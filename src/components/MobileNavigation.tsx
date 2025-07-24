@@ -23,7 +23,7 @@ import {
 import NotificationBell from '@/components/NotificationBell';
 
 interface MobileNavigationProps {
-  userRole?: 'citizen' | 'bidder' | 'issuer' | 'admin' | 'government';
+  userRole?: 'citizen' | 'participant' | 'coordinator' | 'admin' | 'government';
   user?: any;
 }
 
@@ -37,16 +37,16 @@ export default function MobileNavigation({ userRole = 'citizen', user }: MobileN
   // Role-based navigation items
   const getNavigationItems = () => {
     const baseItems = [
-      { path: '/', label: 'Home', icon: Home, roles: ['citizen', 'bidder', 'issuer', 'admin', 'government'] },
+      { path: '/', label: 'Home', icon: Home, roles: ['citizen', 'participant', 'coordinator', 'admin', 'government'] },
       
-      { path: '/search', label: 'Advanced Search', icon: Search, roles: ['citizen', 'bidder', 'issuer', 'admin', 'government'] }
+      { path: '/search', label: 'Advanced Search', icon: Search, roles: ['citizen', 'participant', 'coordinator', 'admin', 'government'] }
     ];
 
     const authenticatedItems = [
-      { path: '/my-bids', label: 'My Bids', icon: Users, roles: ['bidder'] },
+      { path: '/my-projects', label: 'My Projects', icon: Users, roles: ['participant'] },
       
-      { path: '/analytics', label: 'Analytics', icon: BarChart3, roles: ['issuer', 'admin'] },
-      { path: '/verification', label: 'Business Verification', icon: Shield, roles: ['bidder', 'issuer'] },
+      { path: '/analytics', label: 'Analytics', icon: BarChart3, roles: ['coordinator', 'admin'] },
+      { path: '/verification', label: 'Business Verification', icon: Shield, roles: ['participant', 'coordinator'] },
       { path: '/admin', label: 'Admin Panel', icon: Settings, roles: ['admin'] },
       { path: '/government', label: 'Gov Dashboard', icon: Building, roles: ['government'] }
     ];

@@ -14,7 +14,7 @@ interface LayoutProps {
     path?: string;
     icon?: React.ComponentType<any>;
   }>;
-  userRole?: 'citizen' | 'bidder' | 'issuer' | 'admin' | 'government';
+  userRole?: 'citizen' | 'participant' | 'coordinator' | 'admin' | 'government';
 }
 
 export default function Layout({ 

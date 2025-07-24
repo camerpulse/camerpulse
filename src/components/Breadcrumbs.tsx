@@ -50,7 +50,7 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
       'create': 'Create New',
       'analytics': 'Analytics',
       'dashboard': 'Dashboard',
-      'my-bids': 'My Bids',
+      'my-projects': 'My Projects',
       'search': 'Search',
       'auth': 'Authentication',
       'verification': 'Verification',
@@ -101,9 +101,9 @@ export default function Breadcrumbs({ items, className = '' }: BreadcrumbsProps)
 // Predefined breadcrumb configurations for common pages
 export const CommonBreadcrumbs = {
   
-  myBids: (): BreadcrumbItem[] => [
+  myProjects: (): BreadcrumbItem[] => [
     { label: 'Home', path: '/', icon: Home },
-    { label: 'My Bids' }
+    { label: 'My Projects' }
   ],
   
   analytics: (): BreadcrumbItem[] => [

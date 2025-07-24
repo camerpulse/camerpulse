@@ -1332,22 +1332,22 @@ const Admin = () => {
                   </CardHeader>
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {/* CamerTenders Feature */}
-                      <Card className="border">
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <FileText className="h-4 w-4" />
-                              <div>
-                                <CardTitle className="text-sm">CamerTenders</CardTitle>
-                                <p className="text-xs text-muted-foreground">Government Procurement</p>
-                              </div>
-                            </div>
-                            <Switch defaultChecked />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="pt-0">
-                          <div className="space-y-2">
+                       {/* CamerProjects Feature */}
+                       <Card className="border">
+                         <CardHeader className="pb-3">
+                           <div className="flex items-center justify-between">
+                             <div className="flex items-center gap-2">
+                               <FileText className="h-4 w-4" />
+                               <div>
+                                 <CardTitle className="text-sm">CamerProjects</CardTitle>
+                                 <p className="text-xs text-muted-foreground">Civic Project Management</p>
+                               </div>
+                             </div>
+                             <Switch defaultChecked />
+                           </div>
+                         </CardHeader>
+                         <CardContent className="pt-0">
+                           <div className="space-y-2">
                             <div className="flex items-center justify-between text-xs">
                               <span>Status</span>
                               <Badge variant="default" className="text-xs">Active</Badge>
