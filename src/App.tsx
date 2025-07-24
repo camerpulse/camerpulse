@@ -179,9 +179,9 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <AuthProvider>
-          <PluginProvider>
+      <AuthProvider>
+        <PluginProvider>
+          <TooltipProvider>
             <PanAfricaProvider>
               <MobileProvider>
                 <BrowserRouter>
@@ -393,9 +393,9 @@ const App = () => {
                 </BrowserRouter>
               </MobileProvider>
             </PanAfricaProvider>
-          </PluginProvider>
-        </AuthProvider>
-      </TooltipProvider>
+          </TooltipProvider>
+        </PluginProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
