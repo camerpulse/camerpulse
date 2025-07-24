@@ -247,12 +247,12 @@ const CamerPulseHome = () => {
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Link to="/tenders" className="block">
+            <Link to="/business-verification" className="block">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
                   <Building className="h-8 w-8 mx-auto mb-3 text-primary" />
-                  <h3 className="font-semibold mb-2">Tenders</h3>
-                  <p className="text-sm text-muted-foreground">Government procurement opportunities</p>
+                  <h3 className="font-semibold mb-2">Business Verification</h3>
+                  <p className="text-sm text-muted-foreground">Verify your business credentials</p>
                 </CardContent>
               </Card>
             </Link>
