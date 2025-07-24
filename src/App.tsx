@@ -168,6 +168,7 @@ import WorkforceEcosystemHub from "./pages/jobs/WorkforceEcosystemHub";
 import TransparencyHub from "./pages/transparency/TransparencyHub";
 import { GovernmentTransparency } from "./pages/transparency/GovernmentTransparency";
 import { JudicialTransparency } from "./pages/transparency/JudicialTransparency";
+import { ElectoralTransparency } from "./pages/transparency/ElectoralTransparency";
 import PublicWorkforceDashboard from "./pages/transparency/PublicWorkforceDashboard";
 import PolicyImpactDashboard from "./pages/transparency/PolicyImpactDashboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
@@ -212,6 +213,7 @@ const App = () => {
         <Route path="/transparency" element={<TransparencyHub />} />
         <Route path="/transparency/government" element={<GovernmentTransparency />} />
         <Route path="/judiciary" element={<JudicialTransparency />} />
+        <Route path="/transparency/elections" element={<ElectoralTransparency />} />
            <Route path="/transparency/workforce" element={<PublicWorkforceDashboard />} />
            <Route path="/transparency/policy-impact" element={<PolicyImpactDashboard />} />
           <Route path="/experts" element={<ExpertMarketplace />} />
