@@ -29,15 +29,14 @@ interface Application {
   id: string;
   applicant_email: string;
   applicant_name: string;
+  applicant_phone?: string;
   job_id: string;
-  cover_letter: string;
+  cover_letter?: string;
   resume_url?: string;
   application_status: string;
-  application_score?: number;
-  recruiter_notes?: string;
-  salary_offered?: number;
-  interview_scheduled_at?: string;
   applied_at: string;
+  reviewed_at?: string;
+  notes?: string;
   jobs: {
     title: string;
     company_name: string;
@@ -86,7 +85,7 @@ export const ApplicationsDashboard = () => {
         .from('job_applications')
         .select(`
           *,
-          jobs!inner(title, company_name, posted_by)
+          jobs!inner(title, company_name, created_by)
         `)
         .eq('jobs.created_by', user.id);
 
@@ -109,21 +108,17 @@ export const ApplicationsDashboard = () => {
   const updateApplicationStatus = async (
     applicationId: string, 
     newStatus: string,
-    notes?: string,
-    salaryOffered?: number,
-    interviewDate?: string
+    notes?: string
   ) => {
     setUpdatingStatus(true);
     
     try {
       const updateData: any = {
         application_status: newStatus,
-        updated_at: new Date().toISOString()
+        reviewed_at: new Date().toISOString()
       };
 
-      if (notes) updateData.recruiter_notes = notes;
-      if (salaryOffered) updateData.salary_offered = salaryOffered;
-      if (interviewDate) updateData.interview_scheduled_at = new Date(interviewDate).toISOString();
+      if (notes) updateData.notes = notes;
 
       const { error } = await supabase
         .from('job_applications')
@@ -172,12 +167,10 @@ export const ApplicationsDashboard = () => {
             {formatDistanceToNow(new Date(application.applied_at), { addSuffix: true })}
           </span>
           
-          {application.application_score && (
-            <span className="flex items-center gap-1">
-              <Star className="h-3 w-3" />
-              {application.application_score}/100
-            </span>
-          )}
+          <span className="flex items-center gap-1">
+            <FileText className="h-3 w-3" />
+            {application.application_status.replace('_', ' ').toUpperCase()}
+          </span>
         </div>
 
         {application.cover_letter && (
@@ -191,13 +184,7 @@ export const ApplicationsDashboard = () => {
 
   const ApplicationDetail = ({ application }: { application: Application }) => {
     const [newStatus, setNewStatus] = useState(application.application_status);
-    const [notes, setNotes] = useState(application.recruiter_notes || '');
-    const [salaryOffer, setSalaryOffer] = useState(application.salary_offered?.toString() || '');
-    const [interviewDate, setInterviewDate] = useState(
-      application.interview_scheduled_at ? 
-        new Date(application.interview_scheduled_at).toISOString().split('T')[0] : ''
-    );
-    const [score, setScore] = useState(application.application_score?.toString() || '');
+    const [notes, setNotes] = useState(application.notes || '');
 
     return (
       <Card className="h-full">
@@ -247,7 +234,7 @@ export const ApplicationsDashboard = () => {
           <div className="space-y-4 border-t pt-4">
             <h4 className="font-medium">Update Application</h4>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-4">
               <div className="space-y-2">
                 <Label>Status</Label>
                 <Select value={newStatus} onValueChange={setNewStatus}>
@@ -258,8 +245,6 @@ export const ApplicationsDashboard = () => {
                     <SelectItem value="pending">Pending</SelectItem>
                     <SelectItem value="reviewing">Reviewing</SelectItem>
                     <SelectItem value="shortlisted">Shortlisted</SelectItem>
-                    <SelectItem value="interview_scheduled">Interview Scheduled</SelectItem>
-                    <SelectItem value="interviewed">Interviewed</SelectItem>
                     <SelectItem value="rejected">Rejected</SelectItem>
                     <SelectItem value="hired">Hired</SelectItem>
                   </SelectContent>
@@ -267,64 +252,27 @@ export const ApplicationsDashboard = () => {
               </div>
 
               <div className="space-y-2">
-                <Label>Score (0-100)</Label>
-                <Input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={score}
-                  onChange={(e) => setScore(e.target.value)}
-                  placeholder="Rate this application"
+                <Label>Notes</Label>
+                <Textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Add notes about this candidate..."
+                  rows={3}
                 />
               </div>
+
+              <Button
+                onClick={() => updateApplicationStatus(
+                  application.id,
+                  newStatus,
+                  notes
+                )}
+                disabled={updatingStatus}
+                className="w-full"
+              >
+                {updatingStatus ? 'Updating...' : 'Update Application'}
+              </Button>
             </div>
-
-            {newStatus === 'interview_scheduled' && (
-              <div className="space-y-2">
-                <Label>Interview Date</Label>
-                <Input
-                  type="datetime-local"
-                  value={interviewDate}
-                  onChange={(e) => setInterviewDate(e.target.value)}
-                />
-              </div>
-            )}
-
-            {newStatus === 'hired' && (
-              <div className="space-y-2">
-                <Label>Salary Offer (FCFA)</Label>
-                <Input
-                  type="number"
-                  value={salaryOffer}
-                  onChange={(e) => setSalaryOffer(e.target.value)}
-                  placeholder="e.g. 600000"
-                />
-              </div>
-            )}
-
-            <div className="space-y-2">
-              <Label>Recruiter Notes</Label>
-              <Textarea
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="Add notes about this candidate..."
-                rows={3}
-              />
-            </div>
-
-            <Button
-              onClick={() => updateApplicationStatus(
-                application.id,
-                newStatus,
-                notes,
-                salaryOffer ? parseInt(salaryOffer) : undefined,
-                interviewDate || undefined
-              )}
-              disabled={updatingStatus}
-              className="w-full"
-            >
-              {updatingStatus ? 'Updating...' : 'Update Application'}
-            </Button>
           </div>
         </CardContent>
       </Card>
@@ -342,7 +290,6 @@ export const ApplicationsDashboard = () => {
       pending: counts.pending || 0,
       reviewing: counts.reviewing || 0,
       shortlisted: counts.shortlisted || 0,
-      interviewed: counts.interviewed || 0,
       hired: counts.hired || 0,
       rejected: counts.rejected || 0
     };
@@ -364,7 +311,7 @@ export const ApplicationsDashboard = () => {
   return (
     <div className="space-y-6">
       {/* Stats Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
@@ -408,16 +355,6 @@ export const ApplicationsDashboard = () => {
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <MessageCircle className="h-6 w-6 mx-auto mb-2 text-purple-600" />
-              <p className="text-2xl font-bold">{statusCounts.interviewed}</p>
-              <p className="text-sm text-muted-foreground">Interviewed</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-center">
               <CheckCircle className="h-6 w-6 mx-auto mb-2 text-emerald-600" />
               <p className="text-2xl font-bold">{statusCounts.hired}</p>
               <p className="text-sm text-muted-foreground">Hired</p>
@@ -447,8 +384,6 @@ export const ApplicationsDashboard = () => {
             <SelectItem value="pending">Pending</SelectItem>
             <SelectItem value="reviewing">Reviewing</SelectItem>
             <SelectItem value="shortlisted">Shortlisted</SelectItem>
-            <SelectItem value="interview_scheduled">Interview Scheduled</SelectItem>
-            <SelectItem value="interviewed">Interviewed</SelectItem>
             <SelectItem value="hired">Hired</SelectItem>
             <SelectItem value="rejected">Rejected</SelectItem>
           </SelectContent>

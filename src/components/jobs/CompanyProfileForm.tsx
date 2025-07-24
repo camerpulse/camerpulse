@@ -14,16 +14,17 @@ import { Building2, Globe, Phone, Mail, MapPin, Calendar, Users } from 'lucide-r
 
 interface CompanyFormData {
   company_name: string;
-  company_description: string;
-  company_size: string;
-  industry: string;
+  description: string;
+  employee_count_range: string;
+  sector: string;
   website_url: string;
-  company_logo_url: string;
-  headquarters_location: string;
-  founded_year: number;
+  logo_url: string;
+  physical_address: string;
+  region: string;
+  division: string;
   company_type: string;
-  contact_email: string;
-  contact_phone: string;
+  email: string;
+  phone_number: string;
   social_media_links: {
     linkedin?: string;
     twitter?: string;
@@ -32,7 +33,7 @@ interface CompanyFormData {
   };
 }
 
-const INDUSTRIES = [
+const SECTORS = [
   'Technology',
   'Finance',
   'Healthcare',
@@ -51,6 +52,11 @@ const INDUSTRIES = [
   'Other'
 ];
 
+const REGIONS = [
+  'Adamawa', 'Centre', 'East', 'Far North', 'Littoral',
+  'North', 'Northwest', 'South', 'Southwest', 'West'
+];
+
 export const CompanyProfileForm = ({ 
   companyId, 
   onSuccess 
@@ -63,7 +69,7 @@ export const CompanyProfileForm = ({
   
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<CompanyFormData>({
     defaultValues: {
-      company_type: 'private',
+      company_type: 'sole_proprietor',
       social_media_links: {}
     }
   });
@@ -91,7 +97,7 @@ export const CompanyProfileForm = ({
     if (data) {
       reset({
         ...data,
-        social_media_links: data.social_media_links || {}
+        social_media_links: data.social_media_links && typeof data.social_media_links === 'object' && !Array.isArray(data.social_media_links) ? data.social_media_links as { linkedin?: string; twitter?: string; facebook?: string; instagram?: string; } : {}
       });
     }
   };
@@ -108,13 +114,14 @@ export const CompanyProfileForm = ({
       const companyData = {
         ...data,
         user_id: user.id,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        tax_identification_number: `TAX-${Date.now()}` // Required field
       };
 
       if (companyId) {
         const { error } = await supabase
           .from('companies')
-          .update(companyData)
+          .update(companyData as any)
           .eq('id', companyId);
 
         if (error) throw error;
@@ -122,7 +129,7 @@ export const CompanyProfileForm = ({
       } else {
         const { error } = await supabase
           .from('companies')
-          .insert(companyData);
+          .insert(companyData as any);
 
         if (error) throw error;
         toast.success('Company profile created successfully!');
@@ -135,8 +142,6 @@ export const CompanyProfileForm = ({
       setIsLoading(false);
     }
   };
-
-  const currentYear = new Date().getFullYear();
 
   return (
     <Card className="w-full max-w-4xl mx-auto">
@@ -166,29 +171,29 @@ export const CompanyProfileForm = ({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="industry">Industry *</Label>
-                <Select onValueChange={(value) => setValue('industry', value)}>
+                <Label htmlFor="sector">Sector *</Label>
+                <Select onValueChange={(value) => setValue('sector', value)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select industry" />
+                    <SelectValue placeholder="Select sector" />
                   </SelectTrigger>
                   <SelectContent>
-                    {INDUSTRIES.map((industry) => (
-                      <SelectItem key={industry} value={industry}>
-                        {industry}
+                    {SECTORS.map((sector) => (
+                      <SelectItem key={sector} value={sector}>
+                        {sector}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                {errors.industry && (
-                  <p className="text-sm text-destructive">{errors.industry.message}</p>
+                {errors.sector && (
+                  <p className="text-sm text-destructive">{errors.sector.message}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="company_size">Company Size</Label>
-                <Select onValueChange={(value) => setValue('company_size', value)}>
+                <Label htmlFor="employee_count_range">Employee Count</Label>
+                <Select onValueChange={(value) => setValue('employee_count_range', value)}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select company size" />
+                    <SelectValue placeholder="Select employee count" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="1-10">1-10 employees</SelectItem>
@@ -207,57 +212,57 @@ export const CompanyProfileForm = ({
                     <SelectValue placeholder="Select company type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="private">Private Company</SelectItem>
-                    <SelectItem value="public">Public Company</SelectItem>
-                    <SelectItem value="government">Government</SelectItem>
-                    <SelectItem value="ngo">NGO/Non-Profit</SelectItem>
-                    <SelectItem value="startup">Startup</SelectItem>
+                    <SelectItem value="sole_proprietor">Sole Proprietor</SelectItem>
+                    <SelectItem value="limited_company">Limited Company</SelectItem>
+                    <SelectItem value="public_company">Public Company</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="headquarters_location">Headquarters</Label>
-                <div className="relative">
-                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="headquarters_location"
-                    {...register('headquarters_location')}
-                    placeholder="e.g. Douala, Cameroon"
-                    className="pl-10"
-                  />
-                </div>
+                <Label htmlFor="region">Region *</Label>
+                <Select onValueChange={(value) => setValue('region', value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select region" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {REGIONS.map((region) => (
+                      <SelectItem key={region} value={region}>
+                        {region}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="founded_year">Founded Year</Label>
+                <Label htmlFor="division">Division *</Label>
+                <Input
+                  id="division"
+                  {...register('division', { required: 'Division is required' })}
+                  placeholder="e.g. Wouri Division"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="physical_address">Physical Address *</Label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <MapPin className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
-                    id="founded_year"
-                    type="number"
-                    min="1800"
-                    max={currentYear}
-                    {...register('founded_year', { 
-                      valueAsNumber: true,
-                      min: { value: 1800, message: 'Invalid year' },
-                      max: { value: currentYear, message: 'Year cannot be in the future' }
-                    })}
-                    placeholder="e.g. 2010"
+                    id="physical_address"
+                    {...register('physical_address', { required: 'Address is required' })}
+                    placeholder="e.g. Bonanjo, Douala, Cameroon"
                     className="pl-10"
                   />
                 </div>
-                {errors.founded_year && (
-                  <p className="text-sm text-destructive">{errors.founded_year.message}</p>
-                )}
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="company_description">Company Description</Label>
+              <Label htmlFor="description">Company Description</Label>
               <Textarea
-                id="company_description"
-                {...register('company_description')}
+                id="description"
+                {...register('description')}
                 placeholder="Tell us about your company, mission, and values..."
                 rows={4}
               />
@@ -270,13 +275,14 @@ export const CompanyProfileForm = ({
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="contact_email">Contact Email</Label>
+                <Label htmlFor="email">Contact Email *</Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
-                    id="contact_email"
+                    id="email"
                     type="email"
-                    {...register('contact_email', {
+                    {...register('email', {
+                      required: 'Email is required',
                       pattern: {
                         value: /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/,
                         message: 'Invalid email format'
@@ -286,18 +292,18 @@ export const CompanyProfileForm = ({
                     className="pl-10"
                   />
                 </div>
-                {errors.contact_email && (
-                  <p className="text-sm text-destructive">{errors.contact_email.message}</p>
+                {errors.email && (
+                  <p className="text-sm text-destructive">{errors.email.message}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="contact_phone">Contact Phone</Label>
+                <Label htmlFor="phone_number">Contact Phone *</Label>
                 <div className="relative">
                   <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
-                    id="contact_phone"
-                    {...register('contact_phone')}
+                    id="phone_number"
+                    {...register('phone_number', { required: 'Phone number is required' })}
                     placeholder="+237 6XX XXX XXX"
                     className="pl-10"
                   />
@@ -376,11 +382,11 @@ export const CompanyProfileForm = ({
             <h3 className="text-lg font-medium">Branding</h3>
             
             <div className="space-y-2">
-              <Label htmlFor="company_logo_url">Company Logo URL</Label>
+              <Label htmlFor="logo_url">Company Logo URL</Label>
               <Input
-                id="company_logo_url"
+                id="logo_url"
                 type="url"
-                {...register('company_logo_url')}
+                {...register('logo_url')}
                 placeholder="https://example.com/logo.png"
               />
               <p className="text-sm text-muted-foreground">
