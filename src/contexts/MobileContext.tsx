@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 
 interface MobileContextType {
   isMobile: boolean
@@ -27,10 +27,10 @@ export const useMobile = () => {
 }
 
 interface MobileProviderProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
-export const MobileProvider: React.FC<MobileProviderProps> = ({ children }) => {
+export const MobileProvider = ({ children }: MobileProviderProps) => {
   const [detection, setDetection] = useState<{
     isMobile: boolean
     isTablet: boolean
