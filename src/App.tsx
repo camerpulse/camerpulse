@@ -20,6 +20,11 @@ import { CivicTenderWatchlist } from '@/plugins/camertenders/CivicTenderWatchlis
 import { RecommendationEngine } from '@/components/RecommendationEngine';
 import UserProfilePage from '@/pages/UserProfilePage';
 import CompanyDashboard from '@/pages/CompanyDashboard';
+import JobsPage from '@/pages/JobsPage';
+import AboutPage from '@/pages/AboutPage';
+import ActivityPage from '@/pages/ActivityPage';
+import SchoolsPage from '@/pages/SchoolsPage';
+import PharmaciesPage from '@/pages/PharmaciesPage';
 // import DiasporaAuth from '@/pages/DiasporaAuth';
 import { LegislationTracker } from "./pages/LegislationTracker";
 import CivicReputationPage from "@/pages/CivicReputationPage";
@@ -88,6 +93,11 @@ const App = () => {
                       <Route path="recommendations" element={<RecommendationEngine />} />
                       <Route path="profile/:userId" element={<UserProfilePage />} />
                       <Route path="company" element={<CompanyDashboard />} />
+                      <Route path="jobs" element={<JobsPage />} />
+                      <Route path="about" element={<AboutPage />} />
+                      <Route path="activity" element={<ActivityPage />} />
+                      <Route path="schools" element={<SchoolsPage />} />
+                      <Route path="pharmacies" element={<PharmaciesPage />} />
                       <Route path="legislation" element={<LegislationTracker />} />
                       <Route path="hospitals" element={<HospitalsDirectory />} />
                       <Route path="tenders" element={<Tenders />} />

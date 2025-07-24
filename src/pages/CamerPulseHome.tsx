@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { Link } from 'react-router-dom';
 import {
   Users,
@@ -23,7 +24,8 @@ import {
   MessageSquare,
   Calendar,
   BookOpen,
-  Briefcase
+  Briefcase,
+  Mail
 } from 'lucide-react';
 
 const CamerPulseHome: React.FC = () => {
@@ -290,6 +292,25 @@ const CamerPulseHome: React.FC = () => {
           <p className="text-xl mb-8 opacity-90">
             Join thousands of Cameroonians already building a more transparent and participatory democracy.
           </p>
+          
+          {/* Newsletter Signup */}
+          <div className="max-w-md mx-auto mb-8">
+            <div className="flex gap-2">
+              <Input 
+                type="email" 
+                placeholder="Enter your email for updates..." 
+                className="bg-white/10 border-white/30 text-white placeholder:text-white/70"
+              />
+              <Button variant="secondary">
+                <Mail className="w-4 h-4 mr-2" />
+                Subscribe
+              </Button>
+            </div>
+            <p className="text-xs mt-2 opacity-70">
+              Get weekly updates on civic activities and opportunities
+            </p>
+          </div>
+          
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/auth">
               <Button size="lg" variant="secondary" className="min-w-[200px]">
