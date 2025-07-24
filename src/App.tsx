@@ -158,6 +158,7 @@ import ModeratorOnboarding from "./pages/ModeratorOnboarding";
 import ModerationDashboard from "./pages/ModerationDashboard";
 import TestPage from "./pages/TestPage";
 import JobsHome from "./pages/jobs/JobsHome";
+import JobBoard from "./pages/jobs/JobBoard";
 import JobsSetupTest from "./tests/JobsSetupTest";
 
 import { MobileProvider } from "./contexts/MobileContext";
@@ -186,8 +187,9 @@ const App = () => {
                   <OfflineIndicator />
                   <Routes>
                     <Route path="/test" element={<TestPage />} />
-                    <Route path="/jobs" element={<JobsHome />} />
-                    <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
+          <Route path="/jobs" element={<JobsHome />} />
+          <Route path="/jobs/board" element={<JobBoard />} />
+          <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/feed" element={<Feed />} />

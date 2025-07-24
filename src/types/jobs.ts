@@ -41,36 +41,51 @@ export interface Company {
 
 export interface Job {
   id: string;
-  company_id: string;
-  category_id?: string;
   title: string;
   slug: string;
-  description: string;
-  requirements: string[];
-  responsibilities: string[];
-  benefits: string[];
+  company_id?: string;
+  company_name: string;
+  company_logo?: string;
+  category_id?: string;
+  location: string;
+  region: string;
+  job_type: string;
+  experience_level: string;
+  education_level?: string;
   salary_min?: number;
   salary_max?: number;
-  salary_currency: string;
-  job_type: 'full_time' | 'part_time' | 'contract' | 'internship' | 'remote';
-  experience_level?: 'entry' | 'junior' | 'mid' | 'senior' | 'executive';
-  location?: string;
-  region?: string;
-  is_remote: boolean;
-  application_deadline?: string;
-  status: 'draft' | 'open' | 'closed' | 'filled';
-  featured: boolean;
-  views_count: number;
-  applications_count: number;
+  salary_currency?: string;
+  salary_period?: string;
+  description: string;
+  requirements?: string[];
+  responsibilities?: string[];
+  benefits?: string[];
+  how_to_apply?: string;
+  external_url?: string;
   external_apply_url?: string;
-  contact_email?: string;
-  tags: string[];
+  application_email?: string;
+  deadline?: string;
+  application_deadline?: string;
+  is_featured: boolean;
+  featured: boolean;
+  is_urgent: boolean;
+  is_remote: boolean;
+  status: string;
+  views_count?: number;
+  applications_count?: number;
+  created_by?: string;
+  tags?: string[];
+  meta_data?: any;
   created_at: string;
   updated_at: string;
+  published_at?: string;
+  expires_at?: string;
   
   // Relations (populated when joined)
   company?: Company;
+  companies?: Company;
   category?: JobCategory;
+  job_categories?: JobCategory;
 }
 
 export interface JobApplication {

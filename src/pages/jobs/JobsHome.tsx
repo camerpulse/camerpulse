@@ -85,7 +85,9 @@ const JobsHome = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full">Browse Jobs</Button>
+              <Button className="w-full" asChild>
+                <a href="/jobs/board">Browse Jobs</a>
+              </Button>
             </CardContent>
           </Card>
 
@@ -128,9 +130,10 @@ const JobsHome = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {/* Job listings will be added in Step 2 */}
-              <div className="text-center py-8 text-muted-foreground">
-                Job listings will be displayed here once we implement the job board functionality.
+              <div className="text-center py-4">
+                <Button asChild>
+                  <a href="/jobs/board">View All Jobs</a>
+                </Button>
               </div>
             </div>
           </CardContent>
