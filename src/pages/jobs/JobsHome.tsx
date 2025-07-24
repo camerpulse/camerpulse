@@ -112,16 +112,16 @@ const JobsHome = () => {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Campaign Management
+                <TrendingUp className="h-5 w-5" />
+                Sponsor Analytics
               </CardTitle>
               <CardDescription>
-                Create and manage hiring campaigns for social impact
+                Track hiring impact and view sponsor performance metrics
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Button variant="secondary" className="w-full" asChild>
-                <a href="/jobs/campaigns">Manage Campaigns</a>
+                <a href="/jobs/analytics">View Analytics</a>
               </Button>
             </CardContent>
           </Card>

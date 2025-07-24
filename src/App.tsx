@@ -163,6 +163,7 @@ import { CompanyPortal } from "./pages/jobs/CompanyPortal";
 import RegionalHiringLeaderboard from "./pages/jobs/RegionalHiringLeaderboard";
 import CampaignDashboard from "./pages/jobs/CampaignDashboard";
 import CampaignPublicPage from "./pages/jobs/CampaignPublicPage";
+import SponsorAnalyticsDashboard from "./pages/jobs/SponsorAnalyticsDashboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
 import { ExpertPortal } from "./pages/experts/ExpertPortal";
 import { ProfilePage } from "./pages/profile/ProfilePage";
@@ -200,6 +201,7 @@ const App = () => {
           <Route path="/jobs/leaderboard" element={<RegionalHiringLeaderboard />} />
           <Route path="/jobs/campaigns" element={<CampaignDashboard />} />
           <Route path="/jobs/campaigns/:campaignId" element={<CampaignPublicPage />} />
+          <Route path="/jobs/analytics" element={<SponsorAnalyticsDashboard />} />
           <Route path="/experts" element={<ExpertMarketplace />} />
           <Route path="/experts/portal" element={<ExpertPortal />} />
           <Route path="/profile" element={<ProfilePage />} />
