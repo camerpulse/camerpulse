@@ -30419,6 +30419,45 @@ export type Database = {
         }
         Relationships: []
       }
+      security_audit_logs: {
+        Row: {
+          action_type: string
+          details: Json | null
+          id: string
+          ip_address: unknown | null
+          resource_id: string | null
+          resource_type: string
+          severity: string | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type: string
+          severity?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          details?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type?: string
+          severity?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       security_logs: {
         Row: {
           created_at: string | null
@@ -35430,15 +35469,23 @@ export type Database = {
         Returns: string
       }
       log_security_event: {
-        Args: {
-          p_user_id: string
-          p_event_type: string
-          p_ip_address?: unknown
-          p_user_agent?: string
-          p_metadata?: Json
-          p_severity?: string
-        }
-        Returns: string
+        Args:
+          | {
+              p_action_type: string
+              p_resource_type: string
+              p_resource_id?: string
+              p_details?: Json
+              p_severity?: string
+            }
+          | {
+              p_user_id: string
+              p_event_type: string
+              p_ip_address?: unknown
+              p_user_agent?: string
+              p_metadata?: Json
+              p_severity?: string
+            }
+        Returns: undefined
       }
       mark_message_read: {
         Args: { p_message_id: string }
@@ -35510,6 +35557,10 @@ export type Database = {
           p_device_type?: string
           p_device_model?: string
         }
+        Returns: string
+      }
+      sanitize_message_content: {
+        Args: { content: string }
         Returns: string
       }
       scan_for_feature_conflicts: {

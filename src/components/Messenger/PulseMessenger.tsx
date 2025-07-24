@@ -30,6 +30,13 @@ import { useMessenger, type Conversation, type Message } from '@/hooks/useMessen
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { 
+  validateMessageContent, 
+  validateFileUpload, 
+  messageRateLimiter, 
+  fileUploadRateLimiter,
+  logSecurityEvent 
+} from '@/utils/security';
 import { MediaUpload, MediaPreview } from './MediaUpload';
 import { MediaMessage } from './MediaMessage';
 import { MessageReactions } from './MessageReactions';
@@ -83,11 +90,57 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
   const handleSendMessage = async () => {
     if (!activeConversation || (!newMessage.trim() && !pendingFile)) return;
     
+    // Security validation for text messages
+    if (newMessage.trim()) {
+      const validation = validateMessageContent(newMessage);
+      if (!validation.isValid) {
+        toast({
+          title: "Invalid Message",
+          description: validation.error,
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Rate limiting
+      if (!messageRateLimiter.isAllowed(user?.id || 'anonymous')) {
+        toast({
+          title: "Rate Limited",
+          description: "Too many messages. Please slow down.",
+          variant: "destructive"
+        });
+        return;
+      }
+    }
+    
     if (pendingFile) {
       await handleSendMediaMessage();
     } else {
-      await sendMessage(activeConversation.id, newMessage);
-      setNewMessage('');
+      try {
+        await sendMessage(activeConversation.id, newMessage);
+        setNewMessage('');
+        
+        // Log security event
+        await logSecurityEvent(
+          'message_sent',
+          'message',
+          activeConversation.id,
+          { conversation_id: activeConversation.id },
+          'low'
+        );
+      } catch (error) {
+        console.error('Error sending message:', error);
+        await logSecurityEvent(
+          'message_send_failed',
+          'message',
+          activeConversation.id,
+          { 
+            error: error instanceof Error ? error.message : 'Unknown error',
+            conversation_id: activeConversation.id 
+          },
+          'medium'
+        );
+      }
     }
   };
 
@@ -139,10 +192,44 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
 
   // Handle file selection
   const handleFileSelect = (file: File, type: string) => {
+    // Security validation for file uploads
+    const validation = validateFileUpload(file);
+    if (!validation.isValid) {
+      toast({
+        title: "Invalid File",
+        description: validation.error,
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Rate limiting for file uploads
+    if (!fileUploadRateLimiter.isAllowed(user?.id || 'anonymous')) {
+      toast({
+        title: "Rate Limited",
+        description: "Too many file uploads. Please wait.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setPendingFile(file);
     if (!newMessage.trim()) {
       setNewMessage(`Sending ${type}...`);
     }
+
+    // Log security event
+    logSecurityEvent(
+      'file_selected',
+      'file',
+      undefined,
+      { 
+        file_name: file.name,
+        file_size: file.size,
+        file_type: file.type 
+      },
+      'low'
+    );
   };
 
   // Handle key press in message input

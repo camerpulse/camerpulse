@@ -1,5 +1,8 @@
 project_id = "wsiorhtiovwcajiarydw"
 
+[functions.security-monitor]
+verify_jwt = false
+
 [functions.camerpulse-intelligence-core]
 verify_jwt = false
 
