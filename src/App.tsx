@@ -78,6 +78,7 @@ import EcosystemDashboard from "./pages/EcosystemDashboard";
 import FanPortal from "./pages/FanPortal";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProfileSlugPage from "./pages/ProfileSlugPage";
+import { ProfileValidationTest } from "./components/Profile/ProfileValidationTest";
 import Events from "./pages/Events";
 import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
@@ -306,6 +307,7 @@ const App = () => {
               <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
               <Route path="/profile/:userId" element={<UserProfilePage />} />
               <Route path="/@:slug" element={<ProfileSlugPage />} />
+              <Route path="/profile-test" element={<ProfileValidationTest />} />
           <Route path="/events" element={<Events />} />
           <Route path="/calendar" element={<EventCalendarPage />} />
           <Route path="/verify-certificate" element={<CertificateVerificationPage />} />

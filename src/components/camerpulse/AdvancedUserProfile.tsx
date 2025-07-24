@@ -703,7 +703,11 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
           ) : (
             <div className="flex gap-2">
               {profile?.allow_messages && (
-                <Button variant="outline" size="sm">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => window.location.href = `/messenger?startConversation=${userId}`}
+                >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Message
                 </Button>
