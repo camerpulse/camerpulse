@@ -164,6 +164,7 @@ import RegionalHiringLeaderboard from "./pages/jobs/RegionalHiringLeaderboard";
 import CampaignDashboard from "./pages/jobs/CampaignDashboard";
 import CampaignPublicPage from "./pages/jobs/CampaignPublicPage";
 import SponsorAnalyticsDashboard from "./pages/jobs/SponsorAnalyticsDashboard";
+import WorkforceEcosystemHub from "./pages/jobs/WorkforceEcosystemHub";
 import PublicWorkforceDashboard from "./pages/transparency/PublicWorkforceDashboard";
 import PolicyImpactDashboard from "./pages/transparency/PolicyImpactDashboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
@@ -197,8 +198,9 @@ const App = () => {
                   <OfflineIndicator />
                   <Routes>
                     <Route path="/test" element={<TestPage />} />
-          <Route path="/jobs" element={<JobsHome />} />
-          <Route path="/jobs/board" element={<JobBoard />} />
+          <Route path="/jobs" element={<WorkforceEcosystemHub />} />
+          <Route path="/jobs/home" element={<JobsHome />} />
+          <Route path="/jobs/ecosystem" element={<WorkforceEcosystemHub />} />
           <Route path="/jobs/company" element={<CompanyPortal />} />
           <Route path="/jobs/leaderboard" element={<RegionalHiringLeaderboard />} />
           <Route path="/jobs/campaigns" element={<CampaignDashboard />} />
