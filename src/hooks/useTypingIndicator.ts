@@ -13,10 +13,21 @@ export const useTypingIndicator = (conversationId: string) => {
 
   const setTypingStatus = useCallback(async (typing: boolean) => {
     try {
-      const { error } = await supabase.rpc('set_typing_indicator', {
-        p_conversation_id: conversationId,
-        p_is_typing: typing
-      });
+      const { error } = await supabase
+        .from('conversation_typing')
+        .upsert({
+          conversation_id: conversationId,
+          user_id: (await supabase.auth.getUser()).data.user?.id,
+          last_activity: new Date().toISOString()
+        }, { onConflict: 'conversation_id,user_id' });
+      
+      if (!typing) {
+        await supabase
+          .from('conversation_typing')
+          .delete()
+          .eq('conversation_id', conversationId)
+          .eq('user_id', (await supabase.auth.getUser()).data.user?.id);
+      }
 
       if (error) throw error;
       setIsTyping(typing);

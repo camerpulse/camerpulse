@@ -398,9 +398,10 @@ export const PulseMessenger: React.FC<PulseMessengerProps> = ({ className }) => 
                 )}
                 
                 {/* Typing indicator */}
-                {isTyping && (
-                  <TypingIndicator message={typingMessage} />
-                )}
+                <TypingIndicator 
+                  conversationId={activeConversation?.id || ''} 
+                  currentUserId={user?.id || ''} 
+                />
               </div>
             </ScrollArea>
 

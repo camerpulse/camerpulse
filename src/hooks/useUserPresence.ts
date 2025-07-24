@@ -37,7 +37,15 @@ export const useUserPresence = () => {
       if (error) throw error;
 
       const presenceMap = data.reduce((acc, presence) => {
-        acc[presence.user_id] = presence;
+        acc[presence.user_id] = {
+          ...presence,
+          status: presence.status as 'online' | 'away' | 'busy' | 'offline',
+          device_info: presence.device_info ? 
+            (typeof presence.device_info === 'string' ? 
+              JSON.parse(presence.device_info) : 
+              presence.device_info as Record<string, any>) : 
+            {}
+        };
         return acc;
       }, {} as Record<string, UserPresence>);
 
