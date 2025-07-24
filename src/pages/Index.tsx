@@ -28,7 +28,8 @@ import {
   Sparkles,
   Scale,
   LogOut,
-  User
+  User,
+  Briefcase
 } from "lucide-react";
 
 const Index = () => {
@@ -84,6 +85,14 @@ const Index = () => {
       href: "/politicians",
       gradient: "from-secondary to-accent",
       features: ["Promise tracking", "Performance metrics", "Citizen ratings"]
+    },
+    {
+      title: "CamerPulse Jobs",
+      description: "Connect talent with opportunities across Cameroon's job market",
+      icon: Briefcase,
+      href: "/jobs",
+      gradient: "from-primary to-primary-glow",
+      features: ["Job board", "Expert directory", "Company profiles"]
     }
   ];
 

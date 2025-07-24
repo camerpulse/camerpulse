@@ -157,6 +157,8 @@ import ModeratorPortal from "./pages/ModeratorPortal";
 import ModeratorOnboarding from "./pages/ModeratorOnboarding";
 import ModerationDashboard from "./pages/ModerationDashboard";
 import TestPage from "./pages/TestPage";
+import JobsHome from "./pages/jobs/JobsHome";
+import JobsSetupTest from "./tests/JobsSetupTest";
 
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -171,9 +173,21 @@ const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/test" element={<TestPage />} />
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <AuthProvider>
+          <PluginProvider>
+            <PanAfricaProvider>
+              <MobileProvider>
+                <BrowserRouter>
+                  <Toaster />
+                  <Sonner />
+                  <PWAInstallPrompt />
+                  <OfflineIndicator />
+                  <Routes>
+                    <Route path="/test" element={<TestPage />} />
+                    <Route path="/jobs" element={<JobsHome />} />
+                    <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/feed" element={<Feed />} />
@@ -364,8 +378,14 @@ const App = () => {
               <Route path="/officials" element={<Officials />} />
               <Route path="/judiciary" element={<Judiciary />} />
                  <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+                  </Routes>
+                </BrowserRouter>
+              </MobileProvider>
+            </PanAfricaProvider>
+          </PluginProvider>
+        </AuthProvider>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 };
 
