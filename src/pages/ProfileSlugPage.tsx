@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { AdvancedUserProfile } from '@/components/camerpulse';
+import { SocialStyleProfile } from '@/components/Profile/SocialStyleProfile';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { Loader2 } from 'lucide-react';
 
@@ -73,7 +73,7 @@ const ProfileSlugPage: React.FC = () => {
 
   return (
     <AppLayout>
-      <AdvancedUserProfile userId={userId} isModal={false} />
+      <SocialStyleProfile userId={userId} isModal={false} />
     </AppLayout>
   );
 };

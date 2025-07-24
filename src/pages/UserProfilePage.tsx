@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { IndustryGradeUserProfile } from '@/components/Profile/IndustryGradeUserProfile';
+import { SocialStyleProfile } from '@/components/Profile/SocialStyleProfile';
 import { AppLayout } from '@/components/Layout/AppLayout';
 
 const UserProfilePage: React.FC = () => {
@@ -21,9 +21,7 @@ const UserProfilePage: React.FC = () => {
 
   return (
     <AppLayout>
-      <div className="py-8 px-4">
-        <IndustryGradeUserProfile userId={userId} isModal={false} />
-      </div>
+      <SocialStyleProfile userId={userId} isModal={false} />
     </AppLayout>
   );
 };
