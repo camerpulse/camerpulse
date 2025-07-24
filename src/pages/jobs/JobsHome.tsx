@@ -119,7 +119,9 @@ const JobsHome = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button variant="secondary" className="w-full">Find Experts</Button>
+              <Button variant="secondary" className="w-full" asChild>
+                <a href="/experts">Find Experts</a>
+              </Button>
             </CardContent>
           </Card>
         </div>

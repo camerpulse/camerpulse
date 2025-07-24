@@ -15512,6 +15512,161 @@ export type Database = {
           },
         ]
       }
+      expert_profiles: {
+        Row: {
+          availability: string | null
+          average_rating: number | null
+          bio: string | null
+          certifications: Json | null
+          created_at: string
+          currency: string | null
+          education: Json | null
+          expertise_areas: string[]
+          featured_until: string | null
+          hourly_rate_max: number | null
+          hourly_rate_min: number | null
+          id: string
+          is_active: boolean | null
+          is_featured: boolean | null
+          is_verified: boolean | null
+          languages: string[] | null
+          location: string | null
+          payment_status: string | null
+          portfolio_items: Json | null
+          professional_title: string
+          profile_completion: number | null
+          profile_views: number | null
+          region: string | null
+          response_time_hours: number | null
+          skills: string[] | null
+          total_projects: number | null
+          total_reviews: number | null
+          updated_at: string
+          user_id: string
+          work_preference: string[] | null
+          years_experience: number | null
+        }
+        Insert: {
+          availability?: string | null
+          average_rating?: number | null
+          bio?: string | null
+          certifications?: Json | null
+          created_at?: string
+          currency?: string | null
+          education?: Json | null
+          expertise_areas?: string[]
+          featured_until?: string | null
+          hourly_rate_max?: number | null
+          hourly_rate_min?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          location?: string | null
+          payment_status?: string | null
+          portfolio_items?: Json | null
+          professional_title: string
+          profile_completion?: number | null
+          profile_views?: number | null
+          region?: string | null
+          response_time_hours?: number | null
+          skills?: string[] | null
+          total_projects?: number | null
+          total_reviews?: number | null
+          updated_at?: string
+          user_id: string
+          work_preference?: string[] | null
+          years_experience?: number | null
+        }
+        Update: {
+          availability?: string | null
+          average_rating?: number | null
+          bio?: string | null
+          certifications?: Json | null
+          created_at?: string
+          currency?: string | null
+          education?: Json | null
+          expertise_areas?: string[]
+          featured_until?: string | null
+          hourly_rate_max?: number | null
+          hourly_rate_min?: number | null
+          id?: string
+          is_active?: boolean | null
+          is_featured?: boolean | null
+          is_verified?: boolean | null
+          languages?: string[] | null
+          location?: string | null
+          payment_status?: string | null
+          portfolio_items?: Json | null
+          professional_title?: string
+          profile_completion?: number | null
+          profile_views?: number | null
+          region?: string | null
+          response_time_hours?: number | null
+          skills?: string[] | null
+          total_projects?: number | null
+          total_reviews?: number | null
+          updated_at?: string
+          user_id?: string
+          work_preference?: string[] | null
+          years_experience?: number | null
+        }
+        Relationships: []
+      }
+      expert_reviews: {
+        Row: {
+          communication_rating: number | null
+          created_at: string
+          deadline_rating: number | null
+          expert_id: string
+          id: string
+          is_public: boolean | null
+          project_id: string | null
+          rating: number
+          review_text: string | null
+          reviewer_id: string
+          skills_rating: number | null
+          updated_at: string
+        }
+        Insert: {
+          communication_rating?: number | null
+          created_at?: string
+          deadline_rating?: number | null
+          expert_id: string
+          id?: string
+          is_public?: boolean | null
+          project_id?: string | null
+          rating: number
+          review_text?: string | null
+          reviewer_id: string
+          skills_rating?: number | null
+          updated_at?: string
+        }
+        Update: {
+          communication_rating?: number | null
+          created_at?: string
+          deadline_rating?: number | null
+          expert_id?: string
+          id?: string
+          is_public?: boolean | null
+          project_id?: string | null
+          rating?: number
+          review_text?: string | null
+          reviewer_id?: string
+          skills_rating?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "expert_reviews_expert_id_fkey"
+            columns: ["expert_id"]
+            isOneToOne: false
+            referencedRelation: "expert_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       failed_login_attempts: {
         Row: {
           attempt_time: string | null
@@ -29156,6 +29311,134 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      project_proposals: {
+        Row: {
+          attachments: string[] | null
+          client_id: string
+          created_at: string
+          currency: string | null
+          delivered_at: string | null
+          estimated_duration: string | null
+          expert_id: string
+          id: string
+          project_description: string
+          project_title: string
+          proposal_text: string
+          proposed_rate: number
+          rate_type: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          attachments?: string[] | null
+          client_id: string
+          created_at?: string
+          currency?: string | null
+          delivered_at?: string | null
+          estimated_duration?: string | null
+          expert_id: string
+          id?: string
+          project_description: string
+          project_title: string
+          proposal_text: string
+          proposed_rate: number
+          rate_type?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attachments?: string[] | null
+          client_id?: string
+          created_at?: string
+          currency?: string | null
+          delivered_at?: string | null
+          estimated_duration?: string | null
+          expert_id?: string
+          id?: string
+          project_description?: string
+          project_title?: string
+          proposal_text?: string
+          proposed_rate?: number
+          rate_type?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_proposals_expert_id_fkey"
+            columns: ["expert_id"]
+            isOneToOne: false
+            referencedRelation: "expert_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_requests: {
+        Row: {
+          attachments: string[] | null
+          budget_max: number | null
+          budget_min: number | null
+          budget_type: string | null
+          client_id: string
+          created_at: string
+          currency: string | null
+          deadline: string | null
+          description: string
+          duration_estimate: string | null
+          experience_level: string | null
+          id: string
+          is_remote: boolean | null
+          location_requirement: string | null
+          proposals_count: number | null
+          required_skills: string[]
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          attachments?: string[] | null
+          budget_max?: number | null
+          budget_min?: number | null
+          budget_type?: string | null
+          client_id: string
+          created_at?: string
+          currency?: string | null
+          deadline?: string | null
+          description: string
+          duration_estimate?: string | null
+          experience_level?: string | null
+          id?: string
+          is_remote?: boolean | null
+          location_requirement?: string | null
+          proposals_count?: number | null
+          required_skills?: string[]
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          attachments?: string[] | null
+          budget_max?: number | null
+          budget_min?: number | null
+          budget_type?: string | null
+          client_id?: string
+          created_at?: string
+          currency?: string | null
+          deadline?: string | null
+          description?: string
+          duration_estimate?: string | null
+          experience_level?: string | null
+          id?: string
+          is_remote?: boolean | null
+          location_requirement?: string | null
+          proposals_count?: number | null
+          required_skills?: string[]
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       project_status_updates: {
         Row: {
