@@ -18262,6 +18262,290 @@ export type Database = {
         }
         Relationships: []
       }
+      job_applications: {
+        Row: {
+          applicant_email: string
+          applicant_name: string
+          applicant_phone: string | null
+          application_status: string
+          applied_at: string
+          cover_letter: string | null
+          id: string
+          job_id: string
+          meta_data: Json | null
+          notes: string | null
+          resume_url: string | null
+          reviewed_at: string | null
+          user_id: string
+        }
+        Insert: {
+          applicant_email: string
+          applicant_name: string
+          applicant_phone?: string | null
+          application_status?: string
+          applied_at?: string
+          cover_letter?: string | null
+          id?: string
+          job_id: string
+          meta_data?: Json | null
+          notes?: string | null
+          resume_url?: string | null
+          reviewed_at?: string | null
+          user_id: string
+        }
+        Update: {
+          applicant_email?: string
+          applicant_name?: string
+          applicant_phone?: string | null
+          application_status?: string
+          applied_at?: string
+          cover_letter?: string | null
+          id?: string
+          job_id?: string
+          meta_data?: Json | null
+          notes?: string | null
+          resume_url?: string | null
+          reviewed_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_applications_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_bookmarks: {
+        Row: {
+          created_at: string
+          id: string
+          job_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          job_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          job_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_bookmarks_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean
+          job_count: number | null
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          job_count?: number | null
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          job_count?: number | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      job_views: {
+        Row: {
+          id: string
+          ip_address: unknown | null
+          job_id: string
+          user_agent: string | null
+          user_id: string | null
+          viewed_at: string
+        }
+        Insert: {
+          id?: string
+          ip_address?: unknown | null
+          job_id: string
+          user_agent?: string | null
+          user_id?: string | null
+          viewed_at?: string
+        }
+        Update: {
+          id?: string
+          ip_address?: unknown | null
+          job_id?: string
+          user_agent?: string | null
+          user_id?: string | null
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_views_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      jobs: {
+        Row: {
+          application_email: string | null
+          applications_count: number | null
+          benefits: string | null
+          category_id: string | null
+          company_id: string | null
+          company_logo: string | null
+          company_name: string
+          created_at: string
+          created_by: string | null
+          deadline: string | null
+          description: string
+          education_level: string | null
+          experience_level: string
+          expires_at: string | null
+          external_url: string | null
+          how_to_apply: string | null
+          id: string
+          is_featured: boolean
+          is_remote: boolean
+          is_urgent: boolean
+          job_type: string
+          location: string
+          meta_data: Json | null
+          published_at: string | null
+          region: string
+          requirements: string | null
+          salary_currency: string | null
+          salary_max: number | null
+          salary_min: number | null
+          salary_period: string | null
+          slug: string
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          application_email?: string | null
+          applications_count?: number | null
+          benefits?: string | null
+          category_id?: string | null
+          company_id?: string | null
+          company_logo?: string | null
+          company_name: string
+          created_at?: string
+          created_by?: string | null
+          deadline?: string | null
+          description: string
+          education_level?: string | null
+          experience_level?: string
+          expires_at?: string | null
+          external_url?: string | null
+          how_to_apply?: string | null
+          id?: string
+          is_featured?: boolean
+          is_remote?: boolean
+          is_urgent?: boolean
+          job_type?: string
+          location: string
+          meta_data?: Json | null
+          published_at?: string | null
+          region: string
+          requirements?: string | null
+          salary_currency?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          salary_period?: string | null
+          slug: string
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          application_email?: string | null
+          applications_count?: number | null
+          benefits?: string | null
+          category_id?: string | null
+          company_id?: string | null
+          company_logo?: string | null
+          company_name?: string
+          created_at?: string
+          created_by?: string | null
+          deadline?: string | null
+          description?: string
+          education_level?: string | null
+          experience_level?: string
+          expires_at?: string | null
+          external_url?: string | null
+          how_to_apply?: string | null
+          id?: string
+          is_featured?: boolean
+          is_remote?: boolean
+          is_urgent?: boolean
+          job_type?: string
+          location?: string
+          meta_data?: Json | null
+          published_at?: string | null
+          region?: string
+          requirements?: string | null
+          salary_currency?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          salary_period?: string | null
+          slug?: string
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "job_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       judicial_misconduct_reports: {
         Row: {
           case_id: string | null
@@ -35473,6 +35757,10 @@ export type Database = {
           regions_processed: number
           parties_processed: number
         }[]
+      }
+      generate_job_slug: {
+        Args: { job_title: string; company_name: string }
+        Returns: string
       }
       generate_license_key: {
         Args: Record<PropertyKey, never>
