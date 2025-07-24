@@ -40,8 +40,8 @@ export const CompanyDashboard: React.FC<CompanyDashboardProps> = ({ company, onC
           getJobApplications(company.id)
         ]);
         
-        setJobs(jobsData as Job[]);
-        setApplications(applicationsData as JobApplication[]);
+        setJobs(jobsData as unknown as Job[]);
+        setApplications(applicationsData as unknown as JobApplication[]);
       } catch (error) {
         console.error('Error loading dashboard data:', error);
       } finally {

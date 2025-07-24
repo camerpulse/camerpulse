@@ -6,7 +6,7 @@ import { toast } from 'sonner';
 
 export interface CompanyRegistrationData {
   company_name: string;
-  company_type: 'sole_proprietorship' | 'partnership' | 'limited_company' | 'corporation' | 'cooperative' | 'non_profit' | 'government';
+  company_type: string;
   sector: string;
   description?: string;
   physical_address: string;
@@ -65,7 +65,7 @@ export const useCompanies = () => {
           user_id: user.id,
           status: 'pending',
           payment_status: 'pending'
-        })
+        } as any)
         .select()
         .single();
 
@@ -93,7 +93,7 @@ export const useCompanies = () => {
       
       const { data, error } = await supabase
         .from('companies')
-        .update(updates)
+        .update(updates as any)
         .eq('id', companyId)
         .eq('user_id', user?.id)
         .select()
