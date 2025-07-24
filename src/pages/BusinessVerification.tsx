@@ -10,7 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { Building2, FileCheck, Clock, AlertCircle, CheckCircle, XCircle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { FileUpload } from '@/components/Tenders/FileUpload';
+// FileUpload component removed with CamerTenders cleanup
 
 interface BusinessVerification {
   id: string;
@@ -394,13 +394,16 @@ export default function BusinessVerification() {
                   </ul>
                 </div>
 
-                <FileUpload
-                  bucket="business-verification"
-                  folder="documents"
-                  maxFiles={10}
-                  maxSize={5}
-                  onUploadComplete={handleDocumentUpload}
+                <Input
+                  type="file"
+                  multiple
+                  accept=".pdf,.doc,.docx,.jpg,.png"
+                  onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    handleDocumentUpload(files);
+                  }}
                   disabled={verification?.verification_status === 'approved'}
+                  className="file:mr-2 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-medium file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                 />
               </div>
 

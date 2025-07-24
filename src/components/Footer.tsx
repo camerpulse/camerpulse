@@ -141,10 +141,6 @@ export default function Footer() {
                 <Users className="h-3 w-3" />
                 Job Board
               </Link>
-              <Link to="/tenders" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <FileText className="h-3 w-3" />
-                Tenders
-              </Link>
             </nav>
           </div>
 

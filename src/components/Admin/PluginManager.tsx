@@ -43,20 +43,6 @@ const PluginManager: React.FC = () => {
   useEffect(() => {
     const mockPlugins: PluginInfo[] = [
       {
-        id: 'camertenders',
-        name: 'CamerTenders',
-        version: '2.1.0',
-        description: 'Government tender and procurement management system',
-        isEnabled: true,
-        isCore: false,
-        routes: ['/tenders', '/tenders/create', '/tenders/:id', '/admin/tenders'],
-        components: ['TendersList', 'TenderDetail', 'BidSubmission', 'TenderAnalytics'],
-        dependencies: ['supabase', 'pdf-generator'],
-        status: 'active',
-        lastUpdated: '2024-01-20',
-        category: 'business'
-      },
-      {
         id: 'camerplay',
         name: 'CamerPlay Music',
         version: '1.8.5',

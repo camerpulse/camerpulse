@@ -178,22 +178,6 @@ const ComprehensiveAdminPanel: React.FC = () => {
 
       // BUSINESS & ECONOMIC FEATURES
       {
-        id: 'camertenders',
-        name: 'CamerTenders',
-        category: 'Business',
-        description: 'Government tender and procurement management system',
-        isEnabled: true,
-        isCore: false,
-        routes: ['/tenders', '/tenders/create', '/tenders/:id', '/my-bids'],
-        components: ['TendersList', 'TenderDetail', 'BidSubmission', 'TenderAnalytics'],
-        icon: <FileText className="h-4 w-4" />,
-        version: '2.1.0',
-        lastUpdated: '2024-01-20',
-        status: 'active',
-        usage: 78,
-        dependencies: ['pdf-generator', 'file-upload', 'notifications']
-      },
-      {
         id: 'business-directory',
         name: 'Business Directory',
         category: 'Business',

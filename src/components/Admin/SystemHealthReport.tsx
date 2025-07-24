@@ -96,7 +96,7 @@ const SystemHealthReport: React.FC = () => {
           details: [
             '✅ Plugin manager operational',
             '✅ Core plugins stable',
-            '✅ CamerTenders plugin active',
+            '✅ Business verification active',
             '✅ CamerPlay plugin active',
             '⚠️ Pulse Messenger plugin disabled'
           ],
