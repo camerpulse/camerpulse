@@ -65,6 +65,9 @@ import SupportPage from "./pages/SupportPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import TermsPage from "./pages/TermsPage";
 import CookiesPage from "./pages/CookiesPage";
+import JudiciaryPage from "./pages/JudiciaryPage";
+import AnalyticsPage from "./pages/AnalyticsPage";
+import VillagesSearchPage from "./pages/VillagesSearchPage";
 
 
 const queryClient = new QueryClient();
@@ -102,6 +105,7 @@ const App = () => {
                        <Route path="polls" element={<PollsPage />} />
                        <Route path="politicians" element={<PoliticiansPage />} />
                        <Route path="villages" element={<VillagesPage />} />
+                       <Route path="villages/search" element={<VillagesSearchPage />} />
                        <Route path="pulse" element={<PulsePage />} />
                        <Route path="profile" element={<ProfilePage />} />
                        <Route path="settings" element={<SettingsPage />} />
@@ -109,6 +113,8 @@ const App = () => {
                        <Route path="privacy" element={<PrivacyPage />} />
                        <Route path="terms" element={<TermsPage />} />
                        <Route path="cookies" element={<CookiesPage />} />
+                       <Route path="judiciary" element={<JudiciaryPage />} />
+                       <Route path="analytics" element={<AnalyticsPage />} />
                        <Route path="search" element={<AdvancedSearch />} />
                        <Route path="verification" element={<VerificationCenter />} />
                        <Route path="recommendations" element={<RecommendationEngine />} />
@@ -136,7 +142,6 @@ const App = () => {
                        <Route path="document-verification" element={<DocumentVerificationDashboard />} />
                        <Route path="notifications" element={<NotificationCenter />} />
                        <Route path="search-interface" element={<SearchInterface />} />
-                       <Route path="analytics" element={<TenderAnalytics />} />
                        <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />
                        <Route path="my-bids" element={<BidderDashboard />} />
                        <Route path="diaspora-connect" element={<DiasporaConnect />} />
