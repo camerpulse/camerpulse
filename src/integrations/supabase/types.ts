@@ -10998,6 +10998,50 @@ export type Database = {
         }
         Relationships: []
       }
+      conversation_analytics: {
+        Row: {
+          active_users: number
+          avg_response_time_minutes: number | null
+          conversation_id: string
+          date: string
+          id: string
+          metadata: Json | null
+          peak_activity_hour: number | null
+          sentiment_score: number | null
+          total_messages: number
+        }
+        Insert: {
+          active_users?: number
+          avg_response_time_minutes?: number | null
+          conversation_id: string
+          date?: string
+          id?: string
+          metadata?: Json | null
+          peak_activity_hour?: number | null
+          sentiment_score?: number | null
+          total_messages?: number
+        }
+        Update: {
+          active_users?: number
+          avg_response_time_minutes?: number | null
+          conversation_id?: string
+          date?: string
+          id?: string
+          metadata?: Json | null
+          peak_activity_hour?: number | null
+          sentiment_score?: number | null
+          total_messages?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversation_analytics_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversation_participants: {
         Row: {
           conversation_id: string | null
@@ -11480,6 +11524,36 @@ export type Database = {
             referencedColumns: ["country_code"]
           },
         ]
+      }
+      custom_emojis: {
+        Row: {
+          created_at: string
+          created_by: string
+          emoji_url: string
+          id: string
+          is_public: boolean
+          name: string
+          usage_count: number
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          emoji_url: string
+          id?: string
+          is_public?: boolean
+          name: string
+          usage_count?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          emoji_url?: string
+          id?: string
+          is_public?: boolean
+          name?: string
+          usage_count?: number
+        }
+        Relationships: []
       }
       custom_integrations: {
         Row: {
@@ -19957,6 +20031,50 @@ export type Database = {
           },
         ]
       }
+      message_attachments: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_size: number
+          file_type: string
+          file_url: string
+          id: string
+          message_id: string
+          thumbnail_url: string | null
+          upload_status: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_size: number
+          file_type: string
+          file_url: string
+          id?: string
+          message_id: string
+          thumbnail_url?: string | null
+          upload_status?: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_size?: number
+          file_type?: string
+          file_url?: string
+          id?: string
+          message_id?: string
+          thumbnail_url?: string | null
+          upload_status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_attachments_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       message_edit_history: {
         Row: {
           edit_reason: string | null
@@ -20041,6 +20159,91 @@ export type Database = {
           {
             foreignKeyName: "message_forwards_original_message_id_fkey"
             columns: ["original_message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_moderation: {
+        Row: {
+          action_taken: string | null
+          confidence_score: number
+          created_at: string
+          flagged_content: Json | null
+          id: string
+          message_id: string
+          moderation_type: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          confidence_score?: number
+          created_at?: string
+          flagged_content?: Json | null
+          id?: string
+          message_id: string
+          moderation_type: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          confidence_score?: number
+          created_at?: string
+          flagged_content?: Json | null
+          id?: string
+          message_id?: string
+          moderation_type?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_moderation_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_polls: {
+        Row: {
+          allow_multiple: boolean
+          created_at: string
+          created_by: string
+          expires_at: string | null
+          id: string
+          message_id: string
+          options: Json
+          question: string
+        }
+        Insert: {
+          allow_multiple?: boolean
+          created_at?: string
+          created_by: string
+          expires_at?: string | null
+          id?: string
+          message_id: string
+          options?: Json
+          question: string
+        }
+        Update: {
+          allow_multiple?: boolean
+          created_at?: string
+          created_by?: string
+          expires_at?: string | null
+          id?: string
+          message_id?: string
+          options?: Json
+          question?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_polls_message_id_fkey"
+            columns: ["message_id"]
             isOneToOne: false
             referencedRelation: "messages"
             referencedColumns: ["id"]
@@ -20143,6 +20346,38 @@ export type Database = {
           },
         ]
       }
+      message_read_status_enhanced: {
+        Row: {
+          delivered_at: string | null
+          id: string
+          message_id: string
+          read_at: string
+          user_id: string
+        }
+        Insert: {
+          delivered_at?: string | null
+          id?: string
+          message_id: string
+          read_at?: string
+          user_id: string
+        }
+        Update: {
+          delivered_at?: string | null
+          id?: string
+          message_id?: string
+          read_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_read_status_enhanced_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       message_search_index: {
         Row: {
           content_preview: string | null
@@ -20181,6 +20416,95 @@ export type Database = {
           },
           {
             foreignKeyName: "message_search_index_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_threads: {
+        Row: {
+          conversation_id: string
+          created_at: string
+          created_by: string
+          id: string
+          is_active: boolean
+          parent_message_id: string
+          thread_title: string | null
+          updated_at: string
+        }
+        Insert: {
+          conversation_id: string
+          created_at?: string
+          created_by: string
+          id?: string
+          is_active?: boolean
+          parent_message_id: string
+          thread_title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          conversation_id?: string
+          created_at?: string
+          created_by?: string
+          id?: string
+          is_active?: boolean
+          parent_message_id?: string
+          thread_title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_threads_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "message_threads_parent_message_id_fkey"
+            columns: ["parent_message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      message_translations: {
+        Row: {
+          confidence_score: number | null
+          created_at: string
+          from_language: string
+          id: string
+          message_id: string
+          to_language: string
+          translated_content: string
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string
+          from_language: string
+          id?: string
+          message_id: string
+          to_language: string
+          translated_content: string
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string
+          from_language?: string
+          id?: string
+          message_id?: string
+          to_language?: string
+          translated_content?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "message_translations_message_id_fkey"
             columns: ["message_id"]
             isOneToOne: false
             referencedRelation: "messages"
@@ -30927,6 +31251,54 @@ export type Database = {
           },
         ]
       }
+      smart_reply_suggestions: {
+        Row: {
+          confidence_scores: Json
+          context_message_id: string | null
+          conversation_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          suggestions: Json
+          user_id: string
+        }
+        Insert: {
+          confidence_scores?: Json
+          context_message_id?: string | null
+          conversation_id: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          suggestions?: Json
+          user_id: string
+        }
+        Update: {
+          confidence_scores?: Json
+          context_message_id?: string | null
+          conversation_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          suggestions?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "smart_reply_suggestions_context_message_id_fkey"
+            columns: ["context_message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "smart_reply_suggestions_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       social_media_trends: {
         Row: {
           age_demographics: Json | null
@@ -31547,6 +31919,42 @@ export type Database = {
           success?: boolean
         }
         Relationships: []
+      }
+      thread_messages: {
+        Row: {
+          created_at: string
+          id: string
+          message_id: string
+          thread_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message_id: string
+          thread_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message_id?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "thread_messages_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "messages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "thread_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "message_threads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ticket_purchases: {
         Row: {
@@ -32566,6 +32974,33 @@ export type Database = {
           interests?: string[] | null
           last_updated?: string
           preferred_regions?: string[] | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_presence: {
+        Row: {
+          device_info: Json | null
+          id: string
+          last_seen: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          device_info?: Json | null
+          id?: string
+          last_seen?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          device_info?: Json | null
+          id?: string
+          last_seen?: string
+          status?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -34678,6 +35113,10 @@ export type Database = {
         }
         Returns: string
       }
+      create_message_thread: {
+        Args: { p_parent_message_id: string; p_thread_title?: string }
+        Returns: string
+      }
       create_moderator_notification: {
         Args: {
           p_moderator_id: string
@@ -35001,6 +35440,10 @@ export type Database = {
         }
         Returns: string
       }
+      mark_message_read: {
+        Args: { p_message_id: string }
+        Returns: undefined
+      }
       mark_notification_read: {
         Args: { p_notification_id: string }
         Returns: boolean
@@ -35235,6 +35678,10 @@ export type Database = {
       }
       update_trending_search: {
         Args: { p_query: string }
+        Returns: undefined
+      }
+      update_user_presence: {
+        Args: { p_status: string; p_device_info?: Json }
         Returns: undefined
       }
       validate_password_strength: {
