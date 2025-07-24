@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { useMobileDetection } from '@/hooks/useMobileDetection'
 
 interface MobileContextType {
   isMobile: boolean
@@ -32,13 +31,70 @@ interface MobileProviderProps {
 }
 
 export const MobileProvider: React.FC<MobileProviderProps> = ({ children }) => {
-  const detection = useMobileDetection()
+  const [detection, setDetection] = useState<{
+    isMobile: boolean
+    isTablet: boolean
+    isDesktop: boolean
+    isIOS: boolean
+    isAndroid: boolean
+    isPWA: boolean
+    isStandalone: boolean
+    userAgent: string
+    screenSize: 'mobile' | 'tablet' | 'desktop'
+  }>({
+    isMobile: false,
+    isTablet: false,
+    isDesktop: true,
+    isIOS: false,
+    isAndroid: false,
+    isPWA: false,
+    isStandalone: false,
+    userAgent: '',
+    screenSize: 'desktop'
+  })
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait')
-  const [isOnline, setIsOnline] = useState(navigator.onLine)
+  const [isOnline, setIsOnline] = useState(typeof navigator !== 'undefined' ? navigator.onLine : true)
   const [connectionType, setConnectionType] = useState('unknown')
   const [showMobileUI, setShowMobileUI] = useState(true)
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    // Mobile detection
+    const detectMobile = () => {
+      const userAgent = navigator.userAgent
+      const isIOS = /iPad|iPhone|iPod/.test(userAgent)
+      const isAndroid = /Android/.test(userAgent)
+      const isMobile = /Mobi|Android/i.test(userAgent) || isIOS
+      const isTablet = /iPad/.test(userAgent) || (isAndroid && !/Mobile/.test(userAgent))
+      const isDesktop = !isMobile && !isTablet
+
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches ||
+                    (window.navigator as any).standalone === true ||
+                    document.referrer.includes('android-app://')
+
+      const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+
+      const getScreenSize = (): 'mobile' | 'tablet' | 'desktop' => {
+        const width = window.innerWidth
+        if (width < 768) return 'mobile'
+        if (width < 1024) return 'tablet'
+        return 'desktop'
+      }
+
+      setDetection({
+        isMobile,
+        isTablet,
+        isDesktop,
+        isIOS,
+        isAndroid,
+        isPWA,
+        isStandalone,
+        userAgent,
+        screenSize: getScreenSize()
+      })
+    }
+
     // Orientation detection
     const handleOrientationChange = () => {
       setOrientation(window.innerHeight > window.innerWidth ? 'portrait' : 'landscape')
@@ -57,11 +113,26 @@ export const MobileProvider: React.FC<MobileProviderProps> = ({ children }) => {
     }
 
     // Initial setup
+    detectMobile()
     handleOrientationChange()
     updateConnectionType()
 
+    // Resize handler for screen size changes
+    const handleResize = () => {
+      setDetection(prev => ({
+        ...prev,
+        screenSize: (() => {
+          const width = window.innerWidth
+          if (width < 768) return 'mobile'
+          if (width < 1024) return 'tablet'
+          return 'desktop'
+        })()
+      }))
+    }
+
     // Event listeners
     window.addEventListener('resize', handleOrientationChange)
+    window.addEventListener('resize', handleResize)
     window.addEventListener('orientationchange', handleOrientationChange)
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
@@ -74,6 +145,7 @@ export const MobileProvider: React.FC<MobileProviderProps> = ({ children }) => {
 
     return () => {
       window.removeEventListener('resize', handleOrientationChange)
+      window.removeEventListener('resize', handleResize)
       window.removeEventListener('orientationchange', handleOrientationChange)
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
