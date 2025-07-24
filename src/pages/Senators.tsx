@@ -330,33 +330,29 @@ export default function SenatorsPage() {
         </div>
 
         {/* Senators Grid */}
-        {isLoading ? (
-          <div className="flex items-center justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-          </div>
-        ) : sortedSenators.length === 0 ? (
-          <div className="text-center py-12">
-            <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-foreground mb-2">
-              {searchTerm || filterRegion !== 'all' || filterParty !== 'all' || filterPosition !== 'all' || transparencyFilter !== 'all' 
-                ? 'No senators match your filters' 
-                : 'No senators available'
-              }
-            </h3>
-            <p className="text-muted-foreground">
-              {searchTerm || filterRegion !== 'all' || filterParty !== 'all' || filterPosition !== 'all' || transparencyFilter !== 'all'
-                ? 'Try adjusting your search criteria or clearing filters' 
-                : 'Senate data will be imported soon'
-              }
-            </p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {sortedSenators.map((senator) => (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {isLoading ? (
+            Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="bg-muted rounded-xl aspect-square mb-4" />
+                <div className="space-y-2">
+                  <div className="h-4 bg-muted rounded w-3/4" />
+                  <div className="h-3 bg-muted rounded w-1/2" />
+                </div>
+              </div>
+            ))
+          ) : sortedSenators.length === 0 ? (
+            <div className="col-span-full text-center py-12">
+              <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-foreground mb-2">No senators found</h3>
+              <p className="text-muted-foreground">Try adjusting your search criteria</p>
+            </div>
+          ) : (
+            sortedSenators.map((senator) => (
               <EnhancedSenatorCard key={senator.id} senator={senator} />
-            ))}
-          </div>
-        )}
+            ))
+          )}
+        </div>
       </div>
     </AppLayout>
   );
