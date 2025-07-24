@@ -143,6 +143,10 @@ import SenatorsPage from "./pages/Senators";
 import SenatorProfilePage from "./pages/SenatorProfilePage";
 import MPsPage from "./pages/MPsPage";
 import MinistersPage from "./pages/MinistersPage";
+import { MPDetailPage } from "./pages/MPDetailPage";
+import { MinisterDetailPage } from "./pages/MinisterDetailPage";
+import { PoliticianDetailPage } from "./pages/PoliticianDetailPage";
+import { SenatorDetailPage } from "./pages/SenatorDetailPage";
 import AdminDataImport from "./pages/AdminDataImport";
 import AuditRegistryPage from "./pages/AuditRegistryPage";
 
@@ -196,10 +200,13 @@ const App = () => {
               <Route path="/feed" element={<Feed />} />
               <Route path="/civic-feed" element={<CivicFeed />} />
               <Route path="/politicians" element={<Politicians />} />
+              <Route path="/politicians/:id" element={<PoliticianDetailPage />} />
               <Route path="/senators" element={<SenatorsPage />} />
-              <Route path="/senators/:id" element={<SenatorProfilePage />} />
+              <Route path="/senators/:id" element={<SenatorDetailPage />} />
               <Route path="/mps" element={<MPsPage />} />
+              <Route path="/mps/:id" element={<MPDetailPage />} />
               <Route path="/ministers" element={<MinistersPage />} />
+              <Route path="/ministers/:id" element={<MinisterDetailPage />} />
               <Route path="/admin/data-import" element={<AdminDataImport />} />
               <Route path="/audit-registry" element={<AuditRegistryPage />} />
               <Route path="/security" element={<Security />} />
