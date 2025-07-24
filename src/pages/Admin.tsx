@@ -212,119 +212,27 @@ const Admin = () => {
 
           <Tabs value={selectedTab} onValueChange={setSelectedTab}>
             <ScrollArea className="w-full">
-              <TabsList className="mb-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-1 h-auto p-1">
+              <TabsList className="mb-8 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-1 h-auto p-1">
                 <TabsTrigger value="overview" className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
                   Overview
                 </TabsTrigger>
-                <TabsTrigger value="security" className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  Security
-                </TabsTrigger>
-                <TabsTrigger value="users" className="flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  Users
-                </TabsTrigger>
-                <TabsTrigger value="politicians" className="flex items-center gap-2">
-                  <UserCheck className="h-4 w-4" />
-                  Politicians
-                </TabsTrigger>
-                <TabsTrigger value="term-validation" className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  Term Validation
-                </TabsTrigger>
-                <TabsTrigger value="marketplace" className="flex items-center gap-2">
-                  <ShoppingBag className="h-4 w-4" />
-                  Marketplace
-                </TabsTrigger>
-                <TabsTrigger value="ai-control" className="flex items-center gap-2">
-                  <Bot className="h-4 w-4" />
-                  Politica AI
-                </TabsTrigger>
-                <TabsTrigger value="civic-intelligence" className="flex items-center gap-2">
-                  <Activity className="h-4 w-4" />
-                  Civic Intelligence
-                </TabsTrigger>
-                <TabsTrigger value="news" className="flex items-center gap-2">
-                  <Newspaper className="h-4 w-4" />
-                  News
-                </TabsTrigger>
-                <TabsTrigger value="finance" className="flex items-center gap-2">
-                  <DollarSign className="h-4 w-4" />
-                  Finance
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
-                  Analytics
-                </TabsTrigger>
-                <TabsTrigger value="moderation" className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  Moderation
-                </TabsTrigger>
-                <TabsTrigger value="themes" className="flex items-center gap-2">
-                  <Monitor className="h-4 w-4" />
-                  Themes
-                </TabsTrigger>
-                <TabsTrigger value="comprehensive-admin" className="flex items-center gap-2">
+                <TabsTrigger value="feature-control" className="flex items-center gap-2">
                   <Settings className="h-4 w-4" />
                   Feature Control Center
                 </TabsTrigger>
-                <TabsTrigger value="health" className="flex items-center gap-2">
-                  <Activity className="h-4 w-4" />
-                  System Health
+                <TabsTrigger value="plugins" className="flex items-center gap-2">
+                  <Puzzle className="h-4 w-4" />
+                  Plugin Manager
                 </TabsTrigger>
-                <TabsTrigger value="settings" className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  System Settings
+                <TabsTrigger value="users" className="flex items-center gap-2">
+                  <Users className="h-4 w-4" />
+                  User Management
                 </TabsTrigger>
-                <TabsTrigger value="pan-africa" className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
-                  Pan-Africa
+                <TabsTrigger value="security" className="flex items-center gap-2">
+                  <Shield className="h-4 w-4" />
+                  Security & Health
                 </TabsTrigger>
-                <TabsTrigger value="civic-control" className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  Portal Control
-                </TabsTrigger>
-                <TabsTrigger value="localization" className="flex items-center gap-2">
-                  <Languages className="h-4 w-4" />
-                  Localization
-                </TabsTrigger>
-                 <TabsTrigger value="cache-management" className="flex items-center gap-2">
-                   <Database className="h-4 w-4" />
-                   Cache Management
-                 </TabsTrigger>
-                 <TabsTrigger value="system-health" className="flex items-center gap-2">
-                   <Activity className="h-4 w-4" />
-                   System Health
-                 </TabsTrigger>
-                 <TabsTrigger value="ashen-debug" className="flex items-center gap-2">
-                   <Bot className="h-4 w-4" />
-                   Ashen Debug
-                 </TabsTrigger>
-                  <TabsTrigger value="code-health" className="flex items-center gap-2">
-                    <FileCode className="h-4 w-4" />
-                    Code Health
-                  </TabsTrigger>
-                  <TabsTrigger value="ux-simulation" className="flex items-center gap-2">
-                    <Activity className="h-4 w-4" />
-                    UX Simulation
-                  </TabsTrigger>
-                  <TabsTrigger value="activity-timeline" className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Activity Timeline
-                  </TabsTrigger>
-                  <TabsTrigger value="integrity-monitor" className="flex items-center gap-2">
-                    <Shield className="h-4 w-4" />
-                    Ashen Quill
-                  </TabsTrigger>
-                  <TabsTrigger value="civic-learning" className="flex items-center gap-2">
-                    <BookOpen className="h-4 w-4" />
-                    Civic Learning
-                  </TabsTrigger>
-                  <TabsTrigger value="plugins" className="flex items-center gap-2">
-                    <Puzzle className="h-4 w-4" />
-                    Plugin Manager
-                  </TabsTrigger>
               </TabsList>
             </ScrollArea>
 
@@ -1357,8 +1265,8 @@ const Admin = () => {
               </div>
             </TabsContent>
 
-            {/* NEW: Comprehensive Admin Panel */}
-            <TabsContent value="comprehensive-admin">
+            {/* Feature Control Center Tab */}
+            <TabsContent value="feature-control">
               <div className="space-y-6">
                 {/* System Overview */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

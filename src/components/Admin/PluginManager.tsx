@@ -138,21 +138,27 @@ const PluginManager: React.FC = () => {
     const plugin = plugins.find(p => p.id === pluginId);
     
     if (plugin?.isCore && !newState) {
-      alert('Core plugins cannot be disabled as they are essential for platform functionality.');
+      alert('❌ Core plugins cannot be disabled as they are essential for platform functionality.');
       return;
     }
 
+    // Update the plugin state
     setPlugins(prev => prev.map(p => 
       p.id === pluginId 
         ? { ...p, isEnabled: newState, status: newState ? 'active' : 'inactive' }
         : p
     ));
 
-    // Show success message
-    alert(`Plugin ${plugin?.name} has been ${newState ? 'enabled' : 'disabled'} successfully!`);
+    // Show success message with plugin name
+    const pluginName = plugin?.name || pluginId;
+    if (newState) {
+      alert(`✅ ${pluginName} has been ENABLED successfully! The feature is now active.`);
+    } else {
+      alert(`⚠️ ${pluginName} has been DISABLED successfully! The feature is now inactive.`);
+    }
 
     // Here you would call your actual plugin management API
-    console.log(`Plugin ${pluginId} ${newState ? 'enabled' : 'disabled'}`);
+    console.log(`🔧 Plugin ${pluginId} (${pluginName}) ${newState ? 'enabled' : 'disabled'}`);
   };
 
   const getCategoryIcon = (category: string) => {
