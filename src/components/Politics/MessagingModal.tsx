@@ -1,42 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
-import {
-  Send,
-  Paperclip,
-  Smile,
-  Phone,
-  VideoIcon,
+import { 
+  Send, 
+  Paperclip, 
+  Smile, 
+  Phone, 
+  Video, 
   MoreVertical,
-  CheckCheck,
-  Clock,
-  MessageSquare
+  Check,
+  CheckCheck
 } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { cn } from '@/lib/utils';
 
 interface Message {
   id: string;
   content: string;
-  sender_id: string;
-  created_at: string;
-  is_read: boolean;
+  sender: 'user' | 'recipient';
+  timestamp: Date;
+  read: boolean;
 }
 
 interface MessagingModalProps {
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
   recipientId: string;
   recipientName: string;
@@ -44,92 +33,62 @@ interface MessagingModalProps {
 }
 
 export const MessagingModal: React.FC<MessagingModalProps> = ({
-  isOpen,
+  open,
   onClose,
   recipientId,
   recipientName,
   recipientType
 }) => {
-  const { user } = useAuth();
   const { toast } = useToast();
-  const [message, setMessage] = useState('');
+  const [currentMessage, setCurrentMessage] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
 
   const getInitials = (name: string) => {
-    return name
-      .split(' ')
-      .map(n => n[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2);
+    return name.split(' ').map(n => n[0]).join('');
   };
 
   const loadMessages = async () => {
-    if (!user) return;
-
-    try {
-      // For demo purposes, we'll create some sample messages
-      // In production, this would fetch from a real messages table
-      const sampleMessages: Message[] = [
-        {
-          id: '1',
-          content: `Hello ${recipientName}, I hope this message finds you well. I wanted to reach out regarding...`,
-          sender_id: user.id,
-          created_at: new Date(Date.now() - 86400000).toISOString(), // 1 day ago
-          is_read: true
-        },
-        {
-          id: '2',
-          content: 'Thank you for your message. I appreciate your interest in civic engagement. I will review your concerns and get back to you soon.',
-          sender_id: recipientId,
-          created_at: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
-          is_read: false
-        }
-      ];
-      
-      setMessages(sampleMessages);
-    } catch (error) {
-      console.error('Error loading messages:', error);
-    }
+    // TODO: Load messages from database
+    // For now, add some sample messages
+    const sampleMessages: Message[] = [
+      {
+        id: '1',
+        content: 'Hello! Thank you for reaching out. How can I assist you today?',
+        sender: 'recipient',
+        timestamp: new Date(Date.now() - 3600000),
+        read: true
+      }
+    ];
+    setMessages(sampleMessages);
   };
 
   const sendMessage = async () => {
-    if (!message.trim() || !user) return;
+    if (!currentMessage.trim()) return;
 
     setLoading(true);
     try {
-      // For demo purposes, we'll add the message locally
-      // In production, this would save to the database
       const newMessage: Message = {
         id: Date.now().toString(),
-        content: message.trim(),
-        sender_id: user.id,
-        created_at: new Date().toISOString(),
-        is_read: false
+        content: currentMessage,
+        sender: 'user',
+        timestamp: new Date(),
+        read: false
       };
 
       setMessages(prev => [...prev, newMessage]);
-      setMessage('');
+      setCurrentMessage('');
 
+      // TODO: Send message to database
       toast({
-        title: "Message Sent",
+        title: "Message sent",
         description: `Your message has been sent to ${recipientName}`,
       });
-
-      // Scroll to bottom
-      setTimeout(() => {
-        if (scrollAreaRef.current) {
-          scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
-        }
-      }, 100);
-
     } catch (error) {
-      console.error('Error sending message:', error);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: "Failed to send message",
         variant: "destructive"
       });
     } finally {
@@ -145,143 +104,123 @@ export const MessagingModal: React.FC<MessagingModalProps> = ({
   };
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       loadMessages();
     }
-  }, [isOpen]);
+  }, [open]);
 
-  if (!user) {
-    return null;
-  }
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-lg h-[600px] flex flex-col p-0">
-        {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b">
-          <div className="flex items-center space-x-3">
-            <Avatar className="h-10 w-10">
-              <AvatarImage src="" alt={recipientName} />
-              <AvatarFallback className="bg-primary/10 text-primary font-semibold">
-                {getInitials(recipientName)}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h3 className="font-semibold text-sm">{recipientName}</h3>
-              <div className="flex items-center space-x-2">
-                <Badge variant="secondary" className="text-xs">
-                  {recipientType.charAt(0).toUpperCase() + recipientType.slice(1)}
-                </Badge>
-                <span className="text-xs text-green-600">● Online</span>
+    <Dialog open={open} onOpenChange={onClose}>
+      <DialogContent className="max-w-lg h-[600px] p-0 gap-0">
+        <DialogHeader className="px-6 py-4 border-b">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Avatar className="h-10 w-10">
+                <AvatarImage src="" />
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  {getInitials(recipientName)}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <DialogTitle className="text-left">{recipientName}</DialogTitle>
+                <p className="text-sm text-muted-foreground capitalize">{recipientType}</p>
               </div>
             </div>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm">
+                <Phone className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <Video className="h-4 w-4" />
+              </Button>
+              <Button variant="ghost" size="sm">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
-          
-          <div className="flex items-center space-x-1">
-            <Button variant="ghost" size="sm">
-              <Phone className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <VideoIcon className="h-4 w-4" />
-            </Button>
-            <Button variant="ghost" size="sm">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
+        </DialogHeader>
 
-        {/* Messages Area */}
-        <ScrollArea className="flex-1 p-4" ref={scrollAreaRef}>
-          <div className="space-y-4">
-            {messages.length === 0 ? (
-              <div className="text-center text-muted-foreground text-sm py-8">
-                <MessageSquare className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                <p>No messages yet. Start the conversation!</p>
-              </div>
-            ) : (
-              messages.map((msg) => (
+        <ScrollArea className="flex-1 px-6 py-4" ref={scrollAreaRef}>
+          {messages.length === 0 ? (
+            <div className="text-center text-muted-foreground py-8">
+              <p>No messages yet. Start the conversation!</p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {messages.map((message) => (
                 <div
-                  key={msg.id}
-                  className={cn(
-                    "flex",
-                    msg.sender_id === user.id ? "justify-end" : "justify-start"
-                  )}
+                  key={message.id}
+                  className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={cn(
-                      "max-w-[70%] rounded-lg px-3 py-2 text-sm",
-                      msg.sender_id === user.id
-                        ? "bg-green-600 text-white"
-                        : "bg-muted text-foreground"
-                    )}
+                    className={`max-w-[70%] rounded-lg px-3 py-2 ${
+                      message.sender === 'user'
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-muted'
+                    }`}
                   >
-                    <p>{msg.content}</p>
-                    <div
-                      className={cn(
-                        "flex items-center justify-end mt-1 space-x-1 text-xs",
-                        msg.sender_id === user.id
-                          ? "text-green-100"
-                          : "text-muted-foreground"
-                      )}
-                    >
-                      <span>
-                        {new Date(msg.created_at).toLocaleTimeString([], {
-                          hour: '2-digit',
-                          minute: '2-digit'
+                    <p className="text-sm">{message.content}</p>
+                    <div className={`flex items-center gap-1 mt-1 ${
+                      message.sender === 'user' ? 'justify-end' : 'justify-start'
+                    }`}>
+                      <span className="text-xs opacity-70">
+                        {message.timestamp.toLocaleTimeString([], { 
+                          hour: '2-digit', 
+                          minute: '2-digit' 
                         })}
                       </span>
-                      {msg.sender_id === user.id && (
-                        <div>
-                          {msg.is_read ? (
+                      {message.sender === 'user' && (
+                        <div className="text-xs opacity-70">
+                          {message.read ? (
                             <CheckCheck className="h-3 w-3" />
                           ) : (
-                            <Clock className="h-3 w-3" />
+                            <Check className="h-3 w-3" />
                           )}
                         </div>
                       )}
                     </div>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
+              ))}
+            </div>
+          )}
         </ScrollArea>
 
-        {/* Message Input */}
         <div className="p-4 border-t">
-          <div className="flex items-end space-x-2">
-            <div className="flex-1 space-y-2">
+          <div className="flex items-end gap-2">
+            <div className="flex-1">
               <Textarea
-                placeholder={`Message ${recipientName}...`}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
+                placeholder="Type your message..."
+                value={currentMessage}
+                onChange={(e) => setCurrentMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 className="min-h-[40px] max-h-[120px] resize-none"
                 rows={1}
               />
             </div>
-            
-            <div className="flex items-center space-x-1">
-              <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
+            <div className="flex gap-1">
+              <Button variant="ghost" size="sm">
                 <Paperclip className="h-4 w-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="h-10 w-10 p-0">
+              <Button variant="ghost" size="sm">
                 <Smile className="h-4 w-4" />
               </Button>
-              <Button
+              <Button 
                 size="sm"
                 onClick={sendMessage}
-                disabled={!message.trim() || loading}
-                className="bg-green-600 hover:bg-green-700 text-white h-10 w-10 p-0"
+                disabled={!currentMessage.trim() || loading}
+                className="bg-[#28a745] hover:bg-[#218838] text-white"
               >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
           </div>
-          
-          <p className="text-xs text-muted-foreground mt-2">
-            Messages are encrypted and secure. Response time may vary.
-          </p>
         </div>
       </DialogContent>
     </Dialog>

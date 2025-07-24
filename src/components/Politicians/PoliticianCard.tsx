@@ -15,6 +15,8 @@ import {
   MessageSquare,
   ExternalLink
 } from 'lucide-react';
+import { MessagingModal } from '@/components/Politics/MessagingModal';
+import { useState } from 'react';
 
 interface PoliticianProps {
   id: string;
@@ -42,6 +44,8 @@ interface PoliticianProps {
 }
 
 export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) => {
+  const [showMessaging, setShowMessaging] = useState(false);
+  
   const getApprovalColor = (rating: number) => {
     if (rating >= 70) return 'bg-cm-green';
     if (rating >= 50) return 'bg-cm-yellow';
@@ -194,7 +198,12 @@ export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) 
 
         {/* Actions */}
         <div className="flex gap-2">
-          <Button variant="outline" size="sm" className="flex-1">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex-1 bg-[#28a745] hover:bg-[#218838] text-white border-[#28a745]"
+            onClick={() => setShowMessaging(true)}
+          >
             <MessageSquare className="w-4 h-4 mr-2" />
             Message
           </Button>
@@ -204,6 +213,14 @@ export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) 
             View Profile
           </Button>
         </div>
+
+        <MessagingModal
+          open={showMessaging}
+          onClose={() => setShowMessaging(false)}
+          recipientId={politician.id}
+          recipientName={politician.name}
+          recipientType="politician"
+        />
 
         {/* Last Active */}
         {politician.lastActive && (

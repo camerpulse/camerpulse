@@ -267,7 +267,7 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
       {/* Messaging Modal */}
       {showMessaging && (
         <MessagingModal
-          isOpen={showMessaging}
+          open={showMessaging}
           onClose={() => setShowMessaging(false)}
           recipientId={id}
           recipientName={name}
