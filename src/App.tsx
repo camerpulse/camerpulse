@@ -55,7 +55,7 @@ import { UserModerationTools } from "./components/Admin/UserModerationTools";
 import { TenderApprovalWorkflow } from "./components/Admin/TenderApprovalWorkflow";
 import { MobileAppFeatures } from "./components/ui/mobile-app-features";
 import { EnhancedTenderList } from "./components/enhanced/EnhancedTenderList";
-import CamerTendersHome from "./pages/CamerTendersHome";
+import TendersHomePage from "./pages/TendersHomePage";
 
 const queryClient = new QueryClient();
 
@@ -101,7 +101,7 @@ const App = () => {
                       <Route path="pharmacies" element={<PharmaciesPage />} />
                       <Route path="legislation" element={<LegislationTracker />} />
                       <Route path="hospitals" element={<HospitalsDirectory />} />
-                      <Route path="tenders" element={<CamerTendersHome />} />
+                      <Route path="tenders" element={<TendersHomePage />} />
                       <Route path="tenders/list" element={<Tenders />} />
                       <Route path="tenders/create" element={<CreateTender />} />
                       <Route path="tenders/:id" element={<TenderDetail />} />
@@ -109,7 +109,8 @@ const App = () => {
                       <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
                       <Route path="dashboard" element={<UserDashboard />} />
                       <Route path="business-logic" element={<BusinessLogicDashboard />} />
-                      <Route path="admin/tenders" element={<CamertendersAdminPanel />} />
+                       <Route path="admin" element={<CamertendersAdminPanel />} />
+                       <Route path="admin/tenders" element={<CamertendersAdminPanel />} />
                       <Route path="tenders/watchlist" element={<CivicTenderWatchlist />} />
                       <Route path="tender-management" element={<TenderManagementDashboard />} />
                       <Route path="user-management" element={<UserManagementDashboard />} />
