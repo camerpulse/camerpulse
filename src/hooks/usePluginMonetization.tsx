@@ -218,13 +218,8 @@ export const useTrackUsage = () => {
 
       if (logError) throw logError;
 
-      // Update usage count
-      const { error: updateError } = await supabase.rpc(
-        'increment_usage_count',
-        { license_key_id: licenseKeyId }
-      );
-
-      if (updateError) throw updateError;
+      // TODO: Implement usage count tracking when needed
+      // For now, skip usage count increment as the function doesn't exist yet
     },
     onError: (error) => {
       toast({

@@ -77,25 +77,9 @@ const TenderDetail = () => {
 
   const fetchTenderDetails = async () => {
     try {
-      const { data: tenderData, error: tenderError } = await supabase
-        .from('tenders')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (tenderError) throw tenderError;
-      setTender(tenderData);
-
-      // Fetch bids for tender owners/admins
-      const { data: bidsData, error: bidsError } = await supabase
-        .from('tender_bids')
-        .select('*')
-        .eq('tender_id', id)
-        .order('submitted_at', { ascending: false });
-
-      if (!bidsError) {
-        setBids(bidsData || []);
-      }
+      // TODO: Implement tender functionality when tables are created
+      console.log('Tender functionality not yet implemented - tables missing');
+      toast.error('Tender functionality is not yet available');
     } catch (error) {
       console.error('Error fetching tender details:', error);
       toast.error('Failed to load tender details');
@@ -106,19 +90,8 @@ const TenderDetail = () => {
 
   const incrementViewCount = async () => {
     try {
-      // Get current tender to increment view count
-      const { data: currentTender } = await supabase
-        .from('tenders')
-        .select('views_count')
-        .eq('id', id)
-        .single();
-
-      if (currentTender) {
-        await supabase
-          .from('tenders')
-          .update({ views_count: (currentTender.views_count || 0) + 1 })
-          .eq('id', id);
-      }
+      // TODO: Implement view count when tender tables are created
+      console.log('View count functionality not yet implemented');
     } catch (error) {
       console.error('Error incrementing view count:', error);
     }

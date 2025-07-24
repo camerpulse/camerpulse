@@ -80,26 +80,9 @@ const Tenders = () => {
 
   const fetchTenders = async () => {
     try {
-      let query = supabase
-        .from('tenders')
-        .select('*')
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
-
-      if (selectedType !== 'all') {
-        query = query.eq('tender_type', selectedType);
-      }
-      if (selectedCategory !== 'all') {
-        query = query.eq('category', selectedCategory);
-      }
-      if (selectedRegion !== 'all') {
-        query = query.eq('region', selectedRegion);
-      }
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-      setTenders(data || []);
+      // TODO: Implement tender functionality when tables are created
+      console.log('Tender functionality not yet implemented - tables missing');
+      setTenders([]); // Set empty array for now
     } catch (error) {
       console.error('Error fetching tenders:', error);
       toast.error('Failed to load tenders');
