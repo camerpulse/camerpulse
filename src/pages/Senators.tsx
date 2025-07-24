@@ -12,7 +12,7 @@ import {
   Loader2, Search, Download, Users, Filter, Star, 
   TrendingUp, Award, Shield, CheckCircle, AlertTriangle 
 } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 
 export default function SenatorsPage() {

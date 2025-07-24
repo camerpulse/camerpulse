@@ -16,7 +16,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { useRateSenator, useUserSenatorRating } from '@/hooks/useSenators';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 
 const ratingSchema = z.object({
   overall_rating: z.number().min(1).max(5),

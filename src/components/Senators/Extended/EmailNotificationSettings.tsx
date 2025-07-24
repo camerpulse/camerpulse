@@ -15,7 +15,7 @@ import {
   Info
 } from 'lucide-react';
 import { useEmailNotifications, EmailPreferences } from '@/hooks/useEmailNotifications';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface EmailNotificationTestProps {
   onClose?: () => void;
