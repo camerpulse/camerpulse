@@ -27,7 +27,7 @@ interface ReputationData {
 
 interface RelatedActivity {
   id: string;
-  type: 'petition' | 'tender' | 'project' | 'complaint';
+  type: 'petition' | 'project' | 'complaint';
   title: string;
   status: string;
   created_at: string;
@@ -88,7 +88,7 @@ export function EntityReputationProfile({
         },
         {
           id: '2',
-          type: 'tender',
+          type: 'project',
           title: 'Road Construction Project - North Route',
           status: 'awarded',
           created_at: new Date(Date.now() - 1209600000).toISOString(),
@@ -113,7 +113,7 @@ export function EntityReputationProfile({
   const getActivityIcon = (type: string) => {
     switch (type) {
       case 'petition': return <FileText className="h-4 w-4" />;
-      case 'tender': return <Shield className="h-4 w-4" />;
+      case 'project': return <Shield className="h-4 w-4" />;
       case 'project': return <Shield className="h-4 w-4" />;
       case 'complaint': return <AlertTriangle className="h-4 w-4" />;
       default: return <FileText className="h-4 w-4" />;

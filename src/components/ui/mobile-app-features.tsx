@@ -26,7 +26,7 @@ export const MobileAppFeatures: React.FC = () => {
     {
       id: 'camera',
       name: 'Camera Access',
-      description: 'Take photos for tender submissions and verification',
+      description: 'Take photos for document submissions and verification',
       icon: Camera,
       available: true,
       status: 'supported'
@@ -34,7 +34,7 @@ export const MobileAppFeatures: React.FC = () => {
     {
       id: 'notifications',
       name: 'Push Notifications',
-      description: 'Real-time alerts for tender updates and deadlines',
+      description: 'Real-time alerts for civic updates and deadlines',
       icon: Bell,
       available: true,
       status: 'supported'
@@ -42,7 +42,7 @@ export const MobileAppFeatures: React.FC = () => {
     {
       id: 'geolocation',
       name: 'Location Services',
-      description: 'Auto-detect location for local tenders',
+      description: 'Auto-detect location for local civic engagement',
       icon: MapPin,
       available: true,
       status: 'supported'
@@ -58,7 +58,7 @@ export const MobileAppFeatures: React.FC = () => {
     {
       id: 'offline',
       name: 'Offline Support',
-      description: 'View cached tenders when offline',
+      description: 'View cached content when offline',
       icon: WifiOff,
       available: true,
       status: 'limited'
@@ -66,7 +66,7 @@ export const MobileAppFeatures: React.FC = () => {
     {
       id: 'sharing',
       name: 'Native Sharing',
-      description: 'Share tenders via system share sheet',
+      description: 'Share content via system share sheet',
       icon: Share,
       available: true,
       status: 'supported'
@@ -104,7 +104,7 @@ export const MobileAppFeatures: React.FC = () => {
             });
             toast({
               title: "Notifications Enabled",
-              description: "You'll receive tender updates and alerts.",
+              description: "You'll receive civic updates and alerts.",
             });
           }
         }
@@ -134,8 +134,8 @@ export const MobileAppFeatures: React.FC = () => {
         if ('share' in navigator) {
           try {
             await (navigator as any).share({
-              title: 'CamerPulse - Tender Platform',
-              text: 'Check out this innovative tender platform for Cameroon',
+              title: 'CamerPulse - Civic Platform',
+              text: 'Check out this innovative civic engagement platform for Cameroon',
               url: window.location.href
             });
             toast({

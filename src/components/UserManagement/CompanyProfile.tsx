@@ -138,7 +138,7 @@ export const CompanyProfile: React.FC = () => {
               Create Company Profile
             </CardTitle>
             <CardDescription>
-              Create a company profile to participate in the tender platform
+              Create a company profile to participate in civic initiatives
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center">

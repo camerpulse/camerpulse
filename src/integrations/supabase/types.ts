@@ -33968,36 +33968,6 @@ export type Database = {
         }
         Relationships: []
       }
-      wallet_transactions: {
-        Row: {
-          amount: number
-          created_at: string | null
-          description: string | null
-          id: string
-          reference_id: string | null
-          transaction_type: string
-          user_id: string
-        }
-        Insert: {
-          amount: number
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          reference_id?: string | null
-          transaction_type: string
-          user_id: string
-        }
-        Update: {
-          amount?: number
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          reference_id?: string | null
-          transaction_type?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       whatsapp_message_logs: {
         Row: {
           delivered_at: string | null
@@ -34254,14 +34224,6 @@ export type Database = {
         Args: { application_id: string }
         Returns: Json
       }
-      assign_license_key: {
-        Args: {
-          p_license_id: string
-          p_user_id: string
-          p_trial_mode?: boolean
-        }
-        Returns: string
-      }
       auto_assign_moderator: {
         Args: { p_submission_id: string; p_region: string }
         Returns: string
@@ -34327,10 +34289,6 @@ export type Database = {
       }
       calculate_civic_score: {
         Args: { p_user_id: string }
-        Returns: number
-      }
-      calculate_commission: {
-        Args: { amount: number; gateway_name: string }
         Returns: number
       }
       calculate_connection_fee: {
@@ -34609,10 +34567,6 @@ export type Database = {
         Args: { job_title: string; company_name: string }
         Returns: string
       }
-      generate_license_key: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
       generate_protection_alias: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -34756,10 +34710,6 @@ export type Database = {
         }
         Returns: boolean
       }
-      increment_usage_count: {
-        Args: { license_key_id: string }
-        Returns: undefined
-      }
       learn_from_manual_fix: {
         Args: {
           p_file_path: string
@@ -34838,14 +34788,6 @@ export type Database = {
           p_result_data?: Json
         }
         Returns: string
-      }
-      process_payment_success: {
-        Args: {
-          p_purchase_id: string
-          p_transaction_id: string
-          p_payment_data?: Json
-        }
-        Returns: undefined
       }
       process_wallet_transaction: {
         Args: {

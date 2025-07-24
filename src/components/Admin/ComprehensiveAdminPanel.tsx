@@ -383,7 +383,7 @@ const ComprehensiveAdminPanel: React.FC = () => {
         isEnabled: true,
         isCore: false,
         routes: ['/ratings'],
-        components: ['TenderRatingsPage', 'ReviewSystem', 'RatingAnalytics'],
+        components: ['CivicRatingsPage', 'ReviewSystem', 'RatingAnalytics'],
         icon: <Star className="h-4 w-4" />,
         version: '2.0.0',
         lastUpdated: '2024-01-19',

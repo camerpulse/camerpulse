@@ -59,7 +59,7 @@ export const UserDashboard = () => {
     if (!user) return
 
     try {
-      // For now, set default stats since we're focusing on removing tender references
+      // Default stats for civic engagement dashboard
       // This can be enhanced later with actual poll data
       setStats({ 
         totalPolls: 0, 
