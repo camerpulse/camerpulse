@@ -305,32 +305,72 @@ const CamerPulseHome = () => {
               </Card>
             </Link>
             
-            <Link to="/schools" className="block">
-              <Card className="hover:shadow-lg transition-shadow">
-                <CardContent className="p-6 text-center">
-                  <Building className="h-8 w-8 mx-auto mb-3 text-primary" />
-                  <h3 className="font-semibold mb-2">Schools</h3>
-                  <p className="text-sm text-muted-foreground">Educational institutions directory</p>
-                </CardContent>
-              </Card>
-            </Link>
-            
-            <Link to="/hospitals" className="block">
+            <Link to="/camerplay" className="block">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
                   <Heart className="h-8 w-8 mx-auto mb-3 text-primary" />
-                  <h3 className="font-semibold mb-2">Hospitals</h3>
-                  <p className="text-sm text-muted-foreground">Healthcare facilities directory</p>
+                  <h3 className="font-semibold mb-2">CamerPlay</h3>
+                  <p className="text-sm text-muted-foreground">Music streaming & artist platform</p>
                 </CardContent>
               </Card>
             </Link>
             
-            <Link to="/jobs" className="block">
+            <Link to="/billionaires" className="block">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6 text-center">
+                  <TrendingUp className="h-8 w-8 mx-auto mb-3 text-primary" />
+                  <h3 className="font-semibold mb-2">Wealth Tracker</h3>
+                  <p className="text-sm text-muted-foreground">Billionaires & wealth monitoring</p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link to="/villages" className="block">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6 text-center">
+                  <MapPin className="h-8 w-8 mx-auto mb-3 text-primary" />
+                  <h3 className="font-semibold mb-2">Villages</h3>
+                  <p className="text-sm text-muted-foreground">Comprehensive village registry</p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link to="/pulse-messenger" className="block">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6 text-center">
+                  <MessageCircle className="h-8 w-8 mx-auto mb-3 text-primary" />
+                  <h3 className="font-semibold mb-2">Pulse Messenger</h3>
+                  <p className="text-sm text-muted-foreground">Secure civic communication</p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link to="/ratings" className="block">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6 text-center">
+                  <Shield className="h-8 w-8 mx-auto mb-3 text-primary" />
+                  <h3 className="font-semibold mb-2">Rating System</h3>
+                  <p className="text-sm text-muted-foreground">Civic credibility & reviews</p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link to="/mayors" className="block">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
                   <Users className="h-8 w-8 mx-auto mb-3 text-primary" />
-                  <h3 className="font-semibold mb-2">Jobs</h3>
-                  <p className="text-sm text-muted-foreground">Employment opportunities</p>
+                  <h3 className="font-semibold mb-2">Mayor Rankings</h3>
+                  <p className="text-sm text-muted-foreground">Trusted mayor leaderboards</p>
+                </CardContent>
+              </Card>
+            </Link>
+            
+            <Link to="/laws" className="block">
+              <Card className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6 text-center">
+                  <Scale className="h-8 w-8 mx-auto mb-3 text-primary" />
+                  <h3 className="font-semibold mb-2">Civic Education</h3>
+                  <p className="text-sm text-muted-foreground">Constitution & rights learning</p>
                 </CardContent>
               </Card>
             </Link>

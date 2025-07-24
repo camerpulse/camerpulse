@@ -74,6 +74,9 @@ import BillionaireTracker from "./pages/BillionaireTracker";
 import CamerPlayEvents from "./pages/CamerPlayEvents";
 import EventCalendarPage from "./pages/EventCalendarPage";
 import MessengerPage from "./pages/MessengerPage";
+import TenderRatingsPage from "./pages/TenderRatingsPage";
+import CivicEducationHub from "./pages/CivicEducationHub";
+import CivicShield from "./pages/CivicShield";
 
 // Missing page imports that need to be created
 const ChurchesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Churches Directory</h1><p>Coming soon...</p></div>;
@@ -86,8 +89,6 @@ const CouncilsPage = () => <div className="container mx-auto px-4 py-8"><h1 clas
 const ProjectsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Government Projects</h1><p>Coming soon...</p></div>;
 const PetitionsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Petitions</h1><p>Coming soon...</p></div>;
 const ComplaintsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Complaints</h1><p>Coming soon...</p></div>;
-const RatingsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Ratings & Reviews</h1><p>Coming soon...</p></div>;
-const GovernmentHierarchyPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Government Hierarchy</h1><p>Coming soon...</p></div>;
 const FAQsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">FAQs</h1><p>Coming soon...</p></div>;
 const ContactPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Contact</h1><p>Coming soon...</p></div>;
 const PartnershipsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Partnerships</h1><p>Coming soon...</p></div>;
@@ -164,15 +165,15 @@ const App = () => {
                         <Route path="councils" element={<CouncilsPage />} />
                         <Route path="projects" element={<ProjectsPage />} />
                        
-                       {/* Civic Tools */}
+                        {/* Civic Tools */}
                         <Route path="petitions" element={<PetitionsPage />} />
                         <Route path="complaints" element={<ComplaintsPage />} />
-                        <Route path="ratings" element={<RatingsPage />} />
+                        <Route path="ratings" element={<TenderRatingsPage />} />
                         <Route path="pulse-messenger" element={<MessengerPage />} />
                         
                         {/* Knowledge */}
-                        <Route path="laws" element={<LegislationTracker />} />
-                       <Route path="government-hierarchy" element={<GovernmentHierarchyPage />} />
+                        <Route path="laws" element={<CivicEducationHub />} />
+                        <Route path="government-hierarchy" element={<CivicShield />} />
                        <Route path="faqs" element={<FAQsPage />} />
                        
                        {/* More */}
