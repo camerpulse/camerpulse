@@ -10661,6 +10661,53 @@ export type Database = {
           },
         ]
       }
+      company_team_members: {
+        Row: {
+          company_id: string
+          created_at: string
+          id: string
+          invited_at: string | null
+          invited_by: string | null
+          is_active: boolean
+          joined_at: string | null
+          permissions: Json | null
+          role: string
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          id?: string
+          invited_at?: string | null
+          invited_by?: string | null
+          is_active?: boolean
+          joined_at?: string | null
+          permissions?: Json | null
+          role?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          id?: string
+          invited_at?: string | null
+          invited_by?: string | null
+          is_active?: boolean
+          joined_at?: string | null
+          permissions?: Json | null
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_team_members_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_updates: {
         Row: {
           company_id: string | null
@@ -18385,6 +18432,60 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      job_posting_analytics: {
+        Row: {
+          applications_count: number | null
+          bookmarks_count: number | null
+          company_id: string
+          conversion_rate: number | null
+          created_at: string
+          id: string
+          job_id: string
+          metric_date: string
+          shares_count: number | null
+          views_count: number | null
+        }
+        Insert: {
+          applications_count?: number | null
+          bookmarks_count?: number | null
+          company_id: string
+          conversion_rate?: number | null
+          created_at?: string
+          id?: string
+          job_id: string
+          metric_date?: string
+          shares_count?: number | null
+          views_count?: number | null
+        }
+        Update: {
+          applications_count?: number | null
+          bookmarks_count?: number | null
+          company_id?: string
+          conversion_rate?: number | null
+          created_at?: string
+          id?: string
+          job_id?: string
+          metric_date?: string
+          shares_count?: number | null
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_posting_analytics_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_posting_analytics_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       job_views: {
         Row: {
