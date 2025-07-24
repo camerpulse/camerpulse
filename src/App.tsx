@@ -55,6 +55,16 @@ import { UserModerationTools } from "./components/Admin/UserModerationTools";
 import { TenderApprovalWorkflow } from "./components/Admin/TenderApprovalWorkflow";
 import { MobileAppFeatures } from "./components/ui/mobile-app-features";
 import { EnhancedTenderList } from "./components/enhanced/EnhancedTenderList";
+import PollsPage from "./pages/PollsPage";
+import PoliticiansPage from "./pages/PoliticiansPage";
+import VillagesPage from "./pages/VillagesPage";
+import PulsePage from "./pages/PulsePage";
+import ProfilePage from "./pages/ProfilePage";
+import SettingsPage from "./pages/SettingsPage";
+import SupportPage from "./pages/SupportPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import TermsPage from "./pages/TermsPage";
+import CookiesPage from "./pages/CookiesPage";
 
 
 const queryClient = new QueryClient();
@@ -87,51 +97,61 @@ const App = () => {
                 <OfflineIndicator />
                 <BrowserRouter>
                   <Routes>
-                    <Route path="/" element={<Layout />}>
-                      <Route index element={<CamerPulseHome />} />
-                      <Route path="search" element={<AdvancedSearch />} />
-                      <Route path="verification" element={<VerificationCenter />} />
-                      <Route path="recommendations" element={<RecommendationEngine />} />
-                      <Route path="profile/:userId" element={<UserProfilePage />} />
-                      <Route path="company" element={<CompanyDashboard />} />
-                      <Route path="jobs" element={<JobsPage />} />
-                      <Route path="about" element={<AboutPage />} />
-                      <Route path="activity" element={<ActivityPage />} />
-                      <Route path="schools" element={<SchoolsPage />} />
-                      <Route path="pharmacies" element={<PharmaciesPage />} />
-                      <Route path="legislation" element={<LegislationTracker />} />
-                      <Route path="hospitals" element={<HospitalsDirectory />} />
+                     <Route path="/" element={<Layout />}>
+                       <Route index element={<CamerPulseHome />} />
+                       <Route path="polls" element={<PollsPage />} />
+                       <Route path="politicians" element={<PoliticiansPage />} />
+                       <Route path="villages" element={<VillagesPage />} />
+                       <Route path="pulse" element={<PulsePage />} />
+                       <Route path="profile" element={<ProfilePage />} />
+                       <Route path="settings" element={<SettingsPage />} />
+                       <Route path="support" element={<SupportPage />} />
+                       <Route path="privacy" element={<PrivacyPage />} />
+                       <Route path="terms" element={<TermsPage />} />
+                       <Route path="cookies" element={<CookiesPage />} />
+                       <Route path="search" element={<AdvancedSearch />} />
+                       <Route path="verification" element={<VerificationCenter />} />
+                       <Route path="recommendations" element={<RecommendationEngine />} />
+                       <Route path="profile/:userId" element={<UserProfilePage />} />
+                       <Route path="company" element={<CompanyDashboard />} />
+                       <Route path="jobs" element={<JobsPage />} />
+                       <Route path="about" element={<AboutPage />} />
+                       <Route path="activity" element={<ActivityPage />} />
+                       <Route path="schools" element={<SchoolsPage />} />
+                       <Route path="pharmacies" element={<PharmaciesPage />} />
+                       <Route path="legislation" element={<LegislationTracker />} />
+                       <Route path="hospitals" element={<HospitalsDirectory />} />
                        <Route path="tenders" element={<Tenders />} />
-                      <Route path="tenders/create" element={<CreateTender />} />
-                      <Route path="tenders/:id" element={<TenderDetail />} />
-                      <Route path="tenders/:id/bid" element={<BidSubmissionForm />} />
-                      <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
-                      <Route path="dashboard" element={<UserDashboard />} />
-                      <Route path="business-logic" element={<BusinessLogicDashboard />} />
+                       <Route path="tenders/create" element={<CreateTender />} />
+                       <Route path="tenders/:id" element={<TenderDetail />} />
+                       <Route path="tenders/:id/bid" element={<BidSubmissionForm />} />
+                       <Route path="tenders/:id/analytics" element={<TenderAnalytics />} />
+                       <Route path="dashboard" element={<UserDashboard />} />
+                       <Route path="business-logic" element={<BusinessLogicDashboard />} />
                        <Route path="admin" element={<CamertendersAdminPanel />} />
                        <Route path="admin/tenders" element={<CamertendersAdminPanel />} />
-                      <Route path="tenders/watchlist" element={<CivicTenderWatchlist />} />
-                      <Route path="tender-management" element={<TenderManagementDashboard />} />
-                      <Route path="user-management" element={<UserManagementDashboard />} />
-                      <Route path="document-verification" element={<DocumentVerificationDashboard />} />
-                      <Route path="notifications" element={<NotificationCenter />} />
-                      <Route path="search-interface" element={<SearchInterface />} />
-                      <Route path="analytics" element={<TenderAnalytics />} />
-                      <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />
-                      <Route path="my-bids" element={<BidderDashboard />} />
-                      <Route path="diaspora-connect" element={<DiasporaConnect />} />
-                      <Route path="admin/platform" element={<TenderPlatformDashboard />} />
-                      <Route path="admin/moderation" element={<UserModerationTools />} />
-                      <Route path="admin/approvals" element={<TenderApprovalWorkflow />} />
-                      <Route path="mobile-features" element={<MobileAppFeatures />} />
-                      <Route path="enhanced-list" element={<EnhancedTenderList />} />
-                      <Route path="civic-reputation" element={<CivicReputationPage />} />
-                      <Route path="rankings/top-politicians" element={<TopPoliticiansPage />} />
-                      <Route path="rankings/trusted-mayors" element={<TrustedMayorsPage />} />
-                      <Route path="rankings/falling-reputation" element={<FallingReputationPage />} />
-                      <Route path="admin/civic-moderation" element={<CivicModerationPage />} />
-                      <Route path="admin/reputation-settings" element={<AdminSettingsPanel />} />
-                      <Route path="*" element={<NotFoundPage />} />
+                       <Route path="tenders/watchlist" element={<CivicTenderWatchlist />} />
+                       <Route path="tender-management" element={<TenderManagementDashboard />} />
+                       <Route path="user-management" element={<UserManagementDashboard />} />
+                       <Route path="document-verification" element={<DocumentVerificationDashboard />} />
+                       <Route path="notifications" element={<NotificationCenter />} />
+                       <Route path="search-interface" element={<SearchInterface />} />
+                       <Route path="analytics" element={<TenderAnalytics />} />
+                       <Route path="dashboard/tenders" element={<TenderIssuerDashboard />} />
+                       <Route path="my-bids" element={<BidderDashboard />} />
+                       <Route path="diaspora-connect" element={<DiasporaConnect />} />
+                       <Route path="admin/platform" element={<TenderPlatformDashboard />} />
+                       <Route path="admin/moderation" element={<UserModerationTools />} />
+                       <Route path="admin/approvals" element={<TenderApprovalWorkflow />} />
+                       <Route path="mobile-features" element={<MobileAppFeatures />} />
+                       <Route path="enhanced-list" element={<EnhancedTenderList />} />
+                       <Route path="civic-reputation" element={<CivicReputationPage />} />
+                       <Route path="rankings/top-politicians" element={<TopPoliticiansPage />} />
+                       <Route path="rankings/trusted-mayors" element={<TrustedMayorsPage />} />
+                       <Route path="rankings/falling-reputation" element={<FallingReputationPage />} />
+                       <Route path="admin/civic-moderation" element={<CivicModerationPage />} />
+                       <Route path="admin/reputation-settings" element={<AdminSettingsPanel />} />
+                       <Route path="*" element={<NotFoundPage />} />
                     </Route>
                     <Route path="/auth" element={<Layout showFooter={false} />}>
                       <Route index element={<Auth />} />

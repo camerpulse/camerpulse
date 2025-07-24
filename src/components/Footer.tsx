@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
+import camerPulseLogo from '@/assets/camerpulse-logo.png';
 import {
   Building,
   Mail,
@@ -33,8 +34,8 @@ export default function Footer() {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
-                <Building className="h-5 w-5 text-primary-foreground" />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+                <img src={camerPulseLogo} alt="CamerPulse" className="w-8 h-8 rounded-lg" />
               </div>
               <span className="text-xl font-bold">CamerPulse</span>
             </div>

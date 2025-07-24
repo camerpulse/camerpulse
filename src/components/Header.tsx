@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import camerPulseLogo from '@/assets/camerpulse-logo.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -59,8 +60,8 @@ const Header = () => {
           {/* Logo & Branding */}
           <div className="flex items-center gap-6">
             <Link to={brandingConfig.href} className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
-                <Building className="h-5 w-5 text-primary-foreground" />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+                <img src={camerPulseLogo} alt={brandingConfig.title} className="w-8 h-8 rounded-lg" />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold text-foreground">{brandingConfig.title}</span>

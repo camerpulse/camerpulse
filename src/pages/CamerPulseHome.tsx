@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import camerPulseLogo from '@/assets/camerpulse-logo.png';
 import { 
   Building, 
   Vote, 
@@ -33,8 +34,8 @@ const CamerPulseHome = () => {
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-              <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
-                <Building className="h-5 w-5 text-primary-foreground" />
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+                <img src={camerPulseLogo} alt="CamerPulse" className="w-8 h-8 rounded-lg" />
               </div>
               <div className="flex flex-col">
                 <span className="text-xl font-bold text-foreground">CamerPulse</span>
@@ -371,8 +372,8 @@ const CamerPulseHome = () => {
             {/* Company Info */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
-                  <Building className="h-5 w-5 text-primary-foreground" />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+                  <img src={camerPulseLogo} alt="CamerPulse" className="w-8 h-8 rounded-lg" />
                 </div>
                 <span className="text-xl font-bold">CamerPulse</span>
               </div>
