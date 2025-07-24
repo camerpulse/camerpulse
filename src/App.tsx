@@ -3,9 +3,10 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
+import { AuthPage } from "./pages/AuthPage";
 import CivicFeed from "./pages/CivicFeed";
 import PulseFeed from "./pages/PulseFeed";
 import Feed from "./pages/Feed";
@@ -81,7 +82,6 @@ import ProfileSlugPage from "./pages/ProfileSlugPage";
 import { ProfileValidationTest } from "./components/Profile/ProfileValidationTest";
 import { ProfileFeatureTest } from "./components/Profile/ProfileFeatureTest";
 import { ProfileSystemTester } from "./components/Profile/ProfileSystemTester";
-import { AuthPage } from "./pages/AuthPage";
 import Events from "./pages/Events";
 import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
@@ -151,9 +151,10 @@ import VillageLeaderboards from "./pages/VillageLeaderboards";
 import ModeratorPortal from "./pages/ModeratorPortal";
 import ModeratorOnboarding from "./pages/ModeratorOnboarding";
 import ModerationDashboard from "./pages/ModerationDashboard";
-import { AuthProvider } from "./contexts/AuthContext";
+
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import { PluginProvider } from "./contexts/PluginContext";
 
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
@@ -191,7 +192,7 @@ const App = () => {
                 <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<Auth />} />
+              <Route path="/auth" element={<AuthPage />} />
               <Route path="/feed" element={<Feed />} />
               <Route path="/civic-feed" element={<CivicFeed />} />
               <Route path="/politicians" element={<Politicians />} />
@@ -313,7 +314,6 @@ const App = () => {
         <Route path="/profile-test" element={<ProfileValidationTest />} />
         <Route path="/feature-test" element={<ProfileFeatureTest />} />
         <Route path="/system-test" element={<ProfileSystemTester />} />
-        <Route path="/auth" element={<AuthPage />} />
           <Route path="/events" element={<Events />} />
           <Route path="/calendar" element={<EventCalendarPage />} />
           <Route path="/verify-certificate" element={<CertificateVerificationPage />} />

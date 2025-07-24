@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { 
   Users, 
   Calendar, 
@@ -25,10 +26,17 @@ import {
   ArrowRight,
   CheckCircle,
   Sparkles,
-  Scale
+  Scale,
+  LogOut,
+  User
 } from "lucide-react";
 
 const Index = () => {
+  const { user, profile, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
   const featuredStats = [
     { label: "Active Citizens", value: "127K+", icon: Users, color: "text-primary" },
     { label: "Projects Funded", value: "340+", icon: Target, color: "text-accent" },
@@ -88,6 +96,29 @@ const Index = () => {
 
   return (
     <AppLayout>
+      {/* User Info Bar */}
+      {user && (
+        <div className="bg-muted/30 border-b">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <User className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium">
+                  Welcome back, {profile?.display_name || profile?.username || 'User'}!
+                </span>
+                <Link to={`/profile/${user.id}`}>
+                  <Button variant="outline" size="sm">View Profile</Button>
+                </Link>
+              </div>
+              <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground hover:text-foreground">
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div 
