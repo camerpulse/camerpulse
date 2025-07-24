@@ -70,12 +70,13 @@ import JudiciaryPage from "./pages/JudiciaryPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import VillagesSearchPage from "./pages/VillagesSearchPage";
 
+import CamerPlayHome from "./pages/CamerPlayHome";
+import ArtistDashboard from "./pages/ArtistDashboard";
+import BillionaireTracker from "./pages/BillionaireTracker";
+
 // Missing page imports that need to be created
 const ChurchesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Churches Directory</h1><p>Coming soon...</p></div>;
 const TraditionalLeadersPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Traditional Leaders</h1><p>Coming soon...</p></div>;
-const BillionairesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Billionaires Directory</h1><p>Coming soon...</p></div>;
-import CamerPlayHome from "./pages/CamerPlayHome";
-import ArtistDashboard from "./pages/ArtistDashboard";
 const VideosPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Video Center</h1><p>Coming soon...</p></div>;
 const SenatorsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Senators</h1><p>Coming soon...</p></div>;
 const MPsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">MPs (Members of Parliament)</h1><p>Coming soon...</p></div>;
@@ -149,8 +150,8 @@ const App = () => {
                        <Route path="churches" element={<ChurchesPage />} />
                        <Route path="traditional-leaders" element={<TraditionalLeadersPage />} />
                        
-                       {/* Businesses */}
-                       <Route path="billionaires" element={<BillionairesPage />} />
+                        {/* Businesses */}
+                        <Route path="billionaires" element={<BillionaireTracker />} />
                        
                         {/* Media & Engagement */}
                         <Route path="camerplay" element={<CamerPlayHome />} />
