@@ -10962,7 +10962,6 @@ export type Database = {
           milestones: Json | null
           signed_at: string | null
           start_date: string
-          tender_id: string
           updated_at: string
         }
         Insert: {
@@ -10979,7 +10978,6 @@ export type Database = {
           milestones?: Json | null
           signed_at?: string | null
           start_date: string
-          tender_id: string
           updated_at?: string
         }
         Update: {
@@ -10996,7 +10994,6 @@ export type Database = {
           milestones?: Json | null
           signed_at?: string | null
           start_date?: string
-          tender_id?: string
           updated_at?: string
         }
         Relationships: []
@@ -13489,7 +13486,6 @@ export type Database = {
           file_size: number
           file_type: string
           id: string
-          tender_id: string | null
           updated_at: string
           upload_status: string
           user_id: string
@@ -13504,7 +13500,6 @@ export type Database = {
           file_size: number
           file_type: string
           id?: string
-          tender_id?: string | null
           updated_at?: string
           upload_status?: string
           user_id: string
@@ -13519,7 +13514,6 @@ export type Database = {
           file_size?: number
           file_type?: string
           id?: string
-          tender_id?: string | null
           updated_at?: string
           upload_status?: string
           user_id?: string
@@ -18173,8 +18167,6 @@ export type Database = {
           issuer_name: string
           issuer_type: string
           last_calculated_at: string | null
-          tenders_awarded: number | null
-          tenders_posted: number | null
           updated_at: string
         }
         Insert: {
@@ -18190,8 +18182,6 @@ export type Database = {
           issuer_name: string
           issuer_type: string
           last_calculated_at?: string | null
-          tenders_awarded?: number | null
-          tenders_posted?: number | null
           updated_at?: string
         }
         Update: {
@@ -18207,8 +18197,6 @@ export type Database = {
           issuer_name?: string
           issuer_type?: string
           last_calculated_at?: string | null
-          tenders_awarded?: number | null
-          tenders_posted?: number | null
           updated_at?: string
         }
         Relationships: []
@@ -23478,7 +23466,6 @@ export type Database = {
           petition_title: string
           petition_url: string | null
           petition_votes: number
-          tender_id: string
           updated_at: string
         }
         Insert: {
@@ -23495,7 +23482,6 @@ export type Database = {
           petition_title: string
           petition_url?: string | null
           petition_votes?: number
-          tender_id: string
           updated_at?: string
         }
         Update: {
@@ -23512,7 +23498,6 @@ export type Database = {
           petition_title?: string
           petition_url?: string | null
           petition_votes?: number
-          tender_id?: string
           updated_at?: string
         }
         Relationships: []
