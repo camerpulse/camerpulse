@@ -17,6 +17,7 @@ import {
   ChevronDown, 
   LogOut, 
   Menu, 
+  MessageSquare,
   Settings, 
   User,
   X
@@ -79,7 +80,7 @@ export const Header = () => {
               <Link to="/judiciary">Judiciary</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              
+              <Link to="/messenger">Messenger</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/analytics">Analytics</Link>
@@ -128,6 +129,12 @@ export const Header = () => {
                     <Link to="/social" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
                       Profile
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/messenger" className="cursor-pointer">
+                      <MessageSquare className="mr-2 h-4 w-4" />
+                      Messenger
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
@@ -187,7 +194,7 @@ export const Header = () => {
                 <Link to="/judiciary" onClick={() => setMobileMenuOpen(false)}>⚖️ Judiciary</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                
+                <Link to="/messenger" onClick={() => setMobileMenuOpen(false)}>💬 Messenger</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/analytics" onClick={() => setMobileMenuOpen(false)}>📊 Analytics</Link>

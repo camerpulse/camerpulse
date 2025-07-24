@@ -18,6 +18,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ProfileEditDialog } from '@/components/profile/ProfileEditDialog';
 import { ProfileQRCode } from '@/components/profile/ProfileQRCode';
 import { ProfileComparison } from '@/components/profile/ProfileComparison';
+import { MessengerSection } from '@/components/Profile/MessengerSection';
 import { 
   MapPin, 
   Calendar, 
@@ -838,7 +839,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
 
           {/* Tabs */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-8 md:grid-cols-8">
+            <TabsList className="grid w-full grid-cols-9 md:grid-cols-9">
               <TabsTrigger value="overview">Overview</TabsTrigger>
               <TabsTrigger value="posts">Posts</TabsTrigger>
               <TabsTrigger value="polls">Polls</TabsTrigger>
@@ -846,6 +847,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
               <TabsTrigger value="ratings">Ratings</TabsTrigger>
               <TabsTrigger value="following">Following</TabsTrigger>
               <TabsTrigger value="followers">Followers</TabsTrigger>
+              {user?.id === userId && <TabsTrigger value="messenger">Messenger</TabsTrigger>}
               {user?.id === userId && <TabsTrigger value="saved">Saved</TabsTrigger>}
             </TabsList>
 
@@ -991,6 +993,12 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                   </div>
                 )}
               </TabsContent>
+
+              {user?.id === userId && (
+                <TabsContent value="messenger" className="space-y-4">
+                  <MessengerSection />
+                </TabsContent>
+              )}
 
               {user?.id === userId && (
                 <TabsContent value="saved" className="space-y-4">
