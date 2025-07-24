@@ -34,10 +34,10 @@ import HospitalsDirectory from "./pages/HospitalsDirectory";
 import { UserDashboard } from './components/UserDashboard';
 import { NotFoundPage } from './components/NotFoundPage';
 import { UserManagementDashboard } from './components/UserManagement/UserManagementDashboard';
-import { DocumentVerificationDashboard } from './components/Documents/DocumentVerificationDashboard';
+
 import { NotificationCenter } from './components/Notifications/NotificationCenter';
 
-import SearchInterface from "./components/SearchInterface";
+
 import DiasporaConnect from "./pages/DiasporaConnect";
 import { UserModerationTools } from "./components/Admin/UserModerationTools";
 import { MobileAppFeatures } from "./components/ui/mobile-app-features";
@@ -193,9 +193,9 @@ const App = () => {
                         <Route path="admin" element={<Admin />} />
                         <Route path="admin/plugins" element={<div className="container mx-auto px-4 py-8"><div className="mb-8"><h1 className="text-3xl font-bold">Plugin Manager</h1></div></div>} />
                        <Route path="user-management" element={<UserManagementDashboard />} />
-                       <Route path="document-verification" element={<DocumentVerificationDashboard />} />
+                       
                        <Route path="notifications" element={<NotificationCenter />} />
-                       <Route path="search-interface" element={<SearchInterface />} />
+                       
                         <Route path="diaspora-connect" element={<DiasporaConnect />} />
                         <Route path="admin/moderation" element={<UserModerationTools />} />
                         <Route path="mobile-features" element={<MobileAppFeatures />} />
