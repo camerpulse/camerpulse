@@ -296,10 +296,14 @@ export default function Footer() {
                 <DollarSign className="h-3 w-3" />
                 Donate
               </Link>
-              <Link to="/report-bug" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-                <Bug className="h-3 w-3" />
-                Report a Bug
-              </Link>
+               <Link to="/report-bug" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                 <Bug className="h-3 w-3" />
+                 Report a Bug
+               </Link>
+               <Link to="/admin" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                 <Shield className="h-3 w-3" />
+                 Admin Panel
+               </Link>
             </nav>
           </div>
 
