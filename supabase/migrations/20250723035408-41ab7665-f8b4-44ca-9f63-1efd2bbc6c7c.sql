@@ -1,4 +1,4 @@
--- Phase 1: CamerTenders Monetization Foundation & Core Billing (Add Missing Parts)
+-- Phase 1: Monetization Foundation & Core Billing (Add Missing Parts)
 
 -- Add missing columns to existing tender_payments table
 ALTER TABLE public.tender_payments 

@@ -1,5 +1,5 @@
--- Complete CamerTenders removal - drop all tender-related tables
--- This will permanently remove all CamerTenders functionality and data
+-- Complete tender system removal - drop all tender-related tables
+-- This will permanently remove all tender functionality and data
 
 -- Drop tables in correct order to avoid foreign key constraints
 DROP TABLE IF EXISTS public.tender_ai_suggestions CASCADE;

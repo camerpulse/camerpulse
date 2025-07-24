@@ -1,4 +1,4 @@
--- Phase 1: CamerTenders Monetization Foundation & Core Billing (Simple Version)
+-- Phase 1: Monetization Foundation & Core Billing (Simple Version)
 
 -- Create enum for payment status if not exists
 DO $$ BEGIN
