@@ -28,14 +28,45 @@ import {
   ArrowRight,
   Globe
 } from 'lucide-react';
+import { 
+  useTransparencyScore, 
+  useTransparencyCategories, 
+  useTransparencyUpdates, 
+  useRegionalTransparency,
+  useTransparencyMetrics,
+  useDataSources,
+  formatTimestamp
+} from '@/hooks/useTransparencyData';
 
 const TransparencyHub = () => {
   const [selectedTimeframe, setSelectedTimeframe] = useState('month');
+  
+  // Fetch real data using hooks
+  const { data: transparencyScore, isLoading: scoreLoading } = useTransparencyScore();
+  const { data: categories, isLoading: categoriesLoading } = useTransparencyCategories();
+  const { data: recentUpdates, isLoading: updatesLoading } = useTransparencyUpdates();
+  const { data: regionalData, isLoading: regionalLoading } = useRegionalTransparency();
+  const { data: metrics, isLoading: metricsLoading } = useTransparencyMetrics();
+  const { data: dataSources, isLoading: sourcesLoading } = useDataSources();
+
+  // Loading state
+  if (scoreLoading || categoriesLoading) {
+    return (
+      <AppLayout>
+        <div className="flex items-center justify-center min-h-96">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Loading transparency data...</p>
+          </div>
+        </div>
+      </AppLayout>
+    );
+  }
 
   const overviewStats = [
     { 
       label: "Overall Transparency Score", 
-      value: "94%", 
+      value: `${transparencyScore?.overall || 94}%`, 
       change: "+2.3%", 
       icon: Shield, 
       color: "text-green-600",
@@ -59,7 +90,7 @@ const TransparencyHub = () => {
     },
     { 
       label: "Budget Transparency", 
-      value: "87%", 
+      value: `${transparencyScore?.budget || 87}%`, 
       change: "+4.1%", 
       icon: DollarSign, 
       color: "text-green-600",
@@ -67,83 +98,20 @@ const TransparencyHub = () => {
     }
   ];
 
-  const transparencyCategories = [
-    {
-      title: "Government Operations",
-      description: "Track government efficiency, spending, and service delivery",
-      icon: Building2,
-      score: 91,
-      features: ["Budget tracking", "Ministry performance", "Public contracts"],
-      href: "/transparency/government",
-      color: "from-blue-500 to-blue-600",
-      metrics: { total: 847, verified: 771, pending: 76 }
-    },
-    {
-      title: "Judicial System",
-      description: "Monitor court proceedings, case resolutions, and judicial accountability",
-      icon: Scale,
-      score: 78,
-      features: ["Court case tracking", "Judge ratings", "Legal transparency"],
-      href: "/judiciary",
-      color: "from-purple-500 to-purple-600",
-      metrics: { total: 234, verified: 183, pending: 51 }
-    },
-    {
-      title: "Electoral Process",
-      description: "Ensure transparent elections, campaign finance, and voting integrity",
-      icon: Vote,
-      score: 95,
-      features: ["Campaign finance", "Election results", "Voting security"],
-      href: "/transparency/elections",
-      color: "from-green-500 to-green-600",
-      metrics: { total: 156, verified: 148, pending: 8 }
-    },
-    {
-      title: "Public Workforce",
-      description: "Monitor hiring practices, workforce analytics, and employment policies",
-      icon: Users,
-      score: 89,
-      features: ["Hiring transparency", "Workforce data", "Policy impact"],
-      href: "/transparency/workforce",
-      color: "from-orange-500 to-orange-600",
-      metrics: { total: 423, verified: 376, pending: 47 }
-    }
-  ];
+  
+  // Use real data or fallback to defaults
+  const transparencyCategories = categories || [];
 
-  const recentUpdates = [
-    {
-      title: "Ministry of Health Budget Report",
-      description: "Q3 2024 financial transparency report published",
-      timestamp: "2 hours ago",
-      type: "budget",
-      impact: "high",
-      verified: true
-    },
-    {
-      title: "Supreme Court Case Database Updated",
-      description: "847 new case records added with full documentation",
-      timestamp: "5 hours ago",
-      type: "judicial",
-      impact: "medium",
-      verified: true
-    },
-    {
-      title: "Regional Election Results Verified",
-      description: "Complete transparency audit for recent regional elections",
-      timestamp: "1 day ago",
-      type: "electoral",
-      impact: "high",
-      verified: true
-    },
-    {
-      title: "Public Procurement Alert",
-      description: "New contracts worth 2.4B FCFA require transparency review",
-      timestamp: "2 days ago",
-      type: "procurement",
-      impact: "critical",
-      verified: false
+  // Icon mapping for categories
+  const getIconComponent = (categoryId: string) => {
+    switch (categoryId) {
+      case 'government': return Building2;
+      case 'judicial': return Scale;
+      case 'electoral': return Vote;
+      case 'workforce': return Users;
+      default: return Building2;
     }
-  ];
+  };
 
   const transparencyMethodology = [
     {
@@ -257,21 +225,33 @@ const TransparencyHub = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {[
-                    { category: "Budget & Finance", score: 96, total: 245 },
-                    { category: "Judicial Proceedings", score: 78, total: 156 },
-                    { category: "Electoral Process", score: 95, total: 89 },
-                    { category: "Public Procurement", score: 84, total: 198 },
-                    { category: "Ministry Operations", score: 91, total: 159 }
-                  ].map((item, idx) => (
+                  {metrics && metrics.slice(0, 5).map((item, idx) => (
                     <div key={idx} className="space-y-2">
                       <div className="flex justify-between text-sm">
                         <span className="font-medium">{item.category}</span>
-                        <span className="text-muted-foreground">{item.score}% ({item.total} metrics)</span>
+                        <span className="text-muted-foreground">{item.score}% (weight: {item.weight}%)</span>
                       </div>
                       <Progress value={item.score} className="h-2" />
                     </div>
-                  ))}
+                  )) || (
+                    <div className="space-y-4">
+                      {[
+                        { category: "Budget & Finance", score: 96, total: 245 },
+                        { category: "Judicial Proceedings", score: 78, total: 156 },
+                        { category: "Electoral Process", score: 95, total: 89 },
+                        { category: "Public Procurement", score: 84, total: 198 },
+                        { category: "Ministry Operations", score: 91, total: 159 }
+                      ].map((item, idx) => (
+                        <div key={idx} className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span className="font-medium">{item.category}</span>
+                            <span className="text-muted-foreground">{item.score}% ({item.total} metrics)</span>
+                          </div>
+                          <Progress value={item.score} className="h-2" />
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
@@ -287,14 +267,7 @@ const TransparencyHub = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {[
-                    { region: "Centre", score: 94, trend: "up" },
-                    { region: "Littoral", score: 91, trend: "up" },
-                    { region: "South", score: 87, trend: "stable" },
-                    { region: "West", score: 85, trend: "up" },
-                    { region: "East", score: 82, trend: "down" },
-                    { region: "Northwest", score: 79, trend: "up" }
-                  ].map((item, idx) => (
+                  {regionalData && regionalData.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
                       <div className="flex items-center space-x-3">
                         <span className="font-medium">{item.region}</span>
@@ -308,7 +281,32 @@ const TransparencyHub = () => {
                         {item.trend === 'stable' && <Activity className="h-4 w-4 text-yellow-600" />}
                       </div>
                     </div>
-                  ))}
+                  )) || (
+                    <>
+                      {[
+                        { region: "Centre", score: 94, trend: "up" },
+                        { region: "Littoral", score: 91, trend: "up" },
+                        { region: "South", score: 87, trend: "stable" },
+                        { region: "West", score: 85, trend: "up" },
+                        { region: "East", score: 82, trend: "down" },
+                        { region: "Northwest", score: 79, trend: "up" }
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/30">
+                          <div className="flex items-center space-x-3">
+                            <span className="font-medium">{item.region}</span>
+                            <Badge variant="outline" className="text-xs">
+                              {item.score}%
+                            </Badge>
+                          </div>
+                          <div className="flex items-center">
+                            {item.trend === 'up' && <TrendingUp className="h-4 w-4 text-green-600" />}
+                            {item.trend === 'down' && <TrendingUp className="h-4 w-4 text-red-600 rotate-180" />}
+                            {item.trend === 'stable' && <Activity className="h-4 w-4 text-yellow-600" />}
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -317,57 +315,60 @@ const TransparencyHub = () => {
           {/* Categories Tab */}
           <TabsContent value="categories" className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {transparencyCategories.map((category, index) => (
-                <Card key={index} className="group hover:shadow-xl transition-all duration-300">
-                  <CardHeader className="pb-4">
-                    <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${category.color} flex items-center justify-center mb-4`}>
-                      <category.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-xl">{category.title}</CardTitle>
-                      <Badge variant="secondary" className="text-lg px-3 py-1">
-                        {category.score}%
-                      </Badge>
-                    </div>
-                    <CardDescription className="text-base">
-                      {category.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4 mb-6">
-                      <Progress value={category.score} className="h-3" />
-                      <div className="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                          <div className="text-lg font-bold text-primary">{category.metrics.total}</div>
-                          <div className="text-xs text-muted-foreground">Total</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-bold text-green-600">{category.metrics.verified}</div>
-                          <div className="text-xs text-muted-foreground">Verified</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-bold text-orange-600">{category.metrics.pending}</div>
-                          <div className="text-xs text-muted-foreground">Pending</div>
-                        </div>
+              {transparencyCategories.map((category, index) => {
+                const IconComponent = getIconComponent(category.id);
+                return (
+                  <Card key={index} className="group hover:shadow-xl transition-all duration-300">
+                    <CardHeader className="pb-4">
+                      <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${category.color} flex items-center justify-center mb-4`}>
+                        <IconComponent className="h-6 w-6 text-white" />
                       </div>
-                      <div className="space-y-2">
-                        {category.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-center text-sm text-muted-foreground">
-                            <CheckCircle className="h-4 w-4 text-primary mr-2" />
-                            {feature}
+                      <div className="flex items-center justify-between">
+                        <CardTitle className="text-xl">{category.title}</CardTitle>
+                        <Badge variant="secondary" className="text-lg px-3 py-1">
+                          {category.score}%
+                        </Badge>
+                      </div>
+                      <CardDescription className="text-base">
+                        {category.description}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4 mb-6">
+                        <Progress value={category.score} className="h-3" />
+                        <div className="grid grid-cols-3 gap-4 text-center">
+                          <div>
+                            <div className="text-lg font-bold text-primary">{category.totalMetrics}</div>
+                            <div className="text-xs text-muted-foreground">Total</div>
                           </div>
-                        ))}
+                          <div>
+                            <div className="text-lg font-bold text-green-600">{category.verifiedMetrics}</div>
+                            <div className="text-xs text-muted-foreground">Verified</div>
+                          </div>
+                          <div>
+                            <div className="text-lg font-bold text-orange-600">{category.pendingMetrics}</div>
+                            <div className="text-xs text-muted-foreground">Pending</div>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          {category.features.map((feature, idx) => (
+                            <div key={idx} className="flex items-center text-sm text-muted-foreground">
+                              <CheckCircle className="h-4 w-4 text-primary mr-2" />
+                              {feature}
+                            </div>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    <Button asChild className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                      <Link to={category.href}>
-                        Explore Details
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Link>
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+                      <Button asChild className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                        <Link to={category.href}>
+                          Explore Details
+                          <ArrowRight className="h-4 w-4 ml-2" />
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </TabsContent>
 
@@ -428,21 +429,33 @@ const TransparencyHub = () => {
                   <CardTitle>Data Sources</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  {[
-                    { source: "Government Websites", status: "Active", count: "247 sites" },
-                    { source: "Official Documents", status: "Verified", count: "12,847 docs" },
-                    { source: "Budget Reports", status: "Real-time", count: "156 reports" },
-                    { source: "Court Records", status: "Updated", count: "8,934 cases" },
-                    { source: "Citizen Reports", status: "Moderated", count: "2,156 reports" }
-                  ].map((item, idx) => (
+                  {dataSources?.map((source, idx) => (
                     <div key={idx} className="flex justify-between items-center p-3 rounded-lg bg-muted/30">
                       <div>
-                        <div className="font-medium">{item.source}</div>
-                        <div className="text-sm text-muted-foreground">{item.count}</div>
+                        <div className="font-medium">{source.name}</div>
+                        <div className="text-sm text-muted-foreground">{source.recordCount} records</div>
                       </div>
-                      <Badge variant="secondary">{item.status}</Badge>
+                      <Badge variant="secondary">{source.status}</Badge>
                     </div>
-                  ))}
+                  )) || (
+                    <>
+                      {[
+                        { source: "Government Websites", status: "Active", count: "247 sites" },
+                        { source: "Official Documents", status: "Verified", count: "12,847 docs" },
+                        { source: "Budget Reports", status: "Real-time", count: "156 reports" },
+                        { source: "Court Records", status: "Updated", count: "8,934 cases" },
+                        { source: "Citizen Reports", status: "Moderated", count: "2,156 reports" }
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex justify-between items-center p-3 rounded-lg bg-muted/30">
+                          <div>
+                            <div className="font-medium">{item.source}</div>
+                            <div className="text-sm text-muted-foreground">{item.count}</div>
+                          </div>
+                          <Badge variant="secondary">{item.status}</Badge>
+                        </div>
+                      ))}
+                    </>
+                  )}
                 </CardContent>
               </Card>
             </div>
@@ -463,7 +476,7 @@ const TransparencyHub = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    {recentUpdates.map((update, index) => (
+                    {recentUpdates?.map((update, index) => (
                       <div key={index} className="flex items-start space-x-4 p-4 rounded-lg border">
                         <div className="flex-shrink-0">
                           {update.verified ? (
@@ -482,11 +495,13 @@ const TransparencyHub = () => {
                           <p className="text-sm text-muted-foreground mb-2">{update.description}</p>
                           <div className="flex items-center text-xs text-muted-foreground">
                             <Calendar className="h-3 w-3 mr-1" />
-                            {update.timestamp}
+                            {formatTimestamp(update.timestamp)}
                           </div>
                         </div>
                       </div>
-                    ))}
+                    )) || (
+                      <p className="text-center text-muted-foreground py-8">No recent updates available</p>
+                    )}
                   </CardContent>
                 </Card>
               </div>
