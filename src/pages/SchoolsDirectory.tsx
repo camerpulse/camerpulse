@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ServicesLayout } from '@/components/Layout/ServicesLayout';
+
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -239,8 +239,7 @@ export default function SchoolsDirectory() {
   };
 
   return (
-    <ServicesLayout serviceType="schools">
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-primary to-primary/80 text-white py-16">
           <div className="container mx-auto px-4">
@@ -561,6 +560,5 @@ export default function SchoolsDirectory() {
           onSuccess={fetchSchools}
         />
       </div>
-    </ServicesLayout>
   );
 }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Search, MapPin, Filter, Phone, Globe, Clock, Heart, Users, Building, Star, AlertTriangle, Ambulance, Shield, TrendingUp, ChevronRight, Eye } from 'lucide-react';
-import { ServicesLayout } from '@/components/Layout/ServicesLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -247,8 +246,7 @@ export default function HospitalsDirectory() {
   };
 
   return (
-    <ServicesLayout serviceType="hospitals">
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <div className="bg-gradient-to-r from-red-600 to-red-500 text-white py-16">
           <div className="container mx-auto px-4">
@@ -631,6 +629,5 @@ export default function HospitalsDirectory() {
           </>
         )}
       </div>
-    </ServicesLayout>
   );
 }

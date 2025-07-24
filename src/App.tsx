@@ -70,6 +70,34 @@ import JudiciaryPage from "./pages/JudiciaryPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import VillagesSearchPage from "./pages/VillagesSearchPage";
 
+// Missing page imports that need to be created
+const ChurchesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Churches Directory</h1><p>Coming soon...</p></div>;
+const TraditionalLeadersPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Traditional Leaders</h1><p>Coming soon...</p></div>;
+const BillionairesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Billionaires Directory</h1><p>Coming soon...</p></div>;
+const CamerPlayPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">CamerPlay Music</h1><p>Coming soon...</p></div>;
+const ArtistsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Artist Directory</h1><p>Coming soon...</p></div>;
+const VideosPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Video Center</h1><p>Coming soon...</p></div>;
+const SenatorsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Senators</h1><p>Coming soon...</p></div>;
+const MPsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">MPs (Members of Parliament)</h1><p>Coming soon...</p></div>;
+const MinistersPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Ministers</h1><p>Coming soon...</p></div>;
+const MayorsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Mayors</h1><p>Coming soon...</p></div>;
+const GovernorsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Governors</h1><p>Coming soon...</p></div>;
+const CouncilsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Councils</h1><p>Coming soon...</p></div>;
+const ProjectsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Government Projects</h1><p>Coming soon...</p></div>;
+const PetitionsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Petitions</h1><p>Coming soon...</p></div>;
+const ComplaintsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Complaints</h1><p>Coming soon...</p></div>;
+const RatingsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Ratings & Reviews</h1><p>Coming soon...</p></div>;
+const PulseMessengerPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Pulse Messenger</h1><p>Coming soon...</p></div>;
+const LawsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Laws & Constitution</h1><p>Coming soon...</p></div>;
+const GovernmentHierarchyPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Government Hierarchy</h1><p>Coming soon...</p></div>;
+const FAQsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">FAQs</h1><p>Coming soon...</p></div>;
+const ContactPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Contact</h1><p>Coming soon...</p></div>;
+const PartnershipsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Partnerships</h1><p>Coming soon...</p></div>;
+const PressPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Press</h1><p>Coming soon...</p></div>;
+const DonatePage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Donate</h1><p>Coming soon...</p></div>;
+const ReportBugPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Report a Bug</h1><p>Coming soon...</p></div>;
+const EventsPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Events</h1><p>Coming soon...</p></div>;
+
 
 const queryClient = new QueryClient();
 
@@ -116,6 +144,48 @@ const App = () => {
                        <Route path="cookies" element={<CookiesPage />} />
                        <Route path="judiciary" element={<JudiciaryPage />} />
                        <Route path="analytics" element={<AnalyticsPage />} />
+                       
+                       {/* Civic Directories */}
+                       <Route path="churches" element={<ChurchesPage />} />
+                       <Route path="traditional-leaders" element={<TraditionalLeadersPage />} />
+                       
+                       {/* Businesses */}
+                       <Route path="billionaires" element={<BillionairesPage />} />
+                       
+                       {/* Media & Engagement */}
+                       <Route path="camerplay" element={<CamerPlayPage />} />
+                       <Route path="events" element={<EventsPage />} />
+                       <Route path="artists" element={<ArtistsPage />} />
+                       <Route path="videos" element={<VideosPage />} />
+                       
+                       {/* Government & Officials */}
+                       <Route path="senators" element={<SenatorsPage />} />
+                       <Route path="mps" element={<MPsPage />} />
+                       <Route path="ministers" element={<MinistersPage />} />
+                       <Route path="mayors" element={<MayorsPage />} />
+                       <Route path="governors" element={<GovernorsPage />} />
+                       <Route path="councils" element={<CouncilsPage />} />
+                       <Route path="projects" element={<ProjectsPage />} />
+                       
+                       {/* Civic Tools */}
+                       <Route path="petitions" element={<PetitionsPage />} />
+                       <Route path="complaints" element={<ComplaintsPage />} />
+                       <Route path="ratings" element={<RatingsPage />} />
+                       <Route path="pulse-messenger" element={<PulseMessengerPage />} />
+                       
+                       {/* Knowledge */}
+                       <Route path="laws" element={<LawsPage />} />
+                       <Route path="government-hierarchy" element={<GovernmentHierarchyPage />} />
+                       <Route path="faqs" element={<FAQsPage />} />
+                       
+                       {/* More */}
+                       <Route path="contact" element={<ContactPage />} />
+                       <Route path="partnerships" element={<PartnershipsPage />} />
+                       <Route path="press" element={<PressPage />} />
+                       <Route path="donate" element={<DonatePage />} />
+                       <Route path="report-bug" element={<ReportBugPage />} />
+                       
+                       {/* Existing Routes */}
                        <Route path="search" element={<AdvancedSearch />} />
                        <Route path="verification" element={<VerificationCenter />} />
                        <Route path="recommendations" element={<RecommendationEngine />} />
