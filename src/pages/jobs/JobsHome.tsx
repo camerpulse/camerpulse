@@ -127,6 +127,25 @@ const JobsHome = () => {
           </Card>
         </div>
 
+        {/* Live Leaderboard Preview */}
+        <Card className="mb-8 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              🏆 Regional Hiring Leaderboard
+            </CardTitle>
+            <CardDescription>See which regions are leading in job creation this week - updated live!</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center py-4">
+              <TrendingUp className="h-8 w-8 mx-auto mb-3 text-primary" />
+              <p className="mb-4 text-muted-foreground">Real-time hiring activity across Cameroon's regions</p>
+              <Button asChild>
+                <a href="/jobs/leaderboard">View Live Leaderboard</a>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Recent Jobs Preview */}
         <Card>
           <CardHeader>

@@ -160,6 +160,7 @@ import TestPage from "./pages/TestPage";
 import JobsHome from "./pages/jobs/JobsHome";
 import JobBoard from "./pages/jobs/JobBoard";
 import { CompanyPortal } from "./pages/jobs/CompanyPortal";
+import RegionalHiringLeaderboard from "./pages/jobs/RegionalHiringLeaderboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
 import { ExpertPortal } from "./pages/experts/ExpertPortal";
 import { ProfilePage } from "./pages/profile/ProfilePage";
@@ -194,6 +195,7 @@ const App = () => {
           <Route path="/jobs" element={<JobsHome />} />
           <Route path="/jobs/board" element={<JobBoard />} />
           <Route path="/jobs/company" element={<CompanyPortal />} />
+          <Route path="/jobs/leaderboard" element={<RegionalHiringLeaderboard />} />
           <Route path="/experts" element={<ExpertMarketplace />} />
           <Route path="/experts/portal" element={<ExpertPortal />} />
           <Route path="/profile" element={<ProfilePage />} />

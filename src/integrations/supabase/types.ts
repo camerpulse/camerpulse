@@ -6695,6 +6695,68 @@ export type Database = {
         }
         Relationships: []
       }
+      campaign_hires: {
+        Row: {
+          age_group: string | null
+          campaign_id: string
+          created_at: string
+          employer_name: string | null
+          gender: string | null
+          hire_date: string
+          id: string
+          job_id: string | null
+          job_title: string
+          region: string | null
+          sector: string | null
+          user_id: string | null
+          verification_notes: string | null
+          verified: boolean
+          verified_by: string | null
+        }
+        Insert: {
+          age_group?: string | null
+          campaign_id: string
+          created_at?: string
+          employer_name?: string | null
+          gender?: string | null
+          hire_date?: string
+          id?: string
+          job_id?: string | null
+          job_title: string
+          region?: string | null
+          sector?: string | null
+          user_id?: string | null
+          verification_notes?: string | null
+          verified?: boolean
+          verified_by?: string | null
+        }
+        Update: {
+          age_group?: string | null
+          campaign_id?: string
+          created_at?: string
+          employer_name?: string | null
+          gender?: string | null
+          hire_date?: string
+          id?: string
+          job_id?: string | null
+          job_title?: string
+          region?: string | null
+          sector?: string | null
+          user_id?: string | null
+          verification_notes?: string | null
+          verified?: boolean
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_hires_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "hiring_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       case_comments: {
         Row: {
           approved_at: string | null
@@ -16953,6 +17015,74 @@ export type Database = {
           },
         ]
       }
+      hiring_campaigns: {
+        Row: {
+          budget_allocated: number | null
+          campaign_status: string
+          created_at: string
+          current_hires: number
+          description: string | null
+          end_date: string
+          id: string
+          is_public: boolean
+          name: string
+          sponsor_id: string
+          start_date: string
+          success_metrics: Json | null
+          target_demographics: Json | null
+          target_hires: number
+          target_regions: string[] | null
+          target_sectors: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          budget_allocated?: number | null
+          campaign_status?: string
+          created_at?: string
+          current_hires?: number
+          description?: string | null
+          end_date: string
+          id?: string
+          is_public?: boolean
+          name: string
+          sponsor_id: string
+          start_date: string
+          success_metrics?: Json | null
+          target_demographics?: Json | null
+          target_hires?: number
+          target_regions?: string[] | null
+          target_sectors?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          budget_allocated?: number | null
+          campaign_status?: string
+          created_at?: string
+          current_hires?: number
+          description?: string | null
+          end_date?: string
+          id?: string
+          is_public?: boolean
+          name?: string
+          sponsor_id?: string
+          start_date?: string
+          success_metrics?: Json | null
+          target_demographics?: Json | null
+          target_hires?: number
+          target_regions?: string[] | null
+          target_sectors?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hiring_campaigns_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hospital_claims: {
         Row: {
           admin_notes: string | null
@@ -18649,6 +18779,69 @@ export type Database = {
             columns: ["job_id"]
             isOneToOne: false
             referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_seeker_badges: {
+        Row: {
+          badge_description: string | null
+          badge_image_url: string | null
+          badge_name: string
+          badge_type: string
+          campaign_id: string | null
+          created_at: string
+          earned_date: string
+          id: string
+          is_public: boolean
+          is_shareable: boolean
+          sponsor_id: string | null
+          user_id: string
+          verification_url: string | null
+        }
+        Insert: {
+          badge_description?: string | null
+          badge_image_url?: string | null
+          badge_name: string
+          badge_type: string
+          campaign_id?: string | null
+          created_at?: string
+          earned_date?: string
+          id?: string
+          is_public?: boolean
+          is_shareable?: boolean
+          sponsor_id?: string | null
+          user_id: string
+          verification_url?: string | null
+        }
+        Update: {
+          badge_description?: string | null
+          badge_image_url?: string | null
+          badge_name?: string
+          badge_type?: string
+          campaign_id?: string | null
+          created_at?: string
+          earned_date?: string
+          id?: string
+          is_public?: boolean
+          is_shareable?: boolean
+          sponsor_id?: string | null
+          user_id?: string
+          verification_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_seeker_badges_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "hiring_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_seeker_badges_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsors"
             referencedColumns: ["id"]
           },
         ]
@@ -30123,6 +30316,48 @@ export type Database = {
         }
         Relationships: []
       }
+      regional_hiring_stats: {
+        Row: {
+          active_employers: number
+          created_at: string
+          id: string
+          period_end: string
+          period_start: string
+          period_type: string
+          population_normalized_rate: number | null
+          region: string
+          top_sectors: Json | null
+          total_hires: number
+          total_job_posts: number
+        }
+        Insert: {
+          active_employers?: number
+          created_at?: string
+          id?: string
+          period_end: string
+          period_start: string
+          period_type: string
+          population_normalized_rate?: number | null
+          region: string
+          top_sectors?: Json | null
+          total_hires?: number
+          total_job_posts?: number
+        }
+        Update: {
+          active_employers?: number
+          created_at?: string
+          id?: string
+          period_end?: string
+          period_start?: string
+          period_type?: string
+          population_normalized_rate?: number | null
+          region?: string
+          top_sectors?: Json | null
+          total_hires?: number
+          total_job_posts?: number
+        }
+        Relationships: []
+      }
       remote_plugin_cache: {
         Row: {
           bundle_content: string | null
@@ -31867,6 +32102,47 @@ export type Database = {
         }
         Relationships: []
       }
+      sponsor_impact_metrics: {
+        Row: {
+          additional_data: Json | null
+          created_at: string
+          id: string
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+          sponsor_id: string
+        }
+        Insert: {
+          additional_data?: Json | null
+          created_at?: string
+          id?: string
+          metric_type: string
+          metric_value?: number
+          period_end: string
+          period_start: string
+          sponsor_id: string
+        }
+        Update: {
+          additional_data?: Json | null
+          created_at?: string
+          id?: string
+          metric_type?: string
+          metric_value?: number
+          period_end?: string
+          period_start?: string
+          sponsor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sponsor_impact_metrics_sponsor_id_fkey"
+            columns: ["sponsor_id"]
+            isOneToOne: false
+            referencedRelation: "sponsors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sponsored_listings: {
         Row: {
           amount_paid: number | null
@@ -31925,6 +32201,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sponsors: {
+        Row: {
+          contact_email: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          is_verified: boolean
+          logo_url: string | null
+          name: string
+          regions_focus: string[] | null
+          sectors_focus: string[] | null
+          sponsor_type: string
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          contact_email?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          logo_url?: string | null
+          name: string
+          regions_focus?: string[] | null
+          sectors_focus?: string[] | null
+          sponsor_type?: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          contact_email?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          is_verified?: boolean
+          logo_url?: string | null
+          name?: string
+          regions_focus?: string[] | null
+          sectors_focus?: string[] | null
+          sponsor_type?: string
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: []
       }
       storefront_products: {
         Row: {
