@@ -55,6 +55,75 @@ export const useUserMinisterRating = (ministerId: string) => {
   });
 };
 
+export const useAllRatings = () => {
+  return useQuery({
+    queryKey: ['all-ratings'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('approval_ratings')
+        .select(`
+          *,
+          politicians(name)
+        `)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data.map(rating => ({
+        ...rating,
+        politician_name: rating.politicians?.name,
+        is_flagged: false, // Add flagged status logic here
+        admin_notes: null // Add admin notes if available
+      }));
+    }
+  });
+};
+
+export const useModerateRating = () => {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ ratingId, action, adminNotes }: { 
+      ratingId: string; 
+      action: 'remove' | 'flag' | 'approve'; 
+      adminNotes: string 
+    }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('You must be logged in to moderate ratings');
+
+      if (action === 'remove') {
+        const { error } = await supabase
+          .from('approval_ratings')
+          .delete()
+          .eq('id', ratingId);
+        if (error) throw error;
+      } else {
+        // For flag/approve actions, you would update a moderation status
+        // This depends on your database schema
+        console.log(`${action} rating ${ratingId} with notes: ${adminNotes}`);
+      }
+
+      return { ratingId, action };
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['all-ratings'] });
+      
+      const actionText = data.action === 'remove' ? 'removed' : data.action === 'flag' ? 'flagged' : 'approved';
+      toast({
+        title: "Rating Moderated",
+        description: `Rating has been ${actionText} successfully`,
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Moderation Failed",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+  });
+};
+
 export const useRateMinister = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
