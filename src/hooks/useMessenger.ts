@@ -40,6 +40,8 @@ export interface Message {
   is_deleted: boolean;
   created_at: string;
   updated_at: string;
+  edited_at?: string;
+  deleted_at?: string;
   sender_email?: string;
   read_status?: MessageReadStatus[];
 }
