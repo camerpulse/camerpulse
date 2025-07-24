@@ -1,17 +1,7 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import NotificationBell from '@/components/NotificationBell';
-import { useAuth } from '@/contexts/AuthContext';
-import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-} from '@/components/ui/navigation-menu';
+import { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,40 +9,38 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  Home,
-  FileText,
-  Plus,
-  BarChart3,
-  Settings,
+} from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
+import { 
+  Bell, 
+  ChevronDown, 
+  LogOut, 
+  Menu, 
+  Settings, 
   User,
-  Search,
-  Building,
-  Award,
-  LogOut,
-  BookmarkCheck,
-  Shield,
-  TrendingUp,
-  Globe,
-  Phone,
-  Mail
-} from 'lucide-react';
+  X,
+  Building
+} from "lucide-react";
 
-export default function Header() {
+interface Profile {
+  full_name?: string;
+  avatar_url?: string;
+}
+
+const Header = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, profile, signOut } = useAuth();
   
   const isActive = (path: string) => location.pathname === path;
   
-  // Determine if we're in the tenders section
+  // Only show CamerTenders branding on tenders-specific pages
   const isTendersSection = location.pathname.startsWith('/tenders') || 
                           location.pathname === '/my-bids' || 
-                          location.pathname === '/verification' || 
-                          location.pathname === '/analytics';
+                          location.pathname === '/dashboard/tenders';
   
-  // Dynamic branding based on section
+  // Default to CamerPulse branding everywhere except tenders section
   const brandingConfig = isTendersSection ? {
     title: "CamerTenders",
     subtitle: "Government Procurement Platform",
@@ -65,11 +53,12 @@ export default function Header() {
 
   const handleSignOut = async () => {
     await signOut();
+    navigate('/');
   };
-  
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
+      <div className="container flex h-16 items-center justify-between">
         <div className="flex h-16 items-center justify-between">
           {/* Logo & Branding */}
           <div className="flex items-center gap-6">
@@ -83,285 +72,159 @@ export default function Header() {
               </div>
             </Link>
             
-            {/* Main Navigation */}
-            <div className="hidden md:block">
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <Link
-                      to="/"
-                      className={`group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 ${
-                        isActive('/') ? 'bg-accent text-accent-foreground' : ''
-                      }`}
-                    >
-                      <Home className="h-4 w-4 mr-2" />
-                      Home
-                    </Link>
-                  </NavigationMenuItem>
-                  
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger>
-                      <FileText className="h-4 w-4 mr-2" />
-                      Tenders
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <div className="grid gap-3 p-6 w-[500px] lg:w-[600px] lg:grid-cols-2">
-                        <div className="row-span-3">
-                          <NavigationMenuLink asChild>
-                            <Link
-                              className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md hover:bg-muted/60 transition-colors"
-                              to="/tenders"
-                            >
-                              <FileText className="h-6 w-6" />
-                              <div className="mb-2 mt-4 text-lg font-medium">
-                                Browse All Tenders
-                              </div>
-                              <p className="text-sm leading-tight text-muted-foreground">
-                                Discover government contracts and opportunities across Cameroon
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to="/tenders/create"
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                            >
-                              <div className="text-sm font-medium leading-none flex items-center">
-                                <Plus className="h-4 w-4 mr-2" />
-                                Post Tender
-                              </div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Create and publish a new tender
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                          
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to="/my-bids"
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                            >
-                              <div className="text-sm font-medium leading-none flex items-center">
-                                <BookmarkCheck className="h-4 w-4 mr-2" />
-                                My Bids
-                              </div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Track your submitted bids
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                          
-                          <NavigationMenuLink asChild>
-                            <Link
-                              to="/my-tenders"
-                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                            >
-                              <div className="text-sm font-medium leading-none flex items-center">
-                                <FileText className="h-4 w-4 mr-2" />
-                                My Tenders
-                              </div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Manage your published tenders
-                              </p>
-                            </Link>
-                          </NavigationMenuLink>
-                        </div>
-                      </div>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                  
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger>
-                      <TrendingUp className="h-4 w-4 mr-2" />
-                      Tools
-                    </NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <div className="grid gap-3 p-6 w-[400px] grid-cols-1">
-                        <NavigationMenuLink asChild>
-                          <Link
-                            to="/search"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none flex items-center">
-                              <Search className="h-4 w-4 mr-2" />
-                              Advanced Search
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Find tenders with advanced filters
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                        
-                        <NavigationMenuLink asChild>
-                          <Link
-                            to="/analytics"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none flex items-center">
-                              <BarChart3 className="h-4 w-4 mr-2" />
-                              Analytics
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Market insights and trends
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                        
-                        <NavigationMenuLink asChild>
-                          <Link
-                            to="/verification"
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none flex items-center">
-                              <Shield className="h-4 w-4 mr-2" />
-                              Verification Center
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Verify your business credentials
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </div>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
-            </div>
-          </div>
-          
-          {/* Right Side Actions */}
-          <div className="flex items-center gap-3">
-            {/* Quick Search - Desktop Only */}
-            <div className="hidden lg:block">
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/search">
-                  <Search className="h-4 w-4 mr-2" />
-                  Search
-                </Link>
-              </Button>
-            </div>
-            
-            {user ? (
-              <>
-                {/* Post Tender Button */}
-                <Button size="sm" asChild>
-                  <Link to="/tenders/create">
-                    <Plus className="h-4 w-4 mr-2" />
-                    <span className="hidden sm:inline">Post Tender</span>
-                    <span className="sm:hidden">Post</span>
-                  </Link>
-                </Button>
-                
-                {/* Notifications */}
-                <NotificationBell />
-                
-                {/* User Menu */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={profile?.avatar_url || ''} alt={profile?.display_name || ''} />
-                        <AvatarFallback>
-                          {profile?.display_name?.charAt(0)?.toUpperCase() || 
-                           user.email?.charAt(0)?.toUpperCase() || 'U'}
-                        </AvatarFallback>
-                      </Avatar>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">
-                          {profile?.display_name || 'User'}
-                        </p>
-                        <p className="text-xs leading-none text-muted-foreground">
-                          {user.email}
-                        </p>
-                        {profile?.verified && (
-                          <Badge variant="secondary" className="w-fit text-xs">
-                            <Shield className="h-3 w-3 mr-1" />
-                            Verified
-                          </Badge>
-                        )}
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    
-                    <DropdownMenuItem asChild>
-                      <Link to="/profile">
-                        <User className="h-4 w-4 mr-2" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    
-                    <DropdownMenuItem asChild>
-                      <Link to="/company">
-                        <Building className="h-4 w-4 mr-2" />
-                        Company Dashboard
-                      </Link>
-                    </DropdownMenuItem>
-                    
-                    <DropdownMenuItem asChild>
-                      <Link to="/verification">
-                        <Shield className="h-4 w-4 mr-2" />
-                        Verification
-                      </Link>
-                    </DropdownMenuItem>
-                    
-                    <DropdownMenuItem asChild>
-                      <Link to="/certificates">
-                        <Award className="h-4 w-4 mr-2" />
-                        Certificates
-                      </Link>
-                    </DropdownMenuItem>
-                    
-                    <DropdownMenuSeparator />
-                    
-                    <DropdownMenuItem asChild>
-                      <Link to="/settings">
-                        <Settings className="h-4 w-4 mr-2" />
-                        Settings
-                      </Link>
-                    </DropdownMenuItem>
-                    
-                    <DropdownMenuSeparator />
-                    
-                    <DropdownMenuItem onClick={handleSignOut}>
-                      <LogOut className="h-4 w-4 mr-2" />
-                      Log out
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </>
-            ) : (
-              /* Auth Buttons for Non-logged Users */
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" asChild>
-                  <Link to="/auth">Sign In</Link>
-                </Button>
-                <Button size="sm" asChild>
-                  <Link to="/auth">Get Started</Link>
-                </Button>
-              </div>
-            )}
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-6">
+              <Link 
+                to="/polls" 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/polls') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Polls
+              </Link>
+              <Link 
+                to="/politicians" 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/politicians') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Politicians
+              </Link>
+              <Link 
+                to="/legislation" 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/legislation') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Legislation
+              </Link>
+              <Link 
+                to="/judiciary" 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/judiciary') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Judiciary
+              </Link>
+              <Link 
+                to="/tenders" 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/tenders') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Tenders
+              </Link>
+              <Link 
+                to="/analytics" 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/analytics') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Analytics
+              </Link>
+              <Link 
+                to="/schools" 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/schools') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Services
+              </Link>
+              <Link 
+                to="/diaspora-connect" 
+                className={`text-sm font-medium transition-colors hover:text-primary ${
+                  isActive('/diaspora-connect') ? 'text-primary' : 'text-muted-foreground'
+                }`}
+              >
+                Diaspora
+              </Link>
+            </nav>
           </div>
         </div>
-      </div>
-      
-      {/* Mobile Search Bar - Below header on small screens */}
-      <div className="lg:hidden border-t bg-muted/30">
-        <div className="container mx-auto px-4 py-2">
-          <Button variant="outline" size="sm" className="w-full justify-start" asChild>
-            <Link to="/search">
-              <Search className="h-4 w-4 mr-2" />
-              Search tenders, companies, opportunities...
-            </Link>
+
+        {/* Right side - Auth & Menu */}
+        <div className="flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" className="relative">
+                <Bell className="h-4 w-4" />
+                <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+              </Button>
+              
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center gap-2">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={profile?.avatar_url} />
+                      <AvatarFallback>
+                        {user.email?.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <span className="hidden sm:block text-sm">
+                      {profile?.full_name || user.email}
+                    </span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard">Dashboard</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to="/settings">Settings</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/auth">Sign In</Link>
+              </Button>
+              <Button asChild size="sm">
+                <Link to="/auth">Sign Up</Link>
+              </Button>
+            </div>
+          )}
+
+          {/* Mobile menu button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="md:hidden"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
+            {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
         </div>
       </div>
+
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <div className="md:hidden border-t">
+          <nav className="flex flex-col p-4 space-y-2">
+            <Link to="/polls" className="py-2 text-sm hover:text-primary">Polls</Link>
+            <Link to="/politicians" className="py-2 text-sm hover:text-primary">Politicians</Link>
+            <Link to="/legislation" className="py-2 text-sm hover:text-primary">Legislation</Link>
+            <Link to="/judiciary" className="py-2 text-sm hover:text-primary">Judiciary</Link>
+            <Link to="/tenders" className="py-2 text-sm hover:text-primary">Tenders</Link>
+            <Link to="/analytics" className="py-2 text-sm hover:text-primary">Analytics</Link>
+            <Link to="/schools" className="py-2 text-sm hover:text-primary">Services</Link>
+            <Link to="/diaspora-connect" className="py-2 text-sm hover:text-primary">Diaspora</Link>
+          </nav>
+        </div>
+      )}
     </header>
   );
-}
+};
+
+export default Header;
