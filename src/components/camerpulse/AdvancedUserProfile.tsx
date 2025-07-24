@@ -216,6 +216,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
 
   const fetchProfile = async () => {
     try {
+      console.log('Fetching profile for userId:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select(`
@@ -228,9 +229,21 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
           )
         `)
         .eq('user_id', userId)
-        .single();
+        .maybeSingle();
 
+      console.log('Profile fetch result:', { data, error });
       if (error) throw error;
+      
+      if (!data) {
+        console.log('No profile found for userId:', userId);
+        toast({
+          title: "Profile not found",
+          description: "The requested user profile could not be found.",
+          variant: "destructive"
+        });
+        return;
+      }
+      
       setProfile(data);
     } catch (error) {
       console.error('Error fetching profile:', error);
