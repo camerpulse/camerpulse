@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Building2, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { CamerJobsLayout } from '@/components/Layout/CamerJobsLayout';
 
 type ViewState = 'loading' | 'register' | 'dashboard' | 'post-job';
 
@@ -81,7 +82,7 @@ export const CompanyPortal: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <CamerJobsLayout>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
@@ -129,6 +130,6 @@ export const CompanyPortal: React.FC = () => {
           />
         )}
       </div>
-    </div>
+    </CamerJobsLayout>
   );
 };

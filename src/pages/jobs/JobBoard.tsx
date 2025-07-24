@@ -8,6 +8,7 @@ import { JobDetail } from '@/components/jobs/JobDetail';
 import { JobApplication } from '@/components/jobs/JobApplication';
 import { JobFilters as JobFiltersType, Job } from '@/types/jobs';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { CamerJobsLayout } from '@/components/Layout/CamerJobsLayout';
 
 const JobBoard = () => {
   const [filters, setFilters] = useState<JobFiltersType>({});
@@ -46,7 +47,7 @@ const JobBoard = () => {
   // Show job detail view
   if (selectedJob) {
     return (
-      <div className="min-h-screen bg-background">
+      <CamerJobsLayout>
         <div className="container mx-auto px-4 py-8">
           <JobDetail 
             job={selectedJob} 
@@ -59,13 +60,13 @@ const JobBoard = () => {
             onClose={() => setShowApplication(false)}
           />
         </div>
-      </div>
+      </CamerJobsLayout>
     );
   }
 
   // Show main job board
   return (
-    <div className="min-h-screen bg-background">
+    <CamerJobsLayout>
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Find Your Next Opportunity</h1>
@@ -169,7 +170,7 @@ const JobBoard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </CamerJobsLayout>
   );
 };
 

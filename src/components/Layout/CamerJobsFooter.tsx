@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { Music, Upload, Search, Calendar, Trophy, Star, Users, Headphones } from 'lucide-react';
+import { Briefcase, Upload, Search, Users, Building, MapPin, Star, TrendingUp } from 'lucide-react';
 
-export const CamerPlayFooter = () => {
+export const CamerJobsFooter = () => {
   return (
     <footer className="border-t bg-background">
       <div className="container mx-auto px-4 py-12">
@@ -9,11 +9,14 @@ export const CamerPlayFooter = () => {
           {/* Brand Section */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <Music className="h-6 w-6 text-primary" />
-              <span className="font-bold text-xl">CamerPlay</span>
+              <Briefcase className="h-6 w-6 text-primary" />
+              <div className="flex items-center space-x-1">
+                <span className="font-bold text-xl text-primary">Camer</span>
+                <span className="font-bold text-xl">Jobs</span>
+              </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Cameroon's premier music streaming and discovery platform. Support local artists and discover amazing music.
+              Cameroon's premier job platform connecting talent with opportunities. Find jobs, build careers, and grow your business.
             </p>
             <div className="flex space-x-4">
               <Link to="https://facebook.com" className="text-muted-foreground hover:text-primary">
@@ -31,88 +34,70 @@ export const CamerPlayFooter = () => {
             </div>
           </div>
 
-          {/* Music Section */}
+          {/* Job Seekers Section */}
           <div className="space-y-4">
-            <h3 className="font-semibold">Discover Music</h3>
+            <h3 className="font-semibold">For Job Seekers</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/camerplay/search" className="text-muted-foreground hover:text-primary flex items-center">
+                <Link to="/jobs/board" className="text-muted-foreground hover:text-primary flex items-center">
                   <Search className="mr-2 h-4 w-4" />
-                  Search & Discover
+                  Browse Jobs
                 </Link>
               </li>
               <li>
-                <Link to="/camerplay/rankings" className="text-muted-foreground hover:text-primary flex items-center">
-                  <Trophy className="mr-2 h-4 w-4" />
-                  Top Rankings
+                <Link to="/experts" className="text-muted-foreground hover:text-primary flex items-center">
+                  <Star className="mr-2 h-4 w-4" />
+                  Expert Marketplace
                 </Link>
               </li>
               <li>
-                <Link to="/camerplay/music-player" className="text-muted-foreground hover:text-primary flex items-center">
-                  <Headphones className="mr-2 h-4 w-4" />
-                  Music Player
-                </Link>
-              </li>
-              <li>
-                <Link to="/fan-portal" className="text-muted-foreground hover:text-primary flex items-center">
+                <Link to="/profile" className="text-muted-foreground hover:text-primary flex items-center">
                   <Users className="mr-2 h-4 w-4" />
-                  Fan Portal
+                  My Profile
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Artists Section */}
+          {/* Employers Section */}
           <div className="space-y-4">
-            <h3 className="font-semibold">For Artists</h3>
+            <h3 className="font-semibold">For Employers</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/artist-register" className="text-muted-foreground hover:text-primary flex items-center">
-                  <Users className="mr-2 h-4 w-4" />
-                  Join as Artist
+                <Link to="/jobs/company" className="text-muted-foreground hover:text-primary flex items-center">
+                  <Building className="mr-2 h-4 w-4" />
+                  Company Portal
                 </Link>
               </li>
               <li>
-                <Link to="/camerplay/upload" className="text-muted-foreground hover:text-primary flex items-center">
+                <Link to="/jobs/company" className="text-muted-foreground hover:text-primary flex items-center">
                   <Upload className="mr-2 h-4 w-4" />
-                  Upload Music
+                  Post Jobs
                 </Link>
               </li>
               <li>
-                <Link to="/artist-dashboard" className="text-muted-foreground hover:text-primary flex items-center">
-                  <Star className="mr-2 h-4 w-4" />
-                  Artist Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link to="/camerplay/submit-artist" className="text-muted-foreground hover:text-primary flex items-center">
-                  <Star className="mr-2 h-4 w-4" />
-                  Submit Artist
+                <Link to="/experts" className="text-muted-foreground hover:text-primary flex items-center">
+                  <Users className="mr-2 h-4 w-4" />
+                  Find Experts
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Events & Awards Section */}
+          {/* Resources Section */}
           <div className="space-y-4">
-            <h3 className="font-semibold">Events & Awards</h3>
+            <h3 className="font-semibold">Resources</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/camerplay/events" className="text-muted-foreground hover:text-primary flex items-center">
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Upcoming Events
+                <Link to="/jobs" className="text-muted-foreground hover:text-primary flex items-center">
+                  <TrendingUp className="mr-2 h-4 w-4" />
+                  Career Resources
                 </Link>
               </li>
               <li>
-                <Link to="/camerplay/awards" className="text-muted-foreground hover:text-primary flex items-center">
-                  <Trophy className="mr-2 h-4 w-4" />
-                  Music Awards
-                </Link>
-              </li>
-              <li>
-                <Link to="/events" className="text-muted-foreground hover:text-primary flex items-center">
-                  <Calendar className="mr-2 h-4 w-4" />
-                  Event Calendar
+                <Link to="/jobs/board" className="text-muted-foreground hover:text-primary flex items-center">
+                  <MapPin className="mr-2 h-4 w-4" />
+                  Jobs by Location
                 </Link>
               </li>
             </ul>
@@ -121,10 +106,10 @@ export const CamerPlayFooter = () => {
 
         <div className="mt-8 border-t pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm text-muted-foreground">
-            © 2024 CamerPlay. Supporting Cameroonian music and artists.
+            © 2024 CamerJobs. Connecting Cameroonian talent with opportunities.
           </p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link to="/camerpulse-master" className="text-sm text-muted-foreground hover:text-primary">
+            <Link to="/" className="text-sm text-muted-foreground hover:text-primary">
               Back to CamerPulse
             </Link>
           </div>

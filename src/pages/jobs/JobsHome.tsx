@@ -2,10 +2,11 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Briefcase, Building, Users, TrendingUp } from 'lucide-react';
+import { CamerJobsLayout } from '@/components/Layout/CamerJobsLayout';
 
 const JobsHome = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <CamerJobsLayout>
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -143,7 +144,7 @@ const JobsHome = () => {
           </CardContent>
         </Card>
       </div>
-    </div>
+    </CamerJobsLayout>
   );
 };
 

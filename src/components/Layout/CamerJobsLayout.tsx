@@ -1,24 +1,24 @@
 import { ReactNode } from 'react';
-import { CamerPlayHeader } from './CamerPlayHeader';
-import { CamerPlayFooter } from './CamerPlayFooter';
+import { CamerJobsHeader } from './CamerJobsHeader';
+import { CamerJobsFooter } from './CamerJobsFooter';
 import { MobileNavigation } from './MobileNavigation';
 import { PWAInstallPrompt } from './PWAInstallPrompt';
 
-interface CamerPlayLayoutProps {
+interface CamerJobsLayoutProps {
   children: ReactNode;
   showMobileNav?: boolean;
 }
 
-export const CamerPlayLayout = ({ children, showMobileNav = true }: CamerPlayLayoutProps) => {
+export const CamerJobsLayout = ({ children, showMobileNav = true }: CamerJobsLayoutProps) => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      <CamerPlayHeader />
+      <CamerJobsHeader />
       
       <main className="flex-1 relative z-10">
         {children}
       </main>
       
-      <CamerPlayFooter />
+      <CamerJobsFooter />
       
       {showMobileNav && <MobileNavigation />}
       <PWAInstallPrompt />
