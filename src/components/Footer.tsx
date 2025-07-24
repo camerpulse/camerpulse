@@ -36,11 +36,11 @@ export default function Footer() {
               <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary/80 rounded-lg flex items-center justify-center">
                 <Building className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="text-xl font-bold">CamerTenders</span>
+              <span className="text-xl font-bold">CamerPulse</span>
             </div>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              Cameroon's leading government procurement platform. Connecting businesses 
-              with opportunities and promoting transparency in public spending.
+              Cameroon's comprehensive civic engagement platform. Empowering citizens through 
+              transparency, democracy, and community connection from villages to national governance.
             </p>
             <div className="space-y-2">
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -58,47 +58,59 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Civic Engagement */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Platform</h3>
+            <h3 className="text-lg font-semibold">Civic Platform</h3>
+            <nav className="space-y-2">
+              <Link 
+                to="/villages" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Villages Directory
+              </Link>
+              <Link 
+                to="/civic-reputation" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Rate Leaders
+              </Link>
+              <Link 
+                to="/rankings/top-politicians" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Political Rankings
+              </Link>
+              <Link 
+                to="/rankings/trusted-mayors" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Mayor Rankings
+              </Link>
+              <Link 
+                to="/legislation" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Legislation Tracker
+              </Link>
+            </nav>
+          </div>
+
+          {/* Economic Opportunities */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Economic Platform</h3>
             <nav className="space-y-2">
               <Link 
                 to="/tenders" 
                 className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Browse Tenders
+                Government Tenders
               </Link>
               <Link 
-                to="/tenders/create" 
+                to="/jobs" 
                 className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Post a Tender
+                Job Opportunities
               </Link>
-              <Link 
-                to="/search" 
-                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Advanced Search
-              </Link>
-              <Link 
-                to="/analytics" 
-                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Market Analytics
-              </Link>
-              <Link 
-                to="/verification" 
-                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Business Verification
-              </Link>
-            </nav>
-          </div>
-
-          {/* Services */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Services</h3>
-            <nav className="space-y-2">
               <Link 
                 to="/company" 
                 className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -106,63 +118,65 @@ export default function Footer() {
                 Company Profiles
               </Link>
               <Link 
-                to="/certificates" 
+                to="/verification" 
                 className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Certification Management
+                Business Verification
+              </Link>
+              <Link 
+                to="/diaspora-connect" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Diaspora Connect
+              </Link>
+            </nav>
+          </div>
+
+          {/* Directories & Community */}
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Community Services</h3>
+            <nav className="space-y-2">
+              <Link 
+                to="/hospitals" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Hospitals Directory
+              </Link>
+              <Link 
+                to="/schools" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Schools Directory
+              </Link>
+              <Link 
+                to="/pharmacies" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Pharmacies Directory
+              </Link>
+              <Link 
+                to="/notifications" 
+                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Notification Center
               </Link>
               <Link 
                 to="/support" 
                 className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Customer Support
-              </Link>
-              <Link 
-                to="/training" 
-                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Training & Resources
-              </Link>
-              <Link 
-                to="/api" 
-                className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Developer API
+                Support Center
               </Link>
             </nav>
-          </div>
-
-          {/* Newsletter & Stats */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Stay Updated</h3>
-            <p className="text-sm text-muted-foreground">
-              Get the latest tender notifications and platform updates.
-            </p>
-            <div className="space-y-2">
-              <div className="flex gap-2">
-                <Input 
-                  type="email" 
-                  placeholder="Enter your email" 
-                  className="flex-1"
-                />
-                <Button size="sm">
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                By subscribing, you agree to our privacy policy.
-              </p>
-            </div>
             
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-4 pt-4">
               <div className="text-center p-3 bg-muted/50 rounded-md">
-                <div className="text-lg font-bold text-foreground">2,500+</div>
-                <div className="text-xs text-muted-foreground">Active Tenders</div>
+                <div className="text-lg font-bold text-foreground">250K+</div>
+                <div className="text-xs text-muted-foreground">Active Citizens</div>
               </div>
               <div className="text-center p-3 bg-muted/50 rounded-md">
-                <div className="text-lg font-bold text-foreground">15,000+</div>
-                <div className="text-xs text-muted-foreground">Businesses</div>
+                <div className="text-lg font-bold text-foreground">15K+</div>
+                <div className="text-xs text-muted-foreground">Villages</div>
               </div>
             </div>
           </div>
@@ -214,7 +228,7 @@ export default function Footer() {
       <div className="container mx-auto px-4 py-6">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
-            <span>© {currentYear} CamerTenders. All rights reserved.</span>
+            <span>© {currentYear} CamerPulse. All rights reserved.</span>
             <Separator orientation="vertical" className="h-4" />
             <span className="flex items-center gap-1">
               Made with <Heart className="h-3 w-3 text-red-500" /> in Cameroon

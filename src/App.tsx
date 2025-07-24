@@ -10,7 +10,7 @@ import { RealtimeProvider } from "./contexts/RealtimeContext";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import Layout from '@/components/Layout';
-import TenderHomePage from '@/components/TenderHomePage';
+import CamerPulseHome from '@/pages/CamerPulseHome';
 import Auth from './pages/Auth';
 import { AdvancedSearch } from '@/components/AdvancedSearch';
 import { VerificationCenter } from '@/components/VerificationCenter';
@@ -82,7 +82,7 @@ const App = () => {
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<Layout />}>
-                      <Route index element={<TenderHomePage />} />
+                      <Route index element={<CamerPulseHome />} />
                       <Route path="search" element={<AdvancedSearch />} />
                       <Route path="verification" element={<VerificationCenter />} />
                       <Route path="recommendations" element={<RecommendationEngine />} />
