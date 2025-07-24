@@ -10,33 +10,26 @@ import { useToast } from "@/hooks/use-toast"
 import { 
   User, 
   FileText, 
-  DollarSign, 
+  BarChart3, 
   Calendar, 
   TrendingUp, 
   Award,
-  Eye,
+  MessageCircle,
   Loader2 
 } from "lucide-react"
 
-interface BidInfo {
+interface UserActivity {
   id: string
-  tender_id: string
-  bid_amount: number
-  currency: string
-  status: string
-  submitted_at: string
-  tender: {
-    title: string
-    deadline: string
-    status: string
-  }
+  type: string
+  title: string
+  created_at: string
 }
 
 interface UserStats {
-  totalBids: number
-  activeBids: number
-  wonBids: number
-  totalValue: number
+  totalPolls: number
+  totalVotes: number
+  civicScore: number
+  activitiesCount: number
 }
 
 export const UserDashboard = () => {
@@ -44,12 +37,12 @@ export const UserDashboard = () => {
   const navigate = useNavigate()
   const { toast } = useToast()
   
-  const [bids, setBids] = useState<BidInfo[]>([])
+  const [activities, setActivities] = useState<UserActivity[]>([])
   const [stats, setStats] = useState<UserStats>({
-    totalBids: 0,
-    activeBids: 0,
-    wonBids: 0,
-    totalValue: 0
+    totalPolls: 0,
+    totalVotes: 0,
+    civicScore: 0,
+    activitiesCount: 0
   })
   const [loading, setLoading] = useState(true)
 
@@ -66,59 +59,23 @@ export const UserDashboard = () => {
     if (!user) return
 
     try {
-      // Fetch user's bids with tender information
-      const { data: bidData, error: bidError } = await supabase
-        .from('tender_bids')
-        .select(`
-          id,
-          tender_id,
-          bid_amount,
-          currency,
-          status,
-          submitted_at,
-          tenders (
-            title,
-            deadline,
-            status
-          )
-        `)
-        .eq('user_id', user.id)
-        .order('submitted_at', { ascending: false })
+      // For now, set default stats since we're focusing on removing tender references
+      // This can be enhanced later with actual poll data
+      setStats({ 
+        totalPolls: 0, 
+        totalVotes: 0, 
+        civicScore: 10, 
+        activitiesCount: 0 
+      })
 
-      if (bidError) {
-        console.error('Error fetching bids:', bidError)
-        toast({
-          title: "Error",
-          description: "Failed to load your bids",
-          variant: "destructive"
-        })
-        return
-      }
-
-      const bidsWithTender = bidData?.map(bid => ({
-        ...bid,
-        tender: Array.isArray(bid.tenders) ? bid.tenders[0] : bid.tenders
-      })) || []
-
-      setBids(bidsWithTender)
-
-      // Calculate stats
-      const totalBids = bidsWithTender.length
-      const activeBids = bidsWithTender.filter(bid => 
-        bid.status === 'submitted' && bid.tender?.status === 'open'
-      ).length
-      const wonBids = bidsWithTender.filter(bid => 
-        bid.status === 'accepted' || bid.status === 'awarded'
-      ).length
-      const totalValue = bidsWithTender.reduce((sum, bid) => sum + bid.bid_amount, 0)
-
-      setStats({ totalBids, activeBids, wonBids, totalValue })
+      // Set empty activities for now
+      setActivities([])
 
     } catch (error) {
       console.error('Error fetching user data:', error)
       toast({
         title: "Error",
-        description: "Failed to load dashboard data",
+        description: "Failed to load your dashboard data",
         variant: "destructive"
       })
     } finally {
@@ -126,24 +83,26 @@ export const UserDashboard = () => {
     }
   }
 
-  const getBidStatusColor = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'submitted':
-        return 'bg-blue-100 text-blue-800 border-blue-200'
-      case 'accepted':
-      case 'awarded':
-        return 'bg-green-100 text-green-800 border-green-200'
-      case 'rejected':
-        return 'bg-red-100 text-red-800 border-red-200'
-      case 'under_review':
-        return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+  const getActivityIcon = (type: string) => {
+    switch (type) {
+      case 'poll':
+        return <BarChart3 className="h-4 w-4" />
+      case 'vote':
+        return <MessageCircle className="h-4 w-4" />
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200'
+        return <FileText className="h-4 w-4" />
     }
   }
 
-  const formatCurrency = (amount: number, currency: string) => {
-    return `${amount.toLocaleString()} ${currency}`
+  const getActivityColor = (type: string) => {
+    switch (type) {
+      case 'poll':
+        return 'bg-blue-100 text-blue-800 border-blue-200'
+      case 'vote':
+        return 'bg-green-100 text-green-800 border-green-200'
+      default:
+        return 'bg-gray-100 text-gray-800 border-gray-200'
+    }
   }
 
   if (loading) {
@@ -168,129 +127,100 @@ export const UserDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Bids</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Polls Created</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalBids}</div>
+            <div className="text-2xl font-bold">{stats.totalPolls}</div>
             <p className="text-xs text-muted-foreground">
-              All time submissions
+              All time polls
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Bids</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Votes Cast</CardTitle>
+            <MessageCircle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.activeBids}</div>
+            <div className="text-2xl font-bold">{stats.totalVotes}</div>
             <p className="text-xs text-muted-foreground">
-              Pending review
+              Civic participation
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Won Bids</CardTitle>
+            <CardTitle className="text-sm font-medium">Civic Score</CardTitle>
             <Award className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.wonBids}</div>
+            <div className="text-2xl font-bold">{stats.civicScore}</div>
             <p className="text-xs text-muted-foreground">
-              Successful awards
+              Engagement points
             </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Value</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Activities</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {stats.totalValue > 0 ? formatCurrency(stats.totalValue, 'FCFA') : '0'}
-            </div>
+            <div className="text-2xl font-bold">{stats.activitiesCount}</div>
             <p className="text-xs text-muted-foreground">
-              Bid amounts submitted
+              Total actions
             </p>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content */}
-      <Tabs defaultValue="my-bids" className="space-y-6">
+      <Tabs defaultValue="activities" className="space-y-6">
         <TabsList>
-          <TabsTrigger value="my-bids">My Bids</TabsTrigger>
+          <TabsTrigger value="activities">Recent Activity</TabsTrigger>
           <TabsTrigger value="profile">Profile</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="my-bids" className="space-y-6">
+        <TabsContent value="activities" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Recent Bids</CardTitle>
+              <CardTitle>Recent Civic Activities</CardTitle>
             </CardHeader>
             <CardContent>
-              {bids.length === 0 ? (
+              {activities.length === 0 ? (
                 <div className="text-center py-8">
-                  <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">No bids yet</h3>
+                  <BarChart3 className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold mb-2">No activity yet</h3>
                   <p className="text-muted-foreground mb-4">
-                    Start by browsing available tenders and submit your first bid
+                    Start participating in polls and civic discussions
                   </p>
-                  <Button onClick={() => navigate('/tenders')}>
-                    Browse Tenders
+                  <Button onClick={() => navigate('/polls')}>
+                    Browse Polls
                   </Button>
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {bids.map((bid) => (
+                  {activities.map((activity) => (
                     <div
-                      key={bid.id}
+                      key={activity.id}
                       className="border rounded-lg p-4 hover:shadow-md transition-shadow"
                     >
-                      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-lg mb-2">
-                            {bid.tender?.title || 'Tender Title'}
-                          </h4>
-                          <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                            <div className="flex items-center gap-1">
-                              <DollarSign className="h-4 w-4" />
-                              <span>{formatCurrency(bid.bid_amount, bid.currency)}</span>
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Calendar className="h-4 w-4" />
-                              <span>
-                                Submitted {new Date(bid.submitted_at).toLocaleDateString()}
-                              </span>
-                            </div>
-                            {bid.tender?.deadline && (
-                              <div className="flex items-center gap-1">
-                                <Calendar className="h-4 w-4" />
-                                <span>
-                                  Deadline {new Date(bid.tender.deadline).toLocaleDateString()}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center gap-3">
-                          <Badge className={getBidStatusColor(bid.status)}>
-                            {bid.status}
+                      <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2">
+                          {getActivityIcon(activity.type)}
+                          <Badge className={getActivityColor(activity.type)}>
+                            {activity.type}
                           </Badge>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => navigate(`/tender/${bid.tender_id}`)}
-                          >
-                            <Eye className="h-4 w-4 mr-1" />
-                            View Tender
-                          </Button>
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium">{activity.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {new Date(activity.created_at).toLocaleDateString()}
+                          </p>
                         </div>
                       </div>
                     </div>
