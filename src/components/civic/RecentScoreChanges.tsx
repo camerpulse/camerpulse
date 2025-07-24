@@ -75,21 +75,47 @@ export function RecentScoreChanges() {
     try {
       setLoading(true);
       
-      // Fetch recent reputation history
-      const { data: historyData, error } = await supabase
-        .from('civic_reputation_history')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(20);
+      // Mock data for recent reputation history until database is ready
+      const mockData: ScoreChange[] = [
+        {
+          id: '1',
+          entity_type: 'politician',
+          entity_id: 'pol-1',
+          entity_name: 'Hon. John Tamfu',
+          old_score: 75,
+          new_score: 82,
+          change_reason: 'Successful bill passage',
+          calculation_details: { bill_id: 'bill-123', impact: 7 },
+          created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 minutes ago
+          score_difference: 7
+        },
+        {
+          id: '2',
+          entity_type: 'village',
+          entity_id: 'vil-1',
+          entity_name: 'Bamunka',
+          old_score: 68,
+          new_score: 64,
+          change_reason: 'Infrastructure project delay',
+          calculation_details: { project_id: 'proj-456', delay_days: 45 },
+          created_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
+          score_difference: -4
+        },
+        {
+          id: '3',
+          entity_type: 'ministry',
+          entity_id: 'min-1',
+          entity_name: 'Ministry of Health',
+          old_score: 72,
+          new_score: 78,
+          change_reason: 'Improved healthcare delivery',
+          calculation_details: { hospital_count: 3, patient_satisfaction: 0.85 },
+          created_at: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(), // 4 hours ago
+          score_difference: 6
+        }
+      ];
 
-      if (error) throw error;
-
-      const processedChanges = (historyData || []).map(change => ({
-        ...change,
-        score_difference: change.new_score - change.old_score
-      }));
-
-      setScoreChanges(processedChanges);
+      setScoreChanges(mockData);
     } catch (error) {
       console.error('Error fetching recent changes:', error);
       toast({
