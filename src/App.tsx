@@ -55,7 +55,7 @@ import { UserModerationTools } from "./components/Admin/UserModerationTools";
 import { TenderApprovalWorkflow } from "./components/Admin/TenderApprovalWorkflow";
 import { MobileAppFeatures } from "./components/ui/mobile-app-features";
 import { EnhancedTenderList } from "./components/enhanced/EnhancedTenderList";
-import TendersHomePage from "./pages/TendersHomePage";
+
 
 const queryClient = new QueryClient();
 
@@ -101,8 +101,7 @@ const App = () => {
                       <Route path="pharmacies" element={<PharmaciesPage />} />
                       <Route path="legislation" element={<LegislationTracker />} />
                       <Route path="hospitals" element={<HospitalsDirectory />} />
-                      <Route path="tenders" element={<TendersHomePage />} />
-                      <Route path="tenders/list" element={<Tenders />} />
+                       <Route path="tenders" element={<Tenders />} />
                       <Route path="tenders/create" element={<CreateTender />} />
                       <Route path="tenders/:id" element={<TenderDetail />} />
                       <Route path="tenders/:id/bid" element={<BidSubmissionForm />} />
