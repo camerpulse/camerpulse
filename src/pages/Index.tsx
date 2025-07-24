@@ -157,9 +157,9 @@ const Index = () => {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Button asChild size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 text-lg">
-                <Link to="/diaspora-connect">
-                  <Globe className="h-5 w-5 mr-2" />
-                  DiasporaConnect
+                <Link to="/transparency">
+                  <Shield className="h-5 w-5 mr-2" />
+                  Transparency Portal
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg" className="px-8 py-4 text-lg">
@@ -310,6 +310,13 @@ const Index = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
+              {
+                title: "Transparency Portal",
+                description: "Real-time government transparency monitoring and scoring",
+                icon: Shield,
+                href: "/transparency",
+                metrics: ["94% transparency score", "Live monitoring", "Public accountability"]
+              },
               {
                 title: "Election Forecasting",
                 description: "AI-powered predictions and electoral analysis",
