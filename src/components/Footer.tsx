@@ -38,7 +38,9 @@ import {
   Handshake,
   Newspaper,
   DollarSign,
-  Bug
+  Bug,
+  BarChart3,
+  Shield
 } from 'lucide-react';
 
 export default function Footer() {
@@ -119,13 +121,21 @@ export default function Footer() {
               Businesses
             </h3>
             <nav className="space-y-2">
-              <Link to="/company" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+              <Link to="/companies" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
                 <Building className="h-3 w-3" />
                 Companies
               </Link>
               <Link to="/billionaires" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
                 <TrendingUp className="h-3 w-3" />
                 Billionaires
+              </Link>
+              <Link to="/economics" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <BarChart3 className="h-3 w-3" />
+                Economics
+              </Link>
+              <Link to="/business-verification" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+                <Shield className="h-3 w-3" />
+                Business Verification
               </Link>
               <Link to="/jobs" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
                 <Users className="h-3 w-3" />

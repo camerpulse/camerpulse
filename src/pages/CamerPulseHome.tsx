@@ -315,12 +315,12 @@ const CamerPulseHome = () => {
               </Card>
             </Link>
             
-            <Link to="/billionaires" className="block">
+            <Link to="/economics" className="block">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
                   <TrendingUp className="h-8 w-8 mx-auto mb-3 text-primary" />
-                  <h3 className="font-semibold mb-2">Wealth Tracker</h3>
-                  <p className="text-sm text-muted-foreground">Billionaires & wealth monitoring</p>
+                  <h3 className="font-semibold mb-2">Economics</h3>
+                  <p className="text-sm text-muted-foreground">Economic analysis & business insights</p>
                 </CardContent>
               </Card>
             </Link>
@@ -355,12 +355,12 @@ const CamerPulseHome = () => {
               </Card>
             </Link>
             
-            <Link to="/mayors" className="block">
+            <Link to="/user/profile" className="block">
               <Card className="hover:shadow-lg transition-shadow">
                 <CardContent className="p-6 text-center">
                   <Users className="h-8 w-8 mx-auto mb-3 text-primary" />
-                  <h3 className="font-semibold mb-2">Mayor Rankings</h3>
-                  <p className="text-sm text-muted-foreground">Trusted mayor leaderboards</p>
+                  <h3 className="font-semibold mb-2">User Profiles</h3>
+                  <p className="text-sm text-muted-foreground">Advanced social profiles & networking</p>
                 </CardContent>
               </Card>
             </Link>

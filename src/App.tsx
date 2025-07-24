@@ -19,8 +19,6 @@ import { CamertendersAdminPanel } from '@/plugins/camertenders/CamertendersAdmin
 import Admin from './pages/Admin';
 import { CivicTenderWatchlist } from '@/plugins/camertenders/CivicTenderWatchlist';
 import { RecommendationEngine } from '@/components/RecommendationEngine';
-import UserProfilePage from '@/pages/UserProfilePage';
-import CompanyDashboard from '@/pages/CompanyDashboard';
 import JobsPage from '@/pages/JobsPage';
 import AboutPage from '@/pages/AboutPage';
 import ActivityPage from '@/pages/ActivityPage';
@@ -77,6 +75,10 @@ import MessengerPage from "./pages/MessengerPage";
 import TenderRatingsPage from "./pages/TenderRatingsPage";
 import CivicEducationHub from "./pages/CivicEducationHub";
 import CivicShield from "./pages/CivicShield";
+import { EconomicsPage } from "./pages/EconomicsPage";
+import CompanyDashboard from "./pages/CompanyDashboard";
+import UserProfilePage from "./pages/UserProfilePage";
+import BusinessVerification from "./pages/BusinessVerification";
 
 // Missing page imports that need to be created
 const ChurchesPage = () => <div className="container mx-auto px-4 py-8"><h1 className="text-4xl font-bold">Churches Directory</h1><p>Coming soon...</p></div>;
@@ -134,21 +136,24 @@ const App = () => {
                         <Route path="villages" element={<VillagesPage />} />
                         <Route path="villages/search" element={<VillagesSearchPage />} />
                         <Route path="pulse" element={<AnalyticsDashboard />} />
-                       <Route path="profile" element={<ProfilePage />} />
+                        <Route path="profile" element={<ProfilePage />} />
+                        <Route path="user/:userId" element={<UserProfilePage />} />
                        <Route path="settings" element={<SettingsPage />} />
                        <Route path="support" element={<SupportPage />} />
                        <Route path="privacy" element={<PrivacyPage />} />
                        <Route path="terms" element={<TermsPage />} />
                        <Route path="cookies" element={<CookiesPage />} />
                        <Route path="judiciary" element={<JudiciaryPage />} />
-                       <Route path="analytics" element={<AnalyticsDashboard />} />
-                       
+                        <Route path="analytics" element={<AnalyticsDashboard />} />
+                        <Route path="economics" element={<EconomicsPage />} />
                        {/* Civic Directories */}
                        <Route path="churches" element={<ChurchesPage />} />
                        <Route path="traditional-leaders" element={<TraditionalLeadersPage />} />
                        
                         {/* Businesses */}
                         <Route path="billionaires" element={<BillionaireTracker />} />
+                        <Route path="companies" element={<CompanyDashboard />} />
+                        <Route path="business-verification" element={<BusinessVerification />} />
                        
                         {/* Media & Engagement */}
                         <Route path="camerplay" element={<CamerPlayHome />} />
@@ -187,8 +192,7 @@ const App = () => {
                        <Route path="search" element={<AdvancedSearch />} />
                        <Route path="verification" element={<VerificationCenter />} />
                        <Route path="recommendations" element={<RecommendationEngine />} />
-                       <Route path="profile/:userId" element={<UserProfilePage />} />
-                       <Route path="company" element={<CompanyDashboard />} />
+                        <Route path="profile/:userId" element={<UserProfilePage />} />
                        <Route path="jobs" element={<JobsPage />} />
                        <Route path="about" element={<AboutPage />} />
                        <Route path="activity" element={<ActivityPage />} />
