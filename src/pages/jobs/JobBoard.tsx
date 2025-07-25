@@ -54,11 +54,16 @@ const JobBoard = () => {
             onBack={handleBack}
             onApply={handleApply}
           />
-          <JobApplication
-            job={selectedJob}
-            isOpen={showApplication}
-            onClose={() => setShowApplication(false)}
-          />
+          {showApplication && (
+            <JobApplication
+              job={selectedJob}
+              onBack={() => setShowApplication(false)}
+              onSuccess={() => {
+                setShowApplication(false);
+                setSelectedJob(null);
+              }}
+            />
+          )}
         </div>
       </CamerJobsLayout>
     );
@@ -81,7 +86,7 @@ const JobBoard = () => {
             <JobFilters
               filters={filters}
               onFiltersChange={handleFiltersChange}
-              onClearFilters={clearFilters}
+              onClear={clearFilters}
             />
           </div>
 
@@ -135,7 +140,7 @@ const JobBoard = () => {
                   <JobCard
                     key={job.id}
                     job={job}
-                    onViewDetails={handleJobSelect}
+                    onSelect={(job) => handleJobSelect(job.id)}
                   />
                 ))}
               </div>
