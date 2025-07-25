@@ -37242,6 +37242,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      generate_profile_slug: {
+        Args: { input_text: string }
+        Returns: string
+      }
       generate_protection_alias: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -37722,6 +37726,10 @@ export type Database = {
         Args: { p_profile_id: string }
         Returns: undefined
       }
+      update_profile_slug: {
+        Args: { p_user_id: string; p_new_slug: string }
+        Returns: Json
+      }
       update_senator_badges: {
         Args: { p_senator_id: string }
         Returns: undefined
@@ -37747,6 +37755,10 @@ export type Database = {
           needs_update: boolean
           days_since_term_end: number
         }[]
+      }
+      validate_profile_slug: {
+        Args: { slug_input: string }
+        Returns: boolean
       }
     }
     Enums: {

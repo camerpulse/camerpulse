@@ -13,6 +13,7 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { ProfileImageManager } from '@/components/Profile/ProfileImageManager';
+import { ProfileSlugManager } from '@/components/Profile/ProfileSlugManager';
 import { 
   User,
   Shield, 
@@ -195,6 +196,12 @@ const SettingsPage: React.FC = () => {
                 </div>
               </CardContent>
             </Card>
+
+            <ProfileSlugManager 
+              currentSlug={user?.user_metadata?.profile_slug}
+              username={user?.user_metadata?.username}
+              displayName={user?.user_metadata?.display_name}
+            />
           </TabsContent>
 
           {/* Privacy Settings */}
