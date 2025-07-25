@@ -488,7 +488,7 @@ export default function AdvancedFeed() {
   // Apply advanced algorithm
   const algorithmFeed = useAdvancedFeedAlgorithm(combinedFeedItems, user);
 
-  // Filter and search logic
+  // Filter and search logic with enhanced animations
   useEffect(() => {
     let filtered = algorithmFeed;
 
@@ -506,21 +506,29 @@ export default function AdvancedFeed() {
       );
     }
 
-    setFilteredItems(filtered);
+    // Animate content changes
+    setFilteredItems([]);
+    setTimeout(() => setFilteredItems(filtered), 100);
   }, [algorithmFeed, activeFilter, searchTerm]);
 
-  const handleCreatePost = () => {
+  const handleCreatePost = async () => {
     if (!newPost.trim()) return;
 
+    setLoading(true);
+
+    // Create new item with enhanced data
     const newItem: FeedItem = {
       id: Date.now().toString(),
       type: 'pulse',
       timestamp: new Date().toISOString(),
       user: {
         id: user?.id || 'current-user',
-        name: user?.user_metadata?.display_name || 'You',
+        name: user?.user_metadata?.display_name || user?.user_metadata?.full_name || 'You',
         username: user?.user_metadata?.username || 'you',
-        verified: false
+        avatar: user?.user_metadata?.avatar_url || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085',
+        verified: false,
+        role: 'Community Member',
+        location: user?.user_metadata?.location || 'Cameroon'
       },
       content: {
         description: newPost,
@@ -532,35 +540,84 @@ export default function AdvancedFeed() {
         likes: 0,
         comments: 0,
         shares: 0,
-        views: 0
+        views: 1,
+        isLiked: false
       },
       metadata: {
         score: 0.7,
-        relevanceFactors: ['user_content'],
+        relevanceFactors: ['user_content', 'fresh_content'],
         source: 'user'
       }
     };
 
+    // Try to create in database
+    const result = await createFeedItem({
+      item_type: 'pulse',
+      content: newPost,
+      tags: newItem.content.tags,
+      category: 'User Post',
+      metadata: newItem.metadata
+    });
+
+    // Add to local state for immediate feedback
     setFeedItems([newItem, ...feedItems]);
     setNewPost('');
     setShowComposer(false);
+    setLoading(false);
     
     toast({
-      title: "Post published!",
-      description: "Your content has been added to the CamerPulse feed."
+      title: "🎉 Post published!",
+      description: "Your content has been added to the CamerPulse feed and is now live.",
+      duration: 3000,
     });
   };
 
   const handleRefresh = async () => {
     setLoading(true);
+    
+    // Animate out current content
+    setFilteredItems([]);
+    
     setTimeout(() => {
-      setFeedItems(generateAdvancedFeedData());
+      const refreshedData = generateAdvancedFeedData();
+      setFeedItems(refreshedData);
       setLoading(false);
+      
       toast({
-        title: "Feed refreshed",
-        description: "Latest content loaded with advanced algorithm."
+        title: "✨ Feed refreshed",
+        description: "Latest content loaded with advanced AI algorithm.",
+        duration: 2000,
       });
-    }, 1000);
+    }, 800);
+  };
+
+  const handleEngagement = async (itemId: string, type: 'like' | 'comment' | 'share' | 'view') => {
+    // Optimistic update for immediate feedback
+    setFilteredItems(prev => 
+      prev.map(item => 
+        item.id === itemId 
+          ? { 
+              ...item, 
+              engagement: {
+                ...item.engagement,
+                [type === 'like' ? 'likes' : `${type}s`]: item.engagement[type === 'like' ? 'likes' : `${type}s` as keyof typeof item.engagement] as number + 1,
+                isLiked: type === 'like' ? !item.engagement.isLiked : item.engagement.isLiked
+              }
+            }
+          : item
+      )
+    );
+
+    // Try to update in database
+    await engageWithItem(itemId, type);
+    
+    if (type === 'like') {
+      toast({
+        title: "❤️ Liked!",
+        description: "Your engagement helps improve our algorithm.",
+        duration: 1500,
+      });
+    }
   };
 
   const getFeedItemIcon = (type: string) => {
@@ -595,52 +652,71 @@ export default function AdvancedFeed() {
   return (
     <AppLayout>
       <div className="min-h-screen bg-background">
-        {/* Advanced Header */}
-        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50">
+        {/* Enhanced Animated Header */}
+        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border/50 transition-all duration-300">
           <div className="container mx-auto px-4 py-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+              <div className="flex items-center gap-3 animate-fade-in">
+                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary via-primary-glow to-secondary bg-clip-text text-transparent animate-pulse">
                   CamerPulse Feed
                 </h1>
-                <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200">
-                  <Zap className="w-3 h-3 mr-1" />
+                <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200 hover-scale">
+                  <Zap className="w-3 h-3 mr-1 animate-pulse" />
                   AI-Powered
                 </Badge>
               </div>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={loading}>
-                  <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={handleRefresh} 
+                  disabled={loading}
+                  className="hover-scale transition-all duration-200"
+                >
+                  <RefreshCw className={`w-4 h-4 transition-transform duration-500 ${loading ? 'animate-spin' : 'hover:rotate-180'}`} />
                 </Button>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="hover-scale relative">
                   <Bell className="w-4 h-4" />
+                  <span className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                 </Button>
               </div>
             </div>
 
-            {/* Advanced Search & Filters */}
-            <div className="mt-4 space-y-3">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            {/* Enhanced Search & Filters with Animations */}
+            <div className="mt-4 space-y-3 animate-fade-in">
+              <div className="relative group">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground transition-colors group-focus-within:text-primary" />
                 <Input
                   placeholder="Search across all platform features..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 bg-background/50"
+                  className="pl-10 bg-background/50 border-border/50 focus:border-primary transition-all duration-300 hover:border-primary/50"
                 />
               </div>
 
-              {/* Filter Tabs */}
+              {/* Enhanced Filter Tabs with Smooth Transitions */}
               <Tabs value={activeFilter} onValueChange={setActiveFilter} className="w-full">
-                <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 bg-muted/50">
-                  <TabsTrigger value="all" className="text-xs">All</TabsTrigger>
-                  <TabsTrigger value="pulse" className="text-xs">Pulse</TabsTrigger>
-                  <TabsTrigger value="poll" className="text-xs">Polls</TabsTrigger>
-                  <TabsTrigger value="music" className="text-xs">Music</TabsTrigger>
-                  <TabsTrigger value="job" className="text-xs">Jobs</TabsTrigger>
-                  <TabsTrigger value="debt_alert" className="text-xs">Alerts</TabsTrigger>
-                  <TabsTrigger value="election_forecast" className="text-xs">Elections</TabsTrigger>
-                  <TabsTrigger value="civic_event" className="text-xs">Events</TabsTrigger>
+                <TabsList className="grid w-full grid-cols-4 lg:grid-cols-8 bg-muted/50 backdrop-blur-sm">
+                  {[
+                    { value: 'all', label: 'All', icon: Globe },
+                    { value: 'pulse', label: 'Pulse', icon: MessageCircle },
+                    { value: 'poll', label: 'Polls', icon: Vote },
+                    { value: 'music', label: 'Music', icon: Music },
+                    { value: 'job', label: 'Jobs', icon: Building2 },
+                    { value: 'debt_alert', label: 'Alerts', icon: AlertTriangle },
+                    { value: 'election_forecast', label: 'Elections', icon: BarChart3 },
+                    { value: 'civic_event', label: 'Events', icon: Calendar }
+                  ].map((tab, index) => (
+                    <TabsTrigger 
+                      key={tab.value} 
+                      value={tab.value} 
+                      className="text-xs transition-all duration-200 hover-scale data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      <tab.icon className="w-3 h-3 mr-1" />
+                      {tab.label}
+                    </TabsTrigger>
+                  ))}
                 </TabsList>
               </Tabs>
             </div>
@@ -654,11 +730,12 @@ export default function AdvancedFeed() {
             {/* Left Sidebar - Hidden on mobile */}
             <div className="hidden lg:block lg:col-span-1 space-y-6">
               
-              {/* Trending Topics */}
-              <Card className="border-primary/20">
+              {/* Enhanced Trending Topics with Animations */}
+              
+              <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Flame className="w-5 h-5 text-orange-500" />
+                    <Flame className="w-5 h-5 text-orange-500 animate-pulse" />
                     Trending in Cameroon
                   </CardTitle>
                 </CardHeader>
@@ -666,33 +743,37 @@ export default function AdvancedFeed() {
                   {topicsLoading ? (
                     <div className="space-y-2">
                       {[1, 2, 3, 4, 5].map(i => (
-                        <div key={i} className="h-4 bg-muted animate-pulse rounded" />
+                        <div key={i} className="h-4 bg-muted animate-pulse rounded" style={{ animationDelay: `${i * 100}ms` }} />
                       ))}
                     </div>
                   ) : (
                     trendingTopics.slice(0, 8).map((topic, index) => (
-                      <div key={topic.id} className="flex items-center justify-between py-1">
+                      <div 
+                        key={topic.id} 
+                        className="flex items-center justify-between py-1 hover:bg-muted/50 rounded-lg px-2 transition-all duration-200 cursor-pointer group animate-fade-in"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-muted-foreground font-medium">
+                          <span className="text-xs text-muted-foreground font-medium w-4">
                             {index + 1}
                           </span>
                           <div>
-                            <p className="text-sm font-medium">#{topic.topic_name}</p>
+                            <p className="text-sm font-medium group-hover:text-primary transition-colors">#{topic.topic_name}</p>
                             <p className="text-xs text-muted-foreground">{topic.mention_count.toLocaleString()} mentions</p>
                           </div>
                         </div>
-                        <TrendingUp className="w-3 h-3 text-green-500" />
+                        <TrendingUp className="w-3 h-3 text-green-500 group-hover:scale-110 transition-transform" />
                       </div>
                     ))
                   )}
-                  <Button variant="ghost" className="w-full text-xs mt-3">
+                  <Button variant="ghost" className="w-full text-xs mt-3 hover-scale">
                     View All Trends
                   </Button>
                 </CardContent>
               </Card>
 
-              {/* Suggested Users */}
-              <Card className="border-primary/20">
+              {/* Enhanced Suggested Users */}
+              <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center gap-2">
                     <UserPlus className="w-5 h-5 text-blue-500" />
@@ -706,22 +787,31 @@ export default function AdvancedFeed() {
                     { name: 'Prof. Fame Ndongo', role: 'Minister of Higher Education', verified: true },
                     { name: 'Cameroon Startup Hub', role: 'Innovation Center', verified: false }
                   ].map((user, index) => (
-                    <div key={index} className="flex items-center justify-between">
+                    <div 
+                      key={index} 
+                      className="flex items-center justify-between hover:bg-muted/50 rounded-lg p-2 transition-all duration-200 animate-fade-in"
+                      style={{ animationDelay: `${index * 150}ms` }}
+                    >
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
-                          <Users className="w-4 h-4" />
+                        <div className="w-8 h-8 bg-gradient-to-br from-primary to-primary-glow rounded-full flex items-center justify-center">
+                          <Users className="w-4 h-4 text-white" />
                         </div>
                         <div>
                           <p className="text-sm font-medium">{user.name}</p>
                           <p className="text-xs text-muted-foreground">{user.role}</p>
                         </div>
+                        {user.verified && (
+                          <Badge variant="secondary" className="text-xs">
+                            ✓
+                          </Badge>
+                        )}
                       </div>
-                      <Button size="sm" variant="outline" className="text-xs">
+                      <Button size="sm" variant="outline" className="text-xs hover-scale">
                         Follow
                       </Button>
                     </div>
                   ))}
-                  <Button variant="ghost" className="w-full text-xs mt-3">
+                  <Button variant="ghost" className="w-full text-xs mt-3 hover-scale">
                     See More Suggestions
                   </Button>
                 </CardContent>
@@ -729,237 +819,353 @@ export default function AdvancedFeed() {
 
             </div>
 
-            {/* Main Feed */}
+            {/* Enhanced Main Feed with Smooth Animations */}
             <div className="lg:col-span-2 space-y-6">
-          {/* Post Composer */}
-          <Card className="mb-6 border-primary/20 shadow-sm">
-            <CardContent className="p-4">
-              {showComposer ? (
-                <div className="space-y-4">
-                  <Textarea
-                    placeholder="Share your thoughts with the CamerPulse community..."
-                    value={newPost}
-                    onChange={(e) => setNewPost(e.target.value)}
-                    className="min-h-[120px] resize-none border-primary/20 focus:border-primary"
-                    maxLength={1000}
-                  />
-                  <div className="flex justify-between items-center">
-                    <div className="flex gap-2">
-                      <Button variant="ghost" size="sm">
-                        <Camera className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <Video className="w-4 h-4" />
-                      </Button>
-                      <Button variant="ghost" size="sm">
-                        <Vote className="w-4 h-4" />
-                      </Button>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" onClick={() => setShowComposer(false)}>
-                        Cancel
-                      </Button>
-                      <Button 
-                        onClick={handleCreatePost}
-                        disabled={!newPost.trim()}
-                        className="bg-primary hover:bg-primary/90"
-                      >
-                        Publish
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div 
-                  className="flex items-center gap-3 p-4 rounded-lg border border-dashed border-primary/30 cursor-pointer hover:bg-muted/50 transition-colors"
-                  onClick={() => setShowComposer(true)}
-                >
-                  <span className="flex-1 text-muted-foreground">What's happening in Cameroon?</span>
-                  <Button size="sm" className="bg-primary hover:bg-primary/90">
-                    <Plus className="w-4 h-4" />
-                  </Button>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Advanced Feed Items */}
-          <div className="space-y-6">
-            {filteredItems.map((item, index) => {
-              const IconComponent = getFeedItemIcon(item.type);
-              return (
-                <Card key={item.id} className="border-border/50 shadow-sm hover:shadow-md transition-all duration-200">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
-                          <IconComponent className="w-5 h-5 text-muted-foreground" />
+              {/* Enhanced Post Composer */}
+              <Card className="border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in">
+                <CardContent className="p-4">
+                  {showComposer ? (
+                    <div className="space-y-4 animate-scale-in">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-glow rounded-full flex items-center justify-center">
+                          <span className="text-white font-semibold text-sm">
+                            {user?.user_metadata?.display_name?.[0] || user?.user_metadata?.full_name?.[0] || 'U'}
+                          </span>
                         </div>
                         <div>
-                          <div className="flex items-center gap-2">
-                            <h4 className="font-semibold text-sm">{item.user?.name}</h4>
-                            {item.user?.verified && (
-                              <Badge variant="secondary" className="text-xs">Verified</Badge>
-                            )}
-                            <Badge className={`text-xs ${getPriorityColor(item.content.priority)}`}>
-                              {item.content.priority}
-                            </Badge>
-                          </div>
-                          <p className="text-xs text-muted-foreground">
-                            {item.user?.role} • {formatDistanceToNow(new Date(item.timestamp))} ago
-                          </p>
+                          <p className="font-medium text-sm">{user?.user_metadata?.display_name || user?.user_metadata?.full_name || 'You'}</p>
+                          <p className="text-xs text-muted-foreground">Share with the community</p>
                         </div>
                       </div>
-                      <Button variant="ghost" size="icon">
-                        <Bookmark className="w-4 h-4" />
+                      <Textarea
+                        placeholder="What's happening in Cameroon? Share your thoughts, experiences, or insights..."
+                        value={newPost}
+                        onChange={(e) => setNewPost(e.target.value)}
+                        className="min-h-[120px] resize-none border-primary/20 focus:border-primary transition-all duration-300"
+                        maxLength={1000}
+                      />
+                      <div className="flex items-center justify-between">
+                        <div className="flex gap-2">
+                          <Button variant="ghost" size="sm" className="hover-scale">
+                            <Camera className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" className="hover-scale">
+                            <Video className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" className="hover-scale">
+                            <Vote className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" className="hover-scale">
+                            <Hash className="w-4 h-4" />
+                          </Button>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-xs text-muted-foreground">
+                            {1000 - newPost.length} characters left
+                          </span>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline" 
+                              onClick={() => setShowComposer(false)}
+                              className="hover-scale"
+                            >
+                              Cancel
+                            </Button>
+                            <Button 
+                              onClick={handleCreatePost}
+                              disabled={!newPost.trim() || loading}
+                              className="bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 hover-scale"
+                            >
+                              {loading ? (
+                                <RefreshCw className="w-4 h-4 animate-spin mr-2" />
+                              ) : (
+                                <Zap className="w-4 h-4 mr-2" />
+                              )}
+                              Publish
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div 
+                      className="flex items-center gap-3 p-4 rounded-lg border border-dashed border-primary/30 cursor-pointer hover:bg-gradient-to-r hover:from-primary/5 hover:to-primary-glow/5 transition-all duration-300 group animate-fade-in"
+                      onClick={() => setShowComposer(true)}
+                    >
+                      <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-glow rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <span className="text-white font-semibold text-sm">
+                          {user?.user_metadata?.display_name?.[0] || user?.user_metadata?.full_name?.[0] || 'U'}
+                        </span>
+                      </div>
+                      <span className="flex-1 text-muted-foreground group-hover:text-foreground transition-colors">
+                        What's happening in Cameroon?
+                      </span>
+                      <Button size="sm" className="bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary hover-scale">
+                        <Plus className="w-4 h-4" />
                       </Button>
                     </div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    {item.content.title && (
-                      <h3 className="font-semibold text-lg mb-2">{item.content.title}</h3>
-                    )}
-                    <p className="text-sm mb-3 leading-relaxed">{item.content.description}</p>
-                    
-                    {item.content.media && item.content.media.length > 0 && (
-                      <div className="mb-3 rounded-lg overflow-hidden">
-                        <img 
-                          src={item.content.media[0]} 
-                          alt="Post media"
-                          className="w-full h-48 object-cover"
-                        />
-                      </div>
-                    )}
+                  )}
+                </CardContent>
+              </Card>
 
-                    {item.content.tags && item.content.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {item.content.tags.map(tag => (
-                          <Badge key={tag} variant="outline" className="text-xs">
-                            #{tag}
-                          </Badge>
-                        ))}
-                      </div>
-                    )}
+              {/* Enhanced Feed Items with Staggered Animations */}
+              <div className="space-y-6">
+                {loading && filteredItems.length === 0 ? (
+                  <div className="space-y-6">
+                    {[1, 2, 3, 4, 5].map(i => (
+                      <Card key={i} className="border-border/50 animate-pulse">
+                        <CardContent className="p-6">
+                          <div className="flex items-center gap-3 mb-4">
+                            <div className="w-10 h-10 bg-muted rounded-full" />
+                            <div className="space-y-2 flex-1">
+                              <div className="h-4 bg-muted rounded w-1/3" />
+                              <div className="h-3 bg-muted rounded w-1/4" />
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <div className="h-4 bg-muted rounded" />
+                            <div className="h-4 bg-muted rounded w-3/4" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  filteredItems.map((item, index) => {
+                    const IconComponent = getFeedItemIcon(item.type);
+                    return (
+                      <Card 
+                        key={item.id} 
+                        className="border-border/50 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover-scale animate-fade-in group"
+                        style={{ animationDelay: `${index * 100}ms` }}
+                      >
+                        <CardHeader className="pb-3">
+                          <div className="flex items-start justify-between">
+                            <div className="flex items-center gap-3">
+                              <div className="relative">
+                                {item.user?.avatar ? (
+                                  <img 
+                                    src={item.user.avatar} 
+                                    alt={item.user.name}
+                                    className="w-10 h-10 rounded-full object-cover ring-2 ring-primary/20 group-hover:ring-primary/40 transition-all duration-300"
+                                  />
+                                ) : (
+                                  <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary-glow rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                                    <IconComponent className="w-5 h-5 text-white" />
+                                  </div>
+                                )}
+                                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-background rounded-full flex items-center justify-center">
+                                  <IconComponent className="w-2.5 h-2.5 text-muted-foreground" />
+                                </div>
+                              </div>
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <h4 className="font-semibold text-sm group-hover:text-primary transition-colors">{item.user?.name}</h4>
+                                  {item.user?.verified && (
+                                    <Badge variant="secondary" className="text-xs bg-blue-100 text-blue-700">
+                                      ✓ Verified
+                                    </Badge>
+                                  )}
+                                  <Badge className={`text-xs transition-all duration-200 ${getPriorityColor(item.content.priority)}`}>
+                                    {item.content.priority}
+                                  </Badge>
+                                </div>
+                                <p className="text-xs text-muted-foreground">
+                                  {item.user?.role} • {item.user?.location} • {formatDistanceToNow(new Date(item.timestamp))} ago
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="hover-scale opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                onClick={() => handleEngagement(item.id, 'view')}
+                              >
+                                <Bookmark className="w-4 h-4" />
+                              </Button>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="hover-scale opacity-0 group-hover:opacity-100 transition-all duration-300"
+                              >
+                                <Share2 className="w-4 h-4" />
+                              </Button>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="pt-0">
+                          {item.content.title && (
+                            <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">{item.content.title}</h3>
+                          )}
+                          <p className="text-sm mb-3 leading-relaxed">{item.content.description}</p>
+                          
+                          {item.content.media && item.content.media.length > 0 && (
+                            <div className="mb-3 rounded-lg overflow-hidden group-hover:scale-[1.02] transition-transform duration-300">
+                              <img 
+                                src={item.content.media[0]} 
+                                alt="Post media"
+                                className="w-full h-48 object-cover hover:scale-105 transition-transform duration-500"
+                              />
+                            </div>
+                          )}
 
-                    {/* Engagement Bar */}
-                    <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                      <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Heart className="w-3 h-3" />
-                          {item.engagement.likes.toLocaleString()}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <MessageCircle className="w-3 h-3" />
-                          {item.engagement.comments.toLocaleString()}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Share2 className="w-3 h-3" />
-                          {item.engagement.shares.toLocaleString()}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Eye className="w-3 h-3" />
-                          {item.engagement.views.toLocaleString()}
-                        </span>
-                      </div>
-                      {item.content.actionUrl && (
-                        <Button variant="outline" size="sm">
-                          View Details
-                        </Button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
+                          {item.content.tags && item.content.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mb-3">
+                              {item.content.tags.map((tag, tagIndex) => (
+                                <Badge 
+                                  key={tag} 
+                                  variant="outline" 
+                                  className="text-xs hover:bg-primary hover:text-primary-foreground transition-all duration-200 cursor-pointer hover-scale"
+                                  style={{ animationDelay: `${tagIndex * 50}ms` }}
+                                >
+                                  #{tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
 
-              {/* Load More */}
-              <div className="text-center mt-8">
-                <Button variant="outline" className="w-full sm:w-auto">
+                          {/* Enhanced Engagement Bar */}
+                          <div className="flex items-center justify-between pt-3 border-t border-border/50">
+                            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                              <button 
+                                className={`flex items-center gap-1 hover:text-red-500 transition-all duration-200 hover-scale ${item.engagement.isLiked ? 'text-red-500' : ''}`}
+                                onClick={() => handleEngagement(item.id, 'like')}
+                              >
+                                <Heart className={`w-3 h-3 ${item.engagement.isLiked ? 'fill-current' : ''}`} />
+                                {item.engagement.likes.toLocaleString()}
+                              </button>
+                              <button 
+                                className="flex items-center gap-1 hover:text-blue-500 transition-all duration-200 hover-scale"
+                                onClick={() => handleEngagement(item.id, 'comment')}
+                              >
+                                <MessageCircle className="w-3 h-3" />
+                                {item.engagement.comments.toLocaleString()}
+                              </button>
+                              <button 
+                                className="flex items-center gap-1 hover:text-green-500 transition-all duration-200 hover-scale"
+                                onClick={() => handleEngagement(item.id, 'share')}
+                              >
+                                <Share2 className="w-3 h-3" />
+                                {item.engagement.shares.toLocaleString()}
+                              </button>
+                              <span className="flex items-center gap-1">
+                                <Eye className="w-3 h-3" />
+                                {item.engagement.views.toLocaleString()}
+                              </span>
+                            </div>
+                            {item.content.actionUrl && (
+                              <Button variant="outline" size="sm" className="hover-scale">
+                                View Details
+                              </Button>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })
+                )}
+              </div>
+
+              {/* Enhanced Load More */}
+              <div className="text-center mt-8 animate-fade-in">
+                <Button 
+                  variant="outline" 
+                  className="w-full sm:w-auto hover-scale bg-gradient-to-r from-background to-muted hover:from-primary hover:to-primary-glow hover:text-primary-foreground transition-all duration-300"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
                   Load More Content
                 </Button>
               </div>
             </div>
 
-            {/* Right Sidebar - Hidden on mobile */}
+            {/* Enhanced Right Sidebar with Live Animations */}
             <div className="hidden lg:block lg:col-span-1 space-y-6">
               
-              {/* Live Activity */}
-              <Card className="border-primary/20">
+              {/* Enhanced Live Activity */}
+              <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-green-500" />
+                    <Clock className="w-5 h-5 text-green-500 animate-pulse" />
                     Live Activity
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {[
-                    { action: 'New poll created', time: '2 min ago', icon: Vote },
-                    { action: 'Minister posted update', time: '5 min ago', icon: Shield },
-                    { action: 'Job posting in Douala', time: '12 min ago', icon: Building2 },
-                    { action: 'Health alert issued', time: '18 min ago', icon: Heart },
-                    { action: 'New music release', time: '25 min ago', icon: Music }
+                    { action: 'New poll created', time: '2 min ago', icon: Vote, color: 'text-blue-500' },
+                    { action: 'Minister posted update', time: '5 min ago', icon: Shield, color: 'text-green-500' },
+                    { action: 'Job posting in Douala', time: '12 min ago', icon: Building2, color: 'text-orange-500' },
+                    { action: 'Health alert issued', time: '18 min ago', icon: Heart, color: 'text-red-500' },
+                    { action: 'New music release', time: '25 min ago', icon: Music, color: 'text-purple-500' }
                   ].map((activity, index) => (
-                    <div key={index} className="flex items-center gap-3 py-1">
-                      <div className="w-6 h-6 bg-muted rounded-full flex items-center justify-center">
-                        <activity.icon className="w-3 h-3" />
+                    <div 
+                      key={index} 
+                      className="flex items-center gap-3 py-2 hover:bg-muted/50 rounded-lg px-2 transition-all duration-200 animate-fade-in"
+                      style={{ animationDelay: `${index * 200}ms` }}
+                    >
+                      <div className={`w-6 h-6 bg-gradient-to-br from-primary to-primary-glow rounded-full flex items-center justify-center`}>
+                        <activity.icon className={`w-3 h-3 text-white`} />
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm">{activity.action}</p>
+                        <p className="text-sm font-medium">{activity.action}</p>
                         <p className="text-xs text-muted-foreground">{activity.time}</p>
+                      </div>
+                      <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Enhanced Quick Stats */}
+              <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Platform Stats</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {[
+                    { label: 'Active Users', value: '12.4K', change: '+5%', color: 'text-green-500' },
+                    { label: 'Posts Today', value: '1,234', change: '+12%', color: 'text-blue-500' },
+                    { label: 'Active Polls', value: '45', change: '+2', color: 'text-purple-500' },
+                    { label: 'Jobs Posted', value: '156', change: '+8', color: 'text-orange-500' }
+                  ].map((stat, index) => (
+                    <div 
+                      key={stat.label}
+                      className="flex justify-between items-center hover:bg-muted/50 rounded-lg p-2 transition-all duration-200 animate-fade-in"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <span className="text-sm text-muted-foreground">{stat.label}</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium">{stat.value}</span>
+                        <span className={`text-xs ${stat.color}`}>{stat.change}</span>
                       </div>
                     </div>
                   ))}
                 </CardContent>
               </Card>
 
-              {/* Quick Stats */}
-              <Card className="border-primary/20">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Platform Stats</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Active Users</span>
-                    <span className="text-sm font-medium">12.4K</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Posts Today</span>
-                    <span className="text-sm font-medium">1,234</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Active Polls</span>
-                    <span className="text-sm font-medium">45</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-sm text-muted-foreground">Jobs Posted</span>
-                    <span className="text-sm font-medium">156</span>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Quick Actions */}
-              <Card className="border-primary/20">
+              {/* Enhanced Quick Actions */}
+              <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
                 <CardHeader className="pb-3">
                   <CardTitle className="text-lg">Quick Actions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    <Vote className="w-4 h-4 mr-2" />
-                    Create Poll
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    <Building2 className="w-4 h-4 mr-2" />
-                    Post Job
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    <Calendar className="w-4 h-4 mr-2" />
-                    Add Event
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-full justify-start">
-                    <Music className="w-4 h-4 mr-2" />
-                    Share Music
-                  </Button>
+                  {[
+                    { label: 'Create Poll', icon: Vote, gradient: 'from-blue-500 to-blue-600' },
+                    { label: 'Post Job', icon: Building2, gradient: 'from-green-500 to-green-600' },
+                    { label: 'Add Event', icon: Calendar, gradient: 'from-purple-500 to-purple-600' },
+                    { label: 'Share Music', icon: Music, gradient: 'from-pink-500 to-pink-600' }
+                  ].map((action, index) => (
+                    <Button 
+                      key={action.label}
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full justify-start hover-scale transition-all duration-200 hover:bg-gradient-to-r hover:from-primary/10 hover:to-primary-glow/10 animate-fade-in"
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <action.icon className="w-4 h-4 mr-2" />
+                      {action.label}
+                    </Button>
+                  ))}
                 </CardContent>
               </Card>
 
