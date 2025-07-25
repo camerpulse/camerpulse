@@ -27368,6 +27368,71 @@ export type Database = {
         }
         Relationships: []
       }
+      poll_bookmarks: {
+        Row: {
+          created_at: string | null
+          id: string
+          poll_id: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          poll_id?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          poll_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_bookmarks_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poll_categories: {
+        Row: {
+          color: string | null
+          created_at: string | null
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          poll_count: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          poll_count?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          color?: string | null
+          created_at?: string | null
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          poll_count?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       poll_comment_likes: {
         Row: {
           comment_id: string
@@ -28060,6 +28125,8 @@ export type Database = {
           anonymous_mode: boolean | null
           auto_delete_at: string | null
           banner_image_url: string | null
+          bookmark_count: number | null
+          category_id: string | null
           created_at: string | null
           creator_id: string
           description: string | null
@@ -28075,12 +28142,15 @@ export type Database = {
           show_results_after_expiry: boolean
           theme_color: string | null
           title: string
+          view_count: number | null
           votes_count: number | null
         }
         Insert: {
           anonymous_mode?: boolean | null
           auto_delete_at?: string | null
           banner_image_url?: string | null
+          bookmark_count?: number | null
+          category_id?: string | null
           created_at?: string | null
           creator_id: string
           description?: string | null
@@ -28096,12 +28166,15 @@ export type Database = {
           show_results_after_expiry?: boolean
           theme_color?: string | null
           title: string
+          view_count?: number | null
           votes_count?: number | null
         }
         Update: {
           anonymous_mode?: boolean | null
           auto_delete_at?: string | null
           banner_image_url?: string | null
+          bookmark_count?: number | null
+          category_id?: string | null
           created_at?: string | null
           creator_id?: string
           description?: string | null
@@ -28117,9 +28190,18 @@ export type Database = {
           show_results_after_expiry?: boolean
           theme_color?: string | null
           title?: string
+          view_count?: number | null
           votes_count?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "polls_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "poll_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       polls_ai_generated: {
         Row: {
@@ -36672,6 +36754,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_poll_view_count: {
+        Args: { p_poll_id: string; p_user_id?: string }
+        Returns: undefined
+      }
       learn_from_manual_fix: {
         Args: {
           p_file_path: string
@@ -36925,6 +37011,10 @@ export type Database = {
       sync_platform_data: {
         Args: { p_connection_id: string }
         Returns: Json
+      }
+      toggle_poll_bookmark: {
+        Args: { p_poll_id: string; p_user_id: string }
+        Returns: boolean
       }
       track_audit_interaction: {
         Args: { p_audit_id: string; p_action_type: string; p_metadata?: Json }
