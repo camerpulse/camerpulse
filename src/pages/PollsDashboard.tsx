@@ -38,6 +38,10 @@ import { Link } from 'react-router-dom';
 import { CreatePollDialog } from '@/components/Polls/CreatePollDialog';
 import { RegionalHeatmap } from '@/components/Polls/RegionalHeatmap';
 import { PollModerationTab } from '@/components/Admin/PollModerationTab';
+import { EnterpriseBulkOperations } from '@/components/Polls/EnterpriseBulkOperations';
+import { PollTemplateSystem } from '@/components/Polls/PollTemplateSystem';
+import { AdvancedPermissionsManager } from '@/components/Polls/AdvancedPermissionsManager';
+import { APIIntegrationManagement } from '@/components/Polls/APIIntegrationManagement';
 
 interface Poll {
   id: string;
@@ -317,13 +321,13 @@ const PollsDashboard = () => {
           ) : (
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-6 mb-8">
-                <TabsTrigger value="overview">Poll Overview</TabsTrigger>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
-                <TabsTrigger value="management">Management</TabsTrigger>
+                <TabsTrigger value="management">Enterprise</TabsTrigger>
                 <TabsTrigger value="templates">Templates</TabsTrigger>
                 <TabsTrigger value="fraud-protection">
                   <Shield className="w-4 h-4 mr-1" />
-                  Fraud Protection
+                  Security
                 </TabsTrigger>
                 <TabsTrigger value="moderation">
                   <Flag className="w-4 h-4 mr-1" />
@@ -537,110 +541,30 @@ const PollsDashboard = () => {
 
               {/* Management Tab */}
               <TabsContent value="management" className="space-y-6">
-                <div className="space-y-4">
-                  {polls.map((poll) => (
-                    <Card key={poll.id} className="hover:shadow-elegant transition-all duration-300">
-                      <CardContent className="p-6">
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <h3 className="font-semibold mb-2">{poll.title}</h3>
-                            <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                              <span>{poll.votes_count} votes</span>
-                              <span>{formatDistanceToNow(new Date(poll.created_at), { addSuffix: true })}</span>
-                              <Badge variant={poll.is_active ? "default" : "secondary"}>
-                                {poll.is_active ? "Active" : "Closed"}
-                              </Badge>
-                              <Badge variant="outline" className="capitalize">
-                                {poll.privacy_mode}
-                              </Badge>
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => togglePollVisibility(poll.id, poll.is_active)}
-                            >
-                              {poll.is_active ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => generateShareLink(poll.id)}
-                            >
-                              <Share2 className="w-4 h-4" />
-                            </Button>
-                            <Dialog>
-                              <DialogTrigger asChild>
-                                <Button variant="outline" size="sm">
-                                  <QrCode className="w-4 h-4" />
-                                </Button>
-                              </DialogTrigger>
-                              <DialogContent>
-                                <DialogHeader>
-                                  <DialogTitle>QR Code for "{poll.title}"</DialogTitle>
-                                </DialogHeader>
-                                <div className="text-center p-8">
-                                  <div className="w-48 h-48 bg-muted rounded-lg mx-auto mb-4 flex items-center justify-center">
-                                    <QrCode className="w-16 h-16 text-muted-foreground" />
-                                  </div>
-                                  <p className="text-sm text-muted-foreground">
-                                    QR code generation would be implemented here
-                                  </p>
-                                </div>
-                              </DialogContent>
-                            </Dialog>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => deletePoll(poll.id)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4 mt-4">
-                          <Button variant="outline" size="sm" className="w-full">
-                            <Copy className="w-4 h-4 mr-2" />
-                            Clone Poll
-                          </Button>
-                          <Button variant="outline" size="sm" className="w-full">
-                            <Edit className="w-4 h-4 mr-2" />
-                            Edit Poll
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                <Tabs defaultValue="bulk" className="space-y-4">
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="bulk">Bulk Operations</TabsTrigger>
+                    <TabsTrigger value="permissions">Permissions</TabsTrigger>
+                    <TabsTrigger value="api">API Management</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="bulk">
+                    <EnterpriseBulkOperations />
+                  </TabsContent>
+                  
+                  <TabsContent value="permissions">
+                    <AdvancedPermissionsManager />
+                  </TabsContent>
+                  
+                  <TabsContent value="api">
+                    <APIIntegrationManagement />
+                  </TabsContent>
+                </Tabs>
               </TabsContent>
 
               {/* Templates Tab */}
               <TabsContent value="templates" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Poll Template Editor</CardTitle>
-                    <p className="text-muted-foreground">
-                      Customize poll appearance and create reusable templates
-                    </p>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-8">
-                      <Settings className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">Template Editor Coming Soon</h3>
-                      <p className="text-muted-foreground mb-4">
-                        Advanced template customization and appearance editing features will be available soon
-                      </p>
-                      <Button asChild variant="outline">
-                        <Link to="/admin/core">
-                          View Available Templates
-                        </Link>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
+                <PollTemplateSystem />
               </TabsContent>
 
               {/* Fraud Protection Tab */}
