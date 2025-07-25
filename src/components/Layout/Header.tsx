@@ -63,48 +63,94 @@ export const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/diaspora-connect">DiasporaConnect</Link>
+              <Link to="/advanced-feed">Feed</Link>
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-                  Polls <ChevronDown className="w-4 h-4 ml-1" />
+                  Civic <ChevronDown className="w-4 h-4 ml-1" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
+              <DropdownMenuContent className="w-56 bg-background border border-border shadow-lg">
                 <DropdownMenuItem asChild>
-                  <Link to="/polls">Browse Polls</Link>
+                  <Link to="/polls">Polls & Voting</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/poll-templates">Poll Templates</Link>
+                  <Link to="/politicians">Politicians</Link>
                 </DropdownMenuItem>
-                {user && (
-                  <DropdownMenuItem asChild>
-                    <Link to="/dashboard/polls">My Dashboard</Link>
-                  </DropdownMenuItem>
-                )}
+                <DropdownMenuItem asChild>
+                  <Link to="/senators">Senators</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/ministers">Ministers</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/mps">MPs</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/judiciary">Judiciary</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/political-parties">Political Parties</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+                  Services <ChevronDown className="w-4 h-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 bg-background border border-border shadow-lg">
+                <DropdownMenuItem asChild>
+                  <Link to="/companies">Companies</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/schools">Schools</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/hospitals">Hospitals</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/villages">Villages</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/jobs">Job Board</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/marketplace">Marketplace</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+                  Transparency <ChevronDown className="w-4 h-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 bg-background border border-border shadow-lg">
+                <DropdownMenuItem asChild>
+                  <Link to="/national-debt">National Debt</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/billionaires">Billionaire Tracker</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/election-forecast">Election Forecast</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/government-projects">Gov Projects</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/analytics">Analytics</Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/politicians">Politicians</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/senators">Senators</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/legislation">Legislation</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/judiciary">Judiciary</Link>
+              <Link to="/camerplay">CamerPlay</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/messenger">Messenger</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/analytics">Analytics</Link>
-            </Button>
-            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/schools">Services</Link>
             </Button>
           </nav>
 

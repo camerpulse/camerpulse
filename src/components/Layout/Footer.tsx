@@ -21,7 +21,8 @@ import {
   DollarSign,
   Globe,
   Shield,
-  MapPin
+  MapPin,
+  MessageSquare
 } from "lucide-react";
 
 export const Footer = () => {
@@ -63,9 +64,17 @@ export const Footer = () => {
               Civic Engagement
             </h3>
             <div className="space-y-2 text-sm">
+              <Link to="/advanced-feed" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <TrendingUp className="w-3 h-3" />
+                Advanced Feed
+              </Link>
               <Link to="/polls" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Vote className="w-3 h-3" />
                 Polls & Voting
+              </Link>
+              <Link to="/poll-templates" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <FileText className="w-3 h-3" />
+                Poll Templates
               </Link>
               <Link to="/legislation" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Scale className="w-3 h-3" />
@@ -75,17 +84,29 @@ export const Footer = () => {
                 <Users className="w-3 h-3" />
                 Politicians
               </Link>
-              <Link to="/petitions" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <FileText className="w-3 h-3" />
-                Petitions
+              <Link to="/senators" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                Senators
+              </Link>
+              <Link to="/ministers" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                Ministers
+              </Link>
+              <Link to="/mps" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                MPs
+              </Link>
+              <Link to="/judiciary" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Scale className="w-3 h-3" />
+                Judiciary
               </Link>
               <Link to="/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Calendar className="w-3 h-3" />
                 Civic Events
               </Link>
-              <Link to="/government-projects" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                <Target className="w-3 h-3" />
-                Gov Projects
+              <Link to="/messenger" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <MessageSquare className="w-3 h-3" />
+                Pulse Messenger
               </Link>
               <Link to="/analytics" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <TrendingUp className="w-3 h-3" />
@@ -117,6 +138,10 @@ export const Footer = () => {
                 <Briefcase className="w-3 h-3" />
                 Companies
               </Link>
+              <Link to="/jobs" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Briefcase className="w-3 h-3" />
+                Job Board
+              </Link>
               <Link to="/schools" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Building className="w-3 h-3" />
                 Schools
@@ -136,6 +161,10 @@ export const Footer = () => {
               <Link to="/institutions" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Building className="w-3 h-3" />
                 Institutions
+              </Link>
+              <Link to="/marketplace" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <DollarSign className="w-3 h-3" />
+                Marketplace
               </Link>
             </div>
           </div>
@@ -163,13 +192,59 @@ export const Footer = () => {
                 <Users className="w-3 h-3" />
                 Political Parties
               </Link>
+              <Link to="/government-projects" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Target className="w-3 h-3" />
+                Gov Projects
+              </Link>
+              <Link to="/promises" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <FileText className="w-3 h-3" />
+                Political Promises
+              </Link>
+              <Link to="/intelligence" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Shield className="w-3 h-3" />
+                Intelligence Hub
+              </Link>
+              <Link to="/sentiment-analysis" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <BarChart3 className="w-3 h-3" />
+                Sentiment Analysis
+              </Link>
+            </div>
+          </div>
+
+          {/* Entertainment & Culture */}
+          <div className="space-y-4">
+            <h3 className="font-semibold flex items-center gap-2">
+              <Music className="w-4 h-4 text-primary" />
+              Entertainment & Culture
+            </h3>
+            <div className="space-y-2 text-sm">
               <Link to="/camerplay" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Music className="w-3 h-3" />
                 CamerPlay Music
               </Link>
+              <Link to="/artist-registration" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Users className="w-3 h-3" />
+                Artist Registration
+              </Link>
+              <Link to="/camerplay/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Calendar className="w-3 h-3" />
+                Music Events
+              </Link>
+              <Link to="/camerplay/rankings" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Crown className="w-3 h-3" />
+                Artist Rankings
+              </Link>
+              <Link to="/camerplay/awards" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Crown className="w-3 h-3" />
+                Music Awards
+              </Link>
               <Link to="/rewards" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <DollarSign className="w-3 h-3" />
                 Rewards Center
+              </Link>
+              <Link to="/ecosystem" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Globe className="w-3 h-3" />
+                Ecosystem Dashboard
               </Link>
             </div>
           </div>

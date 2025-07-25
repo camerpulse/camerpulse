@@ -3,19 +3,15 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { 
   Home, 
-  Radio, 
   Users, 
   ShoppingBag, 
-  Bell,
   User,
-  Settings,
   Vote,
   Activity,
-  Calendar,
-  MapPin,
-  Shield,
-  BookOpen,
-  Globe
+  Building2,
+  Music,
+  Briefcase,
+  MessageCircle
 } from 'lucide-react';
 
 interface NavItem {
@@ -37,32 +33,7 @@ const navItems: NavItem[] = [
     id: 'feed',
     label: 'Feed',
     icon: Activity,
-    path: '/feed'
-  },
-  {
-    id: 'pulse',
-    label: 'Pulse',
-    icon: Radio,
-    path: '/pulse',
-    badge: 3,
-  },
-  {
-    id: 'politicians',
-    label: 'Politics',
-    icon: Users,
-    path: '/politicians',
-  },
-  {
-    id: 'calendar',
-    label: 'Calendar',
-    icon: Calendar,
-    path: '/calendar',
-  },
-  {
-    id: 'education',
-    label: 'Civics',
-    icon: BookOpen,
-    path: '/civic-education',
+    path: '/advanced-feed'
   },
   {
     id: 'polls',
@@ -71,16 +42,28 @@ const navItems: NavItem[] = [
     path: '/polls',
   },
   {
-    id: 'civic-shield',
-    label: 'Shield',
-    icon: Shield,
-    path: '/civic-shield',
+    id: 'politicians',
+    label: 'Politics',
+    icon: Users,
+    path: '/politicians',
   },
   {
-    id: 'diaspora',
-    label: 'Diaspora',
-    icon: Globe,
-    path: '/diaspora-connect',
+    id: 'services',
+    label: 'Services',
+    icon: Building2,
+    path: '/companies',
+  },
+  {
+    id: 'camerplay',
+    label: 'Music',
+    icon: Music,
+    path: '/camerplay',
+  },
+  {
+    id: 'jobs',
+    label: 'Jobs',
+    icon: Briefcase,
+    path: '/jobs',
   },
   {
     id: 'marketplace',
@@ -89,17 +72,17 @@ const navItems: NavItem[] = [
     path: '/marketplace',
   },
   {
+    id: 'messenger',
+    label: 'Chat',
+    icon: MessageCircle,
+    path: '/messenger',
+  },
+  {
     id: 'profile',
     label: 'Profile',
     icon: User,
     path: '/profile',
-  },
-  {
-    id: 'admin',
-    label: 'Admin',
-    icon: Settings,
-    path: '/admin/core',
-  },
+  }
 ];
 
 export const MobileNavigation = () => {

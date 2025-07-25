@@ -10,6 +10,7 @@ import { AuthPage } from "./pages/AuthPage";
 import CivicFeed from "./pages/CivicFeed";
 import PulseFeed from "./pages/PulseFeed";
 import Feed from "./pages/Feed";
+import AdvancedFeed from "./pages/AdvancedFeed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
 import AdvancedDirectory from "./pages/AdvancedDirectory";
@@ -227,6 +228,7 @@ const App = () => {
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/feed" element={<Feed />} />
+              <Route path="/advanced-feed" element={<AdvancedFeed />} />
               <Route path="/civic-feed" element={<CivicFeed />} />
               <Route path="/politicians" element={<Politicians />} />
               <Route path="/politicians/:id" element={<PoliticianDetailPage />} />
