@@ -36265,6 +36265,17 @@ export type Database = {
         Args: { p_politician_id: string }
         Returns: Json
       }
+      calculate_poll_performance_metrics: {
+        Args: { p_poll_id: string }
+        Returns: {
+          total_votes: number
+          unique_voters: number
+          engagement_rate: number
+          average_time_to_vote: unknown
+          geographic_diversity_score: number
+          fraud_risk_score: number
+        }[]
+      }
       calculate_profile_completion_score: {
         Args: { p_user_id: string }
         Returns: number
@@ -36404,6 +36415,16 @@ export type Database = {
           p_tags?: string[]
         }
         Returns: string
+      }
+      detect_advanced_fraud_patterns: {
+        Args: { p_poll_id: string }
+        Returns: {
+          fraud_type: string
+          severity: string
+          confidence_score: number
+          evidence_count: number
+          description: string
+        }[]
       }
       detect_data_trends: {
         Args: { p_category: string; p_time_window?: unknown }
@@ -36787,6 +36808,16 @@ export type Database = {
           p_device_model?: string
         }
         Returns: string
+      }
+      run_poll_health_checks: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          poll_id: string
+          poll_title: string
+          health_status: string
+          issues_found: string[]
+          recommendations: string[]
+        }[]
       }
       sanitize_message_content: {
         Args: { content: string }

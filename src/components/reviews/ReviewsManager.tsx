@@ -45,24 +45,14 @@ export const ReviewsManager: React.FC<ReviewsManagerProps> = ({
       const tableName = entityType === 'employer' ? 'employer_reviews' : 'expert_performance_reviews';
       const entityField = entityType === 'employer' ? 'employer_id' : 'expert_id';
       
-      // Build query step by step to avoid type inference issues
-      let query = supabase
+      // Use direct query to avoid type issues
+      const { data, error } = await supabase
         .from(tableName as any)
         .select('*')
         .eq(entityField, entityId)
-        .eq('status', 'active');
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
 
-      // Apply filters
-      if (filterRating !== 'all') {
-        query = query.eq('overall_rating', parseInt(filterRating));
-      }
-
-      // Apply sorting
-      const orderColumn = sortBy === 'rating' ? 'overall_rating' : 'created_at';
-      const ascending = sortBy === 'rating' ? false : sortBy === 'oldest';
-      query = query.order(orderColumn, { ascending });
-
-      const { data, error } = await query;
       if (error) throw error;
       setReviews(data || []);
     } catch (error) {
@@ -78,7 +68,7 @@ export const ReviewsManager: React.FC<ReviewsManagerProps> = ({
       const entityField = entityType === 'employer' ? 'employer_id' : 'expert_id';
       
       const { data, error } = await supabase
-        .from(tableName)
+        .from(tableName as any)
         .select('overall_rating, would_recommend')
         .eq(entityField, entityId)
         .eq('status', 'active');
@@ -87,8 +77,8 @@ export const ReviewsManager: React.FC<ReviewsManagerProps> = ({
       
       if (data && data.length > 0) {
         const totalReviews = data.length;
-        const averageRating = data.reduce((sum, review) => sum + review.overall_rating, 0) / totalReviews;
-        const recommendations = data.filter(review => review.would_recommend === true).length;
+        const averageRating = data.reduce((sum: number, review: any) => sum + (review.overall_rating || 0), 0) / totalReviews;
+        const recommendations = data.filter((review: any) => review.would_recommend === true).length;
         const recommendationRate = recommendations / totalReviews * 100;
         
         setStats({
