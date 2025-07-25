@@ -12,8 +12,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { ProfileImageManager } from '@/components/Profile/ProfileImageManager';
 import { 
-  User, 
+  User,
   Shield, 
   Bell, 
   Eye, 
@@ -108,8 +109,12 @@ const SettingsPage: React.FC = () => {
           </p>
         </div>
 
-        <Tabs defaultValue="profile" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 lg:grid-cols-5">
+        <Tabs defaultValue="images" className="w-full">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6">
+            <TabsTrigger value="images" className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              <span className="hidden sm:inline">Images</span>
+            </TabsTrigger>
             <TabsTrigger value="profile" className="flex items-center gap-2">
               <User className="h-4 w-4" />
               <span className="hidden sm:inline">Profile</span>
@@ -131,6 +136,11 @@ const SettingsPage: React.FC = () => {
               <span className="hidden sm:inline">Data</span>
             </TabsTrigger>
           </TabsList>
+
+          {/* Profile Images */}
+          <TabsContent value="images" className="space-y-6">
+            <ProfileImageManager />
+          </TabsContent>
 
           {/* Profile Settings */}
           <TabsContent value="profile" className="space-y-6">

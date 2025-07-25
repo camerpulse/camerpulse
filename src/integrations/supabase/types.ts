@@ -36974,6 +36974,10 @@ export type Database = {
         Args: { p_senator_id: string }
         Returns: number
       }
+      can_upload_cover_photo: {
+        Args: { user_id: string }
+        Returns: boolean
+      }
       check_claim_renewals: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -37350,6 +37354,10 @@ export type Database = {
       get_pan_africa_config: {
         Args: { p_config_key?: string }
         Returns: Json
+      }
+      get_profile_image_url: {
+        Args: { bucket_name: string; file_path: string }
+        Returns: string
       }
       get_revenue_dashboard: {
         Args: Record<PropertyKey, never>
