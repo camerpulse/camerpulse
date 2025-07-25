@@ -56,6 +56,8 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import { PeopleToFollowSidebar } from '@/components/feed/PeopleToFollowSidebar';
 import { RecommendationCarousel } from '@/components/feed/RecommendationCarousel';
+import { PoliticalFiguresCarousel } from '@/components/feed/PoliticalFiguresCarousel';
+import { PoliticalFiguresSidebar } from '@/components/feed/PoliticalFiguresSidebar';
 
 // Advanced Feed Item Types
 interface FeedItem {
@@ -452,6 +454,7 @@ export default function AdvancedFeed() {
   const [showComposer, setShowComposer] = useState(false);
   const [loading, setLoading] = useState(false);
   const [recommendations, setRecommendations] = useState<any[]>([]);
+  const [politicalFigures, setPoliticalFigures] = useState<any[]>([]);
 
   // Combine real and mock data for demo
   const combinedFeedItems = useMemo(() => {
@@ -508,7 +511,79 @@ export default function AdvancedFeed() {
       if (data) setRecommendations(data);
     };
 
+    const fetchPoliticalFigures = async () => {
+      // Mock political figures data
+      const mockPoliticalFigures = [
+        {
+          id: '1',
+          user_id: 'pol-1',
+          name: 'Hon. Paul Atanga Nji',
+          username: 'paulatanganji',
+          avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e',
+          position: 'Minister of Territorial Administration',
+          party_affiliation: 'CPDM',
+          region: 'Northwest',
+          figure_type: 'politician',
+          average_rating: 4.2,
+          total_ratings: 1247,
+          influence_score: 95,
+          verification_status: 'verified',
+          bio: 'Serving the people of Cameroon with dedication.'
+        },
+        {
+          id: '2',
+          user_id: 'mp-1',
+          name: 'Hon. Cavaye Yeguie Djibril',
+          username: 'cavayeyeguie',
+          avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
+          position: 'Speaker of National Assembly',
+          party_affiliation: 'CPDM',
+          region: 'Far North',
+          figure_type: 'mp',
+          average_rating: 4.0,
+          total_ratings: 892,
+          influence_score: 88,
+          verification_status: 'verified',
+          bio: 'Leading parliamentary proceedings.'
+        },
+        {
+          id: '3',
+          user_id: 'senator-1',
+          name: 'Sen. Marcel Niat Njifenji',
+          username: 'marcelniat',
+          avatar_url: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7',
+          position: 'Senate President',
+          party_affiliation: 'CPDM',
+          region: 'Centre',
+          figure_type: 'senator',
+          average_rating: 4.1,
+          total_ratings: 634,
+          influence_score: 85,
+          verification_status: 'verified',
+          bio: 'Championing legislative excellence.'
+        },
+        {
+          id: '4',
+          user_id: 'chief-1',
+          name: 'HRH Fon Angwafor III',
+          username: 'fonangwafor',
+          avatar_url: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e',
+          position: 'Fon of Mankon',
+          party_affiliation: 'Traditional Authority',
+          region: 'Northwest',
+          figure_type: 'chief',
+          average_rating: 4.5,
+          total_ratings: 456,
+          influence_score: 72,
+          verification_status: 'verified',
+          bio: 'Preserving culture and promoting peace.'
+        }
+      ];
+      setPoliticalFigures(mockPoliticalFigures);
+    };
+
     fetchRecommendations();
+    fetchPoliticalFigures();
   }, [user]);
 
   // Filter and search logic with enhanced animations
@@ -1092,6 +1167,10 @@ export default function AdvancedFeed() {
                         {(index + 1) % 3 === 0 && recommendations.length > 0 && (
                           <RecommendationCarousel recommendations={recommendations} />
                         )}
+                        {/* Insert political figures carousel every 5th post */}
+                        {(index + 1) % 5 === 0 && politicalFigures.length > 0 && (
+                          <PoliticalFiguresCarousel figures={politicalFigures} />
+                        )}
                       </div>
                     );
                   })
@@ -1110,9 +1189,10 @@ export default function AdvancedFeed() {
               </div>
             </div>
 
-            {/* Right Sidebar - People to Follow */}
-            <div className="hidden lg:block lg:col-span-1">
+            {/* Right Sidebar - People to Follow & Political Figures */}
+            <div className="hidden lg:block lg:col-span-1 space-y-6">
               <PeopleToFollowSidebar />
+              <PoliticalFiguresSidebar />
               
               {/* Enhanced Live Activity */}
               <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
