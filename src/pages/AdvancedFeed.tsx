@@ -871,7 +871,7 @@ export default function AdvancedFeed() {
                             >
                               Cancel
                             </Button>
-                            <Button 
+                            <Button
                               onClick={handleCreatePost}
                               disabled={!newPost.trim() || loading}
                               className="bg-gradient-to-r from-primary to-primary-glow hover:from-primary-glow hover:to-primary transition-all duration-300 hover-scale"
@@ -879,9 +879,12 @@ export default function AdvancedFeed() {
                               {loading ? (
                                 <RefreshCw className="w-4 h-4 animate-spin mr-2" />
                               ) : (
-                                <Zap className="w-4 h-4 mr-2" />
+                                <div className="flex items-center">
+                                  <div className="w-2 h-2 bg-white rounded-full animate-pulse mr-1" />
+                                  <Zap className="w-4 h-4 mr-2" />
+                                </div>
                               )}
-                              Publish
+                              Pulse
                             </Button>
                           </div>
                         </div>
