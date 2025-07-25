@@ -15,6 +15,8 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
+import { useFeed } from '@/hooks/useFeed';
+import { useTrendingTopics } from '@/hooks/useTrendingTopics';
 import {
   Home,
   TrendingUp,
@@ -45,7 +47,11 @@ import {
   Bookmark,
   RefreshCw,
   Bell,
-  Eye
+  Eye,
+  Hash,
+  UserPlus,
+  Flame,
+  Clock
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -89,14 +95,79 @@ interface FeedItem {
   };
 }
 
-// Mock comprehensive feed data
+// Enhanced mock feed data with diverse user posts
 const generateAdvancedFeedData = (): FeedItem[] => [
   {
     id: '1',
     type: 'pulse',
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
     user: {
       id: '1',
+      name: 'Amina Nkomo',
+      username: 'amina_dev',
+      avatar: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158',
+      verified: false,
+      role: 'Software Developer',
+      location: 'Douala, Littoral'
+    },
+    content: {
+      description: "Just finished building a new feature for our local fintech app! Excited to see how it helps small businesses in Cameroon manage their finances better. Tech can really transform lives! 💻🇨🇲 #TechForGood #Cameroon #Fintech",
+      tags: ['TechForGood', 'Cameroon', 'Fintech', 'Development'],
+      priority: 'medium',
+      category: 'Technology'
+    },
+    engagement: {
+      likes: 324,
+      comments: 45,
+      shares: 23,
+      views: 1250,
+      isLiked: false
+    },
+    metadata: {
+      score: 0.87,
+      relevanceFactors: ['user_content', 'tech_related', 'local_impact'],
+      source: 'user'
+    }
+  },
+  {
+    id: '2',
+    type: 'pulse',
+    timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+    user: {
+      id: '2',
+      name: 'Dr. Marie Fouda',
+      username: 'dr_marie',
+      avatar: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d',
+      verified: true,
+      role: 'Medical Doctor',
+      location: 'Yaoundé, Centre'
+    },
+    content: {
+      description: "Proud to announce that our rural health clinic reached 1000 patients this month! Access to healthcare is a fundamental right. Thank you to all the volunteers and staff who make this possible. #Healthcare #RuralHealth #Community",
+      tags: ['Healthcare', 'RuralHealth', 'Community', 'PublicService'],
+      priority: 'high',
+      category: 'Healthcare'
+    },
+    engagement: {
+      likes: 892,
+      comments: 67,
+      shares: 145,
+      views: 2890,
+      isLiked: true
+    },
+    metadata: {
+      score: 0.92,
+      relevanceFactors: ['verified_user', 'healthcare', 'community_impact'],
+      source: 'user',
+      region: 'Centre'
+    }
+  },
+  {
+    id: '3',
+    type: 'pulse',
+    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+    user: {
+      id: '3',
       name: 'Minister Paul Atanga Nji',
       username: 'paulatanganji',
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e',
@@ -105,16 +176,16 @@ const generateAdvancedFeedData = (): FeedItem[] => [
       location: 'Bamenda, Northwest'
     },
     content: {
-      description: 'Major infrastructure development announced for the Northwest region. This will create thousands of jobs and improve connectivity. #Infrastructure #Development #NorthwestRegion',
-      tags: ['Infrastructure', 'Development', 'NorthwestRegion'],
+      description: 'Major infrastructure development announced for the Northwest region. This will create thousands of jobs and improve connectivity. Road construction begins next month. #Infrastructure #Development #NorthwestRegion',
+      tags: ['Infrastructure', 'Development', 'NorthwestRegion', 'Jobs'],
       priority: 'high',
       category: 'Government Announcement'
     },
     engagement: {
       likes: 1247,
-      comments: 89,
-      shares: 156,
-      views: 5670,
+      comments: 189,
+      shares: 356,
+      views: 8670,
       isLiked: false
     },
     metadata: {
@@ -125,9 +196,43 @@ const generateAdvancedFeedData = (): FeedItem[] => [
     }
   },
   {
-    id: '2',
+    id: '4',
+    type: 'pulse',
+    timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+    user: {
+      id: '4',
+      name: 'Jean-Baptiste Owona',
+      username: 'jb_farmer',
+      avatar: 'https://images.unsplash.com/photo-1535268647677-300dbf3d78d1',
+      verified: false,
+      role: 'Farmer',
+      location: 'Mbalmayo, Centre'
+    },
+    content: {
+      description: "Great harvest this season! Our cooperative produced 50 tons of cocoa. Climate-smart farming techniques are really paying off. Looking forward to selling at fair prices through the new digital marketplace. 🌱 #Agriculture #Cocoa #FairTrade #ClimateChangei",
+      media: ['https://images.unsplash.com/photo-1582562124811-c09040d0a901'],
+      tags: ['Agriculture', 'Cocoa', 'FairTrade', 'ClimateChange'],
+      priority: 'medium',
+      category: 'Agriculture'
+    },
+    engagement: {
+      likes: 456,
+      comments: 78,
+      shares: 89,
+      views: 1890,
+      isLiked: false
+    },
+    metadata: {
+      score: 0.83,
+      relevanceFactors: ['agricultural_content', 'economic_impact', 'sustainability'],
+      source: 'user',
+      region: 'Centre'
+    }
+  },
+  {
+    id: '5',
     type: 'poll',
-    timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
     user: {
       id: '2',
       name: 'CamerPulse Community',
@@ -326,6 +431,17 @@ export default function AdvancedFeed() {
   const { user } = useAuth();
   const { toast } = useToast();
   
+  // Real data hooks
+  const { 
+    feedItems: realFeedItems, 
+    loading: feedLoading, 
+    createFeedItem, 
+    engageWithItem 
+  } = useFeed();
+  
+  const { trendingTopics, loading: topicsLoading } = useTrendingTopics(8);
+  
+  // Local state for UI
   const [feedItems, setFeedItems] = useState<FeedItem[]>(generateAdvancedFeedData());
   const [filteredItems, setFilteredItems] = useState<FeedItem[]>([]);
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -334,8 +450,43 @@ export default function AdvancedFeed() {
   const [showComposer, setShowComposer] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  // Combine real and mock data for demo
+  const combinedFeedItems = useMemo(() => {
+    const mockItems = generateAdvancedFeedData();
+    const realItems = realFeedItems.map(item => ({
+      id: item.id,
+      type: item.item_type as any,
+      timestamp: item.created_at,
+      user: {
+        id: item.author_id,
+        name: 'CamerPulse User',
+        verified: false,
+        role: 'User'
+      },
+      content: {
+        title: item.title,
+        description: item.content,
+        tags: item.tags || [],
+        priority: item.priority as any,
+        category: item.category
+      },
+      engagement: {
+        likes: item.likes_count || 0,
+        comments: item.comments_count || 0,
+        shares: item.shares_count || 0,
+        views: item.views_count || 0
+      },
+      metadata: {
+        score: item.engagement_score || 0.5,
+        source: 'user'
+      }
+    }));
+    
+    return [...realItems, ...mockItems];
+  }, [realFeedItems]);
+
   // Apply advanced algorithm
-  const algorithmFeed = useAdvancedFeedAlgorithm(feedItems, user);
+  const algorithmFeed = useAdvancedFeedAlgorithm(combinedFeedItems, user);
 
   // Filter and search logic
   useEffect(() => {
@@ -496,7 +647,90 @@ export default function AdvancedFeed() {
           </div>
         </div>
 
-        <div className="container mx-auto px-4 py-6 max-w-4xl">
+        {/* Main Content with Sidebars */}
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            
+            {/* Left Sidebar - Hidden on mobile */}
+            <div className="hidden lg:block lg:col-span-1 space-y-6">
+              
+              {/* Trending Topics */}
+              <Card className="border-primary/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Flame className="w-5 h-5 text-orange-500" />
+                    Trending in Cameroon
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {topicsLoading ? (
+                    <div className="space-y-2">
+                      {[1, 2, 3, 4, 5].map(i => (
+                        <div key={i} className="h-4 bg-muted animate-pulse rounded" />
+                      ))}
+                    </div>
+                  ) : (
+                    trendingTopics.slice(0, 8).map((topic, index) => (
+                      <div key={topic.id} className="flex items-center justify-between py-1">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground font-medium">
+                            {index + 1}
+                          </span>
+                          <div>
+                            <p className="text-sm font-medium">#{topic.topic_name}</p>
+                            <p className="text-xs text-muted-foreground">{topic.mention_count.toLocaleString()} mentions</p>
+                          </div>
+                        </div>
+                        <TrendingUp className="w-3 h-3 text-green-500" />
+                      </div>
+                    ))
+                  )}
+                  <Button variant="ghost" className="w-full text-xs mt-3">
+                    View All Trends
+                  </Button>
+                </CardContent>
+              </Card>
+
+              {/* Suggested Users */}
+              <Card className="border-primary/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <UserPlus className="w-5 h-5 text-blue-500" />
+                    Suggested Follows
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {[
+                    { name: 'Hon. Cavaye Yeguie Djibril', role: 'National Assembly Speaker', verified: true },
+                    { name: 'Dr. Manaouda Malachie', role: 'Minister of Health', verified: true },
+                    { name: 'Prof. Fame Ndongo', role: 'Minister of Higher Education', verified: true },
+                    { name: 'Cameroon Startup Hub', role: 'Innovation Center', verified: false }
+                  ].map((user, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
+                          <Users className="w-4 h-4" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">{user.name}</p>
+                          <p className="text-xs text-muted-foreground">{user.role}</p>
+                        </div>
+                      </div>
+                      <Button size="sm" variant="outline" className="text-xs">
+                        Follow
+                      </Button>
+                    </div>
+                  ))}
+                  <Button variant="ghost" className="w-full text-xs mt-3">
+                    See More Suggestions
+                  </Button>
+                </CardContent>
+              </Card>
+
+            </div>
+
+            {/* Main Feed */}
+            <div className="lg:col-span-2 space-y-6">
           {/* Post Composer */}
           <Card className="mb-6 border-primary/20 shadow-sm">
             <CardContent className="p-4">
@@ -639,11 +873,98 @@ export default function AdvancedFeed() {
             })}
           </div>
 
-          {/* Load More */}
-          <div className="text-center mt-8">
-            <Button variant="outline" className="w-full sm:w-auto">
-              Load More Content
-            </Button>
+              {/* Load More */}
+              <div className="text-center mt-8">
+                <Button variant="outline" className="w-full sm:w-auto">
+                  Load More Content
+                </Button>
+              </div>
+            </div>
+
+            {/* Right Sidebar - Hidden on mobile */}
+            <div className="hidden lg:block lg:col-span-1 space-y-6">
+              
+              {/* Live Activity */}
+              <Card className="border-primary/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-green-500" />
+                    Live Activity
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {[
+                    { action: 'New poll created', time: '2 min ago', icon: Vote },
+                    { action: 'Minister posted update', time: '5 min ago', icon: Shield },
+                    { action: 'Job posting in Douala', time: '12 min ago', icon: Building2 },
+                    { action: 'Health alert issued', time: '18 min ago', icon: Heart },
+                    { action: 'New music release', time: '25 min ago', icon: Music }
+                  ].map((activity, index) => (
+                    <div key={index} className="flex items-center gap-3 py-1">
+                      <div className="w-6 h-6 bg-muted rounded-full flex items-center justify-center">
+                        <activity.icon className="w-3 h-3" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm">{activity.action}</p>
+                        <p className="text-xs text-muted-foreground">{activity.time}</p>
+                      </div>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Quick Stats */}
+              <Card className="border-primary/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Platform Stats</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm text-muted-foreground">Active Users</span>
+                    <span className="text-sm font-medium">12.4K</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-muted-foreground">Posts Today</span>
+                    <span className="text-sm font-medium">1,234</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-muted-foreground">Active Polls</span>
+                    <span className="text-sm font-medium">45</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm text-muted-foreground">Jobs Posted</span>
+                    <span className="text-sm font-medium">156</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <Card className="border-primary/20">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg">Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Button variant="outline" size="sm" className="w-full justify-start">
+                    <Vote className="w-4 h-4 mr-2" />
+                    Create Poll
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start">
+                    <Building2 className="w-4 h-4 mr-2" />
+                    Post Job
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start">
+                    <Calendar className="w-4 h-4 mr-2" />
+                    Add Event
+                  </Button>
+                  <Button variant="outline" size="sm" className="w-full justify-start">
+                    <Music className="w-4 h-4 mr-2" />
+                    Share Music
+                  </Button>
+                </CardContent>
+              </Card>
+
+            </div>
+
           </div>
         </div>
       </div>
