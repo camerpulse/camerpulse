@@ -258,13 +258,13 @@ export const PollFraudProtectionEngine = ({ pollId, isCreator }: PollFraudProtec
                 <div className="space-y-1">
                   <Label className="text-base font-medium">CAPTCHA Challenge</Label>
                   <p className="text-sm text-muted-foreground">
-                    Require human verification before voting (Coming Soon)
+                    Require human verification before voting
                   </p>
                 </div>
                 <Switch
                   checked={settings.enable_captcha}
                   onCheckedChange={(checked) => updateSettings({ enable_captcha: checked })}
-                  disabled={true} // Disabled until implemented
+                  disabled={saving}
                 />
               </div>
 

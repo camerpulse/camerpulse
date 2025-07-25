@@ -8,9 +8,10 @@ interface VoteValidationResult {
 }
 
 interface FraudProtectionHook {
-  validateVote: (pollId: string, userId?: string) => Promise<VoteValidationResult>;
+  validateVote: (pollId: string, userId?: string, captchaToken?: string) => Promise<VoteValidationResult>;
   logVote: (pollId: string, optionIndex: number, userId?: string, region?: string) => Promise<void>;
   generateFingerprint: () => string;
+  runBotDetection: (pollId: string) => Promise<boolean>;
   loading: boolean;
 }
 
@@ -70,7 +71,7 @@ export const useFraudProtection = (): FraudProtectionHook => {
     }
   }, []);
 
-  const validateVote = useCallback(async (pollId: string, userId?: string): Promise<VoteValidationResult> => {
+  const validateVote = useCallback(async (pollId: string, userId?: string, captchaToken?: string): Promise<VoteValidationResult> => {
     try {
       setLoading(true);
 
@@ -80,6 +81,31 @@ export const useFraudProtection = (): FraudProtectionHook => {
         .select('*')
         .eq('poll_id', pollId)
         .single();
+
+      // Check CAPTCHA if enabled
+      if (settings?.enable_captcha && !captchaToken) {
+        return { 
+          canVote: false, 
+          reason: 'CAPTCHA verification required' 
+        };
+      }
+
+      if (settings?.enable_captcha && captchaToken) {
+        try {
+          const tokenData = JSON.parse(atob(captchaToken));
+          if (!tokenData.verified || Date.now() - tokenData.timestamp > 300000) { // 5 minutes
+            return { 
+              canVote: false, 
+              reason: 'CAPTCHA token expired or invalid' 
+            };
+          }
+        } catch {
+          return { 
+            canVote: false, 
+            reason: 'Invalid CAPTCHA token' 
+          };
+        }
+      }
 
       if (!settings || !settings.enable_rate_limiting) {
         return { canVote: true };
@@ -181,10 +207,80 @@ export const useFraudProtection = (): FraudProtectionHook => {
     }
   }, [hashIP, generateFingerprint]);
 
+  const runBotDetection = useCallback(async (pollId: string): Promise<boolean> => {
+    try {
+      setLoading(true);
+      
+      // Enhanced bot detection algorithm
+      const checks = [
+        checkMouseMovement(),
+        checkKeyboardPatterns(),
+        checkBrowserFingerprint(),
+        checkTimingPatterns(),
+        checkDeviceCapabilities()
+      ];
+      
+      const results = await Promise.all(checks);
+      const suspiciousCount = results.filter(result => result).length;
+      const isBot = suspiciousCount >= 3; // Threshold for bot detection
+      
+      // Log bot detection result
+      const deviceFingerprint = generateFingerprint();
+      await supabase.from('poll_bot_detection_logs').insert({
+        poll_id: pollId,
+        is_bot: isBot,
+        confidence_score: (suspiciousCount / checks.length) * 100,
+        detection_reasons: results.map((result, index) => 
+          result ? [`Check ${index + 1} failed`] : []
+        ).flat(),
+        device_fingerprint: deviceFingerprint,
+        user_agent: navigator.userAgent
+      });
+      
+      return isBot;
+    } catch (error) {
+      console.error('Bot detection error:', error);
+      return false; // Default to allowing vote on error
+    } finally {
+      setLoading(false);
+    }
+  }, [generateFingerprint]);
+
+  // Bot detection helper functions
+  const checkMouseMovement = (): boolean => {
+    return !(window as any).mouseMovements || (window as any).mouseMovements.length < 5;
+  };
+
+  const checkKeyboardPatterns = (): boolean => {
+    return !(window as any).keyboardEvents || (window as any).keyboardEvents.length < 3;
+  };
+
+  const checkBrowserFingerprint = (): boolean => {
+    return !!(
+      (window as any).webdriver ||
+      (window as any).phantom ||
+      (navigator as any).webdriver
+    );
+  };
+
+  const checkTimingPatterns = (): boolean => {
+    const pageLoadTime = performance.now();
+    return pageLoadTime < 500; // Too fast interaction
+  };
+
+  const checkDeviceCapabilities = (): boolean => {
+    return !(
+      'ontouchstart' in window ||
+      navigator.maxTouchPoints > 0 ||
+      window.screen.width > 600
+    );
+  };
+
   return {
     validateVote,
     logVote,
     generateFingerprint,
+    runBotDetection,
     loading
   };
 };
