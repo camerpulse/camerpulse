@@ -1170,34 +1170,52 @@ export default function AdvancedFeed() {
               </Card>
 
               {/* Platform Sections */}
-              <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg flex items-center gap-2">
-                    <Hash className="w-5 h-5 text-primary" />
+              <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale bg-gradient-to-br from-background via-background to-primary/5">
+                <CardHeader className="pb-3 bg-gradient-to-r from-primary/10 to-primary-glow/10 rounded-t-lg">
+                  <CardTitle className="text-lg flex items-center gap-2 text-primary">
+                    <Hash className="w-5 h-5" />
                     Platform Sections
+                    <Badge variant="secondary" className="ml-auto text-xs">8</Badge>
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-1 p-4">
                   {[
-                    { label: 'Villages', icon: MapPin, href: '/villages' },
-                    { label: 'Petitions', icon: Scale, href: '/petitions' },
-                    { label: 'Sentiment', icon: BarChart3, href: '/sentiment' },
-                    { label: 'Companies', icon: Building2, href: '/companies' },
-                    { label: 'Politicians', icon: Users, href: '/politicians' },
-                    { label: 'Political Parties', icon: Crown, href: '/political-parties' },
-                    { label: 'MPs', icon: Shield, href: '/mps' },
-                    { label: 'Senators', icon: BookOpen, href: '/senators' }
+                    { label: 'Villages', icon: MapPin, href: '/villages', count: '2.4k', color: 'text-green-500' },
+                    { label: 'Petitions', icon: Scale, href: '/petitions', count: '142', color: 'text-orange-500' },
+                    { label: 'Sentiment', icon: BarChart3, href: '/sentiment', count: 'Live', color: 'text-blue-500', isLive: true },
+                    { label: 'Companies', icon: Building2, href: '/companies', count: '856', color: 'text-purple-500' },
+                    { label: 'Politicians', icon: Users, href: '/politicians', count: '324', color: 'text-red-500' },
+                    { label: 'Political Parties', icon: Crown, href: '/political-parties', count: '12', color: 'text-yellow-500' },
+                    { label: 'MPs', icon: Shield, href: '/mps', count: '180', color: 'text-indigo-500' },
+                    { label: 'Senators', icon: BookOpen, href: '/senators', count: '100', color: 'text-cyan-500' }
                   ].map((section, index) => (
-                    <Button 
+                    <div 
                       key={section.label}
-                      variant="ghost" 
-                      size="sm" 
-                      className="w-full justify-start hover-scale transition-all duration-200 hover:bg-gradient-to-r hover:from-primary/10 hover:to-primary-glow/10 animate-fade-in"
-                      style={{ animationDelay: `${index * 50}ms` }}
+                      className="group relative animate-fade-in"
+                      style={{ animationDelay: `${index * 75}ms` }}
                     >
-                      <section.icon className="w-4 h-4 mr-2" />
-                      {section.label}
-                    </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="w-full justify-start hover-scale transition-all duration-300 hover:bg-gradient-to-r hover:from-primary/15 hover:to-primary-glow/15 hover:shadow-md group-hover:translate-x-1"
+                        onClick={() => window.location.href = section.href}
+                      >
+                        <section.icon className={`w-4 h-4 mr-3 transition-colors duration-200 ${section.color} group-hover:scale-110`} />
+                        <span className="flex-1 text-left font-medium">{section.label}</span>
+                        <div className="flex items-center gap-2">
+                          {section.isLive && (
+                            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                          )}
+                          <Badge 
+                            variant="outline" 
+                            className="text-xs px-2 py-0.5 border-primary/20 bg-primary/5 group-hover:bg-primary/10 transition-colors duration-200"
+                          >
+                            {section.count}
+                          </Badge>
+                        </div>
+                      </Button>
+                      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-md" />
+                    </div>
                   ))}
                 </CardContent>
               </Card>
