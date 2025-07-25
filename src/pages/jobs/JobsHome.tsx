@@ -87,7 +87,7 @@ const JobsHome = () => {
             </CardHeader>
             <CardContent>
               <Button className="w-full" asChild>
-                <a href="/jobs/board">Browse Jobs</a>
+                <a href="/jobs">Browse Jobs</a>
               </Button>
             </CardContent>
           </Card>
@@ -187,7 +187,7 @@ const JobsHome = () => {
             <div className="space-y-4">
               <div className="text-center py-4">
                 <Button asChild>
-                  <a href="/jobs/board">View All Jobs</a>
+                  <a href="/jobs">View All Jobs</a>
                 </Button>
               </div>
             </div>
