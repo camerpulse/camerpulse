@@ -21,7 +21,9 @@ import {
   Calendar,
   Briefcase,
   GraduationCap,
-  Star
+  Star,
+  BarChart3,
+  Vote
 } from 'lucide-react';
 
 export const ProfilePage: React.FC = () => {
@@ -178,10 +180,11 @@ export const ProfilePage: React.FC = () => {
           {/* Right Column - Detailed Information */}
           <div className="lg:col-span-2">
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
                 <TabsTrigger value="experience">Experience</TabsTrigger>
                 <TabsTrigger value="achievements">Achievements</TabsTrigger>
+                <TabsTrigger value="polls">My Polls</TabsTrigger>
                 <TabsTrigger value="connections">Connections</TabsTrigger>
               </TabsList>
 
@@ -386,6 +389,62 @@ export const ProfilePage: React.FC = () => {
                     </CardContent>
                   </Card>
                 )}
+              </TabsContent>
+
+              {/* My Polls Tab */}
+              <TabsContent value="polls" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <BarChart3 className="h-5 w-5" />
+                      My Polls Activity
+                    </CardTitle>
+                    <CardDescription>
+                      Polls you've created and participated in
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <div className="flex items-center gap-3 p-4 bg-primary/5 rounded-lg">
+                        <Vote className="h-8 w-8 text-primary" />
+                        <div>
+                          <p className="text-sm text-muted-foreground">Polls Created</p>
+                          <p className="text-2xl font-bold">--</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 p-4 bg-secondary/5 rounded-lg">
+                        <BarChart3 className="h-8 w-8 text-secondary" />
+                        <div>
+                          <p className="text-sm text-muted-foreground">Votes Cast</p>
+                          <p className="text-2xl font-bold">--</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-medium">Quick Actions</h4>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <Button 
+                          onClick={() => navigate('/dashboard/polls')}
+                          className="flex items-center gap-2"
+                        >
+                          <BarChart3 className="h-4 w-4" />
+                          My Dashboard
+                        </Button>
+                        <Button 
+                          variant="outline"
+                          onClick={() => navigate('/polls')}
+                          className="flex items-center gap-2"
+                        >
+                          <Vote className="h-4 w-4" />
+                          Browse Polls
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </TabsContent>
 
               {/* Connections Tab */}
