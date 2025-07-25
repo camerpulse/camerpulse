@@ -65,9 +65,26 @@ export const Header = () => {
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/diaspora-connect">DiasporaConnect</Link>
             </Button>
-            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/polls">Polls</Link>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+                  Polls <ChevronDown className="w-4 h-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild>
+                  <Link to="/polls">Browse Polls</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/poll-templates">Poll Templates</Link>
+                </DropdownMenuItem>
+                {user && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard/polls">My Dashboard</Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/politicians">Politicians</Link>
             </Button>
@@ -186,7 +203,10 @@ export const Header = () => {
                 <Link to="/diaspora-connect" onClick={() => setMobileMenuOpen(false)}>🌍 DiasporaConnect</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Polls</Link>
+                <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Browse Polls</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
+                <Link to="/poll-templates" onClick={() => setMobileMenuOpen(false)}>📋 Poll Templates</Link>
               </Button>
               {user && (
                 <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">

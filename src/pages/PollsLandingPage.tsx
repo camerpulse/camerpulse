@@ -277,7 +277,7 @@ const PollsLandingPage = () => {
                   </Button>
                 )}
                 <Button asChild variant="outline" size="lg" className="border-primary/20">
-                  <Link to="#templates">
+                  <Link to="/poll-templates">
                     <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                     Explore Templates
                   </Link>
@@ -397,9 +397,9 @@ const PollsLandingPage = () => {
             )}
             
             <div className="text-center mt-6 sm:mt-8">
-              <Button asChild variant="outline" size="lg">
-                <Link to="/admin/core">
-                  View All {templates.length} Templates
+              <Button asChild variant="outline" size="lg" className="mr-4">
+                <Link to="/poll-templates">
+                  View All Advanced Templates
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>
