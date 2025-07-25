@@ -114,7 +114,7 @@ export const PollAnalyticsDashboard: React.FC<PollAnalyticsProps> = ({ pollId })
           { rating: 3, count: 15 },
           { rating: 4, count: 25 },
           { rating: 5, count: 30 }
-        ] : undefined
+        ]
       };
 
       setAnalytics(mockAnalytics);
