@@ -150,6 +150,7 @@ import { SenatorDetailPage } from "./pages/SenatorDetailPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataImport from "./pages/AdminDataImport";
 import AuditRegistryPage from "./pages/AuditRegistryPage";
+import UserPollOverview from "./pages/UserPollOverview";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -246,6 +247,7 @@ const App = () => {
           <Route path="/messenger" element={<MessengerPage />} />
           <Route path="/notification-settings" element={<NotificationSettingsPage />} />
               <Route path="/dashboard/polls" element={<PollsDashboard />} />
+              <Route path="/polls/overview" element={<UserPollOverview />} />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/donate" element={<Donations />} />
               <Route path="/social" element={<Social />} />

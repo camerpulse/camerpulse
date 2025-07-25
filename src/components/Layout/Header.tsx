@@ -20,7 +20,8 @@ import {
   MessageSquare,
   Settings, 
   User,
-  X
+  X,
+  BarChart3
 } from "lucide-react";
 
 export const Header = () => {
@@ -132,6 +133,12 @@ export const Header = () => {
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link to="/dashboard/polls" className="cursor-pointer">
+                      <BarChart3 className="mr-2 h-4 w-4" />
+                      My Polls Dashboard
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link to="/messenger" className="cursor-pointer">
                       <MessageSquare className="mr-2 h-4 w-4" />
                       Messenger
@@ -181,6 +188,11 @@ export const Header = () => {
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Polls</Link>
               </Button>
+              {user && (
+                <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
+                  <Link to="/dashboard/polls" onClick={() => setMobileMenuOpen(false)}>📊 My Polls Dashboard</Link>
+                </Button>
+              )}
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
               </Button>

@@ -40,6 +40,7 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { PollsQuickGuide } from '@/components/Polls/PollsQuickGuide';
 
 interface Poll {
   id: string;
@@ -287,6 +288,11 @@ const PollsLandingPage = () => {
         </div>
 
         <div className="container mx-auto px-4 py-6 sm:py-8 lg:py-12 max-w-7xl">
+          {/* Quick Guide Section */}
+          <section className="mb-8 sm:mb-12 lg:mb-16">
+            <PollsQuickGuide />
+          </section>
+
           {/* Benefits Section */}
           <section className="mb-8 sm:mb-12 lg:mb-16">
             <div className="text-center mb-6 sm:mb-8">
