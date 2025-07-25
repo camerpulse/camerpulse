@@ -77,7 +77,7 @@ import CamerPulseMaster from "./pages/CamerPulseMaster";
 import CamerPlayHome from "./pages/CamerPlayHome";
 import EcosystemDashboard from "./pages/EcosystemDashboard";
 import FanPortal from "./pages/FanPortal";
-import UserProfilePage from "./pages/UserProfilePage";
+import UserProfile from "./pages/UserProfile";
 import ProfileSlugPage from "./pages/ProfileSlugPage";
 import { ProfileValidationTest } from "./components/Profile/ProfileValidationTest";
 import { ProfileFeatureTest } from "./components/Profile/ProfileFeatureTest";
@@ -347,8 +347,8 @@ const App = () => {
           <Route path="/rewards" element={<RewardsCenter />} />
               <Route path="/poll-archive" element={<PollArchive />} />
               <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
-              <Route path="/user/:userId" element={<UserProfilePage />} />
-              <Route path="/@:slug" element={<ProfileSlugPage />} />
+              <Route path="/user/:userId" element={<UserProfile />} />
+              <Route path="/@:slug" element={<UserProfile />} />
         <Route path="/profile-test" element={<ProfileValidationTest />} />
         <Route path="/feature-test" element={<ProfileFeatureTest />} />
         <Route path="/system-test" element={<ProfileSystemTester />} />
