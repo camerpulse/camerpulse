@@ -14399,6 +14399,89 @@ export type Database = {
         }
         Relationships: []
       }
+      employer_reviews: {
+        Row: {
+          career_growth_rating: number | null
+          compensation_rating: number | null
+          created_at: string
+          employer_id: string
+          employment_duration: string | null
+          employment_type: string | null
+          id: string
+          is_anonymous: boolean | null
+          is_verified: boolean | null
+          job_id: string | null
+          management_rating: number | null
+          moderation_notes: string | null
+          overall_rating: number
+          review_content: string
+          review_title: string
+          reviewer_id: string
+          status: string | null
+          toxicity_score: number | null
+          updated_at: string
+          work_environment_rating: number | null
+          work_life_balance_rating: number | null
+          would_recommend: boolean | null
+        }
+        Insert: {
+          career_growth_rating?: number | null
+          compensation_rating?: number | null
+          created_at?: string
+          employer_id: string
+          employment_duration?: string | null
+          employment_type?: string | null
+          id?: string
+          is_anonymous?: boolean | null
+          is_verified?: boolean | null
+          job_id?: string | null
+          management_rating?: number | null
+          moderation_notes?: string | null
+          overall_rating: number
+          review_content: string
+          review_title: string
+          reviewer_id: string
+          status?: string | null
+          toxicity_score?: number | null
+          updated_at?: string
+          work_environment_rating?: number | null
+          work_life_balance_rating?: number | null
+          would_recommend?: boolean | null
+        }
+        Update: {
+          career_growth_rating?: number | null
+          compensation_rating?: number | null
+          created_at?: string
+          employer_id?: string
+          employment_duration?: string | null
+          employment_type?: string | null
+          id?: string
+          is_anonymous?: boolean | null
+          is_verified?: boolean | null
+          job_id?: string | null
+          management_rating?: number | null
+          moderation_notes?: string | null
+          overall_rating?: number
+          review_content?: string
+          review_title?: string
+          reviewer_id?: string
+          status?: string | null
+          toxicity_score?: number | null
+          updated_at?: string
+          work_environment_rating?: number | null
+          work_life_balance_rating?: number | null
+          would_recommend?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employer_reviews_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "jobs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       encrypted_messages: {
         Row: {
           created_at: string | null
@@ -15573,6 +15656,81 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      expert_performance_reviews: {
+        Row: {
+          communication_rating: number | null
+          created_at: string
+          expert_id: string
+          id: string
+          is_anonymous: boolean | null
+          is_verified: boolean | null
+          moderation_notes: string | null
+          overall_rating: number
+          problem_solving_rating: number | null
+          professionalism_rating: number | null
+          project_budget_range: string | null
+          project_duration: string | null
+          project_id: string | null
+          review_content: string
+          review_title: string
+          reviewer_id: string
+          status: string | null
+          technical_skills_rating: number | null
+          timeliness_rating: number | null
+          toxicity_score: number | null
+          updated_at: string
+          would_recommend: boolean | null
+        }
+        Insert: {
+          communication_rating?: number | null
+          created_at?: string
+          expert_id: string
+          id?: string
+          is_anonymous?: boolean | null
+          is_verified?: boolean | null
+          moderation_notes?: string | null
+          overall_rating: number
+          problem_solving_rating?: number | null
+          professionalism_rating?: number | null
+          project_budget_range?: string | null
+          project_duration?: string | null
+          project_id?: string | null
+          review_content: string
+          review_title: string
+          reviewer_id: string
+          status?: string | null
+          technical_skills_rating?: number | null
+          timeliness_rating?: number | null
+          toxicity_score?: number | null
+          updated_at?: string
+          would_recommend?: boolean | null
+        }
+        Update: {
+          communication_rating?: number | null
+          created_at?: string
+          expert_id?: string
+          id?: string
+          is_anonymous?: boolean | null
+          is_verified?: boolean | null
+          moderation_notes?: string | null
+          overall_rating?: number
+          problem_solving_rating?: number | null
+          professionalism_rating?: number | null
+          project_budget_range?: string | null
+          project_duration?: string | null
+          project_id?: string | null
+          review_content?: string
+          review_title?: string
+          reviewer_id?: string
+          status?: string | null
+          technical_skills_rating?: number | null
+          timeliness_rating?: number | null
+          toxicity_score?: number | null
+          updated_at?: string
+          would_recommend?: boolean | null
+        }
+        Relationships: []
       }
       expert_profiles: {
         Row: {
@@ -30504,6 +30662,39 @@ export type Database = {
         }
         Relationships: []
       }
+      review_analytics: {
+        Row: {
+          created_at: string
+          entity_id: string
+          entity_type: string
+          id: string
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+        }
+        Insert: {
+          created_at?: string
+          entity_id: string
+          entity_type: string
+          id?: string
+          metric_type: string
+          metric_value?: number
+          period_end: string
+          period_start: string
+        }
+        Update: {
+          created_at?: string
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          metric_type?: string
+          metric_value?: number
+          period_end?: string
+          period_start?: string
+        }
+        Relationships: []
+      }
       review_comments: {
         Row: {
           comment_text: string
@@ -30588,6 +30779,132 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      review_helpfulness_votes: {
+        Row: {
+          created_at: string
+          id: string
+          is_helpful: boolean
+          review_id: string
+          review_type: string
+          voter_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_helpful: boolean
+          review_id: string
+          review_type: string
+          voter_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_helpful?: boolean
+          review_id?: string
+          review_type?: string
+          voter_id?: string
+        }
+        Relationships: []
+      }
+      review_moderation_queue: {
+        Row: {
+          auto_flagged: boolean | null
+          created_at: string
+          flagged_by: string | null
+          flagged_reason: string
+          id: string
+          moderation_priority: number | null
+          moderator_action: string | null
+          moderator_id: string | null
+          moderator_notes: string | null
+          resolved_at: string | null
+          review_id: string
+          review_type: string
+          status: string | null
+          toxicity_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          auto_flagged?: boolean | null
+          created_at?: string
+          flagged_by?: string | null
+          flagged_reason: string
+          id?: string
+          moderation_priority?: number | null
+          moderator_action?: string | null
+          moderator_id?: string | null
+          moderator_notes?: string | null
+          resolved_at?: string | null
+          review_id: string
+          review_type: string
+          status?: string | null
+          toxicity_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          auto_flagged?: boolean | null
+          created_at?: string
+          flagged_by?: string | null
+          flagged_reason?: string
+          id?: string
+          moderation_priority?: number | null
+          moderator_action?: string | null
+          moderator_id?: string | null
+          moderator_notes?: string | null
+          resolved_at?: string | null
+          review_id?: string
+          review_type?: string
+          status?: string | null
+          toxicity_score?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      review_responses: {
+        Row: {
+          created_at: string
+          id: string
+          is_official_response: boolean | null
+          moderation_notes: string | null
+          original_review_id: string
+          original_review_type: string
+          responder_id: string
+          responder_type: string
+          response_content: string
+          status: string | null
+          toxicity_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_official_response?: boolean | null
+          moderation_notes?: string | null
+          original_review_id: string
+          original_review_type: string
+          responder_id: string
+          responder_type: string
+          response_content: string
+          status?: string | null
+          toxicity_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_official_response?: boolean | null
+          moderation_notes?: string | null
+          original_review_id?: string
+          original_review_type?: string
+          responder_id?: string
+          responder_type?: string
+          response_content?: string
+          status?: string | null
+          toxicity_score?: number | null
+          updated_at?: string
+        }
+        Relationships: []
       }
       review_votes: {
         Row: {
