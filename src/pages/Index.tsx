@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,6 +34,13 @@ import {
 
 const Index = () => {
   const { user, profile, signOut, loading } = useAuth();
+
+  // Redirect authenticated users to their social feed
+  useEffect(() => {
+    if (user && !loading) {
+      window.location.href = '/advanced-feed';
+    }
+  }, [user, loading]);
 
   const handleSignOut = async () => {
     await signOut();
