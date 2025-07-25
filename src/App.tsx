@@ -347,7 +347,7 @@ const App = () => {
           <Route path="/rewards" element={<RewardsCenter />} />
               <Route path="/poll-archive" element={<PollArchive />} />
               <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
-              <Route path="/profile/:userId" element={<UserProfilePage />} />
+              <Route path="/user/:userId" element={<UserProfilePage />} />
               <Route path="/@:slug" element={<ProfileSlugPage />} />
         <Route path="/profile-test" element={<ProfileValidationTest />} />
         <Route path="/feature-test" element={<ProfileFeatureTest />} />

@@ -29774,27 +29774,36 @@ export type Database = {
           civic_tagline: string | null
           contact_info: Json | null
           contribution_level: string | null
+          cover_image_url: string | null
           cover_photo_url: string | null
           created_at: string | null
           display_name: string | null
+          education: Json | null
           enable_notifications: boolean | null
           events_attended: number | null
           id: string
+          interests: string[] | null
           is_banned: boolean | null
           is_diaspora: boolean | null
           language_preference: string | null
+          languages: string[] | null
           last_active_at: string | null
           location: string | null
+          phone: string | null
           polls_created: number | null
+          portfolio_items: Json | null
           post_count: number | null
           privacy_settings: Json | null
           profession: string | null
+          profile_completion_score: number | null
           profile_slug: string | null
           profile_tags: string[] | null
           profile_type: Database["public"]["Enums"]["profile_type"] | null
           profile_views: number | null
+          profile_visibility: string | null
           region: string | null
           rich_bio: Json | null
+          skills: string[] | null
           social_links: Json | null
           subdivision: string | null
           updated_at: string | null
@@ -29804,6 +29813,8 @@ export type Database = {
             | Database["public"]["Enums"]["verification_status"]
             | null
           verified: boolean | null
+          website: string | null
+          work_experience: Json | null
         }
         Insert: {
           achievements?: Json | null
@@ -29816,27 +29827,36 @@ export type Database = {
           civic_tagline?: string | null
           contact_info?: Json | null
           contribution_level?: string | null
+          cover_image_url?: string | null
           cover_photo_url?: string | null
           created_at?: string | null
           display_name?: string | null
+          education?: Json | null
           enable_notifications?: boolean | null
           events_attended?: number | null
           id?: string
+          interests?: string[] | null
           is_banned?: boolean | null
           is_diaspora?: boolean | null
           language_preference?: string | null
+          languages?: string[] | null
           last_active_at?: string | null
           location?: string | null
+          phone?: string | null
           polls_created?: number | null
+          portfolio_items?: Json | null
           post_count?: number | null
           privacy_settings?: Json | null
           profession?: string | null
+          profile_completion_score?: number | null
           profile_slug?: string | null
           profile_tags?: string[] | null
           profile_type?: Database["public"]["Enums"]["profile_type"] | null
           profile_views?: number | null
+          profile_visibility?: string | null
           region?: string | null
           rich_bio?: Json | null
+          skills?: string[] | null
           social_links?: Json | null
           subdivision?: string | null
           updated_at?: string | null
@@ -29846,6 +29866,8 @@ export type Database = {
             | Database["public"]["Enums"]["verification_status"]
             | null
           verified?: boolean | null
+          website?: string | null
+          work_experience?: Json | null
         }
         Update: {
           achievements?: Json | null
@@ -29858,27 +29880,36 @@ export type Database = {
           civic_tagline?: string | null
           contact_info?: Json | null
           contribution_level?: string | null
+          cover_image_url?: string | null
           cover_photo_url?: string | null
           created_at?: string | null
           display_name?: string | null
+          education?: Json | null
           enable_notifications?: boolean | null
           events_attended?: number | null
           id?: string
+          interests?: string[] | null
           is_banned?: boolean | null
           is_diaspora?: boolean | null
           language_preference?: string | null
+          languages?: string[] | null
           last_active_at?: string | null
           location?: string | null
+          phone?: string | null
           polls_created?: number | null
+          portfolio_items?: Json | null
           post_count?: number | null
           privacy_settings?: Json | null
           profession?: string | null
+          profile_completion_score?: number | null
           profile_slug?: string | null
           profile_tags?: string[] | null
           profile_type?: Database["public"]["Enums"]["profile_type"] | null
           profile_views?: number | null
+          profile_visibility?: string | null
           region?: string | null
           rich_bio?: Json | null
+          skills?: string[] | null
           social_links?: Json | null
           subdivision?: string | null
           updated_at?: string | null
@@ -29888,6 +29919,8 @@ export type Database = {
             | Database["public"]["Enums"]["verification_status"]
             | null
           verified?: boolean | null
+          website?: string | null
+          work_experience?: Json | null
         }
         Relationships: []
       }
@@ -36921,6 +36954,10 @@ export type Database = {
           fraud_risk_score: number
         }[]
       }
+      calculate_profile_completion: {
+        Args: { profile_id: string }
+        Returns: number
+      }
       calculate_profile_completion_score: {
         Args: { p_user_id: string }
         Returns: number
@@ -37219,6 +37256,10 @@ export type Database = {
       }
       generate_track_id: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_username_from_email: {
+        Args: { email_input: string }
         Returns: string
       }
       generate_vendor_id: {
