@@ -175,6 +175,7 @@ import PolicyImpactDashboard from "./pages/transparency/PolicyImpactDashboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
 import { ExpertPortal } from "./pages/experts/ExpertPortal";
 import { ProfilePage } from "./pages/profile/ProfilePage";
+import PollTemplatesPage from "./pages/PollTemplatesPage";
 import JobsSetupTest from "./tests/JobsSetupTest";
 
 import { MobileProvider } from "./contexts/MobileContext";
@@ -219,6 +220,7 @@ const App = () => {
            <Route path="/transparency/policy-impact" element={<PolicyImpactDashboard />} />
           <Route path="/experts" element={<ExpertMarketplace />} />
           <Route path="/experts/portal" element={<ExpertPortal />} />
+          <Route path="/poll-templates" element={<PollTemplatesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
