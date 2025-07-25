@@ -92,7 +92,7 @@ const navItems: NavItem[] = [
     id: 'profile',
     label: 'Profile',
     icon: User,
-    path: '/social',
+    path: '/profile',
   },
   {
     id: 'admin',

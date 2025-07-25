@@ -122,7 +122,7 @@ import InstitutionDirectory from "./pages/InstitutionDirectory";
 import ClaimModerationDashboard from "./pages/ClaimModerationDashboard";
 import InstitutionOwnerDashboard from "./pages/InstitutionOwnerDashboard";
 import { GovProjectTracker } from "./pages/GovProjectTracker";
-import UserManagement from "./pages/UserManagement";
+import SettingsPage from "./pages/SettingsPage";
 import CivicParticipationHub from "./pages/CivicParticipationHub";
 import ModerationCenter from "./pages/ModerationCenter";
 import SocialCommunity from "./pages/SocialCommunity";
@@ -222,7 +222,7 @@ const App = () => {
           <Route path="/experts/portal" element={<ExpertPortal />} />
           <Route path="/poll-templates" element={<PollTemplatesPage />} />
           <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/profile/:username" element={<ProfilePage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<AuthPage />} />
@@ -397,7 +397,7 @@ const App = () => {
               <Route path="/admin/claims" element={<ClaimModerationDashboard />} />
               <Route path="/institution/dashboard" element={<InstitutionOwnerDashboard />} />
                <Route path="/government-projects" element={<GovProjectTracker />} />
-               <Route path="/user-management" element={<UserManagement />} />
+               
                <Route path="/civic-participation-hub" element={<CivicParticipationHub />} />
                <Route path="/moderation-center" element={<ModerationCenter />} />
                <Route path="/social-community" element={<SocialCommunity />} />
