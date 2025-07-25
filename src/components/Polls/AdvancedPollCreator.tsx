@@ -17,11 +17,22 @@ interface PollOption {
   weight?: number;
 }
 
+interface MediaOption {
+  text: string;
+  image?: string;
+  video?: string;
+}
+
 interface AdvancedPollConfig {
-  pollType: 'single_choice' | 'multiple_choice' | 'ranked_choice' | 'rating_scale' | 'matrix';
+  pollType: 'single_choice' | 'multiple_choice' | 'ranked_choice' | 'rating_scale' | 'image_choice' | 'matrix';
   title: string;
   description: string;
   options: PollOption[];
+  mediaOptions: MediaOption[];
+  ratingConfig: {
+    scale: number;
+    labels: string[];
+  };
   settings: {
     allowMultipleVotes: boolean;
     maxSelections?: number;
@@ -32,6 +43,7 @@ interface AdvancedPollConfig {
     scheduledStart?: Date;
     autoClose?: Date;
     resultsVisibility: 'public' | 'private' | 'after_vote';
+    allowPartialRanking?: boolean;
   };
   security: {
     enableCaptcha: boolean;
@@ -48,11 +60,17 @@ export const AdvancedPollCreator = () => {
     title: '',
     description: '',
     options: [{ text: '' }, { text: '' }],
+    mediaOptions: [{ text: '' }, { text: '' }],
+    ratingConfig: {
+      scale: 5,
+      labels: ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']
+    },
     settings: {
       allowMultipleVotes: false,
       enableComments: false,
       requireEmail: false,
-      resultsVisibility: 'public'
+      resultsVisibility: 'public',
+      allowPartialRanking: false
     },
     security: {
       enableCaptcha: true,
@@ -159,11 +177,17 @@ export const AdvancedPollCreator = () => {
         title: '',
         description: '',
         options: [{ text: '' }, { text: '' }],
+        mediaOptions: [{ text: '' }, { text: '' }],
+        ratingConfig: {
+          scale: 5,
+          labels: ['Poor', 'Fair', 'Good', 'Very Good', 'Excellent']
+        },
         settings: {
           allowMultipleVotes: false,
           enableComments: false,
           requireEmail: false,
-          resultsVisibility: 'public'
+          resultsVisibility: 'public',
+          allowPartialRanking: false
         },
         security: {
           enableCaptcha: true,
@@ -208,8 +232,9 @@ export const AdvancedPollCreator = () => {
               <SelectContent>
                 <SelectItem value="single_choice">Single Choice</SelectItem>
                 <SelectItem value="multiple_choice">Multiple Choice</SelectItem>
-                <SelectItem value="ranked_choice">Ranked Choice</SelectItem>
+                <SelectItem value="ranked_choice">Ranked Choice Voting</SelectItem>
                 <SelectItem value="rating_scale">Rating Scale</SelectItem>
+                <SelectItem value="image_choice">Image/Media Choice</SelectItem>
                 <SelectItem value="matrix">Matrix Questions</SelectItem>
               </SelectContent>
             </Select>
@@ -239,32 +264,145 @@ export const AdvancedPollCreator = () => {
             </div>
           </div>
 
-          {/* Poll Options */}
-          <div className="space-y-4">
-            <Label>Poll Options *</Label>
-            {config.options.map((option, index) => (
-              <div key={index} className="flex gap-2">
-                <Input
-                  value={option.text}
-                  onChange={(e) => updateOption(index, e.target.value)}
-                  placeholder={`Option ${index + 1}`}
-                />
-                {config.options.length > 2 && (
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeOption(index)}
+          {/* Standard Poll Options */}
+          {['single_choice', 'multiple_choice', 'ranked_choice'].includes(config.pollType) && (
+            <div className="space-y-4">
+              <Label>Poll Options *</Label>
+              {config.options.map((option, index) => (
+                <div key={index} className="flex gap-2">
+                  <Input
+                    value={option.text}
+                    onChange={(e) => updateOption(index, e.target.value)}
+                    placeholder={`Option ${index + 1}`}
+                  />
+                  {config.options.length > 2 && (
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => removeOption(index)}
+                    >
+                      <X className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button variant="outline" onClick={addOption} className="w-full">
+                <Plus className="w-4 h-4 mr-2" />
+                Add Option
+              </Button>
+            </div>
+          )}
+
+          {/* Media Options for Image/Video Polls */}
+          {config.pollType === 'image_choice' && (
+            <div className="space-y-4">
+              <Label>Media Options *</Label>
+              {config.mediaOptions.map((option, index) => (
+                <div key={index} className="space-y-2 p-4 border rounded-lg">
+                  <Input
+                    value={option.text}
+                    onChange={(e) => {
+                      const newOptions = [...config.mediaOptions];
+                      newOptions[index].text = e.target.value;
+                      setConfig(prev => ({...prev, mediaOptions: newOptions}));
+                    }}
+                    placeholder={`Option ${index + 1} text`}
+                  />
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      value={option.image || ''}
+                      onChange={(e) => {
+                        const newOptions = [...config.mediaOptions];
+                        newOptions[index].image = e.target.value;
+                        setConfig(prev => ({...prev, mediaOptions: newOptions}));
+                      }}
+                      placeholder="Image URL (optional)"
+                    />
+                    <Input
+                      value={option.video || ''}
+                      onChange={(e) => {
+                        const newOptions = [...config.mediaOptions];
+                        newOptions[index].video = e.target.value;
+                        setConfig(prev => ({...prev, mediaOptions: newOptions}));
+                      }}
+                      placeholder="Video URL (optional)"
+                    />
+                  </div>
+                  {config.mediaOptions.length > 2 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        const newOptions = config.mediaOptions.filter((_, i) => i !== index);
+                        setConfig(prev => ({...prev, mediaOptions: newOptions}));
+                      }}
+                    >
+                      <X className="w-4 h-4 mr-2" />
+                      Remove
+                    </Button>
+                  )}
+                </div>
+              ))}
+              <Button 
+                variant="outline" 
+                onClick={() => setConfig(prev => ({
+                  ...prev, 
+                  mediaOptions: [...prev.mediaOptions, {text: ''}]
+                }))} 
+                className="w-full"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Media Option
+              </Button>
+            </div>
+          )}
+
+          {/* Rating Scale Configuration */}
+          {config.pollType === 'rating_scale' && (
+            <div className="space-y-4">
+              <Label>Rating Scale Configuration</Label>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Scale (1 to X)</Label>
+                  <Select
+                    value={config.ratingConfig.scale.toString()}
+                    onValueChange={(value) => setConfig(prev => ({
+                      ...prev,
+                      ratingConfig: {...prev.ratingConfig, scale: parseInt(value)}
+                    }))}
                   >
-                    <X className="w-4 h-4" />
-                  </Button>
-                )}
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="3">1 to 3</SelectItem>
+                      <SelectItem value="5">1 to 5</SelectItem>
+                      <SelectItem value="7">1 to 7</SelectItem>
+                      <SelectItem value="10">1 to 10</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-            ))}
-            <Button variant="outline" onClick={addOption} className="w-full">
-              <Plus className="w-4 h-4 mr-2" />
-              Add Option
-            </Button>
-          </div>
+              <div className="space-y-2">
+                <Label>Scale Labels</Label>
+                {config.ratingConfig.labels.map((label, index) => (
+                  <Input
+                    key={index}
+                    value={label}
+                    onChange={(e) => {
+                      const newLabels = [...config.ratingConfig.labels];
+                      newLabels[index] = e.target.value;
+                      setConfig(prev => ({
+                        ...prev,
+                        ratingConfig: {...prev.ratingConfig, labels: newLabels}
+                      }));
+                    }}
+                    placeholder={`Label for ${index + 1}`}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
@@ -291,6 +429,22 @@ export const AdvancedPollCreator = () => {
                     setConfig(prev => ({
                       ...prev,
                       settings: { ...prev.settings, allowMultipleVotes: checked }
+                    }))
+                  }
+                />
+              </div>
+            )}
+
+            {config.pollType === 'ranked_choice' && (
+              <div className="flex items-center justify-between">
+                <Label htmlFor="partialRanking">Allow Partial Ranking</Label>
+                <Switch
+                  id="partialRanking"
+                  checked={config.settings.allowPartialRanking || false}
+                  onCheckedChange={(checked) =>
+                    setConfig(prev => ({
+                      ...prev,
+                      settings: { ...prev.settings, allowPartialRanking: checked }
                     }))
                   }
                 />

@@ -9,6 +9,9 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Bookmark, Eye, Share2, Clock, Users, Shield, TrendingUp } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { RankedChoiceVoting } from './RankedChoiceVoting';
+import { MediaPollChoice } from './MediaPollChoice';
+import { RatingStars } from '../camerpulse/RatingStars';
 
 interface Poll {
   id: string;
@@ -26,6 +29,8 @@ interface Poll {
   is_active: boolean;
   privacy_mode: string;
   tags?: string[];
+  media_options?: Array<{text: string, image?: string, video?: string}>;
+  advanced_settings?: any;
 }
 
 interface EnhancedPollVotingInterfaceProps {
@@ -303,24 +308,84 @@ const EnhancedPollVotingInterface: React.FC<EnhancedPollVotingInterfaceProps> = 
       <CardContent>
         {canVote && !shouldShowResults ? (
           <div className="space-y-4">
-            <RadioGroup value={selectedOption?.toString()} onValueChange={(value) => setSelectedOption(parseInt(value))}>
-              {poll.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-2 p-3 rounded-lg border hover:bg-accent">
-                  <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
-                    {option}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
+            {/* Standard Single/Multiple Choice */}
+            {(!poll.poll_type || ['single_choice', 'multiple_choice'].includes(poll.poll_type)) && (
+              <>
+                <RadioGroup value={selectedOption?.toString()} onValueChange={(value) => setSelectedOption(parseInt(value))}>
+                  {poll.options.map((option, index) => (
+                    <div key={index} className="flex items-center space-x-2 p-3 rounded-lg border hover:bg-accent">
+                      <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                      <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
+                        {option}
+                      </Label>
+                    </div>
+                  ))}
+                </RadioGroup>
 
-            <Button 
-              onClick={handleVote} 
-              disabled={isVoting || selectedOption === null}
-              className="w-full"
-            >
-              {isVoting ? "Submitting Vote..." : "Submit Vote"}
-            </Button>
+                <Button 
+                  onClick={handleVote} 
+                  disabled={isVoting || selectedOption === null}
+                  className="w-full"
+                >
+                  {isVoting ? "Submitting Vote..." : "Submit Vote"}
+                </Button>
+              </>
+            )}
+
+            {/* Ranked Choice Voting */}
+            {poll.poll_type === 'ranked_choice' && (
+              <RankedChoiceVoting
+                options={poll.options}
+                onVoteSubmit={(rankings) => {
+                  // Handle ranked choice vote submission
+                  setSelectedOption(0); // Temporary
+                  handleVote();
+                }}
+                allowPartialRanking={poll.advanced_settings?.allowPartialRanking || false}
+                disabled={isVoting}
+              />
+            )}
+
+            {/* Rating Scale */}
+            {poll.poll_type === 'rating_scale' && (
+              <div className="space-y-4">
+                <div className="text-center">
+                  <p className="text-muted-foreground mb-4">Rate this item:</p>
+                  <RatingStars
+                    rating={selectedOption || 0}
+                    maxRating={poll.advanced_settings?.scale || 5}
+                    size="lg"
+                    showLabel
+                    onRatingChange={setSelectedOption}
+                  />
+                </div>
+                <Button 
+                  onClick={handleVote} 
+                  disabled={isVoting || selectedOption === null}
+                  className="w-full"
+                >
+                  {isVoting ? "Submitting Rating..." : "Submit Rating"}
+                </Button>
+              </div>
+            )}
+
+            {/* Image/Media Choice */}
+            {poll.poll_type === 'image_choice' && poll.media_options && (
+              <MediaPollChoice
+                options={poll.media_options.map((opt: any, index: number) => ({
+                  id: index.toString(),
+                  text: opt.text,
+                  image: opt.image,
+                  video: opt.video
+                }))}
+                onVoteSubmit={(selectedIds) => {
+                  setSelectedOption(parseInt(selectedIds[0]));
+                  handleVote();
+                }}
+                multipleChoice={false}
+                disabled={isVoting}
+              />
+            )}
           </div>
         ) : shouldShowResults ? (
           <div className="space-y-4">
