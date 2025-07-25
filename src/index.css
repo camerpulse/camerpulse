@@ -269,7 +269,6 @@
       padding-right: env(safe-area-inset-right);
     }
   }
-}
 
 @layer utilities {
   .bg-gradient-patriotic {
