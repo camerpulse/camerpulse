@@ -101,7 +101,7 @@ export const PollEmbedWidget: React.FC<PollEmbedWidgetProps> = ({
       
       setPoll({
         ...data,
-        options: Array.isArray(data.options) ? data.options : []
+        options: Array.isArray(data.options) ? data.options.map(opt => String(opt)) : []
       });
       
       // Load vote results
@@ -111,7 +111,7 @@ export const PollEmbedWidget: React.FC<PollEmbedWidgetProps> = ({
         .eq('poll_id', pollId);
 
       if (votes) {
-        const options = Array.isArray(data.options) ? data.options : [];
+        const options = Array.isArray(data.options) ? data.options.map(opt => String(opt)) : [];
         const counts = new Array(options.length).fill(0);
         votes.forEach(vote => {
           if (vote.option_index < counts.length) {
@@ -513,7 +513,7 @@ export const EmbedCodeGenerator: React.FC<{ pollId: string }> = ({ pollId }) => 
             <select
               id="theme"
               value={embedConfig.theme}
-              onChange={(e) => setEmbedConfig({...embedConfig, theme: e.target.value})}
+              onChange={(e) => setEmbedConfig({...embedConfig, theme: e.target.value as 'light' | 'dark' | 'auto'})}
               className="w-full p-2 border rounded"
             >
               <option value="light">Light</option>
