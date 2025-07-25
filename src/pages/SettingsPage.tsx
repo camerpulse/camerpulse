@@ -197,11 +197,17 @@ const SettingsPage: React.FC = () => {
               </CardContent>
             </Card>
 
-            <ProfileSlugManager 
-              currentSlug={user?.user_metadata?.profile_slug}
-              username={user?.user_metadata?.username}
-              displayName={user?.user_metadata?.display_name}
-            />
+          <ProfileSlugManager 
+            currentSlug={profile?.profile_slug}
+            username={profile?.username}
+            displayName={profile?.display_name}
+            onSlugUpdate={(newSlug) => {
+              // Refresh profile data after slug update
+              if (profile) {
+                refetch();
+              }
+            }}
+          />
           </TabsContent>
 
           {/* Privacy Settings */}
