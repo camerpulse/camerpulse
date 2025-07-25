@@ -1169,6 +1169,39 @@ export default function AdvancedFeed() {
                 </CardContent>
               </Card>
 
+              {/* Platform Sections */}
+              <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Hash className="w-5 h-5 text-primary" />
+                    Platform Sections
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {[
+                    { label: 'Villages', icon: MapPin, href: '/villages' },
+                    { label: 'Petitions', icon: Scale, href: '/petitions' },
+                    { label: 'Sentiment', icon: BarChart3, href: '/sentiment' },
+                    { label: 'Companies', icon: Building2, href: '/companies' },
+                    { label: 'Politicians', icon: Users, href: '/politicians' },
+                    { label: 'Political Parties', icon: Crown, href: '/political-parties' },
+                    { label: 'MPs', icon: Shield, href: '/mps' },
+                    { label: 'Senators', icon: BookOpen, href: '/senators' }
+                  ].map((section, index) => (
+                    <Button 
+                      key={section.label}
+                      variant="ghost" 
+                      size="sm" 
+                      className="w-full justify-start hover-scale transition-all duration-200 hover:bg-gradient-to-r hover:from-primary/10 hover:to-primary-glow/10 animate-fade-in"
+                      style={{ animationDelay: `${index * 50}ms` }}
+                    >
+                      <section.icon className="w-4 h-4 mr-2" />
+                      {section.label}
+                    </Button>
+                  ))}
+                </CardContent>
+              </Card>
+
             </div>
 
           </div>
