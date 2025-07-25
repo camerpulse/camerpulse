@@ -36973,6 +36973,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      check_rate_limit_secure: {
+        Args: {
+          p_identifier_type: string
+          p_identifier_value: string
+          p_action_type: string
+          p_limit_per_hour?: number
+        }
+        Returns: boolean
+      }
       cleanup_expired_media: {
         Args: Record<PropertyKey, never>
         Returns: number
