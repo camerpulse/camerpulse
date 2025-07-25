@@ -27323,6 +27323,63 @@ export type Database = {
           },
         ]
       }
+      poll_advanced_config: {
+        Row: {
+          advanced_settings: Json
+          created_at: string
+          id: string
+          poll_id: string
+          poll_type: string
+          updated_at: string
+          validation_rules: Json | null
+        }
+        Insert: {
+          advanced_settings?: Json
+          created_at?: string
+          id?: string
+          poll_id: string
+          poll_type?: string
+          updated_at?: string
+          validation_rules?: Json | null
+        }
+        Update: {
+          advanced_settings?: Json
+          created_at?: string
+          id?: string
+          poll_id?: string
+          poll_type?: string
+          updated_at?: string
+          validation_rules?: Json | null
+        }
+        Relationships: []
+      }
+      poll_advanced_responses: {
+        Row: {
+          created_at: string
+          id: string
+          metadata: Json | null
+          poll_id: string
+          response_data: Json
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          poll_id: string
+          response_data: Json
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          poll_id?: string
+          response_data?: Json
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       poll_analytics: {
         Row: {
           bias_analysis: Json | null
@@ -27396,6 +27453,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      poll_bot_detection_logs: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          detection_reasons: string[] | null
+          device_fingerprint: string | null
+          id: string
+          is_bot: boolean
+          poll_id: string
+          risk_score: number
+          user_agent: string | null
+        }
+        Insert: {
+          confidence_score?: number
+          created_at?: string
+          detection_reasons?: string[] | null
+          device_fingerprint?: string | null
+          id?: string
+          is_bot?: boolean
+          poll_id: string
+          risk_score?: number
+          user_agent?: string | null
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          detection_reasons?: string[] | null
+          device_fingerprint?: string | null
+          id?: string
+          is_bot?: boolean
+          poll_id?: string
+          risk_score?: number
+          user_agent?: string | null
+        }
+        Relationships: []
       }
       poll_categories: {
         Row: {
@@ -27828,6 +27921,36 @@ export type Database = {
           verification_method?: string
           verification_status?: string
           verified_at?: string | null
+        }
+        Relationships: []
+      }
+      poll_rate_limiting_logs: {
+        Row: {
+          action_type: string
+          blocked: boolean
+          created_at: string
+          id: string
+          poll_id: string
+          reason: string | null
+          user_identifier: string
+        }
+        Insert: {
+          action_type: string
+          blocked?: boolean
+          created_at?: string
+          id?: string
+          poll_id: string
+          reason?: string | null
+          user_identifier: string
+        }
+        Update: {
+          action_type?: string
+          blocked?: boolean
+          created_at?: string
+          id?: string
+          poll_id?: string
+          reason?: string | null
+          user_identifier?: string
         }
         Relationships: []
       }
