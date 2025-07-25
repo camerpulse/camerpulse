@@ -16545,6 +16545,133 @@ export type Database = {
           },
         ]
       }
+      feed_algorithm_scores: {
+        Row: {
+          calculated_at: string
+          engagement_score: number
+          final_score: number
+          id: string
+          item_id: string
+          priority_boost: number
+          relevance_score: number
+          time_decay_score: number
+          user_id: string | null
+        }
+        Insert: {
+          calculated_at?: string
+          engagement_score?: number
+          final_score?: number
+          id?: string
+          item_id: string
+          priority_boost?: number
+          relevance_score?: number
+          time_decay_score?: number
+          user_id?: string | null
+        }
+        Update: {
+          calculated_at?: string
+          engagement_score?: number
+          final_score?: number
+          id?: string
+          item_id?: string
+          priority_boost?: number
+          relevance_score?: number
+          time_decay_score?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_algorithm_scores_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "feed_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_engagement: {
+        Row: {
+          comment_text: string | null
+          created_at: string
+          engagement_type: string
+          id: string
+          item_id: string
+          user_id: string | null
+        }
+        Insert: {
+          comment_text?: string | null
+          created_at?: string
+          engagement_type: string
+          id?: string
+          item_id: string
+          user_id?: string | null
+        }
+        Update: {
+          comment_text?: string | null
+          created_at?: string
+          engagement_type?: string
+          id?: string
+          item_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feed_engagement_item_id_fkey"
+            columns: ["item_id"]
+            isOneToOne: false
+            referencedRelation: "feed_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      feed_items: {
+        Row: {
+          action_url: string | null
+          author_id: string | null
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          item_type: string
+          media_urls: string[] | null
+          metadata: Json | null
+          priority: string
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          action_url?: string | null
+          author_id?: string | null
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          item_type: string
+          media_urls?: string[] | null
+          metadata?: Json | null
+          priority?: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          action_url?: string | null
+          author_id?: string | null
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          item_type?: string
+          media_urls?: string[] | null
+          metadata?: Json | null
+          priority?: string
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string | null
@@ -34156,6 +34283,48 @@ export type Database = {
         }
         Relationships: []
       }
+      trending_topics: {
+        Row: {
+          category: string | null
+          created_at: string
+          engagement_count: number
+          id: string
+          mention_count: number
+          period_end: string
+          period_start: string
+          time_window: string
+          topic_name: string
+          trending_score: number
+          updated_at: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          engagement_count?: number
+          id?: string
+          mention_count?: number
+          period_end?: string
+          period_start?: string
+          time_window?: string
+          topic_name: string
+          trending_score?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          engagement_count?: number
+          id?: string
+          mention_count?: number
+          period_end?: string
+          period_start?: string
+          time_window?: string
+          topic_name?: string
+          trending_score?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       trust_events: {
         Row: {
           created_at: string
@@ -34337,6 +34506,44 @@ export type Database = {
           },
         ]
       }
+      user_activity_feed: {
+        Row: {
+          activity_data: Json
+          activity_type: string
+          created_at: string
+          id: string
+          is_read: boolean
+          related_item_id: string | null
+          user_id: string
+        }
+        Insert: {
+          activity_data?: Json
+          activity_type: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          related_item_id?: string | null
+          user_id: string
+        }
+        Update: {
+          activity_data?: Json
+          activity_type?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          related_item_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_activity_feed_related_item_id_fkey"
+            columns: ["related_item_id"]
+            isOneToOne: false
+            referencedRelation: "feed_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_badges: {
         Row: {
           badge_id: string
@@ -34508,6 +34715,48 @@ export type Database = {
           is_trusted?: boolean | null
           last_seen_at?: string | null
           user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_feed_preferences: {
+        Row: {
+          blocked_content_types: string[] | null
+          created_at: string
+          engagement_weight: number | null
+          id: string
+          language_preference: string | null
+          preferred_content_types: string[] | null
+          preferred_regions: string[] | null
+          recency_weight: number | null
+          relevance_weight: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blocked_content_types?: string[] | null
+          created_at?: string
+          engagement_weight?: number | null
+          id?: string
+          language_preference?: string | null
+          preferred_content_types?: string[] | null
+          preferred_regions?: string[] | null
+          recency_weight?: number | null
+          relevance_weight?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blocked_content_types?: string[] | null
+          created_at?: string
+          engagement_weight?: number | null
+          id?: string
+          language_preference?: string | null
+          preferred_content_types?: string[] | null
+          preferred_regions?: string[] | null
+          recency_weight?: number | null
+          relevance_weight?: number | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
@@ -36927,6 +37176,10 @@ export type Database = {
         Args: { p_institution_id: string; p_period_days?: number }
         Returns: number
       }
+      calculate_feed_score: {
+        Args: { p_item_id: string; p_user_id?: string }
+        Returns: number
+      }
       calculate_fix_trust_score: {
         Args: { p_fix_type: string }
         Returns: number
@@ -37358,6 +37611,25 @@ export type Database = {
       get_pan_africa_config: {
         Args: { p_config_key?: string }
         Returns: Json
+      }
+      get_personalized_feed: {
+        Args: { p_user_id: string; p_limit?: number; p_offset?: number }
+        Returns: {
+          id: string
+          item_type: string
+          title: string
+          content: string
+          author_name: string
+          author_avatar: string
+          media_urls: string[]
+          tags: string[]
+          priority: string
+          category: string
+          action_url: string
+          engagement_counts: Json
+          algorithm_score: number
+          created_at: string
+        }[]
       }
       get_profile_image_url: {
         Args: { bucket_name: string; file_path: string }
