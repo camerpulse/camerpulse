@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useUserProfile } from '@/hooks/useUserProfile';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -33,6 +34,7 @@ import {
 
 const SettingsPage: React.FC = () => {
   const { user, signOut } = useAuth();
+  const { userProfile, getUserProfile } = useUserProfile();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
@@ -198,14 +200,12 @@ const SettingsPage: React.FC = () => {
             </Card>
 
           <ProfileSlugManager 
-            currentSlug={profile?.profile_slug}
-            username={profile?.username}
-            displayName={profile?.display_name}
+            currentSlug={userProfile?.profile_slug}
+            username={userProfile?.username}
+            displayName={userProfile?.display_name}
             onSlugUpdate={(newSlug) => {
               // Refresh profile data after slug update
-              if (profile) {
-                refetch();
-              }
+              getUserProfile();
             }}
           />
           </TabsContent>
