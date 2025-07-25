@@ -45,15 +45,10 @@ export const ReviewsManager: React.FC<ReviewsManagerProps> = ({
       const tableName = entityType === 'employer' ? 'employer_reviews' : 'expert_performance_reviews';
       const entityField = entityType === 'employer' ? 'employer_id' : 'expert_id';
       
+      // Build query step by step to avoid type inference issues
       let query = supabase
-        .from(tableName)
-        .select(`
-          *,
-          profiles:reviewer_id (
-            display_name,
-            avatar_url
-          )
-        `)
+        .from(tableName as any)
+        .select('*')
         .eq(entityField, entityId)
         .eq('status', 'active');
 
