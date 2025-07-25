@@ -29,15 +29,10 @@ export const useFeed = (limit = 20) => {
     try {
       setLoading(true);
       
+      // Fix: Remove aggregate functions that cause errors
       const { data, error } = await supabase
         .from('feed_items')
-        .select(`
-          *,
-          engagement:feed_engagement!inner(
-            likes_count:engagement_type.count(),
-            views_count:engagement_type.count()
-          )
-        `)
+        .select('*')
         .order('created_at', { ascending: false })
         .limit(limit);
 

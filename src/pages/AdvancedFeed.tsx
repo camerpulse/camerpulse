@@ -54,6 +54,8 @@ import {
   Clock
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { PeopleToFollowSidebar } from '@/components/feed/PeopleToFollowSidebar';
+import { RecommendationCarousel } from '@/components/feed/RecommendationCarousel';
 
 // Advanced Feed Item Types
 interface FeedItem {
@@ -449,6 +451,7 @@ export default function AdvancedFeed() {
   const [newPost, setNewPost] = useState('');
   const [showComposer, setShowComposer] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [recommendations, setRecommendations] = useState<any[]>([]);
 
   // Combine real and mock data for demo
   const combinedFeedItems = useMemo(() => {
@@ -487,6 +490,26 @@ export default function AdvancedFeed() {
 
   // Apply advanced algorithm
   const algorithmFeed = useAdvancedFeedAlgorithm(combinedFeedItems, user);
+
+  // Fetch recommendations for carousel
+  useEffect(() => {
+    const fetchRecommendations = async () => {
+      if (!user) return;
+      
+      // Import supabase to fetch recommendations
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data } = await supabase
+        .from('profiles')
+        .select('*')
+        .neq('user_id', user.id)
+        .eq('profile_visibility', 'public')
+        .limit(8);
+      
+      if (data) setRecommendations(data);
+    };
+
+    fetchRecommendations();
+  }, [user]);
 
   // Filter and search logic with enhanced animations
   useEffect(() => {
@@ -725,7 +748,7 @@ export default function AdvancedFeed() {
 
         {/* Main Content with Sidebars */}
         <div className="container mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             
             {/* Left Sidebar - Hidden on mobile */}
             <div className="hidden lg:block lg:col-span-1 space-y-6">
@@ -820,7 +843,7 @@ export default function AdvancedFeed() {
             </div>
 
             {/* Enhanced Main Feed with Smooth Animations */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-3 space-y-6">
               {/* Enhanced Post Composer */}
               <Card className="border-primary/20 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in">
                 <CardContent className="p-4">
@@ -937,11 +960,11 @@ export default function AdvancedFeed() {
                   filteredItems.map((item, index) => {
                     const IconComponent = getFeedItemIcon(item.type);
                     return (
-                      <Card 
-                        key={item.id} 
-                        className="border-border/50 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover-scale animate-fade-in group"
-                        style={{ animationDelay: `${index * 100}ms` }}
-                      >
+                      <div key={item.id}>
+                        <Card 
+                          className="border-border/50 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover-scale animate-fade-in group"
+                          style={{ animationDelay: `${index * 100}ms` }}
+                        >
                         <CardHeader className="pb-3">
                           <div className="flex items-start justify-between">
                             <div className="flex items-center gap-3">
@@ -1064,7 +1087,12 @@ export default function AdvancedFeed() {
                             )}
                           </div>
                         </CardContent>
-                      </Card>
+                        </Card>
+                        {/* Insert recommendation carousel every 3rd post */}
+                        {(index + 1) % 3 === 0 && recommendations.length > 0 && (
+                          <RecommendationCarousel recommendations={recommendations} />
+                        )}
+                      </div>
                     );
                   })
                 )}
@@ -1082,8 +1110,9 @@ export default function AdvancedFeed() {
               </div>
             </div>
 
-            {/* Enhanced Right Sidebar with Live Animations */}
-            <div className="hidden lg:block lg:col-span-1 space-y-6">
+            {/* Right Sidebar - People to Follow */}
+            <div className="hidden lg:block lg:col-span-1">
+              <PeopleToFollowSidebar />
               
               {/* Enhanced Live Activity */}
               <Card className="border-primary/20 hover:border-primary/40 transition-all duration-300 hover-scale">
