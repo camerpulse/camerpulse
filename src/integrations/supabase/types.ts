@@ -27425,6 +27425,42 @@ export type Database = {
         }
         Relationships: []
       }
+      poll_api_keys: {
+        Row: {
+          api_key: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          key_name: string
+          last_used_at: string | null
+          permissions: string[] | null
+          rate_limit_per_hour: number | null
+        }
+        Insert: {
+          api_key: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          key_name: string
+          last_used_at?: string | null
+          permissions?: string[] | null
+          rate_limit_per_hour?: number | null
+        }
+        Update: {
+          api_key?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          key_name?: string
+          last_used_at?: string | null
+          permissions?: string[] | null
+          rate_limit_per_hour?: number | null
+        }
+        Relationships: []
+      }
       poll_bookmarks: {
         Row: {
           created_at: string | null
@@ -27608,6 +27644,36 @@ export type Database = {
           },
         ]
       }
+      poll_export_logs: {
+        Row: {
+          export_format: string
+          exported_at: string
+          exported_by: string | null
+          file_size_bytes: number | null
+          id: string
+          metadata: Json | null
+          poll_id: string
+        }
+        Insert: {
+          export_format: string
+          exported_at?: string
+          exported_by?: string | null
+          file_size_bytes?: number | null
+          id?: string
+          metadata?: Json | null
+          poll_id: string
+        }
+        Update: {
+          export_format?: string
+          exported_at?: string
+          exported_by?: string | null
+          file_size_bytes?: number | null
+          id?: string
+          metadata?: Json | null
+          poll_id?: string
+        }
+        Relationships: []
+      }
       poll_fraud_alerts: {
         Row: {
           acknowledged: boolean | null
@@ -27774,6 +27840,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      poll_integrations: {
+        Row: {
+          configuration: Json
+          created_at: string
+          created_by: string | null
+          id: string
+          integration_type: string
+          is_active: boolean
+          last_sync_at: string | null
+          sync_status: string | null
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          integration_type: string
+          is_active?: boolean
+          last_sync_at?: string | null
+          sync_status?: string | null
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          integration_type?: string
+          is_active?: boolean
+          last_sync_at?: string | null
+          sync_status?: string | null
+        }
+        Relationships: []
       }
       poll_moderation_log: {
         Row: {
@@ -28155,6 +28254,42 @@ export type Database = {
         }
         Relationships: []
       }
+      poll_view_log: {
+        Row: {
+          device_type: string | null
+          id: string
+          ip_address: unknown | null
+          poll_id: string
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+          viewed_at: string
+        }
+        Insert: {
+          device_type?: string | null
+          id?: string
+          ip_address?: unknown | null
+          poll_id: string
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          viewed_at?: string
+        }
+        Update: {
+          device_type?: string | null
+          id?: string
+          ip_address?: unknown | null
+          poll_id?: string
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          viewed_at?: string
+        }
+        Relationships: []
+      }
       poll_vote_log: {
         Row: {
           created_at: string | null
@@ -28242,6 +28377,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      poll_webhooks: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          events: string[]
+          id: string
+          is_active: boolean
+          last_triggered_at: string | null
+          poll_id: string | null
+          secret: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          events: string[]
+          id?: string
+          is_active?: boolean
+          last_triggered_at?: string | null
+          poll_id?: string | null
+          secret: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          events?: string[]
+          id?: string
+          is_active?: boolean
+          last_triggered_at?: string | null
+          poll_id?: string | null
+          secret?: string
+          url?: string
+        }
+        Relationships: []
       }
       polls: {
         Row: {
@@ -36726,6 +36897,10 @@ export type Database = {
       }
       generate_job_slug: {
         Args: { job_title: string; company_name: string }
+        Returns: string
+      }
+      generate_poll_api_key: {
+        Args: Record<PropertyKey, never>
         Returns: string
       }
       generate_protection_alias: {
