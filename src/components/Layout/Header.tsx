@@ -103,22 +103,25 @@ export const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-background border border-border shadow-lg">
                 <DropdownMenuItem asChild>
-                  <Link to="/companies">Companies</Link>
+                  <Link to="/company-directory">Companies</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/schools">Schools</Link>
+                  <Link to="/schools-directory">Schools</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/hospitals">Hospitals</Link>
+                  <Link to="/hospitals-directory">Hospitals</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/villages">Villages</Link>
+                  <Link to="/villages-directory">Villages</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/jobs">Job Board</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/marketplace">Marketplace</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/services-map">Services Map</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -130,25 +133,55 @@ export const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-background border border-border shadow-lg">
                 <DropdownMenuItem asChild>
-                  <Link to="/national-debt">National Debt</Link>
+                  <Link to="/transparency">Transparency Hub</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/billionaires">Billionaire Tracker</Link>
+                  <Link to="/national-debt-tracker">National Debt</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/billionaire-tracker">Billionaire Tracker</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/election-forecast">Election Forecast</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/government-projects">Gov Projects</Link>
+                  <Link to="/government-project-tracker">Gov Projects</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/budget-explorer">Budget Explorer</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/analytics">Analytics</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/camerplay">CamerPlay</Link>
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+                  CamerPlay <ChevronDown className="w-4 h-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56 bg-background border border-border shadow-lg">
+                <DropdownMenuItem asChild>
+                  <Link to="/camerplay">CamerPlay Home</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/camerplay/upload">Upload Music</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/camerplay/search">Search</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/camerplay/events">Events</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/camerplay/rankings">Rankings</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/artist-landing">Artist Portal</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/messenger">Messenger</Link>
             </Button>
@@ -189,6 +222,12 @@ export const Header = () => {
                 <DropdownMenuContent align="end" className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  <DropdownMenuItem asChild>
+                    <Link to="/dashboard" className="cursor-pointer">
+                      <BarChart3 className="mr-2 h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link to={`/user/${user.id}`} className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />

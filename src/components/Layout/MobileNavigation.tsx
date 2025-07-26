@@ -51,7 +51,7 @@ const navItems: NavItem[] = [
     id: 'services',
     label: 'Services',
     icon: Building2,
-    path: '/companies',
+    path: '/services-map',
   },
   {
     id: 'camerplay',

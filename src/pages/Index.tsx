@@ -427,7 +427,7 @@ const Index = () => {
                   </Link>
                 </Button>
                 <Button asChild size="lg" variant="outline" className="px-8 py-4 text-lg border-white text-white hover:bg-white/10">
-                  <Link to="/polls">
+                  <Link to="/dashboard">
                     Explore Platform
                     <ExternalLink className="h-5 w-5 ml-2" />
                   </Link>

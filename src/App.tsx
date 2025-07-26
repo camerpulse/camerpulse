@@ -179,6 +179,7 @@ import { ProfilePage } from "./pages/profile/ProfilePage";
 import Profile from "./pages/Profile";
 import PollTemplatesPage from "./pages/PollTemplatesPage";
 import JobsSetupTest from "./tests/JobsSetupTest";
+import Dashboard from "./pages/Dashboard";
 
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -232,7 +233,8 @@ const App = () => {
            <Route path="/profile/:userId" element={<Profile />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
-                <Route path="/" element={<Index />} />
+                    <Route path="/" element={<Index />} />
+                    <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/auth" element={<AuthFlow />} />
                 <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
                 <Route path="/feed" element={
