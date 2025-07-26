@@ -31,6 +31,7 @@ import { VillageLeaderboards } from '@/components/villages/VillageLeaderboards';
 import { VillageReputationEngine } from '@/components/villages/VillageReputationEngine';
 import { VillageReputationTimeline } from '@/components/villages/VillageReputationTimeline';
 import { VillageAfricanMaskBackground } from '@/components/villages/VillageAfricanMaskBackground';
+import { VillageGenealogyHub } from '@/components/villages/genealogy';
 
 
 interface VillageData {
@@ -519,12 +520,18 @@ const VillageProfile = () => {
         <Tabs defaultValue="overview" className="w-full">
           {/* Primary Navigation Tabs - Priority Order */}
           <div className="mb-6">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-1 p-1 bg-muted/50 rounded-lg">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-1 p-1 bg-muted/50 rounded-lg">
               <TabsTrigger 
                 value="overview" 
                 className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
               >
                 Overview
+              </TabsTrigger>
+              <TabsTrigger 
+                value="genealogy" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Genealogy
               </TabsTrigger>
               <TabsTrigger 
                 value="reputation" 
@@ -821,6 +828,13 @@ const VillageProfile = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="genealogy">
+            <VillageGenealogyHub 
+              villageId={village.id} 
+              villageName={village.village_name}
+            />
           </TabsContent>
 
           <TabsContent value="reputation">

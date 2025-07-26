@@ -516,6 +516,70 @@ export type Database = {
         }
         Relationships: []
       }
+      ancestor_relationships: {
+        Row: {
+          ancestor_id: string | null
+          created_at: string | null
+          id: string
+          marriage_date: string | null
+          marriage_village_id: string | null
+          related_ancestor_id: string | null
+          relationship_notes: string | null
+          relationship_type: string
+          traditional_ceremony: boolean | null
+          updated_at: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          ancestor_id?: string | null
+          created_at?: string | null
+          id?: string
+          marriage_date?: string | null
+          marriage_village_id?: string | null
+          related_ancestor_id?: string | null
+          relationship_notes?: string | null
+          relationship_type: string
+          traditional_ceremony?: boolean | null
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          ancestor_id?: string | null
+          created_at?: string | null
+          id?: string
+          marriage_date?: string | null
+          marriage_village_id?: string | null
+          related_ancestor_id?: string | null
+          relationship_notes?: string | null
+          relationship_type?: string
+          traditional_ceremony?: boolean | null
+          updated_at?: string | null
+          verified?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ancestor_relationships_ancestor_id_fkey"
+            columns: ["ancestor_id"]
+            isOneToOne: false
+            referencedRelation: "village_ancestors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ancestor_relationships_marriage_village_id_fkey"
+            columns: ["marriage_village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ancestor_relationships_related_ancestor_id_fkey"
+            columns: ["related_ancestor_id"]
+            isOneToOne: false
+            referencedRelation: "village_ancestors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_configurations: {
         Row: {
           additional_config: Json | null
@@ -35597,6 +35661,72 @@ export type Database = {
           },
         ]
       }
+      user_village_ancestry: {
+        Row: {
+          ancestor_id: string | null
+          connection_story: string | null
+          connection_strength: string | null
+          connection_type: string | null
+          created_at: string | null
+          evidence_type: string[] | null
+          generation_distance: number | null
+          id: string
+          is_primary_village: boolean | null
+          updated_at: string | null
+          user_id: string | null
+          verification_votes: number | null
+          verified_by_community: boolean | null
+          village_id: string | null
+        }
+        Insert: {
+          ancestor_id?: string | null
+          connection_story?: string | null
+          connection_strength?: string | null
+          connection_type?: string | null
+          created_at?: string | null
+          evidence_type?: string[] | null
+          generation_distance?: number | null
+          id?: string
+          is_primary_village?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_votes?: number | null
+          verified_by_community?: boolean | null
+          village_id?: string | null
+        }
+        Update: {
+          ancestor_id?: string | null
+          connection_story?: string | null
+          connection_strength?: string | null
+          connection_type?: string | null
+          created_at?: string | null
+          evidence_type?: string[] | null
+          generation_distance?: number | null
+          id?: string
+          is_primary_village?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_votes?: number | null
+          verified_by_community?: boolean | null
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_village_ancestry_ancestor_id_fkey"
+            columns: ["ancestor_id"]
+            isOneToOne: false
+            referencedRelation: "village_ancestors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_village_ancestry_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_whatsapp_preferences: {
         Row: {
           country_code: string | null
@@ -35668,6 +35798,103 @@ export type Database = {
           village_id?: string
         }
         Relationships: []
+      }
+      village_ancestors: {
+        Row: {
+          birth_village_id: string | null
+          birth_year: number | null
+          created_at: string | null
+          death_village_id: string | null
+          death_year: number | null
+          family_name: string | null
+          full_name: string
+          gender: string | null
+          given_names: string[] | null
+          id: string
+          migration_story: string | null
+          notable_achievements: string | null
+          occupation: string | null
+          oral_stories: string | null
+          photo_urls: string[] | null
+          privacy_level: string | null
+          traditional_title: string | null
+          updated_at: string | null
+          user_id: string | null
+          verification_notes: string | null
+          verified_by_elders: boolean | null
+          village_id: string | null
+        }
+        Insert: {
+          birth_village_id?: string | null
+          birth_year?: number | null
+          created_at?: string | null
+          death_village_id?: string | null
+          death_year?: number | null
+          family_name?: string | null
+          full_name: string
+          gender?: string | null
+          given_names?: string[] | null
+          id?: string
+          migration_story?: string | null
+          notable_achievements?: string | null
+          occupation?: string | null
+          oral_stories?: string | null
+          photo_urls?: string[] | null
+          privacy_level?: string | null
+          traditional_title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_notes?: string | null
+          verified_by_elders?: boolean | null
+          village_id?: string | null
+        }
+        Update: {
+          birth_village_id?: string | null
+          birth_year?: number | null
+          created_at?: string | null
+          death_village_id?: string | null
+          death_year?: number | null
+          family_name?: string | null
+          full_name?: string
+          gender?: string | null
+          given_names?: string[] | null
+          id?: string
+          migration_story?: string | null
+          notable_achievements?: string | null
+          occupation?: string | null
+          oral_stories?: string | null
+          photo_urls?: string[] | null
+          privacy_level?: string | null
+          traditional_title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_notes?: string | null
+          verified_by_elders?: boolean | null
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_ancestors_birth_village_id_fkey"
+            columns: ["birth_village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "village_ancestors_death_village_id_fkey"
+            columns: ["death_village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "village_ancestors_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       village_billionaires: {
         Row: {
@@ -36349,6 +36576,110 @@ export type Database = {
           },
         ]
       }
+      village_family_trees: {
+        Row: {
+          collaborators: string[] | null
+          created_at: string | null
+          created_by: string | null
+          founding_ancestor_id: string | null
+          id: string
+          is_founding_lineage: boolean | null
+          tree_description: string | null
+          tree_metadata: Json | null
+          tree_name: string
+          tree_visibility: string | null
+          updated_at: string | null
+          village_id: string | null
+        }
+        Insert: {
+          collaborators?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          founding_ancestor_id?: string | null
+          id?: string
+          is_founding_lineage?: boolean | null
+          tree_description?: string | null
+          tree_metadata?: Json | null
+          tree_name: string
+          tree_visibility?: string | null
+          updated_at?: string | null
+          village_id?: string | null
+        }
+        Update: {
+          collaborators?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          founding_ancestor_id?: string | null
+          id?: string
+          is_founding_lineage?: boolean | null
+          tree_description?: string | null
+          tree_metadata?: Json | null
+          tree_name?: string
+          tree_visibility?: string | null
+          updated_at?: string | null
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_family_trees_founding_ancestor_id_fkey"
+            columns: ["founding_ancestor_id"]
+            isOneToOne: false
+            referencedRelation: "village_ancestors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "village_family_trees_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_genealogy_dna: {
+        Row: {
+          confidence_level: number | null
+          dna_provider: string | null
+          ethnic_composition: Json | null
+          genetic_village_matches: string[] | null
+          id: string
+          privacy_level: string | null
+          uploaded_at: string | null
+          user_id: string | null
+          village_id: string | null
+        }
+        Insert: {
+          confidence_level?: number | null
+          dna_provider?: string | null
+          ethnic_composition?: Json | null
+          genetic_village_matches?: string[] | null
+          id?: string
+          privacy_level?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+          village_id?: string | null
+        }
+        Update: {
+          confidence_level?: number | null
+          dna_provider?: string | null
+          ethnic_composition?: Json | null
+          genetic_village_matches?: string[] | null
+          id?: string
+          privacy_level?: string | null
+          uploaded_at?: string | null
+          user_id?: string | null
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_genealogy_dna_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       village_leaders: {
         Row: {
           accessibility_rating: number | null
@@ -36449,6 +36780,81 @@ export type Database = {
           {
             foreignKeyName: "village_memberships_village_id_fkey"
             columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_migration_patterns: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          cultural_impact: string | null
+          documented_evidence: string[] | null
+          family_groups_involved: number | null
+          from_village_id: string | null
+          id: string
+          migration_period_end: number | null
+          migration_period_start: number | null
+          migration_reason: string | null
+          migration_route: string | null
+          migration_season: string | null
+          oral_tradition_account: string | null
+          pattern_frequency: string | null
+          to_village_id: string | null
+          updated_at: string | null
+          verified_by_elders: boolean | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          cultural_impact?: string | null
+          documented_evidence?: string[] | null
+          family_groups_involved?: number | null
+          from_village_id?: string | null
+          id?: string
+          migration_period_end?: number | null
+          migration_period_start?: number | null
+          migration_reason?: string | null
+          migration_route?: string | null
+          migration_season?: string | null
+          oral_tradition_account?: string | null
+          pattern_frequency?: string | null
+          to_village_id?: string | null
+          updated_at?: string | null
+          verified_by_elders?: boolean | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          cultural_impact?: string | null
+          documented_evidence?: string[] | null
+          family_groups_involved?: number | null
+          from_village_id?: string | null
+          id?: string
+          migration_period_end?: number | null
+          migration_period_start?: number | null
+          migration_reason?: string | null
+          migration_route?: string | null
+          migration_season?: string | null
+          oral_tradition_account?: string | null
+          pattern_frequency?: string | null
+          to_village_id?: string | null
+          updated_at?: string | null
+          verified_by_elders?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_migration_patterns_from_village_id_fkey"
+            columns: ["from_village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "village_migration_patterns_to_village_id_fkey"
+            columns: ["to_village_id"]
             isOneToOne: false
             referencedRelation: "villages"
             referencedColumns: ["id"]
