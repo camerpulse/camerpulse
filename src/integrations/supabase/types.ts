@@ -31136,6 +31136,27 @@ export type Database = {
           },
         ]
       }
+      pulse_post_likes: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       pulse_posts: {
         Row: {
           comments_count: number | null
@@ -37836,6 +37857,18 @@ export type Database = {
           engagement_counts: Json
           algorithm_score: number
           created_at: string
+        }[]
+      }
+      get_posts_with_like_status: {
+        Args: { p_user_id?: string }
+        Returns: {
+          id: string
+          user_id: string
+          content: string
+          created_at: string
+          updated_at: string
+          likes_count: number
+          is_liked: boolean
         }[]
       }
       get_profile_image_url: {
