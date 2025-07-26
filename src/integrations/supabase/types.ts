@@ -35790,6 +35790,80 @@ export type Database = {
           },
         ]
       }
+      village_chiefs: {
+        Row: {
+          ceremonial_titles: string[] | null
+          chief_name: string
+          chief_title: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          current_chief: boolean | null
+          id: string
+          lineage_history: string | null
+          notable_achievements: string | null
+          palace_location: string | null
+          profile_photo_url: string | null
+          reign_ended: number | null
+          reign_started: number | null
+          succession_type: string | null
+          throne_name: string | null
+          traditional_regalia: string | null
+          updated_at: string
+          village_id: string | null
+        }
+        Insert: {
+          ceremonial_titles?: string[] | null
+          chief_name: string
+          chief_title?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          current_chief?: boolean | null
+          id?: string
+          lineage_history?: string | null
+          notable_achievements?: string | null
+          palace_location?: string | null
+          profile_photo_url?: string | null
+          reign_ended?: number | null
+          reign_started?: number | null
+          succession_type?: string | null
+          throne_name?: string | null
+          traditional_regalia?: string | null
+          updated_at?: string
+          village_id?: string | null
+        }
+        Update: {
+          ceremonial_titles?: string[] | null
+          chief_name?: string
+          chief_title?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          current_chief?: boolean | null
+          id?: string
+          lineage_history?: string | null
+          notable_achievements?: string | null
+          palace_location?: string | null
+          profile_photo_url?: string | null
+          reign_ended?: number | null
+          reign_started?: number | null
+          succession_type?: string | null
+          throne_name?: string | null
+          traditional_regalia?: string | null
+          updated_at?: string
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_chiefs_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       village_comments: {
         Row: {
           content: string
@@ -36597,6 +36671,81 @@ export type Database = {
           recommendation_type?: string
           user_id?: string
           village_id?: string
+        }
+        Relationships: []
+      }
+      village_submissions: {
+        Row: {
+          admin_notes: string | null
+          chief_name: string | null
+          chief_title: string | null
+          created_at: string
+          division: string
+          ethnic_groups: string[] | null
+          founding_story: string | null
+          gps_latitude: number | null
+          gps_longitude: number | null
+          id: string
+          notable_events: string | null
+          population_estimate: number | null
+          region: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          subdivision: string
+          submission_status: string | null
+          submitted_by: string | null
+          traditional_languages: string[] | null
+          updated_at: string
+          verification_documents: string[] | null
+          village_name: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          chief_name?: string | null
+          chief_title?: string | null
+          created_at?: string
+          division: string
+          ethnic_groups?: string[] | null
+          founding_story?: string | null
+          gps_latitude?: number | null
+          gps_longitude?: number | null
+          id?: string
+          notable_events?: string | null
+          population_estimate?: number | null
+          region: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          subdivision: string
+          submission_status?: string | null
+          submitted_by?: string | null
+          traditional_languages?: string[] | null
+          updated_at?: string
+          verification_documents?: string[] | null
+          village_name: string
+        }
+        Update: {
+          admin_notes?: string | null
+          chief_name?: string | null
+          chief_title?: string | null
+          created_at?: string
+          division?: string
+          ethnic_groups?: string[] | null
+          founding_story?: string | null
+          gps_latitude?: number | null
+          gps_longitude?: number | null
+          id?: string
+          notable_events?: string | null
+          population_estimate?: number | null
+          region?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          subdivision?: string
+          submission_status?: string | null
+          submitted_by?: string | null
+          traditional_languages?: string[] | null
+          updated_at?: string
+          verification_documents?: string[] | null
+          village_name?: string
         }
         Relationships: []
       }

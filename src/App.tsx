@@ -87,6 +87,7 @@ import Events from "./pages/Events";
 import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
 import VillagesDirectory from "./pages/VillagesDirectory";
+import ChiefsDirectory from "./pages/ChiefsDirectory";
 import VillageProfile from "./pages/VillageProfile";
 import { Analytics } from "./pages/Analytics";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
@@ -396,6 +397,8 @@ const App = () => {
           <Route path="/villages/add" element={<AddVillage />} />
           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
           <Route path="/villages/:id" element={<VillageProfile />} />
+          <Route path="/chiefs" element={<ChiefsDirectory />} />
+          <Route path="/traditional-leaders" element={<ChiefsDirectory />} />
           <Route path="/search" element={<AdvancedSearchPage />} />
           <Route path="/economics" element={<EconomicsPage />} />
           <Route path="/civic" element={<CivicParticipationPage />} />

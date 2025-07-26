@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Users, Star, Plus, Crown, TrendingUp, Search, Filter, MapIcon, Compass, Calendar, Award } from "lucide-react";
 import { useVillages } from "@/hooks/useVillages";
 import { AppLayout } from "@/components/Layout/AppLayout";
+import AddVillageForm from "@/components/Villages/AddVillageForm";
 
 export default function VillagesDirectory() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -171,10 +172,7 @@ export default function VillagesDirectory() {
                 <Filter className="h-4 w-4 mr-2" />
                 Filters
               </Button>
-              <Button className="gap-2 bg-gradient-hero text-white border-0 shadow-elegant">
-                <Plus className="h-4 w-4" />
-                Add Village
-              </Button>
+              <AddVillageForm />
             </div>
           </div>
 
