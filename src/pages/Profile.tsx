@@ -166,7 +166,11 @@ export default function Profile() {
                           targetUsername={displayProfile?.username}
                           showCount={true}
                         />
-                        <Button variant="outline" size="sm">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => navigate('/messages')}
+                        >
                           <MessageCircle className="w-4 h-4 mr-2" />
                           Message
                         </Button>

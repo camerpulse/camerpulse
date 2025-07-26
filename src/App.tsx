@@ -5,8 +5,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import { AuthPage } from "./pages/AuthPage";
+import AuthFlow from "./pages/AuthFlow";
+import Messages from "./pages/Messages";
 import CivicFeed from "./pages/CivicFeed";
 import PulseFeed from "./pages/PulseFeed";
 import Feed from "./pages/Feed";
@@ -233,7 +233,8 @@ const App = () => {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
                 <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
+                <Route path="/auth" element={<AuthFlow />} />
+                <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
                 <Route path="/feed" element={
                   <ProtectedRoute>
                     <Feed />
