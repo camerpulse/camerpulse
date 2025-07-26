@@ -25,6 +25,7 @@ interface Village {
   region: string;
   division: string;
   subdivision: string;
+  slug?: string;
   overall_rating: number;
   sons_daughters_count: number;
   view_count: number;
@@ -440,7 +441,7 @@ const VillagesDirectory = () => {
 
   const VillageCard = ({ village, onClick }: { village: Village; onClick?: () => void }) => (
     <Card className="hover:shadow-lg transition-all duration-200 group cursor-pointer">
-      <Link to={`/villages/${village.id}`} className="block" onClick={onClick}>
+      <Link to={`/village/${village.slug || village.id}`} className="block" onClick={onClick}>
         <CardHeader className="pb-3">
           <div className="flex items-start justify-between">
             <div className="flex-1">

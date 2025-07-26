@@ -36780,27 +36780,38 @@ export type Database = {
           community_chat_link: string | null
           created_at: string
           created_by: string | null
+          development_partners: Json | null
           diaspora_engagement_score: number | null
           division: string
           economic_activity_score: number | null
           education_score: number | null
+          electricity_coverage_percentage: number | null
           ethnic_groups: string[] | null
           facebook_link: string | null
+          flag_image_url: string | null
           founding_story: string | null
           governance_score: number | null
           gps_latitude: number | null
           gps_longitude: number | null
           health_score: number | null
+          hospitals_count: number | null
           id: string
           infrastructure_score: number | null
           is_verified: boolean | null
+          logo_image_url: string | null
+          main_economic_activity: string | null
           migration_legend: string | null
+          mtn_coverage: boolean | null
+          nexttel_coverage: boolean | null
           notable_events: string | null
           oral_traditions: string | null
+          orange_coverage: boolean | null
           overall_rating: number | null
           peace_security_score: number | null
           population_estimate: number | null
           region: string
+          road_network_km: number | null
+          schools_count: number | null
           slug: string | null
           social_spirit_score: number | null
           sons_daughters_count: number | null
@@ -36811,8 +36822,11 @@ export type Database = {
           updated_at: string
           verification_notes: string | null
           view_count: number | null
+          village_anthem_url: string | null
           village_motto: string | null
           village_name: string
+          village_scorecard_rating: number | null
+          water_sources_count: number | null
           whatsapp_link: string | null
           year_founded: number | null
         }
@@ -36822,27 +36836,38 @@ export type Database = {
           community_chat_link?: string | null
           created_at?: string
           created_by?: string | null
+          development_partners?: Json | null
           diaspora_engagement_score?: number | null
           division: string
           economic_activity_score?: number | null
           education_score?: number | null
+          electricity_coverage_percentage?: number | null
           ethnic_groups?: string[] | null
           facebook_link?: string | null
+          flag_image_url?: string | null
           founding_story?: string | null
           governance_score?: number | null
           gps_latitude?: number | null
           gps_longitude?: number | null
           health_score?: number | null
+          hospitals_count?: number | null
           id?: string
           infrastructure_score?: number | null
           is_verified?: boolean | null
+          logo_image_url?: string | null
+          main_economic_activity?: string | null
           migration_legend?: string | null
+          mtn_coverage?: boolean | null
+          nexttel_coverage?: boolean | null
           notable_events?: string | null
           oral_traditions?: string | null
+          orange_coverage?: boolean | null
           overall_rating?: number | null
           peace_security_score?: number | null
           population_estimate?: number | null
           region: string
+          road_network_km?: number | null
+          schools_count?: number | null
           slug?: string | null
           social_spirit_score?: number | null
           sons_daughters_count?: number | null
@@ -36853,8 +36878,11 @@ export type Database = {
           updated_at?: string
           verification_notes?: string | null
           view_count?: number | null
+          village_anthem_url?: string | null
           village_motto?: string | null
           village_name: string
+          village_scorecard_rating?: number | null
+          water_sources_count?: number | null
           whatsapp_link?: string | null
           year_founded?: number | null
         }
@@ -36864,27 +36892,38 @@ export type Database = {
           community_chat_link?: string | null
           created_at?: string
           created_by?: string | null
+          development_partners?: Json | null
           diaspora_engagement_score?: number | null
           division?: string
           economic_activity_score?: number | null
           education_score?: number | null
+          electricity_coverage_percentage?: number | null
           ethnic_groups?: string[] | null
           facebook_link?: string | null
+          flag_image_url?: string | null
           founding_story?: string | null
           governance_score?: number | null
           gps_latitude?: number | null
           gps_longitude?: number | null
           health_score?: number | null
+          hospitals_count?: number | null
           id?: string
           infrastructure_score?: number | null
           is_verified?: boolean | null
+          logo_image_url?: string | null
+          main_economic_activity?: string | null
           migration_legend?: string | null
+          mtn_coverage?: boolean | null
+          nexttel_coverage?: boolean | null
           notable_events?: string | null
           oral_traditions?: string | null
+          orange_coverage?: boolean | null
           overall_rating?: number | null
           peace_security_score?: number | null
           population_estimate?: number | null
           region?: string
+          road_network_km?: number | null
+          schools_count?: number | null
           slug?: string | null
           social_spirit_score?: number | null
           sons_daughters_count?: number | null
@@ -36895,8 +36934,11 @@ export type Database = {
           updated_at?: string
           verification_notes?: string | null
           view_count?: number | null
+          village_anthem_url?: string | null
           village_motto?: string | null
           village_name?: string
+          village_scorecard_rating?: number | null
+          water_sources_count?: number | null
           whatsapp_link?: string | null
           year_founded?: number | null
         }

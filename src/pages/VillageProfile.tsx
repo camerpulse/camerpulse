@@ -4,7 +4,8 @@ import {
   MapPin, Star, Users, Crown, Calendar, Phone, Globe, 
   Facebook, MessageCircle, Plus, ChevronRight, Heart,
   Award, DollarSign, Building, AlertTriangle, Vote,
-  Camera, Edit, Share2, Eye
+  Camera, Edit, Share2, Eye, FileText, School, 
+  Hospital, Droplet, Zap, Wifi, Home, ArrowLeft
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -35,6 +36,7 @@ interface VillageData {
   region: string;
   division: string;
   subdivision: string;
+  slug?: string;
   year_founded?: number;
   gps_latitude?: number;
   gps_longitude?: number;
@@ -65,10 +67,24 @@ interface VillageData {
   whatsapp_link?: string;
   facebook_link?: string;
   community_chat_link?: string;
+  schools_count?: number;
+  hospitals_count?: number;
+  water_sources_count?: number;
+  electricity_coverage_percentage?: number;
+  road_network_km?: number;
+  mtn_coverage?: boolean;
+  orange_coverage?: boolean;
+  nexttel_coverage?: boolean;
+  main_economic_activity?: string;
+  development_partners?: any;
+  village_scorecard_rating?: number;
+  flag_image_url?: string;
+  logo_image_url?: string;
+  village_anthem_url?: string;
 }
 
 const VillageProfile = () => {
-  const { id } = useParams<{ id: string }>();
+  const { id, slug } = useParams<{ id: string; slug: string }>();
   const [village, setVillage] = useState<VillageData | null>(null);
   const [leaders, setLeaders] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -81,23 +97,32 @@ const VillageProfile = () => {
   const [userMembership, setUserMembership] = useState(null);
 
   useEffect(() => {
-    if (id) {
+    if (id || slug) {
       fetchVillageData();
       incrementViewCount();
     }
-  }, [id]);
+  }, [id, slug]);
 
   const fetchVillageData = async () => {
     try {
-      // Fetch village basic info
-      const { data: villageData, error: villageError } = await supabase
-        .from('villages')
-        .select('*')
-        .eq('id', id)
-        .single();
+      // Fetch village basic info - support both ID and slug
+      let query = supabase.from('villages').select('*');
+      
+      if (slug) {
+        query = query.eq('slug', slug);
+      } else if (id) {
+        query = query.eq('id', id);
+      } else {
+        throw new Error('No village identifier provided');
+      }
+
+      const { data: villageData, error: villageError } = await query.single();
 
       if (villageError) throw villageError;
       setVillage(villageData);
+
+      // Use the actual village ID for related data
+      const villageId = villageData.id;
 
       // Fetch related data
       const [
@@ -109,13 +134,13 @@ const VillageProfile = () => {
         conflictsResponse,
         photosResponse
       ] = await Promise.all([
-        supabase.from('village_leaders').select('*').eq('village_id', id),
-        supabase.from('village_projects').select('*').eq('village_id', id),
-        supabase.from('village_billionaires').select('*').eq('village_id', id),
-        supabase.from('village_celebrities').select('*').eq('village_id', id),
-        supabase.from('village_petitions').select('*').eq('village_id', id),
-        supabase.from('village_conflicts').select('*').eq('village_id', id),
-        supabase.from('village_photos').select('*').eq('village_id', id)
+        supabase.from('village_leaders').select('*').eq('village_id', villageId),
+        supabase.from('village_projects').select('*').eq('village_id', villageId),
+        supabase.from('village_billionaires').select('*').eq('village_id', villageId),
+        supabase.from('village_celebrities').select('*').eq('village_id', villageId),
+        supabase.from('village_petitions').select('*').eq('village_id', villageId),
+        supabase.from('village_conflicts').select('*').eq('village_id', villageId),
+        supabase.from('village_photos').select('*').eq('village_id', villageId)
       ]);
 
       setLeaders(leadersResponse.data || []);
@@ -136,10 +161,13 @@ const VillageProfile = () => {
 
   const incrementViewCount = async () => {
     try {
-      await supabase
-        .from('villages')
-        .update({ view_count: (village?.view_count || 0) + 1 })
-        .eq('id', id);
+      const villageId = village?.id || (slug ? village?.id : id);
+      if (villageId) {
+        await supabase
+          .from('villages')
+          .update({ view_count: (village?.view_count || 0) + 1 })
+          .eq('id', villageId);
+      }
     } catch (error) {
       console.error('Error incrementing view count:', error);
     }
@@ -154,10 +182,16 @@ const VillageProfile = () => {
         return;
       }
 
+      const villageId = village?.id;
+      if (!villageId) {
+        toast.error('Village ID not found');
+        return;
+      }
+
       const { error } = await supabase
         .from('village_memberships')
         .insert({
-          village_id: id,
+          village_id: villageId,
           user_id: user.id,
           membership_type: 'son_daughter'
         });
@@ -241,6 +275,23 @@ const VillageProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* Breadcrumb Navigation */}
+      <div className="bg-muted/50 border-b">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="flex items-center space-x-2 text-sm">
+            <Link to="/" className="text-muted-foreground hover:text-foreground">
+              Home
+            </Link>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <Link to="/villages" className="text-muted-foreground hover:text-foreground">
+              Villages Directory
+            </Link>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium">{village.village_name}</span>
+          </nav>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <div className="relative bg-gradient-civic text-white">
         <div className="container mx-auto px-4 py-12">
@@ -282,6 +333,13 @@ const VillageProfile = () => {
             </div>
 
             <div className="flex flex-col gap-3">
+              <Link to="/villages">
+                <Button variant="outline" size="sm" className="text-white border-white hover:bg-white hover:text-primary">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Directory
+                </Button>
+              </Link>
+              
               <Button 
                 onClick={handleClaimMembership}
                 variant="secondary" 
@@ -462,30 +520,146 @@ const VillageProfile = () => {
                 </div>
               </CardContent>
             </Card>
+
+            {/* Infrastructure & Services */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Building className="h-5 w-5 mr-2" />
+                  Infrastructure & Services
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                  <div className="text-center">
+                    <School className="h-8 w-8 mx-auto mb-2 text-primary" />
+                    <div className="text-lg font-bold">{village.schools_count || 0}</div>
+                    <div className="text-sm text-muted-foreground">Schools</div>
+                  </div>
+                  <div className="text-center">
+                    <Hospital className="h-8 w-8 mx-auto mb-2 text-accent" />
+                    <div className="text-lg font-bold">{village.hospitals_count || 0}</div>
+                    <div className="text-sm text-muted-foreground">Health Centers</div>
+                  </div>
+                  <div className="text-center">
+                    <Droplet className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                    <div className="text-lg font-bold">{village.water_sources_count || 0}</div>
+                    <div className="text-sm text-muted-foreground">Water Sources</div>
+                  </div>
+                  <div className="text-center">
+                    <Zap className="h-8 w-8 mx-auto mb-2 text-yellow-500" />
+                    <div className="text-lg font-bold">{village.electricity_coverage_percentage || 0}%</div>
+                    <div className="text-sm text-muted-foreground">Electricity</div>
+                  </div>
+                </div>
+
+                {/* Network Coverage */}
+                <Separator className="my-6" />
+                <div>
+                  <h4 className="font-semibold mb-3 flex items-center">
+                    <Wifi className="h-4 w-4 mr-2" />
+                    Network Coverage
+                  </h4>
+                  <div className="flex gap-4">
+                    <Badge variant={village.mtn_coverage ? "default" : "outline"}>
+                      MTN {village.mtn_coverage ? "✓" : "✗"}
+                    </Badge>
+                    <Badge variant={village.orange_coverage ? "default" : "outline"}>
+                      Orange {village.orange_coverage ? "✓" : "✗"}
+                    </Badge>
+                    <Badge variant={village.nexttel_coverage ? "default" : "outline"}>
+                      Nexttel {village.nexttel_coverage ? "✓" : "✗"}
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* Economic Activity */}
+                {village.main_economic_activity && (
+                  <>
+                    <Separator className="my-6" />
+                    <div>
+                      <h4 className="font-semibold mb-2 flex items-center">
+                        <DollarSign className="h-4 w-4 mr-2" />
+                        Main Economic Activity
+                      </h4>
+                      <p className="text-muted-foreground">{village.main_economic_activity}</p>
+                    </div>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Civic Action Buttons */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Vote className="h-5 w-5 mr-2" />
+                  Take Action
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  <Link to={`/petitions/new?village=${village.id}`}>
+                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                      <FileText className="h-6 w-6" />
+                      <span>Raise Petition</span>
+                    </Button>
+                  </Link>
+                  <Link to={`/projects/new?village=${village.id}`}>
+                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                      <Building className="h-6 w-6" />
+                      <span>Propose Project</span>
+                    </Button>
+                  </Link>
+                  <Link to={`/reports/new?village=${village.id}`}>
+                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                      <AlertTriangle className="h-6 w-6" />
+                      <span>Report Problem</span>
+                    </Button>
+                  </Link>
+                  <Link to={`/villages/${village.id}/officials`}>
+                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                      <Users className="h-6 w-6" />
+                      <span>View Officials</span>
+                    </Button>
+                  </Link>
+                  <Link to={`/villages/${village.id}/edit`}>
+                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                      <Edit className="h-6 w-6" />
+                      <span>Submit Update</span>
+                    </Button>
+                  </Link>
+                  <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                    <FileText className="h-6 w-6" />
+                    <span>Village Report PDF</span>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="membership">
-            <VillageMembership villageId={id!} villageName={village.village_name} />
+            <VillageMembership villageId={village.id} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="leaders">
-            <VillageLeadership villageId={id!} villageName={village.village_name} />
+            <VillageLeadership villageId={village.id} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="projects">
-            <VillageProjects villageId={id!} villageName={village.village_name} />
+            <VillageProjects villageId={village.id} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="people">
-            <VillageNotablePeople villageId={id!} villageName={village.village_name} />
+            <VillageNotablePeople villageId={village.id} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="civic">
-            <VillageCivicActivity villageId={id!} villageName={village.village_name} />
+            <VillageCivicActivity villageId={village.id} villageName={village.village_name} />
           </TabsContent>
 
           <TabsContent value="gallery">
-            <VillagePhotoGallery villageId={id!} />
+            <VillagePhotoGallery villageId={village.id} />
           </TabsContent>
 
           <TabsContent value="chat">
@@ -501,15 +675,15 @@ const VillageProfile = () => {
           </TabsContent>
 
           <TabsContent value="discussions" className="space-y-6">
-            <VillageDiscussions villageId={id!} />
+            <VillageDiscussions villageId={village.id} />
           </TabsContent>
 
           <TabsContent value="events" className="space-y-6">
-            <VillageEvents villageId={id!} />
+            <VillageEvents villageId={village.id} />
           </TabsContent>
 
           <TabsContent value="comments" className="space-y-6">
-            <VillageComments villageId={id!} />
+            <VillageComments villageId={village.id} />
           </TabsContent>
         </Tabs>
       </div>
