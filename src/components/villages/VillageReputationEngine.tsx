@@ -12,6 +12,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { VillageVotingDialog } from './VillageVotingDialog';
 import { VillageCorruptionReportDialog } from './VillageCorruptionReportDialog';
 import { VillageReputationTimeline } from './VillageReputationTimeline';
+import { VillageTransparencyHeatmap } from './VillageTransparencyHeatmap';
+import { VillageReputationSecurity } from './VillageReputationSecurity';
+import { VillageCivicEngagementIntegration } from './VillageCivicEngagementIntegration';
 import { toast } from 'sonner';
 
 interface VillageReputationEngineProps {
@@ -264,11 +267,13 @@ export const VillageReputationEngine: React.FC<VillageReputationEngineProps> = (
 
       {/* Detailed Metrics */}
       <Tabs defaultValue="dashboard" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-6">
           <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-          <TabsTrigger value="votes">Citizen Votes</TabsTrigger>
-          <TabsTrigger value="reports">Reports</TabsTrigger>
-          <TabsTrigger value="trends">Trends</TabsTrigger>
+          <TabsTrigger value="security">Security</TabsTrigger>
+          <TabsTrigger value="civic">Civic Links</TabsTrigger>
+          <TabsTrigger value="heatmap">Map</TabsTrigger>
+          <TabsTrigger value="votes">Votes</TabsTrigger>
+          <TabsTrigger value="trends">Timeline</TabsTrigger>
         </TabsList>
 
         <TabsContent value="dashboard" className="space-y-6">
@@ -378,6 +383,24 @@ export const VillageReputationEngine: React.FC<VillageReputationEngineProps> = (
               </Card>
             </div>
           )}
+        </TabsContent>
+
+        <TabsContent value="security" className="space-y-6">
+          <VillageReputationSecurity 
+            villageId={villageId} 
+            villageName={villageName} 
+          />
+        </TabsContent>
+
+        <TabsContent value="civic" className="space-y-6">
+          <VillageCivicEngagementIntegration 
+            villageId={villageId} 
+            villageName={villageName} 
+          />
+        </TabsContent>
+
+        <TabsContent value="heatmap" className="space-y-6">
+          <VillageTransparencyHeatmap />
         </TabsContent>
 
         <TabsContent value="votes" className="space-y-4">

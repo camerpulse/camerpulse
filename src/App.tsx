@@ -130,6 +130,7 @@ import ModerationCenter from "./pages/ModerationCenter";
 import SocialCommunity from "./pages/SocialCommunity";
 import GovernmentPortal from "./pages/GovernmentPortal";
 import AdvancedAnalytics from "./pages/AdvancedAnalytics";
+import VillageReputationAdmin from "./pages/admin/VillageReputationAdmin";
 import NotificationCampaigns from "./pages/NotificationCampaigns";
 import APIIntegrations from "./pages/APIIntegrations";
 import { LegislationTracker } from "./pages/LegislationTracker";
@@ -293,7 +294,12 @@ const App = () => {
               <Route path="/news" element={<News />} />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
-              <Route path="/admin" element={<Admin />} />
+               <Route path="/admin" element={<Admin />} />
+               <Route path="/admin/village-reputation" element={
+                 <ProtectedRoute>
+                   <VillageReputationAdmin />
+                 </ProtectedRoute>
+               } />
               <Route path="/admin/plugins" element={
                 <PluginRoute pluginName="CamerPulse.Admin.PluginManager" adminAccess>
                   <div className="min-h-screen bg-background p-6">
