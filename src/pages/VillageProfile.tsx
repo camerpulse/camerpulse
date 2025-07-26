@@ -267,7 +267,7 @@ const VillageProfile = () => {
               The village you're looking for doesn't exist or has been removed.
             </p>
             <Link to="/villages">
-              <Button>Back to Villages Directory</Button>
+              <Button variant="cm-green">Back to Villages Directory</Button>
             </Link>
           </CardContent>
         </Card>
@@ -280,7 +280,7 @@ const VillageProfile = () => {
       {/* Floating Navigation */}
       <div className="fixed top-4 left-4 z-50">
         <Link to="/villages">
-          <Button variant="outline" size="sm" className="backdrop-blur-md bg-background/80 border shadow-lg">
+          <Button variant="cm-green" size="sm" className="backdrop-blur-md bg-background/80 border shadow-lg">
             <ArrowLeft className="h-4 w-4 mr-2" />
             Villages
           </Button>
@@ -364,7 +364,7 @@ const VillageProfile = () => {
                   <Button 
                     onClick={handleClaimMembership}
                     size="lg"
-                    className="bg-amber-600 hover:bg-amber-700 text-white shadow-xl"
+                    variant="cm-green"
                   >
                     <Heart className="h-5 w-5 mr-2" />
                     I'm From Here
@@ -372,16 +372,16 @@ const VillageProfile = () => {
                   
                   <div className="flex gap-2">
                     {village.whatsapp_link && (
-                      <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
+                      <Button size="lg" variant="cm-green" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
                         <MessageCircle className="h-5 w-5" />
                       </Button>
                     )}
                     {village.facebook_link && (
-                      <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
+                      <Button size="lg" variant="cm-green" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
                         <Facebook className="h-5 w-5" />
                       </Button>
                     )}
-                    <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
+                    <Button size="lg" variant="cm-green" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
                       <Share2 className="h-5 w-5" />
                     </Button>
                   </div>
@@ -685,36 +685,36 @@ const VillageProfile = () => {
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <Link to={`/petitions/new?village=${village.id}`}>
-                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                    <Button variant="cm-green" className="w-full h-auto p-4 flex flex-col gap-2">
                       <FileText className="h-6 w-6" />
                       <span>Raise Petition</span>
                     </Button>
                   </Link>
                   <Link to={`/projects/new?village=${village.id}`}>
-                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                    <Button variant="cm-green" className="w-full h-auto p-4 flex flex-col gap-2">
                       <Building className="h-6 w-6" />
                       <span>Propose Project</span>
                     </Button>
                   </Link>
                   <Link to={`/reports/new?village=${village.id}`}>
-                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                    <Button variant="cm-green" className="w-full h-auto p-4 flex flex-col gap-2">
                       <AlertTriangle className="h-6 w-6" />
                       <span>Report Problem</span>
                     </Button>
                   </Link>
                   <Link to={`/villages/${village.id}/officials`}>
-                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                    <Button variant="cm-green" className="w-full h-auto p-4 flex flex-col gap-2">
                       <Users className="h-6 w-6" />
                       <span>View Officials</span>
                     </Button>
                   </Link>
                   <Link to={`/villages/${village.id}/edit`}>
-                    <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                    <Button variant="cm-green" className="w-full h-auto p-4 flex flex-col gap-2">
                       <Edit className="h-6 w-6" />
                       <span>Submit Update</span>
                     </Button>
                   </Link>
-                  <Button variant="outline" className="w-full h-auto p-4 flex flex-col gap-2">
+                  <Button variant="cm-green" className="w-full h-auto p-4 flex flex-col gap-2">
                     <FileText className="h-6 w-6" />
                     <span>Village Report PDF</span>
                   </Button>
