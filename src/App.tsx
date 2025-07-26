@@ -397,6 +397,7 @@ const App = () => {
           <Route path="/villages/add" element={<AddVillage />} />
           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
           <Route path="/villages/:id" element={<VillageProfile />} />
+          <Route path="/village/:slug" element={<VillageProfile />} />
           <Route path="/chiefs" element={<ChiefsDirectory />} />
           <Route path="/traditional-leaders" element={<ChiefsDirectory />} />
           <Route path="/search" element={<AdvancedSearchPage />} />
