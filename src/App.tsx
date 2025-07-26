@@ -403,6 +403,9 @@ const App = () => {
           <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
           <Route path="/villages" element={<VillagesDirectory />} />
           <Route path="/villages/directory" element={<VillagesDirectory />} />
+          <Route path="/villages/ratings-leaderboard" element={<VillageRatingsLeaderboard />} />
+          <Route path="/villages/petitioned" element={<VillagesPetitioned />} />
+          <Route path="/villages/diaspora-backed" element={<VillagesDiasporaBacked />} />
           <Route path="/villages/add" element={<AddVillage />} />
           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
           <Route path="/villages/:id" element={<VillageProfile />} />
