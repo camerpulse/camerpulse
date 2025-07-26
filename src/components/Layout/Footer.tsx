@@ -158,6 +158,10 @@ export const Footer = () => {
                 <Crown className="w-3 h-3" />
                 Villages
               </Link>
+              <Link to="/chiefs" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <Crown className="w-3 h-3" />
+                Chiefs Directory
+              </Link>
               <Link to="/institutions" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Building className="w-3 h-3" />
                 Institutions
