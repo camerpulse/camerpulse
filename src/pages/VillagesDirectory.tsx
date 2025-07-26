@@ -18,6 +18,7 @@ import { toast } from 'sonner';
 import { InteractiveVillageMap } from '@/components/villages/InteractiveVillageMap';
 import { VillageRecommendations } from '@/components/recommendations/VillageRecommendations';
 import { useAnalytics } from '@/hooks/useAnalytics';
+import { VillageReputationHighlights } from '@/components/villages/VillageReputationHighlights';
 
 interface Village {
   id: string;
@@ -582,6 +583,8 @@ const VillagesDirectory = () => {
 
         {/* Main Content */}
         <div className="container mx-auto px-4 py-8">
+          {/* Village Reputation Highlights */}
+          <VillageReputationHighlights />
           {/* Featured Village Slider */}
           <section className="mb-12">
             <div className="flex items-center justify-between mb-6">

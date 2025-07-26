@@ -29,6 +29,7 @@ import { VillageChat } from '@/components/villages/VillageChat';
 import { VillageAnalytics } from '@/components/villages/VillageAnalytics';
 import { VillageLeaderboards } from '@/components/villages/VillageLeaderboards';
 import { VillageReputationEngine } from '@/components/villages/VillageReputationEngine';
+import { VillageReputationTimeline } from '@/components/villages/VillageReputationTimeline';
 
 
 interface VillageData {
