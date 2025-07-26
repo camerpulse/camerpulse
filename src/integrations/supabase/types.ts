@@ -36084,6 +36084,57 @@ export type Database = {
           },
         ]
       }
+      village_announcements: {
+        Row: {
+          announcement_type: string
+          attachments: Json | null
+          content: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_pinned: boolean
+          priority: string
+          reactions: Json | null
+          title: string
+          updated_at: string
+          user_id: string
+          views_count: number
+          village_id: string
+        }
+        Insert: {
+          announcement_type?: string
+          attachments?: Json | null
+          content: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_pinned?: boolean
+          priority?: string
+          reactions?: Json | null
+          title: string
+          updated_at?: string
+          user_id: string
+          views_count?: number
+          village_id: string
+        }
+        Update: {
+          announcement_type?: string
+          attachments?: Json | null
+          content?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_pinned?: boolean
+          priority?: string
+          reactions?: Json | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+          views_count?: number
+          village_id?: string
+        }
+        Relationships: []
+      }
       village_billionaires: {
         Row: {
           billionaire_name: string
@@ -36573,6 +36624,162 @@ export type Database = {
         }
         Relationships: []
       }
+      village_cultural_events: {
+        Row: {
+          created_at: string
+          cultural_elements: Json | null
+          cultural_significance: string | null
+          current_participants: number
+          description: string
+          elder_involvement: Json | null
+          end_date: string | null
+          event_type: string
+          heritage_preservation_goal: string | null
+          id: string
+          is_public: boolean
+          location: string | null
+          max_participants: number | null
+          media_urls: Json | null
+          organizer_user_id: string
+          registration_deadline: string | null
+          registration_required: boolean
+          requirements: Json | null
+          start_date: string
+          status: string
+          title: string
+          updated_at: string
+          village_id: string
+        }
+        Insert: {
+          created_at?: string
+          cultural_elements?: Json | null
+          cultural_significance?: string | null
+          current_participants?: number
+          description: string
+          elder_involvement?: Json | null
+          end_date?: string | null
+          event_type?: string
+          heritage_preservation_goal?: string | null
+          id?: string
+          is_public?: boolean
+          location?: string | null
+          max_participants?: number | null
+          media_urls?: Json | null
+          organizer_user_id: string
+          registration_deadline?: string | null
+          registration_required?: boolean
+          requirements?: Json | null
+          start_date: string
+          status?: string
+          title: string
+          updated_at?: string
+          village_id: string
+        }
+        Update: {
+          created_at?: string
+          cultural_elements?: Json | null
+          cultural_significance?: string | null
+          current_participants?: number
+          description?: string
+          elder_involvement?: Json | null
+          end_date?: string | null
+          event_type?: string
+          heritage_preservation_goal?: string | null
+          id?: string
+          is_public?: boolean
+          location?: string | null
+          max_participants?: number | null
+          media_urls?: Json | null
+          organizer_user_id?: string
+          registration_deadline?: string | null
+          registration_required?: boolean
+          requirements?: Json | null
+          start_date?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          village_id?: string
+        }
+        Relationships: []
+      }
+      village_cultural_heritage: {
+        Row: {
+          category: string
+          community_involvement: string | null
+          contributor_user_id: string
+          created_at: string
+          description: string
+          documentation: Json | null
+          expert_validation: Json | null
+          heritage_type: string
+          historical_period: string | null
+          id: string
+          is_featured: boolean
+          likes_count: number
+          media_urls: Json | null
+          preservation_actions: Json | null
+          preservation_status: string
+          related_knowledge_ids: string[] | null
+          significance_level: string
+          threats: Json | null
+          title: string
+          updated_at: string
+          views_count: number
+          village_id: string
+          visibility: string
+        }
+        Insert: {
+          category?: string
+          community_involvement?: string | null
+          contributor_user_id: string
+          created_at?: string
+          description: string
+          documentation?: Json | null
+          expert_validation?: Json | null
+          heritage_type?: string
+          historical_period?: string | null
+          id?: string
+          is_featured?: boolean
+          likes_count?: number
+          media_urls?: Json | null
+          preservation_actions?: Json | null
+          preservation_status?: string
+          related_knowledge_ids?: string[] | null
+          significance_level?: string
+          threats?: Json | null
+          title: string
+          updated_at?: string
+          views_count?: number
+          village_id: string
+          visibility?: string
+        }
+        Update: {
+          category?: string
+          community_involvement?: string | null
+          contributor_user_id?: string
+          created_at?: string
+          description?: string
+          documentation?: Json | null
+          expert_validation?: Json | null
+          heritage_type?: string
+          historical_period?: string | null
+          id?: string
+          is_featured?: boolean
+          likes_count?: number
+          media_urls?: Json | null
+          preservation_actions?: Json | null
+          preservation_status?: string
+          related_knowledge_ids?: string[] | null
+          significance_level?: string
+          threats?: Json | null
+          title?: string
+          updated_at?: string
+          views_count?: number
+          village_id?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
       village_data: {
         Row: {
           chief_contact: string | null
@@ -36703,6 +36910,54 @@ export type Database = {
           },
         ]
       }
+      village_discussion_messages: {
+        Row: {
+          attachments: Json | null
+          content: string
+          created_at: string
+          deleted_at: string | null
+          discussion_id: string
+          edited_at: string | null
+          id: string
+          is_deleted: boolean
+          is_edited: boolean
+          message_type: string
+          parent_message_id: string | null
+          reactions: Json | null
+          user_id: string
+        }
+        Insert: {
+          attachments?: Json | null
+          content: string
+          created_at?: string
+          deleted_at?: string | null
+          discussion_id: string
+          edited_at?: string | null
+          id?: string
+          is_deleted?: boolean
+          is_edited?: boolean
+          message_type?: string
+          parent_message_id?: string | null
+          reactions?: Json | null
+          user_id: string
+        }
+        Update: {
+          attachments?: Json | null
+          content?: string
+          created_at?: string
+          deleted_at?: string | null
+          discussion_id?: string
+          edited_at?: string | null
+          id?: string
+          is_deleted?: boolean
+          is_edited?: boolean
+          message_type?: string
+          parent_message_id?: string | null
+          reactions?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       village_discussions: {
         Row: {
           category: string
@@ -36758,6 +37013,78 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      village_elder_knowledge: {
+        Row: {
+          audio_url: string | null
+          category: string
+          content: string
+          created_at: string
+          elder_user_id: string
+          id: string
+          images: Json | null
+          is_public: boolean
+          knowledge_type: string
+          language: string
+          preservation_priority: string
+          submitted_by_user_id: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+          video_url: string | null
+          views_count: number
+          village_id: string
+        }
+        Insert: {
+          audio_url?: string | null
+          category?: string
+          content: string
+          created_at?: string
+          elder_user_id: string
+          id?: string
+          images?: Json | null
+          is_public?: boolean
+          knowledge_type?: string
+          language?: string
+          preservation_priority?: string
+          submitted_by_user_id?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          video_url?: string | null
+          views_count?: number
+          village_id: string
+        }
+        Update: {
+          audio_url?: string | null
+          category?: string
+          content?: string
+          created_at?: string
+          elder_user_id?: string
+          id?: string
+          images?: Json | null
+          is_public?: boolean
+          knowledge_type?: string
+          language?: string
+          preservation_priority?: string
+          submitted_by_user_id?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          video_url?: string | null
+          views_count?: number
+          village_id?: string
+        }
+        Relationships: []
       }
       village_events: {
         Row: {
