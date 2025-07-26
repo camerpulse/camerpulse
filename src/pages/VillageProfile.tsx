@@ -496,64 +496,143 @@ const VillageProfile = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-14">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="reputation">Reputation</TabsTrigger>
-            <TabsTrigger value="membership">Members</TabsTrigger>
-            <TabsTrigger value="leaders">Leadership</TabsTrigger>
-            <TabsTrigger value="projects">Projects</TabsTrigger>
-            <TabsTrigger value="people">Notable People</TabsTrigger>
-            <TabsTrigger value="civic">Civic Activity</TabsTrigger>
-            <TabsTrigger value="gallery">Gallery</TabsTrigger>
-            <TabsTrigger value="chat">Chat</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="leaderboards">Rankings</TabsTrigger>
-            <TabsTrigger value="discussions">Discussions</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="comments">Comments</TabsTrigger>
-          </TabsList>
+          {/* Primary Navigation Tabs - Priority Order */}
+          <div className="mb-6">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-1 p-1 bg-muted/50 rounded-lg">
+              <TabsTrigger 
+                value="overview" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Overview
+              </TabsTrigger>
+              <TabsTrigger 
+                value="reputation" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Reputation
+              </TabsTrigger>
+              <TabsTrigger 
+                value="membership" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Members
+              </TabsTrigger>
+              <TabsTrigger 
+                value="leaders" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Leadership
+              </TabsTrigger>
+              <TabsTrigger 
+                value="projects" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Projects
+              </TabsTrigger>
+              <TabsTrigger 
+                value="people" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Notable People
+              </TabsTrigger>
+              <TabsTrigger 
+                value="civic" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Civic Activity
+              </TabsTrigger>
+              <TabsTrigger 
+                value="gallery" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Gallery
+              </TabsTrigger>
+            </TabsList>
+          </div>
+
+          {/* Secondary Navigation Tabs */}
+          <div className="mb-6">
+            <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 gap-1 p-1 bg-muted/30 rounded-lg">
+              <TabsTrigger 
+                value="chat" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+              >
+                Chat
+              </TabsTrigger>
+              <TabsTrigger 
+                value="analytics" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+              >
+                Analytics
+              </TabsTrigger>
+              <TabsTrigger 
+                value="leaderboards" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+              >
+                Rankings
+              </TabsTrigger>
+              <TabsTrigger 
+                value="discussions" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+              >
+                Discussions
+              </TabsTrigger>
+              <TabsTrigger 
+                value="events" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+              >
+                Events
+              </TabsTrigger>
+              <TabsTrigger 
+                value="comments" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+              >
+                Comments
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="overview" className="space-y-6">
             {/* Village Identity */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
+                <CardTitle className="flex items-center text-cm-green">
                   <MapPin className="h-5 w-5 mr-2" />
                   Village Identity
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {village.year_founded && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Founded</label>
-                      <div className="font-semibold">{village.year_founded}</div>
-                    </div>
-                  )}
-                  {village.population_estimate && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Population</label>
-                      <div className="font-semibold">{village.population_estimate.toLocaleString()}</div>
-                    </div>
-                  )}
-                  {village.traditional_languages.length > 0 && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Languages</label>
-                      <div className="font-semibold">{village.traditional_languages.join(', ')}</div>
-                    </div>
-                  )}
-                  {village.ethnic_groups.length > 0 && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Ethnic Groups</label>
-                      <div className="font-semibold">{village.ethnic_groups.join(', ')}</div>
-                    </div>
-                  )}
-                  {village.totem_symbol && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Totem/Symbol</label>
-                      <div className="font-semibold">{village.totem_symbol}</div>
-                    </div>
-                  )}
+                   {village.year_founded && (
+                     <div>
+                       <label className="text-sm font-medium text-cm-green">Founded</label>
+                       <div className="font-semibold">{village.year_founded}</div>
+                     </div>
+                   )}
+                   {village.population_estimate && (
+                     <div>
+                       <label className="text-sm font-medium text-cm-green">Population</label>
+                       <div className="font-semibold">{village.population_estimate.toLocaleString()}</div>
+                     </div>
+                   )}
+                   {village.traditional_languages.length > 0 && (
+                     <div>
+                       <label className="text-sm font-medium text-cm-green">Languages</label>
+                       <div className="font-semibold">{village.traditional_languages.join(', ')}</div>
+                     </div>
+                   )}
+                   {village.ethnic_groups.length > 0 && (
+                     <div>
+                       <label className="text-sm font-medium text-cm-green">Ethnic Groups</label>
+                       <div className="font-semibold">{village.ethnic_groups.join(', ')}</div>
+                     </div>
+                   )}
+                   {village.totem_symbol && (
+                     <div>
+                       <label className="text-sm font-medium text-cm-green">Totem/Symbol</label>
+                       <div className="font-semibold">{village.totem_symbol}</div>
+                     </div>
+                   )}
                 </div>
 
                 {village.founding_story && (
