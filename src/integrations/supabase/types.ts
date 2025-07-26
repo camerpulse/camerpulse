@@ -36984,7 +36984,9 @@ export type Database = {
           id: string
           infrastructure_score: number | null
           is_verified: boolean | null
+          latitude: number | null
           logo_image_url: string | null
+          longitude: number | null
           main_economic_activity: string | null
           migration_legend: string | null
           mtn_coverage: boolean | null
@@ -37040,7 +37042,9 @@ export type Database = {
           id?: string
           infrastructure_score?: number | null
           is_verified?: boolean | null
+          latitude?: number | null
           logo_image_url?: string | null
+          longitude?: number | null
           main_economic_activity?: string | null
           migration_legend?: string | null
           mtn_coverage?: boolean | null
@@ -37096,7 +37100,9 @@ export type Database = {
           id?: string
           infrastructure_score?: number | null
           is_verified?: boolean | null
+          latitude?: number | null
           logo_image_url?: string | null
+          longitude?: number | null
           main_economic_activity?: string | null
           migration_legend?: string | null
           mtn_coverage?: boolean | null

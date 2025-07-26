@@ -112,19 +112,26 @@ export function VillageTransparencyHeatmap() {
 
       if (error) throw error;
 
-      const processedVillages = data?.map(village => ({
-        id: village.id,
-        village_name: village.village_name,
-        slug: village.slug,
-        region: village.region,
-        latitude: village.latitude,
-        longitude: village.longitude,
-        overall_reputation_score: village.village_transparency_metrics?.overall_reputation_score || 0,
-        reputation_badge: village.village_transparency_metrics?.reputation_badge || 'under_assessment',
-        transparency_score: village.village_transparency_metrics?.transparency_score || 0,
-        corruption_reports_count: village.village_transparency_metrics?.corruption_reports_count || 0,
-        citizen_satisfaction_score: village.village_transparency_metrics?.citizen_satisfaction_score || 0
-      })).filter(v => v.latitude && v.longitude) || [];
+      const processedVillages = data?.map(village => {
+        // Handle the relationship data - it's an array, so take the first item
+        const metrics = Array.isArray(village.village_transparency_metrics) 
+          ? village.village_transparency_metrics[0] 
+          : village.village_transparency_metrics;
+
+        return {
+          id: village.id,
+          village_name: village.village_name,
+          slug: village.slug,
+          region: village.region,
+          latitude: village.latitude,
+          longitude: village.longitude,
+          overall_reputation_score: metrics?.overall_reputation_score || 0,
+          reputation_badge: metrics?.reputation_badge || 'under_assessment',
+          transparency_score: metrics?.transparency_score || 0,
+          corruption_reports_count: metrics?.corruption_reports_count || 0,
+          citizen_satisfaction_score: metrics?.citizen_satisfaction_score || 0
+        };
+      }).filter(v => v.latitude && v.longitude) || [];
 
       setVillages(processedVillages);
     } catch (error) {
