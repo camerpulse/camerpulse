@@ -276,137 +276,219 @@ const VillageProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Breadcrumb Navigation */}
-      <div className="bg-muted/50 border-b">
-        <div className="container mx-auto px-4 py-3">
-          <nav className="flex items-center space-x-2 text-sm">
-            <Link to="/" className="text-muted-foreground hover:text-foreground">
-              Home
-            </Link>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            <Link to="/villages" className="text-muted-foreground hover:text-foreground">
-              Villages Directory
-            </Link>
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium">{village.village_name}</span>
-          </nav>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+      {/* Floating Navigation */}
+      <div className="fixed top-4 left-4 z-50">
+        <Link to="/villages">
+          <Button variant="outline" size="sm" className="backdrop-blur-md bg-background/80 border shadow-lg">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Villages
+          </Button>
+        </Link>
       </div>
 
-      {/* Hero Section */}
-      <div className="relative bg-gradient-civic text-white">
-        <div className="container mx-auto px-4 py-12">
-          <div className="flex flex-col md:flex-row items-start gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold">{village.village_name}</h1>
-                {village.is_verified && (
-                  <Badge variant="secondary" className="text-white border-white">
-                    <Crown className="h-4 w-4 mr-1" />
-                    Verified
-                  </Badge>
-                )}
-              </div>
-              
-              <div className="flex items-center text-lg opacity-90 mb-4">
-                <MapPin className="h-5 w-5 mr-2" />
-                {village.subdivision}, {village.division}, {village.region}
-              </div>
+      {/* Immersive Hero Section */}
+      <div className="relative min-h-[70vh] bg-gradient-ancestral overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23ffffff%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%224%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        </div>
+        
+        <div className="relative container mx-auto px-4 py-16 flex items-center min-h-[70vh]">
+          <div className="w-full">
+            {/* Breadcrumb */}
+            <nav className="flex items-center space-x-2 text-sm text-amber-200/80 mb-8">
+              <Link to="/" className="hover:text-amber-100 transition-colors">Home</Link>
+              <ChevronRight className="h-4 w-4" />
+              <Link to="/villages" className="hover:text-amber-100 transition-colors">Villages</Link>
+              <ChevronRight className="h-4 w-4" />
+              <span className="text-amber-100">{village.village_name}</span>
+            </nav>
 
-              {village.village_motto && (
-                <blockquote className="text-lg italic opacity-90 mb-4">
-                  "{village.village_motto}"
-                </blockquote>
-              )}
+            <div className="grid lg:grid-cols-12 gap-8 items-center">
+              {/* Main Content */}
+              <div className="lg:col-span-8 space-y-6">
+                {/* Title Section */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4 flex-wrap">
+                    <h1 className="text-5xl lg:text-6xl font-bold text-amber-100 leading-tight">
+                      {village.village_name}
+                    </h1>
+                    {village.is_verified && (
+                      <Badge className="bg-amber-600 text-white border-none">
+                        <Crown className="h-4 w-4 mr-1" />
+                        Verified Village
+                      </Badge>
+                    )}
+                  </div>
+                  
+                  <div className="flex items-center text-xl text-amber-200">
+                    <MapPin className="h-6 w-6 mr-3" />
+                    <span className="font-medium">{village.subdivision}</span>
+                    <span className="mx-2">•</span>
+                    <span>{village.division}</span>
+                    <span className="mx-2">•</span>
+                    <span className="font-medium">{village.region}</span>
+                  </div>
 
-              <div className="flex items-center gap-6 text-sm">
-                <div className="flex items-center">
-                  {renderStars(village.overall_rating)}
-                  <span className="ml-2 font-medium">
-                    {village.overall_rating.toFixed(1)} ({village.total_ratings_count} reviews)
-                  </span>
+                  {village.village_motto && (
+                    <blockquote className="text-2xl italic text-amber-100/90 font-light leading-relaxed border-l-4 border-amber-400 pl-6">
+                      "{village.village_motto}"
+                    </blockquote>
+                  )}
                 </div>
-                <div className="flex items-center">
-                  <Eye className="h-4 w-4 mr-1" />
-                  {village.view_count} views
+
+                {/* Key Metrics */}
+                <div className="flex items-center gap-8 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    {renderStars(village.overall_rating)}
+                    <span className="text-amber-100 font-semibold text-lg">
+                      {village.overall_rating.toFixed(1)}
+                    </span>
+                    <span className="text-amber-200/80">
+                      ({village.total_ratings_count} reviews)
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 text-amber-200">
+                    <Eye className="h-5 w-5" />
+                    <span className="font-medium">{village.view_count.toLocaleString()} views</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-amber-200">
+                    <Users className="h-5 w-5" />
+                    <span className="font-medium">{village.sons_daughters_count} members</span>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex items-center gap-4 pt-4">
+                  <Button 
+                    onClick={handleClaimMembership}
+                    size="lg"
+                    className="bg-amber-600 hover:bg-amber-700 text-white shadow-xl"
+                  >
+                    <Heart className="h-5 w-5 mr-2" />
+                    I'm From Here
+                  </Button>
+                  
+                  <div className="flex gap-2">
+                    {village.whatsapp_link && (
+                      <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
+                        <MessageCircle className="h-5 w-5" />
+                      </Button>
+                    )}
+                    {village.facebook_link && (
+                      <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
+                        <Facebook className="h-5 w-5" />
+                      </Button>
+                    )}
+                    <Button size="lg" variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white hover:text-primary">
+                      <Share2 className="h-5 w-5" />
+                    </Button>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            <div className="flex flex-col gap-3">
-              <Link to="/villages">
-                <Button variant="outline" size="sm" className="text-white border-white hover:bg-white hover:text-primary">
-                  <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Directory
-                </Button>
-              </Link>
-              
-              <Button 
-                onClick={handleClaimMembership}
-                variant="secondary" 
-                className="text-primary hover:text-primary-foreground"
-              >
-                <Heart className="h-4 w-4 mr-2" />
-                I'm From Here
-              </Button>
-              
-              <div className="flex gap-2">
-                {village.whatsapp_link && (
-                  <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                    <MessageCircle className="h-4 w-4" />
-                  </Button>
-                )}
-                {village.facebook_link && (
-                  <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                    <Facebook className="h-4 w-4" />
-                  </Button>
-                )}
-                <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                  <Share2 className="h-4 w-4" />
-                </Button>
+              {/* Stats Panel */}
+              <div className="lg:col-span-4">
+                <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-2xl">
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold text-amber-100 mb-4">Village Scorecard</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-amber-100">{village.infrastructure_score}</div>
+                        <div className="text-sm text-amber-200/80">Infrastructure</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-amber-100">{village.education_score}</div>
+                        <div className="text-sm text-amber-200/80">Education</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-amber-100">{village.health_score}</div>
+                        <div className="text-sm text-amber-200/80">Health</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-3xl font-bold text-amber-100">{village.governance_score}</div>
+                        <div className="text-sm text-amber-200/80">Governance</div>
+                      </div>
+                    </div>
+                    
+                    <Separator className="my-4 bg-white/20" />
+                    
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center text-amber-200">
+                        <span>🏗️ Projects</span>
+                        <span className="font-semibold text-amber-100">{projects.length}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-amber-200">
+                        <span>💎 Notable People</span>
+                        <span className="font-semibold text-amber-100">{billionaires.length + celebrities.length}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-amber-200">
+                        <span>📋 Active Petitions</span>
+                        <span className="font-semibold text-amber-100">{petitions.length}</span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Stats Overview */}
-      <div className="bg-muted/30 py-8">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-primary">{village.sons_daughters_count}</div>
-              <div className="text-sm text-muted-foreground">Sons & Daughters</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-secondary">{village.infrastructure_score}</div>
-              <div className="text-sm text-muted-foreground">Infrastructure</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-accent">{village.education_score}</div>
-              <div className="text-sm text-muted-foreground">Education</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-success">{village.health_score}</div>
-              <div className="text-sm text-muted-foreground">Health</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-warning">{village.governance_score}</div>
-              <div className="text-sm text-muted-foreground">Governance</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-info">{village.diaspora_engagement_score}</div>
-              <div className="text-sm text-muted-foreground">Diaspora</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-primary">{projects.length}</div>
-              <div className="text-sm text-muted-foreground">Projects</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-secondary">{billionaires.length}</div>
-              <div className="text-sm text-muted-foreground">Billionaires</div>
-            </Card>
+      {/* Quick Stats Bar */}
+      <div className="bg-white shadow-xl border-t">
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div className="text-center group hover:scale-105 transition-transform duration-200">
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <School className="h-8 w-8" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{village.schools_count || 0}</div>
+              <div className="text-sm text-muted-foreground">Schools</div>
+            </div>
+            
+            <div className="text-center group hover:scale-105 transition-transform duration-200">
+              <div className="bg-gradient-to-br from-red-500 to-red-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <Hospital className="h-8 w-8" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{village.hospitals_count || 0}</div>
+              <div className="text-sm text-muted-foreground">Health Centers</div>
+            </div>
+            
+            <div className="text-center group hover:scale-105 transition-transform duration-200">
+              <div className="bg-gradient-to-br from-cyan-500 to-cyan-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <Droplet className="h-8 w-8" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{village.water_sources_count || 0}</div>
+              <div className="text-sm text-muted-foreground">Water Sources</div>
+            </div>
+            
+            <div className="text-center group hover:scale-105 transition-transform duration-200">
+              <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <Zap className="h-8 w-8" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{village.electricity_coverage_percentage || 0}%</div>
+              <div className="text-sm text-muted-foreground">Electricity</div>
+            </div>
+            
+            <div className="text-center group hover:scale-105 transition-transform duration-200">
+              <div className="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <Users className="h-8 w-8" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">{village.population_estimate?.toLocaleString() || 'N/A'}</div>
+              <div className="text-sm text-muted-foreground">Population</div>
+            </div>
+            
+            <div className="text-center group hover:scale-105 transition-transform duration-200">
+              <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3 shadow-lg">
+                <Wifi className="h-8 w-8" />
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {[village.mtn_coverage, village.orange_coverage, village.nexttel_coverage].filter(Boolean).length}/3
+              </div>
+              <div className="text-sm text-muted-foreground">Network Coverage</div>
+            </div>
           </div>
         </div>
       </div>
