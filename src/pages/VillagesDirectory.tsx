@@ -79,7 +79,7 @@ const VillagesDirectory = () => {
       let villages = allVillages || [];
 
       // Use region-specific data if region is selected
-      if (selectedRegion && regionVillages) {
+      if (selectedRegion && selectedRegion !== 'all' && regionVillages) {
         villages = regionVillages;
       }
 
@@ -111,7 +111,7 @@ const VillagesDirectory = () => {
       }
 
       // Apply category sorting
-      if (filterCategory) {
+      if (filterCategory && filterCategory !== 'default') {
         const category = FILTER_CATEGORIES.find(cat => cat.id === filterCategory);
         if (category) {
           villages.sort((a, b) => (b[category.field as keyof Village] as number) - (a[category.field as keyof Village] as number));
@@ -358,8 +358,8 @@ const VillagesDirectory = () => {
                     <SelectTrigger>
                       <SelectValue placeholder="Select region" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">All Regions</SelectItem>
+                     <SelectContent>
+                      <SelectItem value="all">All Regions</SelectItem>
                       {REGIONS.map(region => (
                         <SelectItem key={region} value={region}>{region}</SelectItem>
                       ))}
@@ -374,8 +374,8 @@ const VillagesDirectory = () => {
                     <SelectTrigger>
                       <SelectValue placeholder="Select category" />
                     </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="">Default Order</SelectItem>
+                     <SelectContent>
+                      <SelectItem value="default">Default Order</SelectItem>
                       {FILTER_CATEGORIES.map(category => (
                         <SelectItem key={category.id} value={category.id}>
                           {category.label}
