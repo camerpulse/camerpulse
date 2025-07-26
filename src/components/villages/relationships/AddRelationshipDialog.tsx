@@ -51,6 +51,7 @@ export const AddRelationshipDialog: React.FC<AddRelationshipDialogProps> = ({
       source_village_id: villageId,
       target_village_id: selectedVillage.id,
       relationship_type: formData.relationship_type,
+      relationship_status: 'active',
       relationship_strength: formData.relationship_strength,
       description: formData.description,
       historical_context: formData.historical_context || undefined,
@@ -127,7 +128,7 @@ export const AddRelationshipDialog: React.FC<AddRelationshipDialogProps> = ({
                       <MapPin className="h-4 w-4 text-muted-foreground" />
                       <div>
                         <p className="font-medium">{village.village_name}</p>
-                        <p className="text-sm text-muted-foreground">{village.region}, {village.country}</p>
+                        <p className="text-sm text-muted-foreground">{village.region}</p>
                       </div>
                     </div>
                   </div>

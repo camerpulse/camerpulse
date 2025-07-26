@@ -112,7 +112,7 @@ export const useSearchVillagesForRelationships = (searchTerm: string, excludeVil
       
       let query = supabase
         .from('villages')
-        .select('id, village_name, region, country')
+        .select('id, village_name, region')
         .ilike('village_name', `%${searchTerm}%`)
         .order('village_name')
         .limit(10);

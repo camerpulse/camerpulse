@@ -32,6 +32,8 @@ import { VillageReputationEngine } from '@/components/villages/VillageReputation
 import { VillageReputationTimeline } from '@/components/villages/VillageReputationTimeline';
 import { VillageAfricanMaskBackground } from '@/components/villages/VillageAfricanMaskBackground';
 import { VillageGenealogyHub } from '@/components/villages/genealogy';
+import { VillageRelationshipsHub } from '@/components/villages/relationships';
+import { TraditionalCalendarHub } from '@/components/villages/calendar';
 
 
 interface VillageData {
@@ -520,7 +522,7 @@ const VillageProfile = () => {
         <Tabs defaultValue="overview" className="w-full">
           {/* Primary Navigation Tabs - Priority Order */}
           <div className="mb-6">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 lg:grid-cols-9 gap-1 p-1 bg-muted/50 rounded-lg">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-11 gap-1 p-1 bg-muted/50 rounded-lg">
               <TabsTrigger 
                 value="overview" 
                 className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
@@ -574,6 +576,18 @@ const VillageProfile = () => {
                 className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
               >
                 Gallery
+              </TabsTrigger>
+              <TabsTrigger 
+                value="relationships" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Relationships
+              </TabsTrigger>
+              <TabsTrigger 
+                value="calendar" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Calendar
               </TabsTrigger>
             </TabsList>
           </div>
@@ -866,6 +880,14 @@ const VillageProfile = () => {
 
           <TabsContent value="gallery">
             <VillagePhotoGallery villageId={village.id} />
+          </TabsContent>
+
+          <TabsContent value="relationships">
+            <VillageRelationshipsHub villageId={village.id} />
+          </TabsContent>
+
+          <TabsContent value="calendar">
+            <TraditionalCalendarHub villageId={village.id} />
           </TabsContent>
 
           <TabsContent value="chat">
