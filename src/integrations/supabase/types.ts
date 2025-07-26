@@ -29906,6 +29906,7 @@ export type Database = {
           created_at: string | null
           display_name: string | null
           education: Json | null
+          email: string | null
           enable_notifications: boolean | null
           events_attended: number | null
           id: string
@@ -29917,6 +29918,7 @@ export type Database = {
           last_active_at: string | null
           location: string | null
           phone: string | null
+          phone_number: string | null
           polls_created: number | null
           portfolio_items: Json | null
           post_count: number | null
@@ -29941,6 +29943,7 @@ export type Database = {
             | null
           verified: boolean | null
           website: string | null
+          website_url: string | null
           work_experience: Json | null
         }
         Insert: {
@@ -29959,6 +29962,7 @@ export type Database = {
           created_at?: string | null
           display_name?: string | null
           education?: Json | null
+          email?: string | null
           enable_notifications?: boolean | null
           events_attended?: number | null
           id?: string
@@ -29970,6 +29974,7 @@ export type Database = {
           last_active_at?: string | null
           location?: string | null
           phone?: string | null
+          phone_number?: string | null
           polls_created?: number | null
           portfolio_items?: Json | null
           post_count?: number | null
@@ -29994,6 +29999,7 @@ export type Database = {
             | null
           verified?: boolean | null
           website?: string | null
+          website_url?: string | null
           work_experience?: Json | null
         }
         Update: {
@@ -30012,6 +30018,7 @@ export type Database = {
           created_at?: string | null
           display_name?: string | null
           education?: Json | null
+          email?: string | null
           enable_notifications?: boolean | null
           events_attended?: number | null
           id?: string
@@ -30023,6 +30030,7 @@ export type Database = {
           last_active_at?: string | null
           location?: string | null
           phone?: string | null
+          phone_number?: string | null
           polls_created?: number | null
           portfolio_items?: Json | null
           post_count?: number | null
@@ -30047,6 +30055,7 @@ export type Database = {
             | null
           verified?: boolean | null
           website?: string | null
+          website_url?: string | null
           work_experience?: Json | null
         }
         Relationships: []

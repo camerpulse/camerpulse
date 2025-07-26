@@ -176,6 +176,7 @@ import PolicyImpactDashboard from "./pages/transparency/PolicyImpactDashboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
 import { ExpertPortal } from "./pages/experts/ExpertPortal";
 import { ProfilePage } from "./pages/profile/ProfilePage";
+import Profile from "./pages/Profile";
 import PollTemplatesPage from "./pages/PollTemplatesPage";
 import JobsSetupTest from "./tests/JobsSetupTest";
 
@@ -183,6 +184,7 @@ import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PluginProvider } from "./contexts/PluginContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
@@ -222,13 +224,26 @@ const App = () => {
           <Route path="/experts" element={<ExpertMarketplace />} />
           <Route path="/experts/portal" element={<ExpertPortal />} />
           <Route path="/poll-templates" element={<PollTemplatesPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
+           <Route path="/profile" element={
+             <ProtectedRoute>
+               <Profile />
+             </ProtectedRoute>
+           } />
+           <Route path="/profile/:userId" element={<Profile />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/feed" element={<Feed />} />
-              <Route path="/advanced-feed" element={<AdvancedFeed />} />
+                <Route path="/" element={<Index />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/feed" element={
+                  <ProtectedRoute>
+                    <Feed />
+                  </ProtectedRoute>
+                } />
+                <Route path="/advanced-feed" element={
+                  <ProtectedRoute>
+                    <AdvancedFeed />
+                  </ProtectedRoute>
+                } />
               <Route path="/civic-feed" element={<CivicFeed />} />
               <Route path="/politicians" element={<Politicians />} />
               <Route path="/politicians/:id" element={<PoliticianDetailPage />} />
@@ -248,10 +263,26 @@ const App = () => {
           <Route path="/polls/results/:poll_id" element={<PollResultsPage />} />
           <Route path="/polls/embed/:poll_id" element={<PollEmbedViewerPage />} />
           <Route path="/polls/embed-generator/:poll_id" element={<PollEmbedGeneratorPage />} />
-          <Route path="/messenger" element={<MessengerPage />} />
-          <Route path="/notification-settings" element={<NotificationSettingsPage />} />
-              <Route path="/dashboard/polls" element={<PollsDashboard />} />
-              <Route path="/polls/overview" element={<UserPollOverview />} />
+           <Route path="/messenger" element={
+             <ProtectedRoute>
+               <MessengerPage />
+             </ProtectedRoute>
+           } />
+           <Route path="/notification-settings" element={
+             <ProtectedRoute>
+               <NotificationSettingsPage />
+             </ProtectedRoute>
+           } />
+               <Route path="/dashboard/polls" element={
+                 <ProtectedRoute>
+                   <PollsDashboard />
+                 </ProtectedRoute>
+               } />
+               <Route path="/polls/overview" element={
+                 <ProtectedRoute>
+                   <UserPollOverview />
+                 </ProtectedRoute>
+               } />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/donate" element={<Donations />} />
               <Route path="/social" element={<Social />} />
