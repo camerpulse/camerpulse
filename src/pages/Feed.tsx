@@ -238,24 +238,24 @@ export default function Feed() {
     <AppLayout>
       <div className="min-h-screen bg-background">
         {/* Fixed Top Header */}
-        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
-          <div className="flex items-center justify-between px-4 py-3">
+        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border safe-area-padding">
+          <div className="flex items-center justify-between px-4 py-3 min-h-[60px]">
             <div className="flex items-center gap-3">
-              <h1 className="text-xl font-bold text-cm-red">CamerPulse</h1>
-              <Badge variant="secondary" className="bg-cm-green/10 text-cm-green">
+              <h1 className="text-xl font-bold text-cm-red font-grotesk tracking-tight">CamerPulse</h1>
+              <Badge variant="secondary" className="bg-cm-green/10 text-cm-green font-medium text-xs px-2 py-1">
                 <Zap className="w-3 h-3 mr-1" />
                 Live
               </Badge>
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="lg:hidden">
-                <Search className="w-4 h-4" />
+            <div className="flex items-center gap-1">
+              <Button variant="ghost" size="icon" className="lg:hidden h-10 w-10 touch-manipulation">
+                <Search className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={loading}>
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={loading} className="h-10 w-10 touch-manipulation">
+                <RefreshCw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
               </Button>
-              <Button variant="ghost" size="icon">
-                <Bell className="w-4 h-4" />
+              <Button variant="ghost" size="icon" className="h-10 w-10 touch-manipulation">
+                <Bell className="w-5 h-5" />
               </Button>
             </div>
           </div>
@@ -264,11 +264,11 @@ export default function Feed() {
         <div className="flex">
           {/* Left Sidebar - Hidden on mobile */}
           <div className="hidden lg:block w-64 border-r border-border bg-card">
-            <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto p-4">
+            <div className="sticky top-[76px] h-[calc(100vh-76px)] overflow-y-auto p-4 scroll-smooth-mobile">
               {/* Follow Suggestions */}
-              <Card className="mb-6">
+              <Card className="mb-6 shadow-elegant">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
+                  <CardTitle className="text-sm flex items-center gap-2 font-grotesk font-semibold">
                     <Users className="w-4 h-4" />
                     Who to Follow
                   </CardTitle>
@@ -277,20 +277,20 @@ export default function Feed() {
                   {suggestedFollows.map((suggestion) => (
                     <div key={suggestion.id} className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
-                          {suggestion.type === 'politician' && <Users className="w-4 h-4" />}
-                          {suggestion.type === 'organization' && <Building2 className="w-4 h-4" />}
-                          {suggestion.type === 'school' && <School className="w-4 h-4" />}
-                          {suggestion.type === 'hospital' && <Hospital className="w-4 h-4" />}
+                        <div className="w-8 h-8 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full flex items-center justify-center">
+                          {suggestion.type === 'politician' && <Users className="w-4 h-4 text-primary" />}
+                          {suggestion.type === 'organization' && <Building2 className="w-4 h-4 text-accent" />}
+                          {suggestion.type === 'school' && <School className="w-4 h-4 text-secondary" />}
+                          {suggestion.type === 'hospital' && <Hospital className="w-4 h-4 text-destructive" />}
                         </div>
                         <div>
-                          <p className="text-sm font-medium">{suggestion.name}</p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-sm font-medium font-inter">{suggestion.name}</p>
+                          <p className="text-xs text-muted-foreground font-mono">
                             {(suggestion.followers / 1000).toFixed(0)}k followers
                           </p>
                         </div>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button variant="outline" size="sm" className="font-medium hover:bg-primary hover:text-primary-foreground transition-all">
                         Follow
                       </Button>
                     </div>
@@ -299,21 +299,21 @@ export default function Feed() {
               </Card>
 
               {/* Trending Topics */}
-              <Card>
+              <Card className="shadow-elegant">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
+                  <CardTitle className="text-sm flex items-center gap-2 font-grotesk font-semibold">
                     <Hash className="w-4 h-4" />
                     Trending Topics
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {trendingTopics.map((topic, index) => (
-                    <div key={topic.name} className="flex items-center justify-between">
+                    <div key={topic.name} className="flex items-center justify-between hover:bg-muted/50 p-2 rounded-md transition-colors cursor-pointer">
                       <div>
-                        <p className="text-sm font-medium">#{topic.name}</p>
-                        <p className="text-xs text-muted-foreground">{topic.count} discussions</p>
+                        <p className="text-sm font-medium font-inter">#{topic.name}</p>
+                        <p className="text-xs text-muted-foreground font-mono">{topic.count} discussions</p>
                       </div>
-                      <div className="text-xs text-muted-foreground">#{index + 1}</div>
+                      <div className="text-xs text-muted-foreground font-mono bg-primary/10 px-2 py-1 rounded-full">#{index + 1}</div>
                     </div>
                   ))}
                 </CardContent>
@@ -323,7 +323,7 @@ export default function Feed() {
 
           {/* Main Feed */}
           <div className="flex-1 max-w-2xl mx-auto">
-            <div className="p-4 space-y-6">
+            <div className="p-4 space-y-6 pb-safe-bottom">
               {/* Search Bar - Desktop only */}
               <div className="hidden lg:block">
                 <div className="relative">
@@ -332,13 +332,13 @@ export default function Feed() {
                     placeholder="Search CamerPulse..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 font-inter border-primary/20 focus:border-primary"
                   />
                 </div>
               </div>
 
               {/* Post Composer */}
-              <Card className="border-cm-red/20">
+              <Card className="border-primary/20 shadow-elegant bg-gradient-to-br from-background to-muted/30">
                 <CardContent className="p-4">
                   {showComposer ? (
                     <div className="space-y-4">
@@ -356,33 +356,33 @@ export default function Feed() {
                             placeholder="What's happening in Cameroon? Share your civic thoughts..."
                             value={newPost}
                             onChange={(e) => setNewPost(e.target.value)}
-                            className="min-h-[100px] resize-none border-cm-red/20 focus:border-cm-red"
+                            className="min-h-[120px] resize-none border-primary/20 focus:border-primary font-inter text-base"
                             maxLength={500}
                           />
-                          <div className="flex justify-between items-center mt-2">
-                            <span className="text-xs text-muted-foreground">{newPost.length}/500</span>
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm">
-                                <Camera className="w-4 h-4" />
+                          <div className="flex justify-between items-center mt-3">
+                            <span className="text-xs text-muted-foreground font-mono">{newPost.length}/500</span>
+                            <div className="flex gap-1">
+                              <Button variant="ghost" size="sm" className="h-10 w-10 touch-manipulation">
+                                <Camera className="w-5 h-5" />
                               </Button>
-                              <Button variant="ghost" size="sm">
-                                <Video className="w-4 h-4" />
+                              <Button variant="ghost" size="sm" className="h-10 w-10 touch-manipulation">
+                                <Video className="w-5 h-5" />
                               </Button>
-                              <Button variant="ghost" size="sm">
-                                <Vote className="w-4 h-4" />
+                              <Button variant="ghost" size="sm" className="h-10 w-10 touch-manipulation">
+                                <Vote className="w-5 h-5" />
                               </Button>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className="flex justify-between">
-                        <Button variant="outline" onClick={() => setShowComposer(false)}>
+                      <div className="flex gap-3 justify-end">
+                        <Button variant="outline" onClick={() => setShowComposer(false)} className="font-medium">
                           Cancel
                         </Button>
                         <Button 
                           onClick={handleCreatePost}
                           disabled={!newPost.trim()}
-                          className="bg-cm-green hover:bg-cm-green/90"
+                          className="bg-primary hover:bg-primary/90 font-medium px-6"
                         >
                           Share Pulse
                         </Button>
@@ -390,7 +390,7 @@ export default function Feed() {
                     </div>
                   ) : (
                     <div 
-                      className="flex items-center gap-3 p-3 rounded-lg border border-dashed border-cm-red/30 cursor-pointer hover:bg-muted/50 transition-colors"
+                      className="flex items-center gap-3 p-4 rounded-lg border border-dashed border-primary/30 cursor-pointer hover:bg-muted/50 transition-all duration-200 touch-manipulation"
                       onClick={() => setShowComposer(true)}
                     >
                       <UserAvatar 
@@ -401,9 +401,9 @@ export default function Feed() {
                         }} 
                         size="default"
                       />
-                      <span className="flex-1 text-muted-foreground">What's happening in Cameroon?</span>
-                      <Button size="sm" className="bg-cm-red hover:bg-cm-red/90">
-                        <Plus className="w-4 h-4" />
+                      <span className="flex-1 text-muted-foreground font-inter">What's happening in Cameroon?</span>
+                      <Button size="sm" className="bg-primary hover:bg-primary/90 h-10 w-10 p-0 touch-manipulation">
+                        <Plus className="w-5 h-5" />
                       </Button>
                     </div>
                   )}
@@ -489,50 +489,54 @@ export default function Feed() {
 
           {/* Right Sidebar */}
           <div className="hidden xl:block w-80 border-l border-border bg-card">
-            <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto p-4">
+            <div className="sticky top-[76px] h-[calc(100vh-76px)] overflow-y-auto p-4 scroll-smooth-mobile">
               {/* Civic Stats */}
-              <Card className="mb-6">
+              <Card className="mb-6 shadow-elegant">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
+                  <CardTitle className="text-sm flex items-center gap-2 font-grotesk font-semibold">
                     <Globe className="w-4 h-4" />
                     Civic Pulse Stats
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="text-center p-3 bg-muted/50 rounded-lg">
-                    <p className="text-2xl font-bold text-cm-green">72%</p>
-                    <p className="text-xs text-muted-foreground">of youth believe in democracy</p>
+                  <div className="text-center p-4 bg-gradient-to-br from-primary/10 to-primary/5 rounded-lg border border-primary/20">
+                    <p className="text-3xl font-bold text-primary font-grotesk">72%</p>
+                    <p className="text-xs text-muted-foreground font-inter">of youth believe in democracy</p>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 text-center">
-                    <div className="p-2 bg-muted/30 rounded">
-                      <p className="text-sm font-semibold">1.2M</p>
-                      <p className="text-xs text-muted-foreground">Active Voters</p>
+                  <div className="grid grid-cols-2 gap-3 text-center">
+                    <div className="p-3 bg-gradient-to-br from-accent/10 to-accent/5 rounded-lg border border-accent/20">
+                      <p className="text-lg font-bold text-accent font-grotesk">1.2M</p>
+                      <p className="text-xs text-muted-foreground font-inter">Active Voters</p>
                     </div>
-                    <div className="p-2 bg-muted/30 rounded">
-                      <p className="text-sm font-semibold">345</p>
-                      <p className="text-xs text-muted-foreground">Live Polls</p>
+                    <div className="p-3 bg-gradient-to-br from-secondary/10 to-secondary/5 rounded-lg border border-secondary/20">
+                      <p className="text-lg font-bold text-secondary font-grotesk">345</p>
+                      <p className="text-xs text-muted-foreground font-inter">Live Polls</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Trending Posts */}
-              <Card className="mb-6">
+              <Card className="mb-6 shadow-elegant">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
+                  <CardTitle className="text-sm flex items-center gap-2 font-grotesk font-semibold">
                     <TrendingUp className="w-4 h-4" />
                     Trending Now
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   {posts.slice(0, 3).map((post) => (
-                    <div key={post.id} className="p-2 hover:bg-muted/50 rounded cursor-pointer">
-                      <p className="text-xs line-clamp-2 mb-1">{post.content}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Heart className="w-3 h-3" />
-                        <span>{post.likes}</span>
-                        <MessageCircle className="w-3 h-3" />
-                        <span>{post.comments}</span>
+                    <div key={post.id} className="p-3 hover:bg-muted/50 rounded-lg cursor-pointer transition-all border border-border/50 hover:border-primary/20">
+                      <p className="text-xs line-clamp-2 mb-2 font-inter">{post.content}</p>
+                      <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                        <div className="flex items-center gap-1">
+                          <Heart className="w-3 h-3" />
+                          <span className="font-mono">{post.likes}</span>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <MessageCircle className="w-3 h-3" />
+                          <span className="font-mono">{post.comments}</span>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -540,21 +544,21 @@ export default function Feed() {
               </Card>
 
               {/* Events */}
-              <Card>
+              <Card className="shadow-elegant">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
+                  <CardTitle className="text-sm flex items-center gap-2 font-grotesk font-semibold">
                     <Calendar className="w-4 h-4" />
                     Upcoming Events
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <div className="p-2 border rounded">
-                    <p className="text-sm font-medium">National Assembly Session</p>
-                    <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</p>
+                  <div className="p-3 border border-primary/20 rounded-lg bg-gradient-to-r from-primary/5 to-transparent hover:from-primary/10 transition-all">
+                    <p className="text-sm font-medium font-inter">National Assembly Session</p>
+                    <p className="text-xs text-muted-foreground font-mono">Tomorrow, 10:00 AM</p>
                   </div>
-                  <div className="p-2 border rounded">
-                    <p className="text-sm font-medium">Municipal Elections</p>
-                    <p className="text-xs text-muted-foreground">Next month</p>
+                  <div className="p-3 border border-secondary/20 rounded-lg bg-gradient-to-r from-secondary/5 to-transparent hover:from-secondary/10 transition-all">
+                    <p className="text-sm font-medium font-inter">Municipal Elections</p>
+                    <p className="text-xs text-muted-foreground font-mono">Next month</p>
                   </div>
                 </CardContent>
               </Card>
@@ -563,8 +567,8 @@ export default function Feed() {
         </div>
 
         {/* Fixed Bottom Navigation - Mobile Only */}
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50">
-          <div className="flex justify-around py-2">
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background/95 backdrop-blur border-t border-border z-50 safe-area-padding">
+          <div className="flex justify-around py-3 px-safe-left pr-safe-right pb-safe-bottom">
             {[
               { icon: Home, label: 'Home', key: 'home' },
               { icon: Vote, label: 'Polls', key: 'polls' },
@@ -578,14 +582,14 @@ export default function Feed() {
                   setActiveTab(tab.key);
                   if (tab.key === 'create') setShowComposer(true);
                 }}
-                className={`flex flex-col items-center py-2 px-3 ${
+                className={`flex flex-col items-center py-2 px-2 rounded-lg min-h-[60px] min-w-[60px] touch-manipulation transition-all ${
                   activeTab === tab.key 
-                    ? 'text-cm-red' 
-                    : 'text-muted-foreground'
+                    ? 'text-primary bg-primary/10 font-medium' 
+                    : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                 }`}
               >
-                <tab.icon className="w-5 h-5 mb-1" />
-                <span className="text-xs">{tab.label}</span>
+                <tab.icon className="w-6 h-6 mb-1" />
+                <span className="text-xs font-medium font-inter">{tab.label}</span>
               </button>
             ))}
           </div>
