@@ -11,6 +11,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { VillageVotingDialog } from './VillageVotingDialog';
 import { VillageCorruptionReportDialog } from './VillageCorruptionReportDialog';
+import { VillageReputationTimeline } from './VillageReputationTimeline';
 import { toast } from 'sonner';
 
 interface VillageReputationEngineProps {
@@ -469,12 +470,11 @@ export const VillageReputationEngine: React.FC<VillageReputationEngineProps> = (
           </div>
         </TabsContent>
 
-        <TabsContent value="trends" className="space-y-4">
-          <div className="text-center py-8 text-muted-foreground">
-            <TrendingUp className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p>Trend analysis feature coming soon!</p>
-            <p className="text-sm">Historical reputation data and projection charts will be available here.</p>
-          </div>
+        <TabsContent value="trends" className="space-y-6">
+          <VillageReputationTimeline 
+            villageId={villageId} 
+            villageName={villageName} 
+          />
         </TabsContent>
       </Tabs>
 
