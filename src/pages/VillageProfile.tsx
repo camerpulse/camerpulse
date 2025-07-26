@@ -311,7 +311,7 @@ const VillageProfile = () => {
                 {/* Title Section */}
                 <div className="space-y-4">
                   <div className="flex items-center gap-4 flex-wrap">
-                    <h1 className="text-5xl lg:text-6xl font-bold text-amber-100 leading-tight">
+                    <h1 className="text-5xl lg:text-6xl font-bold text-cm-green leading-tight">
                       {village.village_name}
                     </h1>
                     {village.is_verified && (
@@ -322,8 +322,8 @@ const VillageProfile = () => {
                     )}
                   </div>
                   
-                  <div className="flex items-center text-xl text-amber-200">
-                    <MapPin className="h-6 w-6 mr-3" />
+                  <div className="flex items-center text-xl text-black">
+                    <MapPin className="h-6 w-6 mr-3 text-cm-green" />
                     <span className="font-medium">{village.subdivision}</span>
                     <span className="mx-2">•</span>
                     <span>{village.division}</span>
@@ -332,7 +332,7 @@ const VillageProfile = () => {
                   </div>
 
                   {village.village_motto && (
-                    <blockquote className="text-2xl italic text-amber-100/90 font-light leading-relaxed border-l-4 border-amber-400 pl-6">
+                    <blockquote className="text-2xl italic text-black font-light leading-relaxed border-l-4 border-cm-green pl-6">
                       "{village.village_motto}"
                     </blockquote>
                   )}
@@ -342,19 +342,19 @@ const VillageProfile = () => {
                 <div className="flex items-center gap-8 flex-wrap">
                   <div className="flex items-center gap-2">
                     {renderStars(village.overall_rating)}
-                    <span className="text-amber-100 font-semibold text-lg">
+                    <span className="text-cm-green font-semibold text-lg">
                       {village.overall_rating.toFixed(1)}
                     </span>
-                    <span className="text-amber-200/80">
+                    <span className="text-black">
                       ({village.total_ratings_count} reviews)
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-amber-200">
-                    <Eye className="h-5 w-5" />
+                  <div className="flex items-center gap-2 text-black">
+                    <Eye className="h-5 w-5 text-cm-green" />
                     <span className="font-medium">{village.view_count.toLocaleString()} views</span>
                   </div>
-                  <div className="flex items-center gap-2 text-amber-200">
-                    <Users className="h-5 w-5" />
+                  <div className="flex items-center gap-2 text-black">
+                    <Users className="h-5 w-5 text-cm-green" />
                     <span className="font-medium">{village.sons_daughters_count} members</span>
                   </div>
                 </div>
@@ -392,40 +392,40 @@ const VillageProfile = () => {
               <div className="lg:col-span-4">
                 <Card className="bg-white/10 backdrop-blur-md border-white/20 shadow-2xl">
                   <CardContent className="p-6">
-                    <h3 className="text-lg font-semibold text-amber-100 mb-4">Village Scorecard</h3>
+                    <h3 className="text-lg font-semibold text-cm-green mb-4">Village Scorecard</h3>
                     <div className="grid grid-cols-2 gap-4">
                       <div className="text-center">
-                        <div className="text-3xl font-bold text-amber-100">{village.infrastructure_score}</div>
-                        <div className="text-sm text-amber-200/80">Infrastructure</div>
+                        <div className="text-3xl font-bold text-cm-green">{village.infrastructure_score}</div>
+                        <div className="text-sm text-black">Infrastructure</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-3xl font-bold text-amber-100">{village.education_score}</div>
-                        <div className="text-sm text-amber-200/80">Education</div>
+                        <div className="text-3xl font-bold text-cm-green">{village.education_score}</div>
+                        <div className="text-sm text-black">Education</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-3xl font-bold text-amber-100">{village.health_score}</div>
-                        <div className="text-sm text-amber-200/80">Health</div>
+                        <div className="text-3xl font-bold text-cm-green">{village.health_score}</div>
+                        <div className="text-sm text-black">Health</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-3xl font-bold text-amber-100">{village.governance_score}</div>
-                        <div className="text-sm text-amber-200/80">Governance</div>
+                        <div className="text-3xl font-bold text-cm-green">{village.governance_score}</div>
+                        <div className="text-sm text-black">Governance</div>
                       </div>
                     </div>
                     
                     <Separator className="my-4 bg-white/20" />
                     
                     <div className="space-y-3">
-                      <div className="flex justify-between items-center text-amber-200">
+                      <div className="flex justify-between items-center text-black">
                         <span>🏗️ Projects</span>
-                        <span className="font-semibold text-amber-100">{projects.length}</span>
+                        <span className="font-semibold text-cm-green">{projects.length}</span>
                       </div>
-                      <div className="flex justify-between items-center text-amber-200">
+                      <div className="flex justify-between items-center text-black">
                         <span>💎 Notable People</span>
-                        <span className="font-semibold text-amber-100">{billionaires.length + celebrities.length}</span>
+                        <span className="font-semibold text-cm-green">{billionaires.length + celebrities.length}</span>
                       </div>
-                      <div className="flex justify-between items-center text-amber-200">
+                      <div className="flex justify-between items-center text-black">
                         <span>📋 Active Petitions</span>
-                        <span className="font-semibold text-amber-100">{petitions.length}</span>
+                        <span className="font-semibold text-cm-green">{petitions.length}</span>
                       </div>
                     </div>
                   </CardContent>
