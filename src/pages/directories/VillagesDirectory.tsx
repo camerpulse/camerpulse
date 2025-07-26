@@ -3,238 +3,274 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Users, Star, Plus, Crown, Heart, BookOpen, CheckCircle, TrendingUp } from "lucide-react";
-
-// Mock data for villages
-const mockVillages = [
-  {
-    id: "1",
-    name: "Bafut",
-    region: "Northwest",
-    division: "Mezam",
-    population: 95000,
-    is_verified: true,
-    development_rating: 4.2,
-    culture_rating: 4.8,
-    education_rating: 3.9,
-    conflict_resolution_rating: 4.5,
-    overall_ranking: 1,
-    chief_name: "Fon Abumbi II",
-    description: "Historic palace and rich cultural heritage",
-    heritage_sites: ["Royal Palace", "Traditional Markets"],
-    notable_elites: [{"name": "Dr. John Niba", "field": "Medicine"}],
-    ongoing_projects: [{"name": "Water Project", "budget": 50000000}],
-    facilities: ["school", "health_center", "market", "palace"]
-  },
-  {
-    id: "2",
-    name: "Foumban",
-    region: "West",
-    division: "Noun",
-    population: 83522,
-    is_verified: true,
-    development_rating: 4.1,
-    culture_rating: 4.9,
-    education_rating: 4.2,
-    conflict_resolution_rating: 4.3,
-    overall_ranking: 2,
-    chief_name: "Sultan Nabil Mbombo Njoya",
-    description: "Cultural capital with royal palace and museums",
-    heritage_sites: ["Sultan's Palace", "Foumban Museum"],
-    notable_elites: [{"name": "Prof. Ahmadou Ahidjo", "field": "Politics"}],
-    ongoing_projects: [{"name": "Tourism Development", "budget": 100000000}],
-    facilities: ["university", "hospital", "market", "museum"]
-  }
-];
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { MapPin, Users, Star, Plus, Crown, TrendingUp, Search, Filter, MapIcon, Compass, Calendar, Award } from "lucide-react";
+import { useVillages } from "@/hooks/useVillages";
+import { AppLayout } from "@/components/Layout/AppLayout";
 
 export default function VillagesDirectory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedRegion, setSelectedRegion] = useState("all");
+  const [sortBy, setSortBy] = useState("rating");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  const filteredVillages = mockVillages.filter(village => {
-    const matchesSearch = village.name.toLowerCase().includes(searchTerm.toLowerCase());
+  const { data: villages, isLoading } = useVillages();
+
+  const filteredVillages = villages?.filter(village => {
+    const matchesSearch = village.village_name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesRegion = selectedRegion === "all" || village.region === selectedRegion;
     return matchesSearch && matchesRegion;
   });
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-amber-50 to-orange-100">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Crown className="h-12 w-12" />
-            <h1 className="text-4xl md:text-5xl font-bold">Villages Directory</h1>
-          </div>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Discover Cameroon's rich cultural heritage through our villages. Explore traditional authority, development projects, and community initiatives.
-          </p>
-          
-          {/* Search Bar */}
-          <div className="max-w-4xl mx-auto bg-white rounded-lg p-4 shadow-xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Input
-                placeholder="Search villages..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="md:col-span-2 text-gray-900"
-              />
-              <select
-                value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md text-gray-900"
-              >
-                <option value="all">All Regions</option>
-                <option value="Northwest">Northwest</option>
-                <option value="West">West</option>
-                <option value="Centre">Centre</option>
-              </select>
+  const regions = [...new Set(villages?.map(v => v.region))];
+
+  if (isLoading) {
+    return (
+      <AppLayout>
+        <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
+          <div className="container mx-auto px-4 py-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+              <p className="text-muted-foreground mt-4">Loading Villages...</p>
             </div>
           </div>
         </div>
-      </div>
+      </AppLayout>
+    );
+  }
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Ranking Board */}
-        <section className="mb-12">
-          <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
-            <TrendingUp className="h-6 w-6 text-amber-500" />
-            Village Rankings
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="text-center">
-              <CardHeader>
-                <CardTitle className="text-lg">Development</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-blue-600">4.2</div>
-                <p className="text-sm text-muted-foreground">Average Rating</p>
-              </CardContent>
-            </Card>
-            <Card className="text-center">
-              <CardHeader>
-                <CardTitle className="text-lg">Culture</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-purple-600">4.8</div>
-                <p className="text-sm text-muted-foreground">Heritage Score</p>
-              </CardContent>
-            </Card>
-            <Card className="text-center">
-              <CardHeader>
-                <CardTitle className="text-lg">Education</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-green-600">4.0</div>
-                <p className="text-sm text-muted-foreground">Access Rating</p>
-              </CardContent>
-            </Card>
-            <Card className="text-center">
-              <CardHeader>
-                <CardTitle className="text-lg">Peace</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold text-red-600">4.4</div>
-                <p className="text-sm text-muted-foreground">Conflict Resolution</p>
-              </CardContent>
-            </Card>
+  return (
+    <AppLayout>
+      <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background">
+        {/* Modern Hero Section */}
+        <div className="relative overflow-hidden">
+          <div className="bg-gradient-hero">
+            <div className="absolute inset-0 bg-black/20"></div>
+            <div className="relative container mx-auto px-4 py-16 sm:py-24">
+              <div className="text-center text-white">
+                <div className="flex items-center justify-center gap-3 mb-6">
+                  <div className="p-3 bg-white/20 backdrop-blur-sm rounded-2xl">
+                    <Crown className="h-8 w-8" />
+                  </div>
+                  <h1 className="responsive-heading font-bold">Villages of Cameroon</h1>
+                </div>
+                <p className="text-lg sm:text-xl mb-8 max-w-3xl mx-auto opacity-90">
+                  Discover the rich cultural heritage and vibrant communities that form the backbone of our nation
+                </p>
+                
+                {/* Enhanced Search Interface */}
+                <div className="max-w-5xl mx-auto">
+                  <Card className="p-6 shadow-elegant backdrop-blur-sm border-white/20">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                      <div className="relative md:col-span-2">
+                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          placeholder="Search villages, chiefs, regions..."
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="pl-10 h-12"
+                        />
+                      </div>
+                      
+                      <Select value={selectedRegion} onValueChange={setSelectedRegion}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="All Regions" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Regions</SelectItem>
+                          {regions.map(region => (
+                            <SelectItem key={region} value={region}>{region}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+
+                      <Select value={sortBy} onValueChange={setSortBy}>
+                        <SelectTrigger className="h-12">
+                          <SelectValue placeholder="Sort by" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="rating">Top Rated</SelectItem>
+                          <SelectItem value="name">Name</SelectItem>
+                          <SelectItem value="population">Population</SelectItem>
+                          <SelectItem value="recent">Recently Added</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </Card>
+                </div>
+              </div>
+            </div>
           </div>
-        </section>
-
-        {/* Add Village CTA */}
-        <div className="mb-8 text-center">
-          <Card className="inline-block">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-2">Add Your Village</h3>
-              <p className="text-muted-foreground mb-4">Share your village's story and showcase its unique heritage</p>
-              <Button className="gap-2">
-                <Plus className="h-4 w-4" />
-                Add Your Village
-              </Button>
-            </CardContent>
-          </Card>
         </div>
 
-        {/* Featured Villages */}
-        <section>
-          <h2 className="text-2xl font-bold mb-6">Featured Villages</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {filteredVillages.map(village => (
-              <Card key={village.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-xl flex items-center gap-2">
-                        {village.name}
-                        <Badge variant="secondary">#{village.overall_ranking}</Badge>
-                      </CardTitle>
-                      <CardDescription className="flex items-center gap-1">
-                        <MapPin className="h-3 w-3" />
-                        {village.division}, {village.region}
-                      </CardDescription>
+        <div className="container mx-auto px-4 py-8">
+          {/* Quick Stats */}
+          <section className="mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Card className="directory-card text-center bg-gradient-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-center mb-2">
+                    <div className="p-2 bg-directory-village/10 rounded-lg">
+                      <MapIcon className="h-6 w-6 text-directory-village" />
                     </div>
-                    {village.is_verified && (
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                    )}
                   </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <p className="text-sm text-muted-foreground">{village.description}</p>
-                    
-                    <div className="grid grid-cols-2 gap-4 text-sm">
-                      <div className="flex items-center gap-1">
-                        <Users className="h-3 w-3" />
-                        {village.population.toLocaleString()} people
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <Crown className="h-3 w-3" />
-                        {village.chief_name}
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-4 gap-2 text-xs">
-                      <div className="text-center">
-                        <div className="font-semibold">{village.development_rating}</div>
-                        <div className="text-muted-foreground">Development</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="font-semibold">{village.culture_rating}</div>
-                        <div className="text-muted-foreground">Culture</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="font-semibold">{village.education_rating}</div>
-                        <div className="text-muted-foreground">Education</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="font-semibold">{village.conflict_resolution_rating}</div>
-                        <div className="text-muted-foreground">Peace</div>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-wrap gap-1">
-                      {village.facilities.map(facility => (
-                        <Badge key={facility} variant="outline" className="text-xs">
-                          {facility}
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {village.ongoing_projects.length > 0 && (
-                      <div>
-                        <div className="text-sm font-medium mb-1">Active Projects</div>
-                        <div className="text-xs text-muted-foreground">
-                          {village.ongoing_projects[0].name} - {(village.ongoing_projects[0].budget / 1000000).toFixed(1)}M FCFA
-                        </div>
-                      </div>
-                    )}
-                  </div>
+                  <div className="text-2xl font-bold text-foreground">{villages?.length || 0}</div>
+                  <p className="text-sm text-muted-foreground">Villages</p>
                 </CardContent>
               </Card>
-            ))}
+
+              <Card className="directory-card text-center bg-gradient-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-center mb-2">
+                    <div className="p-2 bg-primary/10 rounded-lg">
+                      <Compass className="h-6 w-6 text-primary" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-foreground">{regions.length}</div>
+                  <p className="text-sm text-muted-foreground">Regions</p>
+                </CardContent>
+              </Card>
+
+              <Card className="directory-card text-center bg-gradient-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-center mb-2">
+                    <div className="p-2 bg-secondary/10 rounded-lg">
+                      <Crown className="h-6 w-6 text-secondary" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-foreground">{villages?.filter(v => v.is_verified).length || 0}</div>
+                  <p className="text-sm text-muted-foreground">Chiefs</p>
+                </CardContent>
+              </Card>
+
+              <Card className="directory-card text-center bg-gradient-card border-0">
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-center mb-2">
+                    <div className="p-2 bg-accent/10 rounded-lg">
+                      <Award className="h-6 w-6 text-accent" />
+                    </div>
+                  </div>
+                  <div className="text-2xl font-bold text-foreground">{villages?.filter(v => v.overall_rating >= 4).length || 0}</div>
+                  <p className="text-sm text-muted-foreground">Highly Rated</p>
+                </CardContent>
+              </Card>
+            </div>
+          </section>
+
+          {/* Action Bar */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">Explore Villages</h2>
+              <p className="text-muted-foreground">
+                Showing {filteredVillages?.length || 0} of {villages?.length || 0} villages
+              </p>
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Button variant="outline" size="sm">
+                <Filter className="h-4 w-4 mr-2" />
+                Filters
+              </Button>
+              <Button className="gap-2 bg-gradient-hero text-white border-0 shadow-elegant">
+                <Plus className="h-4 w-4" />
+                Add Village
+              </Button>
+            </div>
           </div>
-        </section>
+
+          {/* Villages Grid */}
+          <section>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredVillages?.map(village => (
+                <Card key={village.id} className="directory-card group overflow-hidden border-0 shadow-md hover:shadow-elegant">
+                  <div className="aspect-video bg-gradient-to-br from-directory-village/20 to-directory-village/5 relative">
+                    <div className="absolute top-4 left-4">
+                      {village.is_verified && (
+                        <Badge className="bg-directory-verified text-white">
+                          Verified
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="absolute top-4 right-4">
+                      <Badge variant="secondary">
+                        ⭐ {village.overall_rating.toFixed(1)}
+                      </Badge>
+                    </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+                    <div className="absolute bottom-4 left-4 text-white">
+                      <h3 className="font-semibold text-lg">{village.village_name}</h3>
+                      <p className="text-sm opacity-90 flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {village.division}, {village.region}
+                      </p>
+                    </div>
+                  </div>
+
+                  <CardContent className="p-6">
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-muted-foreground" />
+                          <span>{village.population_estimate?.toLocaleString() || 'N/A'} people</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Crown className="h-4 w-4 text-muted-foreground" />
+                          <span className="truncate">{village.subdivision || 'N/A'}</span>
+                        </div>
+                      </div>
+
+                      <div className="text-sm text-muted-foreground">
+                        <p>Rich cultural heritage and community spirit</p>
+                      </div>
+
+                      <div className="grid grid-cols-4 gap-2 text-center">
+                        <div className="p-2 bg-muted/50 rounded-lg">
+                          <div className="text-sm font-semibold">{village.infrastructure_score.toFixed(1)}</div>
+                          <div className="text-xs text-muted-foreground">Infra</div>
+                        </div>
+                        <div className="p-2 bg-muted/50 rounded-lg">
+                          <div className="text-sm font-semibold">{village.education_score.toFixed(1)}</div>
+                          <div className="text-xs text-muted-foreground">Education</div>
+                        </div>
+                        <div className="p-2 bg-muted/50 rounded-lg">
+                          <div className="text-sm font-semibold">{village.health_score.toFixed(1)}</div>
+                          <div className="text-xs text-muted-foreground">Health</div>
+                        </div>
+                        <div className="p-2 bg-muted/50 rounded-lg">
+                          <div className="text-sm font-semibold">{village.peace_security_score.toFixed(1)}</div>
+                          <div className="text-xs text-muted-foreground">Peace</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center justify-between pt-2">
+                        <div className="flex -space-x-1">
+                          {[1, 2, 3].map(i => (
+                            <div key={i} className="w-6 h-6 bg-muted rounded-full border-2 border-card"></div>
+                          ))}
+                          <div className="w-6 h-6 bg-muted-foreground/20 rounded-full border-2 border-card flex items-center justify-center">
+                            <span className="text-xs text-muted-foreground">+</span>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="sm" className="text-primary hover:text-primary/80">
+                          View Details
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )) || (
+                <div className="col-span-full text-center py-12">
+                  <Crown className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <h3 className="text-lg font-semibold text-muted-foreground mb-2">No villages found</h3>
+                  <p className="text-muted-foreground">
+                    {searchTerm ? 'Try adjusting your search criteria' : 'No villages available yet'}
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+        </div>
       </div>
-    </div>
+    </AppLayout>
   );
 }
