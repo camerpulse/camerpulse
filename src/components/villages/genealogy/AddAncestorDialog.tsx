@@ -53,6 +53,8 @@ export const AddAncestorDialog: React.FC<AddAncestorDialogProps> = ({
       given_names: formData.given_names ? formData.given_names.split(',').map(n => n.trim()) : [],
       birth_year: formData.birth_year ? parseInt(formData.birth_year) : null,
       death_year: formData.death_year ? parseInt(formData.death_year) : null,
+      gender: formData.gender as 'male' | 'female' | 'other',
+      privacy_level: formData.privacy_level as 'private' | 'family' | 'village' | 'public',
     };
 
     createAncestor.mutate(ancestorData, {

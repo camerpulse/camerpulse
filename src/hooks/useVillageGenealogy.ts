@@ -163,7 +163,7 @@ export const useCreateAncestor = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (ancestorData: Partial<VillageAncestor>) => {
+    mutationFn: async (ancestorData: Omit<VillageAncestor, 'id' | 'created_at' | 'updated_at' | 'birth_village_id' | 'death_village_id' | 'photo_urls' | 'verified_by_elders' | 'verification_notes'>) => {
       const { data, error } = await supabase
         .from('village_ancestors')
         .insert(ancestorData)
@@ -189,7 +189,7 @@ export const useCreateRelationship = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (relationshipData: Partial<AncestorRelationship>) => {
+    mutationFn: async (relationshipData: Omit<AncestorRelationship, 'id' | 'created_at' | 'updated_at'>) => {
       const { data, error } = await supabase
         .from('ancestor_relationships')
         .insert(relationshipData)
@@ -215,7 +215,7 @@ export const useCreateFamilyTree = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (treeData: Partial<FamilyTree>) => {
+    mutationFn: async (treeData: Omit<FamilyTree, 'id' | 'created_at' | 'updated_at'>) => {
       const { data, error } = await supabase
         .from('village_family_trees')
         .insert(treeData)

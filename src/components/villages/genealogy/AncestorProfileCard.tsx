@@ -81,7 +81,7 @@ export const AncestorProfileCard: React.FC<AncestorProfileCardProps> = ({
               </h4>
               <div className="flex items-center gap-1 ml-2">
                 {ancestor.verified_by_elders && (
-                  <Crown className="h-3 w-3 text-amber-500" title="Verified by Elders" />
+                  <Crown className="h-3 w-3 text-amber-500" />
                 )}
                 <div className={`p-1 rounded-full ${getPrivacyColor()}`}>
                   {getPrivacyIcon()}
