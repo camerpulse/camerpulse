@@ -28,6 +28,7 @@ import { VillageCivicActivity } from '@/components/villages/VillageCivicActivity
 import { VillageChat } from '@/components/villages/VillageChat';
 import { VillageAnalytics } from '@/components/villages/VillageAnalytics';
 import { VillageLeaderboards } from '@/components/villages/VillageLeaderboards';
+import { VillageReputationEngine } from '@/components/villages/VillageReputationEngine';
 
 
 interface VillageData {
@@ -412,8 +413,9 @@ const VillageProfile = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-13">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-14">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="reputation">Reputation</TabsTrigger>
             <TabsTrigger value="membership">Members</TabsTrigger>
             <TabsTrigger value="leaders">Leadership</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
@@ -636,6 +638,13 @@ const VillageProfile = () => {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="reputation">
+            <VillageReputationEngine 
+              villageId={village.id} 
+              villageName={village.village_name} 
+            />
           </TabsContent>
 
           <TabsContent value="membership">

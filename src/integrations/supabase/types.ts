@@ -36036,6 +36036,74 @@ export type Database = {
           },
         ]
       }
+      village_corruption_reports: {
+        Row: {
+          anonymous_report: boolean
+          created_at: string
+          description: string
+          evidence_urls: string[] | null
+          id: string
+          related_official_id: string | null
+          related_project_id: string | null
+          report_type: string
+          reporter_user_id: string | null
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          severity_level: string
+          status: string
+          title: string
+          updated_at: string
+          village_id: string
+        }
+        Insert: {
+          anonymous_report?: boolean
+          created_at?: string
+          description: string
+          evidence_urls?: string[] | null
+          id?: string
+          related_official_id?: string | null
+          related_project_id?: string | null
+          report_type: string
+          reporter_user_id?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity_level?: string
+          status?: string
+          title: string
+          updated_at?: string
+          village_id: string
+        }
+        Update: {
+          anonymous_report?: boolean
+          created_at?: string
+          description?: string
+          evidence_urls?: string[] | null
+          id?: string
+          related_official_id?: string | null
+          related_project_id?: string | null
+          report_type?: string
+          reporter_user_id?: string | null
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          severity_level?: string
+          status?: string
+          title?: string
+          updated_at?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_corruption_reports_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       village_data: {
         Row: {
           chief_contact: string | null
@@ -36380,6 +36448,62 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "village_memberships_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_monthly_votes: {
+        Row: {
+          access_to_services_rating: number | null
+          comment: string | null
+          created_at: string
+          development_progress_rating: number | null
+          id: string
+          is_diaspora_vote: boolean | null
+          leadership_transparency_rating: number | null
+          overall_satisfaction_rating: number | null
+          updated_at: string
+          village_id: string
+          village_unity_rating: number | null
+          vote_month: string
+          voter_user_id: string
+        }
+        Insert: {
+          access_to_services_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          development_progress_rating?: number | null
+          id?: string
+          is_diaspora_vote?: boolean | null
+          leadership_transparency_rating?: number | null
+          overall_satisfaction_rating?: number | null
+          updated_at?: string
+          village_id: string
+          village_unity_rating?: number | null
+          vote_month?: string
+          voter_user_id: string
+        }
+        Update: {
+          access_to_services_rating?: number | null
+          comment?: string | null
+          created_at?: string
+          development_progress_rating?: number | null
+          id?: string
+          is_diaspora_vote?: boolean | null
+          leadership_transparency_rating?: number | null
+          overall_satisfaction_rating?: number | null
+          updated_at?: string
+          village_id?: string
+          village_unity_rating?: number | null
+          vote_month?: string
+          voter_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_monthly_votes_village_id_fkey"
             columns: ["village_id"]
             isOneToOne: false
             referencedRelation: "villages"
@@ -36772,6 +36896,68 @@ export type Database = {
           village_id?: string
         }
         Relationships: []
+      }
+      village_transparency_metrics: {
+        Row: {
+          citizen_satisfaction_score: number | null
+          civic_engagement_score: number | null
+          corruption_reports_count: number | null
+          created_at: string
+          development_progress_score: number | null
+          id: string
+          last_calculated_at: string | null
+          official_performance_score: number | null
+          overall_reputation_score: number | null
+          project_completion_rate: number | null
+          reputation_badge: string | null
+          transparency_score: number | null
+          updated_at: string
+          verified_corruption_count: number | null
+          village_id: string
+        }
+        Insert: {
+          citizen_satisfaction_score?: number | null
+          civic_engagement_score?: number | null
+          corruption_reports_count?: number | null
+          created_at?: string
+          development_progress_score?: number | null
+          id?: string
+          last_calculated_at?: string | null
+          official_performance_score?: number | null
+          overall_reputation_score?: number | null
+          project_completion_rate?: number | null
+          reputation_badge?: string | null
+          transparency_score?: number | null
+          updated_at?: string
+          verified_corruption_count?: number | null
+          village_id: string
+        }
+        Update: {
+          citizen_satisfaction_score?: number | null
+          civic_engagement_score?: number | null
+          corruption_reports_count?: number | null
+          created_at?: string
+          development_progress_score?: number | null
+          id?: string
+          last_calculated_at?: string | null
+          official_performance_score?: number | null
+          overall_reputation_score?: number | null
+          project_completion_rate?: number | null
+          reputation_badge?: string | null
+          transparency_score?: number | null
+          updated_at?: string
+          verified_corruption_count?: number | null
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_transparency_metrics_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: true
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       villages: {
         Row: {
@@ -37648,6 +37834,10 @@ export type Database = {
       calculate_senator_performance_score: {
         Args: { p_senator_id: string }
         Returns: number
+      }
+      calculate_village_reputation_index: {
+        Args: { p_village_id: string }
+        Returns: undefined
       }
       can_upload_cover_photo: {
         Args: { user_id: string }
@@ -38562,6 +38752,7 @@ export type Database = {
         | "election_event"
         | "policy_document"
         | "government_statement"
+        | "village"
       civic_event_type:
         | "civic"
         | "campaign"
@@ -39204,6 +39395,7 @@ export const Constants = {
         "election_event",
         "policy_document",
         "government_statement",
+        "village",
       ],
       civic_event_type: [
         "civic",
