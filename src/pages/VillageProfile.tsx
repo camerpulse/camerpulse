@@ -30,6 +30,7 @@ import { VillageAnalytics } from '@/components/villages/VillageAnalytics';
 import { VillageLeaderboards } from '@/components/villages/VillageLeaderboards';
 import { VillageReputationEngine } from '@/components/villages/VillageReputationEngine';
 import { VillageReputationTimeline } from '@/components/villages/VillageReputationTimeline';
+import { VillageAfricanMaskBackground } from '@/components/villages/VillageAfricanMaskBackground';
 
 
 interface VillageData {
@@ -292,10 +293,8 @@ const VillageProfile = () => {
         {/* Cameroon Flag Color Gradient Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-green-600 via-red-600 to-yellow-500"></div>
         
-        {/* African Mask Pattern Overlay */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20width%3D%22120%22%20height%3D%22120%22%20viewBox%3D%220%200%20120%20120%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cdefs%3E%3Cpattern%20id%3D%22mask-pattern%22%20x%3D%220%22%20y%3D%220%22%20width%3D%22120%22%20height%3D%22120%22%20patternUnits%3D%22userSpaceOnUse%22%3E%3Cg%20fill%3D%22%23000000%22%20fill-opacity%3D%220.3%22%3E%3C!--%20African%20mask%20inspired%20geometric%20patterns%20--%3E%3Cellipse%20cx%3D%2260%22%20cy%3D%2240%22%20rx%3D%2225%22%20ry%3D%2235%22/%3E%3Cpolygon%20points%3D%2260%2C75%2040%2C85%2080%2C85%22/%3E%3Crect%20x%3D%2250%22%20y%3D%2220%22%20width%3D%2220%22%20height%3D%2210%22%20rx%3D%225%22/%3E%3Ccircle%20cx%3D%2250%22%20cy%3D%2235%22%20r%3D%223%22/%3E%3Ccircle%20cx%3D%2270%22%20cy%3D%2235%22%20r%3D%223%22/%3E%3Cpath%20d%3D%22M45%2050%20Q60%2060%2075%2050%22%20stroke%3D%22%23000%22%20stroke-width%3D%222%22%20fill%3D%22none%22/%3E%3C/g%3E%3C/pattern%3E%3C/defs%3E%3Crect%20width%3D%22100%25%22%20height%3D%22100%25%22%20fill%3D%22url(%23mask-pattern)%22/%3E%3C/svg%3E')]"></div>
-        </div>
+        {/* African Masks Background with Transparent Background */}
+        <VillageAfricanMaskBackground className="opacity-25" />
         
         {/* Traditional Geometric Pattern Overlay */}
         <div className="absolute inset-0 opacity-15">
