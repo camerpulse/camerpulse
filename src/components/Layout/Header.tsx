@@ -93,6 +93,12 @@ export const Header = () => {
                 <DropdownMenuItem asChild>
                   <Link to="/political-parties">Political Parties</Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/petitions">Petitions</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/civic-education">Civic Education</Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <DropdownMenu>
@@ -103,16 +109,16 @@ export const Header = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56 bg-background border border-border shadow-lg">
                 <DropdownMenuItem asChild>
-                  <Link to="/company-directory">Companies</Link>
+                  <Link to="/companies">Companies</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/schools-directory">Schools</Link>
+                  <Link to="/schools">Schools</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/hospitals-directory">Hospitals</Link>
+                  <Link to="/hospitals">Hospitals</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/villages-directory">Villages</Link>
+                  <Link to="/villages">Villages</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/jobs">Job Board</Link>
@@ -121,7 +127,13 @@ export const Header = () => {
                   <Link to="/marketplace">Marketplace</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/services-map">Services Map</Link>
+                  <Link to="/map">Services Map</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/experts">Experts</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/pharmacies">Pharmacies</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -136,22 +148,25 @@ export const Header = () => {
                   <Link to="/transparency">Transparency Hub</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/national-debt-tracker">National Debt</Link>
+                  <Link to="/national-debt">National Debt</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/billionaire-tracker">Billionaire Tracker</Link>
+                  <Link to="/billionaires">Billionaire Tracker</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/election-forecast">Election Forecast</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/government-project-tracker">Gov Projects</Link>
+                  <Link to="/government-projects">Gov Projects</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/budget-explorer">Budget Explorer</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to="/analytics">Analytics</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/audit-registry">Audit Registry</Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
