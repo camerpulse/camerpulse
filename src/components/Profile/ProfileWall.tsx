@@ -150,8 +150,55 @@ export const ProfileWall: React.FC<ProfileWallProps> = ({
   };
 
   const handleLike = async (postId: string, isLiked: boolean) => {
-    // TODO: Implement like functionality when database table is available
-    console.log('Like functionality will be implemented when pulse_post_likes table exists');
+    try {
+      if (isLiked) {
+        // Unlike - remove the like
+        const { error } = await supabase
+          .from('pulse_post_likes')
+          .delete()
+          .eq('post_id', postId)
+          .eq('user_id', user?.id);
+        
+        if (error) throw error;
+        
+        // Update local state
+        setPosts(prev => prev.map(post => 
+          post.id === postId 
+            ? { ...post, likes_count: post.likes_count - 1, is_liked: false }
+            : post
+        ));
+      } else {
+        // Like the post
+        const { error } = await supabase
+          .from('pulse_post_likes')
+          .insert({
+            post_id: postId,
+            user_id: user?.id
+          });
+        
+        if (error) throw error;
+        
+        // Update local state
+        setPosts(prev => prev.map(post => 
+          post.id === postId 
+            ? { ...post, likes_count: post.likes_count + 1, is_liked: true }
+            : post
+        ));
+        
+        toast({
+          title: "❤️ Liked!",
+          description: "Post liked successfully",
+          duration: 1500,
+        });
+      }
+    } catch (error) {
+      console.error('Error handling like:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update like",
+        variant: "destructive"
+      });
+    }
   };
 
   const formatTimeAgo = (dateString: string) => {
@@ -301,7 +348,7 @@ export const ProfileWall: React.FC<ProfileWallProps> = ({
 
                 {/* Post Content */}
                 <div className="mb-3">
-                  <p className="text-foreground whitespace-pre-wrap">{post.content}</p>
+                  <p className="text-foreground whitespace-pre-wrap text-sm md:text-base leading-relaxed">{post.content}</p>
                   
                   {/* Hashtags */}
                   {post.hashtags && post.hashtags.length > 0 && (
@@ -340,34 +387,50 @@ export const ProfileWall: React.FC<ProfileWallProps> = ({
 
                 {/* Post Actions */}
                 <div className="flex items-center justify-between pt-3 border-t">
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 md:gap-4">
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={() => handleLike(post.id, post.is_liked || false)}
-                      className={post.is_liked ? 'text-red-500' : ''}
+                      className={`min-h-[44px] px-3 md:px-4 touch-manipulation ${post.is_liked ? 'text-red-500 hover:text-red-600' : 'hover:text-red-500'} transition-all duration-200`}
                     >
-                      <Heart className={`h-4 w-4 mr-2 ${post.is_liked ? 'fill-current' : ''}`} />
-                      {post.likes_count}
+                      <Heart className={`h-4 w-4 md:h-5 md:w-5 mr-1 md:mr-2 ${post.is_liked ? 'fill-current' : ''}`} />
+                      <span className="text-sm md:text-base">{post.likes_count}</span>
                     </Button>
                     
-                    <Button variant="ghost" size="sm">
-                      <MessageCircle className="h-4 w-4 mr-2" />
-                      {post.comments_count}
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="min-h-[44px] px-3 md:px-4 touch-manipulation hover:text-blue-500 transition-all duration-200"
+                    >
+                      <MessageCircle className="h-4 w-4 md:h-5 md:w-5 mr-1 md:mr-2" />
+                      <span className="text-sm md:text-base">{post.comments_count}</span>
                     </Button>
                     
-                    <Button variant="ghost" size="sm">
-                      <Repeat2 className="h-4 w-4 mr-2" />
-                      {post.shares_count}
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="min-h-[44px] px-3 md:px-4 touch-manipulation hover:text-green-500 transition-all duration-200"
+                    >
+                      <Repeat2 className="h-4 w-4 md:h-5 md:w-5 mr-1 md:mr-2" />
+                      <span className="text-sm md:text-base">{post.shares_count}</span>
                     </Button>
                   </div>
                   
                   <div className="flex items-center gap-1">
-                    <Button variant="ghost" size="sm">
-                      <Bookmark className="h-4 w-4" />
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="min-h-[44px] min-w-[44px] touch-manipulation hover:text-primary transition-all duration-200"
+                    >
+                      <Bookmark className="h-4 w-4 md:h-5 md:w-5" />
                     </Button>
-                    <Button variant="ghost" size="sm">
-                      <Share2 className="h-4 w-4" />
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      className="min-h-[44px] min-w-[44px] touch-manipulation hover:text-primary transition-all duration-200"
+                    >
+                      <Share2 className="h-4 w-4 md:h-5 md:w-5" />
                     </Button>
                   </div>
                 </div>

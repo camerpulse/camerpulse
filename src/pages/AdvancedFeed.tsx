@@ -1128,36 +1128,36 @@ export default function AdvancedFeed() {
 
                           {/* Enhanced Engagement Bar */}
                           <div className="flex items-center justify-between pt-3 border-t border-border/50">
-                            <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                            <div className="flex items-center gap-2 md:gap-4 text-xs md:text-sm text-muted-foreground">
                               <button 
-                                className={`flex items-center gap-1 hover:text-red-500 transition-all duration-200 hover-scale ${item.engagement.isLiked ? 'text-red-500' : ''}`}
+                                className={`flex items-center gap-1 md:gap-2 hover:text-red-500 transition-all duration-200 hover-scale min-h-[44px] px-2 md:px-3 rounded-lg touch-manipulation ${item.engagement.isLiked ? 'text-red-500' : ''}`}
                                 onClick={() => handleEngagement(item.id, 'like')}
                               >
-                                <Heart className={`w-3 h-3 ${item.engagement.isLiked ? 'fill-current' : ''}`} />
-                                {item.engagement.likes.toLocaleString()}
+                                <Heart className={`w-3 h-3 md:w-4 md:h-4 ${item.engagement.isLiked ? 'fill-current' : ''}`} />
+                                <span className="font-medium">{item.engagement.likes.toLocaleString()}</span>
                               </button>
                               <button 
-                                className="flex items-center gap-1 hover:text-blue-500 transition-all duration-200 hover-scale"
+                                className="flex items-center gap-1 md:gap-2 hover:text-blue-500 transition-all duration-200 hover-scale min-h-[44px] px-2 md:px-3 rounded-lg touch-manipulation"
                                 onClick={() => handleEngagement(item.id, 'comment')}
                               >
-                                <MessageCircle className="w-3 h-3" />
-                                {item.engagement.comments.toLocaleString()}
+                                <MessageCircle className="w-3 h-3 md:w-4 md:h-4" />
+                                <span className="font-medium">{item.engagement.comments.toLocaleString()}</span>
                               </button>
                               <button 
-                                className="flex items-center gap-1 hover:text-green-500 transition-all duration-200 hover-scale"
+                                className="flex items-center gap-1 md:gap-2 hover:text-green-500 transition-all duration-200 hover-scale min-h-[44px] px-2 md:px-3 rounded-lg touch-manipulation"
                                 onClick={() => handleEngagement(item.id, 'share')}
                               >
-                                <Share2 className="w-3 h-3" />
-                                {item.engagement.shares.toLocaleString()}
+                                <Share2 className="w-3 h-3 md:w-4 md:h-4" />
+                                <span className="font-medium">{item.engagement.shares.toLocaleString()}</span>
                               </button>
-                              <span className="flex items-center gap-1">
-                                <Eye className="w-3 h-3" />
-                                {item.engagement.views.toLocaleString()}
+                              <span className="flex items-center gap-1 md:gap-2 text-muted-foreground/70">
+                                <Eye className="w-3 h-3 md:w-4 md:h-4" />
+                                <span className="text-xs md:text-sm">{item.engagement.views.toLocaleString()}</span>
                               </span>
                             </div>
                             {item.content.actionUrl && (
-                              <Button variant="outline" size="sm" className="hover-scale">
-                                View Details
+                              <Button variant="outline" size="sm" className="hover-scale min-h-[44px] touch-manipulation">
+                                <span className="text-xs md:text-sm">View Details</span>
                               </Button>
                             )}
                           </div>
