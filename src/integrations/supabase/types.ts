@@ -36801,6 +36801,7 @@ export type Database = {
           peace_security_score: number | null
           population_estimate: number | null
           region: string
+          slug: string | null
           social_spirit_score: number | null
           sons_daughters_count: number | null
           subdivision: string
@@ -36842,6 +36843,7 @@ export type Database = {
           peace_security_score?: number | null
           population_estimate?: number | null
           region: string
+          slug?: string | null
           social_spirit_score?: number | null
           sons_daughters_count?: number | null
           subdivision: string
@@ -36883,6 +36885,7 @@ export type Database = {
           peace_security_score?: number | null
           population_estimate?: number | null
           region?: string
+          slug?: string | null
           social_spirit_score?: number | null
           sons_daughters_count?: number | null
           subdivision?: string
@@ -37906,6 +37909,10 @@ export type Database = {
       }
       generate_verification_code: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_village_slug: {
+        Args: { village_name: string; region_name: string }
         Returns: string
       }
       get_agent_suggestions: {
