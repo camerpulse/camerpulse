@@ -195,7 +195,7 @@ export const ProfileSearch: React.FC<ProfileSearchProps> = ({
     if (onProfileSelect) {
       onProfileSelect(profile);
     } else {
-      navigate(`/profile/${profile.user_id}`);
+      navigate(`/user/${profile.user_id}`);
     }
     setShowResults(false);
   };
