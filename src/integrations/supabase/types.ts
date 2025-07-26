@@ -6043,6 +6043,56 @@ export type Database = {
           },
         ]
       }
+      calendar_event_participants: {
+        Row: {
+          attendance_year: number
+          confirmed_attendance: boolean | null
+          contribution_type: string | null
+          created_at: string
+          event_id: string
+          id: string
+          notes: string | null
+          participation_type: string
+          role_description: string | null
+          user_id: string
+          village_id: string | null
+        }
+        Insert: {
+          attendance_year: number
+          confirmed_attendance?: boolean | null
+          contribution_type?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          notes?: string | null
+          participation_type: string
+          role_description?: string | null
+          user_id: string
+          village_id?: string | null
+        }
+        Update: {
+          attendance_year?: number
+          confirmed_attendance?: boolean | null
+          contribution_type?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          notes?: string | null
+          participation_type?: string
+          role_description?: string | null
+          user_id?: string
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "calendar_event_participants_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "traditional_calendar_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cameroon_locations: {
         Row: {
           alternative_names: string[] | null
@@ -34455,6 +34505,144 @@ export type Database = {
         }
         Relationships: []
       }
+      traditional_calendar_events: {
+        Row: {
+          agricultural_season: string | null
+          audio_recordings: string[] | null
+          calendar_type: string
+          ceremonial_items: Json | null
+          challenges_faced: string | null
+          community_involvement_level: string | null
+          created_at: string
+          created_by: string
+          dress_code: string | null
+          duration_days: number | null
+          economic_impact: string | null
+          end_date: string | null
+          event_category: string
+          event_description: string
+          event_name: string
+          event_type: string
+          historical_significance: string | null
+          id: string
+          is_public_event: boolean
+          is_unesco_recognized: boolean | null
+          location_details: string | null
+          lunar_day: number | null
+          lunar_month: number | null
+          modern_adaptations: string | null
+          next_occurrence: string | null
+          occurs_annually: boolean
+          organizer_contact: string | null
+          participant_roles: Json | null
+          photo_urls: string[] | null
+          preservation_status: string | null
+          related_events: string[] | null
+          required_preparations: Json | null
+          solar_day: number | null
+          solar_month: number | null
+          songs_and_dances: Json | null
+          start_date: string | null
+          storytelling_elements: Json | null
+          traditional_foods: Json | null
+          traditional_practices: Json | null
+          updated_at: string
+          video_urls: string[] | null
+          village_id: string | null
+          visitor_policy: string | null
+        }
+        Insert: {
+          agricultural_season?: string | null
+          audio_recordings?: string[] | null
+          calendar_type?: string
+          ceremonial_items?: Json | null
+          challenges_faced?: string | null
+          community_involvement_level?: string | null
+          created_at?: string
+          created_by: string
+          dress_code?: string | null
+          duration_days?: number | null
+          economic_impact?: string | null
+          end_date?: string | null
+          event_category?: string
+          event_description: string
+          event_name: string
+          event_type: string
+          historical_significance?: string | null
+          id?: string
+          is_public_event?: boolean
+          is_unesco_recognized?: boolean | null
+          location_details?: string | null
+          lunar_day?: number | null
+          lunar_month?: number | null
+          modern_adaptations?: string | null
+          next_occurrence?: string | null
+          occurs_annually?: boolean
+          organizer_contact?: string | null
+          participant_roles?: Json | null
+          photo_urls?: string[] | null
+          preservation_status?: string | null
+          related_events?: string[] | null
+          required_preparations?: Json | null
+          solar_day?: number | null
+          solar_month?: number | null
+          songs_and_dances?: Json | null
+          start_date?: string | null
+          storytelling_elements?: Json | null
+          traditional_foods?: Json | null
+          traditional_practices?: Json | null
+          updated_at?: string
+          video_urls?: string[] | null
+          village_id?: string | null
+          visitor_policy?: string | null
+        }
+        Update: {
+          agricultural_season?: string | null
+          audio_recordings?: string[] | null
+          calendar_type?: string
+          ceremonial_items?: Json | null
+          challenges_faced?: string | null
+          community_involvement_level?: string | null
+          created_at?: string
+          created_by?: string
+          dress_code?: string | null
+          duration_days?: number | null
+          economic_impact?: string | null
+          end_date?: string | null
+          event_category?: string
+          event_description?: string
+          event_name?: string
+          event_type?: string
+          historical_significance?: string | null
+          id?: string
+          is_public_event?: boolean
+          is_unesco_recognized?: boolean | null
+          location_details?: string | null
+          lunar_day?: number | null
+          lunar_month?: number | null
+          modern_adaptations?: string | null
+          next_occurrence?: string | null
+          occurs_annually?: boolean
+          organizer_contact?: string | null
+          participant_roles?: Json | null
+          photo_urls?: string[] | null
+          preservation_status?: string | null
+          related_events?: string[] | null
+          required_preparations?: Json | null
+          solar_day?: number | null
+          solar_month?: number | null
+          songs_and_dances?: Json | null
+          start_date?: string | null
+          storytelling_elements?: Json | null
+          traditional_foods?: Json | null
+          traditional_practices?: Json | null
+          updated_at?: string
+          video_urls?: string[] | null
+          village_id?: string | null
+          visitor_policy?: string | null
+        }
+        Relationships: []
+      }
       trend_detection: {
         Row: {
           affected_demographics: Json | null
@@ -36331,6 +36519,60 @@ export type Database = {
           },
         ]
       }
+      village_cultural_connections: {
+        Row: {
+          connection_type: string
+          created_at: string
+          created_by: string
+          description: string
+          documentation_links: string[] | null
+          evidence_type: string[] | null
+          historical_context: string | null
+          id: string
+          research_sources: Json | null
+          similarity_score: number | null
+          updated_at: string
+          verification_date: string | null
+          verified_by_scholars: boolean | null
+          village_a_id: string
+          village_b_id: string
+        }
+        Insert: {
+          connection_type: string
+          created_at?: string
+          created_by: string
+          description: string
+          documentation_links?: string[] | null
+          evidence_type?: string[] | null
+          historical_context?: string | null
+          id?: string
+          research_sources?: Json | null
+          similarity_score?: number | null
+          updated_at?: string
+          verification_date?: string | null
+          verified_by_scholars?: boolean | null
+          village_a_id: string
+          village_b_id: string
+        }
+        Update: {
+          connection_type?: string
+          created_at?: string
+          created_by?: string
+          description?: string
+          documentation_links?: string[] | null
+          evidence_type?: string[] | null
+          historical_context?: string | null
+          id?: string
+          research_sources?: Json | null
+          similarity_score?: number | null
+          updated_at?: string
+          verification_date?: string | null
+          verified_by_scholars?: boolean | null
+          village_a_id?: string
+          village_b_id?: string
+        }
+        Relationships: []
+      }
       village_data: {
         Row: {
           chief_contact: string | null
@@ -37201,6 +37443,99 @@ export type Database = {
           recommendation_type?: string
           user_id?: string
           village_id?: string
+        }
+        Relationships: []
+      }
+      village_relationships: {
+        Row: {
+          contact_frequency: string | null
+          created_at: string
+          created_by: string
+          cultural_exchanges: Json | null
+          current_activities: Json | null
+          description: string | null
+          distance_km: number | null
+          documentation_links: string[] | null
+          economic_benefits: Json | null
+          established_by: string | null
+          established_year: number | null
+          historical_context: string | null
+          id: string
+          is_verified: boolean
+          language_barrier_level: string | null
+          photo_urls: string[] | null
+          relationship_status: string
+          relationship_strength: string
+          relationship_type: string
+          shared_projects: string[] | null
+          source_village_id: string
+          target_village_id: string
+          transport_methods: string[] | null
+          travel_time_hours: number | null
+          updated_at: string
+          verification_notes: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          contact_frequency?: string | null
+          created_at?: string
+          created_by: string
+          cultural_exchanges?: Json | null
+          current_activities?: Json | null
+          description?: string | null
+          distance_km?: number | null
+          documentation_links?: string[] | null
+          economic_benefits?: Json | null
+          established_by?: string | null
+          established_year?: number | null
+          historical_context?: string | null
+          id?: string
+          is_verified?: boolean
+          language_barrier_level?: string | null
+          photo_urls?: string[] | null
+          relationship_status?: string
+          relationship_strength?: string
+          relationship_type: string
+          shared_projects?: string[] | null
+          source_village_id: string
+          target_village_id: string
+          transport_methods?: string[] | null
+          travel_time_hours?: number | null
+          updated_at?: string
+          verification_notes?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          contact_frequency?: string | null
+          created_at?: string
+          created_by?: string
+          cultural_exchanges?: Json | null
+          current_activities?: Json | null
+          description?: string | null
+          distance_km?: number | null
+          documentation_links?: string[] | null
+          economic_benefits?: Json | null
+          established_by?: string | null
+          established_year?: number | null
+          historical_context?: string | null
+          id?: string
+          is_verified?: boolean
+          language_barrier_level?: string | null
+          photo_urls?: string[] | null
+          relationship_status?: string
+          relationship_strength?: string
+          relationship_type?: string
+          shared_projects?: string[] | null
+          source_village_id?: string
+          target_village_id?: string
+          transport_methods?: string[] | null
+          travel_time_hours?: number | null
+          updated_at?: string
+          verification_notes?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
         }
         Relationships: []
       }
