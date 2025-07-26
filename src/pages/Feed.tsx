@@ -222,6 +222,44 @@ export default function Feed() {
     });
   };
 
+  const handleLike = (pulseId: string) => {
+    setPosts(prevPosts => 
+      prevPosts.map(post => 
+        post.id === pulseId 
+          ? { 
+              ...post, 
+              isLiked: !post.isLiked,
+              likes: post.isLiked ? post.likes - 1 : post.likes + 1 
+            }
+          : post
+      )
+    );
+  };
+
+  const handleComment = (pulseId: string) => {
+    // Open comment modal or navigate to post detail
+    console.log('Comment on:', pulseId);
+    // TODO: Implement comment functionality
+  };
+
+  const handleShare = (pulseId: string) => {
+    // Implement share functionality
+    if (navigator.share) {
+      navigator.share({
+        title: 'CamerPulse Post',
+        text: 'Check out this post on CamerPulse',
+        url: `${window.location.origin}/post/${pulseId}`
+      });
+    } else {
+      // Fallback for browsers without Web Share API
+      navigator.clipboard.writeText(`${window.location.origin}/post/${pulseId}`);
+      toast({
+        title: "Link copied!",
+        description: "Post link has been copied to clipboard."
+      });
+    }
+  };
+
   const handleRefresh = async () => {
     setLoading(true);
     // Simulate API call
@@ -323,7 +361,7 @@ export default function Feed() {
 
           {/* Main Feed */}
           <div className="flex-1 max-w-2xl mx-auto">
-            <div className="p-4 space-y-6 pb-safe-bottom">
+            <div className="p-4 space-y-6 pb-safe-bottom" style={{ paddingTop: 'max(1rem, calc(76px + 1rem))' }}>
               {/* Search Bar - Desktop only */}
               <div className="hidden lg:block">
                 <div className="relative">
@@ -332,7 +370,7 @@ export default function Feed() {
                     placeholder="Search CamerPulse..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 font-inter border-primary/20 focus:border-primary"
+                    className="pl-10 font-inter border-primary/20 focus:border-primary text-base"
                   />
                 </div>
               </div>
@@ -436,12 +474,12 @@ export default function Feed() {
               <div className="space-y-6">
                 {posts.map((post, index) => (
                   <div key={post.id}>
-                    <PulseCard 
-                      pulse={post}
-                      onLike={(id) => console.log('Liked:', id)}
-                      onComment={(id) => console.log('Comment:', id)}
-                      onShare={(id) => console.log('Share:', id)}
-                    />
+                     <PulseCard 
+                       pulse={post}
+                       onLike={handleLike}
+                       onComment={handleComment}
+                       onShare={handleShare}
+                     />
                     
                     {/* Insert civic content every 3 posts */}
                     {index === 2 && (

@@ -104,7 +104,7 @@ export const PulseCard: React.FC<PulseCardProps> = ({
             
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h4 className="font-semibold text-foreground truncate">{pulse.user.name}</h4>
+                <h4 className="font-semibold text-foreground truncate text-base font-grotesk">{pulse.user.name}</h4>
                 {pulse.user.verified && (
                   <CivicTag type="verified" label="✓" size="sm" icon={false} />
                 )}
@@ -114,9 +114,9 @@ export const PulseCard: React.FC<PulseCardProps> = ({
               </div>
               
               <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
-                <span>@{pulse.user.username}</span>
+                <span className="font-mono">@{pulse.user.username}</span>
                 <span>•</span>
-                <span>{formatTimestamp(pulse.timestamp)}</span>
+                <span className="font-mono">{formatTimestamp(pulse.timestamp)}</span>
                 {pulse.user.location && (
                   <>
                     <span>•</span>
@@ -141,18 +141,18 @@ export const PulseCard: React.FC<PulseCardProps> = ({
 
         {/* Content */}
         <div className="mb-4">
-          <p className="text-foreground leading-relaxed whitespace-pre-wrap">
+          <p className="text-foreground leading-relaxed whitespace-pre-wrap text-base font-inter tracking-wide">
             {pulse.content}
           </p>
           
           {/* Hashtags */}
           {pulse.hashtags && pulse.hashtags.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className="mt-4 flex flex-wrap gap-2">
               {pulse.hashtags.map((tag, index) => (
                 <Badge 
                   key={index} 
                   variant="outline" 
-                  className="text-primary border-primary/30 hover:bg-primary/10 cursor-pointer transition-colors"
+                  className="text-primary border-primary/30 hover:bg-primary/10 cursor-pointer transition-all duration-200 hover:scale-105 font-medium"
                 >
                   #{tag}
                 </Badge>
@@ -162,40 +162,40 @@ export const PulseCard: React.FC<PulseCardProps> = ({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-between pt-3 border-t border-border/50">
-          <div className="flex items-center gap-1">
+        <div className="flex items-center justify-between pt-4 border-t border-border/50">
+          <div className="flex items-center gap-2">
             <Button 
               variant="ghost" 
               size="sm" 
-              className={`gap-2 transition-colors ${
+              className={`gap-2 transition-all duration-200 hover:scale-105 touch-manipulation min-h-[44px] px-3 ${
                 isLiked 
-                  ? 'text-cm-red hover:text-cm-red/80' 
-                  : 'text-muted-foreground hover:text-cm-red'
+                  ? 'text-cm-red hover:text-cm-red/80 bg-cm-red/5' 
+                  : 'text-muted-foreground hover:text-cm-red hover:bg-cm-red/5'
               }`}
               onClick={handleLike}
             >
-              <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
-              <span className="text-sm font-medium">{likesCount}</span>
+              <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
+              <span className="text-base font-medium font-mono">{likesCount}</span>
             </Button>
             
             <Button 
               variant="ghost" 
               size="sm" 
-              className="gap-2 text-muted-foreground hover:text-primary transition-colors"
+              className="gap-2 text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all duration-200 hover:scale-105 touch-manipulation min-h-[44px] px-3"
               onClick={() => onComment?.(pulse.id)}
             >
-              <MessageCircle className="w-4 h-4" />
-              <span className="text-sm">{pulse.comments}</span>
+              <MessageCircle className="w-5 h-5" />
+              <span className="text-base font-mono">{pulse.comments}</span>
             </Button>
             
             <Button 
               variant="ghost" 
               size="sm" 
-              className="gap-2 text-muted-foreground hover:text-cm-yellow transition-colors"
+              className="gap-2 text-muted-foreground hover:text-secondary hover:bg-secondary/5 transition-all duration-200 hover:scale-105 touch-manipulation min-h-[44px] px-3"
               onClick={() => onShare?.(pulse.id)}
             >
-              <Share2 className="w-4 h-4" />
-              <span className="text-sm">{pulse.shares}</span>
+              <Share2 className="w-5 h-5" />
+              <span className="text-base font-mono">{pulse.shares}</span>
             </Button>
           </div>
           
@@ -203,19 +203,19 @@ export const PulseCard: React.FC<PulseCardProps> = ({
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-muted-foreground hover:text-primary p-2"
+              className="text-muted-foreground hover:text-primary hover:bg-primary/5 transition-all duration-200 hover:scale-105 touch-manipulation min-h-[44px] min-w-[44px]"
               onClick={() => onBookmark?.(pulse.id)}
             >
-              <BookmarkPlus className="w-4 h-4" />
+              <BookmarkPlus className="w-5 h-5" />
             </Button>
             
             <Button 
               variant="ghost" 
               size="sm" 
-              className="text-muted-foreground hover:text-destructive p-2"
+              className="text-muted-foreground hover:text-destructive hover:bg-destructive/5 transition-all duration-200 hover:scale-105 touch-manipulation min-h-[44px] min-w-[44px]"
               onClick={() => onReport?.(pulse.id)}
             >
-              <Flag className="w-4 h-4" />
+              <Flag className="w-5 h-5" />
             </Button>
           </div>
         </div>
