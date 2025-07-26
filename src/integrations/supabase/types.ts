@@ -8143,6 +8143,48 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_events_calendar: {
+        Row: {
+          boost_multiplier: number | null
+          created_at: string | null
+          deadline_date: string | null
+          event_date: string
+          event_name: string
+          event_type: string
+          id: string
+          is_active: boolean | null
+          priority_level: string | null
+          regions_affected: string[] | null
+          updated_at: string | null
+        }
+        Insert: {
+          boost_multiplier?: number | null
+          created_at?: string | null
+          deadline_date?: string | null
+          event_date: string
+          event_name: string
+          event_type: string
+          id?: string
+          is_active?: boolean | null
+          priority_level?: string | null
+          regions_affected?: string[] | null
+          updated_at?: string | null
+        }
+        Update: {
+          boost_multiplier?: number | null
+          created_at?: string | null
+          deadline_date?: string | null
+          event_date?: string
+          event_name?: string
+          event_type?: string
+          id?: string
+          is_active?: boolean | null
+          priority_level?: string | null
+          regions_affected?: string[] | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       civic_fusion_alerts: {
         Row: {
           acknowledged: boolean | null
@@ -16589,6 +16631,96 @@ export type Database = {
           },
         ]
       }
+      feed_content_scores: {
+        Row: {
+          authenticity_score: number | null
+          civic_relevance_score: number | null
+          content_id: string
+          content_type: string
+          created_at: string | null
+          engagement_prediction: number | null
+          expires_at: string | null
+          geographic_relevance: number | null
+          id: string
+          region: string | null
+          time_sensitivity_score: number | null
+          total_score: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          authenticity_score?: number | null
+          civic_relevance_score?: number | null
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          engagement_prediction?: number | null
+          expires_at?: string | null
+          geographic_relevance?: number | null
+          id?: string
+          region?: string | null
+          time_sensitivity_score?: number | null
+          total_score?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          authenticity_score?: number | null
+          civic_relevance_score?: number | null
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          engagement_prediction?: number | null
+          expires_at?: string | null
+          geographic_relevance?: number | null
+          id?: string
+          region?: string | null
+          time_sensitivity_score?: number | null
+          total_score?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      feed_diversity_tracking: {
+        Row: {
+          artist_content_shown: number | null
+          civic_content_shown: number | null
+          created_at: string | null
+          entertainment_content_shown: number | null
+          expires_at: string | null
+          id: string
+          job_content_shown: number | null
+          political_viewpoints_shown: string[] | null
+          regions_shown: string[] | null
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          artist_content_shown?: number | null
+          civic_content_shown?: number | null
+          created_at?: string | null
+          entertainment_content_shown?: number | null
+          expires_at?: string | null
+          id?: string
+          job_content_shown?: number | null
+          political_viewpoints_shown?: string[] | null
+          regions_shown?: string[] | null
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          artist_content_shown?: number | null
+          civic_content_shown?: number | null
+          created_at?: string | null
+          entertainment_content_shown?: number | null
+          expires_at?: string | null
+          id?: string
+          job_content_shown?: number | null
+          political_viewpoints_shown?: string[] | null
+          regions_shown?: string[] | null
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       feed_engagement: {
         Row: {
           comment_text: string | null
@@ -16623,6 +16755,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      feed_interactions: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string | null
+          dwell_time_seconds: number | null
+          engagement_quality: number | null
+          id: string
+          interaction_type: string
+          metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          dwell_time_seconds?: number | null
+          engagement_quality?: number | null
+          id?: string
+          interaction_type: string
+          metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          dwell_time_seconds?: number | null
+          engagement_quality?: number | null
+          id?: string
+          interaction_type?: string
+          metadata?: Json | null
+          user_id?: string
+        }
+        Relationships: []
       }
       feed_items: {
         Row: {
@@ -34730,11 +34898,18 @@ export type Database = {
       }
       user_feed_preferences: {
         Row: {
+          artist_content_weight: number | null
           blocked_content_types: string[] | null
+          blocked_topics: string[] | null
+          civic_content_weight: number | null
           created_at: string
           engagement_weight: number | null
+          entertainment_weight: number | null
           id: string
+          job_content_weight: number | null
           language_preference: string | null
+          local_content_preference: number | null
+          political_engagement_level: string | null
           preferred_content_types: string[] | null
           preferred_regions: string[] | null
           recency_weight: number | null
@@ -34743,11 +34918,18 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          artist_content_weight?: number | null
           blocked_content_types?: string[] | null
+          blocked_topics?: string[] | null
+          civic_content_weight?: number | null
           created_at?: string
           engagement_weight?: number | null
+          entertainment_weight?: number | null
           id?: string
+          job_content_weight?: number | null
           language_preference?: string | null
+          local_content_preference?: number | null
+          political_engagement_level?: string | null
           preferred_content_types?: string[] | null
           preferred_regions?: string[] | null
           recency_weight?: number | null
@@ -34756,11 +34938,18 @@ export type Database = {
           user_id: string
         }
         Update: {
+          artist_content_weight?: number | null
           blocked_content_types?: string[] | null
+          blocked_topics?: string[] | null
+          civic_content_weight?: number | null
           created_at?: string
           engagement_weight?: number | null
+          entertainment_weight?: number | null
           id?: string
+          job_content_weight?: number | null
           language_preference?: string | null
+          local_content_preference?: number | null
+          political_engagement_level?: string | null
           preferred_content_types?: string[] | null
           preferred_regions?: string[] | null
           recency_weight?: number | null
@@ -37155,6 +37344,15 @@ export type Database = {
         Args: {
           p_company_size: Database["public"]["Enums"]["company_size"]
           p_campaign_type: Database["public"]["Enums"]["campaign_type"]
+        }
+        Returns: number
+      }
+      calculate_content_score: {
+        Args: {
+          p_content_id: string
+          p_content_type: string
+          p_user_region?: string
+          p_user_id?: string
         }
         Returns: number
       }
