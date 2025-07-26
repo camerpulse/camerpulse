@@ -54,9 +54,8 @@ const Index = () => {
   ];
 
   useEffect(() => {
-    if (user && !loading) {
-      window.location.href = '/advanced-feed';
-    }
+    // Only redirect if user is authenticated and loading is complete
+    // Remove automatic redirect to avoid blank page issues
   }, [user, loading]);
 
   useEffect(() => {
