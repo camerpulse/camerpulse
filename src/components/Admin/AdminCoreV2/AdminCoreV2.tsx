@@ -32,7 +32,7 @@ import { IntelligencePanel } from './modules/IntelligencePanel';
 import { PoliticalPartiesManager } from './modules/PoliticalPartiesManager';
 import { NewsSystemManager } from './modules/NewsSystemManager';
 import { MarketplaceManager } from './modules/MarketplaceManager';
-import { ElectionManager } from './modules/ElectionManager';
+import { StripeSettings } from '../StripeSettings';
 import { LegalDocumentsManager } from './modules/LegalDocumentsManager';
 import { DonationsManager } from './modules/DonationsManager';
 import { PromisesManager } from './modules/PromisesManager';
@@ -258,6 +258,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'political-parties', label: 'Political Parties', icon: Flag, color: 'text-blue-600', permission: 'politics' },
     { id: 'news-system', label: 'News System', icon: Newspaper, color: 'text-blue-600', permission: 'content' },
     { id: 'marketplace', label: 'Marketplace', icon: Store, color: 'text-green-600', permission: 'marketplace' },
+    { id: 'stripe-settings', label: 'Stripe Settings', icon: CreditCard, color: 'text-blue-600', permission: 'marketplace' },
     { id: 'elections', label: 'Elections', icon: Vote, color: 'text-purple-600', permission: 'elections' },
     { id: 'legal-documents', label: 'Legal Documents', icon: Scale, color: 'text-blue-600', permission: 'legal' },
     { id: 'donations', label: 'Donations', icon: Heart, color: 'text-red-500', permission: 'finance' },
@@ -302,8 +303,10 @@ export const AdminCoreV2: React.FC = () => {
         return <NewsSystemManager {...moduleProps} />;
       case 'marketplace':
         return <MarketplaceManager {...moduleProps} />;
+      case 'stripe-settings':
+        return <StripeSettings />;
       case 'elections':
-        return <ElectionManager {...moduleProps} />;
+        return <div className="p-6 text-center">Elections module coming soon...</div>;
       case 'legal-documents':
         return <LegalDocumentsManager {...moduleProps} />;
       case 'donations':

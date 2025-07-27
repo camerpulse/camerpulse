@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { VendorCard } from '@/components/Marketplace/VendorCard';
 import { ProductCard } from '@/components/Marketplace/ProductCard';
+import { ShoppingCart } from '@/components/Marketplace/ShoppingCart';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
@@ -60,14 +61,18 @@ const Marketplace = () => {
           </p>
         </div>
 
-        <div className="relative mb-6">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search products, vendors..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
+        <div className="flex items-center justify-between mb-6">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Search products, vendors..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="pl-10"
+            />
+          </div>
+          
+          <ShoppingCart />
         </div>
 
         <Tabs defaultValue="products" className="w-full">
