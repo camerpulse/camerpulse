@@ -168,7 +168,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataImport from "./pages/AdminDataImport";
 import AuditRegistryPage from "./pages/AuditRegistryPage";
 import UserPollOverview from "./pages/UserPollOverview";
-import VendorDashboard from "./pages/VendorDashboard";
+import { VendorDashboard } from "./pages/VendorDashboard";
 import CustomerDashboard from "./pages/CustomerDashboard";
 
 import AddVillage from "./pages/AddVillage";

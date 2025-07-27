@@ -94,7 +94,7 @@ export const CustomerWishlist = () => {
                 <CardContent className="p-4">
                   <div className="relative mb-4">
                     <img
-                      src={product.image_url || '/placeholder.svg'}
+                      src={product.images && product.images.length > 0 ? product.images[0] : '/placeholder.svg'}
                       alt={product.name}
                       className="w-full h-48 object-cover rounded-lg"
                     />
