@@ -9,6 +9,7 @@ import { AdminDashboard } from './AdminDashboard';
 import { DisputeResolution } from './DisputeResolution';
 import { FinancialReporting } from './FinancialReporting';
 import { VendorAnalytics } from './VendorAnalytics';
+import { PricingConfigPanel } from '../PricingConfigPanel';
 import {
   LayoutDashboard,
   Scale,
@@ -17,7 +18,8 @@ import {
   AlertTriangle,
   CheckCircle,
   Clock,
-  TrendingUp
+  TrendingUp,
+  Settings
 } from 'lucide-react';
 
 interface MarketplaceAdminProps {
@@ -184,7 +186,7 @@ export const MarketplaceAdmin: React.FC<MarketplaceAdminProps> = ({
 
       {/* Main Admin Interface */}
       <Tabs defaultValue="dashboard" className="space-y-4">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="dashboard" className="flex items-center gap-2">
             <LayoutDashboard className="w-4 h-4" />
             Dashboard
@@ -200,6 +202,10 @@ export const MarketplaceAdmin: React.FC<MarketplaceAdminProps> = ({
           <TabsTrigger value="analytics" className="flex items-center gap-2">
             <BarChart3 className="w-4 h-4" />
             Analytics
+          </TabsTrigger>
+          <TabsTrigger value="pricing" className="flex items-center gap-2">
+            <Settings className="w-4 h-4" />
+            Pricing
           </TabsTrigger>
         </TabsList>
 
@@ -265,6 +271,20 @@ export const MarketplaceAdmin: React.FC<MarketplaceAdminProps> = ({
               <CardContent className="text-center py-8">
                 <p className="text-muted-foreground">
                   You don't have permission to view vendor analytics.
+                </p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+
+        <TabsContent value="pricing">
+          {hasPermission('view_dashboard') ? (
+            <PricingConfigPanel />
+          ) : (
+            <Card>
+              <CardContent className="text-center py-8">
+                <p className="text-muted-foreground">
+                  You don't have permission to manage pricing configuration.
                 </p>
               </CardContent>
             </Card>
