@@ -20879,6 +20879,162 @@ export type Database = {
           },
         ]
       }
+      marketplace_cart: {
+        Row: {
+          created_at: string | null
+          id: string
+          product_id: string | null
+          quantity: number
+          session_id: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          quantity: number
+          session_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          quantity?: number
+          session_id?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_cart_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_order_items: {
+        Row: {
+          created_at: string | null
+          id: string
+          order_id: string | null
+          product_id: string | null
+          product_snapshot: Json | null
+          quantity: number
+          total_price: number
+          unit_price: number
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          product_id?: string | null
+          product_snapshot?: Json | null
+          quantity: number
+          total_price: number
+          unit_price: number
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          order_id?: string | null
+          product_id?: string | null
+          product_snapshot?: Json | null
+          quantity?: number
+          total_price?: number
+          unit_price?: number
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_order_items_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_orders: {
+        Row: {
+          billing_address: Json | null
+          created_at: string | null
+          currency: string | null
+          customer_email: string
+          customer_id: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          order_number: string
+          order_status: string | null
+          payment_method: string | null
+          payment_status: string | null
+          shipping_address: Json | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          total_amount: number
+          updated_at: string | null
+        }
+        Insert: {
+          billing_address?: Json | null
+          created_at?: string | null
+          currency?: string | null
+          customer_email: string
+          customer_id?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          order_number: string
+          order_status?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          shipping_address?: Json | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          total_amount: number
+          updated_at?: string | null
+        }
+        Update: {
+          billing_address?: Json | null
+          created_at?: string | null
+          currency?: string | null
+          customer_email?: string
+          customer_id?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          order_number?: string
+          order_status?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          shipping_address?: Json | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          total_amount?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       marketplace_products: {
         Row: {
           category: string | null
@@ -20925,6 +21081,129 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "marketplace_products_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_reviews: {
+        Row: {
+          created_at: string | null
+          customer_id: string | null
+          helpful_votes: number | null
+          id: string
+          images: string[] | null
+          is_verified_purchase: boolean | null
+          order_id: string | null
+          product_id: string | null
+          rating: number
+          review_text: string | null
+          title: string | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id?: string | null
+          helpful_votes?: number | null
+          id?: string
+          images?: string[] | null
+          is_verified_purchase?: boolean | null
+          order_id?: string | null
+          product_id?: string | null
+          rating: number
+          review_text?: string | null
+          title?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string | null
+          helpful_votes?: number | null
+          id?: string
+          images?: string[] | null
+          is_verified_purchase?: boolean | null
+          order_id?: string | null
+          product_id?: string | null
+          rating?: number
+          review_text?: string | null
+          title?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_reviews_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_reviews_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_reviews_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_vendor_analytics: {
+        Row: {
+          avg_order_value: number | null
+          avg_rating: number | null
+          created_at: string | null
+          customer_count: number | null
+          id: string
+          metric_date: string
+          page_views: number | null
+          total_orders: number | null
+          total_products_sold: number | null
+          total_revenue: number | null
+          total_reviews: number | null
+          vendor_id: string | null
+        }
+        Insert: {
+          avg_order_value?: number | null
+          avg_rating?: number | null
+          created_at?: string | null
+          customer_count?: number | null
+          id?: string
+          metric_date: string
+          page_views?: number | null
+          total_orders?: number | null
+          total_products_sold?: number | null
+          total_revenue?: number | null
+          total_reviews?: number | null
+          vendor_id?: string | null
+        }
+        Update: {
+          avg_order_value?: number | null
+          avg_rating?: number | null
+          created_at?: string | null
+          customer_count?: number | null
+          id?: string
+          metric_date?: string
+          page_views?: number | null
+          total_orders?: number | null
+          total_products_sold?: number | null
+          total_revenue?: number | null
+          total_reviews?: number | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_vendor_analytics_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "marketplace_vendors"
@@ -39975,6 +40254,10 @@ export type Database = {
       }
       generate_job_slug: {
         Args: { job_title: string; company_name: string }
+        Returns: string
+      }
+      generate_order_number: {
+        Args: Record<PropertyKey, never>
         Returns: string
       }
       generate_poll_api_key: {
