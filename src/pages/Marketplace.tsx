@@ -1,17 +1,32 @@
 import { useState, useEffect } from 'react';
 import { AppLayout } from "@/components/Layout/AppLayout";
-import { VendorCard } from '@/components/Marketplace/VendorCard';
 import { ProductCard } from '@/components/Marketplace/ProductCard';
 import { ShoppingCart } from '@/components/Marketplace/ShoppingCart';
 import { AdvancedSearch } from '@/components/Marketplace/AdvancedSearch';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { mockMarketplaceProducts, mockMarketplaceVendors } from '@/data/mockData';
-import { Search, Package, Store, ShoppingBag, Star, Truck, Shield, Zap, ArrowRight, TrendingUp, Clock, Heart, Filter, Grid, List, Eye } from 'lucide-react';
+import { 
+  Search, 
+  Package, 
+  Star, 
+  Truck, 
+  Shield, 
+  ArrowRight, 
+  TrendingUp, 
+  Clock, 
+  Filter, 
+  Grid, 
+  List, 
+  Eye,
+  MapPin,
+  Users,
+  CheckCircle,
+  Award
+} from 'lucide-react';
 
 const Marketplace = () => {
   const [vendors, setVendors] = useState([]);
@@ -21,6 +36,7 @@ const Marketplace = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchFilters, setSearchFilters] = useState<any>({});
   const [showAdvancedSearch, setShowAdvancedSearch] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   useEffect(() => {
     fetchMarketplaceData();
@@ -114,427 +130,327 @@ const Marketplace = () => {
   };
 
   const categories = [
-    { name: 'Electronics', icon: '📱', count: 245, trending: true },
-    { name: 'Fashion', icon: '👗', count: 189, trending: false },
-    { name: 'Art & Crafts', icon: '🎨', count: 156, trending: true },
-    { name: 'Food & Agriculture', icon: '🌾', count: 98, trending: false },
-    { name: 'Home & Garden', icon: '🏠', count: 67, trending: false },
-    { name: 'Health & Beauty', icon: '💅', count: 134, trending: true }
+    { name: 'Electronics', icon: '💻', count: 245, color: 'from-blue-500 to-blue-600' },
+    { name: 'Fashion', icon: '👗', count: 189, color: 'from-pink-500 to-pink-600' },
+    { name: 'Art & Crafts', icon: '🎨', count: 156, color: 'from-purple-500 to-purple-600' },
+    { name: 'Food & Agriculture', icon: '🌾', count: 98, color: 'from-green-500 to-green-600' },
+    { name: 'Home & Garden', icon: '🏠', count: 67, color: 'from-orange-500 to-orange-600' },
+    { name: 'Health & Beauty', icon: '💄', count: 134, color: 'from-rose-500 to-rose-600' }
   ];
 
-  const featuredProducts = mockMarketplaceProducts.slice(0, 4);
   const trendingProducts = mockMarketplaceProducts.filter(p => p.rating >= 4.7).slice(0, 6);
   const newArrivals = [...mockMarketplaceProducts].sort((a, b) => 
     new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   ).slice(0, 8);
-  const bestSellers = mockMarketplaceProducts.filter(p => p.rating >= 4.8).slice(0, 4);
   const topVendors = mockMarketplaceVendors.filter(v => v.rating >= 4.5).slice(0, 3);
-
-  const deals = [
-    { 
-      title: "Weekend Special", 
-      description: "Up to 30% off on Electronics", 
-      badge: "Limited Time",
-      color: "bg-red-500"
-    },
-    { 
-      title: "Artisan Week", 
-      description: "Support local crafts - Free shipping", 
-      badge: "This Week",
-      color: "bg-blue-500"
-    }
-  ];
-
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   return (
     <AppLayout>
-      <main className="min-h-screen bg-gradient-to-br from-background via-background to-accent/5">
-        {/* Hero Section */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/10 via-transparent to-primary/5" />
-          <div className="container mx-auto px-4 py-16 relative">
-            <div className="text-center max-w-4xl mx-auto">
-              <Badge variant="secondary" className="mb-4">
-                <Zap className="w-3 h-3 mr-1" />
-                Trusted by 50,000+ Cameroonians
-              </Badge>
-              <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
-                Africa's Premier
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/70"> Digital Marketplace</span>
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Connect with verified Cameroonian vendors. Shop authentic products. 
-                Support local businesses with secure transactions and escrow protection.
-              </p>
+      <div className="min-h-screen">
+        {/* Premium Hero Section */}
+        <section className="relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white overflow-hidden">
+          <div className="absolute inset-0 opacity-20">
+            <div className="w-full h-full bg-white/5 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.1),transparent)]"></div>
+          </div>
+          
+          <div className="relative container mx-auto px-4 py-20">
+            <div className="max-w-4xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+                <Award className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm font-medium">Africa's #1 Trusted Marketplace</span>
+                <Badge variant="secondary" className="bg-green-500 text-white text-xs">
+                  50K+ Users
+                </Badge>
+              </div>
               
-              {/* Search Bar */}
-              <div className="max-w-2xl mx-auto mb-8">
-                <div className="relative">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                  <Input 
-                    placeholder="Search for products, vendors, or categories..."
-                    className="pl-12 pr-4 py-4 text-lg rounded-full border-2 focus:border-primary/50"
-                  />
-                  <Button size="lg" className="absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full">
-                    Search
-                  </Button>
+              <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                Discover Authentic
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-400"> Cameroon</span>
+              </h1>
+              
+              <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                Shop premium products from verified local vendors. Experience secure payments, 
+                fast delivery, and authentic Cameroonian craftsmanship.
+              </p>
+
+              {/* Enhanced Search Bar */}
+              <div className="max-w-3xl mx-auto mb-8">
+                <div className="relative bg-white rounded-2xl shadow-2xl p-2">
+                  <div className="flex">
+                    <div className="relative flex-1">
+                      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-slate-400 w-5 h-5" />
+                      <Input 
+                        placeholder="Search 25,000+ authentic products..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="pl-12 pr-4 py-4 text-lg border-0 focus:ring-0 bg-transparent"
+                      />
+                    </div>
+                    <Button size="lg" className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 px-8 py-4 rounded-xl text-white font-semibold shadow-lg">
+                      Search
+                    </Button>
+                  </div>
                 </div>
               </div>
 
               {/* Trust Indicators */}
-              <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Shield className="w-4 h-4 text-green-500" />
-                  KYC Verified Vendors
+              <div className="flex flex-wrap justify-center gap-8 text-sm">
+                <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <Shield className="w-5 h-5 text-green-400" />
+                  <span className="font-medium">KYC Verified Vendors</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Truck className="w-4 h-4 text-blue-500" />
-                  Fast Nationwide Delivery
+                <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <Truck className="w-5 h-5 text-blue-400" />
+                  <span className="font-medium">Fast Nationwide Delivery</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Star className="w-4 h-4 text-yellow-500" />
-                  5-Star Customer Protection
+                <div className="flex items-center gap-2 bg-white/5 backdrop-blur-sm rounded-lg px-4 py-2">
+                  <CheckCircle className="w-5 h-5 text-purple-400" />
+                  <span className="font-medium">Secure Escrow Payments</span>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Stats Section */}
-        <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <Card className="text-center p-4">
-              <CardContent className="p-0">
-                <div className="text-2xl font-bold text-primary">1,247</div>
-                <div className="text-sm text-muted-foreground">Verified Vendors</div>
-              </CardContent>
-            </Card>
-            <Card className="text-center p-4">
-              <CardContent className="p-0">
-                <div className="text-2xl font-bold text-primary">25,000+</div>
-                <div className="text-sm text-muted-foreground">Products</div>
-              </CardContent>
-            </Card>
-            <Card className="text-center p-4">
-              <CardContent className="p-0">
-                <div className="text-2xl font-bold text-primary">50,000+</div>
-                <div className="text-sm text-muted-foreground">Happy Customers</div>
-              </CardContent>
-            </Card>
-            <Card className="text-center p-4">
-              <CardContent className="p-0">
-                <div className="text-2xl font-bold text-primary">4.9★</div>
-                <div className="text-sm text-muted-foreground">Platform Rating</div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Categories Grid */}
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-foreground">Shop by Category</h2>
-              <Button variant="outline" className="group">
-                View All <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-              {categories.map((category) => (
-                <Card key={category.name} className="relative overflow-hidden hover:shadow-lg transition-all cursor-pointer group">
+        {/* Stats Dashboard */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {[
+                { label: 'Verified Vendors', value: '1,247', icon: Users, color: 'text-blue-600' },
+                { label: 'Products', value: '25,000+', icon: Package, color: 'text-green-600' },
+                { label: 'Happy Customers', value: '50,000+', icon: Star, color: 'text-yellow-600' },
+                { label: 'Platform Rating', value: '4.9★', icon: Award, color: 'text-purple-600' }
+              ].map((stat, index) => (
+                <Card key={index} className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardContent className="p-6 text-center">
-                    {category.trending && (
-                      <Badge variant="secondary" className="absolute top-2 right-2 text-xs">
-                        <TrendingUp className="w-3 h-3 mr-1" />
-                        Hot
-                      </Badge>
-                    )}
-                    <div className="text-3xl mb-2">{category.icon}</div>
-                    <h3 className="font-semibold text-sm mb-1 group-hover:text-primary transition-colors">{category.name}</h3>
-                    <p className="text-xs text-muted-foreground">{category.count} items</p>
+                    <stat.icon className={`w-8 h-8 ${stat.color} mx-auto mb-3`} />
+                    <div className="text-3xl font-bold text-slate-900 mb-1">{stat.value}</div>
+                    <div className="text-sm text-slate-600 font-medium">{stat.label}</div>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* Trending Now Section */}
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
+        {/* Categories Section */}
+        <section className="py-16 bg-slate-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-slate-900 mb-4">Shop by Category</h2>
+              <p className="text-xl text-slate-600">Discover authentic Cameroonian products across all categories</p>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              {categories.map((category, index) => (
+                <Card key={index} className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer group">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                  <CardContent className="p-6 text-center relative">
+                    <div className="text-4xl mb-4">{category.icon}</div>
+                    <h3 className="font-bold text-slate-900 mb-2 group-hover:text-slate-700 transition-colors">{category.name}</h3>
+                    <p className="text-sm text-slate-600">{category.count} products</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Trending Products */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-12">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">Trending Now</h2>
-                <p className="text-muted-foreground">Most popular products this week</p>
+                <h2 className="text-4xl font-bold text-slate-900 mb-2">Trending Products</h2>
+                <p className="text-xl text-slate-600">Most popular items this week</p>
               </div>
-              <Button variant="outline" className="group">
+              <Button variant="outline" size="lg" className="group">
                 View All <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
               {trendingProducts.map((product) => (
-                <Card key={product.id} className="relative group hover:shadow-xl transition-all duration-300 cursor-pointer">
-                  <div className="absolute top-2 right-2 z-10">
-                    <Badge variant="secondary" className="bg-red-500 text-white">
+                <Card key={product.id} className="relative group hover:shadow-xl transition-all duration-300 border-0 overflow-hidden">
+                  <div className="absolute top-3 right-3 z-10">
+                    <Badge className="bg-red-500 text-white shadow-lg">
                       <TrendingUp className="w-3 h-3 mr-1" />
-                      Trending
+                      Hot
                     </Badge>
                   </div>
-                  <CardContent className="p-0">
-                    <div className="relative overflow-hidden rounded-t-lg">
-                      <img 
-                        src={product.images[0]} 
-                        alt={product.name}
-                        className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                        <Button size="sm" variant="secondary" className="gap-2">
-                          <Eye className="w-4 h-4" />
-                          Quick View
-                        </Button>
-                      </div>
+                  <div className="relative overflow-hidden">
+                    <img 
+                      src={product.images[0]} 
+                      alt={product.name}
+                      className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                      <Button size="sm" variant="secondary" className="gap-2 shadow-lg">
+                        <Eye className="w-4 h-4" />
+                        Quick View
+                      </Button>
                     </div>
-                    <div className="p-3">
-                      <h3 className="font-semibold text-sm truncate">{product.name}</h3>
-                      <div className="flex items-center gap-1 my-1">
-                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
-                        <span className="text-xs text-muted-foreground">{product.rating}</span>
-                      </div>
-                      <p className="text-sm font-bold text-primary">{product.price.toLocaleString()} {product.currency}</p>
+                  </div>
+                  <CardContent className="p-4">
+                    <h3 className="font-semibold text-slate-900 truncate mb-2">{product.name}</h3>
+                    <div className="flex items-center gap-1 mb-2">
+                      <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                      <span className="text-sm font-medium text-slate-700">{product.rating}</span>
                     </div>
+                    <p className="text-lg font-bold text-slate-900">{product.price.toLocaleString()} {product.currency}</p>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* Deals Section */}
-          <div className="mb-12">
-            <h2 className="text-2xl font-bold text-foreground mb-6">Special Deals</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              {deals.map((deal, index) => (
-                <Card key={index} className="relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer">
-                  <div className={`absolute inset-0 ${deal.color} opacity-10 group-hover:opacity-20 transition-opacity`} />
-                  <CardContent className="p-6 relative">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <Badge variant="outline" className="mb-2">{deal.badge}</Badge>
-                        <h3 className="text-xl font-bold mb-2">{deal.title}</h3>
-                        <p className="text-muted-foreground">{deal.description}</p>
-                      </div>
-                      <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+        {/* Featured Vendors */}
+        <section className="py-16 bg-slate-50">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-slate-900 mb-4">Featured Vendors</h2>
+              <p className="text-xl text-slate-600">Meet our top-rated sellers</p>
             </div>
-          </div>
-
-          {/* New Arrivals */}
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-foreground">New Arrivals</h2>
-                <p className="text-muted-foreground">Fresh products added this week</p>
-              </div>
-              <Button variant="outline" className="group">
-                View All <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {newArrivals.slice(0, 4).map((product) => (
-                <Card key={product.id} className="group hover:shadow-xl transition-all duration-300">
-                  <div className="absolute top-2 left-2 z-10">
-                    <Badge className="bg-green-500 text-white">
-                      <Clock className="w-3 h-3 mr-1" />
-                      New
-                    </Badge>
-                  </div>
-                  <ProductCard product={product} />
-                </Card>
-              ))}
-            </div>
-          </div>
-
-          {/* Top Vendors Spotlight */}
-          <div className="mb-12">
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-foreground">Featured Vendors</h2>
-                <p className="text-muted-foreground">Top-rated sellers on our platform</p>
-              </div>
-              <Button variant="outline" className="group">
-                View All Vendors <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Button>
-            </div>
-            <div className="grid md:grid-cols-3 gap-6">
+            
+            <div className="grid md:grid-cols-3 gap-8">
               {topVendors.map((vendor) => (
-                <Card key={vendor.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
-                  <CardContent className="p-6">
-                    <div className="flex items-start gap-4">
+                <Card key={vendor.id} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+                  <CardContent className="p-8">
+                    <div className="text-center mb-6">
                       <img 
                         src={vendor.profile.avatar_url} 
                         alt={vendor.business_name}
-                        className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                        className="w-20 h-20 rounded-full object-cover mx-auto mb-4 border-4 border-green-100"
                       />
-                      <div className="flex-1">
-                        <div className="flex items-start justify-between mb-2">
-                          <h3 className="font-bold text-lg">{vendor.business_name}</h3>
-                          <Badge variant="secondary" className="bg-green-100 text-green-700">
-                            <Shield className="w-3 h-3 mr-1" />
-                            Verified
-                          </Badge>
+                      <Badge className="bg-green-500 text-white mb-3">
+                        <Shield className="w-3 h-3 mr-1" />
+                        Verified Seller
+                      </Badge>
+                      <h3 className="text-xl font-bold text-slate-900 mb-2">{vendor.business_name}</h3>
+                      <p className="text-slate-600 mb-4">{vendor.description}</p>
+                    </div>
+                    
+                    <div className="space-y-3 mb-6">
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">Rating</span>
+                        <div className="flex items-center gap-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="font-semibold">{vendor.rating}</span>
                         </div>
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{vendor.description}</p>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1">
-                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                            <span className="font-semibold">{vendor.rating}</span>
-                            <span className="text-sm text-muted-foreground">({vendor.total_sales} sales)</span>
-                          </div>
-                          <Badge variant="outline">{vendor.location}</Badge>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">Products</span>
+                        <span className="font-semibold">{vendor.total_sales}</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-slate-600">Location</span>
+                        <div className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-slate-400" />
+                          <span className="text-sm">{vendor.location}</span>
                         </div>
                       </div>
                     </div>
+                    
+                    <Button className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800">
+                      Visit Store
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Enhanced Marketplace Browser Section */}
-        <div className="container mx-auto px-4 pb-16">
-          <div className="flex flex-col lg:flex-row gap-6">
-            {/* Sidebar Filters */}
-            <div className="lg:w-80 space-y-6">
-              {showAdvancedSearch && (
-                <div className="lg:sticky lg:top-4">
-                  <AdvancedSearch
-                    onFiltersChange={handleFiltersChange}
-                    initialFilters={{ query: searchTerm }}
-                  />
-                </div>
-              )}
+        {/* All Products */}
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-4xl font-bold text-slate-900 mb-2">All Products</h2>
+                <p className="text-xl text-slate-600">Browse our complete collection</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Button
+                  variant={viewMode === 'grid' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('grid')}
+                >
+                  <Grid className="w-4 h-4" />
+                </Button>
+                <Button
+                  variant={viewMode === 'list' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setViewMode('list')}
+                >
+                  <List className="w-4 h-4" />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+                >
+                  <Filter className="w-4 h-4 mr-2" />
+                  Filters
+                </Button>
+              </div>
             </div>
 
-            {/* Main Content */}
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-6 bg-card/50 backdrop-blur-sm p-4 rounded-lg border">
-                <div className="flex items-center space-x-4 flex-1">
-                  <Button
-                    variant="outline"
-                    onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-                    className="lg:hidden"
-                  >
-                    <Filter className="w-4 h-4 mr-2" />
-                    Filters
-                  </Button>
-                  
-                  <div className="hidden lg:flex items-center space-x-2">
-                    <span className="text-sm text-muted-foreground">View:</span>
-                    <Button
-                      variant={viewMode === 'grid' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setViewMode('grid')}
-                    >
-                      <Grid className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === 'list' ? 'default' : 'outline'}
-                      size="sm"
-                      onClick={() => setViewMode('list')}
-                    >
-                      <List className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-4">
-                  <span className="text-sm text-muted-foreground">
-                    {filteredProducts.length} products found
-                  </span>
-                  <ShoppingCart />
-                </div>
+            {showAdvancedSearch && (
+              <div className="mb-8">
+                <AdvancedSearch onFiltersChange={handleFiltersChange} />
               </div>
+            )}
 
-              <Tabs defaultValue="products" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-6">
-                  <TabsTrigger value="products" className="flex items-center gap-2">
-                    <Package className="w-4 h-4" />
-                    All Products ({filteredProducts.length})
-                  </TabsTrigger>
-                  <TabsTrigger value="vendors" className="flex items-center gap-2">
-                    <Store className="w-4 h-4" />
-                    Vendors ({vendors.length})
-                  </TabsTrigger>
-                </TabsList>
+            {loading ? (
+              <div className="text-center py-20">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+                <p className="text-slate-600 text-lg">Loading amazing products...</p>
+              </div>
+            ) : (
+              <div className={`grid ${
+                viewMode === 'grid' 
+                  ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8' 
+                  : 'grid-cols-1 gap-6'
+              }`}>
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
 
-                <TabsContent value="products">
-                  {loading ? (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                      {[...Array(8)].map((_, i) => (
-                        <Card key={i} className="h-64 animate-pulse">
-                          <CardContent className="p-4">
-                            <div className="w-full h-32 bg-muted rounded mb-4"></div>
-                            <div className="h-4 bg-muted rounded mb-2"></div>
-                            <div className="h-4 bg-muted rounded w-2/3"></div>
-                          </CardContent>
-                        </Card>
-                      ))}
-                    </div>
-                  ) : filteredProducts.length === 0 ? (
-                    <Card className="p-12 text-center">
-                      <div className="space-y-4">
-                        <Package className="w-16 h-16 mx-auto text-muted-foreground" />
-                        <div>
-                          <h3 className="text-lg font-semibold">No products found</h3>
-                          <p className="text-muted-foreground">Try adjusting your search filters or browse our categories</p>
-                        </div>
-                        <Button onClick={() => window.location.reload()}>
-                          Browse All Products
-                        </Button>
-                      </div>
-                    </Card>
-                  ) : (
-                    <div className={viewMode === 'grid' ? 
-                      "grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : 
-                      "space-y-4"
-                    }>
-                      {filteredProducts.map((product) => (
-                        <ProductCard key={product.id} product={product} />
-                      ))}
-                    </div>
-                  )}
-                </TabsContent>
+            {filteredProducts.length === 0 && !loading && (
+              <div className="text-center py-20">
+                <Package className="w-20 h-20 text-slate-400 mx-auto mb-6" />
+                <h3 className="text-2xl font-semibold text-slate-900 mb-3">No products found</h3>
+                <p className="text-slate-600 text-lg">Try adjusting your search terms or filters</p>
+              </div>
+            )}
+          </div>
+        </section>
 
-                <TabsContent value="vendors">
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {vendors.map((vendor) => (
-                      <VendorCard 
-                        key={vendor.id} 
-                        vendor={{
-                          id: vendor.id,
-                          name: vendor.business_name,
-                          vendorId: vendor.vendor_id,
-                          businessName: vendor.business_name,
-                          category: 'General',
-                          location: vendor.location || 'Cameroon',
-                          rating: vendor.rating || 0,
-                          totalReviews: vendor.total_sales || 0,
-                          verified: vendor.verification_status === 'verified',
-                          description: vendor.description || '',
-                          productsCount: 0,
-                          escrowActive: true,
-                          joinedDate: '',
-                          lastActive: 'Recently'
-                        }} 
-                      />
-                    ))}
-                  </div>
-                </TabsContent>
-              </Tabs>
+        {/* Call to Action */}
+        <section className="py-20 bg-gradient-to-r from-green-600 to-blue-600 text-white">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Start Selling?</h2>
+            <p className="text-xl md:text-2xl text-green-100 mb-10 max-w-3xl mx-auto">
+              Join thousands of successful vendors on Africa's most trusted marketplace. 
+              Start your journey today with our easy vendor onboarding process.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" variant="secondary" className="px-8 py-4 text-lg font-semibold">
+                Become a Vendor
+              </Button>
+              <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold text-white border-white hover:bg-white hover:text-green-600">
+                Learn More
+              </Button>
             </div>
           </div>
-        </div>
-      </main>
+        </section>
+      </div>
+      
+      <ShoppingCart />
     </AppLayout>
   );
 };
