@@ -12,13 +12,18 @@ import { InvestmentOpportunitiesPortal } from '@/components/investments/Investme
 import { ProjectCard } from '@/components/diaspora/ProjectCard';
 import { useDiasporaProfile, useDiasporaProjects, useDiasporaEvents } from '@/hooks/useDiaspora';
 import { useAuth } from '@/contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const DiasporaDashboard = () => {
   const { user } = useAuth();
+  const location = useLocation();
   const { data: profile, isLoading: profileLoading } = useDiasporaProfile();
   const { data: projects, isLoading: projectsLoading } = useDiasporaProjects();
   const { data: events, isLoading: eventsLoading } = useDiasporaEvents();
+  
+  // Get tab from URL params
+  const searchParams = new URLSearchParams(location.search);
+  const defaultTab = searchParams.get('tab') || 'overview';
 
   if (!user) {
     return (
@@ -113,7 +118,7 @@ const DiasporaDashboard = () => {
 
       {/* Main Dashboard Content */}
       <div className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="overview" className="space-y-6">
+        <Tabs defaultValue={defaultTab} className="space-y-6">
           <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="remittances">Remittances</TabsTrigger>

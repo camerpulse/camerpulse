@@ -70,7 +70,7 @@ const DiasporaConnect: React.FC = () => {
               Join thousands of Cameroonians worldwide who are actively contributing to the development of their home communities.
             </p>
             <div className="flex gap-4 justify-center">
-              <Button size="lg" onClick={() => window.location.href = '/diaspora/auth'}>
+              <Button size="lg" onClick={() => window.location.href = '/diaspora/setup'}>
                 Create Diaspora Profile
               </Button>
               <Button variant="outline" size="lg" onClick={() => window.location.href = '/diaspora/impact'}>

@@ -127,6 +127,12 @@ import EnhancedPolls from "./pages/EnhancedPolls";
 import PoliticianPerformance from "./pages/PoliticianPerformance";
 import CivicEducationHub from "./pages/CivicEducationHub";
 import DiasporaConnect from "./pages/DiasporaConnect";
+import { DiasporaAuth } from "./pages/DiasporaAuth";
+import DiasporaProfileSetupPage from "./pages/DiasporaProfileSetup";
+import DiasporaImpact from "./pages/DiasporaImpact";
+import DiasporaProjects from "./pages/DiasporaProjects";
+import DiasporaDonations from "./pages/DiasporaDonations";
+import DiasporaEvents from "./pages/DiasporaEvents";
 import InstitutionDirectory from "./pages/InstitutionDirectory";
 import ClaimModerationDashboard from "./pages/ClaimModerationDashboard";
 import InstitutionOwnerDashboard from "./pages/InstitutionOwnerDashboard";
@@ -423,6 +429,12 @@ const App = () => {
           <Route path="/villages/:id/officials" element={<VillageOfficials />} />
           <Route path="/villages/:id/edit" element={<VillageEdit />} />
           <Route path="/diaspora" element={<DiasporaDashboard />} />
+          <Route path="/diaspora/auth" element={<DiasporaAuth />} />
+          <Route path="/diaspora/setup" element={<DiasporaProfileSetupPage />} />
+          <Route path="/diaspora/impact" element={<DiasporaImpact />} />
+          <Route path="/diaspora/donations" element={<DiasporaDonations />} />
+          <Route path="/diaspora/projects" element={<DiasporaProjects />} />
+          <Route path="/diaspora/events" element={<DiasporaEvents />} />
           <Route path="/diaspora/investments" element={<DiasporaDashboard />} />
           <Route path="/diaspora/cultural" element={<DiasporaDashboard />} />
           <Route path="/diaspora/messaging" element={<DiasporaDashboard />} />
