@@ -38,7 +38,8 @@ import {
   Smartphone,
   Lock,
   Award,
-  ChevronDown
+  ChevronDown,
+  ShoppingBag
 } from "lucide-react";
 
 const Index = () => {
@@ -321,6 +322,14 @@ const Index = () => {
                 href: "/legislation",
                 accent: "primary",
                 features: ["Bill tracking", "Voting records", "Impact analysis"]
+              },
+              {
+                title: "CamerPulse Marketplace",
+                description: "Shop authentic Cameroonian products from verified local vendors",
+                icon: ShoppingBag,
+                href: "/marketplace",
+                accent: "primary",
+                features: ["Verified vendors", "Secure payments", "Fast delivery"]
               },
               {
                 title: "Transparency Portal",
