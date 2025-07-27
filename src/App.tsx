@@ -168,6 +168,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataImport from "./pages/AdminDataImport";
 import AuditRegistryPage from "./pages/AuditRegistryPage";
 import UserPollOverview from "./pages/UserPollOverview";
+import VendorDashboard from "./pages/VendorDashboard";
+import CustomerDashboard from "./pages/CustomerDashboard";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -282,6 +284,16 @@ const App = () => {
               <Route path="/audit-registry" element={<AuditRegistryPage />} />
               <Route path="/security" element={<Security />} />
               <Route path="/marketplace" element={<Marketplace />} />
+              <Route path="/vendor-dashboard" element={
+                <ProtectedRoute>
+                  <VendorDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/customer-dashboard" element={
+                <ProtectedRoute>
+                  <CustomerDashboard />
+                </ProtectedRoute>
+              } />
               <Route path="/polls" element={<PollsLandingPage />} />
               <Route path="/polls/discover" element={<PollsDiscovery />} />
           <Route path="/polls/results/:poll_id" element={<PollResultsPage />} />

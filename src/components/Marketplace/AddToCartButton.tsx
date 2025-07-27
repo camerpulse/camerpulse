@@ -1,21 +1,76 @@
 import React, { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { ShoppingCart, Plus } from 'lucide-react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { ShoppingCart, Heart } from 'lucide-react';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 interface AddToCartButtonProps {
-  productId: string;
-  disabled?: boolean;
+  product: any;
   className?: string;
 }
 
-export const AddToCartButton: React.FC<AddToCartButtonProps> = ({ 
-  productId, 
-  disabled = false,
-  className = "" 
-}) => {
+export const AddToCartButton = ({ product, className }: AddToCartButtonProps) => {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
+
+  // Check if product is in wishlist
+  const { data: isInWishlist } = useQuery({
+    queryKey: ['wishlist-status', product.id, user?.id],
+    queryFn: async () => {
+      if (!user) return false;
+      
+      const { data, error } = await supabase
+        .from('marketplace_wishlists')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('product_id', product.id)
+        .single();
+      
+      return !error && !!data;
+    },
+    enabled: !!user,
+  });
+
+  const toggleWishlistMutation = useMutation({
+    mutationFn: async () => {
+      if (!user) {
+        throw new Error('Please log in to add to wishlist');
+      }
+
+      if (isInWishlist) {
+        // Remove from wishlist
+        const { error } = await supabase
+          .from('marketplace_wishlists')
+          .delete()
+          .eq('user_id', user.id)
+          .eq('product_id', product.id);
+
+        if (error) throw error;
+      } else {
+        // Add to wishlist
+        const { error } = await supabase
+          .from('marketplace_wishlists')
+          .insert([{
+            user_id: user.id,
+            product_id: product.id,
+          }]);
+
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      toast.success(isInWishlist ? 'Removed from wishlist' : 'Added to wishlist');
+      queryClient.invalidateQueries({ queryKey: ['wishlist-status', product.id] });
+      queryClient.invalidateQueries({ queryKey: ['customer-wishlist'] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
   const getOrCreateSessionId = () => {
     let sessionId = sessionStorage.getItem('guest_session_id');
@@ -35,7 +90,7 @@ export const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       let existingItemQuery = supabase
         .from('marketplace_cart')
         .select('id, quantity')
-        .eq('product_id', productId);
+        .eq('product_id', product.id);
 
       if (user) {
         existingItemQuery = existingItemQuery.eq('user_id', user.id);
@@ -60,7 +115,7 @@ export const AddToCartButton: React.FC<AddToCartButtonProps> = ({
       } else {
         // Add new item to cart
         const cartData: any = {
-          product_id: productId,
+          product_id: product.id,
           quantity: 1
         };
 
@@ -85,14 +140,31 @@ export const AddToCartButton: React.FC<AddToCartButtonProps> = ({
     }
   };
 
+  const handleToggleWishlist = () => {
+    toggleWishlistMutation.mutate();
+  };
+
   return (
-    <Button
-      onClick={addToCart}
-      disabled={disabled || loading}
-      className={className}
-    >
-      <ShoppingCart className="h-4 w-4 mr-2" />
-      {loading ? 'Adding...' : 'Add to Cart'}
-    </Button>
+    <div className="flex items-center space-x-2">
+      <Button
+        onClick={addToCart}
+        disabled={loading}
+        className={cn("flex-1", className)}
+      >
+        <ShoppingCart className="w-4 h-4 mr-2" />
+        {loading ? 'Adding...' : 'Add to Cart'}
+      </Button>
+      
+      {user && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleToggleWishlist}
+          disabled={toggleWishlistMutation.isPending}
+        >
+          <Heart className={cn("w-4 h-4", isInWishlist && "fill-red-500 text-red-500")} />
+        </Button>
+      )}
+    </div>
   );
 };
