@@ -40,6 +40,8 @@ import {
   CulturalHeritageHub, 
   LiveDiscussionsHub 
 } from '@/components/villages/community';
+import { VirtualTour } from '@/components/villages/VirtualTour';
+import { InvestmentPortal } from '@/components/villages/InvestmentPortal';
 
 
 interface VillageData {
@@ -619,6 +621,18 @@ const VillageProfile = () => {
               >
                 Live Chat
               </TabsTrigger>
+              <TabsTrigger 
+                value="virtual-tour" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Virtual Tour
+              </TabsTrigger>
+              <TabsTrigger 
+                value="investment" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Investment Portal
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -958,6 +972,14 @@ const VillageProfile = () => {
 
           <TabsContent value="comments" className="space-y-6">
             <VillageComments villageId={village.id} />
+          </TabsContent>
+
+          <TabsContent value="virtual-tour" className="space-y-6">
+            <VirtualTour villageId={village.id} villageName={village.village_name} />
+          </TabsContent>
+
+          <TabsContent value="investment" className="space-y-6">
+            <InvestmentPortal villageId={village.id} villageName={village.village_name} />
           </TabsContent>
         </Tabs>
       </div>

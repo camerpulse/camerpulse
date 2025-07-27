@@ -95,6 +95,7 @@ import VillagesDiasporaBacked from "./pages/VillagesDiasporaBacked";
 import ReportProblem from "./pages/ReportProblem";
 import VillageOfficials from "./pages/VillageOfficials";
 import VillageEdit from "./pages/VillageEdit";
+import DiasporaDashboard from "./pages/DiasporaDashboard";
 import { Analytics } from "./pages/Analytics";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import SentimentAnalysis from "./pages/SentimentAnalysis";
@@ -421,6 +422,8 @@ const App = () => {
           <Route path="/villages/:id/report-problem" element={<ReportProblem />} />
           <Route path="/villages/:id/officials" element={<VillageOfficials />} />
           <Route path="/villages/:id/edit" element={<VillageEdit />} />
+          <Route path="/diaspora" element={<DiasporaDashboard />} />
+          <Route path="/diaspora-dashboard" element={<DiasporaDashboard />} />
           <Route path="/chiefs" element={<ChiefsDirectory />} />
           <Route path="/traditional-leaders" element={<ChiefsDirectory />} />
           <Route path="/search" element={<AdvancedSearchPage />} />
