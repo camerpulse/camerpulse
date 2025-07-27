@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
 interface CivicIssue {
@@ -58,6 +59,12 @@ export const VillageCivicActivity: React.FC<VillageCivicActivityProps> = ({ vill
   const [loading, setLoading] = useState(true);
   const [reportIssueDialogOpen, setReportIssueDialogOpen] = useState(false);
   const [createPetitionDialogOpen, setCreatePetitionDialogOpen] = useState(false);
+  
+  // Petition form state
+  const [petitionTitle, setPetitionTitle] = useState('');
+  const [petitionDescription, setPetitionDescription] = useState('');
+  const [targetAudience, setTargetAudience] = useState('');
+  const [submitting, setSubmitting] = useState(false);
 
   const issueCategories = [
     { value: 'infrastructure', label: 'Infrastructure', icon: AlertTriangle },
@@ -190,6 +197,48 @@ export const VillageCivicActivity: React.FC<VillageCivicActivityProps> = ({ vill
       ]
     }
   ];
+
+  const handleCreatePetition = async () => {
+    if (!petitionTitle.trim() || !petitionDescription.trim() || !targetAudience.trim()) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        toast.error('Please log in to create a petition');
+        return;
+      }
+
+      const { error } = await supabase
+        .from('village_petitions')
+        .insert({
+          village_id: villageId,
+          petition_title: petitionTitle,
+          petition_body: petitionDescription,
+          target_audience: targetAudience,
+          created_by: user.id
+        });
+
+      if (error) throw error;
+
+      toast.success('Petition created successfully!');
+      setPetitionTitle('');
+      setPetitionDescription('');
+      setTargetAudience('');
+      setCreatePetitionDialogOpen(false);
+      
+      // Refresh petitions (in a real app, you'd fetch from database)
+    } catch (error) {
+      console.error('Error creating petition:', error);
+      toast.error('Failed to create petition');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     // Demo mode - using sample data
@@ -432,14 +481,67 @@ export const VillageCivicActivity: React.FC<VillageCivicActivityProps> = ({ vill
                 Create Petition
               </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>Create Community Petition</DialogTitle>
               </DialogHeader>
               <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Petition creation functionality will be available when the database is fully connected.
-                </p>
+                <div className="space-y-2">
+                  <Label htmlFor="petition-title">Petition Title *</Label>
+                  <Input
+                    id="petition-title"
+                    placeholder="Enter a clear, compelling title for your petition"
+                    value={petitionTitle}
+                    onChange={(e) => setPetitionTitle(e.target.value)}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="petition-description">Description *</Label>
+                  <Textarea
+                    id="petition-description"
+                    placeholder="Explain what you're petitioning for, why it's important, and what specific actions you want taken..."
+                    value={petitionDescription}
+                    onChange={(e) => setPetitionDescription(e.target.value)}
+                    rows={6}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="target-audience">Target Authority *</Label>
+                  <Select value={targetAudience} onValueChange={setTargetAudience}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select who should address this petition" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="village_council">Village Council</SelectItem>
+                      <SelectItem value="mayor">Mayor's Office</SelectItem>
+                      <SelectItem value="divisional_officer">Divisional Officer</SelectItem>
+                      <SelectItem value="governor">Regional Governor</SelectItem>
+                      <SelectItem value="ministry_education">Ministry of Education</SelectItem>
+                      <SelectItem value="ministry_health">Ministry of Health</SelectItem>
+                      <SelectItem value="ministry_infrastructure">Ministry of Infrastructure</SelectItem>
+                      <SelectItem value="parliament">National Assembly</SelectItem>
+                      <SelectItem value="other">Other Government Agency</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div className="flex justify-end space-x-2 pt-4">
+                  <Button 
+                    variant="outline" 
+                    onClick={() => setCreatePetitionDialogOpen(false)}
+                    disabled={submitting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={handleCreatePetition}
+                    disabled={submitting || !petitionTitle.trim() || !petitionDescription.trim() || !targetAudience}
+                  >
+                    {submitting ? 'Creating...' : 'Create Petition'}
+                  </Button>
+                </div>
               </div>
             </DialogContent>
           </Dialog>
