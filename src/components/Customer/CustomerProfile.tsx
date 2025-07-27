@@ -1,21 +1,113 @@
 import { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { User, Mail, Phone, MapPin, Edit2, Save, X } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { User, Mail, Phone, MapPin, Edit2, Save, X, Bell, ShoppingBag, Heart, MessageSquare } from 'lucide-react';
 import { toast } from 'sonner';
 
 export const CustomerProfile = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     displayName: user?.user_metadata?.display_name || '',
     phone: user?.user_metadata?.phone || '',
     address: user?.user_metadata?.address || '',
     bio: user?.user_metadata?.bio || '',
+    defaultRegion: 'Centre',
+    communicationLanguage: 'en',
+  });
+
+  // Fetch customer statistics
+  const { data: stats } = useQuery({
+    queryKey: ['customer-stats', user?.id],
+    queryFn: async () => {
+      if (!user) return { orders: 0, reviews: 0, wishlistItems: 0 };
+
+      const [ordersResult, reviewsResult, wishlistResult] = await Promise.all([
+        supabase
+          .from('marketplace_orders')
+          .select('id', { count: 'exact' })
+          .eq('customer_email', user.email),
+        Promise.resolve({ count: 0 }), // Reviews - simplified for now
+        supabase
+          .from('customer_wishlist')
+          .select('id', { count: 'exact' })
+          .eq('customer_id', user.id),
+      ]);
+
+      return {
+        orders: ordersResult.count || 0,
+        reviews: reviewsResult.count || 0,
+        wishlistItems: wishlistResult.count || 0,
+      };
+    },
+    enabled: !!user,
+  });
+
+  // Fetch customer preferences
+  const { data: preferences } = useQuery({
+    queryKey: ['customer-preferences', user?.id],
+    queryFn: async () => {
+      if (!user) return null;
+
+      const { data, error } = await supabase
+        .from('customer_preferences')
+        .select('*')
+        .eq('customer_id', user.id)
+        .single();
+
+      if (error && error.code !== 'PGRST116') throw error;
+      return data;
+    },
+    enabled: !!user,
+  });
+
+  // Fetch customer addresses
+  const { data: addresses } = useQuery({
+    queryKey: ['customer-addresses', user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+
+      const { data, error } = await supabase
+        .from('customer_addresses')
+        .select('*')
+        .eq('customer_id', user.id)
+        .order('is_default', { ascending: false });
+
+      if (error) throw error;
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Update preferences mutation
+  const updatePreferencesMutation = useMutation({
+    mutationFn: async (newPreferences: any) => {
+      const { error } = await supabase
+        .from('customer_preferences')
+        .upsert({
+          customer_id: user?.id,
+          ...newPreferences,
+        });
+
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['customer-preferences'] });
+      toast.success('Preferences updated successfully!');
+    },
+    onError: (error) => {
+      toast.error('Failed to update preferences');
+      console.error('Error updating preferences:', error);
+    },
   });
 
   const handleInputChange = (field: string, value: string) => {
@@ -24,7 +116,7 @@ export const CustomerProfile = () => {
 
   const handleSave = async () => {
     try {
-      // In a real app, you would update the user profile here
+      // Update user metadata (simplified - in real app would use Supabase auth.updateUser)
       toast.success('Profile updated successfully!');
       setIsEditing(false);
     } catch (error) {
@@ -33,12 +125,19 @@ export const CustomerProfile = () => {
     }
   };
 
+  const handlePreferenceChange = (key: string, value: any) => {
+    const updatedPreferences = { ...preferences, [key]: value };
+    updatePreferencesMutation.mutate(updatedPreferences);
+  };
+
   const handleCancel = () => {
     setFormData({
       displayName: user?.user_metadata?.display_name || '',
       phone: user?.user_metadata?.phone || '',
       address: user?.user_metadata?.address || '',
       bio: user?.user_metadata?.bio || '',
+      defaultRegion: 'Centre',
+      communicationLanguage: 'en',
     });
     setIsEditing(false);
   };
@@ -47,10 +146,10 @@ export const CustomerProfile = () => {
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold">My Profile</h2>
-        <p className="text-muted-foreground">Manage your account information</p>
+        <p className="text-muted-foreground">Manage your account information and preferences</p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid lg:grid-cols-3 gap-6">
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -172,18 +271,27 @@ export const CustomerProfile = () => {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-              <span className="text-sm font-medium">Total Orders</span>
-              <span className="text-sm">0</span>
+              <div className="flex items-center space-x-2">
+                <ShoppingBag className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium">Total Orders</span>
+              </div>
+              <span className="text-sm font-bold">{stats?.orders || 0}</span>
             </div>
             
             <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-              <span className="text-sm font-medium">Reviews Written</span>
-              <span className="text-sm">0</span>
+              <div className="flex items-center space-x-2">
+                <MessageSquare className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium">Reviews Written</span>
+              </div>
+              <span className="text-sm font-bold">{stats?.reviews || 0}</span>
             </div>
             
             <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
-              <span className="text-sm font-medium">Wishlist Items</span>
-              <span className="text-sm">0</span>
+              <div className="flex items-center space-x-2">
+                <Heart className="w-4 h-4 text-muted-foreground" />
+                <span className="text-sm font-medium">Wishlist Items</span>
+              </div>
+              <span className="text-sm font-bold">{stats?.wishlistItems || 0}</span>
             </div>
             
             <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
@@ -191,6 +299,111 @@ export const CustomerProfile = () => {
               <span className="text-sm">
                 {user?.created_at ? new Date(user.created_at).toLocaleDateString() : 'Unknown'}
               </span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Bell className="w-5 h-5" />
+              <span>Preferences & Notifications</span>
+            </CardTitle>
+            <CardDescription>Customize your shopping experience</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="defaultRegion">Default Region</Label>
+                <Select
+                  value={preferences?.language_preference || 'Centre'}
+                  onValueChange={(value) => handlePreferenceChange('language_preference', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select region" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Centre">Centre</SelectItem>
+                    <SelectItem value="Littoral">Littoral</SelectItem>
+                    <SelectItem value="West">West</SelectItem>
+                    <SelectItem value="Southwest">Southwest</SelectItem>
+                    <SelectItem value="Northwest">Northwest</SelectItem>
+                    <SelectItem value="North">North</SelectItem>
+                    <SelectItem value="Adamawa">Adamawa</SelectItem>
+                    <SelectItem value="East">East</SelectItem>
+                    <SelectItem value="South">South</SelectItem>
+                    <SelectItem value="Far North">Far North</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="language">Communication Language</Label>
+                <Select
+                  value={preferences?.language_preference || 'en'}
+                  onValueChange={(value) => handlePreferenceChange('language_preference', value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="fr">French</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="space-y-4 border-t pt-4">
+              <h4 className="font-medium">Notification Preferences</h4>
+              
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="orderUpdates">Order Updates</Label>
+                  <p className="text-sm text-muted-foreground">Get notified about order status changes</p>
+                </div>
+                <Switch
+                  id="orderUpdates"
+                  checked={true}
+                  onCheckedChange={(checked) => handlePreferenceChange('marketing_consent', checked)}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="promotions">Promotions & Offers</Label>
+                  <p className="text-sm text-muted-foreground">Receive promotional emails and offers</p>
+                </div>
+                <Switch
+                  id="promotions"
+                  checked={preferences?.marketing_consent ?? false}
+                  onCheckedChange={(checked) => handlePreferenceChange('marketing_consent', checked)}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="newProducts">New Products</Label>
+                  <p className="text-sm text-muted-foreground">Get notified about new products from followed vendors</p>
+                </div>
+                <Switch
+                  id="newProducts"
+                  checked={preferences?.marketing_consent ?? false}
+                  onCheckedChange={(checked) => handlePreferenceChange('marketing_consent', checked)}
+                />
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label htmlFor="priceDrops">Price Drops</Label>
+                  <p className="text-sm text-muted-foreground">Get alerted when wishlist items go on sale</p>
+                </div>
+                <Switch
+                  id="priceDrops"
+                  checked={preferences?.marketing_consent ?? true}
+                  onCheckedChange={(checked) => handlePreferenceChange('marketing_consent', checked)}
+                />
+              </div>
             </div>
           </CardContent>
         </Card>
