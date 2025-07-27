@@ -209,7 +209,9 @@ export const mockMarketplaceProducts = [
     images: ['https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=500&h=400&fit=crop'],
     stock_quantity: 15,
     in_stock: true,
-    marketplace_vendors: mockMarketplaceVendors[0]
+    marketplace_vendors: mockMarketplaceVendors[0],
+    rating: 4.8,
+    created_at: '2024-01-15T10:30:00Z'
   },
   {
     id: '2',
@@ -222,7 +224,9 @@ export const mockMarketplaceProducts = [
     images: ['https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=500&h=400&fit=crop'],
     stock_quantity: 8,
     in_stock: true,
-    marketplace_vendors: mockMarketplaceVendors[0]
+    marketplace_vendors: mockMarketplaceVendors[0],
+    rating: 4.9,
+    created_at: '2024-01-20T14:20:00Z'
   },
   {
     id: '3',
@@ -235,7 +239,9 @@ export const mockMarketplaceProducts = [
     images: ['https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=500&h=400&fit=crop'],
     stock_quantity: 25,
     in_stock: true,
-    marketplace_vendors: mockMarketplaceVendors[1]
+    marketplace_vendors: mockMarketplaceVendors[1],
+    rating: 4.7,
+    created_at: '2024-01-18T09:15:00Z'
   },
   {
     id: '4',
@@ -244,11 +250,13 @@ export const mockMarketplaceProducts = [
     description: 'Beautiful handcrafted wooden sculpture by local artisans',
     price: 45000,
     currency: 'XAF',
-    category: 'Art',
+    category: 'Art & Crafts',
     images: ['https://images.unsplash.com/photo-1649972904349-6e44c42644a7?w=500&h=400&fit=crop'],
     stock_quantity: 12,
     in_stock: true,
-    marketplace_vendors: mockMarketplaceVendors[1]
+    marketplace_vendors: mockMarketplaceVendors[1],
+    rating: 4.6,
+    created_at: '2024-01-12T16:45:00Z'
   },
   {
     id: '5',
@@ -257,11 +265,88 @@ export const mockMarketplaceProducts = [
     description: 'Premium Arabica coffee beans grown in the highlands of Cameroon',
     price: 12000,
     currency: 'XAF',
-    category: 'Food',
+    category: 'Food & Agriculture',
     images: ['https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&h=400&fit=crop'],
     stock_quantity: 100,
     in_stock: true,
-    marketplace_vendors: mockMarketplaceVendors[2]
+    marketplace_vendors: mockMarketplaceVendors[2],
+    rating: 4.5,
+    created_at: '2024-01-10T11:30:00Z'
+  },
+  {
+    id: '6',
+    vendor_id: '1',
+    name: 'Wireless Headphones',
+    description: 'Premium noise-cancelling wireless headphones with 30h battery life',
+    price: 125000,
+    currency: 'XAF',
+    category: 'Electronics',
+    images: ['https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&h=400&fit=crop'],
+    stock_quantity: 30,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[0],
+    rating: 4.8,
+    created_at: '2024-01-22T08:20:00Z'
+  },
+  {
+    id: '7',
+    vendor_id: '2',
+    name: 'Bambara Dress',
+    description: 'Traditional Bambara dress with modern fit and authentic patterns',
+    price: 65000,
+    currency: 'XAF',
+    category: 'Fashion',
+    images: ['https://images.unsplash.com/photo-1594736797933-d0a8b4ab7ec0?w=500&h=400&fit=crop'],
+    stock_quantity: 18,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[1],
+    rating: 4.9,
+    created_at: '2024-01-25T13:10:00Z'
+  },
+  {
+    id: '8',
+    vendor_id: '3',
+    name: 'Plantain Chips',
+    description: 'Crispy plantain chips made from fresh Cameroon plantains',
+    price: 3500,
+    currency: 'XAF',
+    category: 'Food & Agriculture',
+    images: ['https://images.unsplash.com/photo-1599490659213-e2b9527bd087?w=500&h=400&fit=crop'],
+    stock_quantity: 200,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[2],
+    rating: 4.4,
+    created_at: '2024-01-14T15:45:00Z'
+  },
+  {
+    id: '9',
+    vendor_id: '2',
+    name: 'African Mask Collection',
+    description: 'Set of 3 traditional African masks for home decoration',
+    price: 75000,
+    currency: 'XAF',
+    category: 'Art & Crafts',
+    images: ['https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&h=400&fit=crop'],
+    stock_quantity: 8,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[1],
+    rating: 4.7,
+    created_at: '2024-01-19T12:30:00Z'
+  },
+  {
+    id: '10',
+    vendor_id: '1',
+    name: 'Smartphone',
+    description: 'Latest Android smartphone with dual camera and 128GB storage',
+    price: 285000,
+    currency: 'XAF',
+    category: 'Electronics',
+    images: ['https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500&h=400&fit=crop'],
+    stock_quantity: 22,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[0],
+    rating: 4.6,
+    created_at: '2024-01-21T17:00:00Z'
   }
 ];
 
