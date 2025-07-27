@@ -185,6 +185,10 @@ import Profile from "./pages/Profile";
 import PollTemplatesPage from "./pages/PollTemplatesPage";
 import JobsSetupTest from "./tests/JobsSetupTest";
 import Dashboard from "./pages/Dashboard";
+import InteractiveVillageMap from "./pages/InteractiveVillageMap";
+import WeatherAgricultureHub from "./pages/WeatherAgricultureHub";
+import OpportunityTracker from "./pages/OpportunityTracker";
+import AdvancedScholarshipPortal from "./pages/AdvancedScholarshipPortal";
 
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -463,7 +467,11 @@ const App = () => {
                 <Route path="/legislation" element={<LegislationTracker />} />
                 <Route path="/ministries" element={<MinistriesDirectory />} />
                 <Route path="/councils" element={<CouncilsDirectory />} />
-                <Route path="/budget-explorer" element={<BudgetExplorer />} />
+              <Route path="/budget-explorer" element={<BudgetExplorer />} />
+              <Route path="/interactive-village-map" element={<InteractiveVillageMap />} />
+              <Route path="/weather-agriculture" element={<WeatherAgricultureHub />} />
+              <Route path="/opportunity-tracker" element={<OpportunityTracker />} />
+              <Route path="/scholarship-portal" element={<AdvancedScholarshipPortal />} />
               <Route path="/officials" element={<Officials />} />
               <Route path="/judiciary" element={<Judiciary />} />
                  <Route path="*" element={<NotFound />} />
