@@ -61,9 +61,12 @@ const VillagesDirectory = () => {
   const [minRating, setMinRating] = useState([0]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [page, setPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
   const [filteredVillages, setFilteredVillages] = useState<Village[]>([]);
   const [loading, setLoading] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
+  
+  const ITEMS_PER_PAGE = 12;
 
   const { data: allVillages } = useVillages();
   const { data: regionVillages } = useVillagesByRegion(selectedRegion);
@@ -71,54 +74,61 @@ const VillagesDirectory = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [searchTerm, selectedRegion, selectedDivision, selectedSubdivision, selectedCouncil, filterCategory, verifiedOnly, minRating, allVillages, regionVillages]);
+  }, [searchTerm, selectedRegion, selectedDivision, selectedSubdivision, selectedCouncil, filterCategory, verifiedOnly, minRating, allVillages, regionVillages, currentPage]);
 
   const applyFilters = async () => {
     setLoading(true);
     try {
-      let villages = allVillages || [];
-
-      // Use region-specific data if region is selected
-      if (selectedRegion && selectedRegion !== 'all' && regionVillages) {
-        villages = regionVillages;
-      }
+      let query = supabase.from('villages').select('*', { count: 'exact' });
 
       // Apply search filter
       if (searchTerm) {
-        villages = villages.filter(village =>
-          village.village_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          village.division.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          village.subdivision.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        query = query.or(`village_name.ilike.%${searchTerm}%,division.ilike.%${searchTerm}%,subdivision.ilike.%${searchTerm}%`);
+      }
+
+      // Apply region filter
+      if (selectedRegion && selectedRegion !== 'all') {
+        query = query.eq('region', selectedRegion);
       }
 
       // Apply location filters
       if (selectedDivision) {
-        villages = villages.filter(village => village.division === selectedDivision);
+        query = query.eq('division', selectedDivision);
       }
       if (selectedSubdivision) {
-        villages = villages.filter(village => village.subdivision === selectedSubdivision);
+        query = query.eq('subdivision', selectedSubdivision);
       }
 
       // Apply verified filter
       if (verifiedOnly) {
-        villages = villages.filter(village => village.is_verified);
+        query = query.eq('is_verified', true);
       }
 
       // Apply minimum rating filter
       if (minRating[0] > 0) {
-        villages = villages.filter(village => village.overall_rating >= minRating[0]);
+        query = query.gte('overall_rating', minRating[0]);
       }
 
       // Apply category sorting
       if (filterCategory && filterCategory !== 'default') {
         const category = FILTER_CATEGORIES.find(cat => cat.id === filterCategory);
         if (category) {
-          villages.sort((a, b) => (b[category.field as keyof Village] as number) - (a[category.field as keyof Village] as number));
+          query = query.order(category.field, { ascending: false });
         }
+      } else {
+        query = query.order('created_at', { ascending: false });
       }
 
-      setFilteredVillages(villages);
+      // Apply pagination
+      const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+      query = query.range(startIndex, startIndex + ITEMS_PER_PAGE - 1);
+
+      const { data, error, count } = await query;
+
+      if (error) throw error;
+
+      setFilteredVillages(data || []);
+      setTotalCount(count || 0);
     } catch (error) {
       console.error('Error filtering villages:', error);
       toast.error('Failed to filter villages');
@@ -136,6 +146,7 @@ const VillagesDirectory = () => {
     setFilterCategory('');
     setVerifiedOnly(false);
     setMinRating([0]);
+    setCurrentPage(1);
   };
 
   const renderStars = (rating: number) => {
@@ -292,8 +303,8 @@ const VillagesDirectory = () => {
             </div>
             <div className="hidden md:flex items-center gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold">{filteredVillages.length}</div>
-                <div className="text-sm opacity-90">Villages</div>
+                <div className="text-2xl font-bold">{totalCount}</div>
+                <div className="text-sm opacity-90">Total Villages</div>
               </div>
               <Separator orientation="vertical" className="h-12 bg-primary-foreground/20" />
               <div className="text-center">
@@ -562,7 +573,55 @@ const VillagesDirectory = () => {
           </div>
         </div>
       </div>
-    </div>
+            {/* Pagination */}
+            {totalCount > ITEMS_PER_PAGE && (
+              <Card>
+                <CardContent className="p-6">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-muted-foreground">
+                      Showing {((currentPage - 1) * ITEMS_PER_PAGE) + 1} to {Math.min(currentPage * ITEMS_PER_PAGE, totalCount)} of {totalCount} villages
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                        disabled={currentPage === 1}
+                      >
+                        Previous
+                      </Button>
+                      
+                      {/* Page numbers */}
+                      {Array.from({ length: Math.min(5, Math.ceil(totalCount / ITEMS_PER_PAGE)) }).map((_, i) => {
+                        const pageNum = Math.max(1, currentPage - 2) + i;
+                        if (pageNum > Math.ceil(totalCount / ITEMS_PER_PAGE)) return null;
+                        
+                        return (
+                          <Button
+                            key={pageNum}
+                            variant={currentPage === pageNum ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setCurrentPage(pageNum)}
+                          >
+                            {pageNum}
+                          </Button>
+                        );
+                      })}
+                      
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setCurrentPage(Math.min(Math.ceil(totalCount / ITEMS_PER_PAGE), currentPage + 1))}
+                        disabled={currentPage >= Math.ceil(totalCount / ITEMS_PER_PAGE)}
+                      >
+                        Next
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+        </div>
   );
 };
 
