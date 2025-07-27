@@ -239,14 +239,19 @@ export function AbTestConfiguration() {
                       type="number"
                       min="0"
                       max="100"
-                      value={percentage}
+                      value={percentage as number}
                       onChange={(e) => updateTrafficAllocation(group, parseInt(e.target.value) || 0)}
                     />
                   </div>
                 ))}
               </div>
               <p className="text-xs text-muted-foreground mt-1">
-                Total: {Object.values(formData.traffic_allocation).reduce((sum, val) => sum + val, 0)}%
+                Total: {(() => {
+                  const total = Object.values(formData.traffic_allocation).reduce((sum: number, val: any) => {
+                    return sum + Number(val);
+                  }, 0);
+                  return `${total}%`;
+                })()}
               </p>
             </div>
 
@@ -343,7 +348,7 @@ export function AbTestConfiguration() {
                     <div className="grid grid-cols-3 gap-4">
                       {Object.entries(config.traffic_allocation).map(([group, percentage]) => (
                         <div key={group} className="text-center p-4 border rounded">
-                          <div className="text-2xl font-bold text-primary">{percentage}%</div>
+                          <div className="text-2xl font-bold text-primary">{percentage as number}%</div>
                           <div className="text-sm text-muted-foreground capitalize">{group}</div>
                         </div>
                       ))}
