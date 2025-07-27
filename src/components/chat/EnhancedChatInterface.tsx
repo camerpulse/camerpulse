@@ -73,11 +73,22 @@ export const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
     // Send to support bot
     setIsLoading(true);
     try {
+      console.log('Sending message to support bot:', userMessage);
       const { data, error } = await supabase.functions.invoke('support-bot', {
         body: { message: userMessage }
       });
 
-      if (error) throw error;
+      console.log('Support bot response:', { data, error });
+
+      if (error) {
+        console.error('Support bot error details:', error);
+        throw error;
+      }
+
+      if (!data || !data.response) {
+        console.error('Invalid response from support bot:', data);
+        throw new Error('Invalid response from support bot');
+      }
 
       // Add bot response
       addMessage({
@@ -91,7 +102,7 @@ export const EnhancedChatInterface: React.FC<EnhancedChatInterfaceProps> = ({
       console.error('Error sending to support bot:', error);
       toast({
         title: "Error",
-        description: "Failed to send message to support bot",
+        description: `Failed to send message to support bot: ${error.message || error}`,
         variant: "destructive"
       });
     } finally {
