@@ -289,11 +289,16 @@ const App = () => {
                   <VendorDashboard />
                 </ProtectedRoute>
               } />
-              <Route path="/customer-dashboard" element={
-                <ProtectedRoute>
-                  <CustomerDashboard />
-                </ProtectedRoute>
-              } />
+          <Route path="/customer-dashboard" element={
+            <ProtectedRoute>
+              <CustomerDashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/vendor-dashboard" element={
+            <ProtectedRoute>
+              <VendorDashboard />
+            </ProtectedRoute>
+          } />
               <Route path="/polls" element={<PollsLandingPage />} />
               <Route path="/polls/discover" element={<PollsDiscovery />} />
           <Route path="/polls/results/:poll_id" element={<PollResultsPage />} />

@@ -1,77 +1,101 @@
-import { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Edit, Trash2, Package } from 'lucide-react';
-import { AddProductDialog } from './AddProductDialog';
-import { toast } from 'sonner';
+import { ProductFormDialog } from './ProductFormDialog';
+import { Plus, Edit, Eye, Package } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
-interface VendorProductsProps {
-  vendorId: string;
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock_quantity: number;
+  category: string;
+  images: string[];
+  in_stock: boolean;
+  created_at: string;
 }
 
-export const VendorProducts = ({ vendorId }: VendorProductsProps) => {
-  const [showAddProduct, setShowAddProduct] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<any>(null);
-  const queryClient = useQueryClient();
+export const VendorProducts: React.FC = () => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
 
-  const { data: products, isLoading } = useQuery({
-    queryKey: ['vendor-products', vendorId],
-    queryFn: async () => {
+  useEffect(() => {
+    fetchProducts();
+  }, [user]);
+
+  const fetchProducts = async () => {
+    if (!user) return;
+
+    try {
       const { data, error } = await supabase
         .from('marketplace_products')
         .select('*')
-        .eq('vendor_id', vendorId)
+        .eq('vendor_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      return data;
-    },
-  });
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch products",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const deleteProduct = useMutation({
-    mutationFn: async (productId: string) => {
+  const handleProductSaved = () => {
+    fetchProducts();
+    setShowForm(false);
+    setEditingProduct(null);
+  };
+
+  const toggleProductStatus = async (productId: string, currentStatus: boolean) => {
+    try {
       const { error } = await supabase
         .from('marketplace_products')
-        .delete()
+        .update({ in_stock: !currentStatus })
         .eq('id', productId);
 
       if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['vendor-products', vendorId] });
-      toast.success('Product deleted successfully');
-    },
-    onError: () => {
-      toast.error('Failed to delete product');
-    },
-  });
 
-  const handleEdit = (product: any) => {
-    setEditingProduct(product);
-    setShowAddProduct(true);
+      toast({
+        title: "Success",
+        description: `Product ${!currentStatus ? 'activated' : 'deactivated'} successfully`,
+      });
+
+      fetchProducts();
+    } catch (error) {
+      console.error('Error toggling product status:', error);
+      toast({
+        title: "Error",
+        description: "Failed to update product status",
+        variant: "destructive",
+      });
+    }
   };
 
-  const handleAddNew = () => {
-    setEditingProduct(null);
-    setShowAddProduct(true);
-  };
-
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="space-y-4">
-        {[...Array(3)].map((_, i) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {[1, 2, 3].map((i) => (
           <Card key={i} className="animate-pulse">
-            <CardContent className="p-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-muted rounded"></div>
-                <div className="flex-1">
-                  <div className="h-4 bg-muted rounded w-1/3 mb-2"></div>
-                  <div className="h-3 bg-muted rounded w-2/3"></div>
-                </div>
-              </div>
+            <CardContent className="p-4">
+              <div className="h-48 bg-muted rounded-md mb-4"></div>
+              <div className="h-4 bg-muted rounded w-3/4 mb-2"></div>
+              <div className="h-3 bg-muted rounded w-1/2"></div>
             </CardContent>
           </Card>
         ))}
@@ -81,79 +105,74 @@ export const VendorProducts = ({ vendorId }: VendorProductsProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold">Products</h2>
-          <p className="text-muted-foreground">Manage your product catalog</p>
-        </div>
-        <Button onClick={handleAddNew}>
-          <Plus className="w-4 h-4 mr-2" />
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-medium">Product Inventory</h3>
+        <Button
+          onClick={() => setShowForm(true)}
+          className="flex items-center gap-2"
+        >
+          <Plus className="w-4 h-4" />
           Add Product
         </Button>
       </div>
 
-      {!products?.length ? (
+      {products.length === 0 ? (
         <Card>
-          <CardContent className="text-center py-12">
+          <CardContent className="p-6 text-center">
             <Package className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">No products yet</h3>
-            <p className="text-muted-foreground mb-4">
-              Start by adding your first product to your store
-            </p>
-            <Button onClick={handleAddNew}>
-              <Plus className="w-4 h-4 mr-2" />
+            <p className="text-muted-foreground mb-4">No products found</p>
+            <Button onClick={() => setShowForm(true)}>
               Add Your First Product
             </Button>
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
-            <Card key={product.id}>
-              <CardContent className="p-6">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-16 h-16 bg-muted rounded flex items-center justify-center">
-                      <Package className="w-8 h-8 text-muted-foreground" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-semibold">{product.name}</h3>
-                        <Badge variant={product.in_stock ? 'default' : 'secondary'}>
-                          {product.in_stock ? 'In Stock' : 'Out of Stock'}
-                        </Badge>
-                      </div>
-                      <p className="text-muted-foreground text-sm mb-2">
-                        {product.description}
-                      </p>
-                      <div className="flex items-center gap-4 text-sm">
-                        <span className="font-medium text-primary">
-                          {product.price.toLocaleString()} XAF
-                        </span>
-                        <span className="text-muted-foreground">
-                          Stock: {product.stock_quantity}
-                        </span>
-                        <span className="text-muted-foreground">
-                          Category: {product.category}
-                        </span>
-                      </div>
-                    </div>
+            <Card key={product.id} className="hover:shadow-md transition-shadow">
+              <CardContent className="p-4">
+                {product.images && product.images.length > 0 && (
+                  <img
+                    src={product.images[0]}
+                    alt={product.name}
+                    className="w-full h-48 object-cover rounded-md mb-4"
+                  />
+                )}
+                <div className="space-y-2">
+                  <div className="flex items-start justify-between">
+                    <h4 className="font-medium line-clamp-2">{product.name}</h4>
+                    <Badge variant={product.in_stock ? "default" : "secondary"}>
+                      {product.in_stock ? "Active" : "Inactive"}
+                    </Badge>
                   </div>
-                  <div className="flex gap-2">
+                  <p className="text-sm text-muted-foreground line-clamp-2">
+                    {product.description}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-primary">
+                      {product.price.toLocaleString()} FCFA
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      Stock: {product.stock_quantity}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 pt-2">
                     <Button
-                      size="sm"
                       variant="outline"
-                      onClick={() => handleEdit(product)}
+                      size="sm"
+                      onClick={() => {
+                        setEditingProduct(product);
+                        setShowForm(true);
+                      }}
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
                     <Button
-                      size="sm"
                       variant="outline"
-                      onClick={() => deleteProduct.mutate(product.id)}
-                      disabled={deleteProduct.isPending}
+                      size="sm"
+                      onClick={() => toggleProductStatus(product.id, product.in_stock)}
                     >
-                      <Trash2 className="w-4 h-4" />
+                      <Eye className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
@@ -163,17 +182,17 @@ export const VendorProducts = ({ vendorId }: VendorProductsProps) => {
         </div>
       )}
 
-      <AddProductDialog
-        open={showAddProduct}
-        onOpenChange={setShowAddProduct}
-        vendorId={vendorId}
-        product={editingProduct}
-        onSuccess={() => {
-          setShowAddProduct(false);
-          setEditingProduct(null);
-          queryClient.invalidateQueries({ queryKey: ['vendor-products', vendorId] });
-        }}
-      />
+      {(showForm || editingProduct) && (
+        <ProductFormDialog
+          product={editingProduct}
+          isOpen={showForm || !!editingProduct}
+          onClose={() => {
+            setShowForm(false);
+            setEditingProduct(null);
+          }}
+          onSave={handleProductSaved}
+        />
+      )}
     </div>
   );
 };

@@ -1,210 +1,150 @@
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-import { TrendingUp, TrendingDown, DollarSign, ShoppingBag } from 'lucide-react';
-
-interface VendorAnalyticsProps {
-  vendorId: string;
-}
+import React, { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { TrendingUp, ShoppingCart, Package, DollarSign } from 'lucide-react';
 
 interface AnalyticsData {
-  chartData: Array<{ month: string; revenue: number; orders: number }>;
-  totalRevenue: number;
+  totalSales: number;
   totalOrders: number;
-  avgOrderValue: number;
-  growth: number;
+  totalProducts: number;
+  averageOrderValue: number;
+  recentOrders: any[];
+  topProducts: any[];
 }
 
-export const VendorAnalytics = ({ vendorId }: VendorAnalyticsProps) => {
-  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export const VendorAnalytics: React.FC = () => {
+  const { user } = useAuth();
+  const [analytics, setAnalytics] = useState<AnalyticsData>({
+    totalSales: 0,
+    totalOrders: 0,
+    totalProducts: 0,
+    averageOrderValue: 0,
+    recentOrders: [],
+    topProducts: [],
+  });
+  const [loading, setLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState('30');
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        setIsLoading(true);
-        
-        // Mock data for now to avoid Supabase type issues
-        // In real implementation, you would fetch from Supabase here
-        const mockData: AnalyticsData = {
-          chartData: [
-            { month: 'Jan 2024', revenue: 75000, orders: 15 },
-            { month: 'Feb 2024', revenue: 85000, orders: 17 },
-            { month: 'Mar 2024', revenue: 92000, orders: 18 },
-            { month: 'Apr 2024', revenue: 105000, orders: 21 },
-            { month: 'May 2024', revenue: 118000, orders: 24 },
-            { month: 'Jun 2024', revenue: 125000, orders: 25 },
-          ],
-          totalRevenue: 600000,
-          totalOrders: 120,
-          avgOrderValue: 5000,
-          growth: 12.3,
-        };
+    fetchAnalytics();
+  }, [user, timeRange]);
 
-        setAnalytics(mockData);
-      } catch (error) {
-        console.error('Error fetching vendor analytics:', error);
-        setAnalytics({
-          chartData: [],
-          totalRevenue: 0,
-          totalOrders: 0,
-          avgOrderValue: 0,
-          growth: 0,
-        });
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchAnalytics = async () => {
+    if (!user) return;
 
-    if (vendorId) {
-      fetchAnalytics();
+    try {
+      // Fetch total products
+      const { data: products } = await supabase
+        .from('marketplace_products')
+        .select('id')
+        .eq('vendor_id', user.id);
+
+      // Mock analytics data
+      setAnalytics({
+        totalSales: 125000,
+        totalOrders: 15,
+        totalProducts: products?.length || 0,
+        averageOrderValue: 8333,
+        recentOrders: [],
+        topProducts: [],
+      });
+    } catch (error) {
+      console.error('Error fetching analytics:', error);
+    } finally {
+      setLoading(false);
     }
-  }, [vendorId]);
+  };
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[...Array(4)].map((_, i) => (
-            <Card key={i} className="animate-pulse">
-              <CardContent className="p-6">
-                <div className="h-16 bg-muted rounded"></div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-        <Card className="animate-pulse">
-          <CardContent className="p-6">
-            <div className="h-64 bg-muted rounded"></div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[1, 2, 3, 4].map((i) => (
+          <Card key={i} className="animate-pulse">
+            <CardContent className="p-6">
+              <div className="h-4 bg-muted rounded w-1/2 mb-2"></div>
+              <div className="h-8 bg-muted rounded w-3/4"></div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold">Analytics</h2>
-        <p className="text-muted-foreground">Track your store performance</p>
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-medium">Sales Analytics</h3>
+        <Select value={timeRange} onValueChange={setTimeRange}>
+          <SelectTrigger className="w-40">
+            <SelectValue placeholder="Time range" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="7">Last 7 days</SelectItem>
+            <SelectItem value="30">Last 30 days</SelectItem>
+            <SelectItem value="90">Last 90 days</SelectItem>
+            <SelectItem value="365">Last year</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <CardTitle className="text-sm font-medium">Total Sales</CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(analytics?.totalRevenue || 0).toLocaleString()} XAF
+              {analytics.totalSales.toLocaleString()} FCFA
             </div>
-            <p className="text-xs text-muted-foreground">
-              Last 6 months
-            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
-            <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+            <ShoppingCart className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{analytics?.totalOrders || 0}</div>
-            <p className="text-xs text-muted-foreground">
-              Last 6 months
-            </p>
+            <div className="text-2xl font-bold">{analytics.totalOrders}</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Order Value</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Total Products</CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{analytics.totalProducts}</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Avg. Order Value</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {(analytics?.avgOrderValue || 0).toLocaleString()} XAF
+              {analytics.averageOrderValue.toLocaleString()} FCFA
             </div>
-            <p className="text-xs text-muted-foreground">
-              Per completed order
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Growth</CardTitle>
-            {(analytics?.growth || 0) >= 0 ? (
-              <TrendingUp className="h-4 w-4 text-green-600" />
-            ) : (
-              <TrendingDown className="h-4 w-4 text-red-600" />
-            )}
-          </CardHeader>
-          <CardContent>
-            <div className={`text-2xl font-bold ${
-              (analytics?.growth || 0) >= 0 ? 'text-green-600' : 'text-red-600'
-            }`}>
-              {(analytics?.growth || 0) >= 0 ? '+' : ''}{(analytics?.growth || 0).toFixed(1)}%
-            </div>
-            <p className="text-xs text-muted-foreground">
-              Month over month
-            </p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Revenue Chart */}
+      {/* Placeholder for future charts */}
       <Card>
         <CardHeader>
-          <CardTitle>Revenue Trend</CardTitle>
-          <CardDescription>Monthly revenue over the last 6 months</CardDescription>
+          <CardTitle>Sales Performance</CardTitle>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={analytics?.chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip 
-                formatter={(value: number) => [`${value.toLocaleString()} XAF`, 'Revenue']}
-              />
-              <Line 
-                type="monotone" 
-                dataKey="revenue" 
-                stroke="hsl(var(--primary))" 
-                strokeWidth={2}
-                dot={{ fill: 'hsl(var(--primary))' }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
-
-      {/* Orders Chart */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Order Volume</CardTitle>
-          <CardDescription>Number of orders per month</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={analytics?.chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" />
-              <YAxis />
-              <Tooltip 
-                formatter={(value: number) => [value, 'Orders']}
-              />
-              <Bar 
-                dataKey="orders" 
-                fill="hsl(var(--primary))" 
-                radius={[4, 4, 0, 0]}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+          <p className="text-muted-foreground text-center py-8">
+            Sales charts and detailed analytics coming soon...
+          </p>
         </CardContent>
       </Card>
     </div>
