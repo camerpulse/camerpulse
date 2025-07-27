@@ -12065,6 +12065,152 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_addresses: {
+        Row: {
+          address_type: string
+          city: string
+          country: string
+          created_at: string
+          customer_id: string
+          id: string
+          is_default: boolean
+          postal_code: string | null
+          region: string
+          street_address: string
+          updated_at: string
+        }
+        Insert: {
+          address_type?: string
+          city: string
+          country?: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          is_default?: boolean
+          postal_code?: string | null
+          region: string
+          street_address: string
+          updated_at?: string
+        }
+        Update: {
+          address_type?: string
+          city?: string
+          country?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          is_default?: boolean
+          postal_code?: string | null
+          region?: string
+          street_address?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      customer_notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string
+          customer_id: string
+          expires_at: string | null
+          id: string
+          is_read: boolean
+          message: string
+          metadata: Json | null
+          notification_type: string
+          title: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string
+          customer_id: string
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message: string
+          metadata?: Json | null
+          notification_type: string
+          title: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string
+          customer_id?: string
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          metadata?: Json | null
+          notification_type?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      customer_preferences: {
+        Row: {
+          created_at: string
+          currency_preference: string
+          customer_id: string
+          id: string
+          language_preference: string
+          marketing_consent: boolean
+          notification_preferences: Json
+          preferred_categories: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          currency_preference?: string
+          customer_id: string
+          id?: string
+          language_preference?: string
+          marketing_consent?: boolean
+          notification_preferences?: Json
+          preferred_categories?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          currency_preference?: string
+          customer_id?: string
+          id?: string
+          language_preference?: string
+          marketing_consent?: boolean
+          notification_preferences?: Json
+          preferred_categories?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      customer_wishlist: {
+        Row: {
+          created_at: string
+          customer_id: string
+          id: string
+          product_id: string
+        }
+        Insert: {
+          created_at?: string
+          customer_id: string
+          id?: string
+          product_id: string
+        }
+        Update: {
+          created_at?: string
+          customer_id?: string
+          id?: string
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_wishlist_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       data_quality_metrics: {
         Row: {
           created_at: string
@@ -21038,6 +21184,7 @@ export type Database = {
       marketplace_products: {
         Row: {
           category: string | null
+          category_id: string | null
           created_at: string | null
           currency: string | null
           description: string | null
@@ -21052,6 +21199,7 @@ export type Database = {
         }
         Insert: {
           category?: string | null
+          category_id?: string | null
           created_at?: string | null
           currency?: string | null
           description?: string | null
@@ -21066,6 +21214,7 @@ export type Database = {
         }
         Update: {
           category?: string | null
+          category_id?: string | null
           created_at?: string | null
           currency?: string | null
           description?: string | null
@@ -21079,6 +21228,13 @@ export type Database = {
           vendor_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "marketplace_products_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "marketplace_products_vendor_id_fkey"
             columns: ["vendor_id"]
@@ -24357,6 +24513,50 @@ export type Database = {
           village_id?: string
         }
         Relationships: []
+      }
+      order_tracking_events: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string
+          estimated_delivery: string | null
+          id: string
+          location: string | null
+          order_id: string
+          status: string
+          tracking_number: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description: string
+          estimated_delivery?: string | null
+          id?: string
+          location?: string | null
+          order_id: string
+          status: string
+          tracking_number?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string
+          estimated_delivery?: string | null
+          id?: string
+          location?: string | null
+          order_id?: string
+          status?: string
+          tracking_number?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_tracking_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       orders: {
         Row: {
@@ -30125,6 +30325,44 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      product_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          parent_category_id: string | null
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          parent_category_id?: string | null
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          parent_category_id?: string | null
+          sort_order?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_categories_parent_category_id_fkey"
+            columns: ["parent_category_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       professional_profiles: {
         Row: {

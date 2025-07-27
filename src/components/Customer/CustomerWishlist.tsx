@@ -17,7 +17,7 @@ export const CustomerWishlist = () => {
       if (!user) return [];
 
       const { data, error } = await supabase
-        .from('marketplace_wishlists')
+        .from('customer_wishlist')
         .select(`
           *,
           marketplace_products (
@@ -25,7 +25,7 @@ export const CustomerWishlist = () => {
             marketplace_vendors (business_name)
           )
         `)
-        .eq('user_id', user.id)
+        .eq('customer_id', user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -37,9 +37,9 @@ export const CustomerWishlist = () => {
   const removeFromWishlistMutation = useMutation({
     mutationFn: async (productId: string) => {
       const { error } = await supabase
-        .from('marketplace_wishlists')
+        .from('customer_wishlist')
         .delete()
-        .eq('user_id', user?.id)
+        .eq('customer_id', user?.id)
         .eq('product_id', productId);
 
       if (error) throw error;
