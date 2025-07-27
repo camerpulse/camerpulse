@@ -19,7 +19,8 @@ import {
   AlertTriangle,
   Lightbulb,
   BarChart3,
-  Leaf
+  Leaf,
+  RefreshCw
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -32,6 +33,11 @@ interface WeatherData {
   rainfall_mm: number;
   wind_speed_kmh: number;
   weather_condition: string;
+  village_id?: string;
+  villages?: {
+    village_name: string;
+    region: string;
+  };
 }
 
 interface AgricultureData {
@@ -44,8 +50,8 @@ interface AgricultureData {
   land_area_hectares: number;
   irrigation_method: string;
   soil_type: string;
-  challenges: any;
-  opportunities: any;
+  challenges: string[];
+  opportunities: string[];
 }
 
 interface WeatherAlert {
@@ -62,6 +68,7 @@ const WeatherAgricultureHub: React.FC = () => {
   const [selectedRegion, setSelectedRegion] = useState('');
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('weather');
+  const [isUpdatingWeather, setIsUpdatingWeather] = useState(false);
 
   const regions = [
     'Adamawa', 'Centre', 'East', 'Far North', 'Littoral', 
@@ -98,39 +105,84 @@ const WeatherAgricultureHub: React.FC = () => {
   }, []);
 
   const fetchData = async () => {
+    setLoading(true);
     try {
-      // Fetch weather data
-      const { data: weather, error: weatherError } = await supabase
-        .from('weather_data')
-        .select('*')
-        .order('date', { ascending: false })
-        .limit(100);
-
-      if (weatherError) throw weatherError;
-
-      // Fetch agriculture data
-      const { data: agriculture, error: agricultureError } = await supabase
-        .from('agriculture_data')
-        .select('*');
-
-      if (agricultureError) throw agricultureError;
-
-      setWeatherData(weather || []);
-      setAgricultureData(agriculture || []);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load weather and agriculture data",
-        variant: "destructive"
-      });
+      await Promise.all([
+        fetchWeatherData(),
+        fetchAgricultureData()
+      ]);
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchWeatherData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('weather_data')
+        .select(`
+          *,
+          villages (
+            village_name,
+            region
+          )
+        `)
+        .order('date', { ascending: false })
+        .limit(50);
+
+      if (error) throw error;
+      
+      // Type cast and handle the villages relation properly
+      const weatherWithVillages = (data || []).map(item => ({
+        ...item,
+        villages: item.villages && typeof item.villages === 'object' && item.villages !== null && !Array.isArray(item.villages)
+          ? item.villages as { village_name: string; region: string }
+          : undefined
+      }));
+      
+      setWeatherData(weatherWithVillages);
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load weather data",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const fetchAgricultureData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('agriculture_data')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setAgricultureData((data || []).map(item => ({
+        ...item,
+        challenges: Array.isArray(item.challenges) 
+          ? item.challenges 
+          : typeof item.challenges === 'string' 
+            ? JSON.parse(item.challenges) 
+            : [],
+        opportunities: Array.isArray(item.opportunities) 
+          ? item.opportunities 
+          : typeof item.opportunities === 'string' 
+            ? JSON.parse(item.opportunities) 
+            : []
+      })));
+    } catch (error) {
+      console.error('Error fetching agriculture data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load agriculture data",
+        variant: "destructive"
+      });
+    }
+  };
+
   const setupRealtimeSubscriptions = () => {
-    // Weather data subscription
     const weatherChannel = supabase
       .channel('weather-realtime')
       .on(
@@ -143,31 +195,9 @@ const WeatherAgricultureHub: React.FC = () => {
         (payload) => {
           if (payload.eventType === 'INSERT') {
             setWeatherData(prev => [payload.new as WeatherData, ...prev]);
-            toast({
-              title: "Weather Update",
-              description: `New weather data available for ${payload.new.region}`,
-            });
-          }
-        }
-      )
-      .subscribe();
-
-    // Agriculture data subscription
-    const agricultureChannel = supabase
-      .channel('agriculture-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: '*',
-          schema: 'public',
-          table: 'agriculture_data'
-        },
-        (payload) => {
-          if (payload.eventType === 'INSERT') {
-            setAgricultureData(prev => [...prev, payload.new as AgricultureData]);
           } else if (payload.eventType === 'UPDATE') {
-            setAgricultureData(prev => 
-              prev.map(item => item.id === payload.new.id ? payload.new as AgricultureData : item)
+            setWeatherData(prev => 
+              prev.map(item => item.id === payload.new.id ? payload.new as WeatherData : item)
             );
           }
         }
@@ -176,46 +206,62 @@ const WeatherAgricultureHub: React.FC = () => {
 
     return () => {
       supabase.removeChannel(weatherChannel);
-      supabase.removeChannel(agricultureChannel);
     };
   };
 
-  const getFilteredWeatherData = () => {
-    if (!selectedRegion) return weatherData.slice(0, 10);
-    return weatherData.filter(item => item.region === selectedRegion).slice(0, 10);
-  };
-
-  const getFilteredAgricultureData = () => {
-    if (!selectedRegion) return agricultureData;
-    return agricultureData.filter(item => item.region === selectedRegion);
+  const updateWeatherData = async () => {
+    setIsUpdatingWeather(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('weather-update');
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Weather Update",
+        description: data.message || "Weather data updated successfully",
+      });
+      
+      await fetchWeatherData();
+    } catch (error) {
+      console.error('Error updating weather:', error);
+      toast({
+        title: "Update Failed",
+        description: "Failed to update weather data. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsUpdatingWeather(false);
+    }
   };
 
   const getWeatherIcon = (condition: string) => {
     const lowerCondition = condition.toLowerCase();
-    if (lowerCondition.includes('rain')) return CloudRain;
-    if (lowerCondition.includes('cloud')) return Cloud;
-    if (lowerCondition.includes('sun') || lowerCondition.includes('clear')) return Sun;
+    if (lowerCondition.includes('rain') || lowerCondition.includes('drizzle')) {
+      return CloudRain;
+    }
+    if (lowerCondition.includes('cloud') || lowerCondition.includes('overcast')) {
+      return Cloud;
+    }
+    if (lowerCondition.includes('clear') || lowerCondition.includes('sunny')) {
+      return Sun;
+    }
     return Cloud;
   };
 
-  const getCurrentWeather = () => {
-    const filteredData = getFilteredWeatherData();
-    return filteredData[0] || null;
+  const getTemperatureColor = (temp: number) => {
+    if (temp >= 35) return 'text-red-500';
+    if (temp >= 25) return 'text-orange-500';
+    if (temp >= 15) return 'text-blue-500';
+    return 'text-blue-600';
   };
 
-  const getWeatherTrend = () => {
-    const filtered = getFilteredWeatherData();
-    if (filtered.length < 2) return { trend: 'stable', change: 0 };
-    
-    const current = filtered[0];
-    const previous = filtered[1];
-    const change = current.temperature_celsius - previous.temperature_celsius;
-    
-    return {
-      trend: change > 1 ? 'rising' : change < -1 ? 'falling' : 'stable',
-      change: Math.abs(change)
-    };
-  };
+  const filteredWeatherData = selectedRegion 
+    ? weatherData.filter(item => item.region === selectedRegion)
+    : weatherData;
+
+  const filteredAgricultureData = selectedRegion 
+    ? agricultureData.filter(item => item.region === selectedRegion)
+    : agricultureData;
 
   if (loading) {
     return (
@@ -224,7 +270,7 @@ const WeatherAgricultureHub: React.FC = () => {
           <div className="animate-pulse space-y-6">
             <div className="h-8 bg-muted rounded w-1/3"></div>
             <div className="grid md:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
+              {[1,2,3].map(i => (
                 <div key={i} className="h-48 bg-muted rounded"></div>
               ))}
             </div>
@@ -234,50 +280,66 @@ const WeatherAgricultureHub: React.FC = () => {
     );
   }
 
-  const currentWeather = getCurrentWeather();
-  const weatherTrend = getWeatherTrend();
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-500 to-blue-500 text-white py-12">
+      <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-12">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center gap-3 mb-4">
-            <Cloud className="h-10 w-10" />
+            <Leaf className="h-10 w-10" />
             <h1 className="text-4xl font-bold">Weather & Agriculture Hub</h1>
           </div>
-          <p className="text-xl opacity-90 max-w-2xl">
-            Real-time weather data, agricultural insights, and farming guidance for Cameroon
+          <p className="text-xl opacity-90 max-w-3xl">
+            Real-time weather data and agricultural insights for farmers across Cameroon
           </p>
           <div className="flex gap-4 mt-6">
             <Badge variant="secondary" className="text-lg px-4 py-2">
-              Live Weather Data
+              {weatherData.length} Weather Reports
             </Badge>
             <Badge variant="secondary" className="text-lg px-4 py-2">
-              Agricultural Intelligence
+              {agricultureData.length} Crop Data
             </Badge>
+            <Button 
+              onClick={updateWeatherData}
+              disabled={isUpdatingWeather}
+              variant="outline"
+              className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+            >
+              {isUpdatingWeather ? (
+                <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4 mr-2" />
+              )}
+              Update Weather
+            </Button>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Weather Alerts */}
+        {/* Alerts Section */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold mb-4">Active Alerts</h2>
+          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+            <AlertTriangle className="h-6 w-6" />
+            Weather Alerts & Advisories
+          </h2>
           <div className="grid md:grid-cols-3 gap-4">
             {weatherAlerts.map((alert, index) => (
-              <Card key={index} className="border-l-4 border-l-yellow-500">
+              <Card key={index} className="border-l-4 border-l-current">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
-                    <alert.icon className={`h-6 w-6 ${alert.color} mt-1`} />
+                    <alert.icon className={`h-6 w-6 ${alert.color} flex-shrink-0 mt-0.5`} />
                     <div>
-                      <h3 className="font-semibold">{alert.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {alert.description}
-                      </p>
-                      <Badge variant="outline" className="mt-2">
-                        {alert.type.toUpperCase()}
-                      </Badge>
+                      <div className="flex items-center gap-2 mb-2">
+                        <h3 className="font-semibold">{alert.title}</h3>
+                        <Badge 
+                          variant={alert.type === 'warning' ? 'destructive' : 'secondary'}
+                          className="text-xs"
+                        >
+                          {alert.type.toUpperCase()}
+                        </Badge>
+                      </div>
+                      <p className="text-sm text-muted-foreground">{alert.description}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -286,245 +348,219 @@ const WeatherAgricultureHub: React.FC = () => {
           </div>
         </div>
 
-        {/* Region Filter */}
+        {/* Controls */}
         <div className="mb-6">
-          <select
-            className="p-2 border rounded-md w-full max-w-xs"
-            value={selectedRegion}
-            onChange={(e) => setSelectedRegion(e.target.value)}
-          >
-            <option value="">All Regions</option>
-            {regions.map(region => (
-              <option key={region} value={region}>{region}</option>
-            ))}
-          </select>
+          <div className="flex flex-wrap gap-4 items-center">
+            <select
+              className="px-4 py-2 border rounded-md"
+              value={selectedRegion}
+              onChange={(e) => setSelectedRegion(e.target.value)}
+            >
+              <option value="">All Regions</option>
+              {regions.map(region => (
+                <option key={region} value={region}>{region}</option>
+              ))}
+            </select>
+            <Badge variant="outline" className="px-4 py-2">
+              {selectedRegion || 'All Regions'} - {filteredWeatherData.length} Records
+            </Badge>
+          </div>
         </div>
 
+        {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full md:w-auto md:grid-cols-3">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="weather">Weather Data</TabsTrigger>
             <TabsTrigger value="agriculture">Agriculture</TabsTrigger>
-            <TabsTrigger value="insights">AI Insights</TabsTrigger>
+            <TabsTrigger value="insights">Smart Insights</TabsTrigger>
           </TabsList>
 
           <TabsContent value="weather" className="space-y-6">
-            {/* Current Weather Overview */}
-            {currentWeather && (
-              <div className="grid md:grid-cols-4 gap-4 mb-6">
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Thermometer className="h-8 w-8 mx-auto mb-2 text-red-500" />
-                    <p className="text-2xl font-bold">{currentWeather.temperature_celsius}°C</p>
-                    <p className="text-sm text-muted-foreground">Temperature</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Droplets className="h-8 w-8 mx-auto mb-2 text-blue-500" />
-                    <p className="text-2xl font-bold">{currentWeather.humidity_percentage}%</p>
-                    <p className="text-sm text-muted-foreground">Humidity</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <CloudRain className="h-8 w-8 mx-auto mb-2 text-green-500" />
-                    <p className="text-2xl font-bold">{currentWeather.rainfall_mm}mm</p>
-                    <p className="text-sm text-muted-foreground">Rainfall</p>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="p-4 text-center">
-                    <Wind className="h-8 w-8 mx-auto mb-2 text-gray-500" />
-                    <p className="text-2xl font-bold">{currentWeather.wind_speed_kmh} km/h</p>
-                    <p className="text-sm text-muted-foreground">Wind Speed</p>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {/* Weather History */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Weather Data</CardTitle>
-                <CardDescription>
-                  Latest weather readings {selectedRegion && `for ${selectedRegion} region`}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {getFilteredWeatherData().map((weather) => {
-                    const WeatherIcon = getWeatherIcon(weather.weather_condition);
-                    return (
-                      <div key={weather.id} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <WeatherIcon className="h-6 w-6 text-blue-500" />
-                          <div>
-                            <p className="font-medium">{weather.region}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {new Date(weather.date).toLocaleDateString()}
-                            </p>
-                          </div>
+            {/* Weather Cards */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredWeatherData.slice(0, 9).map((weather) => {
+                const WeatherIcon = getWeatherIcon(weather.weather_condition);
+                return (
+                  <Card key={weather.id} className="hover:shadow-lg transition-shadow">
+                    <CardHeader className="pb-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <CardTitle className="text-lg flex items-center gap-2">
+                            <MapPin className="h-4 w-4" />
+                            {weather.villages?.village_name || weather.region}
+                          </CardTitle>
+                          <CardDescription>{weather.region} Region</CardDescription>
                         </div>
-                        <div className="text-right">
-                          <p className="font-bold">{weather.temperature_celsius}°C</p>
-                          <p className="text-sm text-muted-foreground">{weather.weather_condition}</p>
+                        <WeatherIcon className="h-8 w-8 text-blue-500" />
+                      </div>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="text-center">
+                          <div className={`text-2xl font-bold ${getTemperatureColor(weather.temperature_celsius)}`}>
+                            {weather.temperature_celsius}°C
+                          </div>
+                          <div className="text-sm text-muted-foreground">Temperature</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-blue-500">
+                            {weather.humidity_percentage}%
+                          </div>
+                          <div className="text-sm text-muted-foreground">Humidity</div>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between">
+                          <span className="flex items-center gap-1">
+                            <Droplets className="h-4 w-4" />
+                            Rainfall
+                          </span>
+                          <span className="font-medium">{weather.rainfall_mm} mm</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="flex items-center gap-1">
+                            <Wind className="h-4 w-4" />
+                            Wind Speed
+                          </span>
+                          <span className="font-medium">{weather.wind_speed_kmh} km/h</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="flex items-center gap-1">
+                            <Calendar className="h-4 w-4" />
+                            Date
+                          </span>
+                          <span className="font-medium">{new Date(weather.date).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+
+                      <Badge variant="outline" className="w-full justify-center">
+                        {weather.weather_condition}
+                      </Badge>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
           </TabsContent>
 
           <TabsContent value="agriculture" className="space-y-6">
-            {/* Agriculture Overview */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {filteredAgricultureData.map((agri) => (
+                <Card key={agri.id} className="hover:shadow-lg transition-shadow">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Sprout className="h-5 w-5" />
+                      {agri.crop_type} - {agri.region}
+                    </CardTitle>
+                    <CardDescription>{agri.soil_type} soil, {agri.land_area_hectares} hectares</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <div className="text-sm text-muted-foreground">Yield per Hectare</div>
+                        <div className="text-xl font-bold text-green-600">
+                          {agri.yield_per_hectare} tons
+                        </div>
+                      </div>
+                      <div>
+                        <div className="text-sm text-muted-foreground">Irrigation</div>
+                        <div className="font-medium">{agri.irrigation_method}</div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span>Planting Season</span>
+                        <Badge variant="outline">{agri.planting_season}</Badge>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Harvest Season</span>
+                        <Badge variant="outline">{agri.harvest_season}</Badge>
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-sm font-medium mb-2">Key Challenges</div>
+                      <div className="flex flex-wrap gap-1">
+                        {agri.challenges.slice(0, 3).map((challenge, idx) => (
+                          <Badge key={idx} variant="destructive" className="text-xs">
+                            {challenge}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <div className="text-sm font-medium mb-2">Opportunities</div>
+                      <div className="flex flex-wrap gap-1">
+                        {agri.opportunities.slice(0, 3).map((opportunity, idx) => (
+                          <Badge key={idx} variant="secondary" className="text-xs">
+                            {opportunity}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="insights" className="space-y-6">
             <div className="grid md:grid-cols-3 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Sprout className="h-5 w-5" />
-                    Active Crops
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold">
-                    {[...new Set(getFilteredAgricultureData().map(item => item.crop_type))].length}
-                  </p>
-                  <p className="text-sm text-muted-foreground">Different crop types</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <BarChart3 className="h-5 w-5" />
-                    Total Land Area
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-3xl font-bold">
-                    {getFilteredAgricultureData()
-                      .reduce((sum, item) => sum + item.land_area_hectares, 0)
-                      .toLocaleString()}
-                  </p>
-                  <p className="text-sm text-muted-foreground">Hectares under cultivation</p>
-                </CardContent>
-              </Card>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
                     <TrendingUp className="h-5 w-5" />
-                    Avg. Yield
+                    Regional Analysis
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-3xl font-bold">
-                    {(getFilteredAgricultureData()
-                      .reduce((sum, item) => sum + item.yield_per_hectare, 0) / 
-                      Math.max(getFilteredAgricultureData().length, 1)
-                    ).toFixed(1)}
-                  </p>
-                  <p className="text-sm text-muted-foreground">Tons per hectare</p>
+                  <div className="space-y-3">
+                    <div>
+                      <div className="text-sm text-muted-foreground">Hottest Region Today</div>
+                      <div className="font-semibold">
+                        {filteredWeatherData.length > 0 
+                          ? filteredWeatherData.reduce((prev, current) => 
+                              prev.temperature_celsius > current.temperature_celsius ? prev : current
+                            ).region
+                          : 'No data'
+                        }
+                      </div>
+                    </div>
+                    <div>
+                      <div className="text-sm text-muted-foreground">Highest Rainfall</div>
+                      <div className="font-semibold">
+                        {filteredWeatherData.length > 0 
+                          ? filteredWeatherData.reduce((prev, current) => 
+                              prev.rainfall_mm > current.rainfall_mm ? prev : current
+                            ).region
+                          : 'No data'
+                        }
+                      </div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-            </div>
 
-            {/* Crop Data */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Agricultural Data</CardTitle>
-                <CardDescription>
-                  Crop information and farming practices {selectedRegion && `for ${selectedRegion} region`}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {getFilteredAgricultureData().map((agriculture) => (
-                    <div key={agriculture.id} className="border rounded-lg p-4">
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <h3 className="font-semibold capitalize">{agriculture.crop_type}</h3>
-                          <p className="text-sm text-muted-foreground">{agriculture.region} Region</p>
-                        </div>
-                        <Badge variant="outline">
-                          {agriculture.yield_per_hectare} tons/ha
-                        </Badge>
-                      </div>
-                      
-                      <div className="grid md:grid-cols-2 gap-4 text-sm">
-                        <div>
-                          <p><strong>Planting:</strong> {agriculture.planting_season}</p>
-                          <p><strong>Harvest:</strong> {agriculture.harvest_season}</p>
-                          <p><strong>Soil Type:</strong> {agriculture.soil_type}</p>
-                        </div>
-                        <div>
-                          <p><strong>Land Area:</strong> {agriculture.land_area_hectares} hectares</p>
-                          <p><strong>Irrigation:</strong> {agriculture.irrigation_method}</p>
-                        </div>
-                      </div>
-
-                      {agriculture.challenges.length > 0 && (
-                        <div className="mt-3">
-                          <p className="font-medium text-sm mb-1">Challenges:</p>
-                          <div className="flex flex-wrap gap-1">
-                            {agriculture.challenges.map((challenge, idx) => (
-                              <Badge key={idx} variant="destructive" className="text-xs">
-                                {challenge}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-
-                      {agriculture.opportunities.length > 0 && (
-                        <div className="mt-2">
-                          <p className="font-medium text-sm mb-1">Opportunities:</p>
-                          <div className="flex flex-wrap gap-1">
-                            {agriculture.opportunities.map((opportunity, idx) => (
-                              <Badge key={idx} variant="secondary" className="text-xs">
-                                {opportunity}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="insights" className="space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Lightbulb className="h-5 w-5" />
-                    Farming Recommendations
+                    Smart Recommendations
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
-                    <h4 className="font-medium text-green-800">Optimal Planting Time</h4>
-                    <p className="text-sm text-green-700 mt-1">
-                      Current weather conditions are ideal for maize planting in Centre region. 
-                      Soil moisture levels are optimal.
-                    </p>
-                  </div>
-                  <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                    <h4 className="font-medium text-blue-800">Irrigation Advisory</h4>
-                    <p className="text-sm text-blue-700 mt-1">
-                      Expected dry spell in Far North region. Consider supplemental irrigation 
-                      for groundnut crops.
-                    </p>
-                  </div>
-                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <h4 className="font-medium text-yellow-800">Pest Alert</h4>
-                    <p className="text-sm text-yellow-700 mt-1">
-                      High humidity in Southwest region may increase risk of cocoa black pod disease. 
-                      Monitor crops closely.
-                    </p>
+                <CardContent>
+                  <div className="space-y-3 text-sm">
+                    <div className="p-3 bg-green-50 rounded-md">
+                      <div className="font-medium text-green-800">Planting Advice</div>
+                      <div className="text-green-700">Ideal conditions for cocoa planting in Southwest region</div>
+                    </div>
+                    <div className="p-3 bg-yellow-50 rounded-md">
+                      <div className="font-medium text-yellow-800">Water Management</div>
+                      <div className="text-yellow-700">Consider irrigation for cotton crops in North</div>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -533,26 +569,31 @@ const WeatherAgricultureHub: React.FC = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <BarChart3 className="h-5 w-5" />
-                    Seasonal Outlook
+                    Quick Stats
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex justify-between items-center p-2 border rounded">
-                      <span>Rainfall Forecast</span>
-                      <Badge variant="secondary">Above Normal</Badge>
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span>Average Temperature</span>
+                      <span className="font-medium">
+                        {filteredWeatherData.length > 0 
+                          ? (filteredWeatherData.reduce((sum, item) => sum + item.temperature_celsius, 0) / filteredWeatherData.length).toFixed(1)
+                          : '0'
+                        }°C
+                      </span>
                     </div>
-                    <div className="flex justify-between items-center p-2 border rounded">
-                      <span>Temperature Trend</span>
-                      <Badge variant="outline">Stable</Badge>
+                    <div className="flex justify-between">
+                      <span>Total Rainfall</span>
+                      <span className="font-medium">
+                        {filteredWeatherData.reduce((sum, item) => sum + item.rainfall_mm, 0).toFixed(1)} mm
+                      </span>
                     </div>
-                    <div className="flex justify-between items-center p-2 border rounded">
-                      <span>Growing Season</span>
-                      <Badge className="bg-green-500">Favorable</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-2 border rounded">
-                      <span>Market Conditions</span>
-                      <Badge variant="secondary">Strong Demand</Badge>
+                    <div className="flex justify-between">
+                      <span>Active Regions</span>
+                      <span className="font-medium">
+                        {new Set(filteredWeatherData.map(item => item.region)).size}
+                      </span>
                     </div>
                   </div>
                 </CardContent>

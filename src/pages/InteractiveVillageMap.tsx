@@ -26,10 +26,9 @@ interface Village {
   region: string;
   latitude: number;
   longitude: number;
-  population?: number;
+  population_estimate?: number;
   overall_rating: number;
-  
-  verified: boolean;
+  is_verified: boolean;
   infrastructure_score: number;
   education_score: number;
   health_score: number;
@@ -75,8 +74,9 @@ const InteractiveVillageMap: React.FC = () => {
           region,
           latitude,
           longitude,
+          population_estimate,
           overall_rating,
-          verified,
+          is_verified,
           infrastructure_score,
           education_score,
           health_score
@@ -85,7 +85,11 @@ const InteractiveVillageMap: React.FC = () => {
         .not('longitude', 'is', null);
 
       if (error) throw error;
-      setVillages(data || []);
+      setVillages((data || []).map(village => ({
+        ...village,
+        latitude: village.latitude || 0,
+        longitude: village.longitude || 0
+      })));
     } catch (error) {
       console.error('Error fetching villages:', error);
       toast({
@@ -154,15 +158,6 @@ const InteractiveVillageMap: React.FC = () => {
   const openInMaps = (village: Village) => {
     const url = `https://www.google.com/maps/search/?api=1&query=${village.latitude},${village.longitude}`;
     window.open(url, '_blank');
-  };
-
-  const calculateMapCenter = () => {
-    if (filteredVillages.length === 0) return { lat: 7.3697, lng: 12.3547 }; // Cameroon center
-    
-    const avgLat = filteredVillages.reduce((sum, v) => sum + v.latitude, 0) / filteredVillages.length;
-    const avgLng = filteredVillages.reduce((sum, v) => sum + v.longitude, 0) / filteredVillages.length;
-    
-    return { lat: avgLat, lng: avgLng };
   };
 
   if (loading) {
@@ -286,13 +281,13 @@ const InteractiveVillageMap: React.FC = () => {
                 <div className="flex justify-between">
                   <span>Verified</span>
                   <Badge variant="secondary">
-                    {villages.filter(v => v.verified).length}
+                    {villages.filter(v => v.is_verified).length}
                   </Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Total Population</span>
                   <Badge>
-                    {villages.reduce((sum, v) => sum + (v.population || 0), 0).toLocaleString()}
+                    {villages.reduce((sum, v) => sum + (v.population_estimate || 0), 0).toLocaleString()}
                   </Badge>
                 </div>
               </CardContent>
@@ -377,7 +372,7 @@ const InteractiveVillageMap: React.FC = () => {
                       <CardTitle className="flex items-center gap-2">
                         <MapPin className="h-5 w-5" />
                         {selectedVillage.village_name}
-                        {selectedVillage.verified && (
+                        {selectedVillage.is_verified && (
                           <Badge variant="secondary">Verified</Badge>
                         )}
                       </CardTitle>
@@ -404,11 +399,7 @@ const InteractiveVillageMap: React.FC = () => {
                       </div>
                       <div className="flex justify-between">
                         <span>Population</span>
-                        <span className="font-medium">{selectedVillage.population?.toLocaleString()}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Members</span>
-                        <span className="font-medium">{selectedVillage.member_count}</span>
+                        <span className="font-medium">{selectedVillage.population_estimate?.toLocaleString() || 'N/A'}</span>
                       </div>
                     </div>
 
