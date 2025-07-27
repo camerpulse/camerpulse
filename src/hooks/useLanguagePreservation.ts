@@ -1,39 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { Database } from '@/integrations/supabase/types';
 
-export interface LanguageEntry {
-  id: string;
-  village_id: string;
-  user_id: string;
-  language_name: string;
-  language_code?: string;
-  entry_type: 'word' | 'phrase' | 'story' | 'song' | 'proverb';
-  local_term: string;
-  pronunciation?: string;
-  audio_pronunciation?: string;
-  french_translation?: string;
-  english_translation?: string;
-  context_usage?: string;
-  grammatical_notes?: string;
-  cultural_context?: string;
-  example_sentences: any[];
-  related_terms?: string[];
-  etymology?: string;
-  difficulty_level: 'beginner' | 'intermediate' | 'advanced';
-  category?: string;
-  is_endangered: boolean;
-  speaker_generation?: string;
-  contributor_name?: string;
-  contributor_role?: string;
-  verification_status: 'pending' | 'verified' | 'flagged';
-  verified_by?: string;
-  verified_at?: string;
-  views_count: number;
-  practice_count: number;
-  created_at: string;
-  updated_at: string;
-}
+type LanguageEntry = Database['public']['Tables']['language_preservation']['Row'];
 
 export const useLanguagePreservation = (villageId: string) => {
   const [entries, setEntries] = useState<LanguageEntry[]>([]);
@@ -82,7 +52,7 @@ export const useLanguagePreservation = (villageId: string) => {
           ...entryData,
           village_id: villageId,
           user_id: user.id,
-        })
+        } as any)
         .select()
         .single();
 

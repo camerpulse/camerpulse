@@ -1,34 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { Database } from '@/integrations/supabase/types';
 
-export interface OralTradition {
-  id: string;
-  village_id: string;
-  user_id: string;
-  title: string;
-  description?: string;
-  tradition_type: 'story' | 'song' | 'prayer' | 'proverb' | 'history';
-  language: string;
-  audio_url?: string;
-  video_url?: string;
-  transcript?: string;
-  duration_seconds?: number;
-  recorded_at?: string;
-  elder_name?: string;
-  elder_age?: number;
-  cultural_significance?: string;
-  keywords?: string[];
-  is_public: boolean;
-  preservation_priority: 'low' | 'medium' | 'high' | 'critical';
-  verification_status: 'pending' | 'verified' | 'flagged';
-  verified_by?: string;
-  verified_at?: string;
-  views_count: number;
-  likes_count: number;
-  created_at: string;
-  updated_at: string;
-}
+type OralTradition = Database['public']['Tables']['oral_traditions']['Row'];
+
+export { type OralTradition };
 
 export const useOralTraditions = (villageId: string) => {
   const [traditions, setTraditions] = useState<OralTradition[]>([]);
@@ -77,7 +54,7 @@ export const useOralTraditions = (villageId: string) => {
           ...traditionData,
           village_id: villageId,
           user_id: user.id,
-        })
+        } as any)
         .select()
         .single();
 

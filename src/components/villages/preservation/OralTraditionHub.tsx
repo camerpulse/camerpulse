@@ -40,6 +40,8 @@ export const OralTraditionHub: React.FC<OralTraditionHubProps> = ({ villageId })
       await submitTradition({
         ...formData,
         elder_age: formData.elder_age ? parseInt(formData.elder_age) : undefined,
+        is_public: true,
+        verification_status: "pending"
       });
       setShowAddDialog(false);
       setFormData({

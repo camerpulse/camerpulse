@@ -44,6 +44,8 @@ export const TraditionalRecipesHub: React.FC<TraditionalRecipesHubProps> = ({ vi
         ...formData,
         cooking_time_minutes: formData.cooking_time_minutes ? parseInt(formData.cooking_time_minutes) : undefined,
         serving_size: formData.serving_size ? parseInt(formData.serving_size) : undefined,
+        is_public: true,
+        is_sacred: false
       });
       setShowAddDialog(false);
       // Reset form

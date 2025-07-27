@@ -1,35 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { Database } from '@/integrations/supabase/types';
 
-export interface TraditionalRecipe {
-  id: string;
-  village_id: string;
-  user_id: string;
-  recipe_name: string;
-  description?: string;
-  origin_story?: string;
-  ingredients: any[];
-  instructions: any[];
-  cooking_time_minutes?: number;
-  serving_size?: number;
-  difficulty_level: 'easy' | 'medium' | 'hard';
-  occasion?: string[];
-  season?: string[];
-  cultural_significance?: string;
-  family_lineage?: string;
-  recipe_photos?: string[];
-  video_url?: string;
-  nutritional_notes?: string;
-  modern_adaptations?: string;
-  is_public: boolean;
-  is_sacred: boolean;
-  views_count: number;
-  likes_count: number;
-  saves_count: number;
-  created_at: string;
-  updated_at: string;
-}
+type TraditionalRecipe = Database['public']['Tables']['traditional_recipes']['Row'];
+
+export { type TraditionalRecipe };
 
 export const useTraditionalRecipes = (villageId: string) => {
   const [recipes, setRecipes] = useState<TraditionalRecipe[]>([]);

@@ -1,37 +1,9 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { Database } from '@/integrations/supabase/types';
 
-export interface CeremonialEvent {
-  id: string;
-  village_id: string;
-  user_id: string;
-  ceremony_name: string;
-  description?: string;
-  ceremony_type: 'traditional' | 'religious' | 'seasonal' | 'lifecycle';
-  event_date?: string;
-  is_annual: boolean;
-  lunar_calendar_based: boolean;
-  duration_days: number;
-  preparation_days: number;
-  location?: string;
-  required_materials: any[];
-  ritual_steps: any[];
-  participants_roles: any[];
-  cultural_significance?: string;
-  historical_notes?: string;
-  modern_adaptations?: string;
-  photos?: string[];
-  videos?: string[];
-  audio_recordings?: string[];
-  is_public: boolean;
-  is_sacred: boolean;
-  access_restrictions?: string;
-  status: 'scheduled' | 'ongoing' | 'completed' | 'cancelled';
-  attendance_count: number;
-  created_at: string;
-  updated_at: string;
-}
+type CeremonialEvent = Database['public']['Tables']['ceremonial_events']['Row'];
 
 export const useCeremonialEvents = (villageId: string) => {
   const [events, setEvents] = useState<CeremonialEvent[]>([]);
@@ -80,7 +52,7 @@ export const useCeremonialEvents = (villageId: string) => {
           ...eventData,
           village_id: villageId,
           user_id: user.id,
-        })
+        } as any)
         .select()
         .single();
 
