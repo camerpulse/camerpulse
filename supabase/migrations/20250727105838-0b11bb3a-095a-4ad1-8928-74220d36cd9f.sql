@@ -1,0 +1,52 @@
+-- Seed data for villages table with correct column names
+INSERT INTO villages (village_name, region, gps_latitude, gps_longitude, overall_rating, is_verified, infrastructure_score, education_score, health_score, created_by) VALUES
+('Kumba', 'Southwest', 4.6364, 9.4469, 7.5, true, 8, 7, 6, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Bamenda', 'Northwest', 5.9597, 10.1491, 8.2, true, 9, 8, 7, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Garoua', 'North', 9.3265, 13.3962, 6.8, true, 6, 7, 5, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Douala', 'Littoral', 4.0511, 9.7679, 9.1, true, 9, 9, 8, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Yaoundé', 'Centre', 3.8480, 11.5021, 8.9, true, 9, 9, 8, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Kribi', 'South', 2.9450, 9.9057, 7.2, true, 7, 6, 7, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Maroua', 'Far North', 10.5906, 14.3197, 6.5, true, 5, 6, 5, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Ngaoundéré', 'Adamawa', 7.3167, 13.5833, 7.0, true, 6, 7, 6, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Bertoua', 'East', 4.5774, 13.6848, 6.2, true, 5, 6, 5, '91569092-36c0-4867-8a0e-370ee026e202'),
+('Bafoussam', 'West', 5.4781, 10.4171, 7.8, true, 7, 8, 7, '91569092-36c0-4867-8a0e-370ee026e202');
+
+-- Add latitude and longitude columns derived from gps coordinates  
+UPDATE villages SET latitude = gps_latitude, longitude = gps_longitude WHERE latitude IS NULL;
+
+-- Seed data for agriculture_data table
+INSERT INTO agriculture_data (region, crop_type, soil_type, land_area_hectares, yield_per_hectare, planting_season, harvest_season, irrigation_method, challenges, opportunities) VALUES
+('Southwest', 'Cocoa', 'Volcanic', 150.5, 2.3, 'March-May', 'October-December', 'Rain-fed', '["Pest attacks", "Climate change"]', '["Organic farming", "Value addition"]'),
+('Northwest', 'Coffee', 'Highland', 89.2, 1.8, 'April-June', 'November-January', 'Rain-fed', '["Market access", "Processing equipment"]', '["Fair trade certification", "Direct export"]'),
+('North', 'Cotton', 'Sandy loam', 234.7, 3.2, 'May-July', 'October-November', 'Irrigation', '["Water scarcity", "Fertilizer costs"]', '["Mechanization", "Cooperative farming"]'),
+('Littoral', 'Banana', 'Alluvial', 67.8, 45.6, 'Year-round', 'Year-round', 'Sprinkler', '["Disease management", "Transportation"]', '["Export markets", "Processing facilities"]'),
+('Centre', 'Cassava', 'Forest soil', 123.4, 12.5, 'March-April', 'December-February', 'Rain-fed', '["Storage facilities", "Market fluctuation"]', '["Flour production", "Starch extraction"]'),
+('South', 'Palm Oil', 'Forest soil', 189.3, 8.7, 'Year-round', 'Year-round', 'Rain-fed', '["Processing capacity", "Road infrastructure"]', '["Industrial processing", "Export potential"]'),
+('Far North', 'Millet', 'Sandy', 156.9, 1.2, 'June-July', 'October-November', 'Rain-fed', '["Drought", "Locust attacks"]', '["Drought-resistant varieties", "Storage improvement"]'),
+('Adamawa', 'Maize', 'Ferruginous', 201.5, 2.8, 'April-May', 'August-September', 'Rain-fed', '["Soil fertility", "Pest control"]', '["Fertilizer programs", "Seed improvement"]'),
+('East', 'Rubber', 'Forest soil', 78.6, 1.5, 'March-April', 'Year-round', 'Rain-fed', '["Tapping equipment", "Market access"]', '["Processing plant", "Export development"]'),
+('West', 'Irish Potato', 'Volcanic', 45.3, 15.2, 'August-September', 'December-January', 'Rain-fed', '["Storage losses", "Price volatility"]', '["Cold storage", "Value addition"]');
+
+-- Seed data for economic_opportunities table
+INSERT INTO economic_opportunities (title, description, opportunity_type, region, funding_amount, funding_currency, application_deadline, eligibility_criteria, contact_info, status, priority_level, created_by) VALUES
+('Youth Agricultural Entrepreneurship Program', 'Support for young farmers to start agribusiness ventures with funding up to 5 million XAF', 'funding', 'Southwest', 5000000, 'XAF', '2025-08-15', '["Age 18-35", "Agricultural background", "Business plan required"]', '{"email": "agri@minader.cm", "phone": "+237-678-901-234"}', 'active', 'high', '91569092-36c0-4867-8a0e-370ee026e202'),
+('Cocoa Processing Equipment Grant', 'Equipment grants for small-scale cocoa processing facilities', 'funding', 'Centre', 3000000, 'XAF', '2025-07-30', '["Registered cooperative", "Minimum 50 members", "Processing experience"]', '{"email": "cocoa@mincommerce.cm", "phone": "+237-699-123-456"}', 'active', 'medium', '91569092-36c0-4867-8a0e-370ee026e202'),
+('Digital Marketing Training for SMEs', 'Free training program on digital marketing for small businesses', 'business', 'Littoral', 0, 'XAF', '2025-08-01', '["Small business owner", "Basic computer skills", "Commitment to complete program"]', '{"email": "digital@minpmeesa.cm", "phone": "+237-677-234-567"}', 'active', 'medium', '91569092-36c0-4867-8a0e-370ee026e202'),
+('Women Cooperative Microcredit', 'Microcredit facilities for women cooperatives in rural areas', 'funding', 'Northwest', 2000000, 'XAF', '2025-09-15', '["Women-led cooperative", "Rural location", "Viable business proposal"]', '{"email": "women@minproff.cm", "phone": "+237-690-345-678"}', 'active', 'high', '91569092-36c0-4867-8a0e-370ee026e202'),
+('Tech Innovation Hub Incubation', 'Incubation program for tech startups with mentorship and funding', 'investment', 'Centre', 10000000, 'XAF', '2025-08-30', '["Tech-based solution", "Innovative idea", "Scalable business model"]', '{"email": "innovation@minpostel.cm", "phone": "+237-655-456-789"}', 'active', 'high', '91569092-36c0-4867-8a0e-370ee026e202');
+
+-- Seed data for scholarship_programs table
+INSERT INTO scholarship_programs (program_name, description, provider_organization, scholarship_type, target_level, amount_xaf, available_slots, application_start_date, application_end_date, eligibility_criteria, required_documents, selection_criteria, regions_eligible, contact_email, contact_phone, website_url, status) VALUES
+('Excellence in Science Scholarship', 'Full scholarship for outstanding students in STEM fields', 'Ministry of Higher Education', 'academic', 'university', 1500000, 50, '2025-08-01', '2025-09-15', '["GPA above 3.5", "STEM field", "Cameroonian citizen"]', '["Academic transcripts", "Recommendation letters", "Personal statement"]', '["Academic performance", "Research potential", "Leadership qualities"]', '["Centre", "Littoral", "Southwest", "Northwest"]', 'scholarships@minesup.cm', '+237-222-234-567', 'https://minesup.gov.cm/scholarships', 'open'),
+('Rural Development Leadership Program', 'Scholarship for students committed to rural development', 'World Bank Cameroon', 'community', 'postgraduate', 2500000, 25, '2025-07-15', '2025-08-30', '["Rural background", "Development studies", "Community service experience"]', '["University degree", "Community service proof", "Development project proposal"]', '["Commitment to rural development", "Academic merit", "Project feasibility"]', '["North", "Far North", "Adamawa", "East"]', 'rural.dev@worldbank.org', '+237-222-345-678', 'https://worldbank.org/cm/scholarships', 'open'),
+('Technical Vocational Excellence Award', 'Support for outstanding vocational training students', 'German Cooperation (GIZ)', 'vocational', 'secondary', 800000, 100, '2025-08-15', '2025-09-30', '["Enrolled in technical program", "Good academic standing", "Financial need"]', '["School enrollment certificate", "Academic records", "Financial need statement"]', '["Academic performance", "Technical skills", "Financial need"]', '["All regions"]', 'vocational@giz.de', '+237-222-456-789', 'https://giz.de/cameroon/vocational', 'open'),
+('Women in Technology Scholarship', 'Encouraging women to pursue technology careers', 'UN Women Cameroon', 'academic', 'university', 1200000, 30, '2025-09-01', '2025-10-15', '["Female student", "Technology field", "Demonstrated interest in women empowerment"]', '["University admission letter", "Gender advocacy essay", "Academic transcripts"]', '["Academic merit", "Leadership potential", "Commitment to gender equality"]', '["Centre", "Littoral", "West"]', 'tech.women@unwomen.org', '+237-222-567-890', 'https://unwomen.org/cm/tech-scholarship', 'open'),
+('Agricultural Innovation Scholarship', 'Supporting innovation in agricultural sciences', 'FAO Cameroon', 'research', 'postgraduate', 2000000, 15, '2025-08-01', '2025-09-01', '["Agricultural sciences", "Research proposal", "Innovation focus"]', '["Research proposal", "Academic credentials", "Innovation portfolio"]', '["Research quality", "Innovation potential", "Practical application"]', '["Southwest", "Northwest", "West", "Centre"]', 'agri.research@fao.org', '+237-222-678-901', 'https://fao.org/cameroon/research', 'open');
+
+-- Seed data for weather_agriculture_data table  
+INSERT INTO weather_agriculture_data (region, village_id, temperature_celsius, humidity_percent, rainfall_mm, wind_speed_kmh, weather_condition, crop_recommendations, farming_tips, alert_level, data_source, recorded_at) VALUES
+('Southwest', (SELECT id FROM villages WHERE village_name = 'Kumba' LIMIT 1), 28.5, 78, 12.3, 8.2, 'Partly Cloudy', '["Cocoa planting optimal", "Banana harvest ready"]', '["Apply organic fertilizer", "Check for pest damage"]', 'low', 'local_station', '2025-01-27 08:00:00'),
+('Northwest', (SELECT id FROM villages WHERE village_name = 'Bamenda' LIMIT 1), 22.1, 65, 0.0, 12.5, 'Sunny', '["Coffee pruning season", "Irish potato planting"]', '["Increase irrigation", "Prepare seedbeds"]', 'low', 'satellite', '2025-01-27 08:00:00'),
+('North', (SELECT id FROM villages WHERE village_name = 'Garoua' LIMIT 1), 35.2, 45, 0.0, 15.8, 'Hot and Dry', '["Cotton irrigation critical", "Millet storage preparation"]', '["Conserve water", "Protect from heat stress"]', 'medium', 'weather_api', '2025-01-27 08:00:00'),
+('Littoral', (SELECT id FROM villages WHERE village_name = 'Douala' LIMIT 1), 29.8, 82, 5.7, 6.3, 'Cloudy', '["Banana maintenance", "Palm oil harvesting"]', '["Monitor humidity levels", "Prevent fungal diseases"]', 'low', 'local_station', '2025-01-27 08:00:00'),
+('Centre', (SELECT id FROM villages WHERE village_name = 'Yaoundé' LIMIT 1), 26.4, 72, 8.1, 9.7, 'Light Rain', '["Cassava planting good", "Cocoa processing time"]', '["Good soil moisture", "Time for fertilizer application"]', 'low', 'weather_api', '2025-01-27 08:00:00');
