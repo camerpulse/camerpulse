@@ -667,6 +667,45 @@ export type Database = {
         }
         Relationships: []
       }
+      api_performance_logs: {
+        Row: {
+          created_at: string
+          endpoint_path: string
+          http_method: string
+          id: string
+          request_size_bytes: number | null
+          response_size_bytes: number | null
+          response_time_ms: number
+          status_code: number
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          endpoint_path: string
+          http_method: string
+          id?: string
+          request_size_bytes?: number | null
+          response_size_bytes?: number | null
+          response_time_ms: number
+          status_code: number
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          endpoint_path?: string
+          http_method?: string
+          id?: string
+          request_size_bytes?: number | null
+          response_size_bytes?: number | null
+          response_time_ms?: number
+          status_code?: number
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       application_reviews: {
         Row: {
           application_id: string
@@ -7146,6 +7185,142 @@ export type Database = {
           },
         ]
       }
+      chat_attachments: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_size: number | null
+          file_type: string
+          file_url: string
+          id: string
+          message_id: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_size?: number | null
+          file_type: string
+          file_url: string
+          id?: string
+          message_id: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_size?: number | null
+          file_type?: string
+          file_url?: string
+          id?: string
+          message_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_attachments_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_conversations: {
+        Row: {
+          conversation_type: string
+          created_at: string
+          customer_id: string
+          id: string
+          last_message_at: string | null
+          related_product_id: string | null
+          status: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          conversation_type?: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          last_message_at?: string | null
+          related_product_id?: string | null
+          status?: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          conversation_type?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          last_message_at?: string | null
+          related_product_id?: string | null
+          status?: string
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_conversations_related_product_id_fkey"
+            columns: ["related_product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_conversations_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_messages: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          is_read: boolean
+          message_type: string
+          metadata: Json | null
+          read_at: string | null
+          sender_id: string
+          sender_type: string
+        }
+        Insert: {
+          content: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message_type?: string
+          metadata?: Json | null
+          read_at?: string | null
+          sender_id: string
+          sender_type: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean
+          message_type?: string
+          metadata?: Json | null
+          read_at?: string | null
+          sender_id?: string
+          sender_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       citizen_bill_engagement: {
         Row: {
           comment_text: string | null
@@ -13322,6 +13497,42 @@ export type Database = {
           total_feedback_count?: number | null
           transparency_rating?: number | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      device_tokens: {
+        Row: {
+          created_at: string
+          device_info: Json | null
+          device_token: string
+          device_type: string
+          id: string
+          is_active: boolean
+          last_used_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          device_info?: Json | null
+          device_token: string
+          device_type: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          device_info?: Json | null
+          device_token?: string
+          device_type?: string
+          id?: string
+          is_active?: boolean
+          last_used_at?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -25599,6 +25810,75 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_disputes: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          customer_evidence: Json | null
+          customer_id: string
+          dispute_amount: number
+          dispute_reason: string
+          dispute_type: string
+          id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+          transaction_id: string
+          updated_at: string
+          vendor_id: string
+          vendor_response: Json | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          customer_evidence?: Json | null
+          customer_id: string
+          dispute_amount: number
+          dispute_reason: string
+          dispute_type: string
+          id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          transaction_id: string
+          updated_at?: string
+          vendor_id: string
+          vendor_response?: Json | null
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          customer_evidence?: Json | null
+          customer_id?: string
+          dispute_amount?: number
+          dispute_reason?: string
+          dispute_type?: string
+          id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          transaction_id?: string
+          updated_at?: string
+          vendor_id?: string
+          vendor_response?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_disputes_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "payment_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_disputes_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_gateway_config: {
         Row: {
           commission_percentage: number
@@ -25667,6 +25947,78 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      payment_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          customer_id: string
+          id: string
+          metadata: Json | null
+          order_id: string | null
+          payment_method: string | null
+          payment_status: string
+          platform_commission: number | null
+          stripe_payment_intent_id: string | null
+          stripe_session_id: string | null
+          transaction_fee: number | null
+          updated_at: string
+          vendor_id: string
+          vendor_payout: number | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          customer_id: string
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+          payment_method?: string | null
+          payment_status?: string
+          platform_commission?: number | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          transaction_fee?: number | null
+          updated_at?: string
+          vendor_id: string
+          vendor_payout?: number | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          customer_id?: string
+          id?: string
+          metadata?: Json | null
+          order_id?: string | null
+          payment_method?: string | null
+          payment_status?: string
+          platform_commission?: number | null
+          stripe_payment_intent_id?: string | null
+          stripe_session_id?: string | null
+          transaction_fee?: number | null
+          updated_at?: string
+          vendor_id?: string
+          vendor_payout?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_transactions_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       performance_alerts: {
         Row: {
@@ -30364,6 +30716,56 @@ export type Database = {
           },
         ]
       }
+      product_recommendations: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_clicked: boolean
+          is_purchased: boolean
+          metadata: Json | null
+          product_id: string
+          reason_tags: string[] | null
+          recommendation_type: string
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_clicked?: boolean
+          is_purchased?: boolean
+          metadata?: Json | null
+          product_id: string
+          reason_tags?: string[] | null
+          recommendation_type: string
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_clicked?: boolean
+          is_purchased?: boolean
+          metadata?: Json | null
+          product_id?: string
+          reason_tags?: string[] | null
+          recommendation_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_recommendations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       professional_profiles: {
         Row: {
           availability_status: string | null
@@ -32317,6 +32719,48 @@ export type Database = {
         }
         Relationships: []
       }
+      push_notifications: {
+        Row: {
+          action_taken: boolean
+          created_at: string
+          data: Json | null
+          delivered_at: string | null
+          delivery_status: string
+          id: string
+          message: string
+          notification_type: string
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          action_taken?: boolean
+          created_at?: string
+          data?: Json | null
+          delivered_at?: string | null
+          delivery_status?: string
+          id?: string
+          message: string
+          notification_type: string
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          action_taken?: boolean
+          created_at?: string
+          data?: Json | null
+          delivered_at?: string | null
+          delivery_status?: string
+          id?: string
+          message?: string
+          notification_type?: string
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       rating_criteria: {
         Row: {
           created_at: string
@@ -32606,6 +33050,44 @@ export type Database = {
             columns: ["recipe_id"]
             isOneToOne: false
             referencedRelation: "traditional_recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_feedback: {
+        Row: {
+          created_at: string
+          feedback_text: string | null
+          feedback_type: string
+          id: string
+          rating: number | null
+          recommendation_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          feedback_text?: string | null
+          feedback_type: string
+          id?: string
+          rating?: number | null
+          recommendation_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          feedback_text?: string | null
+          feedback_type?: string
+          id?: string
+          rating?: number | null
+          recommendation_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_feedback_recommendation_id_fkey"
+            columns: ["recommendation_id"]
+            isOneToOne: false
+            referencedRelation: "product_recommendations"
             referencedColumns: ["id"]
           },
         ]
@@ -36291,6 +36773,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_behavior_tracking: {
+        Row: {
+          action_type: string
+          context_data: Json | null
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          session_id: string | null
+          target_id: string
+          target_type: string
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          context_data?: Json | null
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          session_id?: string | null
+          target_id: string
+          target_type: string
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          context_data?: Json | null
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          session_id?: string | null
+          target_id?: string
+          target_type?: string
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       user_civic_metrics: {
         Row: {
