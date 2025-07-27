@@ -203,6 +203,7 @@ import WeatherAgricultureHub from "./pages/WeatherAgricultureHub";
 import OpportunityTracker from "./pages/OpportunityTracker";
 import AdvancedScholarshipPortal from "./pages/AdvancedScholarshipPortal";
 import { CulturalHeritageCenter } from "./pages/CulturalHeritageCenter";
+import EnhancedChatDemo from "./components/chat/EnhancedChatDemo";
 
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -520,10 +521,11 @@ const App = () => {
               <Route path="/weather-agriculture" element={<WeatherAgricultureHub />} />
               <Route path="/opportunity-tracker" element={<OpportunityTracker />} />
                <Route path="/scholarship-portal" element={<AdvancedScholarshipPortal />} />
-               <Route path="/cultural-heritage" element={<CulturalHeritageCenter />} />
-               <Route path="/officials" element={<Officials />} />
-               <Route path="/judiciary" element={<Judiciary />} />
-                 <Route path="*" element={<NotFound />} />
+                <Route path="/cultural-heritage" element={<CulturalHeritageCenter />} />
+                <Route path="/enhanced-chat-demo" element={<EnhancedChatDemo />} />
+                <Route path="/officials" element={<Officials />} />
+                <Route path="/judiciary" element={<Judiciary />} />
+                  <Route path="*" element={<NotFound />} />
                   </Routes>
                 </BrowserRouter>
               </MobileProvider>
