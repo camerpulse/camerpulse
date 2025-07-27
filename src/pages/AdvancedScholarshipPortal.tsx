@@ -121,7 +121,29 @@ const AdvancedScholarshipPortal: React.FC = () => {
         setApplications(applicationData || []);
       }
 
-      setScholarships(scholarshipData || []);
+      setScholarships((scholarshipData || []).map(item => ({
+        ...item,
+        eligibility_criteria: Array.isArray(item.eligibility_criteria) 
+          ? item.eligibility_criteria 
+          : typeof item.eligibility_criteria === 'string' 
+            ? JSON.parse(item.eligibility_criteria) 
+            : [],
+        required_documents: Array.isArray(item.required_documents) 
+          ? item.required_documents 
+          : typeof item.required_documents === 'string' 
+            ? JSON.parse(item.required_documents) 
+            : [],
+        selection_criteria: Array.isArray(item.selection_criteria) 
+          ? item.selection_criteria 
+          : typeof item.selection_criteria === 'string' 
+            ? JSON.parse(item.selection_criteria) 
+            : [],
+        regions_eligible: Array.isArray(item.regions_eligible) 
+          ? item.regions_eligible 
+          : typeof item.regions_eligible === 'string' 
+            ? JSON.parse(item.regions_eligible) 
+            : []
+      })));
     } catch (error) {
       console.error('Error fetching data:', error);
       toast({

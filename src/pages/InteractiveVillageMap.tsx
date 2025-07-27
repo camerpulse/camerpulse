@@ -28,7 +28,7 @@ interface Village {
   longitude: number;
   population?: number;
   overall_rating: number;
-  member_count: number;
+  
   verified: boolean;
   infrastructure_score: number;
   education_score: number;
@@ -76,7 +76,6 @@ const InteractiveVillageMap: React.FC = () => {
           latitude,
           longitude,
           overall_rating,
-          member_count,
           verified,
           infrastructure_score,
           education_score,

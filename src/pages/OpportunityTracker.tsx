@@ -89,7 +89,19 @@ const OpportunityTracker: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setOpportunities(data || []);
+      setOpportunities((data || []).map(item => ({
+        ...item,
+        eligibility_criteria: Array.isArray(item.eligibility_criteria) 
+          ? item.eligibility_criteria 
+          : typeof item.eligibility_criteria === 'string' 
+            ? JSON.parse(item.eligibility_criteria) 
+            : [],
+        contact_info: typeof item.contact_info === 'object' 
+          ? item.contact_info 
+          : typeof item.contact_info === 'string' 
+            ? JSON.parse(item.contact_info) 
+            : {}
+      })));
     } catch (error) {
       console.error('Error fetching opportunities:', error);
       toast({
