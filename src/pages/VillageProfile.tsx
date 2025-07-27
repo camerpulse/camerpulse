@@ -34,6 +34,12 @@ import { VillageAfricanMaskBackground } from '@/components/villages/VillageAfric
 import { VillageGenealogyHub } from '@/components/villages/genealogy';
 import { VillageRelationshipsHub } from '@/components/villages/relationships';
 import { TraditionalCalendarHub } from '@/components/villages/calendar';
+import { 
+  VillageAnnouncementsHub, 
+  ElderKnowledgeHub, 
+  CulturalHeritageHub, 
+  LiveDiscussionsHub 
+} from '@/components/villages/community';
 
 
 interface VillageData {
@@ -522,7 +528,7 @@ const VillageProfile = () => {
         <Tabs defaultValue="overview" className="w-full">
           {/* Primary Navigation Tabs - Priority Order */}
           <div className="mb-6">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-11 gap-1 p-1 bg-muted/50 rounded-lg">
+            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-15 gap-1 p-1 bg-muted/50 rounded-lg">
               <TabsTrigger 
                 value="overview" 
                 className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
@@ -588,6 +594,30 @@ const VillageProfile = () => {
                 className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
               >
                 Calendar
+              </TabsTrigger>
+              <TabsTrigger 
+                value="announcements" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Announcements
+              </TabsTrigger>
+              <TabsTrigger 
+                value="elder-knowledge" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Elder Knowledge
+              </TabsTrigger>
+              <TabsTrigger 
+                value="cultural-heritage" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Cultural Heritage
+              </TabsTrigger>
+              <TabsTrigger 
+                value="live-discussions" 
+                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+              >
+                Live Chat
               </TabsTrigger>
             </TabsList>
           </div>
@@ -900,6 +930,22 @@ const VillageProfile = () => {
 
           <TabsContent value="leaderboards">
             <VillageLeaderboards />
+          </TabsContent>
+
+          <TabsContent value="announcements" className="space-y-6">
+            <VillageAnnouncementsHub villageId={village.id} />
+          </TabsContent>
+
+          <TabsContent value="elder-knowledge" className="space-y-6">
+            <ElderKnowledgeHub villageId={village.id} />
+          </TabsContent>
+
+          <TabsContent value="cultural-heritage" className="space-y-6">
+            <CulturalHeritageHub villageId={village.id} />
+          </TabsContent>
+
+          <TabsContent value="live-discussions" className="space-y-6">
+            <LiveDiscussionsHub villageId={village.id} />
           </TabsContent>
 
           <TabsContent value="discussions" className="space-y-6">
