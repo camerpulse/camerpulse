@@ -6928,6 +6928,99 @@ export type Database = {
           },
         ]
       }
+      ceremonial_events: {
+        Row: {
+          access_restrictions: string | null
+          attendance_count: number | null
+          audio_recordings: string[] | null
+          ceremony_name: string
+          ceremony_type: string
+          created_at: string
+          cultural_significance: string | null
+          description: string | null
+          duration_days: number | null
+          event_date: string | null
+          historical_notes: string | null
+          id: string
+          is_annual: boolean | null
+          is_public: boolean
+          is_sacred: boolean | null
+          location: string | null
+          lunar_calendar_based: boolean | null
+          modern_adaptations: string | null
+          participants_roles: Json | null
+          photos: string[] | null
+          preparation_days: number | null
+          required_materials: Json | null
+          ritual_steps: Json | null
+          status: string | null
+          updated_at: string
+          user_id: string
+          videos: string[] | null
+          village_id: string
+        }
+        Insert: {
+          access_restrictions?: string | null
+          attendance_count?: number | null
+          audio_recordings?: string[] | null
+          ceremony_name: string
+          ceremony_type: string
+          created_at?: string
+          cultural_significance?: string | null
+          description?: string | null
+          duration_days?: number | null
+          event_date?: string | null
+          historical_notes?: string | null
+          id?: string
+          is_annual?: boolean | null
+          is_public?: boolean
+          is_sacred?: boolean | null
+          location?: string | null
+          lunar_calendar_based?: boolean | null
+          modern_adaptations?: string | null
+          participants_roles?: Json | null
+          photos?: string[] | null
+          preparation_days?: number | null
+          required_materials?: Json | null
+          ritual_steps?: Json | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+          videos?: string[] | null
+          village_id: string
+        }
+        Update: {
+          access_restrictions?: string | null
+          attendance_count?: number | null
+          audio_recordings?: string[] | null
+          ceremony_name?: string
+          ceremony_type?: string
+          created_at?: string
+          cultural_significance?: string | null
+          description?: string | null
+          duration_days?: number | null
+          event_date?: string | null
+          historical_notes?: string | null
+          id?: string
+          is_annual?: boolean | null
+          is_public?: boolean
+          is_sacred?: boolean | null
+          location?: string | null
+          lunar_calendar_based?: boolean | null
+          modern_adaptations?: string | null
+          participants_roles?: Json | null
+          photos?: string[] | null
+          preparation_days?: number | null
+          required_materials?: Json | null
+          ritual_steps?: Json | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+          videos?: string[] | null
+          village_id?: string
+        }
+        Relationships: []
+      }
       certificate_templates: {
         Row: {
           created_at: string | null
@@ -19830,6 +19923,152 @@ export type Database = {
         }
         Relationships: []
       }
+      language_learning_progress: {
+        Row: {
+          created_at: string
+          entry_id: string
+          id: string
+          language_name: string
+          last_practiced_at: string | null
+          mastery_level: string | null
+          practice_count: number | null
+          updated_at: string
+          user_id: string
+          village_id: string
+        }
+        Insert: {
+          created_at?: string
+          entry_id: string
+          id?: string
+          language_name: string
+          last_practiced_at?: string | null
+          mastery_level?: string | null
+          practice_count?: number | null
+          updated_at?: string
+          user_id: string
+          village_id: string
+        }
+        Update: {
+          created_at?: string
+          entry_id?: string
+          id?: string
+          language_name?: string
+          last_practiced_at?: string | null
+          mastery_level?: string | null
+          practice_count?: number | null
+          updated_at?: string
+          user_id?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "language_learning_progress_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "language_preservation"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      language_preservation: {
+        Row: {
+          audio_pronunciation: string | null
+          category: string | null
+          context_usage: string | null
+          contributor_name: string | null
+          contributor_role: string | null
+          created_at: string
+          cultural_context: string | null
+          difficulty_level: string | null
+          english_translation: string | null
+          entry_type: string
+          etymology: string | null
+          example_sentences: Json | null
+          french_translation: string | null
+          grammatical_notes: string | null
+          id: string
+          is_endangered: boolean | null
+          language_code: string | null
+          language_name: string
+          local_term: string
+          practice_count: number | null
+          pronunciation: string | null
+          related_terms: string[] | null
+          speaker_generation: string | null
+          updated_at: string
+          user_id: string
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+          views_count: number | null
+          village_id: string
+        }
+        Insert: {
+          audio_pronunciation?: string | null
+          category?: string | null
+          context_usage?: string | null
+          contributor_name?: string | null
+          contributor_role?: string | null
+          created_at?: string
+          cultural_context?: string | null
+          difficulty_level?: string | null
+          english_translation?: string | null
+          entry_type: string
+          etymology?: string | null
+          example_sentences?: Json | null
+          french_translation?: string | null
+          grammatical_notes?: string | null
+          id?: string
+          is_endangered?: boolean | null
+          language_code?: string | null
+          language_name: string
+          local_term: string
+          practice_count?: number | null
+          pronunciation?: string | null
+          related_terms?: string[] | null
+          speaker_generation?: string | null
+          updated_at?: string
+          user_id: string
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          views_count?: number | null
+          village_id: string
+        }
+        Update: {
+          audio_pronunciation?: string | null
+          category?: string | null
+          context_usage?: string | null
+          contributor_name?: string | null
+          contributor_role?: string | null
+          created_at?: string
+          cultural_context?: string | null
+          difficulty_level?: string | null
+          english_translation?: string | null
+          entry_type?: string
+          etymology?: string | null
+          example_sentences?: Json | null
+          french_translation?: string | null
+          grammatical_notes?: string | null
+          id?: string
+          is_endangered?: boolean | null
+          language_code?: string | null
+          language_name?: string
+          local_term?: string
+          practice_count?: number | null
+          pronunciation?: string | null
+          related_terms?: string[] | null
+          speaker_generation?: string | null
+          updated_at?: string
+          user_id?: string
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          views_count?: number | null
+          village_id?: string
+        }
+        Relationships: []
+      }
       legal_cases: {
         Row: {
           case_documents: Json | null
@@ -23597,6 +23836,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      oral_traditions: {
+        Row: {
+          audio_url: string | null
+          created_at: string
+          cultural_significance: string | null
+          description: string | null
+          duration_seconds: number | null
+          elder_age: number | null
+          elder_name: string | null
+          id: string
+          is_public: boolean
+          keywords: string[] | null
+          language: string
+          likes_count: number | null
+          preservation_priority: string | null
+          recorded_at: string | null
+          title: string
+          tradition_type: string
+          transcript: string | null
+          updated_at: string
+          user_id: string
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+          video_url: string | null
+          views_count: number | null
+          village_id: string
+        }
+        Insert: {
+          audio_url?: string | null
+          created_at?: string
+          cultural_significance?: string | null
+          description?: string | null
+          duration_seconds?: number | null
+          elder_age?: number | null
+          elder_name?: string | null
+          id?: string
+          is_public?: boolean
+          keywords?: string[] | null
+          language?: string
+          likes_count?: number | null
+          preservation_priority?: string | null
+          recorded_at?: string | null
+          title: string
+          tradition_type?: string
+          transcript?: string | null
+          updated_at?: string
+          user_id: string
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          video_url?: string | null
+          views_count?: number | null
+          village_id: string
+        }
+        Update: {
+          audio_url?: string | null
+          created_at?: string
+          cultural_significance?: string | null
+          description?: string | null
+          duration_seconds?: number | null
+          elder_age?: number | null
+          elder_name?: string | null
+          id?: string
+          is_public?: boolean
+          keywords?: string[] | null
+          language?: string
+          likes_count?: number | null
+          preservation_priority?: string | null
+          recorded_at?: string | null
+          title?: string
+          tradition_type?: string
+          transcript?: string | null
+          updated_at?: string
+          user_id?: string
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          video_url?: string | null
+          views_count?: number | null
+          village_id?: string
+        }
+        Relationships: []
       }
       orders: {
         Row: {
@@ -31568,6 +31891,50 @@ export type Database = {
         }
         Relationships: []
       }
+      recipe_reviews: {
+        Row: {
+          created_at: string
+          id: string
+          modifications_made: string | null
+          photos: string[] | null
+          rating: number
+          recipe_id: string
+          review_text: string | null
+          tried_recipe: boolean | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          modifications_made?: string | null
+          photos?: string[] | null
+          rating: number
+          recipe_id: string
+          review_text?: string | null
+          tried_recipe?: boolean | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          modifications_made?: string | null
+          photos?: string[] | null
+          rating?: number
+          recipe_id?: string
+          review_text?: string | null
+          tried_recipe?: boolean | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recipe_reviews_recipe_id_fkey"
+            columns: ["recipe_id"]
+            isOneToOne: false
+            referencedRelation: "traditional_recipes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       regional_hiring_stats: {
         Row: {
           active_employers: number
@@ -34640,6 +35007,93 @@ export type Database = {
           video_urls?: string[] | null
           village_id?: string | null
           visitor_policy?: string | null
+        }
+        Relationships: []
+      }
+      traditional_recipes: {
+        Row: {
+          cooking_time_minutes: number | null
+          created_at: string
+          cultural_significance: string | null
+          description: string | null
+          difficulty_level: string | null
+          family_lineage: string | null
+          id: string
+          ingredients: Json
+          instructions: Json
+          is_public: boolean
+          is_sacred: boolean | null
+          likes_count: number | null
+          modern_adaptations: string | null
+          nutritional_notes: string | null
+          occasion: string[] | null
+          origin_story: string | null
+          recipe_name: string
+          recipe_photos: string[] | null
+          saves_count: number | null
+          season: string[] | null
+          serving_size: number | null
+          updated_at: string
+          user_id: string
+          video_url: string | null
+          views_count: number | null
+          village_id: string
+        }
+        Insert: {
+          cooking_time_minutes?: number | null
+          created_at?: string
+          cultural_significance?: string | null
+          description?: string | null
+          difficulty_level?: string | null
+          family_lineage?: string | null
+          id?: string
+          ingredients?: Json
+          instructions?: Json
+          is_public?: boolean
+          is_sacred?: boolean | null
+          likes_count?: number | null
+          modern_adaptations?: string | null
+          nutritional_notes?: string | null
+          occasion?: string[] | null
+          origin_story?: string | null
+          recipe_name: string
+          recipe_photos?: string[] | null
+          saves_count?: number | null
+          season?: string[] | null
+          serving_size?: number | null
+          updated_at?: string
+          user_id: string
+          video_url?: string | null
+          views_count?: number | null
+          village_id: string
+        }
+        Update: {
+          cooking_time_minutes?: number | null
+          created_at?: string
+          cultural_significance?: string | null
+          description?: string | null
+          difficulty_level?: string | null
+          family_lineage?: string | null
+          id?: string
+          ingredients?: Json
+          instructions?: Json
+          is_public?: boolean
+          is_sacred?: boolean | null
+          likes_count?: number | null
+          modern_adaptations?: string | null
+          nutritional_notes?: string | null
+          occasion?: string[] | null
+          origin_story?: string | null
+          recipe_name?: string
+          recipe_photos?: string[] | null
+          saves_count?: number | null
+          season?: string[] | null
+          serving_size?: number | null
+          updated_at?: string
+          user_id?: string
+          video_url?: string | null
+          views_count?: number | null
+          village_id?: string
         }
         Relationships: []
       }
