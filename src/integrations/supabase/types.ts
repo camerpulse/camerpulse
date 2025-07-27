@@ -31088,6 +31088,45 @@ export type Database = {
         }
         Relationships: []
       }
+      pricing_config: {
+        Row: {
+          amount: number
+          billing_cycle: string | null
+          config_key: string
+          config_type: string
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          amount?: number
+          billing_cycle?: string | null
+          config_key: string
+          config_type: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          billing_cycle?: string | null
+          config_key?: string
+          config_type?: string
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_categories: {
         Row: {
           created_at: string

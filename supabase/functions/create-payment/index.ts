@@ -123,7 +123,7 @@ serve(async (req) => {
       line_items: [
         {
           price_data: {
-            currency: product.currency?.toLowerCase() || 'usd',
+            currency: 'xaf',
             product_data: {
               name: product.name,
               description: product.description || undefined,
@@ -133,7 +133,7 @@ serve(async (req) => {
                 vendor_id: product.vendor_id,
               }
             },
-            unit_amount: Math.round(product.price * 100), // Convert to cents
+            unit_amount: Math.round(product.price), // XAF doesn't typically use decimals
           },
           quantity: quantity,
         },
@@ -164,7 +164,7 @@ serve(async (req) => {
       vendor_id: product.vendor_id,
       stripe_session_id: session.id,
       amount: totalAmount,
-      currency: product.currency || 'XAF',
+      currency: 'XAF',
       quantity: quantity,
       status: 'pending',
       customer_email: customerEmail,

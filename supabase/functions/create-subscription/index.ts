@@ -68,33 +68,35 @@ serve(async (req) => {
     // Initialize Stripe
     const stripe = new Stripe(stripeKey, { apiVersion: "2023-10-16" });
 
-    // Define subscription plans
-    const plans = {
-      vendor_basic: {
-        name: "Vendor Basic",
-        amount: 2000, // 20 USD in cents
-        interval: "month",
-        features: ["Up to 50 products", "Basic analytics", "Standard support"]
-      },
-      vendor_premium: {
-        name: "Vendor Premium", 
-        amount: 5000, // 50 USD in cents
-        interval: "month",
-        features: ["Unlimited products", "Advanced analytics", "Priority support", "Marketing tools"]
-      },
-      vendor_enterprise: {
-        name: "Vendor Enterprise",
-        amount: 10000, // 100 USD in cents
-        interval: "month",
-        features: ["Everything in Premium", "Custom integrations", "Dedicated account manager", "White-label options"]
-      },
-      custom: customPlan
+    // Get pricing from database configuration
+    const { data: pricingData, error: pricingError } = await supabaseService
+      .from('pricing_config')
+      .select('*')
+      .eq('config_type', 'subscription')
+      .eq('is_active', true);
+
+    if (pricingError) {
+      logStep("Error fetching pricing", { error: pricingError });
+      throw new Error("Failed to load pricing configuration");
+    }
+
+    // Find the selected plan pricing
+    const planKey = `${planType.replace('vendor_', '')}_${customPlan?.interval || 'monthly'}`;
+    const selectedPlanConfig = pricingData?.find(p => p.config_key === planKey);
+    
+    if (!selectedPlanConfig && !customPlan) {
+      throw new Error(`Pricing not configured for plan: ${planKey}`);
+    }
+
+    const selectedPlan = customPlan || {
+      name: selectedPlanConfig?.description || planType,
+      amount: selectedPlanConfig?.amount || 500000, // Default 5000 XAF
+      interval: selectedPlanConfig?.billing_cycle || 'monthly',
+      currency: selectedPlanConfig?.currency || 'XAF',
+      features: JSON.parse(selectedPlanConfig?.description || '[]')
     };
 
-    const selectedPlan = plans[planType as keyof typeof plans];
-    if (!selectedPlan) {
-      throw new Error("Invalid plan type");
-    }
+    logStep("Plan configuration loaded", { selectedPlan });
 
     // Check if customer exists
     let customerId;
@@ -140,7 +142,7 @@ serve(async (req) => {
 
       const price = await stripe.prices.create({
         unit_amount: selectedPlan.amount,
-        currency: 'usd',
+        currency: selectedPlan.currency || 'xaf',
         recurring: { interval: selectedPlan.interval as 'month' | 'year' },
         product: product.id,
       });
@@ -183,7 +185,7 @@ serve(async (req) => {
         stripe_session_id: session.id,
         status: 'pending',
         amount: selectedPlan.amount,
-        currency: 'usd',
+        currency: selectedPlan.currency || 'XAF',
         interval: selectedPlan.interval,
         features: selectedPlan.features,
         created_at: new Date().toISOString(),
