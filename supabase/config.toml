@@ -164,3 +164,13 @@ verify_jwt = true
 
 [functions.test-dummy-module]
 verify_jwt = true
+
+# Chat enhancement functions - no JWT required for public access
+[functions.support-bot]
+verify_jwt = false
+
+[functions.voice-to-text]
+verify_jwt = false
+
+[functions.text-to-voice]
+verify_jwt = false
