@@ -11,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { mockMarketplaceProducts, mockMarketplaceVendors } from '@/data/mockData';
-import { Search, Package, Store, ShoppingBag, Star, Truck, Shield, Zap, ArrowRight, TrendingUp } from 'lucide-react';
+import { Search, Package, Store, ShoppingBag, Star, Truck, Shield, Zap, ArrowRight, TrendingUp, Clock, Heart, Filter, Grid, List, Eye } from 'lucide-react';
 
 const Marketplace = () => {
   const [vendors, setVendors] = useState([]);
@@ -119,10 +119,33 @@ const Marketplace = () => {
     { name: 'Art & Crafts', icon: '🎨', count: 156, trending: true },
     { name: 'Food & Agriculture', icon: '🌾', count: 98, trending: false },
     { name: 'Home & Garden', icon: '🏠', count: 67, trending: false },
-    { name: 'Services', icon: '🔧', count: 134, trending: true }
+    { name: 'Health & Beauty', icon: '💅', count: 134, trending: true }
   ];
 
   const featuredProducts = mockMarketplaceProducts.slice(0, 4);
+  const trendingProducts = mockMarketplaceProducts.filter(p => p.rating >= 4.7).slice(0, 6);
+  const newArrivals = [...mockMarketplaceProducts].sort((a, b) => 
+    new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+  ).slice(0, 8);
+  const bestSellers = mockMarketplaceProducts.filter(p => p.rating >= 4.8).slice(0, 4);
+  const topVendors = mockMarketplaceVendors.filter(v => v.rating >= 4.5).slice(0, 3);
+
+  const deals = [
+    { 
+      title: "Weekend Special", 
+      description: "Up to 30% off on Electronics", 
+      badge: "Limited Time",
+      color: "bg-red-500"
+    },
+    { 
+      title: "Artisan Week", 
+      description: "Support local crafts - Free shipping", 
+      badge: "This Week",
+      color: "bg-blue-500"
+    }
+  ];
+
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   return (
     <AppLayout>
@@ -234,107 +257,282 @@ const Marketplace = () => {
             </div>
           </div>
 
-          {/* Featured Products */}
+          {/* Trending Now Section */}
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-foreground">Featured Products</h2>
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">Trending Now</h2>
+                <p className="text-muted-foreground">Most popular products this week</p>
+              </div>
+              <Button variant="outline" className="group">
+                View All <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+              {trendingProducts.map((product) => (
+                <Card key={product.id} className="relative group hover:shadow-xl transition-all duration-300 cursor-pointer">
+                  <div className="absolute top-2 right-2 z-10">
+                    <Badge variant="secondary" className="bg-red-500 text-white">
+                      <TrendingUp className="w-3 h-3 mr-1" />
+                      Trending
+                    </Badge>
+                  </div>
+                  <CardContent className="p-0">
+                    <div className="relative overflow-hidden rounded-t-lg">
+                      <img 
+                        src={product.images[0]} 
+                        alt={product.name}
+                        className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <Button size="sm" variant="secondary" className="gap-2">
+                          <Eye className="w-4 h-4" />
+                          Quick View
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <h3 className="font-semibold text-sm truncate">{product.name}</h3>
+                      <div className="flex items-center gap-1 my-1">
+                        <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
+                        <span className="text-xs text-muted-foreground">{product.rating}</span>
+                      </div>
+                      <p className="text-sm font-bold text-primary">{product.price.toLocaleString()} {product.currency}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Deals Section */}
+          <div className="mb-12">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Special Deals</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {deals.map((deal, index) => (
+                <Card key={index} className="relative overflow-hidden group hover:shadow-lg transition-all cursor-pointer">
+                  <div className={`absolute inset-0 ${deal.color} opacity-10 group-hover:opacity-20 transition-opacity`} />
+                  <CardContent className="p-6 relative">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <Badge variant="outline" className="mb-2">{deal.badge}</Badge>
+                        <h3 className="text-xl font-bold mb-2">{deal.title}</h3>
+                        <p className="text-muted-foreground">{deal.description}</p>
+                      </div>
+                      <ArrowRight className="w-5 h-5 text-primary group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* New Arrivals */}
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">New Arrivals</h2>
+                <p className="text-muted-foreground">Fresh products added this week</p>
+              </div>
               <Button variant="outline" className="group">
                 View All <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </div>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+              {newArrivals.slice(0, 4).map((product) => (
+                <Card key={product.id} className="group hover:shadow-xl transition-all duration-300">
+                  <div className="absolute top-2 left-2 z-10">
+                    <Badge className="bg-green-500 text-white">
+                      <Clock className="w-3 h-3 mr-1" />
+                      New
+                    </Badge>
+                  </div>
+                  <ProductCard product={product} />
+                </Card>
+              ))}
+            </div>
+          </div>
+
+          {/* Top Vendors Spotlight */}
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">Featured Vendors</h2>
+                <p className="text-muted-foreground">Top-rated sellers on our platform</p>
+              </div>
+              <Button variant="outline" className="group">
+                View All Vendors <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              {topVendors.map((vendor) => (
+                <Card key={vendor.id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <img 
+                        src={vendor.profile.avatar_url} 
+                        alt={vendor.business_name}
+                        className="w-16 h-16 rounded-full object-cover border-2 border-primary/20"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-start justify-between mb-2">
+                          <h3 className="font-bold text-lg">{vendor.business_name}</h3>
+                          <Badge variant="secondary" className="bg-green-100 text-green-700">
+                            <Shield className="w-3 h-3 mr-1" />
+                            Verified
+                          </Badge>
+                        </div>
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{vendor.description}</p>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1">
+                            <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                            <span className="font-semibold">{vendor.rating}</span>
+                            <span className="text-sm text-muted-foreground">({vendor.total_sales} sales)</span>
+                          </div>
+                          <Badge variant="outline">{vendor.location}</Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Marketplace Browser Section */}
+        {/* Enhanced Marketplace Browser Section */}
         <div className="container mx-auto px-4 pb-16">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-4 flex-1">
-              <Button
-                variant="outline"
-                onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
-              >
-                <Search className="w-4 h-4 mr-2" />
-                {showAdvancedSearch ? 'Hide' : 'Show'} Advanced Search
-              </Button>
-            </div>
-            
-            <ShoppingCart />
-          </div>
-
-          {showAdvancedSearch && (
-            <div className="mb-6">
-              <AdvancedSearch
-                onFiltersChange={handleFiltersChange}
-                initialFilters={{ query: searchTerm }}
-              />
-            </div>
-          )}
-
-          <Tabs defaultValue="products" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="products">
-                <Package className="w-4 h-4 mr-2" />
-                All Products ({filteredProducts.length})
-              </TabsTrigger>
-              <TabsTrigger value="vendors">
-                <Store className="w-4 h-4 mr-2" />
-                Vendors ({vendors.length})
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="products">
-              {loading ? (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {[...Array(8)].map((_, i) => (
-                    <Card key={i} className="h-64 animate-pulse">
-                      <CardContent className="p-4">
-                        <div className="w-full h-32 bg-muted rounded mb-4"></div>
-                        <div className="h-4 bg-muted rounded mb-2"></div>
-                        <div className="h-4 bg-muted rounded w-2/3"></div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : (
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {filteredProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                  ))}
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Sidebar Filters */}
+            <div className="lg:w-80 space-y-6">
+              {showAdvancedSearch && (
+                <div className="lg:sticky lg:top-4">
+                  <AdvancedSearch
+                    onFiltersChange={handleFiltersChange}
+                    initialFilters={{ query: searchTerm }}
+                  />
                 </div>
               )}
-            </TabsContent>
+            </div>
 
-            <TabsContent value="vendors">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {vendors.map((vendor) => (
-                  <VendorCard 
-                    key={vendor.id} 
-                    vendor={{
-                      id: vendor.id,
-                      name: vendor.business_name,
-                      vendorId: vendor.vendor_id,
-                      businessName: vendor.business_name,
-                      category: 'General',
-                      location: 'Cameroon',
-                      rating: vendor.rating || 0,
-                      totalReviews: 0,
-                      verified: vendor.verification_status === 'verified',
-                      description: vendor.description || '',
-                      productsCount: 0,
-                      escrowActive: true,
-                      joinedDate: '',
-                      lastActive: 'Recently'
-                    }} 
-                  />
-                ))}
+            {/* Main Content */}
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-6 bg-card/50 backdrop-blur-sm p-4 rounded-lg border">
+                <div className="flex items-center space-x-4 flex-1">
+                  <Button
+                    variant="outline"
+                    onClick={() => setShowAdvancedSearch(!showAdvancedSearch)}
+                    className="lg:hidden"
+                  >
+                    <Filter className="w-4 h-4 mr-2" />
+                    Filters
+                  </Button>
+                  
+                  <div className="hidden lg:flex items-center space-x-2">
+                    <span className="text-sm text-muted-foreground">View:</span>
+                    <Button
+                      variant={viewMode === 'grid' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('grid')}
+                    >
+                      <Grid className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant={viewMode === 'list' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                    >
+                      <List className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-muted-foreground">
+                    {filteredProducts.length} products found
+                  </span>
+                  <ShoppingCart />
+                </div>
               </div>
-            </TabsContent>
-          </Tabs>
+
+              <Tabs defaultValue="products" className="w-full">
+                <TabsList className="grid w-full grid-cols-2 mb-6">
+                  <TabsTrigger value="products" className="flex items-center gap-2">
+                    <Package className="w-4 h-4" />
+                    All Products ({filteredProducts.length})
+                  </TabsTrigger>
+                  <TabsTrigger value="vendors" className="flex items-center gap-2">
+                    <Store className="w-4 h-4" />
+                    Vendors ({vendors.length})
+                  </TabsTrigger>
+                </TabsList>
+
+                <TabsContent value="products">
+                  {loading ? (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                      {[...Array(8)].map((_, i) => (
+                        <Card key={i} className="h-64 animate-pulse">
+                          <CardContent className="p-4">
+                            <div className="w-full h-32 bg-muted rounded mb-4"></div>
+                            <div className="h-4 bg-muted rounded mb-2"></div>
+                            <div className="h-4 bg-muted rounded w-2/3"></div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  ) : filteredProducts.length === 0 ? (
+                    <Card className="p-12 text-center">
+                      <div className="space-y-4">
+                        <Package className="w-16 h-16 mx-auto text-muted-foreground" />
+                        <div>
+                          <h3 className="text-lg font-semibold">No products found</h3>
+                          <p className="text-muted-foreground">Try adjusting your search filters or browse our categories</p>
+                        </div>
+                        <Button onClick={() => window.location.reload()}>
+                          Browse All Products
+                        </Button>
+                      </div>
+                    </Card>
+                  ) : (
+                    <div className={viewMode === 'grid' ? 
+                      "grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : 
+                      "space-y-4"
+                    }>
+                      {filteredProducts.map((product) => (
+                        <ProductCard key={product.id} product={product} />
+                      ))}
+                    </div>
+                  )}
+                </TabsContent>
+
+                <TabsContent value="vendors">
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {vendors.map((vendor) => (
+                      <VendorCard 
+                        key={vendor.id} 
+                        vendor={{
+                          id: vendor.id,
+                          name: vendor.business_name,
+                          vendorId: vendor.vendor_id,
+                          businessName: vendor.business_name,
+                          category: 'General',
+                          location: vendor.location || 'Cameroon',
+                          rating: vendor.rating || 0,
+                          totalReviews: vendor.total_sales || 0,
+                          verified: vendor.verification_status === 'verified',
+                          description: vendor.description || '',
+                          productsCount: 0,
+                          escrowActive: true,
+                          joinedDate: '',
+                          lastActive: 'Recently'
+                        }} 
+                      />
+                    ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
         </div>
       </main>
     </AppLayout>

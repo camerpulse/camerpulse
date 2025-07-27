@@ -159,6 +159,7 @@ export const mockMarketplaceVendors = [
     verification_status: 'verified',
     rating: 4.8,
     total_sales: 156,
+    location: 'Douala, Littoral',
     profile: {
       username: 'tech_guy',
       display_name: 'David Tcheutchoua',
@@ -174,6 +175,7 @@ export const mockMarketplaceVendors = [
     verification_status: 'verified',
     rating: 4.6,
     total_sales: 89,
+    location: 'Yaoundé, Centre',
     profile: {
       username: 'mama_africa',
       display_name: 'Aminata Kone',
@@ -186,13 +188,62 @@ export const mockMarketplaceVendors = [
     vendor_id: 'CM-3456789',
     business_name: 'Green Valley Farms',
     description: 'Organic produce and agricultural products from Cameroon',
-    verification_status: 'pending',
+    verification_status: 'verified',
     rating: 4.2,
     total_sales: 34,
+    location: 'Bamenda, Northwest',
     profile: {
       username: 'marie_douala',
       display_name: 'Marie Nkomo',
       avatar_url: 'https://images.unsplash.com/photo-1494790108755-2616b612b494?w=150&h=150&fit=crop&crop=face'
+    }
+  },
+  {
+    id: '4',
+    user_id: '6',
+    vendor_id: 'CM-4567890',
+    business_name: 'Urban Fashion House',
+    description: 'Contemporary African fashion and streetwear',
+    verification_status: 'verified',
+    rating: 4.9,
+    total_sales: 245,
+    location: 'Douala, Littoral',
+    profile: {
+      username: 'urban_style',
+      display_name: 'Pascal Nguemo',
+      avatar_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face'
+    }
+  },
+  {
+    id: '5',
+    user_id: '7',
+    vendor_id: 'CM-5678901',
+    business_name: 'Artisan Workshop',
+    description: 'Handcrafted furniture and home decor',
+    verification_status: 'verified',
+    rating: 4.7,
+    total_sales: 78,
+    location: 'Bafoussam, West',
+    profile: {
+      username: 'artisan_master',
+      display_name: 'Jean-Baptiste Foko',
+      avatar_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face'
+    }
+  },
+  {
+    id: '6',
+    user_id: '8',
+    vendor_id: 'CM-6789012',
+    business_name: 'Wellness & Beauty',
+    description: 'Natural skincare and wellness products',
+    verification_status: 'verified',
+    rating: 4.5,
+    total_sales: 167,
+    location: 'Yaoundé, Centre',
+    profile: {
+      username: 'wellness_queen',
+      display_name: 'Grace Mballa',
+      avatar_url: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150&h=150&fit=crop&crop=face'
     }
   }
 ];
@@ -347,6 +398,81 @@ export const mockMarketplaceProducts = [
     marketplace_vendors: mockMarketplaceVendors[0],
     rating: 4.6,
     created_at: '2024-01-21T17:00:00Z'
+  },
+  {
+    id: '11',
+    vendor_id: '4',
+    name: 'Ankara Jacket',
+    description: 'Stylish Ankara print jacket with modern tailoring',
+    price: 45000,
+    currency: 'XAF',
+    category: 'Fashion',
+    images: ['https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=500&h=400&fit=crop'],
+    stock_quantity: 15,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[3],
+    rating: 4.8,
+    created_at: '2024-01-23T11:15:00Z'
+  },
+  {
+    id: '12',
+    vendor_id: '5',
+    name: 'Wooden Coffee Table',
+    description: 'Handcrafted wooden coffee table with traditional carvings',
+    price: 125000,
+    currency: 'XAF',
+    category: 'Home & Garden',
+    images: ['https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=500&h=400&fit=crop'],
+    stock_quantity: 6,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[4],
+    rating: 4.9,
+    created_at: '2024-01-24T14:30:00Z'
+  },
+  {
+    id: '13',
+    vendor_id: '6',
+    name: 'Shea Butter Skincare Set',
+    description: 'Natural shea butter skincare collection for all skin types',
+    price: 35000,
+    currency: 'XAF',
+    category: 'Health & Beauty',
+    images: ['https://images.unsplash.com/photo-1556228453-efd6c1ff04f6?w=500&h=400&fit=crop'],
+    stock_quantity: 40,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[5],
+    rating: 4.7,
+    created_at: '2024-01-26T09:45:00Z'
+  },
+  {
+    id: '14',
+    vendor_id: '3',
+    name: 'Cameroon Pepper Mix',
+    description: 'Authentic Cameroon pepper blend for traditional cooking',
+    price: 8500,
+    currency: 'XAF',
+    category: 'Food & Agriculture',
+    images: ['https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=400&fit=crop'],
+    stock_quantity: 75,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[2],
+    rating: 4.5,
+    created_at: '2024-01-27T16:20:00Z'
+  },
+  {
+    id: '15',
+    vendor_id: '1',
+    name: 'Tablet with Stylus',
+    description: 'High-resolution tablet perfect for digital art and productivity',
+    price: 425000,
+    currency: 'XAF',
+    category: 'Electronics',
+    images: ['https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=500&h=400&fit=crop'],
+    stock_quantity: 12,
+    in_stock: true,
+    marketplace_vendors: mockMarketplaceVendors[0],
+    rating: 4.7,
+    created_at: '2024-01-28T13:10:00Z'
   }
 ];
 
