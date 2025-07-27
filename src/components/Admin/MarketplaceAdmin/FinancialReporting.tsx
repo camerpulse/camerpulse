@@ -16,7 +16,7 @@ import {
   FileText,
   BarChart3,
   PieChart,
-  Calendar,
+  CalendarIcon,
   Users,
   ShoppingCart,
   CreditCard
@@ -231,7 +231,7 @@ export const FinancialReporting: React.FC<FinancialReportingProps> = ({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Calendar className="w-5 h-5" />
+            <CalendarIcon className="w-5 h-5" />
             Report Configuration
           </CardTitle>
         </CardHeader>
