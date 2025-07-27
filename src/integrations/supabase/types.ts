@@ -7364,6 +7364,72 @@ export type Database = {
           },
         ]
       }
+      chat_media: {
+        Row: {
+          conversation_id: string | null
+          created_at: string | null
+          download_count: number | null
+          file_name: string
+          file_path: string
+          file_size: number | null
+          id: string
+          is_deleted: boolean | null
+          media_type: string
+          message_id: string | null
+          mime_type: string | null
+          storage_bucket: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          conversation_id?: string | null
+          created_at?: string | null
+          download_count?: number | null
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          id?: string
+          is_deleted?: boolean | null
+          media_type?: string
+          message_id?: string | null
+          mime_type?: string | null
+          storage_bucket?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          conversation_id?: string | null
+          created_at?: string | null
+          download_count?: number | null
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          is_deleted?: boolean | null
+          media_type?: string
+          message_id?: string | null
+          mime_type?: string | null
+          storage_bucket?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_media_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_media_message_id_fkey"
+            columns: ["message_id"]
+            isOneToOne: false
+            referencedRelation: "chat_messages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_messages: {
         Row: {
           content: string
