@@ -423,6 +423,9 @@ const App = () => {
           <Route path="/villages/:id/officials" element={<VillageOfficials />} />
           <Route path="/villages/:id/edit" element={<VillageEdit />} />
           <Route path="/diaspora" element={<DiasporaDashboard />} />
+          <Route path="/diaspora/investments" element={<DiasporaDashboard />} />
+          <Route path="/diaspora/cultural" element={<DiasporaDashboard />} />
+          <Route path="/diaspora/messaging" element={<DiasporaDashboard />} />
           <Route path="/diaspora-dashboard" element={<DiasporaDashboard />} />
           <Route path="/chiefs" element={<ChiefsDirectory />} />
           <Route path="/traditional-leaders" element={<ChiefsDirectory />} />
