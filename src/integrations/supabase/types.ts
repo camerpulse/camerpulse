@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_test_configs: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          is_active: boolean
+          start_date: string
+          success_metrics: Json
+          test_name: string
+          traffic_allocation: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          start_date?: string
+          success_metrics?: Json
+          test_name: string
+          traffic_allocation?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          start_date?: string
+          success_metrics?: Json
+          test_name?: string
+          traffic_allocation?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       activity_annotations: {
         Row: {
           activity_id: string
@@ -31134,6 +31173,75 @@ export type Database = {
           },
         ]
       }
+      product_recommendations_cache: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          expires_at: string
+          id: string
+          product_id: string | null
+          recommendation_type: string
+          recommended_products: Json
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          product_id?: string | null
+          recommendation_type: string
+          recommended_products?: Json
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          product_id?: string | null
+          recommendation_type?: string
+          recommended_products?: Json
+          user_id?: string
+        }
+        Relationships: []
+      }
+      product_views: {
+        Row: {
+          created_at: string
+          device_type: string | null
+          id: string
+          last_viewed_at: string
+          product_id: string
+          session_id: string | null
+          updated_at: string
+          user_id: string
+          view_count: number
+        }
+        Insert: {
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          last_viewed_at?: string
+          product_id: string
+          session_id?: string | null
+          updated_at?: string
+          user_id: string
+          view_count?: number
+        }
+        Update: {
+          created_at?: string
+          device_type?: string | null
+          id?: string
+          last_viewed_at?: string
+          product_id?: string
+          session_id?: string | null
+          updated_at?: string
+          user_id?: string
+          view_count?: number
+        }
+        Relationships: []
+      }
       professional_profiles: {
         Row: {
           availability_status: string | null
@@ -33421,6 +33529,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      recommendation_events: {
+        Row: {
+          ab_test_group: string
+          clicked_at: string | null
+          clicked_product_id: string | null
+          context: Json
+          conversion_value: number | null
+          converted: boolean
+          created_at: string
+          id: string
+          product_ids: string[]
+          recommendation_type: string
+          user_id: string
+        }
+        Insert: {
+          ab_test_group?: string
+          clicked_at?: string | null
+          clicked_product_id?: string | null
+          context?: Json
+          conversion_value?: number | null
+          converted?: boolean
+          created_at?: string
+          id?: string
+          product_ids?: string[]
+          recommendation_type: string
+          user_id: string
+        }
+        Update: {
+          ab_test_group?: string
+          clicked_at?: string | null
+          clicked_product_id?: string | null
+          context?: Json
+          conversion_value?: number | null
+          converted?: boolean
+          created_at?: string
+          id?: string
+          product_ids?: string[]
+          recommendation_type?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       recommendation_feedback: {
         Row: {
@@ -37960,6 +38110,33 @@ export type Database = {
         }
         Relationships: []
       }
+      user_similarity_scores: {
+        Row: {
+          calculated_at: string
+          id: string
+          similarity_score: number
+          similarity_type: string
+          user_id_1: string
+          user_id_2: string
+        }
+        Insert: {
+          calculated_at?: string
+          id?: string
+          similarity_score?: number
+          similarity_type?: string
+          user_id_1: string
+          user_id_2: string
+        }
+        Update: {
+          calculated_at?: string
+          id?: string
+          similarity_score?: number
+          similarity_type?: string
+          user_id_1?: string
+          user_id_2?: string
+        }
+        Relationships: []
+      }
       user_trust_feedback: {
         Row: {
           comment: string | null
@@ -41318,6 +41495,10 @@ export type Database = {
         Args: { p_senator_id: string }
         Returns: number
       }
+      calculate_user_similarities: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       calculate_vendor_performance_metrics: {
         Args: {
           p_vendor_id: string
@@ -41781,6 +41962,13 @@ export type Database = {
         }
         Returns: Json
       }
+      get_similar_users: {
+        Args: { target_user_id: string; limit_users?: number }
+        Returns: {
+          user_id: string
+          similarity_score: number
+        }[]
+      }
       get_sync_guard_status: {
         Args: Record<PropertyKey, never>
         Returns: Json
@@ -41804,6 +41992,14 @@ export type Database = {
       }
       increment_poll_view_count: {
         Args: { p_poll_id: string; p_user_id?: string }
+        Returns: undefined
+      }
+      increment_product_view: {
+        Args: {
+          p_product_id: string
+          p_user_id?: string
+          p_session_id?: string
+        }
         Returns: undefined
       }
       learn_from_manual_fix: {

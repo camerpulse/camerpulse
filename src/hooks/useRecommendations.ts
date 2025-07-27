@@ -1,186 +1,195 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/contexts/AuthContext';
 
-interface Recommendation {
+interface UseRecommendationsProps {
+  userId?: string;
+  productId?: string;
+  recommendationType?: 'general' | 'cross_sell' | 'trending' | 'similar_users';
+  limit?: number;
+}
+
+interface Product {
   id: string;
-  village_id: string;
+  title: string;
+  description: string;
+  price: number;
+  image_url?: string;
+  category: string;
+  rating?: number;
+  vendor_id: string;
+}
+
+interface RecommendationMetadata {
+  total_considered: number;
+  collaborative_filtering: boolean;
+  cross_selling: boolean;
+  ab_test_group: string;
+  ai_enhanced: boolean;
   recommendation_type: string;
-  confidence_score: number;
-  reason: string;
-  metadata: any;
-  is_clicked: boolean;
-  is_dismissed: boolean;
-  created_at: string;
-  expires_at?: string;
-  village?: any;
 }
 
-interface UserPreferences {
-  preferred_regions: string[];
-  interests: string[];
-  activity_level: 'low' | 'moderate' | 'high';
-}
+export function useRecommendations({
+  userId,
+  productId,
+  recommendationType = 'general',
+  limit = 10
+}: UseRecommendationsProps) {
+  const [recommendations, setRecommendations] = useState<Product[]>([]);
+  const [metadata, setMetadata] = useState<RecommendationMetadata | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [abTestGroup, setAbTestGroup] = useState<string>('control');
 
-export const useRecommendations = () => {
-  const { user } = useAuth();
-  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
-  const [preferences, setPreferences] = useState<UserPreferences | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Get A/B test group
+  useEffect(() => {
+    const getAbTestGroup = async () => {
+      try {
+        const { data: config } = await supabase
+          .from('ab_test_configs')
+          .select('traffic_allocation')
+          .eq('test_name', 'recommendation_algorithm_test')
+          .eq('is_active', true)
+          .maybeSingle();
 
-  // Fetch user preferences
-  const fetchPreferences = useCallback(async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('user_preferences')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      if (error && error.code !== 'PGRST116') {
-        console.error('Error fetching preferences:', error);
-        return;
+        if (config?.traffic_allocation) {
+          const allocation = config.traffic_allocation as Record<string, number>;
+          const random = Math.random() * 100;
+          let cumulative = 0;
+          
+          for (const [group, percentage] of Object.entries(allocation)) {
+            cumulative += percentage;
+            if (random <= cumulative) {
+              setAbTestGroup(group);
+              break;
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Error getting A/B test config:', err);
       }
+    };
 
-      setPreferences((data as UserPreferences) || {
-        preferred_regions: [],
-        interests: [],
-        activity_level: 'moderate'
-      });
-    } catch (error) {
-      console.error('Error fetching preferences:', error);
-    }
-  }, [user]);
+    getAbTestGroup();
+  }, []);
 
   // Fetch recommendations
-  const fetchRecommendations = useCallback(async () => {
-    if (!user) return;
-
+  const fetchRecommendations = async () => {
+    if (!userId) return;
+    
+    setLoading(true);
+    setError(null);
+    
     try {
-      const { data, error } = await supabase
-        .from('village_recommendations')
-        .select(`
-          *,
-          village:villages!village_id(*)
-        `)
-        .eq('user_id', user.id)
-        .eq('is_dismissed', false)
-        .or('expires_at.is.null,expires_at.gt.now()')
-        .order('confidence_score', { ascending: false })
-        .limit(10);
+      const { data, error: functionError } = await supabase.functions.invoke('generate-marketplace-recommendations', {
+        body: {
+          userId,
+          productId,
+          recommendationType,
+          limit,
+          includeCollaborative: true,
+          includeCrossSell: true,
+          abTestGroup
+        }
+      });
 
-      if (error) {
-        console.error('Error fetching recommendations:', error);
-        return;
-      }
+      if (functionError) throw functionError;
 
-      setRecommendations(data || []);
-    } catch (error) {
-      console.error('Error fetching recommendations:', error);
+      setRecommendations(data.recommendations || []);
+      setMetadata(data.metadata);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch recommendations');
+      console.error('Error fetching recommendations:', err);
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  };
 
-  // Update user preferences
-  const updatePreferences = useCallback(async (newPreferences: Partial<UserPreferences>) => {
-    if (!user) return;
+  // Track recommendation events
+  const trackClick = async (clickedProductId: string) => {
+    if (!userId) return;
 
     try {
-      const { error } = await supabase
-        .from('user_preferences')
-        .upsert({
-          user_id: user.id,
-          ...preferences,
-          ...newPreferences,
-          last_updated: new Date().toISOString()
-        });
-
-      if (error) {
-        console.error('Error updating preferences:', error);
-        return;
-      }
-
-      setPreferences(prev => ({ ...prev, ...newPreferences } as UserPreferences));
-      
-      // Trigger new recommendations generation
-      await generateRecommendations();
-    } catch (error) {
-      console.error('Error updating preferences:', error);
-    }
-  }, [user, preferences]);
-
-  // Mark recommendation as clicked
-  const markClicked = useCallback(async (recommendationId: string) => {
-    try {
+      // Update the most recent recommendation event
       await supabase
-        .from('village_recommendations')
-        .update({ is_clicked: true })
-        .eq('id', recommendationId);
+        .from('recommendation_events')
+        .update({
+          clicked_product_id: clickedProductId,
+          clicked_at: new Date().toISOString()
+        })
+        .eq('user_id', userId)
+        .eq('recommendation_type', recommendationType)
+        .order('created_at', { ascending: false })
+        .limit(1);
 
-      setRecommendations(prev =>
-        prev.map(rec =>
-          rec.id === recommendationId ? { ...rec, is_clicked: true } : rec
-        )
-      );
-    } catch (error) {
-      console.error('Error marking recommendation as clicked:', error);
-    }
-  }, []);
-
-  // Dismiss recommendation
-  const dismissRecommendation = useCallback(async (recommendationId: string) => {
-    try {
-      await supabase
-        .from('village_recommendations')
-        .update({ is_dismissed: true })
-        .eq('id', recommendationId);
-
-      setRecommendations(prev =>
-        prev.filter(rec => rec.id !== recommendationId)
-      );
-    } catch (error) {
-      console.error('Error dismissing recommendation:', error);
-    }
-  }, []);
-
-  // Generate new recommendations based on user behavior
-  const generateRecommendations = useCallback(async () => {
-    if (!user) return;
-
-    try {
-      // Call the AI recommendation engine
-      const { data, error } = await supabase.functions.invoke('generate-village-recommendations', {
-        body: { user_id: user.id }
+      // Track product view
+      await supabase.rpc('increment_product_view', {
+        p_product_id: clickedProductId,
+        p_user_id: userId,
+        p_session_id: `session_${Date.now()}`
       });
-
-      if (error) {
-        console.error('Error generating recommendations:', error);
-        return;
-      }
-
-      // Refresh recommendations
-      await fetchRecommendations();
-    } catch (error) {
-      console.error('Error generating recommendations:', error);
+    } catch (err) {
+      console.error('Error tracking recommendation click:', err);
     }
-  }, [user, fetchRecommendations]);
+  };
+
+  const trackConversion = async (productId: string, conversionValue: number) => {
+    if (!userId) return;
+
+    try {
+      await supabase
+        .from('recommendation_events')
+        .update({
+          converted: true,
+          conversion_value: conversionValue
+        })
+        .eq('user_id', userId)
+        .eq('clicked_product_id', productId)
+        .eq('recommendation_type', recommendationType);
+    } catch (err) {
+      console.error('Error tracking conversion:', err);
+    }
+  };
+
+  // Real-time updates for recommendations
+  useEffect(() => {
+    if (!userId) return;
+
+    const channel = supabase
+      .channel('recommendation-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'marketplace_orders',
+          filter: `buyer_id=eq.${userId}`
+        },
+        () => {
+          // Refresh recommendations when user makes a purchase
+          fetchRecommendations();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [userId]);
 
   useEffect(() => {
-    fetchPreferences();
-    fetchRecommendations();
-  }, [fetchPreferences, fetchRecommendations]);
+    if (userId && abTestGroup) {
+      fetchRecommendations();
+    }
+  }, [userId, productId, recommendationType, abTestGroup]);
 
   return {
     recommendations,
-    preferences,
+    metadata,
     loading,
-    updatePreferences,
-    markClicked,
-    dismissRecommendation,
-    generateRecommendations,
-    refreshRecommendations: fetchRecommendations
+    error,
+    abTestGroup,
+    refetch: fetchRecommendations,
+    trackClick,
+    trackConversion
   };
-};
+}

@@ -7,7 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { Star, X, MapPin, Users, Sparkles } from 'lucide-react';
 
 export const VillageRecommendations: React.FC = () => {
-  const { recommendations, loading, markClicked, dismissRecommendation } = useRecommendations();
+  const { 
+    recommendations, 
+    loading, 
+    markClicked, 
+    dismissRecommendation, 
+    refreshRecommendations 
+  } = useRecommendations();
   const navigate = useNavigate();
 
   const handleVillageClick = (villageId: string, recommendationId: string) => {

@@ -52,27 +52,31 @@ export const FinancialReporting: React.FC<FinancialReportingProps> = ({
       const startDate = effectiveDateRange.from?.toISOString();
       const endDate = effectiveDateRange.to?.toISOString();
 
-      const [transactionsRes, ordersRes, vendorsRes, commissionsRes] = await Promise.all([
-        supabase
-          .from('payment_transactions')
-          .select('*')
-          .gte('created_at', startDate)
-          .lte('created_at', endDate),
-        supabase
-          .from('marketplace_orders')
-          .select('*')
-          .gte('created_at', startDate)
-          .lte('created_at', endDate),
-        supabase
-          .from('marketplace_vendors')
-          .select('*')
-          .eq('status', 'approved'),
-        supabase
-          .from('commission_tracking')
-          .select('*')
-          .gte('created_at', startDate)
-          .lte('created_at', endDate)
-      ]);
+      // Fetch financial data separately to avoid type inference issues
+      const transactionsRes = await supabase
+        .from('payment_transactions')
+        .select('*')
+        .gte('created_at', startDate)
+        .lte('created_at', endDate);
+
+      const ordersRes = await supabase
+        .from('marketplace_orders')
+        .select('*')
+        .gte('created_at', startDate)
+        .lte('created_at', endDate);
+
+      const vendorsRes = await supabase
+        .from('marketplace_vendors')
+        .select('*')
+        .eq('status', 'approved');
+
+      const commissionsRes = await supabase
+        .from('commission_tracking')
+        .select('*')
+        .gte('created_at', startDate)
+        .lte('created_at', endDate);
+
+      const allResults = [transactionsRes, ordersRes, vendorsRes, commissionsRes];
 
       const transactions = transactionsRes.data || [];
       const orders = ordersRes.data || [];
