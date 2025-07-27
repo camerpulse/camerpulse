@@ -21213,43 +21213,64 @@ export type Database = {
       }
       marketplace_vendors: {
         Row: {
+          address: string | null
           business_name: string
+          contact_email: string | null
+          contact_phone: string | null
           created_at: string | null
           description: string | null
           id: string
+          is_active: boolean | null
+          is_verified: boolean | null
           kyc_document_url: string | null
+          logo_url: string | null
           rating: number | null
           total_sales: number | null
           updated_at: string | null
           user_id: string
           vendor_id: string
           verification_status: string | null
+          website_url: string | null
         }
         Insert: {
+          address?: string | null
           business_name: string
+          contact_email?: string | null
+          contact_phone?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
           kyc_document_url?: string | null
+          logo_url?: string | null
           rating?: number | null
           total_sales?: number | null
           updated_at?: string | null
           user_id: string
           vendor_id: string
           verification_status?: string | null
+          website_url?: string | null
         }
         Update: {
+          address?: string | null
           business_name?: string
+          contact_email?: string | null
+          contact_phone?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
           kyc_document_url?: string | null
+          logo_url?: string | null
           rating?: number | null
           total_sales?: number | null
           updated_at?: string | null
           user_id?: string
           vendor_id?: string
           verification_status?: string | null
+          website_url?: string | null
         }
         Relationships: []
       }
