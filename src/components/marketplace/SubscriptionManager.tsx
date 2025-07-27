@@ -381,7 +381,10 @@ export const SubscriptionManager: React.FC = () => {
                 <p className="text-muted-foreground mb-4">
                   Subscribe to a plan to start selling on our marketplace
                 </p>
-                <Button onClick={() => document.querySelector('[value="plans"]')?.click()}>
+                <Button onClick={() => {
+                  const plansTab = document.querySelector('[value="plans"]') as HTMLElement;
+                  plansTab?.click();
+                }}>
                   View Plans
                 </Button>
               </CardContent>

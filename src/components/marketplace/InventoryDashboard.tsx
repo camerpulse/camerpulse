@@ -19,7 +19,8 @@ import { toast } from 'sonner';
 
 interface Product {
   id: string;
-  title: string;
+  title?: string;
+  name?: string;
   stock_quantity: number;
   price: number;
   category: string;
@@ -72,7 +73,10 @@ export const InventoryDashboard: React.FC<InventoryDashboardProps> = ({
         .order('updated_at', { ascending: false });
 
       if (error) throw error;
-      setProducts(data || []);
+      setProducts(data?.map(product => ({
+        ...product,
+        title: (product as any).title || (product as any).name || 'Untitled Product'
+      })) || []);
     } catch (error) {
       console.error('Error fetching products:', error);
       toast.error('Failed to load inventory');

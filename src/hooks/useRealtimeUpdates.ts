@@ -23,6 +23,7 @@ interface InventoryAlert {
   alert_type: 'low_stock' | 'out_of_stock' | 'restock' | 'price_change';
   message: string;
   current_value: number;
+  created_at: string;
 }
 
 interface RealtimeNotification {
@@ -34,6 +35,7 @@ interface RealtimeNotification {
   data: any;
   created_at: string;
   read_at?: string;
+  is_read?: boolean;
 }
 
 export const useRealtimeUpdates = (userId?: string) => {
@@ -144,9 +146,14 @@ export const useRealtimeUpdates = (userId?: string) => {
 
   const markNotificationAsRead = async (notificationId: string) => {
     try {
+      const { data: currentUser } = await supabase.auth.getUser();
+      if (!currentUser.user) return;
+
       await supabase
         .from('realtime_notifications')
-        .update({ read_at: new Date().toISOString() })
+        .update({ 
+          acknowledged_by: [currentUser.user.id] 
+        })
         .eq('id', notificationId);
 
       setNotifications(prev => 

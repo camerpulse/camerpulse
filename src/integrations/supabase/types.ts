@@ -25179,6 +25179,7 @@ export type Database = {
       orders: {
         Row: {
           amount: number
+          buyer_id: string | null
           created_at: string
           currency: string | null
           customer_email: string | null
@@ -25199,6 +25200,7 @@ export type Database = {
         }
         Insert: {
           amount: number
+          buyer_id?: string | null
           created_at?: string
           currency?: string | null
           customer_email?: string | null
@@ -25219,6 +25221,7 @@ export type Database = {
         }
         Update: {
           amount?: number
+          buyer_id?: string | null
           created_at?: string
           currency?: string | null
           customer_email?: string | null
@@ -38435,6 +38438,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      vendor_subscriptions: {
+        Row: {
+          amount: number
+          cancelled_at: string | null
+          created_at: string
+          currency: string
+          features: Json | null
+          id: string
+          interval: string
+          plan_type: string
+          status: string
+          stripe_customer_id: string | null
+          stripe_session_id: string | null
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string
+          vendor_id: string | null
+        }
+        Insert: {
+          amount: number
+          cancelled_at?: string | null
+          created_at?: string
+          currency?: string
+          features?: Json | null
+          id?: string
+          interval?: string
+          plan_type: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_session_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+          vendor_id?: string | null
+        }
+        Update: {
+          amount?: number
+          cancelled_at?: string | null
+          created_at?: string
+          currency?: string
+          features?: Json | null
+          id?: string
+          interval?: string
+          plan_type?: string
+          status?: string
+          stripe_customer_id?: string | null
+          stripe_session_id?: string | null
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
+          vendor_id?: string | null
+        }
+        Relationships: []
       }
       village_analytics: {
         Row: {

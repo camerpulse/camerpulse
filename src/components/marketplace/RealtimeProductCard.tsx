@@ -44,7 +44,10 @@ export const RealtimeProductCard: React.FC<RealtimeProductCardProps> = ({
           .single();
 
         if (error) throw error;
-        setProduct(data);
+        setProduct({
+          ...data,
+          title: (data as any).title || (data as any).name || 'Untitled Product'
+        });
       } catch (error) {
         console.error('Error fetching product:', error);
         toast.error('Failed to load product');

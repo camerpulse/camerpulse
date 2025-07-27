@@ -10,7 +10,7 @@ import {
   Wifi, 
   WifiOff, 
   Coffee,
-  Busy
+  Phone
 } from 'lucide-react';
 
 interface VendorStatusIndicatorProps {
@@ -46,7 +46,7 @@ export const VendorStatusIndicator: React.FC<VendorStatusIndicatorProps> = ({
         return {
           color: 'bg-red-500',
           label: 'Busy',
-          icon: <Busy className="h-3 w-3" />,
+          icon: <Phone className="h-3 w-3" />,
           badge: 'bg-red-500/10 text-red-700 dark:text-red-300'
         };
       case 'away':
@@ -154,7 +154,7 @@ export const VendorStatusIndicator: React.FC<VendorStatusIndicatorProps> = ({
                 onClick={() => setStatus('busy')}
                 className="text-xs"
               >
-                <Busy className="h-3 w-3 mr-1" />
+                <Phone className="h-3 w-3 mr-1" />
                 Busy
               </Button>
               <Button
