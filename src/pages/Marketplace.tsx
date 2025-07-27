@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { ProductCard } from '@/components/Marketplace/ProductCard';
 import { ShoppingCart } from '@/components/Marketplace/ShoppingCart';
