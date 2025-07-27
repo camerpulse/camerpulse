@@ -139,15 +139,13 @@ const VillageEdit = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      // Submit update request instead of directly updating
+      // Store update request as a village comment for now
       const { error } = await supabase
-        .from('village_update_requests')
+        .from('village_comments')
         .insert({
           village_id: villageId,
           user_id: user?.id,
-          update_reason: formData.update_reason,
-          update_description: formData.update_description,
-          proposed_changes: {
+          content: `[UPDATE REQUEST] ${formData.update_reason}\n\nDescription: ${formData.update_description}\n\nContact: ${formData.contact_info}\nEvidence: ${formData.evidence_links}\n\nProposed Changes:\n${JSON.stringify({
             village_name: formData.village_name,
             village_motto: formData.village_motto,
             founding_story: formData.founding_story,
@@ -170,10 +168,7 @@ const VillageEdit = () => {
             traditional_languages: formData.traditional_languages,
             ethnic_groups: formData.ethnic_groups,
             totem_symbol: formData.totem_symbol
-          },
-          evidence_links: formData.evidence_links,
-          contact_info: formData.contact_info,
-          status: 'pending'
+          }, null, 2)}`
         });
 
       if (error) throw error;

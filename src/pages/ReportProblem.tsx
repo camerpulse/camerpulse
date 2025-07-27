@@ -83,19 +83,13 @@ const ReportProblem = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
+      // Store the problem report as a village comment for now
       const { error } = await supabase
-        .from('village_problem_reports')
+        .from('village_comments')
         .insert({
           village_id: villageId,
           user_id: user?.id,
-          problem_type: formData.problem_type,
-          title: formData.title,
-          description: formData.description,
-          location_details: formData.location_details,
-          urgency_level: formData.urgency_level,
-          contact_info: formData.contact_info,
-          supporting_evidence: formData.supporting_evidence,
-          status: 'submitted'
+          content: `[PROBLEM REPORT] ${formData.title}\n\nType: ${formData.problem_type}\nUrgency: ${formData.urgency_level}\nDescription: ${formData.description}\n\nLocation: ${formData.location_details}\nContact: ${formData.contact_info}\nEvidence: ${formData.supporting_evidence}`
         });
 
       if (error) throw error;

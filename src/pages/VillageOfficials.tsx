@@ -65,12 +65,28 @@ const VillageOfficials = () => {
       if (villageError) throw villageError;
       setVillage(villageData);
 
-      // Fetch officials/leaders data
-      const { data: officialsData, error: officialsError } = await supabase
+      // Fetch officials/leaders data and map to our interface
+      const { data: leadersData, error: officialsError } = await supabase
         .from('village_leaders')
         .select('*')
         .eq('village_id', villageId)
-        .order('position');
+        .order('leader_name');
+
+      // Map the database structure to our Official interface
+      const officialsData = leadersData?.map(leader => ({
+        id: leader.id,
+        name: leader.leader_name,
+        position: leader.leader_type || 'Village Leader',
+        role_type: 'traditional',
+        contact_phone: undefined,
+        contact_email: undefined,
+        years_in_office: leader.years_in_power,
+        education_background: leader.bio,
+        achievements: leader.achievements || [],
+        photo_url: leader.photo_url,
+        is_active: leader.is_current,
+        appointed_date: leader.start_year?.toString()
+      })) || [];
 
       if (officialsError) throw officialsError;
       setOfficials(officialsData || []);
