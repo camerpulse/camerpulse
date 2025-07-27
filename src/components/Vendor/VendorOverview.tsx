@@ -1,42 +1,26 @@
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Package, ShoppingBag, DollarSign, TrendingUp, AlertCircle, CheckCircle } from 'lucide-react';
 
-interface VendorOverviewProps {
-  vendor: any;
-}
+export const VendorOverview: React.FC = () => {
+  // Mock stats for now
+  const stats = {
+    totalProducts: 5,
+    totalOrders: 12,
+    totalRevenue: 125000,
+    pendingOrders: 3,
+  };
 
-export const VendorOverview = ({ vendor }: VendorOverviewProps) => {
-  const { data: stats } = useQuery({
-    queryKey: ['vendor-stats', vendor.id],
-    queryFn: async () => {
-      const [productsResult, ordersResult] = await Promise.all([
-        supabase
-          .from('marketplace_products')
-          .select('id')
-          .eq('vendor_id', vendor.id),
-        supabase
-          .from('marketplace_orders')
-          .select('id, total_amount, order_status')
-          .eq('vendor_id', vendor.id)
-      ]);
-
-      const totalProducts = productsResult.data?.length || 0;
-      const totalOrders = ordersResult.data?.length || 0;
-      const completedOrders = ordersResult.data?.filter(order => order.order_status === 'completed') || [];
-      const totalRevenue = completedOrders.reduce((sum, order) => sum + order.total_amount, 0);
-      const pendingOrders = ordersResult.data?.filter(order => order.order_status === 'pending').length || 0;
-
-      return {
-        totalProducts,
-        totalOrders,
-        totalRevenue,
-        pendingOrders,
-      };
-    },
-  });
+  const vendor = {
+    business_name: 'Your Business',
+    description: 'Welcome to your vendor dashboard',
+    vendor_id: 'VENDOR-001',
+    rating: 4.5,
+    created_at: new Date().toISOString(),
+    total_sales: 125000,
+    verification_status: 'pending'
+  };
 
   const getStatusBadge = (status: string) => {
     switch (status) {

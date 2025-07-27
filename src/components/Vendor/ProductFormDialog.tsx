@@ -23,7 +23,8 @@ interface Product {
   price: number;
   stock_quantity: number;
   category: string;
-  image_url?: string;
+  images: string[];
+  in_stock: boolean;
   is_active: boolean;
 }
 
@@ -74,7 +75,7 @@ export const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
         price: product.price,
         stock_quantity: product.stock_quantity,
         category: product.category,
-        image_url: product.image_url || '',
+        image_url: (product.images && product.images[0]) || '',
         is_active: product.is_active,
       });
     } else {
@@ -97,7 +98,13 @@ export const ProductFormDialog: React.FC<ProductFormDialogProps> = ({
     setLoading(true);
     try {
       const productData = {
-        ...formData,
+        name: formData.name,
+        description: formData.description,
+        price: formData.price,
+        stock_quantity: formData.stock_quantity,
+        category: formData.category,
+        images: formData.image_url ? [formData.image_url] : [],
+        in_stock: formData.is_active,
         vendor_id: user.id,
       };
 

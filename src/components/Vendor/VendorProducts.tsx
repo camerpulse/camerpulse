@@ -17,6 +17,7 @@ interface Product {
   category: string;
   images: string[];
   in_stock: boolean;
+  is_active: boolean;
   created_at: string;
 }
 
@@ -43,7 +44,10 @@ export const VendorProducts: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setProducts(data || []);
+      setProducts((data || []).map(product => ({
+        ...product,
+        is_active: product.in_stock // Map in_stock to is_active for compatibility
+      })));
     } catch (error) {
       console.error('Error fetching products:', error);
       toast({
