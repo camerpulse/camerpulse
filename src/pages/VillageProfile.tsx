@@ -529,8 +529,8 @@ const VillageProfile = () => {
       <div className="container mx-auto px-4 py-8">
         <Tabs defaultValue="overview" className="w-full">
           {/* Primary Navigation Tabs - Priority Order */}
-          <div className="mb-6">
-            <TabsList className="flex flex-wrap w-full gap-1 p-1 bg-muted/50 rounded-lg min-h-[3rem]">
+          <div className="mb-6 w-full overflow-x-auto">
+            <TabsList className="inline-flex w-max gap-1 p-1 bg-muted/50 rounded-lg min-h-[3rem]">
               <TabsTrigger 
                 value="overview" 
                 className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
@@ -637,8 +637,8 @@ const VillageProfile = () => {
           </div>
 
           {/* Secondary Navigation Tabs */}
-          <div className="mb-6">
-            <TabsList className="flex flex-wrap w-full gap-1 p-1 bg-muted/30 rounded-lg min-h-[3rem]">
+          <div className="mb-6 w-full overflow-x-auto">
+            <TabsList className="inline-flex w-max gap-1 p-1 bg-muted/30 rounded-lg min-h-[3rem]">
               <TabsTrigger 
                 value="chat" 
                 className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm px-3 py-2 rounded-md whitespace-nowrap"
