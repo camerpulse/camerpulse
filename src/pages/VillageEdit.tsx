@@ -139,13 +139,17 @@ const VillageEdit = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      // Store update request as a village comment for now
+      // Store proper update request
       const { error } = await supabase
-        .from('village_comments')
+        .from('village_edit_requests')
         .insert({
           village_id: villageId,
           user_id: user?.id,
-          content: `[UPDATE REQUEST] ${formData.update_reason}\n\nDescription: ${formData.update_description}\n\nContact: ${formData.contact_info}\nEvidence: ${formData.evidence_links}\n\nProposed Changes:\n${JSON.stringify({
+          update_reason: formData.update_reason,
+          update_description: formData.update_description,
+          contact_info: formData.contact_info,
+          evidence_links: formData.evidence_links,
+          proposed_changes: {
             village_name: formData.village_name,
             village_motto: formData.village_motto,
             founding_story: formData.founding_story,
@@ -168,7 +172,7 @@ const VillageEdit = () => {
             traditional_languages: formData.traditional_languages,
             ethnic_groups: formData.ethnic_groups,
             totem_symbol: formData.totem_symbol
-          }, null, 2)}`
+          }
         });
 
       if (error) throw error;

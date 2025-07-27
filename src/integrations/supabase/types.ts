@@ -37713,6 +37713,65 @@ export type Database = {
           },
         ]
       }
+      village_edit_requests: {
+        Row: {
+          contact_info: string | null
+          created_at: string
+          evidence_links: string | null
+          id: string
+          proposed_changes: Json
+          reviewed_at: string | null
+          reviewer_id: string | null
+          reviewer_notes: string | null
+          status: string
+          update_description: string
+          update_reason: string
+          updated_at: string
+          user_id: string
+          village_id: string
+        }
+        Insert: {
+          contact_info?: string | null
+          created_at?: string
+          evidence_links?: string | null
+          id?: string
+          proposed_changes?: Json
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          status?: string
+          update_description: string
+          update_reason: string
+          updated_at?: string
+          user_id: string
+          village_id: string
+        }
+        Update: {
+          contact_info?: string | null
+          created_at?: string
+          evidence_links?: string | null
+          id?: string
+          proposed_changes?: Json
+          reviewed_at?: string | null
+          reviewer_id?: string | null
+          reviewer_notes?: string | null
+          status?: string
+          update_description?: string
+          update_reason?: string
+          updated_at?: string
+          user_id?: string
+          village_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_edit_requests_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       village_elder_knowledge: {
         Row: {
           audio_url: string | null
