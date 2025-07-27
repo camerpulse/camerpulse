@@ -55,6 +55,96 @@ export type Database = {
           },
         ]
       }
+      admin_activity_logs: {
+        Row: {
+          action_details: Json | null
+          action_type: string
+          admin_user_id: string
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          target_id: string | null
+          target_type: string
+          user_agent: string | null
+        }
+        Insert: {
+          action_details?: Json | null
+          action_type: string
+          admin_user_id: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          target_id?: string | null
+          target_type: string
+          user_agent?: string | null
+        }
+        Update: {
+          action_details?: Json | null
+          action_type?: string
+          admin_user_id?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          target_id?: string | null
+          target_type?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
+      admin_alerts: {
+        Row: {
+          alert_category: string
+          alert_data: Json | null
+          alert_type: string
+          assigned_admin_id: string | null
+          auto_generated: boolean
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_read: boolean
+          message: string
+          read_at: string | null
+          related_entity_id: string | null
+          related_entity_type: string | null
+          severity: string
+          title: string
+        }
+        Insert: {
+          alert_category: string
+          alert_data?: Json | null
+          alert_type: string
+          assigned_admin_id?: string | null
+          auto_generated?: boolean
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message: string
+          read_at?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          severity?: string
+          title: string
+        }
+        Update: {
+          alert_category?: string
+          alert_data?: Json | null
+          alert_type?: string
+          assigned_admin_id?: string | null
+          auto_generated?: boolean
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          read_at?: string | null
+          related_entity_id?: string | null
+          related_entity_type?: string | null
+          severity?: string
+          title?: string
+        }
+        Relationships: []
+      }
       advanced_sentiment_analysis: {
         Row: {
           analysis_metadata: Json | null
@@ -10748,6 +10838,79 @@ export type Database = {
         }
         Relationships: []
       }
+      commission_tracking: {
+        Row: {
+          commission_amount: number
+          commission_rate: number
+          created_at: string
+          gross_amount: number
+          id: string
+          net_revenue: number
+          order_id: string | null
+          paid_out_at: string | null
+          payment_processing_fee: number | null
+          status: string
+          transaction_id: string
+          updated_at: string
+          vendor_id: string
+          vendor_payout: number
+        }
+        Insert: {
+          commission_amount: number
+          commission_rate: number
+          created_at?: string
+          gross_amount: number
+          id?: string
+          net_revenue: number
+          order_id?: string | null
+          paid_out_at?: string | null
+          payment_processing_fee?: number | null
+          status?: string
+          transaction_id: string
+          updated_at?: string
+          vendor_id: string
+          vendor_payout: number
+        }
+        Update: {
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string
+          gross_amount?: number
+          id?: string
+          net_revenue?: number
+          order_id?: string | null
+          paid_out_at?: string | null
+          payment_processing_fee?: number | null
+          status?: string
+          transaction_id?: string
+          updated_at?: string
+          vendor_id?: string
+          vendor_payout?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_tracking_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_tracking_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "payment_transactions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "commission_tracking_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       community_events: {
         Row: {
           address: string | null
@@ -17512,6 +17675,54 @@ export type Database = {
         }
         Relationships: []
       }
+      financial_reports: {
+        Row: {
+          customer_count: number
+          generated_at: string
+          generated_by_admin_id: string
+          id: string
+          report_data: Json | null
+          report_period_end: string
+          report_period_start: string
+          report_type: string
+          total_commission: number
+          total_revenue: number
+          total_vendor_payouts: number
+          transaction_count: number
+          vendor_count: number
+        }
+        Insert: {
+          customer_count?: number
+          generated_at?: string
+          generated_by_admin_id: string
+          id?: string
+          report_data?: Json | null
+          report_period_end: string
+          report_period_start: string
+          report_type: string
+          total_commission?: number
+          total_revenue?: number
+          total_vendor_payouts?: number
+          transaction_count?: number
+          vendor_count?: number
+        }
+        Update: {
+          customer_count?: number
+          generated_at?: string
+          generated_by_admin_id?: string
+          id?: string
+          report_data?: Json | null
+          report_period_end?: string
+          report_period_start?: string
+          report_type?: string
+          total_commission?: number
+          total_revenue?: number
+          total_vendor_payouts?: number
+          transaction_count?: number
+          vendor_count?: number
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string | null
@@ -21270,6 +21481,97 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_disputes: {
+        Row: {
+          admin_notes: string | null
+          assigned_admin_id: string | null
+          compensation_amount: number | null
+          created_at: string
+          customer_evidence: Json | null
+          customer_id: string
+          dispute_category: string
+          dispute_number: string
+          dispute_reason: string
+          dispute_type: string
+          id: string
+          order_id: string | null
+          priority_level: string
+          product_id: string | null
+          resolution_details: string | null
+          resolved_at: string | null
+          status: string
+          updated_at: string
+          vendor_id: string
+          vendor_response: Json | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          assigned_admin_id?: string | null
+          compensation_amount?: number | null
+          created_at?: string
+          customer_evidence?: Json | null
+          customer_id: string
+          dispute_category: string
+          dispute_number: string
+          dispute_reason: string
+          dispute_type: string
+          id?: string
+          order_id?: string | null
+          priority_level?: string
+          product_id?: string | null
+          resolution_details?: string | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+          vendor_id: string
+          vendor_response?: Json | null
+        }
+        Update: {
+          admin_notes?: string | null
+          assigned_admin_id?: string | null
+          compensation_amount?: number | null
+          created_at?: string
+          customer_evidence?: Json | null
+          customer_id?: string
+          dispute_category?: string
+          dispute_number?: string
+          dispute_reason?: string
+          dispute_type?: string
+          id?: string
+          order_id?: string | null
+          priority_level?: string
+          product_id?: string | null
+          resolution_details?: string | null
+          resolved_at?: string | null
+          status?: string
+          updated_at?: string
+          vendor_id?: string
+          vendor_response?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_disputes_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_disputes_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "marketplace_disputes_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
             referencedColumns: ["id"]
           },
         ]
@@ -37738,6 +38040,159 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_compliance_checks: {
+        Row: {
+          check_status: string
+          check_type: string
+          checked_by_admin_id: string | null
+          compliance_score: number | null
+          created_at: string
+          id: string
+          issues_found: Json | null
+          next_check_due: string | null
+          recommendations: Json | null
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          check_status?: string
+          check_type: string
+          checked_by_admin_id?: string | null
+          compliance_score?: number | null
+          created_at?: string
+          id?: string
+          issues_found?: Json | null
+          next_check_due?: string | null
+          recommendations?: Json | null
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          check_status?: string
+          check_type?: string
+          checked_by_admin_id?: string | null
+          compliance_score?: number | null
+          created_at?: string
+          id?: string
+          issues_found?: Json | null
+          next_check_due?: string | null
+          recommendations?: Json | null
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_compliance_checks_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendor_performance_metrics: {
+        Row: {
+          calculated_at: string
+          id: string
+          metric_data: Json | null
+          metric_period: string
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+          vendor_id: string
+        }
+        Insert: {
+          calculated_at?: string
+          id?: string
+          metric_data?: Json | null
+          metric_period: string
+          metric_type: string
+          metric_value?: number
+          period_end: string
+          period_start: string
+          vendor_id: string
+        }
+        Update: {
+          calculated_at?: string
+          id?: string
+          metric_data?: Json | null
+          metric_period?: string
+          metric_type?: string
+          metric_value?: number
+          period_end?: string
+          period_start?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_performance_metrics_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendor_ratings_summary: {
+        Row: {
+          average_rating: number
+          average_response_time_hours: number | null
+          created_at: string
+          five_star_count: number
+          four_star_count: number
+          id: string
+          last_calculated_at: string
+          one_star_count: number
+          response_rate: number | null
+          three_star_count: number
+          total_reviews: number
+          two_star_count: number
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          average_rating?: number
+          average_response_time_hours?: number | null
+          created_at?: string
+          five_star_count?: number
+          four_star_count?: number
+          id?: string
+          last_calculated_at?: string
+          one_star_count?: number
+          response_rate?: number | null
+          three_star_count?: number
+          total_reviews?: number
+          two_star_count?: number
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          average_rating?: number
+          average_response_time_hours?: number | null
+          created_at?: string
+          five_star_count?: number
+          four_star_count?: number
+          id?: string
+          last_calculated_at?: string
+          one_star_count?: number
+          response_rate?: number | null
+          three_star_count?: number
+          total_reviews?: number
+          two_star_count?: number
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_ratings_summary_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       village_analytics: {
         Row: {
           created_at: string
@@ -40797,6 +41252,14 @@ export type Database = {
         Args: { p_senator_id: string }
         Returns: number
       }
+      calculate_vendor_performance_metrics: {
+        Args: {
+          p_vendor_id: string
+          p_period_start: string
+          p_period_end: string
+        }
+        Returns: undefined
+      }
       calculate_village_reputation_index: {
         Args: { p_village_id: string }
         Returns: undefined
@@ -41052,6 +41515,10 @@ export type Database = {
         Returns: {
           predictions_created: number
         }[]
+      }
+      generate_dispute_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       generate_election_forecast: {
         Args: Record<PropertyKey, never>
