@@ -85,8 +85,8 @@ export const LanguagePreservation = () => {
 
   const filteredEntries = entries?.filter(entry => 
     !searchQuery || 
-    entry.word_or_phrase?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    entry.translation?.toLowerCase().includes(searchQuery.toLowerCase())
+    entry.local_term?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    entry.english_translation?.toLowerCase().includes(searchQuery.toLowerCase())
   ) || [];
 
   return (
@@ -295,8 +295,8 @@ export const LanguagePreservation = () => {
                     <div key={entry.id} className="p-4 border rounded-lg">
                       <div className="flex items-start justify-between mb-2">
                         <div>
-                          <h3 className="font-semibold text-lg">{entry.word_or_phrase}</h3>
-                          <p className="text-muted-foreground">{entry.translation}</p>
+                          <h3 className="font-semibold text-lg">{entry.local_term}</h3>
+                          <p className="text-muted-foreground">{entry.english_translation}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           {entry.category && (

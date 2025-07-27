@@ -277,9 +277,9 @@ export const TraditionalRecipeSharing = () => {
                       </div>
                     )}
 
-                    {recipe.traditional_occasions && (
+                    {recipe.occasion && (
                       <div className="text-sm">
-                        <span className="font-medium">Special Occasions:</span> {recipe.traditional_occasions}
+                        <span className="font-medium">Special Occasions:</span> {recipe.occasion}
                       </div>
                     )}
 

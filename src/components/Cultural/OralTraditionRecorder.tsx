@@ -263,12 +263,10 @@ export const OralTraditionRecorder = () => {
                           <User className="h-3 w-3" />
                           <span>{tradition.elder_name}</span>
                         </div>
-                        {tradition.location_recorded && (
-                          <div className="flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            <span>{tradition.location_recorded}</span>
-                          </div>
-                        )}
+                        <div className="flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />
+                          <span>Village Recording</span>
+                        </div>
                         <div className="flex items-center gap-1">
                           <Eye className="h-3 w-3" />
                           <span>{tradition.views_count || 0} views</span>
@@ -276,8 +274,8 @@ export const OralTraditionRecorder = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      {tradition.tradition_category && (
-                        <Badge variant="outline">{tradition.tradition_category}</Badge>
+                      {tradition.tradition_type && (
+                        <Badge variant="outline">{tradition.tradition_type}</Badge>
                       )}
                       {tradition.language && (
                         <Badge variant="secondary">{tradition.language}</Badge>
