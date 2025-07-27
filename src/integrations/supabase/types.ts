@@ -259,6 +259,57 @@ export type Database = {
           },
         ]
       }
+      agriculture_data: {
+        Row: {
+          challenges: Json | null
+          created_at: string | null
+          crop_type: string
+          harvest_season: string | null
+          id: string
+          irrigation_method: string | null
+          land_area_hectares: number | null
+          opportunities: Json | null
+          planting_season: string | null
+          region: string
+          soil_type: string | null
+          updated_at: string | null
+          village_id: string | null
+          yield_per_hectare: number | null
+        }
+        Insert: {
+          challenges?: Json | null
+          created_at?: string | null
+          crop_type: string
+          harvest_season?: string | null
+          id?: string
+          irrigation_method?: string | null
+          land_area_hectares?: number | null
+          opportunities?: Json | null
+          planting_season?: string | null
+          region: string
+          soil_type?: string | null
+          updated_at?: string | null
+          village_id?: string | null
+          yield_per_hectare?: number | null
+        }
+        Update: {
+          challenges?: Json | null
+          created_at?: string | null
+          crop_type?: string
+          harvest_season?: string | null
+          id?: string
+          irrigation_method?: string | null
+          land_area_hectares?: number | null
+          opportunities?: Json | null
+          planting_season?: string | null
+          region?: string
+          soil_type?: string | null
+          updated_at?: string | null
+          village_id?: string | null
+          yield_per_hectare?: number | null
+        }
+        Relationships: []
+      }
       ai_generation_schedule: {
         Row: {
           created_at: string
@@ -14188,6 +14239,63 @@ export type Database = {
           sector_focus?: string | null
           updated_at?: string
           views_count?: number | null
+        }
+        Relationships: []
+      }
+      economic_opportunities: {
+        Row: {
+          application_deadline: string | null
+          contact_info: Json | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          eligibility_criteria: Json | null
+          funding_amount: number | null
+          funding_currency: string | null
+          id: string
+          opportunity_type: string
+          priority_level: string | null
+          region: string
+          status: string | null
+          title: string
+          updated_at: string | null
+          village_id: string | null
+        }
+        Insert: {
+          application_deadline?: string | null
+          contact_info?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          eligibility_criteria?: Json | null
+          funding_amount?: number | null
+          funding_currency?: string | null
+          id?: string
+          opportunity_type: string
+          priority_level?: string | null
+          region: string
+          status?: string | null
+          title: string
+          updated_at?: string | null
+          village_id?: string | null
+        }
+        Update: {
+          application_deadline?: string | null
+          contact_info?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          eligibility_criteria?: Json | null
+          funding_amount?: number | null
+          funding_currency?: string | null
+          id?: string
+          opportunity_type?: string
+          priority_level?: string | null
+          region?: string
+          status?: string | null
+          title?: string
+          updated_at?: string | null
+          village_id?: string | null
         }
         Relationships: []
       }
@@ -32551,6 +32659,143 @@ export type Database = {
         }
         Relationships: []
       }
+      scholarship_applications: {
+        Row: {
+          applicant_email: string
+          applicant_name: string
+          applicant_phone: string | null
+          applicant_user_id: string
+          application_data: Json | null
+          created_at: string | null
+          id: string
+          region: string
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          scholarship_id: string
+          status: string | null
+          submitted_at: string | null
+          updated_at: string | null
+          village: string | null
+        }
+        Insert: {
+          applicant_email: string
+          applicant_name: string
+          applicant_phone?: string | null
+          applicant_user_id: string
+          application_data?: Json | null
+          created_at?: string | null
+          id?: string
+          region: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          scholarship_id: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          village?: string | null
+        }
+        Update: {
+          applicant_email?: string
+          applicant_name?: string
+          applicant_phone?: string | null
+          applicant_user_id?: string
+          application_data?: Json | null
+          created_at?: string | null
+          id?: string
+          region?: string
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          scholarship_id?: string
+          status?: string | null
+          submitted_at?: string | null
+          updated_at?: string | null
+          village?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scholarship_applications_scholarship_id_fkey"
+            columns: ["scholarship_id"]
+            isOneToOne: false
+            referencedRelation: "scholarship_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      scholarship_programs: {
+        Row: {
+          amount_xaf: number | null
+          application_end_date: string | null
+          application_start_date: string | null
+          available_slots: number | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          eligibility_criteria: Json | null
+          id: string
+          program_name: string
+          provider_organization: string
+          regions_eligible: Json | null
+          required_documents: Json | null
+          scholarship_type: string
+          selection_criteria: Json | null
+          status: string | null
+          target_level: string
+          updated_at: string | null
+          website_url: string | null
+        }
+        Insert: {
+          amount_xaf?: number | null
+          application_end_date?: string | null
+          application_start_date?: string | null
+          available_slots?: number | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          eligibility_criteria?: Json | null
+          id?: string
+          program_name: string
+          provider_organization: string
+          regions_eligible?: Json | null
+          required_documents?: Json | null
+          scholarship_type: string
+          selection_criteria?: Json | null
+          status?: string | null
+          target_level: string
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          amount_xaf?: number | null
+          application_end_date?: string | null
+          application_start_date?: string | null
+          available_slots?: number | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          eligibility_criteria?: Json | null
+          id?: string
+          program_name?: string
+          provider_organization?: string
+          regions_eligible?: Json | null
+          required_documents?: Json | null
+          scholarship_type?: string
+          selection_criteria?: Json | null
+          status?: string | null
+          target_level?: string
+          updated_at?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
       school_claims: {
         Row: {
           admin_notes: string | null
@@ -38931,6 +39176,48 @@ export type Database = {
           total_spent?: number
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      weather_data: {
+        Row: {
+          created_at: string | null
+          date: string
+          humidity_percentage: number | null
+          id: string
+          rainfall_mm: number | null
+          region: string
+          temperature_celsius: number | null
+          updated_at: string | null
+          village_id: string | null
+          weather_condition: string | null
+          wind_speed_kmh: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          date: string
+          humidity_percentage?: number | null
+          id?: string
+          rainfall_mm?: number | null
+          region: string
+          temperature_celsius?: number | null
+          updated_at?: string | null
+          village_id?: string | null
+          weather_condition?: string | null
+          wind_speed_kmh?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string
+          humidity_percentage?: number | null
+          id?: string
+          rainfall_mm?: number | null
+          region?: string
+          temperature_celsius?: number | null
+          updated_at?: string | null
+          village_id?: string | null
+          weather_condition?: string | null
+          wind_speed_kmh?: number | null
         }
         Relationships: []
       }

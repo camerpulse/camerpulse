@@ -337,6 +337,38 @@ const Index = () => {
                 href: "/jobs",
                 accent: "accent",
                 features: ["Job board", "Expert directory", "Company profiles"]
+              },
+              {
+                title: "Interactive Village Map",
+                description: "Explore villages across Cameroon with GPS mapping and community data",
+                icon: MapPin,
+                href: "/interactive-village-map",
+                accent: "primary",
+                features: ["GPS mapping", "Village profiles", "Community metrics"]
+              },
+              {
+                title: "Weather & Agriculture",
+                description: "Access real-time weather data and agricultural insights for farmers",
+                icon: TrendingUp,
+                href: "/weather-agriculture",
+                accent: "secondary",
+                features: ["Weather forecasts", "Crop insights", "Farming tips"]
+              },
+              {
+                title: "Economic Opportunities",
+                description: "Discover funding, business opportunities, and economic development",
+                icon: Target,
+                href: "/opportunity-tracker",
+                accent: "accent",
+                features: ["Business funding", "Investment opportunities", "Economic data"]
+              },
+              {
+                title: "Educational Scholarships",
+                description: "Find and apply for scholarships and educational opportunities",
+                icon: GraduationCap,
+                href: "/scholarship-portal",
+                accent: "primary",
+                features: ["Scholarship search", "Application tracking", "Education support"]
               }
             ].map((feature, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-500 border-0 overflow-hidden">
