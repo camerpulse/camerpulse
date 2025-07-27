@@ -530,106 +530,106 @@ const VillageProfile = () => {
         <Tabs defaultValue="overview" className="w-full">
           {/* Primary Navigation Tabs - Priority Order */}
           <div className="mb-6">
-            <TabsList className="grid w-full grid-cols-2 md:grid-cols-5 lg:grid-cols-15 gap-1 p-1 bg-muted/50 rounded-lg">
+            <TabsList className="flex flex-wrap w-full gap-1 p-1 bg-muted/50 rounded-lg min-h-[3rem]">
               <TabsTrigger 
                 value="overview" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Overview
               </TabsTrigger>
               <TabsTrigger 
                 value="genealogy" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Genealogy
               </TabsTrigger>
               <TabsTrigger 
                 value="reputation" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Reputation
               </TabsTrigger>
               <TabsTrigger 
                 value="membership" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Members
               </TabsTrigger>
               <TabsTrigger 
                 value="leaders" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Leadership
               </TabsTrigger>
               <TabsTrigger 
                 value="projects" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Projects
               </TabsTrigger>
               <TabsTrigger 
                 value="people" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Notable People
               </TabsTrigger>
               <TabsTrigger 
                 value="civic" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Civic Activity
               </TabsTrigger>
               <TabsTrigger 
                 value="gallery" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Gallery
               </TabsTrigger>
               <TabsTrigger 
                 value="relationships" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Relationships
               </TabsTrigger>
               <TabsTrigger 
                 value="calendar" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Calendar
               </TabsTrigger>
               <TabsTrigger 
                 value="announcements" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Announcements
               </TabsTrigger>
               <TabsTrigger 
                 value="elder-knowledge" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Elder Knowledge
               </TabsTrigger>
               <TabsTrigger 
                 value="cultural-heritage" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Cultural Heritage
               </TabsTrigger>
               <TabsTrigger 
                 value="live-discussions" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Live Chat
               </TabsTrigger>
               <TabsTrigger 
                 value="virtual-tour" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Virtual Tour
               </TabsTrigger>
               <TabsTrigger 
                 value="investment" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm font-medium"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm font-medium px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Investment Portal
               </TabsTrigger>
@@ -638,40 +638,40 @@ const VillageProfile = () => {
 
           {/* Secondary Navigation Tabs */}
           <div className="mb-6">
-            <TabsList className="grid w-full grid-cols-3 md:grid-cols-6 gap-1 p-1 bg-muted/30 rounded-lg">
+            <TabsList className="flex flex-wrap w-full gap-1 p-1 bg-muted/30 rounded-lg min-h-[3rem]">
               <TabsTrigger 
                 value="chat" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Chat
               </TabsTrigger>
               <TabsTrigger 
                 value="analytics" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Analytics
               </TabsTrigger>
               <TabsTrigger 
                 value="leaderboards" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Rankings
               </TabsTrigger>
               <TabsTrigger 
                 value="discussions" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Discussions
               </TabsTrigger>
               <TabsTrigger 
                 value="events" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Events
               </TabsTrigger>
               <TabsTrigger 
                 value="comments" 
-                className="data-[state=active]:bg-cm-green data-[state=active]:text-white hover:bg-cm-green/10 hover:text-cm-green transition-all duration-200 text-sm"
+                className="bg-green-600 text-white hover:bg-green-700 data-[state=active]:bg-green-700 data-[state=active]:text-white transition-all duration-200 text-sm px-3 py-2 rounded-md whitespace-nowrap"
               >
                 Comments
               </TabsTrigger>
