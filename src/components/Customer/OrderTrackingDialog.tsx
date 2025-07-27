@@ -85,7 +85,7 @@ export const OrderTrackingDialog = ({ open, onOpenChange, orderId }: OrderTracki
           <div className="text-center">
             <h3 className="font-semibold">Order #{order.order_number}</h3>
             <p className="text-sm text-muted-foreground">
-              {order.marketplace_vendors?.business_name}
+              {(order.marketplace_vendors as any)?.business_name || 'Unknown Vendor'}
             </p>
             <Badge className="mt-2">
               {order.order_status.charAt(0).toUpperCase() + order.order_status.slice(1)}
@@ -130,16 +130,16 @@ export const OrderTrackingDialog = ({ open, onOpenChange, orderId }: OrderTracki
             <div className="border-t pt-4">
               <h4 className="font-medium mb-2">Shipping Address</h4>
               <p className="text-sm text-muted-foreground">
-                {order.shipping_address}
+                {String(order.shipping_address) || 'No address provided'}
               </p>
             </div>
           )}
 
-          {order.marketplace_vendors?.contact_phone && (
-            <div className="border-t pt-4">
-              <h4 className="font-medium mb-2">Vendor Contact</h4>
-              <p className="text-sm text-muted-foreground">
-                {order.marketplace_vendors.contact_phone}
+           {(order.marketplace_vendors as any)?.contact_phone && (
+             <div className="border-t pt-4">
+               <h4 className="font-medium mb-2">Vendor Contact</h4>
+               <p className="text-sm text-muted-foreground">
+                 {(order.marketplace_vendors as any).contact_phone}
               </p>
             </div>
           )}

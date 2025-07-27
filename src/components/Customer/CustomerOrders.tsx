@@ -112,7 +112,7 @@ export const CustomerOrders = () => {
                     <div>
                       <p className="font-semibold">Total: {order.total_amount.toLocaleString()} XAF</p>
                       <p className="text-sm text-muted-foreground">
-                        Vendor: {order.marketplace_vendors?.business_name}
+                        Vendor: {(order.marketplace_vendors as any)?.business_name || 'Unknown Vendor'}
                       </p>
                     </div>
                     <Button 
