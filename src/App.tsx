@@ -189,6 +189,7 @@ import InteractiveVillageMap from "./pages/InteractiveVillageMap";
 import WeatherAgricultureHub from "./pages/WeatherAgricultureHub";
 import OpportunityTracker from "./pages/OpportunityTracker";
 import AdvancedScholarshipPortal from "./pages/AdvancedScholarshipPortal";
+import { CulturalHeritageCenter } from "./pages/CulturalHeritageCenter";
 
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
@@ -471,9 +472,10 @@ const App = () => {
               <Route path="/interactive-village-map" element={<InteractiveVillageMap />} />
               <Route path="/weather-agriculture" element={<WeatherAgricultureHub />} />
               <Route path="/opportunity-tracker" element={<OpportunityTracker />} />
-              <Route path="/scholarship-portal" element={<AdvancedScholarshipPortal />} />
-              <Route path="/officials" element={<Officials />} />
-              <Route path="/judiciary" element={<Judiciary />} />
+               <Route path="/scholarship-portal" element={<AdvancedScholarshipPortal />} />
+               <Route path="/cultural-heritage" element={<CulturalHeritageCenter />} />
+               <Route path="/officials" element={<Officials />} />
+               <Route path="/judiciary" element={<Judiciary />} />
                  <Route path="*" element={<NotFound />} />
                   </Routes>
                 </BrowserRouter>

@@ -369,6 +369,14 @@ const Index = () => {
                 href: "/scholarship-portal",
                 accent: "primary",
                 features: ["Scholarship search", "Application tracking", "Education support"]
+              },
+              {
+                title: "Cultural Heritage Center",
+                description: "Preserve and share Cameroonian traditions, languages, and cultural practices",
+                icon: Heart,
+                href: "/cultural-heritage",
+                accent: "secondary",
+                features: ["Oral tradition recording", "Recipe sharing", "Language preservation"]
               }
             ].map((feature, index) => (
               <Card key={index} className="group hover:shadow-xl transition-all duration-500 border-0 overflow-hidden">
