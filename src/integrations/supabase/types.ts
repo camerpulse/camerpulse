@@ -41532,6 +41532,10 @@ export type Database = {
           alerts_created: number
         }[]
       }
+      check_inventory_levels: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       check_performance_milestones: {
         Args: {
           p_artist_id: string
@@ -41646,6 +41650,18 @@ export type Database = {
           p_message: string
           p_action_url?: string
           p_priority?: string
+        }
+        Returns: string
+      }
+      create_realtime_notification: {
+        Args: {
+          p_user_id: string
+          p_type: string
+          p_title: string
+          p_message: string
+          p_data?: Json
+          p_priority?: string
+          p_action_url?: string
         }
         Returns: string
       }
@@ -42335,6 +42351,10 @@ export type Database = {
       }
       update_user_presence: {
         Args: { p_status: string; p_device_info?: Json }
+        Returns: undefined
+      }
+      update_vendor_presence: {
+        Args: { p_vendor_id: string; p_status: string; p_device_info?: Json }
         Returns: undefined
       }
       validate_password_strength: {
