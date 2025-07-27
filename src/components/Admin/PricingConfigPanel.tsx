@@ -91,7 +91,7 @@ export const PricingConfigPanel: React.FC = () => {
     }
   };
 
-  const saveConfig = async (config: Partial<PricingConfig>) => {
+  const saveConfig = async (config: Partial<PricingConfig> & { config_key: string; config_type: string }) => {
     setSaving(true);
     try {
       const { error } = await supabase
