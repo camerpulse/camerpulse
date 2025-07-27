@@ -11,6 +11,7 @@ import { RoleControlSystem } from "@/components/Security/RoleControlSystem";
 import { LocalizationSettings } from "@/components/Admin/LocalizationSettings";
 import { CacheManagementDashboard } from "@/components/Admin/CacheManagementDashboard";
 import { CacheStatusMonitor } from "@/components/Admin/CacheStatusMonitor";
+import { APIConfigurationManager } from "@/components/Admin/APIConfigurationManager";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -304,6 +305,10 @@ const Admin = () => {
                   <TabsTrigger value="plugins" className="flex items-center gap-2">
                     <Puzzle className="h-4 w-4" />
                     Plugin Manager
+                  </TabsTrigger>
+                  <TabsTrigger value="api-config" className="flex items-center gap-2">
+                    <Key className="h-4 w-4" />
+                    API Configuration
                   </TabsTrigger>
               </TabsList>
             </ScrollArea>
@@ -1335,6 +1340,11 @@ const Admin = () => {
                   </CardContent>
                 </Card>
               </div>
+            </TabsContent>
+
+            {/* API Configuration Tab */}
+            <TabsContent value="api-config">
+              <APIConfigurationManager />
             </TabsContent>
           </Tabs>
         </div>
