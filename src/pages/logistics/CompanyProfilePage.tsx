@@ -10,7 +10,9 @@ import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
 import { RateCompanyDialog } from '@/components/logistics/RateCompanyDialog';
-import { useShippingCompanyRatings } from '@/hooks/useShippingCompanyRatings';
+import { CompanyReviews } from '@/components/logistics/CompanyReviews';
+import { RatingStatistics } from '@/components/logistics/RatingStatistics';
+import { useShippingCompanyRatings, useRecentCompanyReviews } from '@/hooks/useShippingCompanyRatings';
 import {
   Building2,
   Star,
@@ -84,6 +86,9 @@ export const CompanyProfilePage = () => {
   
   // Use the rating hook
   const { ratingData, userRating, refreshRatings } = useShippingCompanyRatings(id || '');
+  
+  // Use the reviews hook
+  const { reviews, loading: reviewsLoading } = useRecentCompanyReviews(id || '', 10);
 
   // Mock data - in real app, this would come from the database
   const mockCompanyData: CompanyData = {
@@ -454,10 +459,23 @@ export const CompanyProfilePage = () => {
                     </div>
                   </MobileCardContent>
                 </MobileCard>
+
+                {/* Customer Reviews Section */}
+                <CompanyReviews 
+                  companyId={company.id}
+                  reviews={reviews}
+                  loading={reviewsLoading}
+                />
               </div>
 
               {/* Sidebar */}
               <div className="w-full lg:w-80 space-y-6">
+                {/* Rating Statistics */}
+                <RatingStatistics 
+                  ratingData={ratingData}
+                  loading={false}
+                />
+                
                 {/* Contact Information */}
                 <MobileCard>
                   <MobileCardHeader>

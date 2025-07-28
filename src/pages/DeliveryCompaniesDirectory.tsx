@@ -66,7 +66,8 @@ const DeliveryCompaniesDirectory = () => {
 
   const filteredCompanies = dbCompanies.filter(company => {
     const matchesSearch = (company.name || company.company_name || '').toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRating = (company.rating || company.avg_rating || 0) >= ratingFilter[0];
+    const companyRating = company.rating || company.avg_rating || 0;
+    const matchesRating = companyRating >= ratingFilter[0];
     const matchesVerified = !verifiedOnly || (company.isVerified || company.is_verified);
     const matchesPreferred = !preferredOnly || (company.partnershipStatus || company.partnership_status) === 'preferred';
     
@@ -353,21 +354,27 @@ const DeliveryCompaniesDirectory = () => {
                         </div>
 
                         {/* Rating & Reviews */}
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center justify-between">
                           <div className="flex items-center gap-1">
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
                                 className={`h-4 w-4 ${
-                                  i < Math.floor(company.rating)
+                                  i < Math.floor(company.rating || company.avg_rating || 0)
                                     ? 'fill-secondary text-secondary'
                                     : 'text-muted-foreground/30'
                                 }`}
                               />
                             ))}
                           </div>
-                          <span className="font-semibold text-foreground">{company.rating}</span>
-                          <span className="text-xs text-muted-foreground">({company.totalReviews})</span>
+                          <div className="text-right">
+                            <span className="font-semibold text-foreground">
+                              {(company.rating || company.avg_rating || 0).toFixed(1)}
+                            </span>
+                            <span className="text-xs text-muted-foreground ml-1">
+                              ({(company.totalReviews || company.total_reviews || 0)})
+                            </span>
+                          </div>
                         </div>
                       </div>
                     </div>
