@@ -169,9 +169,9 @@ const CreateShipment = () => {
           description: formData.packageDescription,
           weight_kg: parseFloat(formData.weight),
           dimensions: {
-            length: parseFloat(formData.length),
-            width: parseFloat(formData.width),
-            height: parseFloat(formData.height)
+            length: parseFloat(formData.length || '0'),
+            width: parseFloat(formData.width || '0'),
+            height: parseFloat(formData.height || '0')
           }
         },
         origin_address: formData.senderAddress,
@@ -180,21 +180,21 @@ const CreateShipment = () => {
         service_level: formData.serviceLevel,
         weight_kg: parseFloat(formData.weight),
         dimensions: {
-          length: parseFloat(formData.length),
-          width: parseFloat(formData.width),
-          height: parseFloat(formData.height)
+          length: parseFloat(formData.length || '0'),
+          width: parseFloat(formData.width || '0'),
+          height: parseFloat(formData.height || '0')
         },
         declared_value: formData.declaredValue ? parseFloat(formData.declaredValue) : 0,
-        shipping_cost: shippingCost,
+        shipping_cost: shippingCost || 0,
         requires_signature: formData.requiresSignature,
         is_fragile: formData.isFragile,
-        special_instructions: formData.specialInstructions,
+        special_instructions: formData.specialInstructions || null,
         created_by: user?.id
       };
 
       const { data, error } = await supabase
         .from('shipments')
-        .insert([shipmentData])
+        .insert(shipmentData)
         .select()
         .single();
 

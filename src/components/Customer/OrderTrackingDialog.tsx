@@ -46,8 +46,7 @@ export const OrderTrackingDialog = ({ open, onOpenChange, orderId }: OrderTracki
         .from('shipments')
         .select(`
           *,
-          shipping_companies (company_name, contact_phone),
-          shipment_tracking_events (*)
+          shipping_companies (company_name, contact_phone)
         `)
         .eq('order_id', orderId)
         .maybeSingle();
