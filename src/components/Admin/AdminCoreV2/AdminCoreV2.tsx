@@ -56,6 +56,9 @@ import { LegalJusticeModule } from './modules/LegalJusticeModule';
 import { CommunityForumsModule } from './modules/CommunityForumsModule';
 import { EventManagementModule } from './modules/EventManagementModule';
 import { MessagingSystemModule } from './modules/MessagingSystemModule';
+import { SocialNetworkingModule } from './modules/SocialNetworkingModule';
+import { CommunityGroupsModule } from './modules/CommunityGroupsModule';
+import { SocialAnalyticsModule } from './modules/SocialAnalyticsModule';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -340,6 +343,9 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'community-forums', label: 'Community Forums', icon: MessageSquare, color: 'text-purple-600', permission: 'community' },
     { id: 'event-management', label: 'Event Management', icon: Calendar, color: 'text-indigo-600', permission: 'events' },
     { id: 'messaging-system', label: 'Messaging System', icon: MessageSquare, color: 'text-blue-600', permission: 'messaging' },
+    { id: 'social-networking', label: 'Social Networking', icon: Users, color: 'text-cyan-600', permission: 'social' },
+    { id: 'community-groups', label: 'Community Groups', icon: Users, color: 'text-emerald-600', permission: 'groups' },
+    { id: 'social-analytics', label: 'Social Analytics', icon: BarChart3, color: 'text-violet-600', permission: 'analytics' },
     
     // AI & Intelligence
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
@@ -479,6 +485,12 @@ export const AdminCoreV2: React.FC = () => {
         return <EventManagementModule {...moduleProps} />;
       case 'messaging-system':
         return <MessagingSystemModule {...moduleProps} />;
+      case 'social-networking':
+        return <SocialNetworkingModule {...moduleProps} />;
+      case 'community-groups':
+        return <CommunityGroupsModule {...moduleProps} />;
+      case 'social-analytics':
+        return <SocialAnalyticsModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
