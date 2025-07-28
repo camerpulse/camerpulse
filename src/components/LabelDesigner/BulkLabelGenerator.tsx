@@ -97,10 +97,18 @@ export const BulkLabelGenerator: React.FC = () => {
             description: `Loaded ${processedData.length} records from JSON`,
           });
         } else {
-          toast.error('JSON file must contain an array of objects');
+          toast({
+            title: "Upload Error",
+            description: "JSON file must contain an array of objects",
+            variant: "destructive",
+          });
         }
       } catch (error) {
-        toast.error('Invalid JSON file format');
+        toast({
+          title: "Upload Error", 
+          description: "Invalid JSON file format",
+          variant: "destructive",
+        });
       }
     };
     reader.readAsText(file);
@@ -113,7 +121,11 @@ export const BulkLabelGenerator: React.FC = () => {
         const csv = e.target?.result as string;
         const lines = csv.split('\n').filter(line => line.trim());
         if (lines.length < 2) {
-          toast.error('CSV file must have at least a header and one data row');
+          toast({
+            title: "Upload Error",
+            description: "CSV file must have at least a header and one data row",
+            variant: "destructive",
+          });
           return;
         }
 
@@ -128,9 +140,16 @@ export const BulkLabelGenerator: React.FC = () => {
         });
 
         setBulkData(data);
-        toast.success(`Loaded ${data.length} records from CSV`);
+        toast({
+          title: "Success",
+          description: `Loaded ${data.length} records from CSV`,
+        });
       } catch (error) {
-        toast.error('Error parsing CSV file');
+        toast({
+          title: "Upload Error",
+          description: "Error parsing CSV file",
+          variant: "destructive",
+        });
       }
     };
     reader.readAsText(file);
@@ -162,22 +181,37 @@ export const BulkLabelGenerator: React.FC = () => {
     );
     
     if (validRows.length === 0) {
-      toast.error('Please enter some data first');
+      toast({
+        title: "Entry Error",
+        description: "Please enter some data first",
+        variant: "destructive",
+      });
       return;
     }
 
     setBulkData(validRows);
-    toast.success(`Prepared ${validRows.length} records for generation`);
+    toast({
+      title: "Success",
+      description: `Prepared ${validRows.length} records for generation`,
+    });
   };
 
   const startBulkGeneration = async () => {
     if (bulkData.length === 0) {
-      toast.error('No data to process');
+      toast({
+        title: "Generation Error",
+        description: "No data to process",
+        variant: "destructive",
+      });
       return;
     }
 
     if (!selectedTemplate) {
-      toast.error('Please select a template');
+      toast({
+        title: "Generation Error",
+        description: "Please select a template",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -224,7 +258,10 @@ export const BulkLabelGenerator: React.FC = () => {
         )
       );
 
-      toast.success(`Successfully generated ${bulkData.length} labels`);
+      toast({
+        title: "Success",
+        description: `Successfully generated ${bulkData.length} labels`,
+      });
     } catch (error) {
       // Mark job as failed
       setGenerationJobs(prev =>
@@ -234,7 +271,11 @@ export const BulkLabelGenerator: React.FC = () => {
             : j
         )
       );
-      toast.error('Bulk generation failed');
+      toast({
+        title: "Generation Error",
+        description: "Bulk generation failed",
+        variant: "destructive",
+      });
     } finally {
       setIsProcessing(false);
       setProgress(0);
@@ -244,7 +285,11 @@ export const BulkLabelGenerator: React.FC = () => {
   const downloadSampleCSV = () => {
     const template = templates.find(t => t.id === selectedTemplate);
     if (!template) {
-      toast.error('Please select a template first');
+      toast({
+        title: "Download Error",
+        description: "Please select a template first",
+        variant: "destructive",
+      });
       return;
     }
 
@@ -260,7 +305,10 @@ export const BulkLabelGenerator: React.FC = () => {
     link.click();
     URL.revokeObjectURL(url);
     
-    toast.success('Sample CSV template downloaded');
+    toast({
+      title: "Success",
+      description: "Sample CSV template downloaded",
+    });
   };
 
   const exportResults = (jobId: string) => {
@@ -286,7 +334,10 @@ export const BulkLabelGenerator: React.FC = () => {
     link.click();
     URL.revokeObjectURL(url);
     
-    toast.success('Generation results exported');
+    toast({
+      title: "Success",
+      description: "Generation results exported",
+    });
   };
 
   const getStatusIcon = (status: GenerationJob['status']) => {
