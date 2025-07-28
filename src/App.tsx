@@ -82,6 +82,7 @@ import PollEmbedGeneratorPage from "./pages/PollEmbedGeneratorPage";
 import PollEmbedViewerPage from "./pages/PollEmbedViewerPage";
 import MessengerPage from "./pages/MessengerPage";
 import NotificationSettingsPage from "./pages/NotificationSettingsPage";
+import NotificationDashboard from "./pages/NotificationDashboard";
 import AdminPanel from "./pages/AdminPanel";
 import NotificationFlow from "./pages/NotificationFlow";
 import CamerPulseMaster from "./pages/CamerPulseMaster";
@@ -331,11 +332,8 @@ const App = () => {
                <MessengerPage />
              </ProtectedRoute>
            } />
-           <Route path="/notification-settings" element={
-             <ProtectedRoute>
-               <NotificationSettingsPage />
-             </ProtectedRoute>
-           } />
+            <Route path="/notification-settings" element={<NotificationSettingsPage />} />
+            <Route path="/notification-dashboard" element={<NotificationDashboard />} />
                <Route path="/dashboard/polls" element={
                  <ProtectedRoute>
                    <PollsDashboard />
