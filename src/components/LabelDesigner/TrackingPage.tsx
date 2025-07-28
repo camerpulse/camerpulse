@@ -143,16 +143,26 @@ export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: init
     setError(null);
 
     try {
+      console.log('Tracking number:', trackingNumber);
+      console.log('Making request to:', `https://wsiorhtiovwcajiarydw.supabase.co/functions/v1/track-shipment/${trackingNumber}`);
+      
       // Call the tracking API endpoint
       const response = await fetch(`https://wsiorhtiovwcajiarydw.supabase.co/functions/v1/track-shipment/${trackingNumber}`, {
+        method: 'GET',
         headers: {
           'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzaW9yaHRpb3Z3Y2FqaWFyeWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyODE3ODAsImV4cCI6MjA2Nzg1Nzc4MH0.4GKFhQTxlEzj6oTcfnAZQpPxPHW0nqGDEfBe-gVGoNE`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzaW9yaHRpb3Z3Y2FqaWFyeWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyODE3ODAsImV4cCI6MjA2Nzg1Nzc4MH0.4GKFhQTxlEzj6oTcfnAZQpPxPHW0nqGDEfBe-gVGoNE'
         }
       });
 
+      console.log('Response status:', response.status);
+      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
+
       if (!response.ok) {
-        throw new Error('Tracking number not found');
+        const errorText = await response.text();
+        console.log('Error response:', errorText);
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
 
       const data = await response.json();
