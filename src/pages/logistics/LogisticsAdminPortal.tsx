@@ -4,10 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { CamerLogisticsLayout } from '@/components/Layout/CamerLogisticsLayout';
 import { useAuth } from '@/contexts/AuthContext';
-import { TemplateManager } from '@/components/LabelDesigner/TemplateManager';
-import { LabelDesigner } from '@/components/LabelDesigner/LabelDesigner';
 import { 
   Settings, 
   Package, 
@@ -304,7 +303,18 @@ export const LogisticsAdminPortal = () => {
               Back to Admin
             </Button>
           </div>
-          <LabelDesigner onSave={() => setShowLabelDesigner(false)} />
+          <Card>
+            <CardContent className="p-8 text-center">
+              <Palette className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Label Designer Coming Soon</h3>
+              <p className="text-muted-foreground mb-4">
+                Advanced label designer features will be available in the next update.
+              </p>
+              <Button onClick={() => setShowLabelDesigner(false)}>
+                Go Back
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </CamerLogisticsLayout>
     );
@@ -677,7 +687,82 @@ export const LogisticsAdminPortal = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                <TemplateManager />
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <Card>
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-3 mb-2">
+                          <FileText className="h-8 w-8 text-primary" />
+                          <div>
+                            <h3 className="font-semibold">Standard Shipping Label</h3>
+                            <p className="text-sm text-muted-foreground">Default template</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline">
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                          <Button size="sm" variant="outline">
+                            <Download className="h-4 w-4 mr-2" />
+                            Export
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card>
+                      <CardContent className="p-4">
+                        <div className="flex items-center gap-3 mb-2">
+                          <FileText className="h-8 w-8 text-primary" />
+                          <div>
+                            <h3 className="font-semibold">Express Delivery</h3>
+                            <p className="text-sm text-muted-foreground">Priority template</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button size="sm" variant="outline">
+                            <Edit className="h-4 w-4 mr-2" />
+                            Edit
+                          </Button>
+                          <Button size="sm" variant="outline">
+                            <Download className="h-4 w-4 mr-2" />
+                            Export
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card className="border-dashed border-2 border-muted-foreground/25">
+                      <CardContent className="p-4 text-center">
+                        <Plus className="h-8 w-8 text-muted-foreground mx-auto mb-2" />
+                        <h3 className="font-semibold mb-1">Create New Template</h3>
+                        <p className="text-sm text-muted-foreground mb-3">Design custom labels</p>
+                        <Button size="sm" onClick={() => setShowLabelDesigner(true)}>
+                          Create
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  </div>
+                  
+                  <div className="pt-4 border-t">
+                    <h4 className="font-medium mb-3">Template Statistics</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-primary">{stats.totalTemplates}</div>
+                        <div className="text-sm text-muted-foreground">Total Templates</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-600">2</div>
+                        <div className="text-sm text-muted-foreground">Active Templates</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600">156</div>
+                        <div className="text-sm text-muted-foreground">Labels Generated</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
