@@ -35,6 +35,10 @@ interface AuthContextType {
   signUp: (email: string, password: string, options?: any) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<{ error: AuthError | null }>;
   profile: UserProfile | null;
+  updateProfile: (updates: Partial<UserProfile>) => Promise<void>;
+  userRoles: string[];
+  hasRole: (role: string) => boolean;
+  isAdmin: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -52,6 +56,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [userRoles, setUserRoles] = useState<string[]>([]);
 
   // Fetch profile when user changes
   useEffect(() => {
@@ -144,6 +149,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const updateProfile = async (updates: Partial<UserProfile>) => {
+    if (!user) return;
+    // Profile update logic would go here
+    setProfile(prev => prev ? { ...prev, ...updates } : null);
+  };
+
+  const hasRole = (role: string) => userRoles.includes(role);
+  const isAdmin = hasRole('admin');
+
   const value = {
     user,
     session,
@@ -152,6 +166,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signOut,
     profile,
+    updateProfile,
+    userRoles,
+    hasRole,
+    isAdmin,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
