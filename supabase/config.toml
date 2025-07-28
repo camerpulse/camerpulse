@@ -174,3 +174,10 @@ verify_jwt = false
 
 [functions.text-to-voice]
 verify_jwt = false
+
+# Shipping and logistics functions - no JWT required for public tracking
+[functions.track-shipment]
+verify_jwt = false
+
+[functions.update-tracking]
+verify_jwt = false
