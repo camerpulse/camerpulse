@@ -53,6 +53,10 @@ import { ModerationModule } from './modules/ModerationModule';
 import { DataImportModule } from './modules/DataImportModule';
 import { VillageAdminModule } from './modules/VillageAdminModule';
 import { LogisticsAdminModule } from './modules/LogisticsAdminModule';
+import { SystemManagementModule } from './modules/SystemManagementModule';
+import { TechnicalToolsModule } from './modules/TechnicalToolsModule';
+import { AICivicToolsModule } from './modules/AICivicToolsModule';
+import { PlatformConfigModule } from './modules/PlatformConfigModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 interface AdminStats {
@@ -312,6 +316,12 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
     
+    // New Integrated Modules
+    { id: 'system-management', label: 'System Management', icon: Settings, color: 'text-gray-600', permission: 'all' },
+    { id: 'technical-tools', label: 'Technical Tools', icon: Monitor, color: 'text-purple-600', permission: 'all' },
+    { id: 'ai-civic-tools', label: 'AI Civic Tools', icon: Brain, color: 'text-indigo-600', permission: 'all' },
+    { id: 'platform-config', label: 'Platform Config', icon: Settings, color: 'text-blue-600', permission: 'all' },
+    
     // System Management
     { id: 'data-import', label: 'Data Import', icon: Database, color: 'text-blue-600', permission: 'all' },
     { id: 'legal-documents', label: 'Legal Documents', icon: Scale, color: 'text-blue-600', permission: 'legal' },
@@ -368,6 +378,14 @@ export const AdminCoreV2: React.FC = () => {
         return <DataImportModule {...moduleProps} />;
       case 'village-admin':
         return <VillageAdminModule {...moduleProps} />;
+      case 'system-management':
+        return <SystemManagementModule {...moduleProps} />;
+      case 'technical-tools':
+        return <TechnicalToolsModule {...moduleProps} />;
+      case 'ai-civic-tools':
+        return <AICivicToolsModule {...moduleProps} />;
+      case 'platform-config':
+        return <PlatformConfigModule {...moduleProps} />;
       case 'stripe-settings':
         return <StripeSettings />;
       case 'elections':
