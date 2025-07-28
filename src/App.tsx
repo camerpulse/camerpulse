@@ -16,6 +16,7 @@ import AuthPage from '@/pages/AuthPage';
 import DeliveryCompaniesDirectory from '@/pages/DeliveryCompaniesDirectory';
 import DeliveryCompanyRegister from '@/pages/DeliveryCompanyRegister';
 import { PublicHomePage } from '@/pages/PublicHomePage';
+import { PlatformSelectorPage } from '@/pages/PlatformSelectorPage';
 import { CamerLogisticsLandingPage } from '@/pages/CamerLogisticsLandingPage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
@@ -63,6 +64,9 @@ function AppContent() {
   return (
     <>
       <Routes>
+        {/* Platform Selector - Main Entry Point */}
+        <Route path="/" element={<PlatformSelectorPage />} />
+        
         {/* Public Routes - No auth required */}
         <Route path="/public" element={<PublicHomePage />} />
         <Route path="/public/tracking" element={<TrackingPage />} />
@@ -76,15 +80,13 @@ function AppContent() {
         <Route path="/logistics/tracking/:trackingNumber" element={<TrackingPage />} />
         <Route path="/logistics/companies" element={<DeliveryCompaniesDirectory />} />
         <Route path="/logistics/join-company" element={<DeliveryCompanyRegister />} />
+        
+        {/* Auth Route */}
         <Route path="/auth" element={<AuthPage />} />
         
-        {/* Default redirect based on authentication */}
-        {!user && <Route path="*" element={<PublicHomePage />} />}
-        
-        {/* Authenticated Routes */}
+        {/* Label Designer Platform - Authenticated Routes */}
         {user && (
           <>
-            <Route path="/" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
             <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
             <Route path="/designer" element={<AuthenticatedLayout><LabelDesignerPage /></AuthenticatedLayout>} />
             <Route path="/advanced-builder" element={<AuthenticatedLayout><AdvancedLabelBuilder /></AuthenticatedLayout>} />
