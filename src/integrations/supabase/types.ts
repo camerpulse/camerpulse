@@ -738,6 +738,63 @@ export type Database = {
         }
         Relationships: []
       }
+      analytics_reports: {
+        Row: {
+          configuration: Json
+          created_at: string
+          data_sources: Json
+          description: string | null
+          filters: Json
+          id: string
+          is_public: boolean
+          last_generated_at: string | null
+          report_name: string
+          report_type: string
+          schedule_config: Json | null
+          shared_with: string[] | null
+          status: string
+          updated_at: string
+          user_id: string
+          visualization_config: Json
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string
+          data_sources?: Json
+          description?: string | null
+          filters?: Json
+          id?: string
+          is_public?: boolean
+          last_generated_at?: string | null
+          report_name: string
+          report_type: string
+          schedule_config?: Json | null
+          shared_with?: string[] | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          visualization_config?: Json
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string
+          data_sources?: Json
+          description?: string | null
+          filters?: Json
+          id?: string
+          is_public?: boolean
+          last_generated_at?: string | null
+          report_name?: string
+          report_type?: string
+          schedule_config?: Json | null
+          shared_with?: string[] | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          visualization_config?: Json
+        }
+        Relationships: []
+      }
       ancestor_relationships: {
         Row: {
           ancestor_id: string | null
@@ -12800,6 +12857,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      data_export_jobs: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          data_query: Json
+          error_message: string | null
+          expires_at: string | null
+          export_name: string
+          export_type: string
+          file_path: string | null
+          file_size_bytes: number | null
+          filters: Json
+          format: string
+          id: string
+          processed_records: number | null
+          progress_percentage: number
+          status: string
+          total_records: number | null
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          data_query: Json
+          error_message?: string | null
+          expires_at?: string | null
+          export_name: string
+          export_type: string
+          file_path?: string | null
+          file_size_bytes?: number | null
+          filters?: Json
+          format?: string
+          id?: string
+          processed_records?: number | null
+          progress_percentage?: number
+          status?: string
+          total_records?: number | null
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          data_query?: Json
+          error_message?: string | null
+          expires_at?: string | null
+          export_name?: string
+          export_type?: string
+          file_path?: string | null
+          file_size_bytes?: number | null
+          filters?: Json
+          format?: string
+          id?: string
+          processed_records?: number | null
+          progress_percentage?: number
+          status?: string
+          total_records?: number | null
+          user_id?: string
+        }
+        Relationships: []
       }
       data_quality_metrics: {
         Row: {
@@ -27194,6 +27311,45 @@ export type Database = {
         }
         Relationships: []
       }
+      performance_metrics: {
+        Row: {
+          created_at: string
+          dimensions: Json
+          id: string
+          metric_category: string
+          metric_name: string
+          metric_unit: string
+          metric_value: number
+          session_id: string | null
+          timestamp: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          dimensions?: Json
+          id?: string
+          metric_category: string
+          metric_name: string
+          metric_unit: string
+          metric_value: number
+          session_id?: string | null
+          timestamp?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          dimensions?: Json
+          id?: string
+          metric_category?: string
+          metric_name?: string
+          metric_unit?: string
+          metric_value?: number
+          session_id?: string | null
+          timestamp?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       performance_milestones: {
         Row: {
           achieved_at: string
@@ -34052,6 +34208,72 @@ export type Database = {
         }
         Relationships: []
       }
+      realtime_analytics_events: {
+        Row: {
+          browser: string | null
+          city: string | null
+          country: string | null
+          custom_properties: Json
+          device_type: string | null
+          event_category: string
+          event_label: string | null
+          event_type: string
+          event_value: number | null
+          id: string
+          ip_address: unknown | null
+          os: string | null
+          page_url: string | null
+          referrer: string | null
+          region: string | null
+          session_id: string | null
+          timestamp: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          custom_properties?: Json
+          device_type?: string | null
+          event_category: string
+          event_label?: string | null
+          event_type: string
+          event_value?: number | null
+          id?: string
+          ip_address?: unknown | null
+          os?: string | null
+          page_url?: string | null
+          referrer?: string | null
+          region?: string | null
+          session_id?: string | null
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          country?: string | null
+          custom_properties?: Json
+          device_type?: string | null
+          event_category?: string
+          event_label?: string | null
+          event_type?: string
+          event_value?: number | null
+          id?: string
+          ip_address?: unknown | null
+          os?: string | null
+          page_url?: string | null
+          referrer?: string | null
+          region?: string | null
+          session_id?: string | null
+          timestamp?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       realtime_notifications: {
         Row: {
           acknowledged_by: string[] | null
@@ -34379,6 +34601,59 @@ export type Database = {
           source_url?: string
         }
         Relationships: []
+      }
+      report_executions: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          execution_status: string
+          execution_time_ms: number | null
+          file_format: string | null
+          file_path: string | null
+          id: string
+          report_id: string
+          result_data: Json | null
+          result_metadata: Json
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          execution_status?: string
+          execution_time_ms?: number | null
+          file_format?: string | null
+          file_path?: string | null
+          id?: string
+          report_id: string
+          result_data?: Json | null
+          result_metadata?: Json
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          execution_status?: string
+          execution_time_ms?: number | null
+          file_format?: string | null
+          file_path?: string | null
+          id?: string
+          report_id?: string
+          result_data?: Json | null
+          result_metadata?: Json
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_report_executions_report_id"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "analytics_reports"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       report_instances: {
         Row: {
@@ -43653,6 +43928,17 @@ export type Database = {
           suggestion_type: string
           suggestion_message: string
           priority: number
+        }[]
+      }
+      get_analytics_summary: {
+        Args: { p_user_id: string; p_start_date?: string; p_end_date?: string }
+        Returns: {
+          total_events: number
+          unique_sessions: number
+          avg_session_duration: number
+          top_pages: Json
+          device_breakdown: Json
+          hourly_activity: Json
         }[]
       }
       get_audit_statistics: {

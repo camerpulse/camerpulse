@@ -54,10 +54,14 @@ const NotificationSettingsPage: React.FC = () => {
               <NotificationSettings />
             </TabsContent>
             
-            <TabsContent value="integrations">
-              <IntegrationCenter />
-            </TabsContent>
-          </Tabs>
+        <TabsContent value="integrations">
+          <IntegrationCenter />
+        </TabsContent>
+        
+        <TabsContent value="analytics">
+          <AnalyticsCenter />
+        </TabsContent>
+      </Tabs>
         </div>
       </div>
     </AppLayout>
