@@ -14,7 +14,7 @@ import {
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
   Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck, Plug,
-  Briefcase, Music, DollarSign
+  Briefcase, Music, DollarSign, Calculator
 } from 'lucide-react';
 
 // Import all feature modules
@@ -63,6 +63,8 @@ import { FinancialManagementModule } from './modules/FinancialManagementModule';
 import { EconomicDevelopmentModule } from './modules/EconomicDevelopmentModule';
 import { PaymentProcessingModule } from './modules/PaymentProcessingModule';
 import { EconomicAnalyticsModule } from './modules/EconomicAnalyticsModule';
+import { TaxManagementModule } from './modules/TaxManagementModule';
+import { ProcurementModule } from './modules/ProcurementModule';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -356,6 +358,8 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'economic-development', label: 'Economic Development', icon: TrendingUp, color: 'text-blue-600', permission: 'economic' },
     { id: 'payment-processing', label: 'Payment Processing', icon: CreditCard, color: 'text-purple-600', permission: 'payments' },
     { id: 'economic-analytics', label: 'Economic Analytics', icon: BarChart3, color: 'text-indigo-600', permission: 'analytics' },
+    { id: 'tax-management', label: 'Tax Management', icon: Calculator, color: 'text-red-600', permission: 'tax' },
+    { id: 'procurement', label: 'Public Procurement', icon: Building2, color: 'text-orange-600', permission: 'procurement' },
     
     // AI & Intelligence
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
@@ -509,6 +513,10 @@ export const AdminCoreV2: React.FC = () => {
         return <PaymentProcessingModule {...moduleProps} />;
       case 'economic-analytics':
         return <EconomicAnalyticsModule {...moduleProps} />;
+      case 'tax-management':
+        return <TaxManagementModule {...moduleProps} />;
+      case 'procurement':
+        return <ProcurementModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
