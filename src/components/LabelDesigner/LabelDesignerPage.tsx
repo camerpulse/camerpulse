@@ -257,8 +257,13 @@ export const LabelDesignerPage: React.FC = () => {
         open={showTemplates}
         onOpenChange={setShowTemplates}
         onSelectTemplate={(template) => {
-          // Load template logic would go here
-          console.log('Loading template:', template);
+          // Load template fields
+          if (template.template_fields) {
+            const templateFields = JSON.parse(template.template_fields as string) as LabelField[];
+            setFields(templateFields);
+          }
+          setSelectedSize(template.label_size as keyof typeof LABEL_SIZES || 'A4');
+          setTemplateName(template.template_name);
           setShowTemplates(false);
           toast({
             title: "Template loaded",

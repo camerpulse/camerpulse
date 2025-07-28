@@ -23,7 +23,7 @@ export const ScannerInterface: React.FC = () => {
   } = useLabelScanning();
   
   // Mock analytics for now
-  const analytics = { total_scans: scanLogs.length, successful_scans: scanLogs.filter(s => s.scan_result?.success).length };
+  const analytics = { total_scans: scanLogs.length, successful_scans: scanLogs.filter(s => s.redirect_successful).length };
   
   const { toast } = useToast();
 
@@ -288,12 +288,12 @@ export const ScannerInterface: React.FC = () => {
                           <div className="font-medium text-sm">{scan.tracking_number}</div>
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <Clock size={12} />
-                            {formatDate(scan.created_at)}
+                            {formatDate(scan.scanned_at || new Date().toISOString())}
                           </div>
                         </div>
                       </div>
-                      <Badge variant={scan.scan_result?.success ? "default" : "destructive"}>
-                        {scan.scan_result?.success ? "Success" : "Failed"}
+                      <Badge variant={scan.redirect_successful ? "default" : "destructive"}>
+                        {scan.redirect_successful ? "Success" : "Failed"}
                       </Badge>
                     </div>
                   ))
