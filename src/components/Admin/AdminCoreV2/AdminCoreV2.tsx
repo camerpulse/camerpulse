@@ -13,7 +13,7 @@ import {
   AlertTriangle, CheckCircle, Clock, Menu, X, Search,
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
-  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck
+  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck, Plug
 } from 'lucide-react';
 
 // Import all feature modules
@@ -60,6 +60,7 @@ import { PlatformConfigModule } from './modules/PlatformConfigModule';
 import { PoliticalManagementModule } from './modules/PoliticalManagementModule';
 import { SecurityFinanceModule } from './modules/SecurityFinanceModule';
 import { LegacyFeaturesModule } from './modules/LegacyFeaturesModule';
+import { PluginManagementModule } from './modules/PluginManagementModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 interface AdminStats {
@@ -321,6 +322,7 @@ export const AdminCoreV2: React.FC = () => {
     
     // Specialized Admin Tools (New Integrated Modules)
     { id: 'political-management', label: 'Political Management', icon: UserCheck, color: 'text-cm-red', permission: 'politics' },
+    { id: 'plugin-management', label: 'Plugin Management', icon: Plug, color: 'text-purple-600', permission: 'all' },
     { id: 'security-finance', label: 'Security & Finance', icon: Shield, color: 'text-red-600', permission: 'all' },
     { id: 'legacy-features', label: 'Legacy Features', icon: Settings, color: 'text-gray-500', permission: 'all' },
     
@@ -396,6 +398,8 @@ export const AdminCoreV2: React.FC = () => {
         return <PlatformConfigModule {...moduleProps} />;
       case 'political-management':
         return <PoliticalManagementModule {...moduleProps} />;
+      case 'plugin-management':
+        return <PluginManagementModule {...moduleProps} />;
       case 'security-finance':
         return <SecurityFinanceModule {...moduleProps} />;
       case 'legacy-features':
