@@ -161,6 +161,22 @@ export const RateCompanyDialog: React.FC<RateCompanyDialogProps> = ({
         description: "Thank you for your feedback!"
       });
 
+      // Send email notification to company
+      try {
+        await supabase.functions.invoke('send-rating-notification-email', {
+          body: {
+            companyId: company.id,
+            companyName: company.name,
+            rating: ratings.overall_rating,
+            reviewText: reviewText || undefined,
+            raterName: user?.user_metadata?.display_name || 'A Customer'
+          }
+        });
+      } catch (emailError) {
+        console.error('Failed to send notification email:', emailError);
+        // Don't show error to user since rating was successful
+      }
+
       // Reset form
       setRatings({
         overall_rating: 0,
