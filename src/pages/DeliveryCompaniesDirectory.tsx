@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from "react-router-dom";
 import { RateCompanyDialog } from '@/components/logistics/RateCompanyDialog';
+import { useShippingCompanies } from '@/hooks/useShippingCompanies';
 import { 
   Search, 
   Star, 
@@ -50,73 +51,8 @@ const DeliveryCompaniesDirectory = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCompanyForRating, setSelectedCompanyForRating] = useState<any>(null);
 
-  // Mock data - in real app, this would come from the database
-  const deliveryCompanies = [
-    {
-      id: '1',
-      name: 'Express Cameroon Logistics',
-      code: 'DC-001234',
-      rating: 4.8,
-      totalReviews: 234,
-      regions: ['Douala', 'Yaoundé', 'Bafoussam', 'Bamenda'],
-      services: ['Same-day delivery', 'Express shipping', 'Bulk transport'],
-      vehicleTypes: ['Motorcycles', 'Vans', 'Trucks'],
-      contactEmail: 'info@expresscameroon.cm',
-      contactPhone: '+237 677 123 456',
-      yearsInBusiness: 8,
-      logoUrl: null,
-      isVerified: true,
-      partnershipStatus: 'preferred'
-    },
-    {
-      id: '2',
-      name: 'Savane Transport',
-      code: 'DC-001235',
-      rating: 4.6,
-      totalReviews: 187,
-      regions: ['North', 'Adamawa', 'Far North', 'Garoua'],
-      services: ['Regional coverage', 'Bulk shipping', 'Agricultural products'],
-      vehicleTypes: ['Trucks', 'Trailers'],
-      contactEmail: 'contact@savanetransport.cm',
-      contactPhone: '+237 694 987 654',
-      yearsInBusiness: 12,
-      logoUrl: null,
-      isVerified: true,
-      partnershipStatus: 'partner'
-    },
-    {
-      id: '3',
-      name: 'Coastal Delivery Services',
-      code: 'DC-001236',
-      rating: 4.9,
-      totalReviews: 156,
-      regions: ['Littoral', 'Southwest', 'South'],
-      services: ['Coastal routes', 'Fresh products', 'Express delivery'],
-      vehicleTypes: ['Motorcycles', 'Refrigerated vans'],
-      contactEmail: 'hello@coastaldelivery.cm',
-      contactPhone: '+237 655 111 222',
-      yearsInBusiness: 5,
-      logoUrl: null,
-      isVerified: true,
-      partnershipStatus: 'partner'
-    },
-    {
-      id: '4',
-      name: 'Rapid City Couriers',
-      code: 'DC-001237',
-      rating: 4.3,
-      totalReviews: 89,
-      regions: ['Yaoundé', 'Douala'],
-      services: ['Same-day delivery', 'Document delivery', 'City coverage'],
-      vehicleTypes: ['Motorcycles', 'Bicycles'],
-      contactEmail: 'support@rapidcity.cm',
-      contactPhone: '+237 678 333 444',
-      yearsInBusiness: 3,
-      logoUrl: null,
-      isVerified: false,
-      partnershipStatus: 'registered'
-    },
-  ];
+  // Use real data from database
+  const { companies: dbCompanies, loading: companiesLoading } = useShippingCompanies();
 
   const regions = [
     'All Regions', 'Adamawa', 'Centre', 'East', 'Far North', 'Littoral', 
@@ -128,18 +64,13 @@ const DeliveryCompaniesDirectory = () => {
     'Regional coverage', 'Fresh products', 'Document delivery'
   ];
 
-  const filteredCompanies = deliveryCompanies.filter(company => {
-    const matchesSearch = company.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         company.services.some(service => service.toLowerCase().includes(searchTerm.toLowerCase()));
-    const matchesRegion = !selectedRegion || selectedRegion === 'All Regions' || 
-                         company.regions.some(region => region.includes(selectedRegion));
-    const matchesService = !selectedService || selectedService === 'All Services' || 
-                          company.services.includes(selectedService);
-    const matchesRating = company.rating >= ratingFilter[0];
-    const matchesVerified = !verifiedOnly || company.isVerified;
-    const matchesPreferred = !preferredOnly || company.partnershipStatus === 'preferred';
+  const filteredCompanies = dbCompanies.filter(company => {
+    const matchesSearch = company.company_name.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRating = (company.avg_rating || 0) >= ratingFilter[0];
+    const matchesVerified = !verifiedOnly || company.is_verified;
+    const matchesPreferred = !preferredOnly || company.partnership_status === 'preferred';
     
-    return matchesSearch && matchesRegion && matchesService && matchesRating && matchesVerified && matchesPreferred;
+    return matchesSearch && matchesRating && matchesVerified && matchesPreferred;
   });
 
   const getPartnershipBadge = (status: string) => {
