@@ -9,12 +9,16 @@ export interface DatabaseTemplate {
   created_by: string;
   template_name: string;
   template_type: string;
-  dimensions?: LabelDimensions;
-  fields?: LabelField[];
-  is_default: boolean;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
+  label_size: string;
+  orientation: string | null;
+  template_config: any;
+  fields_config: any;
+  branding_config: any;
+  agency_id: string | null;
+  is_default: boolean | null;
+  is_active: boolean | null;
+  created_at: string | null;
+  updated_at: string | null;
 }
 
 export function useTemplates() {
@@ -54,8 +58,12 @@ export function useTemplates() {
   const createTemplate = async (templateData: {
     template_name: string;
     template_type?: string;
-    dimensions: LabelDimensions;
-    fields: LabelField[];
+    label_size?: string;
+    orientation?: string;
+    template_config?: any;
+    fields_config?: any;
+    branding_config?: any;
+    agency_id?: string;
     is_default?: boolean;
   }) => {
     if (!user) return;
@@ -64,8 +72,16 @@ export function useTemplates() {
       const { data, error } = await supabase
         .from('label_templates')
         .insert([{
-          user_id: user.id,
-          ...templateData,
+          created_by: user.id,
+          template_name: templateData.template_name,
+          template_type: templateData.template_type || 'custom',
+          label_size: templateData.label_size || 'A4',
+          orientation: templateData.orientation,
+          template_config: templateData.template_config || {},
+          fields_config: templateData.fields_config || {},
+          branding_config: templateData.branding_config,
+          agency_id: templateData.agency_id,
+          is_default: templateData.is_default || false,
         }])
         .select()
         .single();
@@ -89,7 +105,7 @@ export function useTemplates() {
         .from('label_templates')
         .update(updates)
         .eq('id', id)
-        .eq('user_id', user.id)
+        .eq('created_by', user.id)
         .select()
         .single();
 
@@ -116,7 +132,7 @@ export function useTemplates() {
         .from('label_templates')
         .update({ is_active: false })
         .eq('id', id)
-        .eq('user_id', user.id);
+        .eq('created_by', user.id);
 
       if (error) throw error;
 
@@ -136,8 +152,12 @@ export function useTemplates() {
     return createTemplate({
       template_name: newName,
       template_type: template.template_type,
-      dimensions: template.dimensions,
-      fields: template.fields,
+      label_size: template.label_size,
+      orientation: template.orientation,
+      template_config: template.template_config,
+      fields_config: template.fields_config,
+      branding_config: template.branding_config,
+      agency_id: template.agency_id,
       is_default: false,
     });
   };
