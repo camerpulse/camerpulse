@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { CamerLogisticsLayout } from '@/components/Layout/CamerLogisticsLayout';
+import { MobileCard, MobileCardContent, MobileCardHeader, MobileCardTitle } from '@/components/ui/mobile-card';
+import { MobileButton, MobileInput } from '@/components/ui/mobile-form';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
+import { Progress } from '@/components/ui/progress';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { 
   Package, 
   MapPin, 
@@ -16,7 +19,12 @@ import {
   User,
   Phone,
   Building2,
-  Navigation
+  Navigation,
+  ArrowRight,
+  Star,
+  Timer,
+  Target,
+  Zap
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -60,10 +68,12 @@ interface TrackingPageProps {
 
 export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: initialTrackingNumber }) => {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [trackingNumber, setTrackingNumber] = useState(initialTrackingNumber || '');
   const [shipmentData, setShipmentData] = useState<ShipmentData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [progressValue, setProgressValue] = useState(0);
 
   // Mock data for demo purposes
   const mockShipmentData: ShipmentData = {
@@ -160,31 +170,45 @@ export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: init
     }
   };
 
-  const getStatusIcon = (status: string) => {
+  const getStatusIcon = (status: string, isActive = false) => {
+    const baseClasses = isActive ? "h-6 w-6" : "h-5 w-5";
+    const animationClasses = isActive ? "animate-pulse" : "";
+    
     switch (status) {
       case 'delivered':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
+        return <CheckCircle className={`${baseClasses} text-primary ${animationClasses}`} />;
       case 'exception':
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
+        return <AlertCircle className={`${baseClasses} text-destructive ${animationClasses}`} />;
       case 'in_transit':
       case 'out_for_delivery':
-        return <Truck className="h-5 w-5 text-blue-500" />;
+        return <Truck className={`${baseClasses} text-secondary ${animationClasses}`} />;
       default:
-        return <Package className="h-5 w-5 text-gray-500" />;
+        return <Package className={`${baseClasses} text-muted-foreground ${animationClasses}`} />;
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered':
-        return 'bg-green-100 text-green-800 border-green-200';
+        return 'bg-primary/10 text-primary border-primary/20';
       case 'exception':
-        return 'bg-red-100 text-red-800 border-red-200';
+        return 'bg-destructive/10 text-destructive border-destructive/20';
       case 'in_transit':
       case 'out_for_delivery':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-secondary/10 text-secondary border-secondary/20';
       default:
-        return 'bg-gray-100 text-gray-800 border-gray-200';
+        return 'bg-muted text-muted-foreground border-border';
+    }
+  };
+
+  const getProgressValue = (status: string) => {
+    switch (status) {
+      case 'pending': return 10;
+      case 'picked_up': return 25;
+      case 'in_transit': return 60;
+      case 'out_for_delivery': return 85;
+      case 'delivered': return 100;
+      default: return 0;
     }
   };
 
@@ -205,188 +229,294 @@ export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: init
     }
   }, [initialTrackingNumber]);
 
+  useEffect(() => {
+    if (shipmentData) {
+      const progress = getProgressValue(shipmentData.status);
+      setProgressValue(progress);
+    }
+  }, [shipmentData]);
+
   return (
-    <div className="container mx-auto p-6 max-w-4xl space-y-6">
-      {/* Header */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Package className="h-6 w-6" />
-            Package Tracking
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-2">
-            <Input
-              placeholder="Enter tracking number (e.g., CP2024010001)"
-              value={trackingNumber}
-              onChange={(e) => setTrackingNumber(e.target.value)}
-              className="flex-1"
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-            />
-            <Button onClick={handleSearch} disabled={loading}>
-              <Search className="h-4 w-4 mr-2" />
-              {loading ? 'Searching...' : 'Track'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+    <CamerLogisticsLayout>
+      {/* Hero Section */}
+      <section className="bg-gradient-primary text-white py-16 sm:py-20">
+        <div className="container mx-auto px-4">
+          <div className="max-w-4xl mx-auto text-center">
+            <Badge className="mb-6 bg-primary-glow/20 text-white border-primary-glow/30">
+              <Navigation className="h-4 w-4 mr-2" />
+              Real-Time Package Tracking
+            </Badge>
+            
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+              Track Your Package
+            </h1>
+            
+            <p className="text-lg sm:text-xl text-primary-foreground/90 max-w-3xl mx-auto mb-8">
+              Get real-time updates on your package location and delivery status with our advanced tracking system.
+            </p>
 
-      {/* Error State */}
-      {error && (
-        <Card className="border-red-200 bg-red-50">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-2 text-red-800">
-              <AlertCircle className="h-5 w-5" />
-              <span>{error}</span>
+            {/* Enhanced Search Box */}
+            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 lg:p-8 max-w-3xl mx-auto border border-white/20 shadow-glow">
+              <div className="flex flex-col sm:flex-row gap-4">
+                {isMobile ? (
+                  <>
+                    <MobileInput
+                      placeholder="Enter tracking number (e.g., CP2024010001)"
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      className="bg-white text-foreground border-0 flex-1"
+                      onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    />
+                    <MobileButton 
+                      onClick={handleSearch} 
+                      disabled={loading}
+                      className="bg-secondary hover:bg-secondary/90 text-secondary-foreground"
+                    >
+                      {loading ? (
+                        <>
+                          <Timer className="h-5 w-5 mr-2 animate-spin" />
+                          Searching...
+                        </>
+                      ) : (
+                        <>
+                          <Search className="h-5 w-5 mr-2" />
+                          Track Package
+                        </>
+                      )}
+                    </MobileButton>
+                  </>
+                ) : (
+                  <>
+                    <Input
+                      placeholder="Enter tracking number (e.g., CP2024010001)"
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      className="bg-white text-foreground border-0 flex-1 h-14 text-lg"
+                      onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                    />
+                    <Button 
+                      onClick={handleSearch} 
+                      disabled={loading}
+                      size="lg"
+                      className="bg-secondary hover:bg-secondary/90 text-secondary-foreground h-14 px-8"
+                    >
+                      {loading ? (
+                        <>
+                          <Timer className="h-5 w-5 mr-2 animate-spin" />
+                          Searching...
+                        </>
+                      ) : (
+                        <>
+                          <Search className="h-5 w-5 mr-2" />
+                          Track Package
+                        </>
+                      )}
+                    </Button>
+                  </>
+                )}
+              </div>
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Shipment Data */}
-      {shipmentData && (
-        <>
-          {/* Status Overview */}
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  {getStatusIcon(shipmentData.status)}
-                  <div>
-                    <h3 className="font-semibold text-lg">
-                      Tracking #{shipmentData.trackingNumber}
-                    </h3>
-                    <Badge className={`mt-1 ${getStatusColor(shipmentData.status)}`}>
-                      {shipmentData.status.replace('_', ' ').toUpperCase()}
-                    </Badge>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Delivery Type</p>
-                  <p className="font-medium">{shipmentData.deliveryType}</p>
-                </div>
-              </div>
-
-              {/* Last Scanned Location Enhancement */}
-              {shipmentData.lastScannedLocation && (
-                <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <Navigation className="h-4 w-4 text-blue-600" />
-                    <span className="text-sm font-medium text-blue-800">
-                      Last seen at {shipmentData.lastScannedLocation.city}, {shipmentData.lastScannedLocation.region} — {formatDateTime(shipmentData.lastScannedLocation.timestamp)}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Delivery Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Sender Information */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Building2 className="h-4 w-4" />
-                  Sender
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <span>{shipmentData.sender.name}</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                  <span className="text-sm">{shipmentData.sender.address}</span>
-                </div>
-                {shipmentData.sender.phone && (
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{shipmentData.sender.phone}</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Receiver Information */}
-            <Card>
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  Receiver
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4 text-muted-foreground" />
-                  <span>{shipmentData.receiver.name}</span>
-                </div>
-                <div className="flex items-start gap-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground mt-0.5" />
-                  <span className="text-sm">{shipmentData.receiver.address}</span>
-                </div>
-                {shipmentData.receiver.phone && (
-                  <div className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{shipmentData.receiver.phone}</span>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
           </div>
+        </div>
+      </section>
 
-          {/* Delivery Timeline */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5" />
-                Delivery Timeline
-              </CardTitle>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>Estimated Delivery: {formatDateTime(shipmentData.estimatedDelivery)}</span>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {shipmentData.events.map((event, index) => (
-                  <div key={event.id} className="relative">
-                    {index < shipmentData.events.length - 1 && (
-                      <div className="absolute left-2.5 top-6 h-8 w-0.5 bg-gray-200"></div>
-                    )}
-                    <div className="flex gap-3">
-                      <div className="flex-shrink-0">
-                        {getStatusIcon(event.status)}
+      {/* Main Content */}
+      <section className="py-16 sm:py-20 bg-background">
+        <div className="container mx-auto px-4 max-w-6xl">
+          {/* Error State */}
+          {error && (
+            <div className="mb-8 animate-fade-in">
+              <MobileCard className="border-destructive/20 bg-destructive/5">
+                <MobileCardContent className="p-6">
+                  <div className="flex items-center gap-3 text-destructive">
+                    <AlertCircle className="h-6 w-6 flex-shrink-0" />
+                    <div>
+                      <h3 className="font-semibold">Package Not Found</h3>
+                      <p className="text-sm mt-1">{error}</p>
+                    </div>
+                  </div>
+                </MobileCardContent>
+              </MobileCard>
+            </div>
+          )}
+
+          {/* Shipment Data */}
+          {shipmentData && (
+            <div className="space-y-8 animate-fade-in">
+              {/* Status Overview */}
+              <MobileCard className="overflow-hidden">
+                <MobileCardContent className="p-6 lg:p-8">
+                  <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div className="flex items-center gap-4">
+                      <div className="h-16 w-16 bg-primary/10 rounded-2xl flex items-center justify-center">
+                        {getStatusIcon(shipmentData.status, true)}
                       </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between">
-                          <div>
-                            <p className="font-medium text-sm">{event.description}</p>
-                            <p className="text-sm text-muted-foreground flex items-center gap-1 mt-1">
-                              <MapPin className="h-3 w-3" />
-                              {event.location}
-                            </p>
-                            {event.details && (
-                              <p className="text-xs text-muted-foreground mt-1">{event.details}</p>
-                            )}
-                          </div>
-                          <span className="text-xs text-muted-foreground whitespace-nowrap">
-                            {formatDateTime(event.timestamp)}
-                          </span>
+                      <div>
+                        <h2 className="text-2xl font-bold text-foreground">
+                          #{shipmentData.trackingNumber}
+                        </h2>
+                        <Badge className={`mt-2 ${getStatusColor(shipmentData.status)} px-3 py-1`}>
+                          {shipmentData.status.replace('_', ' ').toUpperCase()}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="text-center lg:text-right">
+                      <p className="text-sm text-muted-foreground mb-1">Delivery Type</p>
+                      <p className="font-semibold text-lg flex items-center gap-2">
+                        <Zap className="h-5 w-5 text-secondary" />
+                        {shipmentData.deliveryType}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Progress Bar */}
+                  <div className="mt-6">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium">Delivery Progress</span>
+                      <span className="text-sm text-muted-foreground">{progressValue}%</span>
+                    </div>
+                    <Progress value={progressValue} className="h-3 animate-pulse" />
+                  </div>
+
+                  {/* Last Scanned Location */}
+                  {shipmentData.lastScannedLocation && (
+                    <div className="mt-6 p-4 bg-secondary/10 border border-secondary/20 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 bg-secondary/20 rounded-lg flex items-center justify-center">
+                          <Navigation className="h-5 w-5 text-secondary" />
+                        </div>
+                        <div>
+                          <p className="font-medium text-secondary">Current Location</p>
+                          <p className="text-sm text-muted-foreground">
+                            {shipmentData.lastScannedLocation.city}, {shipmentData.lastScannedLocation.region} — {formatDateTime(shipmentData.lastScannedLocation.timestamp)}
+                          </p>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  )}
+                </MobileCardContent>
+              </MobileCard>
+
+              {/* Delivery Information */}
+              <div className="grid lg:grid-cols-2 gap-6">
+                {/* Sender Information */}
+                <MobileCard className="hover:shadow-elegant transition-all duration-300">
+                  <MobileCardHeader>
+                    <MobileCardTitle className="flex items-center gap-3">
+                      <div className="h-10 w-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                        <Building2 className="h-5 w-5 text-primary" />
+                      </div>
+                      Sender Information
+                    </MobileCardTitle>
+                  </MobileCardHeader>
+                  <MobileCardContent className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <User className="h-5 w-5 text-muted-foreground" />
+                      <span className="font-medium">{shipmentData.sender.name}</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
+                      <span className="text-sm text-muted-foreground">{shipmentData.sender.address}</span>
+                    </div>
+                    {shipmentData.sender.phone && (
+                      <div className="flex items-center gap-3">
+                        <Phone className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">{shipmentData.sender.phone}</span>
+                      </div>
+                    )}
+                  </MobileCardContent>
+                </MobileCard>
+
+                {/* Receiver Information */}
+                <MobileCard className="hover:shadow-elegant transition-all duration-300">
+                  <MobileCardHeader>
+                    <MobileCardTitle className="flex items-center gap-3">
+                      <div className="h-10 w-10 bg-secondary/10 rounded-lg flex items-center justify-center">
+                        <Target className="h-5 w-5 text-secondary" />
+                      </div>
+                      Receiver Information
+                    </MobileCardTitle>
+                  </MobileCardHeader>
+                  <MobileCardContent className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <User className="h-5 w-5 text-muted-foreground" />
+                      <span className="font-medium">{shipmentData.receiver.name}</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <MapPin className="h-5 w-5 text-muted-foreground mt-0.5" />
+                      <span className="text-sm text-muted-foreground">{shipmentData.receiver.address}</span>
+                    </div>
+                    {shipmentData.receiver.phone && (
+                      <div className="flex items-center gap-3">
+                        <Phone className="h-5 w-5 text-muted-foreground" />
+                        <span className="text-sm text-muted-foreground">{shipmentData.receiver.phone}</span>
+                      </div>
+                    )}
+                  </MobileCardContent>
+                </MobileCard>
               </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
-    </div>
+
+              {/* Enhanced Delivery Timeline */}
+              <MobileCard className="overflow-hidden">
+                <MobileCardHeader>
+                  <MobileCardTitle className="flex items-center gap-3">
+                    <div className="h-10 w-10 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <Clock className="h-5 w-5 text-primary" />
+                    </div>
+                    Delivery Timeline
+                  </MobileCardTitle>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      <span>Estimated Delivery: {formatDateTime(shipmentData.estimatedDelivery)}</span>
+                    </div>
+                  </div>
+                </MobileCardHeader>
+                <MobileCardContent>
+                  <div className="space-y-6">
+                    {shipmentData.events.map((event, index) => (
+                      <div key={event.id} className="relative animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                        {index < shipmentData.events.length - 1 && (
+                          <div className="absolute left-6 top-12 h-8 w-0.5 bg-border"></div>
+                        )}
+                        <div className="flex gap-4">
+                          <div className="flex-shrink-0">
+                            <div className="h-12 w-12 bg-primary/10 rounded-full flex items-center justify-center border-2 border-primary/20">
+                              {getStatusIcon(event.status)}
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="bg-muted/30 rounded-xl p-4 hover:bg-muted/50 transition-colors">
+                              <div className="flex items-start justify-between">
+                                <div className="flex-1">
+                                  <p className="font-semibold text-foreground">{event.description}</p>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <MapPin className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-sm text-muted-foreground">{event.location}</span>
+                                  </div>
+                                  {event.details && (
+                                    <p className="text-sm text-muted-foreground mt-2 italic">{event.details}</p>
+                                  )}
+                                </div>
+                                <div className="text-right ml-4">
+                                  <Badge variant="outline" className="text-xs">
+                                    {formatDateTime(event.timestamp)}
+                                  </Badge>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </MobileCardContent>
+              </MobileCard>
+            </div>
+          )}
+        </div>
+      </section>
+    </CamerLogisticsLayout>
   );
 };
