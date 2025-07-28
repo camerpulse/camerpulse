@@ -9,6 +9,8 @@ import { Separator } from '@/components/ui/separator';
 import { Progress } from '@/components/ui/progress';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useToast } from '@/hooks/use-toast';
+import { RateCompanyDialog } from '@/components/logistics/RateCompanyDialog';
+import { useShippingCompanyRatings } from '@/hooks/useShippingCompanyRatings';
 import {
   Building2,
   Star,
@@ -78,6 +80,10 @@ export const CompanyProfilePage = () => {
   const [company, setCompany] = useState<CompanyData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isFavorited, setIsFavorited] = useState(false);
+  const [showRatingDialog, setShowRatingDialog] = useState(false);
+  
+  // Use the rating hook
+  const { ratingData, userRating, refreshRatings } = useShippingCompanyRatings(id || '');
 
   // Mock data - in real app, this would come from the database
   const mockCompanyData: CompanyData = {
@@ -237,8 +243,12 @@ export const CompanyProfilePage = () => {
                   )}
                   <div className="flex items-center gap-2">
                     <Star className="h-5 w-5 fill-secondary text-secondary" />
-                    <span className="font-semibold text-lg">{company.rating}</span>
-                    <span className="text-primary-foreground/80">({company.totalReviews} reviews)</span>
+                    <span className="font-semibold text-lg">
+                      {ratingData ? ratingData.avg_overall_rating.toFixed(1) : company.rating}
+                    </span>
+                    <span className="text-primary-foreground/80">
+                      ({ratingData ? ratingData.total_reviews : company.totalReviews} reviews)
+                    </span>
                   </div>
                 </div>
 
@@ -253,9 +263,13 @@ export const CompanyProfilePage = () => {
                         <MessageCircle className="h-5 w-5 mr-2" />
                         Request Quote
                       </MobileButton>
-                      <MobileButton variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                        <Phone className="h-5 w-5 mr-2" />
-                        Contact Now
+                      <MobileButton 
+                        variant="outline" 
+                        className="border-white text-white hover:bg-white hover:text-primary"
+                        onClick={() => setShowRatingDialog(true)}
+                      >
+                        <Star className="h-5 w-5 mr-2" />
+                        Rate Company
                       </MobileButton>
                     </>
                   ) : (
@@ -264,9 +278,14 @@ export const CompanyProfilePage = () => {
                         <MessageCircle className="h-5 w-5 mr-2" />
                         Request Quote
                       </Button>
-                      <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary px-8">
-                        <Phone className="h-5 w-5 mr-2" />
-                        Contact Now
+                      <Button 
+                        size="lg" 
+                        variant="outline" 
+                        className="border-white text-white hover:bg-white hover:text-primary px-8"
+                        onClick={() => setShowRatingDialog(true)}
+                      >
+                        <Star className="h-5 w-5 mr-2" />
+                        Rate Company
                       </Button>
                     </>
                   )}
@@ -283,16 +302,20 @@ export const CompanyProfilePage = () => {
                         <div className="text-sm text-primary-foreground/80">Deliveries</div>
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-secondary">{company.onTimeRate}%</div>
-                        <div className="text-sm text-primary-foreground/80">On-Time Rate</div>
+                        <div className="text-2xl font-bold text-secondary">
+                          {ratingData ? ratingData.avg_overall_rating.toFixed(1) : company.rating}
+                        </div>
+                        <div className="text-sm text-primary-foreground/80">Rating</div>
                       </div>
                       <div>
                         <div className="text-2xl font-bold text-secondary">{company.yearsInBusiness}</div>
                         <div className="text-sm text-primary-foreground/80">Years Active</div>
                       </div>
                       <div>
-                        <div className="text-2xl font-bold text-secondary">{company.regions.length}</div>
-                        <div className="text-sm text-primary-foreground/80">Regions</div>
+                        <div className="text-2xl font-bold text-secondary">
+                          {ratingData ? ratingData.total_reviews : company.totalReviews}
+                        </div>
+                        <div className="text-sm text-primary-foreground/80">Reviews</div>
                       </div>
                     </div>
                   </MobileCardContent>
@@ -552,6 +575,26 @@ export const CompanyProfilePage = () => {
             </div>
           </div>
         </div>
+
+        {/* Rating Dialog */}
+        {company && (
+          <RateCompanyDialog
+            open={showRatingDialog}
+            onOpenChange={setShowRatingDialog}
+            company={{
+              id: company.id,
+              name: company.name,
+              code: company.code
+            }}
+            onRatingAdded={() => {
+              refreshRatings();
+              toast({
+                title: "Thank you!",
+                description: "Your rating has been recorded."
+              });
+            }}
+          />
+        )}
       </section>
     </CamerLogisticsLayout>
   );

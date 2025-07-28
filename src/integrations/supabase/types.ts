@@ -37696,6 +37696,51 @@ export type Database = {
           },
         ]
       }
+      shipping_company_ratings: {
+        Row: {
+          company_id: string
+          created_at: string
+          customer_service_rating: number | null
+          id: string
+          overall_rating: number
+          packaging_rating: number | null
+          pricing_rating: number | null
+          reliability_rating: number | null
+          review_text: string | null
+          speed_rating: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          customer_service_rating?: number | null
+          id?: string
+          overall_rating: number
+          packaging_rating?: number | null
+          pricing_rating?: number | null
+          reliability_rating?: number | null
+          review_text?: string | null
+          speed_rating?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          customer_service_rating?: number | null
+          id?: string
+          overall_rating?: number
+          packaging_rating?: number | null
+          pricing_rating?: number | null
+          reliability_rating?: number | null
+          review_text?: string | null
+          speed_rating?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       shipping_company_staff: {
         Row: {
           branch_id: string | null
@@ -44070,6 +44115,18 @@ export type Database = {
       calculate_civic_score: {
         Args: { p_user_id: string }
         Returns: number
+      }
+      calculate_company_ratings: {
+        Args: { company_uuid: string }
+        Returns: {
+          avg_overall_rating: number
+          avg_reliability_rating: number
+          avg_speed_rating: number
+          avg_customer_service_rating: number
+          avg_pricing_rating: number
+          avg_packaging_rating: number
+          total_reviews: number
+        }[]
       }
       calculate_connection_fee: {
         Args: {

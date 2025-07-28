@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Label } from "@/components/ui/label";
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Link } from "react-router-dom";
+import { RateCompanyDialog } from '@/components/logistics/RateCompanyDialog';
 import { 
   Search, 
   Star, 
@@ -47,6 +48,7 @@ const DeliveryCompaniesDirectory = () => {
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [preferredOnly, setPreferredOnly] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedCompanyForRating, setSelectedCompanyForRating] = useState<any>(null);
 
   // Mock data - in real app, this would come from the database
   const deliveryCompanies = [
@@ -542,10 +544,13 @@ const DeliveryCompaniesDirectory = () => {
                                 View Profile
                               </MobileButton>
                             </Link>
-                            <MobileButton className="w-full bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 text-xs shadow-md">
-                              <MessageCircle className="h-3 w-3 mr-1" />
-                              Get Quote
-                            </MobileButton>
+                            <MobileButton 
+                              className="w-full bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 text-xs shadow-md"
+                              onClick={() => setSelectedCompanyForRating(company)}
+                            >
+                               <Star className="h-3 w-3 mr-1" />
+                               Rate
+                             </MobileButton>
                           </>
                         ) : (
                           <>
@@ -555,10 +560,14 @@ const DeliveryCompaniesDirectory = () => {
                                 View Profile
                               </Link>
                             </Button>
-                            <Button size="sm" className="w-full bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 text-xs shadow-md">
-                              <MessageCircle className="h-3 w-3 mr-1" />
-                              Get Quote
-                            </Button>
+                             <Button 
+                               size="sm" 
+                               className="w-full bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 text-xs shadow-md"
+                               onClick={() => setSelectedCompanyForRating(company)}
+                             >
+                               <Star className="h-3 w-3 mr-1" />
+                               Rate
+                             </Button>
                           </>
                         )}
                       </div>
@@ -648,6 +657,19 @@ const DeliveryCompaniesDirectory = () => {
             </div>
           </div>
         </div>
+
+        {/* Rating Dialog */}
+        {selectedCompanyForRating && (
+          <RateCompanyDialog
+            open={!!selectedCompanyForRating}
+            onOpenChange={() => setSelectedCompanyForRating(null)}
+            company={selectedCompanyForRating}
+            onRatingAdded={() => {
+              // Refresh the page or update ratings data
+              window.location.reload();
+            }}
+          />
+        )}
       </section>
     </CamerLogisticsLayout>
   );
