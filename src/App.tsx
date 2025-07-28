@@ -21,12 +21,15 @@ import VerifiedVendors from "./pages/VerifiedVendors";
 import VendorOnboarding from "./pages/VendorOnboarding";
 import ProductDetail from "./pages/ProductDetail";
 import VendorProfile from "./pages/VendorProfile";
+import ShippingHome from "./pages/ShippingHome";
 import ShippingRegistration from "./pages/ShippingRegistration";
 import ShippingDashboard from "./pages/ShippingDashboard";
 import AdminShippingManagement from "./pages/AdminShippingManagement";
 import CreateShipment from "./pages/CreateShipment";
 import TrackShipment from "./pages/TrackShipment";
 import ShipmentManagement from "./pages/ShipmentManagement";
+import DeliveryCompaniesDirectory from "./pages/DeliveryCompaniesDirectory";
+import DeliveryCompanyRegister from "./pages/DeliveryCompanyRegister";
 import Polls from "./pages/Polls";
 import PollsLandingPage from "./pages/PollsLandingPage";
 import PollsDashboard from "./pages/PollsDashboard";
@@ -298,6 +301,7 @@ const App = () => {
               <Route path="/marketplace" element={<Marketplace />} />
               <Route path="/marketplace/vendors" element={<VerifiedVendors />} />
               <Route path="/vendor-onboarding" element={<VendorOnboarding />} />
+              <Route path="/shipping" element={<ShippingHome />} />
               <Route path="/shipping/register" element={<ShippingRegistration />} />
               <Route path="/shipping/dashboard" element={<ShippingDashboard />} />
               <Route path="/admin/shipping" element={<AdminShippingManagement />} />
@@ -305,6 +309,8 @@ const App = () => {
               <Route path="/shipping/track/:trackingNumber?" element={<TrackShipment />} />
               <Route path="/analytics" element={<AnalyticsDashboard />} />
               <Route path="/shipping/manage" element={<ShipmentManagement />} />
+              <Route path="/delivery-companies" element={<DeliveryCompaniesDirectory />} />
+              <Route path="/delivery/register" element={<DeliveryCompanyRegister />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/vendor/:id" element={<VendorProfile />} />
               <Route path="/vendor-dashboard" element={
