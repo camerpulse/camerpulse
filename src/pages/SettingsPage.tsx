@@ -30,7 +30,7 @@ export function SettingsPage() {
   // Mock settings state - replace with real state management
   const [settings, setSettings] = useState({
     // General
-    companyName: 'CamerPulse Logistics',
+    companyName: 'CamerPulse',
     companyAddress: '123 Main Street, Douala, Cameroon',
     defaultLabelSize: 'A4',
     defaultOrientation: 'portrait',
@@ -81,7 +81,7 @@ export function SettingsPage() {
 
   const handleReset = () => {
     setSettings({
-      companyName: 'CamerPulse Logistics',
+      companyName: 'CamerPulse',
       companyAddress: '123 Main Street, Douala, Cameroon',
       defaultLabelSize: 'A4',
       defaultOrientation: 'portrait',
