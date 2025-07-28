@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Menu, X, Truck, Package, MapPin, User, Building, Settings, LogOut, Search } from 'lucide-react';
+import { Menu, X, Truck, Package, MapPin, User, Building, Settings, LogOut, Search, Shield } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 export const CamerLogisticsHeader = () => {
@@ -108,6 +108,12 @@ export const CamerLogisticsHeader = () => {
                       <Link to="/logistics/shipments" className="cursor-pointer">
                         <Package className="mr-2 h-4 w-4" />
                         My Shipments
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link to="/logistics/admin" className="cursor-pointer">
+                        <Shield className="mr-2 h-4 w-4" />
+                        Admin Portal
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
