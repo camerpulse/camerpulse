@@ -24864,6 +24864,54 @@ export type Database = {
           },
         ]
       }
+      notification_preferences: {
+        Row: {
+          created_at: string
+          email_enabled: boolean
+          frequency: string
+          id: string
+          in_app_enabled: boolean
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          push_enabled: boolean
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          sms_enabled: boolean
+          timezone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_enabled?: boolean
+          frequency?: string
+          id?: string
+          in_app_enabled?: boolean
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          push_enabled?: boolean
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          sms_enabled?: boolean
+          timezone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          email_enabled?: boolean
+          frequency?: string
+          id?: string
+          in_app_enabled?: boolean
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          push_enabled?: boolean
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          sms_enabled?: boolean
+          timezone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notification_queue: {
         Row: {
           channel: Database["public"]["Enums"]["notification_channel"]
@@ -42389,6 +42437,19 @@ export type Database = {
           p_title: string
           p_message: string
           p_action_url?: string
+          p_priority?: string
+        }
+        Returns: string
+      }
+      create_notification: {
+        Args: {
+          p_user_id: string
+          p_notification_type: Database["public"]["Enums"]["notification_type"]
+          p_title: string
+          p_message: string
+          p_data?: Json
+          p_related_shipment_id?: string
+          p_related_order_id?: string
           p_priority?: string
         }
         Returns: string
