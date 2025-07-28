@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Checkbox } from '@/components/ui/checkbox';
 import { 
   Upload, 
   Download, 
@@ -20,13 +21,23 @@ import {
   Plus,
   CheckCircle,
   AlertCircle,
-  RefreshCw
+  RefreshCw,
+  Eye,
+  Settings,
+  Save,
+  MapPin,
+  Package,
+  Hash
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLabelTemplates } from '@/hooks/useLabelTemplates';
+import { useLabelPrinting } from '@/hooks/useLabelPrinting';
 
 interface BulkData {
   id: string;
+  selected?: boolean;
+  validationErrors?: string[];
   [key: string]: any;
 }
 
@@ -36,33 +47,86 @@ interface GenerationJob {
   status: 'pending' | 'processing' | 'completed' | 'failed';
   totalItems: number;
   processedItems: number;
+  successfulItems: number;
+  failedItems: number;
   createdAt: Date;
   completedAt?: Date;
   errorMessage?: string;
+  templateId?: string;
+  printedLabels: string[];
+}
+
+interface ValidationRule {
+  field: string;
+  required?: boolean;
+  pattern?: RegExp;
+  minLength?: number;
+  maxLength?: number;
+  message: string;
 }
 
 export const BulkLabelGenerator: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<'upload' | 'manual' | 'jobs'>('upload');
+  const { templates: dbTemplates, loading: templatesLoading } = useLabelTemplates();
+  const { printLabelFromElement, printBatchLabels } = useLabelPrinting();
+  
+  const [activeTab, setActiveTab] = useState<'upload' | 'manual' | 'jobs' | 'validation'>('upload');
   const [bulkData, setBulkData] = useState<BulkData[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
   const [generationJobs, setGenerationJobs] = useState<GenerationJob[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [validationRules, setValidationRules] = useState<ValidationRule[]>([]);
+  const [previewEnabled, setPreviewEnabled] = useState(true);
+  const [autoTrackingGeneration, setAutoTrackingGeneration] = useState(true);
+  const [batchSize, setBatchSize] = useState(10);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Manual data entry
   const [manualDataRows, setManualDataRows] = useState<BulkData[]>([
-    { id: '1', name: '', address: '', tracking: '' }
+    { id: '1', selected: true, name: '', address: '', tracking: '' }
   ]);
 
-  // Sample templates
+  // Enhanced templates with both local and database templates
   const templates = [
-    { id: 'shipping', name: 'Shipping Label', fields: ['name', 'address', 'tracking', 'weight'] },
-    { id: 'product', name: 'Product Label', fields: ['product_name', 'sku', 'price', 'barcode'] },
-    { id: 'address', name: 'Address Label', fields: ['name', 'address', 'postal_code'] },
+    { id: 'shipping', name: 'Shipping Label', fields: ['name', 'address', 'tracking', 'weight'], source: 'local' },
+    { id: 'product', name: 'Product Label', fields: ['product_name', 'sku', 'price', 'barcode'], source: 'local' },
+    { id: 'address', name: 'Address Label', fields: ['name', 'address', 'postal_code'], source: 'local' },
+    ...(dbTemplates?.map(t => ({
+      id: t.id,
+      name: t.template_name,
+      fields: Object.keys(t.fields_config || {}),
+      source: 'database' as const,
+      template_config: t.template_config,
+      fields_config: t.fields_config
+    })) || [])
   ];
+
+  useEffect(() => {
+    // Set default validation rules based on selected template
+    if (selectedTemplate) {
+      const template = templates.find(t => t.id === selectedTemplate);
+      if (template) {
+        const rules: ValidationRule[] = template.fields.map(field => ({
+          field,
+          required: ['name', 'address', 'tracking'].includes(field),
+          message: `${field} is required`
+        }));
+        
+        // Add specific validation rules
+        if (template.fields.includes('tracking')) {
+          rules.push({
+            field: 'tracking',
+            pattern: /^[A-Z0-9]{10,20}$/,
+            message: 'Tracking number must be 10-20 alphanumeric characters'
+          });
+        }
+        
+        setValidationRules(rules);
+      }
+    }
+  }, [selectedTemplate, templates]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -165,7 +229,7 @@ export const BulkLabelGenerator: React.FC = () => {
     setManualDataRows(prev => [...prev, newRow]);
   };
 
-  const updateManualRow = (id: string, field: string, value: string) => {
+  const updateManualRow = (id: string, field: string, value: string | boolean) => {
     setManualDataRows(prev =>
       prev.map(row => (row.id === id ? { ...row, [field]: value } : row))
     );
@@ -225,7 +289,11 @@ export const BulkLabelGenerator: React.FC = () => {
       status: 'processing',
       totalItems: bulkData.length,
       processedItems: 0,
+      successfulItems: 0,
+      failedItems: 0,
       createdAt: new Date(),
+      templateId: selectedTemplate,
+      printedLabels: []
     };
 
     setGenerationJobs(prev => [job, ...prev]);
@@ -340,6 +408,71 @@ export const BulkLabelGenerator: React.FC = () => {
     });
   };
 
+  const validateBulkData = () => {
+    const validatedData = bulkData.map(row => {
+      const errors: string[] = [];
+      
+      validationRules.forEach(rule => {
+        const value = row[rule.field];
+        
+        if (rule.required && (!value || value.toString().trim() === '')) {
+          errors.push(`${rule.field} is required`);
+        }
+        
+        if (value && rule.pattern && !rule.pattern.test(value.toString())) {
+          errors.push(rule.message);
+        }
+        
+        if (value && rule.minLength && value.toString().length < rule.minLength) {
+          errors.push(`${rule.field} must be at least ${rule.minLength} characters`);
+        }
+        
+        if (value && rule.maxLength && value.toString().length > rule.maxLength) {
+          errors.push(`${rule.field} must be no more than ${rule.maxLength} characters`);
+        }
+      });
+      
+      return { ...row, validationErrors: errors };
+    });
+    
+    setBulkData(validatedData);
+    
+    const errorCount = validatedData.filter(row => row.validationErrors?.length > 0).length;
+    toast({
+      title: "Validation Complete",
+      description: `${validatedData.length - errorCount} valid records, ${errorCount} with errors`,
+      variant: errorCount > 0 ? "destructive" : "default"
+    });
+  };
+
+  const generateTrackingNumbers = () => {
+    const updatedData = bulkData.map(row => {
+      if (!row.tracking || row.tracking.toString().trim() === '') {
+        return {
+          ...row,
+          tracking: `TRK-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+        };
+      }
+      return row;
+    });
+    
+    setBulkData(updatedData);
+    toast({
+      title: "Success",
+      description: "Tracking numbers generated for empty fields",
+    });
+  };
+
+  const toggleRowSelection = (id: string, selected: boolean) => {
+    setBulkData(prev =>
+      prev.map(row => (row.id === id ? { ...row, selected } : row))
+    );
+  };
+
+  const toggleAllSelection = (selected: boolean) => {
+    setBulkData(prev => prev.map(row => ({ ...row, selected })));
+  };
+
   const getStatusIcon = (status: GenerationJob['status']) => {
     switch (status) {
       case 'completed':
@@ -374,9 +507,10 @@ export const BulkLabelGenerator: React.FC = () => {
             </CardHeader>
             <CardContent>
               <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as any)}>
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="upload">File Upload</TabsTrigger>
                   <TabsTrigger value="manual">Manual Entry</TabsTrigger>
+                  <TabsTrigger value="validation">Validation</TabsTrigger>
                   <TabsTrigger value="jobs">Generation Jobs</TabsTrigger>
                 </TabsList>
 
@@ -461,7 +595,11 @@ export const BulkLabelGenerator: React.FC = () => {
                   <ScrollArea className="h-64 border rounded-md">
                     <div className="p-4 space-y-3">
                       {manualDataRows.map((row) => (
-                        <div key={row.id} className="grid grid-cols-4 gap-2 items-center">
+                        <div key={row.id} className="grid grid-cols-5 gap-2 items-center">
+                          <Checkbox 
+                            checked={row.selected}
+                            onCheckedChange={(checked) => updateManualRow(row.id, 'selected', checked)}
+                          />
                           <Input
                             placeholder="Name"
                             value={row.name || ''}
@@ -493,6 +631,106 @@ export const BulkLabelGenerator: React.FC = () => {
                     <FileText className="h-4 w-4 mr-2" />
                     Use Manual Data
                   </Button>
+                </TabsContent>
+
+                <TabsContent value="validation" className="space-y-4">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <Label>Data Validation</Label>
+                      <Button 
+                        onClick={() => validateBulkData()} 
+                        size="sm" 
+                        variant="outline"
+                      >
+                        <CheckCircle className="h-4 w-4 mr-1" />
+                        Validate All
+                      </Button>
+                    </div>
+
+                    {bulkData.length > 0 && (
+                      <div>
+                        <div className="grid grid-cols-3 gap-4 mb-4">
+                          <Card className="p-3">
+                            <div className="text-center">
+                              <CheckCircle className="h-6 w-6 text-green-500 mx-auto mb-1" />
+                              <p className="text-sm font-medium">Valid</p>
+                              <p className="text-lg font-bold text-green-600">
+                                {bulkData.filter(row => !row.validationErrors?.length).length}
+                              </p>
+                            </div>
+                          </Card>
+                          <Card className="p-3">
+                            <div className="text-center">
+                              <AlertCircle className="h-6 w-6 text-red-500 mx-auto mb-1" />
+                              <p className="text-sm font-medium">Errors</p>
+                              <p className="text-lg font-bold text-red-600">
+                                {bulkData.filter(row => row.validationErrors?.length > 0).length}
+                              </p>
+                            </div>
+                          </Card>
+                          <Card className="p-3">
+                            <div className="text-center">
+                              <Package className="h-6 w-6 text-blue-500 mx-auto mb-1" />
+                              <p className="text-sm font-medium">Total</p>
+                              <p className="text-lg font-bold text-blue-600">{bulkData.length}</p>
+                            </div>
+                          </Card>
+                        </div>
+
+                        <ScrollArea className="h-48 border rounded-md">
+                          <Table>
+                            <TableHeader>
+                              <TableRow>
+                                <TableHead>Row</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Issues</TableHead>
+                                <TableHead>Actions</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {bulkData.map((row, index) => (
+                                <TableRow key={row.id}>
+                                  <TableCell>#{index + 1}</TableCell>
+                                  <TableCell>
+                                    {row.validationErrors?.length > 0 ? (
+                                      <Badge variant="destructive">Error</Badge>
+                                    ) : (
+                                      <Badge variant="default">Valid</Badge>
+                                    )}
+                                  </TableCell>
+                                  <TableCell className="max-w-48">
+                                    {row.validationErrors?.join(', ') || 'None'}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Button size="sm" variant="ghost">
+                                      <Eye className="h-3 w-3" />
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </ScrollArea>
+                      </div>
+                    )}
+
+                    <div>
+                      <Label>Validation Rules</Label>
+                      <div className="space-y-2 mt-2">
+                        {validationRules.map((rule, index) => (
+                          <div key={index} className="flex items-center justify-between p-2 border rounded">
+                            <div>
+                              <p className="font-medium">{rule.field}</p>
+                              <p className="text-xs text-muted-foreground">{rule.message}</p>
+                            </div>
+                            <Badge variant={rule.required ? "default" : "outline"}>
+                              {rule.required ? "Required" : "Optional"}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="jobs" className="space-y-4">
@@ -560,7 +798,14 @@ export const BulkLabelGenerator: React.FC = () => {
                   <SelectContent>
                     {templates.map((template) => (
                       <SelectItem key={template.id} value={template.id}>
-                        {template.name}
+                        <div className="flex items-center gap-2">
+                          {template.source === 'database' ? (
+                            <Save className="h-3 w-3 text-blue-500" />
+                          ) : (
+                            <FileText className="h-3 w-3 text-gray-500" />
+                          )}
+                          {template.name}
+                        </div>
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -582,6 +827,43 @@ export const BulkLabelGenerator: React.FC = () => {
                 </div>
               )}
 
+              <div className="space-y-3 border-t pt-4">
+                <Label className="text-sm font-medium">Processing Options</Label>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm">Auto-generate tracking numbers</Label>
+                    <Checkbox 
+                      checked={autoTrackingGeneration}
+                      onCheckedChange={(checked) => setAutoTrackingGeneration(checked === true)}
+                    />
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm">Preview before printing</Label>
+                    <Checkbox 
+                      checked={previewEnabled}
+                      onCheckedChange={(checked) => setPreviewEnabled(checked === true)}
+                    />
+                  </div>
+                  
+                  <div>
+                    <Label className="text-sm">Batch size</Label>
+                    <Select value={batchSize.toString()} onValueChange={(value) => setBatchSize(parseInt(value))}>
+                      <SelectTrigger className="w-full mt-1">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="5">5 labels</SelectItem>
+                        <SelectItem value="10">10 labels</SelectItem>
+                        <SelectItem value="20">20 labels</SelectItem>
+                        <SelectItem value="50">50 labels</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </div>
+
               {isProcessing && (
                 <div>
                   <Label>Generation Progress</Label>
@@ -592,20 +874,82 @@ export const BulkLabelGenerator: React.FC = () => {
                 </div>
               )}
 
-              <Button
-                onClick={startBulkGeneration}
-                disabled={isProcessing || bulkData.length === 0 || !selectedTemplate}
-                className="w-full"
-              >
-                {isProcessing ? (
-                  <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <Printer className="h-4 w-4 mr-2" />
+              <div className="space-y-2">
+                {autoTrackingGeneration && bulkData.length > 0 && (
+                  <Button
+                    onClick={generateTrackingNumbers}
+                    variant="outline"
+                    className="w-full"
+                    size="sm"
+                  >
+                    <Hash className="h-4 w-4 mr-2" />
+                    Generate Tracking Numbers
+                  </Button>
                 )}
-                {isProcessing ? 'Generating...' : 'Generate Labels'}
-              </Button>
+
+                <Button
+                  onClick={startBulkGeneration}
+                  disabled={isProcessing || bulkData.length === 0 || !selectedTemplate}
+                  className="w-full"
+                >
+                  {isProcessing ? (
+                    <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Printer className="h-4 w-4 mr-2" />
+                  )}
+                  {isProcessing ? 'Generating...' : 'Generate Labels'}
+                </Button>
+              </div>
             </CardContent>
           </Card>
+
+          {bulkData.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="h-4 w-4" />
+                  Quick Actions
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm">Selected items</span>
+                  <Badge variant="outline">
+                    {bulkData.filter(row => row.selected).length || 0} / {bulkData.length}
+                  </Badge>
+                </div>
+                
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => toggleAllSelection(true)}
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                  >
+                    Select All
+                  </Button>
+                  <Button
+                    onClick={() => toggleAllSelection(false)}
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                  >
+                    Clear All
+                  </Button>
+                </div>
+
+                <Button
+                  onClick={validateBulkData}
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                >
+                  <CheckCircle className="h-4 w-4 mr-2" />
+                  Validate Data
+                </Button>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </div>
