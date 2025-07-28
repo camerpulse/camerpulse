@@ -302,6 +302,7 @@ const App = () => {
               <Route path="/admin/shipping" element={<AdminShippingManagement />} />
               <Route path="/shipping/create" element={<CreateShipment />} />
               <Route path="/shipping/track/:trackingNumber?" element={<TrackShipment />} />
+              <Route path="/analytics" element={<AnalyticsDashboard />} />
               <Route path="/shipping/manage" element={<ShipmentManagement />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/vendor/:id" element={<VendorProfile />} />
