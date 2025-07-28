@@ -13,7 +13,7 @@ import {
   AlertTriangle, CheckCircle, Clock, Menu, X, Search,
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
-  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette
+  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck
 } from 'lucide-react';
 
 // Import all feature modules
@@ -52,6 +52,7 @@ import { MarketplaceAdminModule } from './modules/MarketplaceAdminModule';
 import { ModerationModule } from './modules/ModerationModule';
 import { DataImportModule } from './modules/DataImportModule';
 import { VillageAdminModule } from './modules/VillageAdminModule';
+import { LogisticsAdminModule } from './modules/LogisticsAdminModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 interface AdminStats {
@@ -85,18 +86,36 @@ export const AdminCoreV2: React.FC = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
-  // Detect initial module based on URL
+  // Detect initial module based on URL parameters or path
   const getInitialModule = () => {
-    const path = window.location.pathname;
-    if (path.includes('/moderation')) return 'moderation';
-    if (path.includes('/marketplace')) return 'marketplace-admin';
-    if (path.includes('/data-import')) return 'data-import';
-    if (path.includes('/village')) return 'village-admin';
+    const urlParams = new URLSearchParams(window.location.search);
+    const moduleParam = urlParams.get('module');
+    
+    // If module is specified in URL, use it
+    if (moduleParam) {
+      return moduleParam;
+    }
+    
+    // Check if coming from legacy route with welcome flag
+    const welcomeParam = urlParams.get('welcome');
+    if (welcomeParam === 'true') {
+      return 'welcome';
+    }
+    
+    // Default to dashboard
     return 'dashboard';
   };
   
   // UI State
   const [activeModule, setActiveModule] = useState(getInitialModule());
+  
+  // Update URL when module changes
+  const handleModuleChange = (moduleId: string) => {
+    setActiveModule(moduleId);
+    const url = new URL(window.location.href);
+    url.searchParams.set('module', moduleId);
+    window.history.pushState({}, '', url.toString());
+  };
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -134,7 +153,7 @@ export const AdminCoreV2: React.FC = () => {
       const permissions = {
         admin: ['all'],
         super_admin: ['all'],
-        moderator: ['users', 'polls', 'civic-tools', 'messenger', 'analytics'],
+        moderator: ['users', 'polls', 'civic-tools', 'messenger', 'analytics', 'logistics'],
         editor: ['polls', 'civic-tools', 'content']
       };
       
@@ -280,6 +299,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'billionaire-tracker', label: 'Billionaire Tracker', icon: CreditCard, color: 'text-yellow-600', permission: 'companies' },
     { id: 'debt-monitor', label: 'Debt Monitor', icon: TrendingUp, color: 'text-red-600', permission: 'analytics' },
     { id: 'marketplace-admin', label: 'Marketplace Admin', icon: Store, color: 'text-green-600', permission: 'marketplace' },
+    { id: 'logistics-admin', label: 'Logistics Admin', icon: Truck, color: 'text-purple-600', permission: 'logistics' },
     { id: 'stripe-settings', label: 'Stripe Settings', icon: CreditCard, color: 'text-blue-600', permission: 'marketplace' },
     { id: 'donations', label: 'Donations', icon: Heart, color: 'text-red-500', permission: 'finance' },
     
@@ -311,7 +331,7 @@ export const AdminCoreV2: React.FC = () => {
       case 'dashboard':
         return <AdminDashboard {...moduleProps} />;
       case 'welcome':
-        return <UnifiedAdminWelcome onModuleSelect={setActiveModule} adminRole={adminRole} />;
+        return <UnifiedAdminWelcome onModuleSelect={handleModuleChange} adminRole={adminRole} />;
       case 'users-roles':
         return <UsersRolesManager {...moduleProps} />;
       case 'polls-system':
@@ -340,6 +360,8 @@ export const AdminCoreV2: React.FC = () => {
         return <MarketplaceManager {...moduleProps} />;
       case 'marketplace-admin':
         return <MarketplaceAdminModule {...moduleProps} />;
+      case 'logistics-admin':
+        return <LogisticsAdminModule {...moduleProps} />;
       case 'moderation':
         return <ModerationModule {...moduleProps} />;
       case 'data-import':
@@ -390,12 +412,12 @@ export const AdminCoreV2: React.FC = () => {
         <AdminSidebar
           modules={adminModules}
           activeModule={activeModule}
-          setActiveModule={setActiveModule}
+          setActiveModule={handleModuleChange}
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
           isMobile={isMobile}
-          adminRole={adminRole}
-          systemModules={systemModules}
+          adminRole={adminRole?.role || 'user'}
+          systemModules={systemModules || []}
         />
 
         {/* Main Content */}
@@ -440,7 +462,7 @@ export const AdminCoreV2: React.FC = () => {
         <MobileAdminNav
           modules={adminModules}
           activeModule={activeModule}
-          setActiveModule={setActiveModule}
+          setActiveModule={handleModuleChange}
           notifications={notifications}
         />
       )}

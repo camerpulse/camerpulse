@@ -76,7 +76,8 @@ function AppContent() {
             
             {/* Unified Admin Routes */}
             <Route path="/admin" element={<Admin />} />
-            <Route path="/admin/core" element={<CamerPulseAdminCore />} />
+          <Route path="/admin/core" element={<CamerPulseAdminCore />} />
+          <Route path="/admin/core/*" element={<CamerPulseAdminCore />} />
             <Route path="/admin/*" element={<AdminRoutes />} />
             
             {/* Legacy Admin Routes (Redirected to Core) */}

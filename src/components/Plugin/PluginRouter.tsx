@@ -17,7 +17,7 @@ import { BusinessSolutionsPage } from '@/pages/logistics/BusinessSolutionsPage';
 import { CompanyProfilePage } from '@/pages/logistics/CompanyProfilePage';
 import { LogisticsCompanyPortal } from '@/pages/logistics/LogisticsCompanyPortal';
 import { LogisticsShipments } from '@/pages/logistics/LogisticsShipments';
-import { LogisticsAdminPortal } from '@/pages/logistics/LogisticsAdminPortal';
+import LogisticsAdminPortalLegacy from '@/pages/logistics/LogisticsAdminPortalLegacy';
 import { EnterpriseFeatures } from '@/pages/logistics/EnterpriseFeatures';
 
 // Logistics Authenticated Layout
@@ -77,7 +77,7 @@ export function PluginRouter({ user }: { user: any }) {
               />
               <Route path="/company-portal" element={<LogisticsCompanyPortal />} />
               <Route path="/shipments" element={<LogisticsShipments />} />
-              <Route path="/admin" element={<LogisticsAdminPortal />} />
+              <Route path="/admin" element={<LogisticsAdminPortalLegacy />} />
               <Route 
                 path="/enterprise" 
                 element={
