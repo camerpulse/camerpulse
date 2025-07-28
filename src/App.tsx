@@ -13,6 +13,9 @@ import { TemplateManager } from '@/components/LabelDesigner/TemplateManager';
 import { BulkLabelGenerator } from '@/components/LabelDesigner/BulkLabelGenerator';
 import { SettingsPage } from '@/pages/SettingsPage';
 import AuthPage from '@/pages/AuthPage';
+import DeliveryCompaniesDirectory from '@/pages/DeliveryCompaniesDirectory';
+import DeliveryCompanyRegister from '@/pages/DeliveryCompanyRegister';
+import { PublicHomePage } from '@/pages/PublicHomePage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -27,6 +30,24 @@ const queryClient = new QueryClient({
   },
 });
 
+// Authenticated Layout Component
+function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-background">
+        <AppSidebar />
+        <div className="flex-1 flex flex-col">
+          <AppHeader />
+          <main className="flex-1 overflow-auto">
+            {children}
+          </main>
+        </div>
+      </div>
+      <Toaster />
+    </SidebarProvider>
+  );
+}
+
 function AppContent() {
   const { user, loading } = useAuth();
 
@@ -38,37 +59,41 @@ function AppContent() {
     );
   }
 
-  if (!user) {
-    return <AuthPage />;
-  }
-
   return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
+    <>
+      <Routes>
+        {/* Public Routes - No auth required */}
+        <Route path="/public" element={<PublicHomePage />} />
+        <Route path="/public/tracking" element={<TrackingPage />} />
+        <Route path="/public/tracking/:trackingNumber" element={<TrackingPage />} />
+        <Route path="/public/directory" element={<DeliveryCompaniesDirectory />} />
+        <Route path="/public/register-company" element={<DeliveryCompanyRegister />} />
+        <Route path="/auth" element={<AuthPage />} />
         
-        <div className="flex-1 flex flex-col">
-          <AppHeader />
-          
-          <main className="flex-1 overflow-auto">
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/designer" element={<LabelDesignerPage />} />
-              <Route path="/advanced-builder" element={<AdvancedLabelBuilder />} />
-              <Route path="/templates" element={<TemplateManager />} />
-              <Route path="/bulk-generator" element={<BulkLabelGenerator />} />
-              <Route path="/scanner" element={<ScannerInterface />} />
-              <Route path="/tracking" element={<TrackingPage />} />
-              <Route path="/tracking/:trackingNumber" element={<TrackingPage />} />
-              <Route path="/history" element={<PrintHistoryPage />} />
-              <Route path="/settings" element={<SettingsPage />} />
-            </Routes>
-          </main>
-        </div>
-      </div>
+        {/* Default redirect based on authentication */}
+        {!user && <Route path="*" element={<PublicHomePage />} />}
+        
+        {/* Authenticated Routes */}
+        {user && (
+          <>
+            <Route path="/" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
+            <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
+            <Route path="/designer" element={<AuthenticatedLayout><LabelDesignerPage /></AuthenticatedLayout>} />
+            <Route path="/advanced-builder" element={<AuthenticatedLayout><AdvancedLabelBuilder /></AuthenticatedLayout>} />
+            <Route path="/templates" element={<AuthenticatedLayout><TemplateManager /></AuthenticatedLayout>} />
+            <Route path="/bulk-generator" element={<AuthenticatedLayout><BulkLabelGenerator /></AuthenticatedLayout>} />
+            <Route path="/scanner" element={<AuthenticatedLayout><ScannerInterface /></AuthenticatedLayout>} />
+            <Route path="/tracking" element={<AuthenticatedLayout><TrackingPage /></AuthenticatedLayout>} />
+            <Route path="/tracking/:trackingNumber" element={<AuthenticatedLayout><TrackingPage /></AuthenticatedLayout>} />
+            <Route path="/history" element={<AuthenticatedLayout><PrintHistoryPage /></AuthenticatedLayout>} />
+            <Route path="/settings" element={<AuthenticatedLayout><SettingsPage /></AuthenticatedLayout>} />
+          </>
+        )}
+      </Routes>
       
-      <Toaster />
-    </SidebarProvider>
+      {/* Toaster for public routes */}
+      {!user && <Toaster />}
+    </>
   );
 }
 

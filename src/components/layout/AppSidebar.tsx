@@ -81,6 +81,21 @@ const toolsItems = [
   }
 ];
 
+const publicItems = [
+  {
+    title: 'Public Homepage',
+    url: '/public',
+    icon: Home,
+    description: 'Visit public website'
+  },
+  {
+    title: 'Company Directory',
+    url: '/public/directory',
+    icon: Truck,
+    description: 'Browse delivery companies'
+  }
+];
+
 const systemItems = [
   {
     title: 'Settings',
@@ -118,8 +133,8 @@ export function AppSidebar() {
           </div>
           {state !== 'collapsed' && (
             <div>
-              <h2 className="font-bold text-lg">LabelCraft</h2>
-              <p className="text-xs text-muted-foreground">Label Management</p>
+              <h2 className="font-bold text-lg">CamerPulse</h2>
+              <p className="text-xs text-muted-foreground">Logistics Platform</p>
             </div>
           )}
         </div>
@@ -171,6 +186,29 @@ export function AppSidebar() {
                       to={item.url}
                       className={getNavClassName(item.url)}
                        title={state === 'collapsed' ? item.description : undefined}
+                    >
+                      <item.icon className="w-4 h-4" />
+                      {state !== 'collapsed' && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Public Section */}
+        <SidebarGroup>
+          <SidebarGroupLabel>Public</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {publicItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink 
+                      to={item.url}
+                      className={getNavClassName(item.url)}
+                      title={state === 'collapsed' ? item.description : undefined}
                     >
                       <item.icon className="w-4 h-4" />
                       {state !== 'collapsed' && <span>{item.title}</span>}
