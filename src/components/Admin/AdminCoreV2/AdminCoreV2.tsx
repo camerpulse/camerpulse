@@ -14,7 +14,7 @@ import {
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
   Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck, Plug,
-  Briefcase, Music
+  Briefcase, Music, DollarSign
 } from 'lucide-react';
 
 // Import all feature modules
@@ -59,6 +59,10 @@ import { MessagingSystemModule } from './modules/MessagingSystemModule';
 import { SocialNetworkingModule } from './modules/SocialNetworkingModule';
 import { CommunityGroupsModule } from './modules/CommunityGroupsModule';
 import { SocialAnalyticsModule } from './modules/SocialAnalyticsModule';
+import { FinancialManagementModule } from './modules/FinancialManagementModule';
+import { EconomicDevelopmentModule } from './modules/EconomicDevelopmentModule';
+import { PaymentProcessingModule } from './modules/PaymentProcessingModule';
+import { EconomicAnalyticsModule } from './modules/EconomicAnalyticsModule';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -347,6 +351,12 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'community-groups', label: 'Community Groups', icon: Users, color: 'text-emerald-600', permission: 'groups' },
     { id: 'social-analytics', label: 'Social Analytics', icon: BarChart3, color: 'text-violet-600', permission: 'analytics' },
     
+    // Economy & Finance
+    { id: 'financial-management', label: 'Financial Management', icon: DollarSign, color: 'text-green-600', permission: 'finance' },
+    { id: 'economic-development', label: 'Economic Development', icon: TrendingUp, color: 'text-blue-600', permission: 'economic' },
+    { id: 'payment-processing', label: 'Payment Processing', icon: CreditCard, color: 'text-purple-600', permission: 'payments' },
+    { id: 'economic-analytics', label: 'Economic Analytics', icon: BarChart3, color: 'text-indigo-600', permission: 'analytics' },
+    
     // AI & Intelligence
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
@@ -491,6 +501,14 @@ export const AdminCoreV2: React.FC = () => {
         return <CommunityGroupsModule {...moduleProps} />;
       case 'social-analytics':
         return <SocialAnalyticsModule {...moduleProps} />;
+      case 'financial-management':
+        return <FinancialManagementModule {...moduleProps} />;
+      case 'economic-development':
+        return <EconomicDevelopmentModule {...moduleProps} />;
+      case 'payment-processing':
+        return <PaymentProcessingModule {...moduleProps} />;
+      case 'economic-analytics':
+        return <EconomicAnalyticsModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
