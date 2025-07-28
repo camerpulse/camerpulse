@@ -14,7 +14,7 @@ import {
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
   Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck, Plug,
-  Briefcase, Music, DollarSign, Calculator
+  Briefcase, Music, DollarSign, Calculator, GraduationCap
 } from 'lucide-react';
 
 // Import all feature modules
@@ -65,6 +65,10 @@ import { PaymentProcessingModule } from './modules/PaymentProcessingModule';
 import { EconomicAnalyticsModule } from './modules/EconomicAnalyticsModule';
 import { TaxManagementModule } from './modules/TaxManagementModule';
 import { ProcurementModule } from './modules/ProcurementModule';
+import { HealthcareManagementModule } from './modules/HealthcareManagementModule';
+import { EducationManagementModule } from './modules/EducationManagementModule';
+import { HealthAnalyticsModule } from './modules/HealthAnalyticsModule';
+import { EducationAnalyticsModule } from './modules/EducationAnalyticsModule';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -360,6 +364,12 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'economic-analytics', label: 'Economic Analytics', icon: BarChart3, color: 'text-indigo-600', permission: 'analytics' },
     { id: 'tax-management', label: 'Tax Management', icon: Calculator, color: 'text-red-600', permission: 'tax' },
     { id: 'procurement', label: 'Public Procurement', icon: Building2, color: 'text-orange-600', permission: 'procurement' },
+    
+    // Health & Education
+    { id: 'healthcare-management', label: 'Healthcare Management', icon: Heart, color: 'text-blue-600', permission: 'health' },
+    { id: 'education-management', label: 'Education Management', icon: GraduationCap, color: 'text-purple-600', permission: 'education' },
+    { id: 'health-analytics', label: 'Health Analytics', icon: Activity, color: 'text-green-600', permission: 'analytics' },
+    { id: 'education-analytics', label: 'Education Analytics', icon: BarChart3, color: 'text-indigo-600', permission: 'analytics' },
     
     // AI & Intelligence
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
