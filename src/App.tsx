@@ -8,6 +8,7 @@ import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticated
 import { Dashboard } from '@/pages/Dashboard';
 import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { SettingsPage } from '@/pages/SettingsPage';
+import Feed from '@/pages/Feed';
 import AuthPage from '@/pages/AuthPage';
 import DeliveryCompaniesDirectory from '@/pages/DeliveryCompaniesDirectory';
 import DeliveryCompanyRegister from '@/pages/DeliveryCompanyRegister';
@@ -89,7 +90,8 @@ function AppContent() {
         {/* Authenticated Routes */}
         {user && (
           <>
-            <Route path="/" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
+            <Route path="/" element={<CivicAuthenticatedLayout><Feed /></CivicAuthenticatedLayout>} />
+            <Route path="/feed" element={<CivicAuthenticatedLayout><Feed /></CivicAuthenticatedLayout>} />
             <Route path="/dashboard" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
             <Route path="/settings" element={<CivicAuthenticatedLayout><SettingsPage /></CivicAuthenticatedLayout>} />
           </>
