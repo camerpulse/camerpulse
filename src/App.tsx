@@ -10,11 +10,10 @@ import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import Feed from '@/pages/Feed';
 import AuthPage from '@/pages/AuthPage';
-import DeliveryCompaniesDirectory from '@/pages/DeliveryCompaniesDirectory';
-import DeliveryCompanyRegister from '@/pages/DeliveryCompanyRegister';
 import { PublicHomePage } from '@/pages/PublicHomePage';
-import { CamerLogisticsLandingPage } from '@/pages/CamerLogisticsLandingPage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { PluginProvider } from '@/contexts/PluginContext';
+import { PluginRouter } from '@/components/Plugin/PluginRouter';
 import { Toaster } from '@/components/ui/toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
@@ -28,23 +27,6 @@ const queryClient = new QueryClient({
   },
 });
 
-// Authenticated Layout Component
-function AuthenticatedLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <SidebarProvider>
-      <div className="min-h-screen flex w-full bg-background">
-        <AppSidebar />
-        <div className="flex-1 flex flex-col">
-          <AppHeader />
-          <main className="flex-1 overflow-auto">
-            {children}
-          </main>
-        </div>
-      </div>
-      <Toaster />
-    </SidebarProvider>
-  );
-}
 
 function AppContent() {
   const { user, loading } = useAuth();
@@ -64,22 +46,9 @@ function AppContent() {
         <Route path="/public" element={<PublicHomePage />} />
         <Route path="/public/tracking" element={<TrackingPage />} />
         <Route path="/public/tracking/:trackingNumber" element={<TrackingPage />} />
-        <Route path="/public/directory" element={<DeliveryCompaniesDirectory />} />
-        <Route path="/public/register-company" element={<DeliveryCompanyRegister />} />
         
-        {/* CamerLogistics Routes - No auth required */}
-        <Route path="/logistics" element={<CamerLogisticsLandingPage />} />
-        <Route path="/logistics/tracking" element={<TrackingPage />} />
-        <Route path="/logistics/tracking/:trackingNumber" element={<TrackingPage />} />
-        <Route path="/logistics/companies" element={<DeliveryCompaniesDirectory />} />
-        <Route path="/logistics/join-company" element={<DeliveryCompanyRegister />} />
-        
-        {/* Logistics Dashboard - Authenticated Routes */}
-        {user && (
-          <>
-            <Route path="/logistics/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
-          </>
-        )}
+        {/* Plugin Routes */}
+        <Route path="/logistics/*" element={<PluginRouter user={user} />} />
         
         {/* Auth Route */}
         <Route path="/auth" element={<AuthPage />} />
@@ -108,9 +77,11 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Router>
-          <AppContent />
-        </Router>
+        <PluginProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </PluginProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

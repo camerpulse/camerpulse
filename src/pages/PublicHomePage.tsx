@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { PluginAwareLink } from '@/components/Plugin/PluginAwareLink';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -109,12 +110,12 @@ export function PublicHomePage() {
                   Petitions
                 </Button>
               </Link>
-              <Link to="/logistics">
+              <PluginAwareLink pluginName="camer-logistics" to="/logistics">
                 <Button variant="outline">
                   <Building2 className="h-4 w-4 mr-2" />
                   Logistics
                 </Button>
-              </Link>
+              </PluginAwareLink>
               <Link to="/auth">
                 <Button>
                   <Shield className="h-4 w-4 mr-2" />
@@ -329,7 +330,7 @@ export function PublicHomePage() {
             <div>
               <h4 className="font-medium mb-3">Services</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><Link to="/logistics" className="hover:text-foreground">Logistics Platform</Link></li>
+                <li><PluginAwareLink pluginName="camer-logistics" to="/logistics" className="hover:text-foreground">Logistics Platform</PluginAwareLink></li>
                 <li><Link to="/jobs" className="hover:text-foreground">Job Portal</Link></li>
                 <li><Link to="/directory" className="hover:text-foreground">Services Directory</Link></li>
               </ul>
