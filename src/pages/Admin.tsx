@@ -1,105 +1,26 @@
 import { useState } from "react";
-import PanAfricaAdminPanel from "@/components/AI/PanAfricaAdminPanel";
-import CivicViewControlPanel from "@/components/AI/CivicViewControlPanel";
-import { PoliticalImportDashboard } from "@/components/Politics/PoliticalImportDashboard";
-import { BulkImportButton } from "@/components/AI/BulkImportButton";
-import { PoliticaAIDashboard } from "@/components/AI/PoliticaAIDashboard";
-import { CivicAlertBot } from "@/components/AI/CivicAlertBot";
-import { DailyReportGenerator } from "@/components/AI/DailyReportGenerator";
-import { CivicAlertSystem } from "@/components/Security/CivicAlertSystem";
-import { RoleControlSystem } from "@/components/Security/RoleControlSystem";
-import { LocalizationSettings } from "@/components/Admin/LocalizationSettings";
-import { CacheManagementDashboard } from "@/components/Admin/CacheManagementDashboard";
-import { CacheStatusMonitor } from "@/components/Admin/CacheStatusMonitor";
-import { APIConfigurationManager } from "@/components/Admin/APIConfigurationManager";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
 import { 
   Users, 
   ShoppingBag, 
-  TrendingUp, 
-  Eye,
-  CheckCircle,
-  XCircle,
-  Clock,
-  Plus,
-  Edit,
-  Trash2,
-  AlertTriangle,
   Bot,
-  Power,
-  Settings,
-  BookOpen,
-  GraduationCap,
-  Volume2,
-  Languages,
-  MessageCircle,
+  AlertTriangle,
   Shield,
-  DollarSign,
   BarChart3,
-  Database,
-  Key,
-  MessageSquare,
-  Newspaper,
-  FileText,
-  Lock,
-  Activity,
-  Globe,
-  Puzzle,
-  Mail,
-  CreditCard,
-  Download,
-  Upload,
-  Calendar,
-  Search,
-  Filter,
-  RefreshCw,
-  UserCheck,
-  Ban,
-  Unlock,
-  Monitor,
-  Building2,
-  Star,
-  FileCode,
-  ExternalLink
+  ExternalLink,
+  Eye
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import PartyDirectorySync from "@/components/AI/PartyDirectorySync";
-import MinisterDirectorySync from "@/components/AI/MinisterDirectorySync";
-import SenateDirectorySync from "@/components/AI/SenateDirectorySync";
-import { MPDirectorySync } from "@/components/AI/MPDirectorySync";
-import { PartyAffiliationResolver } from "@/components/AI/PartyAffiliationResolver";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import TermOfOfficeValidator from "@/components/AI/TermOfOfficeValidator";
-import GovWebsiteScraper from "@/components/AI/GovWebsiteScraper";
-import { SystemHealthCheck } from "@/components/Admin/SystemHealthCheck";
-import AshenDebugCore from "@/components/Admin/AshenDebugCore";
-import CodeHealthLog from "@/components/Admin/CodeHealthLog";
-import UXSimulationLog from "@/components/Admin/UXSimulationLog";
-import CamerPulseActivityTimeline from "@/components/Admin/CamerPulseActivityTimeline";
-import { CivicIntegrityMonitor } from "@/components/AI/CivicIntegrityMonitor";
-import { CreditorBreakdown } from "@/components/AI/CreditorBreakdown";
 
 const Admin = () => {
   const { user } = useAuth();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-  const [selectedTab, setSelectedTab] = useState("overview");
 
   // Check if user is admin
   const { data: userRole } = useQuery({
@@ -158,26 +79,6 @@ const Admin = () => {
     enabled: !!userRole,
   });
 
-  const updateAIConfigMutation = useMutation({
-    mutationFn: async ({ key, value }: { key: string; value: boolean }) => {
-      const { error } = await supabase
-        .from("politica_ai_config")
-        .update({ 
-          config_value: value.toString(),
-          updated_at: new Date().toISOString()
-        })
-        .eq("config_key", key);
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["ai_config"] });
-      toast({ title: "AI configuration updated successfully" });
-    },
-    onError: () => {
-      toast({ title: "Error updating AI configuration", variant: "destructive" });
-    },
-  });
-
   if (!userRole) {
     return (
       <AppLayout showMobileNav={false}>
@@ -197,1156 +98,104 @@ const Admin = () => {
   return (
     <AppLayout showMobileNav={false}>
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">Admin Dashboard</h1>
-            <p className="text-muted-foreground">Complete platform management and control center</p>
-          </div>
-
-          <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-            <ScrollArea className="w-full">
-              <TabsList className="mb-8 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-1 h-auto p-1">
-                <TabsTrigger value="overview" className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4" />
-                  Overview
-                </TabsTrigger>
-                <TabsTrigger value="security" className="flex items-center gap-2">
-                  <Shield className="h-4 w-4" />
-                  Security
-                </TabsTrigger>
-                <TabsTrigger value="users" className="flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  Users
-                </TabsTrigger>
-                <TabsTrigger value="politicians" className="flex items-center gap-2">
-                  <UserCheck className="h-4 w-4" />
-                  Politicians
-                </TabsTrigger>
-                <TabsTrigger value="term-validation" className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
-                  Term Validation
-                </TabsTrigger>
-                <TabsTrigger value="marketplace" className="flex items-center gap-2">
-                  <ShoppingBag className="h-4 w-4" />
-                  Marketplace
-                </TabsTrigger>
-                <TabsTrigger value="ai-control" className="flex items-center gap-2">
-                  <Bot className="h-4 w-4" />
-                  Politica AI
-                </TabsTrigger>
-                <TabsTrigger value="civic-intelligence" className="flex items-center gap-2">
-                  <Activity className="h-4 w-4" />
-                  Civic Intelligence
-                </TabsTrigger>
-                <TabsTrigger value="news" className="flex items-center gap-2">
-                  <Newspaper className="h-4 w-4" />
-                  News
-                </TabsTrigger>
-                <TabsTrigger value="finance" className="flex items-center gap-2">
-                  <DollarSign className="h-4 w-4" />
-                  Finance
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4" />
-                  Analytics
-                </TabsTrigger>
-                <TabsTrigger value="themes" className="flex items-center gap-2">
-                  <Monitor className="h-4 w-4" />
-                  Themes
-                </TabsTrigger>
-                <TabsTrigger value="settings" className="flex items-center gap-2">
-                  <Settings className="h-4 w-4" />
-                  System Settings
-                </TabsTrigger>
-                <TabsTrigger value="pan-africa" className="flex items-center gap-2">
-                  <Globe className="h-4 w-4" />
-                  Pan-Africa
-                </TabsTrigger>
-                <TabsTrigger value="civic-control" className="flex items-center gap-2">
-                  <Eye className="h-4 w-4" />
-                  Portal Control
-                </TabsTrigger>
-                <TabsTrigger value="localization" className="flex items-center gap-2">
-                  <Languages className="h-4 w-4" />
-                  Localization
-                </TabsTrigger>
-                 <TabsTrigger value="cache-management" className="flex items-center gap-2">
-                   <Database className="h-4 w-4" />
-                   Cache Management
-                 </TabsTrigger>
-                 <TabsTrigger value="system-health" className="flex items-center gap-2">
-                   <Activity className="h-4 w-4" />
-                   System Health
-                 </TabsTrigger>
-                 <TabsTrigger value="ashen-debug" className="flex items-center gap-2">
-                   <Bot className="h-4 w-4" />
-                   Ashen Debug
-                 </TabsTrigger>
-                  <TabsTrigger value="code-health" className="flex items-center gap-2">
-                    <FileCode className="h-4 w-4" />
-                    Code Health
-                  </TabsTrigger>
-                  <TabsTrigger value="ux-simulation" className="flex items-center gap-2">
-                    <Activity className="h-4 w-4" />
-                    UX Simulation
-                  </TabsTrigger>
-                  <TabsTrigger value="activity-timeline" className="flex items-center gap-2">
-                    <Clock className="h-4 w-4" />
-                    Activity Timeline
-                  </TabsTrigger>
-                  <TabsTrigger value="integrity-monitor" className="flex items-center gap-2">
-                    <Shield className="h-4 w-4" />
-                    Ashen Quill
-                  </TabsTrigger>
-                  <TabsTrigger value="civic-learning" className="flex items-center gap-2">
-                    <BookOpen className="h-4 w-4" />
-                    Civic Learning
-                  </TabsTrigger>
-                  <TabsTrigger value="plugins" className="flex items-center gap-2">
-                    <Puzzle className="h-4 w-4" />
-                    Plugin Manager
-                  </TabsTrigger>
-                  <TabsTrigger value="api-config" className="flex items-center gap-2">
-                    <Key className="h-4 w-4" />
-                    API Configuration
-                  </TabsTrigger>
-              </TabsList>
-            </ScrollArea>
-
-            {/* 1. OVERVIEW DASHBOARD */}
-            <TabsContent value="overview">
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Total Users</CardTitle>
-                      <Users className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">{stats?.users || 0}</div>
-                      <p className="text-xs text-muted-foreground">+2.1% from last month</p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Active Vendors</CardTitle>
-                      <ShoppingBag className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">{stats?.vendors || 0}</div>
-                      <p className="text-xs text-muted-foreground">CM-ID System Active</p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">Politicians</CardTitle>
-                      <UserCheck className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-2xl font-bold">300+</div>
-                      <p className="text-xs text-muted-foreground">14 claimed profiles</p>
-                    </CardContent>
-                  </Card>
-                  <Card>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">AI Status</CardTitle>
-                      <Bot className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className={`text-2xl font-bold ${aiConfig?.ai_enabled ? 'text-green-600' : 'text-red-600'}`}>
-                        {aiConfig?.ai_enabled ? 'ACTIVE' : 'OFFLINE'}
-                      </div>
-                      <p className="text-xs text-muted-foreground">Politica AI Scanner</p>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* CamerPulse Admin Core Access Card */}
-                <Card className="bg-gradient-civic/10 border-primary/20 hover:shadow-elegant transition-all duration-300">
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-3">
-                      <Shield className="h-6 w-6 text-primary" />
-                      CamerPulse Admin Core
-                    </CardTitle>
-                    <CardDescription>
-                      Access the advanced admin dashboard with real-time analytics, user management, and system controls
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-                      <div className="flex items-center gap-2 text-sm">
-                        <Users className="h-4 w-4 text-cm-green" />
-                        <span>User Management</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <BarChart3 className="h-4 w-4 text-cm-red" />
-                        <span>Real-time Analytics</span>
-                      </div>
-                      <div className="flex items-center gap-2 text-sm">
-                        <Bot className="h-4 w-4 text-cm-yellow" />
-                        <span>Intelligence Panel</span>
-                      </div>
-                    </div>
-                    <Button asChild variant="patriotic" className="w-full">
-                      <Link to="/admin/core" className="flex items-center gap-2">
-                        <ExternalLink className="h-4 w-4" />
-                        Launch Admin Core Dashboard
-                      </Link>
-                    </Button>
+        <div className="max-w-4xl mx-auto">
+          <Card className="bg-gradient-civic/10 border-primary/20 hover:shadow-elegant transition-all duration-300">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl flex items-center justify-center gap-3">
+                <Shield className="h-8 w-8 text-primary" />
+                Admin Dashboard Migration
+              </CardTitle>
+              <CardDescription>
+                The admin dashboard has been migrated to a new unified system with enhanced features
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Overview Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-blue-600">{stats?.users || 0}</div>
+                    <p className="text-sm text-muted-foreground">Total Users</p>
                   </CardContent>
                 </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-green-600">{stats?.vendors || 0}</div>
+                    <p className="text-sm text-muted-foreground">Active Vendors</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <div className="text-2xl font-bold text-orange-600">300+</div>
+                    <p className="text-sm text-muted-foreground">Politicians</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="p-4 text-center">
+                    <div className={`text-2xl font-bold ${aiConfig?.ai_enabled ? 'text-green-600' : 'text-red-600'}`}>
+                      {aiConfig?.ai_enabled ? 'ACTIVE' : 'OFFLINE'}
+                    </div>
+                    <p className="text-sm text-muted-foreground">Politica AI</p>
+                  </CardContent>
+                </Card>
+              </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Platform Health</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <span>Database Status</span>
-                          <Badge variant="default">Online</Badge>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span>Marketplace</span>
-                          <Badge variant="default">Active</Badge>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span>AI Scanner</span>
-                          <Badge variant={aiConfig?.ai_enabled ? "default" : "secondary"}>
-                            {aiConfig?.ai_enabled ? "Running" : "Stopped"}
-                          </Badge>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span>Security</span>
-                          <Badge variant="default">Protected</Badge>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Quick Actions</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-2 gap-3">
-                        <Button variant="outline" size="sm" onClick={() => setSelectedTab("security")}>
-                          <Shield className="h-4 w-4 mr-2" />
-                          Security Center
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => setSelectedTab("ai-control")}>
-                          <Bot className="h-4 w-4 mr-2" />
-                          AI Control
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => setSelectedTab("civic-intelligence")}>
-                          <Activity className="h-4 w-4 mr-2" />
-                          Civic Intelligence
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => setSelectedTab("civic-control")}>
-                          <Eye className="h-4 w-4 mr-2" />
-                          Portal Control
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+              {/* Migration Information */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold">New Features in Unified Admin</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="flex items-center gap-2 text-sm">
+                    <Users className="h-4 w-4 text-cm-green" />
+                    <span>Enhanced User Management</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <BarChart3 className="h-4 w-4 text-cm-red" />
+                    <span>Real-time Analytics</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Bot className="h-4 w-4 text-cm-yellow" />
+                    <span>AI Intelligence Panel</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Shield className="h-4 w-4 text-blue-600" />
+                    <span>Advanced Security Controls</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Users className="h-4 w-4 text-purple-600" />
+                    <span>Political Management Tools</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Shield className="h-4 w-4 text-gray-600" />
+                    <span>System Management Console</span>
+                  </div>
                 </div>
               </div>
-            </TabsContent>
 
-            {/* 2. SECURITY & ACCESS CONTROL */}
-            <TabsContent value="security">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Shield className="h-5 w-5" />
-                      Security Control Center
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CivicAlertSystem />
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Role Management</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <RoleControlSystem />
-                  </CardContent>
-                </Card>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button asChild variant="patriotic" className="flex-1">
+                  <Link to="/admin/core" className="flex items-center gap-2">
+                    <ExternalLink className="h-4 w-4" />
+                    Launch Unified Admin Dashboard
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" className="flex-1">
+                  <Link to="/admin/core?module=welcome" className="flex items-center gap-2">
+                    <Eye className="h-4 w-4" />
+                    View Welcome Tour
+                  </Link>
+                </Button>
               </div>
-            </TabsContent>
 
-            {/* 3. USER MANAGEMENT */}
-            <TabsContent value="users">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle className="flex items-center gap-2">
-                      <Users className="h-5 w-5" />
-                      User Management
-                    </CardTitle>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        <Search className="h-4 w-4 mr-2" />
-                        Search Users
-                      </Button>
-                      <Button variant="outline" size="sm">
-                        <Filter className="h-4 w-4 mr-2" />
-                        Filter
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                        <Card>
-                          <CardContent className="p-4 text-center">
-                            <div className="text-2xl font-bold text-blue-600">{stats?.users || 0}</div>
-                            <p className="text-sm text-muted-foreground">Total Users</p>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardContent className="p-4 text-center">
-                            <div className="text-2xl font-bold text-green-600">85%</div>
-                            <p className="text-sm text-muted-foreground">Verified</p>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardContent className="p-4 text-center">
-                            <div className="text-2xl font-bold text-orange-600">12</div>
-                            <p className="text-sm text-muted-foreground">Diaspora</p>
-                          </CardContent>
-                        </Card>
-                        <Card>
-                          <CardContent className="p-4 text-center">
-                            <div className="text-2xl font-bold text-red-600">3</div>
-                            <p className="text-sm text-muted-foreground">Suspended</p>
-                          </CardContent>
-                        </Card>
-                      </div>
-
-                      <div className="border rounded-lg">
-                        <div className="p-4 border-b">
-                          <h3 className="font-semibold">User Actions</h3>
-                        </div>
-                        <div className="p-4 space-y-3">
-                          <Button variant="outline" className="w-full justify-start">
-                            <UserCheck className="h-4 w-4 mr-2" />
-                            Approve KYC Documents
-                          </Button>
-                          <Button variant="outline" className="w-full justify-start">
-                            <Ban className="h-4 w-4 mr-2" />
-                            Suspend/Ban Users
-                          </Button>
-                          <Button variant="outline" className="w-full justify-start">
-                            <Unlock className="h-4 w-4 mr-2" />
-                            Reset User Passwords
-                          </Button>
-                          <Button variant="outline" className="w-full justify-start">
-                            <Mail className="h-4 w-4 mr-2" />
-                            Send Warnings/Notifications
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 4. POLITICIANS & PARTIES */}
-            <TabsContent value="politicians">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <UserCheck className="h-5 w-5" />
-                      Politicians & Parties Management
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                     <Tabs defaultValue="politicians" className="w-full">
-                       <TabsList className="grid w-full grid-cols-7">
-                         <TabsTrigger value="politicians">Politicians</TabsTrigger>
-                         <TabsTrigger value="ministers">Ministers</TabsTrigger>
-                         <TabsTrigger value="senators">Senators</TabsTrigger>
-                         <TabsTrigger value="mps">MPs</TabsTrigger>
-                         <TabsTrigger value="parties">Parties</TabsTrigger>
-                         <TabsTrigger value="affiliations">Party Links</TabsTrigger>
-                         <TabsTrigger value="party-sync">MINAT Sync</TabsTrigger>
-                       </TabsList>
-                      
-                      <TabsContent value="politicians" className="space-y-4">
-                        <PoliticalImportDashboard />
-                      </TabsContent>
-                      
-                      <TabsContent value="ministers" className="space-y-4">
-                        <MinisterDirectorySync />
-                      </TabsContent>
-                      
-                       <TabsContent value="senators" className="space-y-4">
-                         <SenateDirectorySync />
-                       </TabsContent>
-                       
-                       <TabsContent value="mps" className="space-y-4">
-                         <MPDirectorySync />
-                       </TabsContent>
-                       
-                       <TabsContent value="affiliations" className="space-y-4">
-                         <PartyAffiliationResolver />
-                       </TabsContent>
-                       
-                       <TabsContent value="parties" className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                          <Card>
-                            <CardContent className="p-4">
-                              <div className="flex items-center gap-2">
-                                <Building2 className="h-4 w-4 text-primary" />
-                                <span className="text-sm">Total Parties</span>
-                              </div>
-                              <div className="text-2xl font-bold mt-2">19</div>
-                              <p className="text-xs text-muted-foreground">vs 330 in MINAT</p>
-                            </CardContent>
-                          </Card>
-                          <Card>
-                            <CardContent className="p-4">
-                              <div className="flex items-center gap-2">
-                                <Shield className="h-4 w-4 text-green-600" />
-                                <span className="text-sm">Auto-imported</span>
-                              </div>
-                              <div className="text-2xl font-bold mt-2">15</div>
-                              <p className="text-xs text-muted-foreground">MINAT sourced</p>
-                            </CardContent>
-                          </Card>
-                          <Card>
-                            <CardContent className="p-4">
-                              <div className="flex items-center gap-2">
-                                <Star className="h-4 w-4 text-yellow-600" />
-                                <span className="text-sm">With Ratings</span>
-                              </div>
-                              <div className="text-2xl font-bold mt-2">0</div>
-                              <p className="text-xs text-muted-foreground">Citizen rated</p>
-                            </CardContent>
-                          </Card>
-                          <Card>
-                            <CardContent className="p-4">
-                              <div className="flex items-center gap-2">
-                                <UserCheck className="h-4 w-4 text-blue-600" />
-                                <span className="text-sm">Claimed</span>
-                              </div>
-                              <div className="text-2xl font-bold mt-2">0</div>
-                              <p className="text-xs text-muted-foreground">Verified parties</p>
-                            </CardContent>
-                          </Card>
-                        </div>
-                        
-                        <Alert>
-                          <AlertTriangle className="h-4 w-4" />
-                          <AlertDescription>
-                            <strong>Incomplete Directory:</strong> Only 19 of 330 registered political parties are currently in the database. 
-                            Use the MINAT Sync feature to import all official parties from the Ministry of Territorial Administration.
-                          </AlertDescription>
-                        </Alert>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <Button className="gap-2" onClick={() => window.open('/political-parties', '_blank')}>
-                            <Eye className="h-4 w-4" />
-                            View Public Directory
-                          </Button>
-                          <Button variant="outline" className="gap-2">
-                            <Download className="h-4 w-4" />
-                            Export Party Data
-                          </Button>
-                        </div>
-                      </TabsContent>
-                      
-                      <TabsContent value="party-sync">
-                        <PartyDirectorySync />
-                      </TabsContent>
-                    </Tabs>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* TERM VALIDATION */}
-            <TabsContent value="term-validation">
-              <div className="space-y-6">
-                <TermOfOfficeValidator />
-              </div>
-            </TabsContent>
-
-            <TabsContent value="gov-scraper">
-              <div className="space-y-6">
-                <GovWebsiteScraper />
-              </div>
-            </TabsContent>
-
-            {/* 5. MARKETPLACE MANAGEMENT */}
-            <TabsContent value="marketplace">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <ShoppingBag className="h-5 w-5" />
-                      Marketplace Management (Multivendor)
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                      <Card>
-                        <CardContent className="p-4">
-                          <div className="text-center">
-                            <div className="text-2xl font-bold text-blue-600">{stats?.vendors || 0}</div>
-                            <p className="text-sm text-muted-foreground">Total Vendors</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4">
-                          <div className="text-center">
-                            <div className="text-2xl font-bold text-green-600">150</div>
-                            <p className="text-sm text-muted-foreground">Products Listed</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4">
-                          <div className="text-center">
-                            <div className="text-2xl font-bold text-orange-600">23</div>
-                            <p className="text-sm text-muted-foreground">Active Orders</p>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </div>
-                    
-                    <div className="mt-6 space-y-4">
-                      <h3 className="text-lg font-semibold">Vendor Management Actions</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Button variant="outline" className="h-auto p-4 justify-start">
-                          <CheckCircle className="h-4 w-4 mr-2" />
-                          <div>
-                            <div className="font-medium">Approve Vendor KYC</div>
-                            <div className="text-sm text-muted-foreground">Verify business documents</div>
-                          </div>
-                        </Button>
-                        <Button variant="outline" className="h-auto p-4 justify-start">
-                          <CreditCard className="h-4 w-4 mr-2" />
-                          <div>
-                            <div className="font-medium">Generate CM-ID Cards</div>
-                            <div className="text-sm text-muted-foreground">Digital vendor verification</div>
-                          </div>
-                        </Button>
-                        <Button variant="outline" className="h-auto p-4 justify-start">
-                          <DollarSign className="h-4 w-4 mr-2" />
-                          <div>
-                            <div className="font-medium">Manage Escrow</div>
-                            <div className="text-sm text-muted-foreground">Payment releases & disputes</div>
-                          </div>
-                        </Button>
-                        <Button variant="outline" className="h-auto p-4 justify-start">
-                          <BarChart3 className="h-4 w-4 mr-2" />
-                          <div>
-                            <div className="font-medium">Sales Analytics</div>
-                            <div className="text-sm text-muted-foreground">Revenue & performance metrics</div>
-                          </div>
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 6. AI CONTROL PANEL */}
-            <TabsContent value="ai-control">
-              <div className="space-y-6">
-                <PoliticaAIDashboard />
-              </div>
-            </TabsContent>
-
-            {/* 7. CIVIC INTELLIGENCE CONTROL */}
-            <TabsContent value="civic-intelligence">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Activity className="h-5 w-5" />
-                      Civic Intelligence & Alerts
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CivicAlertBot />
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FileText className="h-5 w-5" />
-                      Daily Report Generator
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <DailyReportGenerator />
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 8. NEWS MANAGEMENT */}
-            <TabsContent value="news">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Newspaper className="h-5 w-5" />
-                      News Content Management
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-blue-600">127</div>
-                          <p className="text-sm text-muted-foreground">Published Articles</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-orange-600">5</div>
-                          <p className="text-sm text-muted-foreground">Pending Review</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-green-600">98%</div>
-                          <p className="text-sm text-muted-foreground">AI Accuracy</p>
-                        </CardContent>
-                      </Card>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <Button variant="outline" className="h-auto p-4 justify-start">
-                        <Plus className="h-4 w-4 mr-2" />
-                        <div>
-                          <div className="font-medium">Create Article</div>
-                          <div className="text-sm text-muted-foreground">Manually add news content</div>
-                        </div>
-                      </Button>
-                      <Button variant="outline" className="h-auto p-4 justify-start">
-                        <Upload className="h-4 w-4 mr-2" />
-                        <div>
-                          <div className="font-medium">Import RSS</div>
-                          <div className="text-sm text-muted-foreground">Auto-import from sources</div>
-                        </div>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 9. FINANCE MANAGEMENT */}
-            <TabsContent value="finance">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <DollarSign className="h-5 w-5" />
-                      Financial Management
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-green-600">2.4M</div>
-                          <p className="text-sm text-muted-foreground">Total Revenue (FCFA)</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-blue-600">45</div>
-                          <p className="text-sm text-muted-foreground">Claims Processed</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-orange-600">12</div>
-                          <p className="text-sm text-muted-foreground">Pending Payments</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-purple-600">180</div>
-                          <p className="text-sm text-muted-foreground">Total Donations</p>
-                        </CardContent>
-                      </Card>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <Button variant="outline" className="w-full justify-start">
-                        <CreditCard className="h-4 w-4 mr-2" />
-                        Process Pending Claims
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start">
-                        <Download className="h-4 w-4 mr-2" />
-                        Export Financial Reports
-                      </Button>
-                      <Button variant="outline" className="w-full justify-start">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        Revenue Analytics
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* National Debt Creditor Management */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Building2 className="h-5 w-5" />
-                      National Debt Creditor Management
-                    </CardTitle>
-                    <CardDescription>
-                      Manage and monitor Cameroon's debt creditors, loan purposes, and terms
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <CreditorBreakdown />
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 10. ANALYTICS */}
-            <TabsContent value="analytics">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <TrendingUp className="h-5 w-5" />
-                      Platform Analytics
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-blue-600">12.5K</div>
-                          <p className="text-sm text-muted-foreground">Monthly Visitors</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-green-600">3.2min</div>
-                          <p className="text-sm text-muted-foreground">Avg Session Time</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-orange-600">67%</div>
-                          <p className="text-sm text-muted-foreground">Return Rate</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardContent className="p-4 text-center">
-                          <div className="text-2xl font-bold text-purple-600">4.8</div>
-                          <p className="text-sm text-muted-foreground">Pages/Session</p>
-                        </CardContent>
-                      </Card>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <Button variant="outline" className="h-auto p-4 justify-start">
-                        <BarChart3 className="h-4 w-4 mr-2" />
-                        <div>
-                          <div className="font-medium">User Engagement</div>
-                          <div className="text-sm text-muted-foreground">Detailed user behavior analytics</div>
-                        </div>
-                      </Button>
-                      <Button variant="outline" className="h-auto p-4 justify-start">
-                        <TrendingUp className="h-4 w-4 mr-2" />
-                        <div>
-                          <div className="font-medium">Growth Metrics</div>
-                          <div className="text-sm text-muted-foreground">Platform growth and adoption</div>
-                        </div>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 11. SYSTEM SETTINGS */}
-            <TabsContent value="themes">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>System Configuration</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p>Theme management has been removed from the system.</p>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 12. SETTINGS & CONFIGURATION */}
-            <TabsContent value="settings">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Settings className="h-5 w-5" />
-                      System Settings
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <h3 className="text-lg font-semibold mb-4">Platform Configuration</h3>
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="font-medium">Maintenance Mode</div>
-                              <div className="text-sm text-muted-foreground">Disable public access</div>
-                            </div>
-                            <Switch />
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="font-medium">Registration</div>
-                              <div className="text-sm text-muted-foreground">Allow new user signups</div>
-                            </div>
-                            <Switch defaultChecked />
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="font-medium">Email Verification</div>
-                              <div className="text-sm text-muted-foreground">Require email confirmation</div>
-                            </div>
-                            <Switch defaultChecked />
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-lg font-semibold mb-4">Security Settings</h3>
-                        <div className="space-y-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="font-medium">Force 2FA</div>
-                              <div className="text-sm text-muted-foreground">Require two-factor authentication</div>
-                            </div>
-                            <Switch />
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <div className="font-medium">Session Timeout</div>
-                              <div className="text-sm text-muted-foreground">Auto-logout after inactivity</div>
-                            </div>
-                            <Select defaultValue="24h">
-                              <SelectTrigger className="w-32">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="1h">1 hour</SelectItem>
-                                <SelectItem value="24h">24 hours</SelectItem>
-                                <SelectItem value="7d">7 days</SelectItem>
-                              </SelectContent>
-                            </Select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    <div>
-                      <h3 className="text-lg font-semibold mb-4">Feature Toggles</h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">Marketplace</div>
-                            <div className="text-sm text-muted-foreground">Enable vendor marketplace</div>
-                          </div>
-                          <Switch defaultChecked />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">Political Claims</div>
-                            <div className="text-sm text-muted-foreground">Allow profile claiming</div>
-                          </div>
-                          <Switch defaultChecked />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">Pulse Feed</div>
-                            <div className="text-sm text-muted-foreground">Social content sharing</div>
-                          </div>
-                          <Switch defaultChecked />
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">Donations</div>
-                            <div className="text-sm text-muted-foreground">Accept platform donations</div>
-                          </div>
-                          <Switch defaultChecked />
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 13. PAN-AFRICA EXPANSION */}
-            <TabsContent value="pan-africa">
-              <div className="space-y-6">
-                <PanAfricaAdminPanel />
-              </div>
-            </TabsContent>
-
-            {/* 14. CIVIC VIEW CONTROL PANEL */}
-            <TabsContent value="civic-control">
-              <div className="space-y-6">
-                <CivicViewControlPanel />
-              </div>
-            </TabsContent>
-
-            {/* 15. LOCALIZATION SETTINGS */}
-            <TabsContent value="localization">
-              <div className="space-y-6">
-                <LocalizationSettings />
-              </div>
-            </TabsContent>
-
-            {/* 16. CACHE MANAGEMENT */}
-            <TabsContent value="cache-management">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Database className="h-5 w-5" />
-                      System Cache Status
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CacheStatusMonitor />
-                  </CardContent>
-                </Card>
-                
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <RefreshCw className="h-5 w-5" />
-                      Cache Management Dashboard
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CacheManagementDashboard />
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 17. SYSTEM HEALTH CHECK */}
-            <TabsContent value="system-health">
-              <div className="space-y-6">
-                <SystemHealthCheck />
-              </div>
-            </TabsContent>
-
-            {/* 18. ASHEN DEBUG CORE */}
-            <TabsContent value="ashen-debug">
-              <AshenDebugCore />
-            </TabsContent>
-
-            {/* 19. CODE HEALTH LOG */}
-            <TabsContent value="code-health">
-              <CodeHealthLog />
-            </TabsContent>
-
-            {/* 20. UX SIMULATION LOG */}
-            <TabsContent value="ux-simulation">
-              <UXSimulationLog />
-            </TabsContent>
-
-            {/* 21. ACTIVITY TIMELINE */}
-            <TabsContent value="activity-timeline">
-              <CamerPulseActivityTimeline />
-            </TabsContent>
-
-            {/* 22. CIVIC INTEGRITY MONITOR - ASHEN QUILL */}
-            <TabsContent value="integrity-monitor">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <Shield className="h-5 w-5" />
-                      Ashen Quill - Civic Integrity Monitor
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CivicIntegrityMonitor />
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* 23. CIVIC LEARNING HUB MANAGEMENT */}
-            <TabsContent value="civic-learning">
-              <div className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <GraduationCap className="h-5 w-5" />
-                      Civic Learning Hub Management
-                    </CardTitle>
-                    <CardDescription>
-                      Manage educational content, learning paths, and voice settings
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <Card>
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-sm">Learning Modules</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold">12</div>
-                          <p className="text-xs text-muted-foreground">Active modules</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-sm">Voice Languages</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold">3</div>
-                          <p className="text-xs text-muted-foreground">EN, FR, Pidgin</p>
-                        </CardContent>
-                      </Card>
-                      <Card>
-                        <CardHeader className="pb-2">
-                          <CardTitle className="text-sm">Daily Learners</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold">2.3k</div>
-                          <p className="text-xs text-muted-foreground">+15% this week</p>
-                        </CardContent>
-                      </Card>
-                    </div>
-
-                    <Separator />
-
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Volume2 className="h-4 w-4" />
-                        Voice Settings (Independent AI)
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label>Speech Rate</Label>
-                          <Select defaultValue="1.0">
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="0.5">0.5x (Slow)</SelectItem>
-                              <SelectItem value="0.75">0.75x</SelectItem>
-                              <SelectItem value="1.0">1.0x (Normal)</SelectItem>
-                              <SelectItem value="1.25">1.25x</SelectItem>
-                              <SelectItem value="1.5">1.5x (Fast)</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Voice Pitch</Label>
-                          <Select defaultValue="1.0">
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="0.5">Low</SelectItem>
-                              <SelectItem value="1.0">Normal</SelectItem>
-                              <SelectItem value="1.5">High</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <Alert>
-                        <Volume2 className="h-4 w-4" />
-                        <AlertDescription>
-                          Using browser's built-in Web Speech API for 100% independent operation. No external dependencies required.
-                        </AlertDescription>
-                      </Alert>
-                    </div>
-
-                    <Separator />
-
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold flex items-center gap-2">
-                        <Languages className="h-4 w-4" />
-                        Content Management
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <Button className="justify-start" variant="outline">
-                          <FileText className="h-4 w-4 mr-2" />
-                          Manage Learning Paths
-                        </Button>
-                        <Button className="justify-start" variant="outline">
-                          <Search className="h-4 w-4 mr-2" />
-                          Edit Knowledge Library
-                        </Button>
-                        <Button className="justify-start" variant="outline">
-                          <MessageCircle className="h-4 w-4 mr-2" />
-                          Configure CivicBot
-                        </Button>
-                        <Button className="justify-start" variant="outline">
-                          <GraduationCap className="h-4 w-4 mr-2" />
-                          Youth Edition Settings
-                        </Button>
-                      </div>
-                    </div>
-
-                    <Separator />
-
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold">Recent Activity</h3>
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between p-3 border rounded-lg">
-                          <div>
-                            <p className="font-medium">New learning path: "Election Process"</p>
-                            <p className="text-sm text-muted-foreground">Added 2 hours ago</p>
-                          </div>
-                          <Badge variant="secondary">Published</Badge>
-                        </div>
-                        <div className="flex items-center justify-between p-3 border rounded-lg">
-                          <div>
-                            <p className="font-medium">CivicBot knowledge updated</p>
-                            <p className="text-sm text-muted-foreground">Updated 6 hours ago</p>
-                          </div>
-                          <Badge variant="secondary">Active</Badge>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            {/* API Configuration Tab */}
-            <TabsContent value="api-config">
-              <APIConfigurationManager />
-            </TabsContent>
-          </Tabs>
+              <Alert>
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription>
+                  <strong>Important:</strong> All admin functionality has been migrated to the new unified system. 
+                  Legacy admin features are now accessible through organized modules in the new interface.
+                </AlertDescription>
+              </Alert>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </AppLayout>

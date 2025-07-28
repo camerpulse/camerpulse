@@ -57,6 +57,9 @@ import { SystemManagementModule } from './modules/SystemManagementModule';
 import { TechnicalToolsModule } from './modules/TechnicalToolsModule';
 import { AICivicToolsModule } from './modules/AICivicToolsModule';
 import { PlatformConfigModule } from './modules/PlatformConfigModule';
+import { PoliticalManagementModule } from './modules/PoliticalManagementModule';
+import { SecurityFinanceModule } from './modules/SecurityFinanceModule';
+import { LegacyFeaturesModule } from './modules/LegacyFeaturesModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 interface AdminStats {
@@ -316,7 +319,12 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
     
-    // New Integrated Modules
+    // Specialized Admin Tools (New Integrated Modules)
+    { id: 'political-management', label: 'Political Management', icon: UserCheck, color: 'text-cm-red', permission: 'politics' },
+    { id: 'security-finance', label: 'Security & Finance', icon: Shield, color: 'text-red-600', permission: 'all' },
+    { id: 'legacy-features', label: 'Legacy Features', icon: Settings, color: 'text-gray-500', permission: 'all' },
+    
+    // Technical & System Tools
     { id: 'system-management', label: 'System Management', icon: Settings, color: 'text-gray-600', permission: 'all' },
     { id: 'technical-tools', label: 'Technical Tools', icon: Monitor, color: 'text-purple-600', permission: 'all' },
     { id: 'ai-civic-tools', label: 'AI Civic Tools', icon: Brain, color: 'text-indigo-600', permission: 'all' },
@@ -386,6 +394,12 @@ export const AdminCoreV2: React.FC = () => {
         return <AICivicToolsModule {...moduleProps} />;
       case 'platform-config':
         return <PlatformConfigModule {...moduleProps} />;
+      case 'political-management':
+        return <PoliticalManagementModule {...moduleProps} />;
+      case 'security-finance':
+        return <SecurityFinanceModule {...moduleProps} />;
+      case 'legacy-features':
+        return <LegacyFeaturesModule {...moduleProps} />;
       case 'stripe-settings':
         return <StripeSettings />;
       case 'elections':
