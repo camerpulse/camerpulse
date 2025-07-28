@@ -48,6 +48,9 @@ import SecurityAuditSuite from './security/SecurityAuditSuite';
 import { PollTemplatesManager } from './PollTemplatesManager';
 import { SecurityManagementModule } from './modules/SecurityManagementModule';
 import { NewsManagementModule } from './modules/NewsManagementModule';
+import { LegalDocumentsModule } from './modules/LegalDocumentsModule';
+import { EducationalContentModule } from './modules/EducationalContentModule';
+import { TraditionalContentModule } from './modules/TraditionalContentModule';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -452,8 +455,14 @@ export const AdminCoreV2: React.FC = () => {
         return <SecurityManagementModule {...moduleProps} />;
       case 'news-management':
         return <NewsManagementModule {...moduleProps} />;
+      case 'legal-documents-module':
+        return <LegalDocumentsModule {...moduleProps} />;
+      case 'educational-content':
+        return <EducationalContentModule {...moduleProps} />;
+      case 'traditional-content':
+        return <TraditionalContentModule {...moduleProps} />;
       default:
-        return <AdminDashboard {...moduleProps} />;
+        return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
   };
 
