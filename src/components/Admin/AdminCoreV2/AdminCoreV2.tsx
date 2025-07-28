@@ -35,6 +35,9 @@ import { NewsSystemManager } from './modules/NewsSystemManager';
 import { JobsManager } from './modules/JobsManager';
 import { ArtistManager } from './modules/ArtistManager';
 import { MarketplaceManager } from './modules/MarketplaceManager';
+import { UserManagementModule } from './modules/UserManagementModule';
+import { ContentModerationModule } from './modules/ContentModerationModule';
+import { SystemSettingsModule } from './modules/SystemSettingsModule';
 import { StripeSettings } from '../StripeSettings';
 import { LegalDocumentsManager } from './modules/LegalDocumentsManager';
 import { DonationsManager } from './modules/DonationsManager';
@@ -294,6 +297,9 @@ export const AdminCoreV2: React.FC = () => {
   const adminModules = [
     // Core Platform
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3, color: 'text-cm-green', permission: 'all' },
+    { id: 'user-management', label: 'User Management', icon: Users, color: 'text-blue-600', permission: 'users' },
+    { id: 'content-moderation', label: 'Content Moderation', icon: ShieldCheck, color: 'text-orange-600', permission: 'moderation' },
+    { id: 'system-settings', label: 'System Settings', icon: Settings, color: 'text-gray-600', permission: 'all' },
     { id: 'users-roles', label: 'Users & Roles', icon: Users, color: 'text-blue-600', permission: 'users' },
     { id: 'analytics-logs', label: 'Analytics & Logs', icon: Database, color: 'text-gray-600', permission: 'analytics' },
     { id: 'moderation', label: 'Content Moderation', icon: ShieldCheck, color: 'text-orange-600', permission: 'moderation' },
@@ -432,6 +438,12 @@ export const AdminCoreV2: React.FC = () => {
         return <SecurityAuditSuite hasPermission={hasPermission} adminRole={adminRole} currentUser={user} />;
       case 'poll-templates':
         return <PollTemplatesManager hasPermission={hasPermission} logActivity={logActivity} />;
+      case 'user-management':
+        return <UserManagementModule {...moduleProps} />;
+      case 'content-moderation':
+        return <ContentModerationModule {...moduleProps} />;
+      case 'system-settings':
+        return <SystemSettingsModule {...moduleProps} />;
       case 'settings-sync':
         return <SettingsSyncManager {...moduleProps} systemModules={systemModules} onAutoSync={() => autoSyncMutation.mutate()} />;
       default:
