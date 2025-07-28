@@ -31,7 +31,11 @@ import {
   Calendar,
   Globe,
   SlidersHorizontal,
-  X
+  X,
+  Package,
+  CheckCircle,
+  Eye,
+  MessageCircle
 } from "lucide-react";
 
 const DeliveryCompaniesDirectory = () => {
@@ -363,128 +367,205 @@ const DeliveryCompaniesDirectory = () => {
               {/* Companies Grid - 4 columns desktop, 2 mobile */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredCompanies.map((company) => (
-                  <MobileCard key={company.id} className="hover:shadow-elegant transition-all duration-300 group">
-                    <MobileCardHeader className="pb-3">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1 min-w-0">
-                          <MobileCardTitle className="text-lg leading-tight mb-2 group-hover:text-primary transition-colors">
-                            {company.name}
-                          </MobileCardTitle>
-                          <div className="flex items-center gap-2 mb-2">
-                            {company.isVerified && (
-                              <Badge className="bg-primary/10 text-primary border-primary/20 text-xs">
-                                <Shield className="h-3 w-3 mr-1" />
-                                Verified
-                              </Badge>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <span>#{company.code}</span>
-                          <div className="flex items-center gap-1">
-                            <Calendar className="h-3 w-3" />
-                            <span>{company.yearsInBusiness}y</span>
-                          </div>
+                  <MobileCard key={company.id} className="group hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-card via-card to-card/95 border-border/40 overflow-hidden">
+                    {/* Card Header with Company Branding */}
+                    <div className="relative bg-gradient-to-r from-primary/5 via-primary/3 to-secondary/5 p-6 border-b border-border/30">
+                      {/* Company Logo Placeholder */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className="h-12 w-12 bg-gradient-to-br from-primary to-primary-glow rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                          <Building2 className="h-6 w-6 text-white" />
                         </div>
                         
-                        <div className="flex items-center gap-1">
-                          <div className="flex items-center">
-                            <Star className="h-4 w-4 fill-secondary text-secondary" />
-                            <span className="font-medium text-sm ml-1">{company.rating}</span>
-                          </div>
-                          <span className="text-xs text-muted-foreground">
-                            ({company.totalReviews})
-                          </span>
+                        {/* Partnership Status Badge */}
+                        <div className="flex flex-col items-end gap-2">
+                          {getPartnershipBadge(company.partnershipStatus)}
+                          {company.isVerified && (
+                            <Badge className="bg-primary/10 text-primary border-primary/20 text-xs shadow-sm">
+                              <Shield className="h-3 w-3 mr-1" />
+                              Verified
+                            </Badge>
+                          )}
                         </div>
-                      </div>
-                    </MobileCardHeader>
-                    
-                    <MobileCardContent className="space-y-4">
-                      {/* Partnership Badge */}
-                      <div className="flex justify-center">
-                        {getPartnershipBadge(company.partnershipStatus)}
                       </div>
 
-                      {/* Service Areas */}
-                      <div>
-                        <div className="flex items-center text-xs font-medium mb-2 text-muted-foreground">
-                          <MapPin className="h-3 w-3 mr-1" />
-                          Coverage
+                      {/* Company Name & Basic Info */}
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-300 line-clamp-1">
+                          {company.name}
+                        </h3>
+                        
+                        <div className="flex items-center justify-between text-sm">
+                          <div className="flex items-center gap-2 text-muted-foreground">
+                            <Building2 className="h-3 w-3" />
+                            <span>#{company.code}</span>
+                          </div>
+                          <div className="flex items-center gap-1 text-muted-foreground">
+                            <Calendar className="h-3 w-3" />
+                            <span>{company.yearsInBusiness} years</span>
+                          </div>
                         </div>
-                        <div className="flex flex-wrap gap-1">
-                          {company.regions.slice(0, 2).map((region, idx) => (
-                            <Badge key={idx} variant="outline" className="text-xs">
+
+                        {/* Rating & Reviews */}
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star
+                                key={i}
+                                className={`h-4 w-4 ${
+                                  i < Math.floor(company.rating)
+                                    ? 'fill-secondary text-secondary'
+                                    : 'text-muted-foreground/30'
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <span className="font-semibold text-foreground">{company.rating}</span>
+                          <span className="text-xs text-muted-foreground">({company.totalReviews})</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <MobileCardContent className="p-6 space-y-5">
+                      {/* Service Coverage Map */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                          <div className="h-6 w-6 bg-secondary/10 rounded-lg flex items-center justify-center">
+                            <MapPin className="h-3 w-3 text-secondary" />
+                          </div>
+                          Service Coverage
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {company.regions.slice(0, 3).map((region, idx) => (
+                            <Badge 
+                              key={idx} 
+                              variant="outline" 
+                              className="text-xs bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20 hover:bg-primary/10 transition-colors"
+                            >
+                              <MapPin className="h-2 w-2 mr-1" />
                               {region}
                             </Badge>
                           ))}
-                          {company.regions.length > 2 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{company.regions.length - 2}
+                          {company.regions.length > 3 && (
+                            <Badge 
+                              variant="outline" 
+                              className="text-xs bg-muted/50 hover:bg-muted transition-colors"
+                            >
+                              +{company.regions.length - 3} more
                             </Badge>
                           )}
                         </div>
                       </div>
                       
-                      {/* Services */}
-                      <div>
-                        <div className="flex items-center text-xs font-medium mb-2 text-muted-foreground">
-                          <Truck className="h-3 w-3 mr-1" />
-                          Services
+                      {/* Key Services */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                          <div className="h-6 w-6 bg-accent/10 rounded-lg flex items-center justify-center">
+                            <Package className="h-3 w-3 text-accent" />
+                          </div>
+                          Key Services
                         </div>
-                        <div className="flex flex-wrap gap-1">
-                          {company.services.slice(0, 1).map((service, idx) => (
-                            <Badge key={idx} className="bg-secondary/10 text-secondary border-secondary/20 text-xs">
-                              {service}
+                        <div className="space-y-2">
+                          {company.services.slice(0, 2).map((service, idx) => (
+                            <div key={idx} className="flex items-center gap-2 text-sm">
+                              <CheckCircle className="h-3 w-3 text-primary flex-shrink-0" />
+                              <span className="text-muted-foreground">{service}</span>
+                            </div>
+                          ))}
+                          {company.services.length > 2 && (
+                            <div className="flex items-center gap-2 text-sm">
+                              <Package className="h-3 w-3 text-muted-foreground/50" />
+                              <span className="text-muted-foreground/70">+{company.services.length - 2} more services</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Fleet Information */}
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                          <div className="h-6 w-6 bg-primary/10 rounded-lg flex items-center justify-center">
+                            <Truck className="h-3 w-3 text-primary" />
+                          </div>
+                          Fleet Types
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {company.vehicleTypes.slice(0, 2).map((vehicle, idx) => (
+                            <Badge 
+                              key={idx} 
+                              className="bg-secondary/10 text-secondary border-secondary/20 text-xs hover:bg-secondary/20 transition-colors"
+                            >
+                              <Truck className="h-2 w-2 mr-1" />
+                              {vehicle}
                             </Badge>
                           ))}
-                          {company.services.length > 1 && (
-                            <Badge className="bg-secondary/10 text-secondary border-secondary/20 text-xs">
-                              +{company.services.length - 1}
+                          {company.vehicleTypes.length > 2 && (
+                            <Badge variant="outline" className="text-xs">
+                              +{company.vehicleTypes.length - 2}
                             </Badge>
                           )}
                         </div>
                       </div>
-                      
-                      {/* Contact Preview */}
-                      <div className="text-xs text-muted-foreground">
-                        <div className="flex items-center mb-1">
-                          <Phone className="h-3 w-3 mr-1" />
-                          <span className="truncate">{company.contactPhone}</span>
+
+                      {/* Quick Contact */}
+                      <div className="bg-gradient-to-r from-muted/30 to-muted/10 rounded-xl p-4 border border-border/30">
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <Phone className="h-3 w-3" />
+                            <span className="font-medium">{company.contactPhone}</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <Mail className="h-3 w-3" />
+                            <span className="font-medium truncate">{company.contactEmail}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Performance Indicators */}
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="text-center p-3 bg-gradient-to-br from-primary/5 to-primary/10 rounded-lg border border-primary/10">
+                          <div className="text-lg font-bold text-primary">98%</div>
+                          <div className="text-xs text-muted-foreground">On-Time</div>
+                        </div>
+                        <div className="text-center p-3 bg-gradient-to-br from-secondary/5 to-secondary/10 rounded-lg border border-secondary/10">
+                          <div className="text-lg font-bold text-secondary">24/7</div>
+                          <div className="text-xs text-muted-foreground">Available</div>
                         </div>
                       </div>
                       
-                      {/* Actions */}
-                      <div className="space-y-2 pt-2">
+                      {/* Action Buttons */}
+                      <div className="grid grid-cols-2 gap-3 pt-2">
                         {isMobile ? (
                           <>
                             <Link to={`/logistics/company/${company.id}`}>
-                              <MobileButton variant="outline" className="w-full text-xs">
+                              <MobileButton variant="outline" className="w-full text-xs group-hover:border-primary group-hover:text-primary transition-colors">
+                                <Eye className="h-3 w-3 mr-1" />
                                 View Profile
-                                <ChevronRight className="h-3 w-3 ml-1" />
                               </MobileButton>
                             </Link>
-                            <MobileButton className="w-full bg-primary hover:bg-primary/90 text-xs">
-                              Request Quote
+                            <MobileButton className="w-full bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 text-xs shadow-md">
+                              <MessageCircle className="h-3 w-3 mr-1" />
+                              Get Quote
                             </MobileButton>
                           </>
                         ) : (
                           <>
-                            <Button variant="outline" size="sm" className="w-full text-xs" asChild>
+                            <Button variant="outline" size="sm" className="w-full text-xs group-hover:border-primary group-hover:text-primary transition-colors" asChild>
                               <Link to={`/logistics/company/${company.id}`}>
+                                <Eye className="h-3 w-3 mr-1" />
                                 View Profile
-                                <ChevronRight className="h-3 w-3 ml-1" />
                               </Link>
                             </Button>
-                            <Button size="sm" className="w-full bg-primary hover:bg-primary/90 text-xs">
-                              Request Quote
+                            <Button size="sm" className="w-full bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 text-xs shadow-md">
+                              <MessageCircle className="h-3 w-3 mr-1" />
+                              Get Quote
                             </Button>
                           </>
                         )}
                       </div>
                     </MobileCardContent>
+
+                    {/* Hover Overlay Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-lg"></div>
                   </MobileCard>
                 ))}
               </div>
