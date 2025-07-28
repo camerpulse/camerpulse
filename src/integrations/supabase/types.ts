@@ -838,6 +838,57 @@ export type Database = {
         }
         Relationships: []
       }
+      api_keys: {
+        Row: {
+          api_key: string
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          key_name: string
+          key_prefix: string
+          last_used_at: string | null
+          permissions: string[]
+          rate_limit_config: Json | null
+          scopes: string[] | null
+          updated_at: string
+          usage_count: number | null
+          user_id: string
+        }
+        Insert: {
+          api_key: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          key_name: string
+          key_prefix: string
+          last_used_at?: string | null
+          permissions?: string[]
+          rate_limit_config?: Json | null
+          scopes?: string[] | null
+          updated_at?: string
+          usage_count?: number | null
+          user_id: string
+        }
+        Update: {
+          api_key?: string
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          key_name?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          permissions?: string[]
+          rate_limit_config?: Json | null
+          scopes?: string[] | null
+          updated_at?: string
+          usage_count?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       api_performance_logs: {
         Row: {
           created_at: string
@@ -12379,6 +12430,60 @@ export type Database = {
           },
         ]
       }
+      custom_connectors: {
+        Row: {
+          code_template: string | null
+          configuration_template: Json
+          connector_name: string
+          connector_type: string
+          created_at: string
+          description: string | null
+          documentation: string | null
+          id: string
+          is_public: boolean
+          is_verified: boolean
+          tags: string[] | null
+          test_config: Json | null
+          updated_at: string
+          user_id: string
+          version: string | null
+        }
+        Insert: {
+          code_template?: string | null
+          configuration_template?: Json
+          connector_name: string
+          connector_type: string
+          created_at?: string
+          description?: string | null
+          documentation?: string | null
+          id?: string
+          is_public?: boolean
+          is_verified?: boolean
+          tags?: string[] | null
+          test_config?: Json | null
+          updated_at?: string
+          user_id: string
+          version?: string | null
+        }
+        Update: {
+          code_template?: string | null
+          configuration_template?: Json
+          connector_name?: string
+          connector_type?: string
+          created_at?: string
+          description?: string | null
+          documentation?: string | null
+          id?: string
+          is_public?: boolean
+          is_verified?: boolean
+          tags?: string[] | null
+          test_config?: Json | null
+          updated_at?: string
+          user_id?: string
+          version?: string | null
+        }
+        Relationships: []
+      }
       custom_emojis: {
         Row: {
           created_at: string
@@ -19726,6 +19831,47 @@ export type Database = {
         }
         Relationships: []
       }
+      integration_analytics: {
+        Row: {
+          created_at: string
+          id: string
+          integration_id: string | null
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          integration_id?: string | null
+          metadata?: Json | null
+          metric_type: string
+          metric_value?: number
+          period_end: string
+          period_start: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          integration_id?: string | null
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          period_end?: string
+          period_start?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_analytics_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "user_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integration_auth_secrets: {
         Row: {
           created_at: string
@@ -19807,6 +19953,145 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      integration_logs_v2: {
+        Row: {
+          api_key_id: string | null
+          created_at: string
+          error_message: string | null
+          event_type: string
+          id: string
+          integration_id: string | null
+          ip_address: unknown | null
+          processing_time_ms: number | null
+          request_headers: Json | null
+          request_method: string | null
+          request_payload: Json | null
+          request_url: string | null
+          response_body: Json | null
+          response_status: number | null
+          user_agent: string | null
+          webhook_endpoint_id: string | null
+        }
+        Insert: {
+          api_key_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          event_type: string
+          id?: string
+          integration_id?: string | null
+          ip_address?: unknown | null
+          processing_time_ms?: number | null
+          request_headers?: Json | null
+          request_method?: string | null
+          request_payload?: Json | null
+          request_url?: string | null
+          response_body?: Json | null
+          response_status?: number | null
+          user_agent?: string | null
+          webhook_endpoint_id?: string | null
+        }
+        Update: {
+          api_key_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          event_type?: string
+          id?: string
+          integration_id?: string | null
+          ip_address?: unknown | null
+          processing_time_ms?: number | null
+          request_headers?: Json | null
+          request_method?: string | null
+          request_payload?: Json | null
+          request_url?: string | null
+          response_body?: Json | null
+          response_status?: number | null
+          user_agent?: string | null
+          webhook_endpoint_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integration_logs_v2_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "integration_logs_v2_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "user_integrations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "integration_logs_v2_webhook_endpoint_id_fkey"
+            columns: ["webhook_endpoint_id"]
+            isOneToOne: false
+            referencedRelation: "webhook_endpoints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      integration_services: {
+        Row: {
+          auth_config: Json
+          auth_type: string
+          configuration_schema: Json
+          created_at: string
+          created_by: string | null
+          description: string | null
+          display_name: string
+          icon_url: string | null
+          id: string
+          is_active: boolean
+          is_system: boolean
+          rate_limits: Json | null
+          service_name: string
+          service_type: string
+          supported_events: string[] | null
+          updated_at: string
+          webhook_config: Json | null
+        }
+        Insert: {
+          auth_config?: Json
+          auth_type: string
+          configuration_schema?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_name: string
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_system?: boolean
+          rate_limits?: Json | null
+          service_name: string
+          service_type: string
+          supported_events?: string[] | null
+          updated_at?: string
+          webhook_config?: Json | null
+        }
+        Update: {
+          auth_config?: Json
+          auth_type?: string
+          configuration_schema?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          display_name?: string
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_system?: boolean
+          rate_limits?: Json | null
+          service_name?: string
+          service_type?: string
+          supported_events?: string[] | null
+          updated_at?: string
+          webhook_config?: Json | null
+        }
+        Relationships: []
       }
       integration_usage_stats: {
         Row: {
@@ -38704,6 +38989,71 @@ export type Database = {
         }
         Relationships: []
       }
+      user_integrations: {
+        Row: {
+          configuration: Json
+          connection_name: string
+          connection_status: string
+          created_at: string
+          credentials: Json | null
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          last_error: string | null
+          last_test_at: string | null
+          retry_count: number | null
+          service_id: string
+          updated_at: string
+          user_id: string
+          webhook_secret: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          configuration?: Json
+          connection_name: string
+          connection_status?: string
+          created_at?: string
+          credentials?: Json | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          last_error?: string | null
+          last_test_at?: string | null
+          retry_count?: number | null
+          service_id: string
+          updated_at?: string
+          user_id: string
+          webhook_secret?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          configuration?: Json
+          connection_name?: string
+          connection_status?: string
+          created_at?: string
+          credentials?: Json | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          last_error?: string | null
+          last_test_at?: string | null
+          retry_count?: number | null
+          service_id?: string
+          updated_at?: string
+          user_id?: string
+          webhook_secret?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_integrations_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "integration_services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_notification_preferences: {
         Row: {
           channel: Database["public"]["Enums"]["notification_channel"]
@@ -42287,6 +42637,57 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_endpoints: {
+        Row: {
+          allowed_origins: string[] | null
+          created_at: string
+          endpoint_name: string
+          endpoint_url: string
+          event_filters: Json | null
+          id: string
+          is_active: boolean
+          last_triggered_at: string | null
+          rate_limit_config: Json | null
+          total_triggers: number | null
+          transformation_rules: Json | null
+          updated_at: string
+          user_id: string
+          webhook_secret: string
+        }
+        Insert: {
+          allowed_origins?: string[] | null
+          created_at?: string
+          endpoint_name: string
+          endpoint_url: string
+          event_filters?: Json | null
+          id?: string
+          is_active?: boolean
+          last_triggered_at?: string | null
+          rate_limit_config?: Json | null
+          total_triggers?: number | null
+          transformation_rules?: Json | null
+          updated_at?: string
+          user_id: string
+          webhook_secret: string
+        }
+        Update: {
+          allowed_origins?: string[] | null
+          created_at?: string
+          endpoint_name?: string
+          endpoint_url?: string
+          event_filters?: Json | null
+          id?: string
+          is_active?: boolean
+          last_triggered_at?: string | null
+          rate_limit_config?: Json | null
+          total_triggers?: number | null
+          transformation_rules?: Json | null
+          updated_at?: string
+          user_id?: string
+          webhook_secret?: string
+        }
+        Relationships: []
+      }
       whatsapp_message_logs: {
         Row: {
           delivered_at: string | null
@@ -43141,6 +43542,10 @@ export type Database = {
         }
         Returns: string
       }
+      generate_api_key: {
+        Args: { key_name: string; user_uuid: string }
+        Returns: string
+      }
       generate_artist_id: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -43679,6 +44084,10 @@ export type Database = {
       }
       sync_platform_data: {
         Args: { p_connection_id: string }
+        Returns: Json
+      }
+      test_integration_connection: {
+        Args: { integration_uuid: string }
         Returns: Json
       }
       toggle_poll_bookmark: {
