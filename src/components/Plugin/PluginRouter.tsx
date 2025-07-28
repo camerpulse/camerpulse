@@ -14,6 +14,7 @@ import { ShipPackagePage } from '@/pages/logistics/ShipPackagePage';
 import { ServicesPage } from '@/pages/logistics/ServicesPage';
 import { ExpressDeliveryPage } from '@/pages/logistics/ExpressDeliveryPage';
 import { BusinessSolutionsPage } from '@/pages/logistics/BusinessSolutionsPage';
+import { CompanyProfilePage } from '@/pages/logistics/CompanyProfilePage';
 
 // Logistics Authenticated Layout
 function LogisticsAuthenticatedLayout({ children }: { children: React.ReactNode }) {
@@ -56,6 +57,7 @@ export function PluginRouter({ user }: { user: any }) {
           <Route path="/tracking" element={<TrackingPage />} />
           <Route path="/tracking/:trackingNumber" element={<TrackingPage />} />
           <Route path="/companies" element={<DeliveryCompaniesDirectory />} />
+          <Route path="/company/:id" element={<CompanyProfilePage />} />
           <Route path="/join-company" element={<DeliveryCompanyRegister />} />
           
           {/* Authenticated Routes */}
