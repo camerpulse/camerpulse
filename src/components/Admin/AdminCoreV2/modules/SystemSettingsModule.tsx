@@ -27,45 +27,39 @@ export const SystemSettingsModule: React.FC<SystemSettingsModuleProps> = ({
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Mock system settings for now
+  // Fetch system settings from database
   const { data: settings, isLoading } = useQuery({
     queryKey: ['system-settings'],
     queryFn: async () => {
-      // Return mock settings with all required properties
-      return {
-        platform_name: { data: 'CamerPulse' },
-        platform_version: { data: '1.0.0' },
-        platform_description: { data: 'Civic engagement platform for Cameroon' },
-        maintenance_mode: { data: false },
-        default_language: { data: 'French' },
-        default_currency: { data: 'FCFA' },
-        require_email_verification: { data: true },
-        enable_2fa: { data: false },
-        session_timeout: { data: 60 },
-        auto_moderation_enabled: { data: true },
-        content_filtering_enabled: { data: true },
-        email_notifications_enabled: { data: true },
-        push_notifications_enabled: { data: true },
-        sms_notifications_enabled: { data: false },
-        auto_backup_enabled: { data: true },
-        backup_frequency_hours: { data: 24 },
-        data_retention_days: { data: 365 },
-        primary_color: { data: '#10b981' },
-        secondary_color: { data: '#3b82f6' },
-        dark_mode_default: { data: false },
-        api_rate_limit: { data: 1000 },
-        api_logging_enabled: { data: true },
-        api_analytics_enabled: { data: true }
-      };
+      const { data, error } = await supabase
+        .from('system_settings')
+        .select('key, value')
+        .order('key');
+      
+      if (error) throw error;
+      
+      // Transform array to object for easier access
+      const settingsObj: Record<string, any> = {};
+      data?.forEach(setting => {
+        settingsObj[setting.key] = setting.value;
+      });
+      
+      return settingsObj;
     }
   });
 
-  // Mock update setting mutation
+  // Update setting mutation
   const updateSetting = useMutation({
     mutationFn: async ({ key, value }: { key: string; value: any }) => {
-      // Mock implementation - will be replaced with actual database operations
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return { key, value };
+      const { error } = await supabase
+        .from('system_settings')
+        .upsert({ 
+          key, 
+          value: typeof value === 'object' ? value : { data: value },
+          updated_at: new Date().toISOString()
+        });
+      
+      if (error) throw error;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['system-settings'] });

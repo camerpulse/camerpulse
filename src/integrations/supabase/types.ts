@@ -12052,6 +12052,54 @@ export type Database = {
           },
         ]
       }
+      content_reports: {
+        Row: {
+          content_data: Json | null
+          content_id: string
+          content_type: string
+          created_at: string
+          id: string
+          moderated_at: string | null
+          moderated_by: string | null
+          moderator_notes: string | null
+          reason: string
+          reported_user_id: string | null
+          reporter_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          content_data?: Json | null
+          content_id: string
+          content_type: string
+          created_at?: string
+          id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderator_notes?: string | null
+          reason: string
+          reported_user_id?: string | null
+          reporter_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          content_data?: Json | null
+          content_id?: string
+          content_type?: string
+          created_at?: string
+          id?: string
+          moderated_at?: string | null
+          moderated_by?: string | null
+          moderator_notes?: string | null
+          reason?: string
+          reported_user_id?: string | null
+          reporter_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       content_tags: {
         Row: {
           created_at: string
@@ -39369,6 +39417,39 @@ export type Database = {
           interval_ms?: number | null
           refresh_time?: string
           success?: boolean
+        }
+        Relationships: []
+      }
+      system_settings: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean
+          key: string
+          updated_at: string
+          value: Json
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          key: string
+          updated_at?: string
+          value?: Json
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean
+          key?: string
+          updated_at?: string
+          value?: Json
         }
         Relationships: []
       }

@@ -28,49 +28,61 @@ export const ContentModerationModule: React.FC<ContentModerationModuleProps> = (
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Mock reported content for now
+  // Fetch content reports from database
   const { data: reportedContent, isLoading } = useQuery({
     queryKey: ['reported-content', statusFilter, contentTypeFilter, searchTerm],
     queryFn: async () => {
-      // Return mock data with proper structure
-      return [
-        {
-          id: '1',
-          content_type: 'post',
-          status: 'pending',
-          reason: 'Inappropriate content reported',
-          created_at: new Date().toISOString(),
-          reported_by_profile: { display_name: 'User A' },
-          content_data: { text: 'Sample content that was reported for moderation review.' }
-        },
-        {
-          id: '2', 
-          content_type: 'comment',
-          status: 'pending',
-          reason: 'Spam content',
-          created_at: new Date(Date.now() - 86400000).toISOString(),
-          reported_by_profile: { display_name: 'User B' },
-          content_data: { text: 'Another sample content for review.' }
-        }
-      ];
-    }
+      let query = supabase
+        .from('content_reports')
+        .select(`
+          *,
+          reported_by_profile:user_profiles!reporter_id(display_name)
+        `)
+        .order('created_at', { ascending: false });
+
+      if (statusFilter !== 'all') {
+        query = query.eq('status', statusFilter);
+      }
+
+      if (contentTypeFilter !== 'all') {
+        query = query.eq('content_type', contentTypeFilter);
+      }
+
+      if (searchTerm) {
+        query = query.or(`reason.ilike.%${searchTerm}%,content_type.ilike.%${searchTerm}%`);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return data;
+    },
+    enabled: hasPermission('moderation')
   });
 
   // Fetch moderation statistics
   const { data: moderationStats } = useQuery({
     queryKey: ['moderation-stats'],
     queryFn: async () => {
-      // Mock data for now - replace with actual queries
+      const [pending, resolved, total, autoMod] = await Promise.all([
+        supabase.from('content_reports').select('id', { count: 'exact' }).eq('status', 'pending'),
+        supabase.from('content_reports').select('id', { count: 'exact' })
+          .in('status', ['approved', 'removed'])
+          .gte('moderated_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
+        supabase.from('content_reports').select('id', { count: 'exact' }),
+        supabase.from('content_reports').select('id', { count: 'exact' })
+          .eq('status', 'auto_moderated')
+      ]);
+
       return {
-        pendingReports: 15,
-        resolvedToday: 8,
-        totalReports: 127,
-        autoModerated: 45
+        pendingReports: pending.count || 0,
+        resolvedToday: resolved.count || 0,
+        totalReports: total.count || 0,
+        autoModerated: autoMod.count || 0
       };
     }
   });
 
-  // Mock moderation action mutation
+  // Content moderation action mutation
   const moderateContent = useMutation({
     mutationFn: async ({ 
       reportId, 
@@ -81,9 +93,17 @@ export const ContentModerationModule: React.FC<ContentModerationModuleProps> = (
       action: 'approve' | 'remove' | 'flag'; 
       moderatorNotes?: string; 
     }) => {
-      // Mock implementation - will be replaced with actual database operations
-      await new Promise(resolve => setTimeout(resolve, 500));
-      return { reportId, action, moderatorNotes };
+      const { error } = await supabase
+        .from('content_reports')
+        .update({
+          status: action === 'approve' ? 'approved' : action === 'remove' ? 'removed' : 'flagged',
+          moderator_notes: moderatorNotes,
+          moderated_at: new Date().toISOString(),
+          moderated_by: (await supabase.auth.getUser()).data.user?.id
+        })
+        .eq('id', reportId);
+      
+      if (error) throw error;
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['reported-content'] });

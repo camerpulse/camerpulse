@@ -29,54 +29,55 @@ export const UserManagementModule: React.FC<UserManagementModuleProps> = ({
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Mock user profiles for now
+  // Fetch user profiles from database
   const { data: userProfiles, isLoading } = useQuery({
     queryKey: ['user-profiles', searchTerm, statusFilter, roleFilter],
     queryFn: async () => {
-      // Return mock user data
-      return [
-        {
-          user_id: '1',
-          display_name: 'John Doe',
-          email: 'john@example.com',
-          status: 'active',
-          profile_picture_url: null,
-          created_at: new Date().toISOString(),
-          user_roles: [{ role: 'admin' }]
-        },
-        {
-          user_id: '2',
-          display_name: 'Jane Smith',
-          email: 'jane@example.com',
-          status: 'active',
-          profile_picture_url: null,
-          created_at: new Date(Date.now() - 86400000).toISOString(),
-          user_roles: [{ role: 'user' }]
-        }
-      ];
-    }
+      let query = supabase
+        .from('user_profiles')
+        .select(`
+          *,
+          user_roles(role)
+        `);
+
+      if (searchTerm) {
+        query = query.or(`display_name.ilike.%${searchTerm}%,email.ilike.%${searchTerm}%`);
+      }
+
+      const { data, error } = await query;
+      if (error) throw error;
+      return data;
+    },
+    enabled: hasPermission('users')
   });
 
-  // Mock user statistics
+  // Fetch user statistics from database
   const { data: userStats } = useQuery({
     queryKey: ['user-stats'],
     queryFn: async () => {
-      // Return mock statistics
+      const [totalUsers, activeUsers, newUsers, adminUsers] = await Promise.all([
+        supabase.from('user_profiles').select('id', { count: 'exact' }),
+        supabase.from('user_profiles').select('id', { count: 'exact' }).gte('last_seen_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+        supabase.from('user_profiles').select('id', { count: 'exact' }).gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
+        supabase.from('user_roles').select('user_id', { count: 'exact' }).eq('role', 'admin')
+      ]);
+
       return {
-        total: 156,
-        active: 142,
-        newThisWeek: 8,
-        admins: 3
+        total: totalUsers.count || 0,
+        active: activeUsers.count || 0,
+        newThisWeek: newUsers.count || 0,
+        admins: adminUsers.count || 0
       };
     }
   });
 
-  // Mock update user role mutation
+  // Update user role mutation
   const updateUserRole = useMutation({
     mutationFn: async ({ userId, role }: { userId: string; role: string }) => {
-      // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return { userId, role };
+      const { error } = await supabase
+        .from('user_roles')
+        .upsert({ user_id: userId, role: role as any });
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-profiles'] });
@@ -87,12 +88,14 @@ export const UserManagementModule: React.FC<UserManagementModuleProps> = ({
     }
   });
 
-  // Mock suspend user mutation
+  // Suspend user mutation
   const suspendUser = useMutation({
     mutationFn: async (userId: string) => {
-      // Mock implementation
-      await new Promise(resolve => setTimeout(resolve, 300));
-      return userId;
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({ status: 'suspended' })
+        .eq('user_id', userId);
+      if (error) throw error;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['user-profiles'] });
