@@ -1,29 +1,15 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { UserProfile } from '@/contexts/AuthContext';
 
-export interface UserProfile {
-  id: string;
-  user_id: string;
-  display_name?: string;
-  company_name?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  preferences?: Record<string, any>;
-  created_at: string;
-  updated_at: string;
-}
-
-export function useProfile() {
-  const { user } = useAuth();
+export function useProfile(userId?: string) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchProfile = async () => {
-    if (!user) {
+    if (!userId) {
       setProfile(null);
       setLoading(false);
       return;
@@ -34,7 +20,7 @@ export function useProfile() {
       const { data, error } = await supabase
         .from('user_profiles')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', userId)
         .single();
 
       if (error && error.code !== 'PGRST116') {
@@ -52,13 +38,13 @@ export function useProfile() {
   };
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
-    if (!user || !profile) return;
+    if (!userId || !profile) return;
 
     try {
       const { data, error } = await supabase
         .from('user_profiles')
         .update(updates)
-        .eq('user_id', user.id)
+        .eq('user_id', userId)
         .select()
         .single();
 
@@ -74,14 +60,13 @@ export function useProfile() {
   };
 
   const createProfile = async (profileData: Partial<UserProfile>) => {
-    if (!user) return;
+    if (!userId) return;
 
     try {
       const { data, error } = await supabase
         .from('user_profiles')
         .insert([{ 
-          user_id: user.id, 
-          email: user.email,
+          user_id: userId, 
           ...profileData 
         }])
         .select()
@@ -100,7 +85,7 @@ export function useProfile() {
 
   useEffect(() => {
     fetchProfile();
-  }, [user]);
+  }, [userId]);
 
   return {
     profile,
