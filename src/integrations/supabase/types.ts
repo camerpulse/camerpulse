@@ -35783,6 +35783,7 @@ export type Database = {
           insurance_amount: number | null
           is_fragile: boolean | null
           is_hazardous: boolean | null
+          order_id: string | null
           origin_address: string
           package_details: Json
           payment_status: string
@@ -35811,6 +35812,7 @@ export type Database = {
           insurance_amount?: number | null
           is_fragile?: boolean | null
           is_hazardous?: boolean | null
+          order_id?: string | null
           origin_address: string
           package_details?: Json
           payment_status?: string
@@ -35839,6 +35841,7 @@ export type Database = {
           insurance_amount?: number | null
           is_fragile?: boolean | null
           is_hazardous?: boolean | null
+          order_id?: string | null
           origin_address?: string
           package_details?: Json
           payment_status?: string
@@ -35856,6 +35859,13 @@ export type Database = {
           weight_kg?: number | null
         }
         Relationships: [
+          {
+            foreignKeyName: "shipments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_orders"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "shipments_shipping_company_id_fkey"
             columns: ["shipping_company_id"]
