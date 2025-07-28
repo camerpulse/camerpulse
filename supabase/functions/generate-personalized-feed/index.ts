@@ -13,105 +13,39 @@ serve(async (req) => {
   }
 
   try {
-    const { limit = 20, offset = 0, session_id } = await req.json()
-
-    // Initialize Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    const supabase = createClient(supabaseUrl, supabaseKey)
-
-    // Get authentication header
-    const authHeader = req.headers.get('Authorization')
-    if (authHeader) {
-      supabase.auth.setSession({
-        access_token: authHeader.replace('Bearer ', ''),
-        refresh_token: ''
-      })
-    }
-
-    // Generate personalized feed content
-    const feedItems = []
-
-    // Fetch recent political updates
-    const { data: politicalUpdates } = await supabase
-      .from('political_updates')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(Math.floor(limit * 0.3))
-
-    if (politicalUpdates) {
-      feedItems.push(...politicalUpdates.map(item => ({
-        ...item,
-        content_type: 'political_update',
-        priority: 0.9
-      })))
-    }
-
-    // Fetch recent pulse posts
-    const { data: pulsePosts } = await supabase
-      .from('profile_posts')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(Math.floor(limit * 0.4))
-
-    if (pulsePosts) {
-      feedItems.push(...pulsePosts.map(item => ({
-        ...item,
-        content_type: 'pulse',
-        priority: 0.7
-      })))
-    }
-
-    // Fetch recent jobs
-    const { data: jobs } = await supabase
-      .from('jobs')
-      .select('*')
-      .eq('status', 'open')
-      .order('created_at', { ascending: false })
-      .limit(Math.floor(limit * 0.2))
-
-    if (jobs) {
-      feedItems.push(...jobs.map(item => ({
-        ...item,
-        content_type: 'job',
-        priority: 0.6
-      })))
-    }
-
-    // Fetch artist content if available
-    const { data: artistPosts } = await supabase
-      .from('artist_notifications')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(Math.floor(limit * 0.1))
-
-    if (artistPosts) {
-      feedItems.push(...artistPosts.map(item => ({
-        ...item,
-        content_type: 'artist_content',
-        priority: 0.5
-      })))
-    }
-
-    // Sort by priority and creation date
-    const sortedFeed = feedItems
-      .sort((a, b) => {
-        // First sort by priority
-        if (b.priority !== a.priority) {
-          return b.priority - a.priority
-        }
-        // Then by creation date
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      })
-      .slice(offset, offset + limit)
+    // Generate a basic feed - return sample content for now
+    const feedItems = [
+      {
+        id: '1',
+        type: 'civic_update',
+        title: 'Welcome to CamerPulse',
+        content: 'Your civic engagement platform is ready',
+        created_at: new Date().toISOString(),
+        score: 1.0
+      },
+      {
+        id: '2', 
+        type: 'marketplace',
+        title: 'Marketplace Active',
+        content: 'Browse local businesses and services',
+        created_at: new Date().toISOString(),
+        score: 0.8
+      },
+      {
+        id: '3',
+        type: 'logistics',
+        title: 'Logistics Directory',
+        content: 'Find trusted shipping companies like Cemac Track',
+        created_at: new Date().toISOString(),
+        score: 0.7
+      }
+    ];
 
     return new Response(
       JSON.stringify({
         success: true,
-        data: sortedFeed,
-        total: feedItems.length,
-        limit,
-        offset
+        data: feedItems,
+        total: feedItems.length
       }),
       { 
         headers: { 
