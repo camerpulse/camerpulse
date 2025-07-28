@@ -21,18 +21,16 @@ import {
   BarChart3
 } from 'lucide-react';
 import { LabelCanvas } from './LabelCanvas';
-import { FieldPropertiesPanel } from './FieldPropertiesPanel';
+import { FieldEditor } from './FieldEditor';
 import { TemplateLibrary } from './TemplateLibrary';
 import { PrintPreviewDialog } from './PrintPreviewDialog';
 import { 
-  TemplateField, 
   LabelSize, 
   LABEL_SIZES, 
   FONT_OPTIONS, 
-  COLOR_SCHEMES,
-  DEFAULT_TEMPLATE_FIELDS,
-  validateTemplate
+  COLOR_SCHEMES
 } from '@/utils/labelGeneration';
+import { LabelField } from '@/types/labelTypes';
 import { useLabelTemplates } from '@/hooks/useLabelTemplates';
 
 interface LabelDesignerProps {
@@ -57,12 +55,12 @@ export const LabelDesigner: React.FC<LabelDesignerProps> = ({
   const [orientation, setOrientation] = useState<'portrait' | 'landscape'>(
     initialTemplate?.orientation || 'portrait'
   );
-  const [fields, setFields] = useState<TemplateField[]>(
-    initialTemplate?.fields_config || DEFAULT_TEMPLATE_FIELDS
+  const [fields, setFields] = useState<LabelField[]>(
+    initialTemplate?.fields_config || []
   );
   
   // UI state
-  const [selectedField, setSelectedField] = useState<TemplateField | null>(null);
+  const [selectedField, setSelectedField] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -79,52 +77,48 @@ export const LabelDesigner: React.FC<LabelDesignerProps> = ({
     };
   };
 
-  const handleAddField = (type: TemplateField['type']) => {
-    const newField: TemplateField = {
+  const handleAddField = (type: 'text' | 'barcode' | 'qr_code' | 'image') => {
+    const newField: LabelField = {
       id: `field_${Date.now()}`,
-      type,
+      field_type: type,
       label: `New ${type}`,
-      enabled: true,
-      required: false,
       position: { x: 50, y: 50 },
       size: { width: 100, height: 30 },
+      is_required: false,
+      validation_rules: {},
       style: {
         fontSize: 12,
-        fontFamily: 'Roboto',
         color: '#1f2937',
       },
     };
 
     if (type === 'barcode') {
-      newField.data = { format: 'CODE128', displayValue: true };
       newField.size = { width: 200, height: 50 };
     } else if (type === 'qr_code') {
-      newField.data = { errorCorrectionLevel: 'M' };
       newField.size = { width: 100, height: 100 };
     }
 
     setFields(prev => [...prev, newField]);
-    setSelectedField(newField);
+    setSelectedField(newField.id);
   };
 
-  const handleUpdateField = (updatedField: TemplateField) => {
+  const handleUpdateField = (fieldId: string, updates: Partial<LabelField>) => {
     setFields(prev => 
       prev.map(field => 
-        field.id === updatedField.id ? updatedField : field
+        field.id === fieldId ? { ...field, ...updates } : field
       )
     );
-    setSelectedField(updatedField);
   };
 
   const handleDeleteField = (fieldId: string) => {
     setFields(prev => prev.filter(field => field.id !== fieldId));
-    if (selectedField?.id === fieldId) {
+    if (selectedField === fieldId) {
       setSelectedField(null);
     }
   };
 
-  const handleDuplicateField = (field: TemplateField) => {
-    const duplicatedField: TemplateField = {
+  const handleDuplicateField = (field: LabelField) => {
+    const duplicatedField: LabelField = {
       ...field,
       id: `field_${Date.now()}`,
       label: `${field.label} (Copy)`,
@@ -135,16 +129,15 @@ export const LabelDesigner: React.FC<LabelDesignerProps> = ({
     };
 
     setFields(prev => [...prev, duplicatedField]);
-    setSelectedField(duplicatedField);
+    setSelectedField(duplicatedField.id);
   };
 
   const handleSaveTemplate = async () => {
-    // Validate template
-    const errors = validateTemplate(fields);
-    if (errors.length > 0) {
+    // Basic validation
+    if (!templateName.trim() || fields.length === 0) {
       toast({
         title: "Validation Error",
-        description: errors[0],
+        description: "Template name and at least one field are required",
         variant: "destructive",
       });
       return;
@@ -215,7 +208,7 @@ export const LabelDesigner: React.FC<LabelDesignerProps> = ({
                 placeholder="Template Name"
               />
               <p className="text-sm text-muted-foreground">
-                {labelSize} • {orientation} • {fields.filter(f => f.enabled).length} fields
+                {labelSize} • {orientation} • {fields.length} fields
               </p>
             </div>
             <Badge variant="secondary">{mode}</Badge>
@@ -338,11 +331,11 @@ export const LabelDesigner: React.FC<LabelDesignerProps> = ({
                 <div
                   key={field.id}
                   className={`p-2 rounded text-xs cursor-pointer border ${
-                    selectedField?.id === field.id
+                    selectedField === field.id
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-background hover:bg-muted'
                   }`}
-                  onClick={() => setSelectedField(field)}
+                  onClick={() => setSelectedField(field.id)}
                 >
                   <div className="flex items-center justify-between">
                     <span className="truncate">{field.label}</span>
@@ -372,7 +365,7 @@ export const LabelDesigner: React.FC<LabelDesignerProps> = ({
                     </div>
                   </div>
                   <div className="text-muted-foreground">
-                    {field.type} • {field.enabled ? 'Enabled' : 'Disabled'}
+                    {field.field_type} • Required: {field.is_required ? 'Yes' : 'No'}
                   </div>
                 </div>
               ))}
@@ -400,10 +393,10 @@ export const LabelDesigner: React.FC<LabelDesignerProps> = ({
         {/* Properties Panel */}
         {selectedField && (
           <div className="w-80 border-l bg-background">
-            <FieldPropertiesPanel
-              field={selectedField}
-              onUpdate={handleUpdateField}
-              onDelete={() => handleDeleteField(selectedField.id)}
+            <FieldEditor
+              field={fields.find(f => f.id === selectedField)!}
+              onUpdate={(updates) => handleUpdateField(selectedField, updates)}
+              onRemove={() => handleDeleteField(selectedField)}
             />
           </div>
         )}
