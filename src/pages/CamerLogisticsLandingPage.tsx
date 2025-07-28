@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import { CamerLogisticsLayout } from '@/components/Layout/CamerLogisticsLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -32,6 +33,15 @@ import {
 export const CamerLogisticsLandingPage = () => {
   const [trackingNumber, setTrackingNumber] = useState('');
   const isMobile = useIsMobile();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+
+  // Redirect logged-in users to company portal
+  useEffect(() => {
+    if (user) {
+      navigate('/logistics/company-portal');
+    }
+  }, [user, navigate]);
 
   const handleTrackPackage = () => {
     if (trackingNumber.trim()) {
