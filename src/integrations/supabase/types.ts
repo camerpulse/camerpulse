@@ -972,6 +972,62 @@ export type Database = {
         }
         Relationships: []
       }
+      api_integrations: {
+        Row: {
+          api_endpoint: string | null
+          api_key_hash: string | null
+          company_id: string | null
+          configuration: Json | null
+          created_at: string | null
+          id: string
+          integration_name: string
+          integration_type: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          rate_limit: number | null
+          updated_at: string | null
+          webhook_url: string | null
+        }
+        Insert: {
+          api_endpoint?: string | null
+          api_key_hash?: string | null
+          company_id?: string | null
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          integration_name: string
+          integration_type: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          rate_limit?: number | null
+          updated_at?: string | null
+          webhook_url?: string | null
+        }
+        Update: {
+          api_endpoint?: string | null
+          api_key_hash?: string | null
+          company_id?: string | null
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          integration_name?: string
+          integration_type?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          rate_limit?: number | null
+          updated_at?: string | null
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_integrations_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_keys: {
         Row: {
           api_key: string
@@ -11533,6 +11589,47 @@ export type Database = {
           },
         ]
       }
+      company_metrics: {
+        Row: {
+          company_id: string | null
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          metric_date: string
+          metric_type: string
+          metric_value: number
+          period_type: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_date: string
+          metric_type: string
+          metric_value: number
+          period_type?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_date?: string
+          metric_type?: string
+          metric_value?: number
+          period_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_metrics_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       company_payments: {
         Row: {
           amount: number
@@ -11676,6 +11773,53 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      company_tenants: {
+        Row: {
+          billing_plan: string | null
+          branding_config: Json | null
+          company_id: string | null
+          created_at: string | null
+          custom_domain: string | null
+          feature_flags: Json | null
+          id: string
+          is_white_label: boolean | null
+          tenant_slug: string
+          updated_at: string | null
+        }
+        Insert: {
+          billing_plan?: string | null
+          branding_config?: Json | null
+          company_id?: string | null
+          created_at?: string | null
+          custom_domain?: string | null
+          feature_flags?: Json | null
+          id?: string
+          is_white_label?: boolean | null
+          tenant_slug: string
+          updated_at?: string | null
+        }
+        Update: {
+          billing_plan?: string | null
+          branding_config?: Json | null
+          company_id?: string | null
+          created_at?: string | null
+          custom_domain?: string | null
+          feature_flags?: Json | null
+          id?: string
+          is_white_label?: boolean | null
+          tenant_slug?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "company_tenants_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
             referencedColumns: ["id"]
           },
         ]
@@ -18566,6 +18710,74 @@ export type Database = {
         }
         Relationships: []
       }
+      fleet_vehicles: {
+        Row: {
+          capacity_kg: number | null
+          company_id: string | null
+          created_at: string | null
+          current_location: Json | null
+          driver_id: string | null
+          id: string
+          insurance_expiry: string | null
+          last_maintenance_date: string | null
+          license_plate: string | null
+          make_model: string | null
+          next_maintenance_due: string | null
+          status: string | null
+          updated_at: string | null
+          vehicle_number: string
+          vehicle_type: string
+          vin_number: string | null
+          year: number | null
+        }
+        Insert: {
+          capacity_kg?: number | null
+          company_id?: string | null
+          created_at?: string | null
+          current_location?: Json | null
+          driver_id?: string | null
+          id?: string
+          insurance_expiry?: string | null
+          last_maintenance_date?: string | null
+          license_plate?: string | null
+          make_model?: string | null
+          next_maintenance_due?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vehicle_number: string
+          vehicle_type: string
+          vin_number?: string | null
+          year?: number | null
+        }
+        Update: {
+          capacity_kg?: number | null
+          company_id?: string | null
+          created_at?: string | null
+          current_location?: Json | null
+          driver_id?: string | null
+          id?: string
+          insurance_expiry?: string | null
+          last_maintenance_date?: string | null
+          license_plate?: string | null
+          make_model?: string | null
+          next_maintenance_due?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vehicle_number?: string
+          vehicle_type?: string
+          vin_number?: string | null
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fleet_vehicles_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follows: {
         Row: {
           created_at: string | null
@@ -20371,6 +20583,121 @@ export type Database = {
           website?: string | null
         }
         Relationships: []
+      }
+      insurance_claims: {
+        Row: {
+          adjuster_notes: string | null
+          approved_amount: number | null
+          claim_number: string
+          claimed_amount: number
+          created_at: string | null
+          created_by: string | null
+          documents: Json | null
+          id: string
+          incident_date: string
+          incident_description: string
+          policy_id: string | null
+          shipment_id: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          adjuster_notes?: string | null
+          approved_amount?: number | null
+          claim_number: string
+          claimed_amount: number
+          created_at?: string | null
+          created_by?: string | null
+          documents?: Json | null
+          id?: string
+          incident_date: string
+          incident_description: string
+          policy_id?: string | null
+          shipment_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          adjuster_notes?: string | null
+          approved_amount?: number | null
+          claim_number?: string
+          claimed_amount?: number
+          created_at?: string | null
+          created_by?: string | null
+          documents?: Json | null
+          id?: string
+          incident_date?: string
+          incident_description?: string
+          policy_id?: string | null
+          shipment_id?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_claims_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "insurance_policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      insurance_policies: {
+        Row: {
+          company_id: string | null
+          coverage_amount: number | null
+          created_at: string | null
+          end_date: string | null
+          id: string
+          policy_document_url: string | null
+          policy_number: string
+          policy_type: string
+          premium_amount: number | null
+          provider_name: string
+          start_date: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          company_id?: string | null
+          coverage_amount?: number | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          policy_document_url?: string | null
+          policy_number: string
+          policy_type: string
+          premium_amount?: number | null
+          provider_name: string
+          start_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          company_id?: string | null
+          coverage_amount?: number | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          policy_document_url?: string | null
+          policy_number?: string
+          policy_type?: string
+          premium_amount?: number | null
+          provider_name?: string
+          start_date?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "insurance_policies_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       integration_analytics: {
         Row: {
@@ -22518,6 +22845,189 @@ export type Database = {
           updated_at?: string
           verification_status?: string | null
           website_url?: string | null
+        }
+        Relationships: []
+      }
+      logistics_api_integrations: {
+        Row: {
+          api_endpoint: string | null
+          configuration: Json | null
+          created_at: string
+          id: string
+          integration_name: string
+          integration_type: string
+          is_active: boolean
+          tenant_id: string | null
+          updated_at: string
+          webhook_url: string | null
+        }
+        Insert: {
+          api_endpoint?: string | null
+          configuration?: Json | null
+          created_at?: string
+          id?: string
+          integration_name: string
+          integration_type: string
+          is_active?: boolean
+          tenant_id?: string | null
+          updated_at?: string
+          webhook_url?: string | null
+        }
+        Update: {
+          api_endpoint?: string | null
+          configuration?: Json | null
+          created_at?: string
+          id?: string
+          integration_name?: string
+          integration_type?: string
+          is_active?: boolean
+          tenant_id?: string | null
+          updated_at?: string
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logistics_api_integrations_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "logistics_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logistics_fleet_vehicles: {
+        Row: {
+          created_at: string
+          driver_name: string | null
+          id: string
+          last_location: Json | null
+          license_plate: string
+          maintenance_due: string | null
+          status: string
+          tenant_id: string | null
+          updated_at: string
+          vehicle_number: string
+          vehicle_type: string
+        }
+        Insert: {
+          created_at?: string
+          driver_name?: string | null
+          id?: string
+          last_location?: Json | null
+          license_plate: string
+          maintenance_due?: string | null
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+          vehicle_number: string
+          vehicle_type: string
+        }
+        Update: {
+          created_at?: string
+          driver_name?: string | null
+          id?: string
+          last_location?: Json | null
+          license_plate?: string
+          maintenance_due?: string | null
+          status?: string
+          tenant_id?: string | null
+          updated_at?: string
+          vehicle_number?: string
+          vehicle_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logistics_fleet_vehicles_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "logistics_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logistics_insurance_policies: {
+        Row: {
+          coverage_amount: number | null
+          created_at: string
+          end_date: string | null
+          id: string
+          is_active: boolean
+          policy_number: string
+          policy_type: string
+          premium_amount: number | null
+          provider_name: string
+          start_date: string | null
+          tenant_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          coverage_amount?: number | null
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          policy_number: string
+          policy_type: string
+          premium_amount?: number | null
+          provider_name: string
+          start_date?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          coverage_amount?: number | null
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          policy_number?: string
+          policy_type?: string
+          premium_amount?: number | null
+          provider_name?: string
+          start_date?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "logistics_insurance_policies_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "logistics_tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      logistics_tenants: {
+        Row: {
+          contact_email: string
+          created_at: string
+          domain: string
+          id: string
+          is_active: boolean
+          name: string
+          settings: Json | null
+          updated_at: string
+        }
+        Insert: {
+          contact_email: string
+          created_at?: string
+          domain: string
+          id?: string
+          is_active?: boolean
+          name: string
+          settings?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          contact_email?: string
+          created_at?: string
+          domain?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          settings?: Json | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -40795,6 +41305,50 @@ export type Database = {
           whatsapp_enabled?: boolean
         }
         Relationships: []
+      }
+      vehicle_tracking: {
+        Row: {
+          created_at: string | null
+          engine_status: string | null
+          fuel_level: number | null
+          id: string
+          latitude: number
+          longitude: number
+          speed_kmh: number | null
+          timestamp: string | null
+          vehicle_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          engine_status?: string | null
+          fuel_level?: number | null
+          id?: string
+          latitude: number
+          longitude: number
+          speed_kmh?: number | null
+          timestamp?: string | null
+          vehicle_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          engine_status?: string | null
+          fuel_level?: number | null
+          id?: string
+          latitude?: number
+          longitude?: number
+          speed_kmh?: number | null
+          timestamp?: string | null
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_tracking_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "fleet_vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vendor_compliance_checks: {
         Row: {
