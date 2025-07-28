@@ -57,7 +57,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
       {/* Sidebar */}
       <div className={cn(
-        "fixed left-0 top-0 h-full bg-card border-r border-border z-50 transition-all duration-300",
+        "fixed left-0 top-0 h-full bg-card border-r border-border z-50 transition-all duration-300 flex flex-col",
         sidebarOpen ? "w-64" : "w-16",
         isMobile ? "shadow-lg" : ""
       )}>
@@ -106,8 +106,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
         )}
 
         {/* Navigation */}
-        <ScrollArea className="flex-1 px-3">
-          <div className="space-y-2 py-2">
+        <ScrollArea className="flex-1 min-h-0">
+          <div className="px-3 space-y-2 py-2">
             {modules.map((module) => {
               const Icon = module.icon;
               const isActive = activeModule === module.id;
@@ -139,7 +139,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
 
           {sidebarOpen && (
             <>
-              <Separator className="my-4" />
+              <Separator className="my-4 mx-3" />
               
               {/* System Status */}
               <div className="pb-4">
