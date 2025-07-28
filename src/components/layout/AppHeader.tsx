@@ -25,34 +25,38 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
-const pageInfo = {
-  '/': {
-    title: 'Dashboard',
+const logisticsPageInfo = {
+  '/logistics/dashboard': {
+    title: 'Logistics Dashboard',
     description: 'Overview of your label operations'
   },
-  '/designer': {
+  '/logistics/designer': {
     title: 'Label Designer',
     description: 'Create and customize shipping labels'
   },
-  '/templates': {
+  '/logistics/templates': {
     title: 'Template Manager',
     description: 'Manage your label templates'
   },
-  '/bulk-generator': {
+  '/logistics/bulk-generator': {
     title: 'Bulk Generator',
     description: 'Generate multiple labels from data'
   },
-  '/scanner': {
+  '/logistics/scanner': {
     title: 'Scanner',
     description: 'Scan barcodes and QR codes'
   },
-  '/history': {
+  '/logistics/history': {
     title: 'Print History',
     description: 'View your printing history'
   },
-  '/settings': {
+  '/logistics/tracking': {
+    title: 'Package Tracking',
+    description: 'Track shipments and deliveries'
+  },
+  '/logistics/settings': {
     title: 'Settings',
-    description: 'Configure application settings'
+    description: 'Configure logistics preferences'
   }
 };
 
@@ -61,9 +65,9 @@ export function AppHeader() {
   const navigate = useNavigate();
   const { user, signOut, profile } = useAuth();
   
-  const currentPage = pageInfo[location.pathname as keyof typeof pageInfo] || {
-    title: 'LabelCraft',
-    description: 'Label Management System'
+  const currentPage = logisticsPageInfo[location.pathname as keyof typeof logisticsPageInfo] || {
+    title: 'CamerLogistics',
+    description: 'Shipping and delivery platform'
   };
 
   const handleSignOut = async () => {

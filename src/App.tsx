@@ -4,6 +4,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { CamerPulseDashboard } from '@/pages/CamerPulseDashboard';
+import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayout';
 import { Dashboard } from '@/pages/Dashboard';
 import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { SettingsPage } from '@/pages/SettingsPage';
@@ -88,9 +89,9 @@ function AppContent() {
         {/* Authenticated Routes */}
         {user && (
           <>
-            <Route path="/" element={<AuthenticatedLayout><CamerPulseDashboard /></AuthenticatedLayout>} />
-            <Route path="/dashboard" element={<AuthenticatedLayout><CamerPulseDashboard /></AuthenticatedLayout>} />
-            <Route path="/settings" element={<AuthenticatedLayout><SettingsPage /></AuthenticatedLayout>} />
+            <Route path="/" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
+            <Route path="/dashboard" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
+            <Route path="/settings" element={<CivicAuthenticatedLayout><SettingsPage /></CivicAuthenticatedLayout>} />
           </>
         )}
       </Routes>

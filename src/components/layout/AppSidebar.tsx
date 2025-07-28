@@ -27,79 +27,79 @@ import {
   Truck
 } from 'lucide-react';
 
-const navigationItems = [
+const logisticsNavigationItems = [
   {
     title: 'Dashboard',
-    url: '/',
+    url: '/logistics/dashboard',
     icon: Home,
     description: 'Overview and analytics'
   },
   {
     title: 'Label Designer',
-    url: '/designer',
+    url: '/logistics/designer',
     icon: PenTool,
     description: 'Create and edit labels'
   },
   {
     title: 'Advanced Builder',
-    url: '/advanced-builder',
+    url: '/logistics/advanced-builder',
     icon: Layers,
     description: 'Drag-and-drop label builder'
   },
   {
     title: 'Templates',
-    url: '/templates',
+    url: '/logistics/templates',
     icon: Library,
     description: 'Manage label templates'
   },
   {
     title: 'Bulk Generator',
-    url: '/bulk-generator',
+    url: '/logistics/bulk-generator',
     icon: Package,
     description: 'Generate multiple labels'
   }
 ];
 
-const toolsItems = [
+const logisticsToolsItems = [
   {
     title: 'Scanner',
-    url: '/scanner',
+    url: '/logistics/scanner',
     icon: QrCode,
     description: 'Scan barcodes and QR codes'
   },
   {
     title: 'Tracking',
-    url: '/tracking',
+    url: '/logistics/tracking',
     icon: Truck,
     description: 'Track packages'
   },
   {
     title: 'Print History',
-    url: '/history',
+    url: '/logistics/history',
     icon: History,
     description: 'View printing history'
   }
 ];
 
-const publicItems = [
+const logisticsPublicItems = [
   {
-    title: 'Public Homepage',
-    url: '/public',
+    title: 'CamerPulse Home',
+    url: '/',
     icon: Home,
-    description: 'Visit public website'
+    description: 'Return to civic platform'
   },
   {
     title: 'Company Directory',
-    url: '/public/directory',
+    url: '/logistics/companies',
     icon: Truck,
     description: 'Browse delivery companies'
   }
 ];
 
-const systemItems = [
+const logisticsSystemItems = [
   {
     title: 'Settings',
-    url: '/settings',
+    url: '/logistics/settings',
     icon: Settings,
     description: 'Application settings'
   }
@@ -133,8 +133,8 @@ export function AppSidebar() {
           </div>
           {state !== 'collapsed' && (
             <div>
-              <h2 className="font-bold text-lg">CamerPulse</h2>
-              <p className="text-xs text-muted-foreground">Logistics Platform</p>
+              <h2 className="font-bold text-lg">CamerLogistics</h2>
+              <p className="text-xs text-muted-foreground">Shipping & Delivery Platform</p>
             </div>
           )}
         </div>
@@ -143,10 +143,10 @@ export function AppSidebar() {
       <SidebarContent className="px-2">
         {/* Main Navigation */}
         <SidebarGroup>
-          <SidebarGroupLabel>Main</SidebarGroupLabel>
+          <SidebarGroupLabel>Logistics Tools</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {navigationItems.map((item) => (
+              {logisticsNavigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
@@ -176,10 +176,10 @@ export function AppSidebar() {
 
         {/* Tools Section */}
         <SidebarGroup>
-          <SidebarGroupLabel>Tools</SidebarGroupLabel>
+          <SidebarGroupLabel>Operations</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {toolsItems.map((item) => (
+              {logisticsToolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
@@ -199,10 +199,10 @@ export function AppSidebar() {
 
         {/* Public Section */}
         <SidebarGroup>
-          <SidebarGroupLabel>Public</SidebarGroupLabel>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {publicItems.map((item) => (
+              {logisticsPublicItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
@@ -225,7 +225,7 @@ export function AppSidebar() {
           <SidebarGroupLabel>System</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {systemItems.map((item) => (
+              {logisticsSystemItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink 
