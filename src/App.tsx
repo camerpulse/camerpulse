@@ -27,6 +27,7 @@ import ShippingDashboard from "./pages/ShippingDashboard";
 import AdminShippingManagement from "./pages/AdminShippingManagement";
 import CreateShipment from "./pages/CreateShipment";
 import TrackShipment from "./pages/TrackShipment";
+import ShippingLabelPage from "./pages/ShippingLabelPage";
 import ShipmentManagement from "./pages/ShipmentManagement";
 import DeliveryCompaniesDirectory from "./pages/DeliveryCompaniesDirectory";
 import DeliveryCompanyRegister from "./pages/DeliveryCompanyRegister";
@@ -307,6 +308,7 @@ const App = () => {
               <Route path="/admin/shipping" element={<AdminShippingManagement />} />
               <Route path="/shipping/create" element={<CreateShipment />} />
               <Route path="/shipping/track/:trackingNumber?" element={<TrackShipment />} />
+              <Route path="/shipping/label/:trackingNumber" element={<ShippingLabelPage />} />
               <Route path="/analytics" element={<AnalyticsDashboard />} />
               <Route path="/shipping/manage" element={<ShipmentManagement />} />
               <Route path="/delivery-companies" element={<DeliveryCompaniesDirectory />} />
