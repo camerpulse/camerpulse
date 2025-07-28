@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import html2canvas from 'html2canvas';
 import { useToast } from '@/hooks/use-toast';
 import { 
   generatePDFFromElement, 
@@ -277,12 +278,36 @@ export const useLabelPrinting = () => {
     }
   }, [toast, printLabelFromElement]);
 
+  const exportLabelAsImage = async (element: HTMLElement, format: 'png' | 'jpeg' = 'png', scale: number = 1): Promise<Blob> => {
+    try {
+      const canvas = await html2canvas(element, {
+        scale: scale,
+        useCORS: true,
+        backgroundColor: '#ffffff'
+      });
+      
+      return new Promise((resolve, reject) => {
+        canvas.toBlob((blob) => {
+          if (blob) {
+            resolve(blob);
+          } else {
+            reject(new Error('Failed to create image blob'));
+          }
+        }, `image/${format}`, 0.9);
+      });
+    } catch (error) {
+      console.error('Export image failed:', error);
+      throw error;
+    }
+  };
+
   return {
     loading,
     error,
     printHistory,
     generateAndDownloadPDF,
     printLabelFromElement,
+    exportLabelAsImage,
     fetchPrintHistory,
     reprintLabel,
     printBatchLabels,
