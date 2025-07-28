@@ -453,13 +453,13 @@ const Marketplace = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" variant="secondary" className="px-8 py-4 text-lg font-semibold" asChild>
-                <Link to="/vendor-dashboard">
+                <Link to="/vendor-onboarding">
                   Become a Vendor
                 </Link>
               </Button>
               <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold text-white border-white hover:bg-white hover:text-green-600" asChild>
-                <Link to="/marketplace/vendor-info">
-                  Learn More
+                <Link to="/marketplace/vendors">
+                  View All Vendors
                 </Link>
               </Button>
             </div>

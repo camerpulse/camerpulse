@@ -17,6 +17,8 @@ import AdvancedDirectory from "./pages/AdvancedDirectory";
 import MinistryProfile from "./pages/MinistryProfile";
 import CouncilProfile from "./pages/CouncilProfile";
 import Marketplace from "./pages/Marketplace";
+import VerifiedVendors from "./pages/VerifiedVendors";
+import VendorOnboarding from "./pages/VendorOnboarding";
 import ProductDetail from "./pages/ProductDetail";
 import VendorProfile from "./pages/VendorProfile";
 import Polls from "./pages/Polls";
@@ -287,6 +289,8 @@ const App = () => {
               <Route path="/audit-registry" element={<AuditRegistryPage />} />
               <Route path="/security" element={<Security />} />
               <Route path="/marketplace" element={<Marketplace />} />
+              <Route path="/marketplace/vendors" element={<VerifiedVendors />} />
+              <Route path="/vendor-onboarding" element={<VendorOnboarding />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/vendor/:id" element={<VendorProfile />} />
               <Route path="/vendor-dashboard" element={

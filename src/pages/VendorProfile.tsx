@@ -90,6 +90,17 @@ const VendorProfile = () => {
                         Verified Vendor
                       </Badge>
                     </div>
+                    
+                    <div className="flex items-center gap-4 mb-3">
+                      <Badge variant="outline" className="font-mono text-sm">
+                        ID: {vendor.vendor_id}
+                      </Badge>
+                      <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                        <Calendar className="w-4 h-4" />
+                        <span>Joined {new Date(vendor.created_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                    
                     <p className="text-muted-foreground text-lg mb-4">{vendor.description}</p>
                   </div>
                 </div>
