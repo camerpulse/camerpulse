@@ -101,7 +101,7 @@ const ShipmentManagement = () => {
         .order('created_at', { ascending: false });
 
       if (statusFilter !== 'all') {
-        query = query.eq('status', statusFilter);
+        query = query.eq('status', statusFilter as 'pending' | 'picked_up' | 'in_transit' | 'out_for_delivery' | 'delivered' | 'exception' | 'cancelled' | 'returned');
       }
 
       const { data, error } = await query;
@@ -122,10 +122,10 @@ const ShipmentManagement = () => {
 
   const updateShipmentStatus = async (shipmentId: string, newStatus: string) => {
     try {
-      const { error } = await supabase
-        .from('shipments')
-        .update({ status: newStatus })
-        .eq('id', shipmentId);
+        const { error } = await supabase
+          .from('shipments')
+          .update({ status: newStatus as 'pending' | 'picked_up' | 'in_transit' | 'out_for_delivery' | 'delivered' | 'exception' | 'cancelled' | 'returned' })
+          .eq('id', shipmentId);
 
       if (error) throw error;
 

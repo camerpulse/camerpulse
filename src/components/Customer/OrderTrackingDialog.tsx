@@ -2,7 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle, Circle, Truck, Package, MapPin } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { CheckCircle, Circle, Truck, Package, MapPin, ExternalLink } from 'lucide-react';
 
 interface OrderTrackingDialogProps {
   open: boolean;
@@ -35,7 +36,29 @@ export const OrderTrackingDialog = ({ open, onOpenChange, orderId }: OrderTracki
     enabled: !!orderId,
   });
 
-  const getTrackingSteps = (status: string) => {
+  // Fetch shipment data for this order
+  const { data: shipment } = useQuery({
+    queryKey: ['order-shipment', orderId],
+    queryFn: async () => {
+      if (!orderId) return null;
+
+      const { data, error } = await supabase
+        .from('shipments')
+        .select(`
+          *,
+          shipping_companies (company_name, contact_phone),
+          shipment_tracking_events (*)
+        `)
+        .eq('order_id', orderId)
+        .maybeSingle();
+
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!orderId,
+  });
+
+  const getTrackingSteps = (orderStatus: string, shipmentStatus?: string) => {
     const steps = [
       { id: 'pending', label: 'Order Placed', icon: Package },
       { id: 'confirmed', label: 'Order Confirmed', icon: CheckCircle },
@@ -44,8 +67,30 @@ export const OrderTrackingDialog = ({ open, onOpenChange, orderId }: OrderTracki
       { id: 'delivered', label: 'Delivered', icon: MapPin },
     ];
 
+    // If shipment exists, use shipment status for more detailed tracking
+    if (shipment && shipmentStatus) {
+      const shipmentSteps = [
+        { id: 'pending', label: 'Order Placed', icon: Package },
+        { id: 'confirmed', label: 'Order Confirmed', icon: CheckCircle },
+        { id: 'picked_up', label: 'Package Picked Up', icon: Truck },
+        { id: 'in_transit', label: 'In Transit', icon: Truck },
+        { id: 'out_for_delivery', label: 'Out for Delivery', icon: Truck },
+        { id: 'delivered', label: 'Delivered', icon: MapPin },
+      ];
+
+      const statusOrder = ['pending', 'confirmed', 'picked_up', 'in_transit', 'out_for_delivery', 'delivered'];
+      const currentIndex = statusOrder.indexOf(shipmentStatus);
+
+      return shipmentSteps.map((step, index) => ({
+        ...step,
+        completed: index <= currentIndex,
+        current: index === currentIndex,
+      }));
+    }
+
+    // Fallback to order status
     const statusOrder = ['pending', 'confirmed', 'processing', 'shipped', 'delivered'];
-    const currentIndex = statusOrder.indexOf(status);
+    const currentIndex = statusOrder.indexOf(orderStatus);
 
     return steps.map((step, index) => ({
       ...step,
@@ -72,7 +117,7 @@ export const OrderTrackingDialog = ({ open, onOpenChange, orderId }: OrderTracki
 
   if (!order) return null;
 
-  const trackingSteps = getTrackingSteps(order.order_status);
+  const trackingSteps = getTrackingSteps(order.order_status, shipment?.status);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -125,6 +170,36 @@ export const OrderTrackingDialog = ({ open, onOpenChange, orderId }: OrderTracki
               );
             })}
           </div>
+
+          {/* Enhanced shipment tracking info */}
+          {shipment && (
+            <div className="border-t pt-4">
+              <div className="flex items-center justify-between mb-2">
+                <h4 className="font-medium">Shipment Details</h4>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => window.open(`/shipping/track/${shipment.tracking_number}`, '_blank')}
+                >
+                  <ExternalLink className="w-4 h-4 mr-1" />
+                  Track
+                </Button>
+              </div>
+              <div className="space-y-2 text-sm">
+                <p className="text-muted-foreground">
+                  <span className="font-medium">Tracking #:</span> {shipment.tracking_number}
+                </p>
+                <p className="text-muted-foreground">
+                  <span className="font-medium">Carrier:</span> {(shipment.shipping_companies as any)?.company_name || 'N/A'}
+                </p>
+                {shipment.estimated_delivery_date && (
+                  <p className="text-muted-foreground">
+                    <span className="font-medium">Expected:</span> {new Date(shipment.estimated_delivery_date).toLocaleDateString()}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
 
           {order.shipping_address && (
             <div className="border-t pt-4">
