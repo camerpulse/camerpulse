@@ -260,7 +260,7 @@ export const ContentModerationModule: React.FC<ContentModerationModuleProps> = (
                           {report.content_type} Report #{report.id.slice(0, 8)}
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                          Reported by {report.reported_by_profile?.display_name || 'Anonymous'}
+                          Reported by Anonymous
                         </p>
                         <p className="text-sm text-muted-foreground">
                           {new Date(report.created_at).toLocaleDateString()}
@@ -281,8 +281,8 @@ export const ContentModerationModule: React.FC<ContentModerationModuleProps> = (
                     <div className="space-y-2">
                       <h4 className="font-medium">Content Preview:</h4>
                       <div className="bg-muted p-3 rounded text-sm">
-                        {report.content_data.text && (
-                          <p>{report.content_data.text.slice(0, 200)}...</p>
+                        {typeof report.content_data === 'object' && report.content_data && 'text' in report.content_data && (
+                          <p>{String(report.content_data.text).slice(0, 200)}...</p>
                         )}
                       </div>
                     </div>
