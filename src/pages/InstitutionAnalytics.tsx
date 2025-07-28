@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { InstitutionAnalyticsDashboard } from '@/components/analytics/InstitutionAnalyticsDashboard';
+import { InstitutionAnalyticsDashboard } from '@/components/Analytics/InstitutionAnalyticsDashboard';
 import { Card, CardContent } from '@/components/ui/card';
 import { AlertCircle, BarChart3 } from 'lucide-react';
 import { toast } from 'sonner';

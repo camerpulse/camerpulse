@@ -2,10 +2,11 @@ import React from 'react';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { NotificationSettings } from '@/components/Notifications/NotificationSettings';
 import { IntegrationCenter } from '@/components/Integrations/IntegrationCenter';
+import { AnalyticsCenter } from '@/components/Analytics/AnalyticsCenter';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
-import { Settings, Plug } from 'lucide-react';
+import { Settings, Plug, BarChart3 } from 'lucide-react';
 
 const NotificationSettingsPage: React.FC = () => {
   const { user, loading } = useAuth();
@@ -39,7 +40,7 @@ const NotificationSettingsPage: React.FC = () => {
           </div>
 
           <Tabs defaultValue="preferences" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="preferences" className="flex items-center gap-2">
                 <Settings className="h-4 w-4" />
                 Preferences
@@ -47,6 +48,10 @@ const NotificationSettingsPage: React.FC = () => {
               <TabsTrigger value="integrations" className="flex items-center gap-2">
                 <Plug className="h-4 w-4" />
                 Integrations
+              </TabsTrigger>
+              <TabsTrigger value="analytics" className="flex items-center gap-2">
+                <BarChart3 className="h-4 w-4" />
+                Analytics
               </TabsTrigger>
             </TabsList>
             

@@ -97,7 +97,12 @@ export function useIntegrations() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setIntegrations(data || []);
+      setIntegrations((data || []).map(integration => ({
+        ...integration,
+        configuration: integration.configuration || {},
+        connection_status: (integration.connection_status as 'pending' | 'connected' | 'error' | 'disconnected') || 'pending',
+        integration_services: integration.integration_services || null
+      })));
     } catch (error) {
       console.error('Error fetching user integrations:', error);
       toast.error('Failed to load integrations');
@@ -199,11 +204,12 @@ export function useIntegrations() {
 
       if (error) throw error;
 
-      if (data.success) {
+      const result = data as { success?: boolean; message?: string };
+      if (result?.success) {
         toast.success('Connection test successful');
         await fetchIntegrations();
       } else {
-        toast.error(`Connection test failed: ${data.message}`);
+        toast.error(`Connection test failed: ${result?.message || 'Unknown error'}`);
       }
 
       return data;

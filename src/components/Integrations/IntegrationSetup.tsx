@@ -20,7 +20,8 @@ import {
   ExternalLink,
   MessageSquare,
   Slack,
-  Hash
+  Hash,
+  Plug
 } from 'lucide-react';
 import { toast } from 'sonner';
 

@@ -93,8 +93,11 @@ export const useEnhancedSearch = () => {
 
       // Track search analytics
       const searchDuration = Date.now() - startTime;
-      trackSearch(query, filters, data?.length || 0);
-      
+      trackSearch({
+        query: query,
+        results_count: data?.length || 0,
+        filters: filters
+      });
       // Track in search analytics table
       if (user && query.trim()) {
         await supabase.from('search_analytics').insert({

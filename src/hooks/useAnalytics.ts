@@ -168,7 +168,11 @@ export function useAnalytics() {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setReports(data || []);
+      setReports((data || []).map(report => ({
+        ...report,
+        data_sources: Array.isArray(report.data_sources) ? report.data_sources : [],
+        shared_with: Array.isArray(report.shared_with) ? report.shared_with : undefined
+      })));
     } catch (error) {
       console.error('Error fetching reports:', error);
       toast.error('Failed to fetch reports');
@@ -316,6 +320,22 @@ export function useAnalytics() {
     }
   }, [user?.id, fetchReports, fetchExportJobs]);
 
+  const trackSearch = useCallback(async (searchData: {
+    query: string;
+    results_count: number;
+    filters?: any;
+  }) => {
+    await trackEvent({
+      event_type: 'search',
+      event_category: 'user_action',
+      event_label: searchData.query,
+      event_value: searchData.results_count,
+      custom_properties: {
+        filters: searchData.filters || {}
+      }
+    });
+  }, [trackEvent]);
+
   return {
     events,
     reports,
@@ -323,6 +343,7 @@ export function useAnalytics() {
     loading,
     trackEvent,
     trackPerformance,
+    trackSearch,
     fetchEvents,
     createReport,
     executeReport,
