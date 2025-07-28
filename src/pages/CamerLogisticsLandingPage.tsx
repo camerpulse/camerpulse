@@ -110,31 +110,67 @@ export const CamerLogisticsLandingPage = () => {
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Enhanced Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-2xl mx-auto">
               {isMobile ? (
                 <>
-                  <MobileButton className="bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-                    <Package className="h-5 w-5 mr-2" />
-                    Ship a Package
-                  </MobileButton>
-                  <MobileButton variant="outline" className="border-white text-white hover:bg-white hover:text-primary">
-                    <Users className="h-5 w-5 mr-2" />
-                    Partner with Us
-                  </MobileButton>
+                  <Link to="/logistics/ship">
+                    <MobileButton className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground">
+                      <Package className="h-5 w-5 mr-2" />
+                      Ship a Package
+                    </MobileButton>
+                  </Link>
+                  <Link to="/logistics/join-company">
+                    <MobileButton variant="outline" className="w-full border-white text-white hover:bg-white hover:text-primary">
+                      <Users className="h-5 w-5 mr-2" />
+                      Partner with Us
+                    </MobileButton>
+                  </Link>
                 </>
               ) : (
                 <>
-                  <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 h-14">
-                    <Package className="h-5 w-5 mr-2" />
-                    Ship a Package
-                  </Button>
-                  <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary px-8 h-14">
-                    <Users className="h-5 w-5 mr-2" />
-                    Partner with Us
-                  </Button>
+                  <Link to="/logistics/ship">
+                    <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-secondary-foreground px-8 h-14">
+                      <Package className="h-5 w-5 mr-2" />
+                      Ship a Package
+                    </Button>
+                  </Link>
+                  <Link to="/logistics/join-company">
+                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-primary px-8 h-14">
+                      <Users className="h-5 w-5 mr-2" />
+                      Partner with Us
+                    </Button>
+                  </Link>
                 </>
               )}
+            </div>
+
+            {/* Quick Access Links */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-12 max-w-4xl mx-auto">
+              <Link to="/logistics/express" className="group">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center hover:bg-white/20 transition-all">
+                  <Zap className="h-8 w-8 mx-auto mb-2 text-secondary group-hover:scale-110 transition-transform" />
+                  <p className="text-sm font-medium">Express Delivery</p>
+                </div>
+              </Link>
+              <Link to="/logistics/tracking" className="group">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center hover:bg-white/20 transition-all">
+                  <MapPin className="h-8 w-8 mx-auto mb-2 text-secondary group-hover:scale-110 transition-transform" />
+                  <p className="text-sm font-medium">Track Package</p>
+                </div>
+              </Link>
+              <Link to="/logistics/business" className="group">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center hover:bg-white/20 transition-all">
+                  <Users className="h-8 w-8 mx-auto mb-2 text-secondary group-hover:scale-110 transition-transform" />
+                  <p className="text-sm font-medium">Business Solutions</p>
+                </div>
+              </Link>
+              <Link to="/logistics/companies" className="group">
+                <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center hover:bg-white/20 transition-all">
+                  <Truck className="h-8 w-8 mx-auto mb-2 text-secondary group-hover:scale-110 transition-transform" />
+                  <p className="text-sm font-medium">Find Companies</p>
+                </div>
+              </Link>
             </div>
           </div>
         </div>
@@ -311,15 +347,19 @@ export const CamerLogisticsLandingPage = () => {
               </div>
 
               {isMobile ? (
-                <MobileButton className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                  <ArrowRight className="h-5 w-5 mr-2" />
-                  Explore All Services
-                </MobileButton>
+                <Link to="/logistics/services">
+                  <MobileButton className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                    <ArrowRight className="h-5 w-5 mr-2" />
+                    Explore All Services
+                  </MobileButton>
+                </Link>
               ) : (
-                <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-14">
-                  <ArrowRight className="h-5 w-5 mr-2" />
-                  Explore All Services
-                </Button>
+                <Link to="/logistics/services">
+                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-14">
+                    <ArrowRight className="h-5 w-5 mr-2" />
+                    Explore All Services
+                  </Button>
+                </Link>
               )}
             </div>
 

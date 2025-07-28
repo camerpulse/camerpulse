@@ -10,6 +10,10 @@ import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import DeliveryCompaniesDirectory from '@/pages/DeliveryCompaniesDirectory';
 import DeliveryCompanyRegister from '@/pages/DeliveryCompanyRegister';
 import { Dashboard } from '@/pages/Dashboard';
+import { ShipPackagePage } from '@/pages/logistics/ShipPackagePage';
+import { ServicesPage } from '@/pages/logistics/ServicesPage';
+import { ExpressDeliveryPage } from '@/pages/logistics/ExpressDeliveryPage';
+import { BusinessSolutionsPage } from '@/pages/logistics/BusinessSolutionsPage';
 
 // Logistics Authenticated Layout
 function LogisticsAuthenticatedLayout({ children }: { children: React.ReactNode }) {
@@ -45,6 +49,10 @@ export function PluginRouter({ user }: { user: any }) {
         <>
           {/* Public Routes */}
           <Route path="/" element={<CamerLogisticsLandingPage />} />
+          <Route path="/ship" element={<ShipPackagePage />} />
+          <Route path="/services" element={<ServicesPage />} />
+          <Route path="/express" element={<ExpressDeliveryPage />} />
+          <Route path="/business" element={<BusinessSolutionsPage />} />
           <Route path="/tracking" element={<TrackingPage />} />
           <Route path="/tracking/:trackingNumber" element={<TrackingPage />} />
           <Route path="/companies" element={<DeliveryCompaniesDirectory />} />
