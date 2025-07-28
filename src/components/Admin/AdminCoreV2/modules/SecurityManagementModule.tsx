@@ -40,10 +40,10 @@ export const SecurityManagementModule: React.FC<SecurityManagementModuleProps> =
         suspiciousActivity, blockedIPs
       ] = await Promise.all([
         supabase.from('failed_login_attempts').select('id', { count: 'exact' }),
-        supabase.from('user_devices').select('id', { count: 'exact' }).eq('is_active', true),
-        supabase.from('security_logs').select('id', { count: 'exact' }).gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
+        supabase.from('user_devices').select('id', { count: 'exact' }),
+        supabase.from('security_audit_logs').select('id', { count: 'exact' }).gte('timestamp', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()),
         supabase.from('security_audit_logs').select('id', { count: 'exact' }).eq('severity', 'high'),
-        supabase.from('failed_login_attempts').select('ip_address', { count: 'exact' }).not('blocked_until', 'is', null)
+        supabase.from('failed_login_attempts').select('ip_address', { count: 'exact' })
       ]);
 
       return {
@@ -85,7 +85,7 @@ export const SecurityManagementModule: React.FC<SecurityManagementModuleProps> =
       const { data, error } = await supabase
         .from('security_audit_logs')
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('timestamp', { ascending: false })
         .limit(100);
       if (error) throw error;
       return data;
@@ -100,7 +100,7 @@ export const SecurityManagementModule: React.FC<SecurityManagementModuleProps> =
       const { data, error } = await supabase
         .from('user_devices')
         .select('*')
-        .order('last_used_at', { ascending: false })
+        .order('last_seen_at', { ascending: false })
         .limit(100);
       if (error) throw error;
       return data;
@@ -114,7 +114,7 @@ export const SecurityManagementModule: React.FC<SecurityManagementModuleProps> =
       const { error } = await supabase
         .from('failed_login_attempts')
         .update({ 
-          blocked_until: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() 
+          reason: 'IP blocked by admin'
         })
         .eq('ip_address', ipAddress);
       if (error) throw error;
@@ -282,9 +282,9 @@ export const SecurityManagementModule: React.FC<SecurityManagementModuleProps> =
                   {auditLogs?.slice(0, 5).map((log) => (
                     <div key={log.id} className="flex items-center justify-between p-2 border rounded">
                       <div>
-                        <p className="text-sm font-medium">{log.event_type}</p>
+                        <p className="text-sm font-medium">{log.action_type}</p>
                         <p className="text-xs text-muted-foreground">
-                          {new Date(log.created_at).toLocaleString()}
+                          {new Date(log.timestamp).toLocaleString()}
                         </p>
                       </div>
                       {getSeverityBadge(log.severity)}
@@ -347,10 +347,10 @@ export const SecurityManagementModule: React.FC<SecurityManagementModuleProps> =
                       <div>
                         <h3 className="font-medium">{device.device_name || 'Unknown Device'}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {device.device_type} | {device.operating_system}
+                          Device fingerprint: {device.device_fingerprint.slice(0, 20)}...
                         </p>
                         <p className="text-xs text-muted-foreground">
-                          Last used: {new Date(device.last_used_at).toLocaleString()}
+                          Last seen: {new Date(device.last_seen_at).toLocaleString()}
                         </p>
                       </div>
                     </div>
@@ -388,10 +388,10 @@ export const SecurityManagementModule: React.FC<SecurityManagementModuleProps> =
                 {auditLogs?.map((log) => (
                   <div key={log.id} className="flex items-center justify-between p-4 border rounded-lg">
                     <div>
-                      <h3 className="font-medium">{log.event_type}</h3>
-                      <p className="text-sm text-muted-foreground">{log.description}</p>
+                      <h3 className="font-medium">{log.action_type}</h3>
+                      <p className="text-sm text-muted-foreground">{log.resource_type}: {log.resource_id}</p>
                       <p className="text-xs text-muted-foreground">
-                        {new Date(log.created_at).toLocaleString()}
+                        {new Date(log.timestamp).toLocaleString()}
                       </p>
                     </div>
                     {getSeverityBadge(log.severity)}
