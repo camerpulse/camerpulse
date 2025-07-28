@@ -146,7 +146,8 @@ export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: init
       // Call the tracking API endpoint
       const response = await fetch(`https://wsiorhtiovwcajiarydw.supabase.co/functions/v1/track-shipment/${trackingNumber}`, {
         headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzaW9yaHRpb3Z3Y2FqaWFyeWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyODE3ODAsImV4cCI6MjA2Nzg1Nzc4MH0.4GKFhQTxlEzj6oTcfnAZQpPxPHW0nqGDEfBe-gVGoNE'}`,
+          'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzaW9yaHRpb3Z3Y2FqaWFyeWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyODE3ODAsImV4cCI6MjA2Nzg1Nzc4MH0.4GKFhQTxlEzj6oTcfnAZQpPxPHW0nqGDEfBe-gVGoNE`,
+          'Content-Type': 'application/json'
         }
       });
 
@@ -155,7 +156,29 @@ export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: init
       }
 
       const data = await response.json();
-      setShipmentData(data);
+      console.log('API Response:', data);
+      
+      // Transform the API response to match our interface
+      const transformedData: ShipmentData = {
+        trackingNumber: data.tracking_number,
+        status: data.status,
+        sender: {
+          name: data.sender_info?.name || 'Unknown Sender',
+          address: data.sender_info?.address || 'Unknown Address',
+          phone: data.sender_info?.phone
+        },
+        receiver: {
+          name: data.receiver_info?.name || 'Unknown Receiver',
+          address: data.receiver_info?.address || 'Unknown Address',
+          phone: data.receiver_info?.phone
+        },
+        deliveryType: data.delivery_type || 'Standard',
+        estimatedDelivery: data.estimated_delivery || new Date().toISOString(),
+        events: data.events || [],
+        lastScannedLocation: data.last_scanned_location
+      };
+      
+      setShipmentData(transformedData);
     } catch (err) {
       console.error('Tracking error:', err);
       // Fallback to mock data if API fails
