@@ -35632,6 +35632,298 @@ export type Database = {
           },
         ]
       }
+      shipping_companies: {
+        Row: {
+          address: string
+          admin_notes: string | null
+          average_rating: number | null
+          brand_colors: Json | null
+          city: string
+          company_name: string
+          company_type: Database["public"]["Enums"]["shipping_company_type"]
+          completed_shipments: number | null
+          country: string
+          created_at: string
+          delivery_scope: Database["public"]["Enums"]["delivery_scope"]
+          delivery_timeframes: Json | null
+          description: string | null
+          email: string
+          id: string
+          logo_url: string | null
+          payment_status: string | null
+          phone: string
+          price_list: Json | null
+          region: string
+          registration_fee_paid: number | null
+          rejection_reason: string | null
+          stripe_customer_id: string | null
+          subscription_active: boolean
+          subscription_expires_at: string | null
+          subscription_tier: Database["public"]["Enums"]["subscription_tier"]
+          tax_number: string | null
+          terms_conditions: string | null
+          total_reviews: number | null
+          total_shipments: number | null
+          updated_at: string
+          user_id: string
+          verification_status: Database["public"]["Enums"]["verification_status"]
+          verified_at: string | null
+          verified_by: string | null
+          website_url: string | null
+        }
+        Insert: {
+          address: string
+          admin_notes?: string | null
+          average_rating?: number | null
+          brand_colors?: Json | null
+          city: string
+          company_name: string
+          company_type: Database["public"]["Enums"]["shipping_company_type"]
+          completed_shipments?: number | null
+          country?: string
+          created_at?: string
+          delivery_scope?: Database["public"]["Enums"]["delivery_scope"]
+          delivery_timeframes?: Json | null
+          description?: string | null
+          email: string
+          id?: string
+          logo_url?: string | null
+          payment_status?: string | null
+          phone: string
+          price_list?: Json | null
+          region: string
+          registration_fee_paid?: number | null
+          rejection_reason?: string | null
+          stripe_customer_id?: string | null
+          subscription_active?: boolean
+          subscription_expires_at?: string | null
+          subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
+          tax_number?: string | null
+          terms_conditions?: string | null
+          total_reviews?: number | null
+          total_shipments?: number | null
+          updated_at?: string
+          user_id: string
+          verification_status?: Database["public"]["Enums"]["verification_status"]
+          verified_at?: string | null
+          verified_by?: string | null
+          website_url?: string | null
+        }
+        Update: {
+          address?: string
+          admin_notes?: string | null
+          average_rating?: number | null
+          brand_colors?: Json | null
+          city?: string
+          company_name?: string
+          company_type?: Database["public"]["Enums"]["shipping_company_type"]
+          completed_shipments?: number | null
+          country?: string
+          created_at?: string
+          delivery_scope?: Database["public"]["Enums"]["delivery_scope"]
+          delivery_timeframes?: Json | null
+          description?: string | null
+          email?: string
+          id?: string
+          logo_url?: string | null
+          payment_status?: string | null
+          phone?: string
+          price_list?: Json | null
+          region?: string
+          registration_fee_paid?: number | null
+          rejection_reason?: string | null
+          stripe_customer_id?: string | null
+          subscription_active?: boolean
+          subscription_expires_at?: string | null
+          subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
+          tax_number?: string | null
+          terms_conditions?: string | null
+          total_reviews?: number | null
+          total_shipments?: number | null
+          updated_at?: string
+          user_id?: string
+          verification_status?: Database["public"]["Enums"]["verification_status"]
+          verified_at?: string | null
+          verified_by?: string | null
+          website_url?: string | null
+        }
+        Relationships: []
+      }
+      shipping_company_branches: {
+        Row: {
+          address: string
+          branch_code: string
+          branch_name: string
+          city: string
+          company_id: string
+          created_at: string
+          email: string | null
+          id: string
+          is_active: boolean | null
+          is_main_branch: boolean | null
+          manager_name: string | null
+          operating_hours: Json | null
+          phone: string
+          region: string
+          services_offered: Json | null
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          branch_code: string
+          branch_name: string
+          city: string
+          company_id: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_main_branch?: boolean | null
+          manager_name?: string | null
+          operating_hours?: Json | null
+          phone: string
+          region: string
+          services_offered?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          branch_code?: string
+          branch_name?: string
+          city?: string
+          company_id?: string
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_main_branch?: boolean | null
+          manager_name?: string | null
+          operating_hours?: Json | null
+          phone?: string
+          region?: string
+          services_offered?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_company_branches_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipping_company_documents: {
+        Row: {
+          company_id: string
+          created_at: string
+          document_name: string
+          document_type: string
+          document_url: string
+          id: string
+          updated_at: string
+          uploaded_by: string
+          verification_notes: string | null
+          verified: boolean | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          company_id: string
+          created_at?: string
+          document_name: string
+          document_type: string
+          document_url: string
+          id?: string
+          updated_at?: string
+          uploaded_by: string
+          verification_notes?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          company_id?: string
+          created_at?: string
+          document_name?: string
+          document_type?: string
+          document_url?: string
+          id?: string
+          updated_at?: string
+          uploaded_by?: string
+          verification_notes?: string | null
+          verified?: boolean | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_company_documents_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipping_company_staff: {
+        Row: {
+          branch_id: string | null
+          company_id: string
+          created_at: string
+          created_by: string
+          hired_at: string | null
+          id: string
+          is_active: boolean | null
+          permissions: Json | null
+          role: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          branch_id?: string | null
+          company_id: string
+          created_at?: string
+          created_by: string
+          hired_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          permissions?: Json | null
+          role?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          branch_id?: string | null
+          company_id?: string
+          created_at?: string
+          created_by?: string
+          hired_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          permissions?: Json | null
+          role?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_company_staff_branch_id_fkey"
+            columns: ["branch_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_company_branches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipping_company_staff_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       smart_reply_suggestions: {
         Row: {
           confidence_scores: Json
@@ -41869,6 +42161,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: number
       }
+      generate_company_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       generate_debt_predictions: {
         Args: { p_years_ahead?: number }
         Returns: {
@@ -42596,6 +42892,7 @@ export type Database = {
         | "magistrate_court"
         | "district_court"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
+      delivery_scope: "local" | "national" | "international"
       disclosure_type:
         | "corruption"
         | "misconduct"
@@ -42907,6 +43204,7 @@ export type Database = {
         | "positive"
         | "very_positive"
       shield_status: "active" | "protected" | "high_risk" | "inactive"
+      shipping_company_type: "bike" | "bus" | "van" | "plane" | "mixed"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -42931,6 +43229,11 @@ export type Database = {
         | "approved"
         | "rejected"
         | "needs_clarification"
+      subscription_tier:
+        | "small_agent"
+        | "medium_courier"
+        | "nationwide_express"
+        | "white_label"
       threat_level: "low" | "medium" | "high" | "critical"
       ticket_type:
         | "regular"
@@ -42949,7 +43252,13 @@ export type Database = {
         | "refund"
       trend_type: "rising" | "declining" | "viral" | "anomaly" | "normal"
       user_type: "artist" | "fan" | "admin" | "event_attendee"
-      verification_status: "pending" | "verified" | "rejected" | "under_review"
+      verification_status:
+        | "pending"
+        | "verified"
+        | "rejected"
+        | "under_review"
+        | "active"
+        | "suspended"
       verification_status_enum:
         | "pending"
         | "verified"
@@ -43243,6 +43552,7 @@ export const Constants = {
         "district_court",
       ],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
+      delivery_scope: ["local", "national", "international"],
       disclosure_type: [
         "corruption",
         "misconduct",
@@ -43591,6 +43901,7 @@ export const Constants = {
         "very_positive",
       ],
       shield_status: ["active", "protected", "high_risk", "inactive"],
+      shipping_company_type: ["bike", "bus", "van", "plane", "mixed"],
       source_type: [
         "government_official",
         "parliamentary",
@@ -43618,6 +43929,12 @@ export const Constants = {
         "rejected",
         "needs_clarification",
       ],
+      subscription_tier: [
+        "small_agent",
+        "medium_courier",
+        "nationwide_express",
+        "white_label",
+      ],
       threat_level: ["low", "medium", "high", "critical"],
       ticket_type: [
         "regular",
@@ -43638,7 +43955,14 @@ export const Constants = {
       ],
       trend_type: ["rising", "declining", "viral", "anomaly", "normal"],
       user_type: ["artist", "fan", "admin", "event_attendee"],
-      verification_status: ["pending", "verified", "rejected", "under_review"],
+      verification_status: [
+        "pending",
+        "verified",
+        "rejected",
+        "under_review",
+        "active",
+        "suspended",
+      ],
       verification_status_enum: [
         "pending",
         "verified",
