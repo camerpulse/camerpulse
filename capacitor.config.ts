@@ -1,45 +1,34 @@
-import type { CapacitorConfig } from '@capacitor/cli';
+import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'app.lovable.fd236a8c6598476fb07e4e57834de962',
   appName: 'camerpulse',
   webDir: 'dist',
   server: {
-    url: "https://fd236a8c-6598-476f-b07e-4e57834de962.lovableproject.com?forceHideBadge=true",
+    url: 'https://fd236a8c-6598-476f-b07e-4e57834de962.lovableproject.com?forceHideBadge=true',
     cleartext: true
   },
   plugins: {
+    PushNotifications: {
+      presentationOptions: ['badge', 'sound', 'alert']
+    },
+    LocalNotifications: {
+      smallIcon: 'ic_stat_icon_config_sample',
+      iconColor: '#2563eb',
+      sound: 'beep.wav'
+    },
     SplashScreen: {
-      launchShowDuration: 3000,
-      launchAutoHide: true,
-      launchFadeOutDuration: 3000,
-      backgroundColor: "#ffffffff",
-      androidSplashResourceName: "splash",
-      androidScaleType: "CENTER_CROP",
+      launchShowDuration: 2000,
+      backgroundColor: '#2563eb',
       showSpinner: true,
-      androidSpinnerStyle: "large",
-      iosSpinnerStyle: "small",
-      spinnerColor: "#999999",
-      splashFullScreen: true,
-      splashImmersive: true,
-      layoutName: "launch_screen",
-      useDialog: true,
+      androidSpinnerStyle: 'large',
+      iosSpinnerStyle: 'small',
+      spinnerColor: '#ffffff'
     },
-    Camera: {
-      saveToPhotoAlbum: true
-    },
-    Geolocation: {
-      permissions: {
-        coarseLocation: "Use your location",
-        fineLocation: "Use your precise location"
-      }
+    StatusBar: {
+      style: 'default',
+      backgroundColor: '#2563eb'
     }
-  },
-  ios: {
-    scheme: 'CamerPulse'
-  },
-  android: {
-    allowMixedContent: true
   }
 };
 

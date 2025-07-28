@@ -3,6 +3,9 @@ import { AppLayout } from '@/components/Layout/AppLayout';
 import { NotificationFeed } from '@/components/Notifications/NotificationFeed';
 import { NotificationStatusTracker } from '@/components/Notifications/NotificationStatusTracker';
 import { InteractiveNotificationManager } from '@/components/Notifications/InteractiveNotificationManager';
+import { PushNotificationManager } from '@/components/Mobile/PushNotificationManager';
+import { PWAInstallPrompt } from '@/components/Mobile/PWAInstallPrompt';
+import { MobileNotificationFeed } from '@/components/Mobile/MobileNotificationFeed';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { Activity, Bell } from 'lucide-react';
@@ -38,15 +41,22 @@ const NotificationDashboard: React.FC = () => {
             </p>
           </div>
 
+          {/* PWA Install Prompt */}
+          <div className="mb-6">
+            <PWAInstallPrompt />
+          </div>
+
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            {/* Left Column - Feed */}
-            <div className="xl:col-span-1">
+            {/* Left Column - Feed & Mobile */}
+            <div className="xl:col-span-1 space-y-6">
               <NotificationFeed />
+              <MobileNotificationFeed />
             </div>
 
-            {/* Right Column - Status & Management */}
+            {/* Right Column - Status, Management & Push */}
             <div className="xl:col-span-2 space-y-6">
               <NotificationStatusTracker />
+              <PushNotificationManager />
               <InteractiveNotificationManager />
             </div>
           </div>
