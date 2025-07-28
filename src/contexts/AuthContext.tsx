@@ -13,6 +13,18 @@ export interface UserProfile {
   preferences?: Record<string, any>;
   created_at: string;
   updated_at: string;
+  // Additional fields to match database schema
+  username?: string;
+  bio?: string;
+  location?: string;
+  phone_number?: string;
+  website_url?: string;
+  is_diaspora?: boolean;
+  avatar_url?: string;
+  verified?: boolean;
+  profile_completion_score?: number;
+  skills?: string[];
+  interests?: string[];
 }
 
 interface AuthContextType {

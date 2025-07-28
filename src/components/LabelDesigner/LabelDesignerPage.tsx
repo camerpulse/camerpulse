@@ -306,15 +306,18 @@ export const LabelDesignerPage: React.FC = () => {
               // Handle generated code integration with label designer
               const codeField: LabelField = {
                 id: `code-${Date.now()}`,
-                type: 'image',
-                content: dataUrl,
+                label: 'Generated Code',
+                field_type: 'image',
                 position: { x: 50, y: 50 },
                 size: { width: 100, height: 100 },
+                is_required: false,
+                validation_rules: {},
                 style: {
                   fontSize: 12,
                   color: '#000000',
                   textAlign: 'left'
-                }
+                },
+                default_value: dataUrl
               };
               setFields(prev => [...prev, codeField]);
               toast({
