@@ -51,6 +51,8 @@ import { NewsManagementModule } from './modules/NewsManagementModule';
 import { LegalDocumentsModule } from './modules/LegalDocumentsModule';
 import { EducationalContentModule } from './modules/EducationalContentModule';
 import { TraditionalContentModule } from './modules/TraditionalContentModule';
+import { CivicEngagementModule } from './modules/CivicEngagementModule';
+import { LegalJusticeModule } from './modules/LegalJusticeModule';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -461,6 +463,10 @@ export const AdminCoreV2: React.FC = () => {
         return <EducationalContentModule {...moduleProps} />;
       case 'traditional-content':
         return <TraditionalContentModule {...moduleProps} />;
+      case 'civic-engagement':
+        return <CivicEngagementModule {...moduleProps} />;
+      case 'legal-justice':
+        return <LegalJusticeModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
