@@ -47,6 +47,13 @@ import { AdminSidebar } from './layout/AdminSidebar';
 import { AdminHeader } from './layout/AdminHeader';
 import { MobileAdminNav } from './layout/MobileAdminNav';
 
+// Import consolidated modules
+import { MarketplaceAdminModule } from './modules/MarketplaceAdminModule';
+import { ModerationModule } from './modules/ModerationModule';
+import { DataImportModule } from './modules/DataImportModule';
+import { VillageAdminModule } from './modules/VillageAdminModule';
+import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
+
 interface AdminStats {
   total_users: number;
   total_politicians: number;
@@ -78,8 +85,18 @@ export const AdminCoreV2: React.FC = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
+  // Detect initial module based on URL
+  const getInitialModule = () => {
+    const path = window.location.pathname;
+    if (path.includes('/moderation')) return 'moderation';
+    if (path.includes('/marketplace')) return 'marketplace-admin';
+    if (path.includes('/data-import')) return 'data-import';
+    if (path.includes('/village')) return 'village-admin';
+    return 'dashboard';
+  };
+  
   // UI State
-  const [activeModule, setActiveModule] = useState('dashboard');
+  const [activeModule, setActiveModule] = useState(getInitialModule());
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -245,29 +262,45 @@ export const AdminCoreV2: React.FC = () => {
   }
 
   const adminModules = [
+    // Core Platform
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3, color: 'text-cm-green', permission: 'all' },
     { id: 'users-roles', label: 'Users & Roles', icon: Users, color: 'text-blue-600', permission: 'users' },
+    { id: 'analytics-logs', label: 'Analytics & Logs', icon: Database, color: 'text-gray-600', permission: 'analytics' },
+    { id: 'moderation', label: 'Content Moderation', icon: ShieldCheck, color: 'text-orange-600', permission: 'moderation' },
+    
+    // Civic & Political
     { id: 'polls-system', label: 'Polls System', icon: Target, color: 'text-purple-600', permission: 'polls' },
+    { id: 'civic-officials', label: 'Civic & Officials', icon: UserCheck, color: 'text-cm-red', permission: 'civic-tools' },
+    { id: 'political-parties', label: 'Political Parties', icon: Flag, color: 'text-blue-600', permission: 'politics' },
+    { id: 'elections', label: 'Elections', icon: Vote, color: 'text-purple-600', permission: 'elections' },
+    { id: 'promises', label: 'Promises Tracker', icon: Target, color: 'text-green-600', permission: 'tracking' },
+    
+    // Business & Finance
     { id: 'company-directory', label: 'Company Directory', icon: Building2, color: 'text-orange-600', permission: 'companies' },
     { id: 'billionaire-tracker', label: 'Billionaire Tracker', icon: CreditCard, color: 'text-yellow-600', permission: 'companies' },
     { id: 'debt-monitor', label: 'Debt Monitor', icon: TrendingUp, color: 'text-red-600', permission: 'analytics' },
-    { id: 'civic-officials', label: 'Civic & Officials', icon: UserCheck, color: 'text-cm-red', permission: 'civic-tools' },
-    { id: 'messenger', label: 'Pulse Messenger', icon: MessageSquare, color: 'text-green-600', permission: 'messenger' },
-    { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
-    { id: 'analytics-logs', label: 'Analytics & Logs', icon: Database, color: 'text-gray-600', permission: 'analytics' },
-    { id: 'political-parties', label: 'Political Parties', icon: Flag, color: 'text-blue-600', permission: 'politics' },
-    { id: 'news-system', label: 'News System', icon: Newspaper, color: 'text-blue-600', permission: 'content' },
-    { id: 'marketplace', label: 'Marketplace', icon: Store, color: 'text-green-600', permission: 'marketplace' },
+    { id: 'marketplace-admin', label: 'Marketplace Admin', icon: Store, color: 'text-green-600', permission: 'marketplace' },
     { id: 'stripe-settings', label: 'Stripe Settings', icon: CreditCard, color: 'text-blue-600', permission: 'marketplace' },
-    { id: 'elections', label: 'Elections', icon: Vote, color: 'text-purple-600', permission: 'elections' },
-    { id: 'legal-documents', label: 'Legal Documents', icon: Scale, color: 'text-blue-600', permission: 'legal' },
     { id: 'donations', label: 'Donations', icon: Heart, color: 'text-red-500', permission: 'finance' },
-    { id: 'promises', label: 'Promises Tracker', icon: Target, color: 'text-green-600', permission: 'tracking' },
+    
+    // Communication & Community
+    { id: 'messenger', label: 'Pulse Messenger', icon: MessageSquare, color: 'text-green-600', permission: 'messenger' },
+    { id: 'news-system', label: 'News System', icon: Newspaper, color: 'text-blue-600', permission: 'content' },
+    { id: 'village-admin', label: 'Village & Community', icon: MapPin, color: 'text-green-600', permission: 'community' },
+    
+    // AI & Intelligence
+    { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
+    { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
+    
+    // System Management
+    { id: 'data-import', label: 'Data Import', icon: Database, color: 'text-blue-600', permission: 'all' },
+    { id: 'legal-documents', label: 'Legal Documents', icon: Scale, color: 'text-blue-600', permission: 'legal' },
     { id: 'regional-analytics', label: 'Regional Analytics', icon: MapPin, color: 'text-blue-600', permission: 'analytics' },
+    { id: 'poll-templates', label: 'Poll Templates', icon: Palette, color: 'text-purple-600', permission: 'content' },
+    
+    // Security & Testing
     { id: 'role-access-test', label: 'Role Access Test', icon: Shield, color: 'text-orange-600', permission: 'all' },
     { id: 'security-audit', label: 'Security Audit', icon: Shield, color: 'text-red-600', permission: 'all' },
-    { id: 'poll-templates', label: 'Poll Templates', icon: Palette, color: 'text-purple-600', permission: 'content' },
-    { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
     { id: 'settings-sync', label: 'Settings & Sync', icon: Settings, color: 'text-gray-500', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
 
@@ -277,6 +310,8 @@ export const AdminCoreV2: React.FC = () => {
     switch (activeModule) {
       case 'dashboard':
         return <AdminDashboard {...moduleProps} />;
+      case 'welcome':
+        return <UnifiedAdminWelcome onModuleSelect={setActiveModule} adminRole={adminRole} />;
       case 'users-roles':
         return <UsersRolesManager {...moduleProps} />;
       case 'polls-system':
@@ -303,6 +338,14 @@ export const AdminCoreV2: React.FC = () => {
         return <NewsSystemManager {...moduleProps} />;
       case 'marketplace':
         return <MarketplaceManager {...moduleProps} />;
+      case 'marketplace-admin':
+        return <MarketplaceAdminModule {...moduleProps} />;
+      case 'moderation':
+        return <ModerationModule {...moduleProps} />;
+      case 'data-import':
+        return <DataImportModule {...moduleProps} />;
+      case 'village-admin':
+        return <VillageAdminModule {...moduleProps} />;
       case 'stripe-settings':
         return <StripeSettings />;
       case 'elections':

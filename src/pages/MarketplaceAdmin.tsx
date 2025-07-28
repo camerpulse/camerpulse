@@ -1,12 +1,7 @@
-import { AppLayout } from '@/components/Layout/AppLayout';
-import { MarketplaceAdmin as MarketplaceAdminComponent } from '@/components/Admin/MarketplaceAdmin';
+import { AdminMigrationNotice } from '@/components/Admin/AdminMigrationNotice';
 
 const MarketplaceAdmin = () => {
-  return (
-    <AppLayout showMobileNav={false}>
-      <MarketplaceAdminComponent />
-    </AppLayout>
-  );
+  return <AdminMigrationNotice legacyFeature="marketplace" newModuleId="marketplace-admin" />;
 };
 
 export default MarketplaceAdmin;

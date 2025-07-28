@@ -1,12 +1,7 @@
-import { AppLayout } from '@/components/Layout/AppLayout';
-import { ModerationDashboard as Dashboard } from '@/components/moderation/ModerationDashboard';
+import { AdminMigrationNotice } from '@/components/Admin/AdminMigrationNotice';
 
 const ModerationDashboard = () => {
-  return (
-    <AppLayout showMobileNav={false}>
-      <Dashboard />
-    </AppLayout>
-  );
+  return <AdminMigrationNotice legacyFeature="moderation" newModuleId="moderation" />;
 };
 
 export default ModerationDashboard;
