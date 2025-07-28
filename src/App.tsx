@@ -16,6 +16,7 @@ import AuthPage from '@/pages/AuthPage';
 import DeliveryCompaniesDirectory from '@/pages/DeliveryCompaniesDirectory';
 import DeliveryCompanyRegister from '@/pages/DeliveryCompanyRegister';
 import { PublicHomePage } from '@/pages/PublicHomePage';
+import { CamerLogisticsLandingPage } from '@/pages/CamerLogisticsLandingPage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -68,6 +69,13 @@ function AppContent() {
         <Route path="/public/tracking/:trackingNumber" element={<TrackingPage />} />
         <Route path="/public/directory" element={<DeliveryCompaniesDirectory />} />
         <Route path="/public/register-company" element={<DeliveryCompanyRegister />} />
+        
+        {/* CamerLogistics Routes - No auth required */}
+        <Route path="/logistics" element={<CamerLogisticsLandingPage />} />
+        <Route path="/logistics/tracking" element={<TrackingPage />} />
+        <Route path="/logistics/tracking/:trackingNumber" element={<TrackingPage />} />
+        <Route path="/logistics/companies" element={<DeliveryCompaniesDirectory />} />
+        <Route path="/logistics/join-company" element={<DeliveryCompanyRegister />} />
         <Route path="/auth" element={<AuthPage />} />
         
         {/* Default redirect based on authentication */}
