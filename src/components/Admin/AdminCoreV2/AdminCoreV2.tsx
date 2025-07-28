@@ -53,6 +53,9 @@ import { EducationalContentModule } from './modules/EducationalContentModule';
 import { TraditionalContentModule } from './modules/TraditionalContentModule';
 import { CivicEngagementModule } from './modules/CivicEngagementModule';
 import { LegalJusticeModule } from './modules/LegalJusticeModule';
+import { CommunityForumsModule } from './modules/CommunityForumsModule';
+import { EventManagementModule } from './modules/EventManagementModule';
+import { MessagingSystemModule } from './modules/MessagingSystemModule';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -334,6 +337,9 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'messenger', label: 'Pulse Messenger', icon: MessageSquare, color: 'text-green-600', permission: 'messenger' },
     { id: 'news-system', label: 'News System', icon: Newspaper, color: 'text-blue-600', permission: 'content' },
     { id: 'village-admin', label: 'Village & Community', icon: MapPin, color: 'text-green-600', permission: 'community' },
+    { id: 'community-forums', label: 'Community Forums', icon: MessageSquare, color: 'text-purple-600', permission: 'community' },
+    { id: 'event-management', label: 'Event Management', icon: Calendar, color: 'text-indigo-600', permission: 'events' },
+    { id: 'messaging-system', label: 'Messaging System', icon: MessageSquare, color: 'text-blue-600', permission: 'messaging' },
     
     // AI & Intelligence
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
@@ -467,6 +473,12 @@ export const AdminCoreV2: React.FC = () => {
         return <CivicEngagementModule {...moduleProps} />;
       case 'legal-justice':
         return <LegalJusticeModule {...moduleProps} />;
+      case 'community-forums':
+        return <CommunityForumsModule {...moduleProps} />;
+      case 'event-management':
+        return <EventManagementModule {...moduleProps} />;
+      case 'messaging-system':
+        return <MessagingSystemModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
