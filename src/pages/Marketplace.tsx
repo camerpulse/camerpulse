@@ -245,14 +245,20 @@ const Marketplace = () => {
             
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {categories.map((category, index) => (
-                <Card key={index} className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer group">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
-                  <CardContent className="p-6 text-center relative">
-                    <div className="text-4xl mb-4">{category.icon}</div>
-                    <h3 className="font-bold text-slate-900 mb-2 group-hover:text-slate-700 transition-colors">{category.name}</h3>
-                    <p className="text-sm text-slate-600">{category.count} products</p>
-                  </CardContent>
-                </Card>
+                <Link 
+                  key={index} 
+                  to={`/marketplace?category=${encodeURIComponent(category.name.toLowerCase())}`}
+                  className="block"
+                >
+                  <Card className="relative overflow-hidden border-0 shadow-lg hover:shadow-xl hover:-translate-y-2 transition-all duration-300 cursor-pointer group">
+                    <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                    <CardContent className="p-6 text-center relative">
+                      <div className="text-4xl mb-4">{category.icon}</div>
+                      <h3 className="font-bold text-slate-900 mb-2 group-hover:text-slate-700 transition-colors">{category.name}</h3>
+                      <p className="text-sm text-slate-600">{category.count} products</p>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
           </div>
@@ -266,8 +272,10 @@ const Marketplace = () => {
                 <h2 className="text-4xl font-bold text-slate-900 mb-2">Trending Products</h2>
                 <p className="text-xl text-slate-600">Most popular items this week</p>
               </div>
-              <Button variant="outline" size="lg" className="group">
-                View All <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+              <Button variant="outline" size="lg" className="group" asChild>
+                <Link to="/marketplace?trending=true">
+                  View All <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
             </div>
             
@@ -287,9 +295,11 @@ const Marketplace = () => {
                       className="w-full h-40 object-cover group-hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                      <Button size="sm" variant="secondary" className="gap-2 shadow-lg">
-                        <Eye className="w-4 h-4" />
-                        Quick View
+                      <Button size="sm" variant="secondary" className="gap-2 shadow-lg" asChild>
+                        <Link to={`/product/${product.id}`}>
+                          <Eye className="w-4 h-4" />
+                          Quick View
+                        </Link>
                       </Button>
                     </div>
                   </div>
@@ -354,8 +364,10 @@ const Marketplace = () => {
                       </div>
                     </div>
                     
-                    <Button className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800">
-                      Visit Store
+                    <Button className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800" asChild>
+                      <Link to={`/vendor/${vendor.id}`}>
+                        Visit Store
+                      </Link>
                     </Button>
                   </CardContent>
                 </Card>
@@ -440,11 +452,15 @@ const Marketplace = () => {
               Start your journey today with our easy vendor onboarding process.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" className="px-8 py-4 text-lg font-semibold">
-                Become a Vendor
+              <Button size="lg" variant="secondary" className="px-8 py-4 text-lg font-semibold" asChild>
+                <Link to="/vendor-dashboard">
+                  Become a Vendor
+                </Link>
               </Button>
-              <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold text-white border-white hover:bg-white hover:text-green-600">
-                Learn More
+              <Button size="lg" variant="outline" className="px-8 py-4 text-lg font-semibold text-white border-white hover:bg-white hover:text-green-600" asChild>
+                <Link to="/marketplace/vendor-info">
+                  Learn More
+                </Link>
               </Button>
             </div>
           </div>
