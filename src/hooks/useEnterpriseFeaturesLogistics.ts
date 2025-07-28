@@ -301,6 +301,51 @@ export const useEnterpriseFeaturesLogistics = () => {
     fetchApiIntegrations();
   }, [fetchTenants, fetchApiIntegrations]);
 
+  // Insurance and fleet functions (can be added later)
+  const fetchInsurancePolicies = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('logistics_insurance_policies')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setInsurancePolicies(data || []);
+    } catch (error) {
+      console.error('Error fetching insurance policies:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch insurance policies",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
+
+  const fetchFleetVehicles = useCallback(async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('logistics_fleet_vehicles')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setFleetVehicles(data || []);
+    } catch (error) {
+      console.error('Error fetching fleet vehicles:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch fleet vehicles",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [toast]);
+
   return {
     loading,
     tenants,
@@ -314,6 +359,8 @@ export const useEnterpriseFeaturesLogistics = () => {
     fetchApiIntegrations,
     createApiIntegration,
     updateApiIntegration,
-    deleteApiIntegration
+    deleteApiIntegration,
+    fetchInsurancePolicies,
+    fetchFleetVehicles
   };
 };

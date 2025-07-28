@@ -1,150 +1,142 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.5'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-interface RequestBody {
-  limit?: number;
-  offset?: number;
-  session_id?: string;
-}
-
-Deno.serve(async (req) => {
+serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    );
+    const { limit = 20, offset = 0, session_id } = await req.json()
 
-    const { limit = 20, offset = 0, session_id }: RequestBody = await req.json();
+    // Initialize Supabase client
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
-    console.log('Generating personalized feed', { limit, offset, session_id });
-
-    // Get user from auth header
-    const authHeader = req.headers.get('Authorization');
-    let userId = null;
-    
+    // Get authentication header
+    const authHeader = req.headers.get('Authorization')
     if (authHeader) {
-      const { data: { user }, error } = await supabase.auth.getUser(authHeader.replace('Bearer ', ''));
-      if (user && !error) {
-        userId = user.id;
-      }
+      supabase.auth.setSession({
+        access_token: authHeader.replace('Bearer ', ''),
+        refresh_token: ''
+      })
     }
 
-    console.log('User ID:', userId);
+    // Generate personalized feed content
+    const feedItems = []
 
-    // Generate a diverse feed with different content types
-    const feedItems = [];
+    // Fetch recent political updates
+    const { data: politicalUpdates } = await supabase
+      .from('political_updates')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(Math.floor(limit * 0.3))
 
-    // Get latest pulse posts
-    const { data: pulses } = await supabase
+    if (politicalUpdates) {
+      feedItems.push(...politicalUpdates.map(item => ({
+        ...item,
+        content_type: 'political_update',
+        priority: 0.9
+      })))
+    }
+
+    // Fetch recent pulse posts
+    const { data: pulsePosts } = await supabase
       .from('profile_posts')
       .select('*')
       .order('created_at', { ascending: false })
-      .limit(Math.floor(limit * 0.4));
+      .limit(Math.floor(limit * 0.4))
 
-    if (pulses) {
-      pulses.forEach(pulse => {
-        feedItems.push({
-          id: pulse.id,
-          type: 'pulse',
-          content: pulse.content,
-          created_at: pulse.created_at,
-          user_id: pulse.user_id,
-          score: 0.8 + Math.random() * 0.2
-        });
-      });
+    if (pulsePosts) {
+      feedItems.push(...pulsePosts.map(item => ({
+        ...item,
+        content_type: 'pulse',
+        priority: 0.7
+      })))
     }
 
-    // Get civic updates (government officials)
-    const { data: officials } = await supabase
-      .from('government_officials')
+    // Fetch recent jobs
+    const { data: jobs } = await supabase
+      .from('jobs')
+      .select('*')
+      .eq('status', 'open')
+      .order('created_at', { ascending: false })
+      .limit(Math.floor(limit * 0.2))
+
+    if (jobs) {
+      feedItems.push(...jobs.map(item => ({
+        ...item,
+        content_type: 'job',
+        priority: 0.6
+      })))
+    }
+
+    // Fetch artist content if available
+    const { data: artistPosts } = await supabase
+      .from('artist_notifications')
       .select('*')
       .order('created_at', { ascending: false })
-      .limit(Math.floor(limit * 0.3));
+      .limit(Math.floor(limit * 0.1))
 
-    if (officials) {
-      officials.forEach(official => {
-        feedItems.push({
-          id: official.id,
-          type: 'political_update',
-          content: `Update from ${official.name} - ${official.position}`,
-          created_at: official.created_at,
-          official_data: official,
-          score: 0.9 + Math.random() * 0.1
-        });
-      });
+    if (artistPosts) {
+      feedItems.push(...artistPosts.map(item => ({
+        ...item,
+        content_type: 'artist_content',
+        priority: 0.5
+      })))
     }
 
-    // Add some sample content if we don't have enough
-    if (feedItems.length < limit) {
-      const sampleContent = [
-        {
-          id: `sample-${Date.now()}-1`,
-          type: 'civic_announcement',
-          content: 'Welcome to CamerPulse - Your civic engagement platform',
-          created_at: new Date().toISOString(),
-          score: 0.7
-        },
-        {
-          id: `sample-${Date.now()}-2`,
-          type: 'community_update',
-          content: 'Join the conversation about improving our communities',
-          created_at: new Date().toISOString(),
-          score: 0.6
+    // Sort by priority and creation date
+    const sortedFeed = feedItems
+      .sort((a, b) => {
+        // First sort by priority
+        if (b.priority !== a.priority) {
+          return b.priority - a.priority
         }
-      ];
-
-      feedItems.push(...sampleContent);
-    }
-
-    // Sort by score and creation time
-    feedItems.sort((a, b) => {
-      const scoreCompare = b.score - a.score;
-      if (scoreCompare !== 0) return scoreCompare;
-      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
-    });
-
-    // Apply pagination
-    const paginatedItems = feedItems.slice(offset, offset + limit);
-
-    console.log(`Generated ${paginatedItems.length} feed items`);
+        // Then by creation date
+        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+      })
+      .slice(offset, offset + limit)
 
     return new Response(
       JSON.stringify({
         success: true,
-        data: paginatedItems,
-        pagination: {
-          offset,
-          limit,
-          total: feedItems.length
-        }
+        data: sortedFeed,
+        total: feedItems.length,
+        limit,
+        offset
       }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200,
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        } 
       }
-    );
+    )
 
   } catch (error) {
-    console.error('Error generating personalized feed:', error);
+    console.error('Error generating personalized feed:', error)
     
     return new Response(
       JSON.stringify({
         success: false,
-        error: error.message || 'Failed to generate personalized feed'
+        error: error.message,
+        data: []
       }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      { 
         status: 500,
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        } 
       }
-    );
+    )
   }
-});
+})
