@@ -8,6 +8,7 @@ import { PWAInstallPrompt } from '@/components/Mobile/PWAInstallPrompt';
 import { MobileNotificationFeed } from '@/components/Mobile/MobileNotificationFeed';
 import { AdvancedNotificationCenter } from '@/components/Notifications/AdvancedNotificationCenter';
 import { AnalyticsCenter } from '@/components/Analytics/AnalyticsCenter';
+import { WorkflowAutomationCenter } from '@/components/Workflows/WorkflowAutomationCenter';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { Activity, Bell } from 'lucide-react';
@@ -49,10 +50,19 @@ const NotificationDashboard: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            {/* Main Analytics Dashboard */}
-            <AnalyticsCenter />
+            {/* Main Feature Tabs */}
+            <div className="grid grid-cols-1 gap-6">
+              {/* Analytics Dashboard */}
+              <AnalyticsCenter />
+              
+              {/* Workflow Automation */}
+              <WorkflowAutomationCenter />
+              
+              {/* Advanced Notification Features */}
+              <AdvancedNotificationCenter />
+            </div>
             
-            {/* Advanced Features Grid */}
+            {/* Supporting Features Grid */}
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
               {/* Left Column - Feed & Mobile */}
               <div className="xl:col-span-1 space-y-6">
@@ -60,9 +70,8 @@ const NotificationDashboard: React.FC = () => {
                 <MobileNotificationFeed />
               </div>
 
-              {/* Right Column - Advanced Management */}
+              {/* Right Column - Management Tools */}
               <div className="xl:col-span-2 space-y-6">
-                <AdvancedNotificationCenter />
                 <NotificationStatusTracker />
                 <PushNotificationManager />
                 <InteractiveNotificationManager />
