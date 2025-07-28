@@ -10,6 +10,7 @@ import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import Feed from '@/pages/Feed';
 import AuthPage from '@/pages/AuthPage';
+import ShippingLabels from '@/pages/ShippingLabels';
 import { PublicHomePage } from '@/pages/PublicHomePage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { PluginProvider } from '@/contexts/PluginContext';
@@ -63,6 +64,7 @@ function AppContent() {
             <Route path="/feed" element={<CivicAuthenticatedLayout><Feed /></CivicAuthenticatedLayout>} />
             <Route path="/dashboard" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
             <Route path="/settings" element={<CivicAuthenticatedLayout><SettingsPage /></CivicAuthenticatedLayout>} />
+            <Route path="/shipping-labels" element={<CivicAuthenticatedLayout><ShippingLabels /></CivicAuthenticatedLayout>} />
           </>
         )}
       </Routes>

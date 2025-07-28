@@ -38308,6 +38308,120 @@ export type Database = {
           },
         ]
       }
+      shipping_label_templates: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          height_mm: number
+          id: string
+          is_default: boolean | null
+          name: string
+          template_data: Json
+          updated_at: string | null
+          width_mm: number
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          height_mm?: number
+          id?: string
+          is_default?: boolean | null
+          name: string
+          template_data?: Json
+          updated_at?: string | null
+          width_mm?: number
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          height_mm?: number
+          id?: string
+          is_default?: boolean | null
+          name?: string
+          template_data?: Json
+          updated_at?: string | null
+          width_mm?: number
+        }
+        Relationships: []
+      }
+      shipping_labels: {
+        Row: {
+          barcode_data: string | null
+          company_id: string | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          label_data: Json | null
+          package_details: Json | null
+          printed_at: string | null
+          qr_code_data: string | null
+          recipient_address: Json
+          recipient_name: string
+          sender_address: Json
+          sender_name: string
+          status: string | null
+          template_id: string | null
+          tracking_number: string
+          updated_at: string | null
+        }
+        Insert: {
+          barcode_data?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          label_data?: Json | null
+          package_details?: Json | null
+          printed_at?: string | null
+          qr_code_data?: string | null
+          recipient_address: Json
+          recipient_name: string
+          sender_address: Json
+          sender_name: string
+          status?: string | null
+          template_id?: string | null
+          tracking_number: string
+          updated_at?: string | null
+        }
+        Update: {
+          barcode_data?: string | null
+          company_id?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          label_data?: Json | null
+          package_details?: Json | null
+          printed_at?: string | null
+          qr_code_data?: string | null
+          recipient_address?: Json
+          recipient_name?: string
+          sender_address?: Json
+          sender_name?: string
+          status?: string | null
+          template_id?: string | null
+          tracking_number?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_labels_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipping_labels_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_label_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipping_rates: {
         Row: {
           base_rate: number
