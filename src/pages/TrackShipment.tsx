@@ -79,8 +79,12 @@ const TrackShipment = () => {
   }, [trackingNumber]);
 
   const searchShipment = async (query: string) => {
-    if (!query.trim()) return;
+    if (!query.trim()) {
+      console.log('TrackShipment: No query provided');
+      return;
+    }
     
+    console.log('TrackShipment: Searching for shipment with tracking number:', query.trim());
     setLoading(true);
     try {
       // Fetch shipment details
@@ -90,7 +94,10 @@ const TrackShipment = () => {
         .eq('tracking_number', query.trim())
         .maybeSingle();
 
+      console.log('TrackShipment: Shipment query result:', { shipmentData, shipmentError });
+
       if (shipmentError) {
+        console.error('TrackShipment: Error fetching shipment:', shipmentError);
         toast({
           title: "Error",
           description: "Failed to fetch shipment information",
@@ -101,6 +108,7 @@ const TrackShipment = () => {
       }
 
       if (!shipmentData) {
+        console.log('TrackShipment: No shipment found for tracking number:', query.trim());
         toast({
           title: "Tracking Number Not Found",
           description: "Please check your tracking number and try again.",
@@ -110,6 +118,7 @@ const TrackShipment = () => {
         return;
       }
 
+      console.log('TrackShipment: Shipment found:', shipmentData);
       setShipment(shipmentData);
 
       // Fetch tracking events

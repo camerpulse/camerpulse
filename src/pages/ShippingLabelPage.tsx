@@ -18,8 +18,12 @@ const ShippingLabelPage = () => {
 
   useEffect(() => {
     const fetchShipment = async () => {
-      if (!trackingNumber) return;
+      if (!trackingNumber) {
+        console.log('ShippingLabelPage: No tracking number provided');
+        return;
+      }
       
+      console.log('ShippingLabelPage: Fetching shipment for tracking number:', trackingNumber);
       setLoading(true);
       try {
         const { data, error } = await supabase
@@ -28,7 +32,10 @@ const ShippingLabelPage = () => {
           .eq('tracking_number', trackingNumber)
           .maybeSingle();
 
+        console.log('ShippingLabelPage: Shipment query result:', { data, error });
+
         if (error) {
+          console.error('ShippingLabelPage: Error fetching shipment:', error);
           toast({
             title: "Error",
             description: "Failed to fetch shipment details",
@@ -38,6 +45,7 @@ const ShippingLabelPage = () => {
         }
 
         if (!data) {
+          console.log('ShippingLabelPage: No shipment found for tracking number:', trackingNumber);
           toast({
             title: "Label Not Found",
             description: "No shipment found with this tracking number",
@@ -46,9 +54,10 @@ const ShippingLabelPage = () => {
           return;
         }
 
+        console.log('ShippingLabelPage: Shipment found:', data);
         setShipment(data);
       } catch (error) {
-        console.error('Error fetching shipment:', error);
+        console.error('ShippingLabelPage: Error fetching shipment:', error);
         toast({
           title: "Error",
           description: "Failed to fetch shipment details",
