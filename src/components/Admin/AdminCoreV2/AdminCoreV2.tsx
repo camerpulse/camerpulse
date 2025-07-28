@@ -46,6 +46,8 @@ import { RegionalAnalyticsManager } from './modules/RegionalAnalyticsManager';
 import RoleAccessTestSuite from './tests/RoleAccessTestSuite';
 import SecurityAuditSuite from './security/SecurityAuditSuite';
 import { PollTemplatesManager } from './PollTemplatesManager';
+import { SecurityManagementModule } from './modules/SecurityManagementModule';
+import { NewsManagementModule } from './modules/NewsManagementModule';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -446,6 +448,10 @@ export const AdminCoreV2: React.FC = () => {
         return <SystemSettingsModule {...moduleProps} />;
       case 'settings-sync':
         return <SettingsSyncManager {...moduleProps} systemModules={systemModules} onAutoSync={() => autoSyncMutation.mutate()} />;
+      case 'security-management':
+        return <SecurityManagementModule {...moduleProps} />;
+      case 'news-management':
+        return <NewsManagementModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} />;
     }
