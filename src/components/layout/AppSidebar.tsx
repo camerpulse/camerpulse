@@ -22,7 +22,9 @@ import {
   History,
   Settings,
   FileText,
-  BarChart3
+  BarChart3,
+  Layers,
+  Truck
 } from 'lucide-react';
 
 const navigationItems = [
@@ -37,6 +39,12 @@ const navigationItems = [
     url: '/designer',
     icon: PenTool,
     description: 'Create and edit labels'
+  },
+  {
+    title: 'Advanced Builder',
+    url: '/advanced-builder',
+    icon: Layers,
+    description: 'Drag-and-drop label builder'
   },
   {
     title: 'Templates',
@@ -58,6 +66,12 @@ const toolsItems = [
     url: '/scanner',
     icon: QrCode,
     description: 'Scan barcodes and QR codes'
+  },
+  {
+    title: 'Tracking',
+    url: '/tracking',
+    icon: Truck,
+    description: 'Track packages'
   },
   {
     title: 'Print History',
@@ -130,7 +144,7 @@ export function AppSidebar() {
                       {state !== 'collapsed' && (
                         <div className="flex-1">
                           <span>{item.title}</span>
-                          {item.url === '/designer' && (
+                          {item.url === '/advanced-builder' && (
                             <Badge variant="secondary" className="ml-2 text-xs">
                               New
                             </Badge>

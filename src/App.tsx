@@ -5,6 +5,8 @@ import { AppSidebar } from '@/components/layout/AppSidebar';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { Dashboard } from '@/pages/Dashboard';
 import { LabelDesignerPage } from '@/components/LabelDesigner/LabelDesignerPage';
+import { AdvancedLabelBuilder } from '@/components/LabelDesigner/AdvancedLabelBuilder';
+import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { PrintHistoryPage } from '@/components/LabelDesigner/PrintHistoryPage';
 import { ScannerInterface } from '@/components/LabelDesigner/ScannerInterface';
 import { TemplateManager } from '@/components/LabelDesigner/TemplateManager';
@@ -52,9 +54,12 @@ function AppContent() {
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/designer" element={<LabelDesignerPage />} />
+              <Route path="/advanced-builder" element={<AdvancedLabelBuilder />} />
               <Route path="/templates" element={<TemplateManager />} />
               <Route path="/bulk-generator" element={<BulkLabelGenerator />} />
               <Route path="/scanner" element={<ScannerInterface />} />
+              <Route path="/tracking" element={<TrackingPage />} />
+              <Route path="/tracking/:trackingNumber" element={<TrackingPage />} />
               <Route path="/history" element={<PrintHistoryPage />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Routes>
