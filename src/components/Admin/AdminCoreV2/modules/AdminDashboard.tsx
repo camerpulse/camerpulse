@@ -1,5 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AdminModuleHeader } from '../components/AdminModuleHeader';
+import { StatCard } from '../components/StatCard';
+import { AdminWorkflowManager } from '../components/AdminWorkflowManager';
 import { Badge } from '@/components/ui/badge';
 import { 
   Users, UserCheck, Target, Building2, CreditCard, TrendingUp, 
@@ -12,92 +15,72 @@ interface AdminDashboardProps {
   stats?: any;
 }
 
+interface AdminDashboardProps {
+  hasPermission: (permission: string) => boolean;
+  logActivity: (action: string, details: any) => void;
+  stats?: any;
+  onModuleNavigate?: (moduleId: string) => void;
+}
+
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
   hasPermission, 
   logActivity, 
-  stats 
+  stats,
+  onModuleNavigate
 }) => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">
-          Admin Core v2.0 Dashboard
-        </h1>
-        <p className="text-muted-foreground">
-          Comprehensive platform management and intelligence control suite
-        </p>
-      </div>
+      <AdminModuleHeader
+        title="Admin Core v2.0 Dashboard"
+        description="Comprehensive platform management and intelligence control suite"
+        icon={Activity}
+        iconColor="text-cm-green"
+        badge={{
+          text: "System Healthy",
+          variant: "default"
+        }}
+        onRefresh={() => {
+          logActivity('dashboard_refresh', { timestamp: new Date() });
+        }}
+      />
 
       {/* Quick Stats Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="border-l-4 border-l-cm-green hover:shadow-elegant transition-all">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <Users className="h-4 w-4 mr-2" />
-              Total Users
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">
-              {stats?.total_users?.toLocaleString() || '0'}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              +12.3% from last month
-            </p>
-          </CardContent>
-        </Card>
+        <StatCard
+          title="Total Users"
+          value={stats?.total_users?.toLocaleString() || '0'}
+          description="+12.3% from last month"
+          icon={Users}
+          trend={{ value: 12.3, isPositive: true, period: "from last month" }}
+          action={{ label: "Manage Users", onClick: () => onModuleNavigate?.('users-roles') }}
+        />
 
-        <Card className="border-l-4 border-l-cm-red hover:shadow-elegant transition-all">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <UserCheck className="h-4 w-4 mr-2" />
-              Politicians
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">
-              {stats?.total_politicians?.toLocaleString() || '0'}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Verified profiles active
-            </p>
-          </CardContent>
-        </Card>
+        <StatCard
+          title="Politicians"
+          value={stats?.total_politicians?.toLocaleString() || '0'}
+          description="Verified profiles active"
+          icon={UserCheck}
+          badge={{ text: "Verified", variant: "default" }}
+          action={{ label: "View Officials", onClick: () => onModuleNavigate?.('civic-officials') }}
+        />
 
-        <Card className="border-l-4 border-l-cm-yellow hover:shadow-elegant transition-all">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <Target className="h-4 w-4 mr-2" />
-              Active Polls
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">
-              {stats?.total_polls?.toLocaleString() || '0'}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              High engagement rate
-            </p>
-          </CardContent>
-        </Card>
+        <StatCard
+          title="Active Polls"
+          value={stats?.total_polls?.toLocaleString() || '0'}
+          description="High engagement rate"
+          icon={Target}
+          trend={{ value: 8.5, isPositive: true, period: "engagement up" }}
+          action={{ label: "Manage Polls", onClick: () => onModuleNavigate?.('polls-system') }}
+        />
 
-        <Card className="border-l-4 border-l-blue-500 hover:shadow-elegant transition-all">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
-              <Building2 className="h-4 w-4 mr-2" />
-              Companies
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-foreground">
-              {stats?.total_companies?.toLocaleString() || '0'}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              Directory listings
-            </p>
-          </CardContent>
-        </Card>
+        <StatCard
+          title="Companies"
+          value={stats?.total_companies?.toLocaleString() || '0'}
+          description="Directory listings"
+          icon={Building2}
+          action={{ label: "View Directory", onClick: () => onModuleNavigate?.('company-directory') }}
+        />
       </div>
 
       {/* System Health Monitor */}
@@ -220,6 +203,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
           </CardContent>
         </Card>
       </div>
+
+      {/* Cross-Module Workflows */}
+      <AdminWorkflowManager
+        onModuleNavigate={(moduleId) => onModuleNavigate?.(moduleId)}
+        onActionExecute={(actionId) => {
+          logActivity('workflow_action_executed', { actionId, timestamp: new Date() });
+        }}
+      />
     </div>
   );
 };

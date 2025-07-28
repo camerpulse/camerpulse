@@ -1,6 +1,6 @@
 import React from 'react';
 import { ModerationDashboard } from '@/components/moderation/ModerationDashboard';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AdminModuleHeader } from '../components/AdminModuleHeader';
 import { Shield } from 'lucide-react';
 
 interface ModerationModuleProps {
@@ -16,13 +16,20 @@ export const ModerationModule: React.FC<ModerationModuleProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold flex items-center">
-          <Shield className="h-6 w-6 mr-2 text-orange-600" />
-          Content Moderation
-        </h2>
-        <p className="text-muted-foreground">Monitor and moderate platform content and user activities</p>
-      </div>
+      <AdminModuleHeader
+        title="Content Moderation"
+        description="Monitor and moderate platform content and user activities"
+        icon={Shield}
+        iconColor="text-orange-600"
+        searchPlaceholder="Search reports, users, content..."
+        onSearch={(query) => {
+          // Handle search functionality
+          console.log('Searching moderation:', query);
+        }}
+        onRefresh={() => {
+          logActivity('moderation_refresh', { timestamp: new Date() });
+        }}
+      />
       
       <ModerationDashboard />
     </div>

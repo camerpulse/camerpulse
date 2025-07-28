@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Menu, Search, Bell, Activity } from 'lucide-react';
+import { Menu, Search, Bell, Activity, X } from 'lucide-react';
+import { AdminGlobalSearch } from '../components/AdminGlobalSearch';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 
 interface AdminHeaderProps {
   sidebarOpen: boolean;
@@ -11,6 +19,7 @@ interface AdminHeaderProps {
   setSearchQuery: (query: string) => void;
   notifications: any[];
   isMobile: boolean;
+  onModuleNavigate?: (moduleId: string) => void;
 }
 
 export const AdminHeader: React.FC<AdminHeaderProps> = ({
@@ -19,8 +28,10 @@ export const AdminHeader: React.FC<AdminHeaderProps> = ({
   searchQuery,
   setSearchQuery,
   notifications,
-  isMobile
+  isMobile,
+  onModuleNavigate
 }) => {
+  const [searchOpen, setSearchOpen] = useState(false);
   return (
     <header className="bg-card border-b border-border p-4 lg:p-6">
       <div className="flex items-center justify-between">

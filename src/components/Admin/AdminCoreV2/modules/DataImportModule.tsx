@@ -1,6 +1,6 @@
 import React from 'react';
 import { DataImportDashboard } from '@/components/Admin/DataImportDashboard';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { AdminModuleHeader } from '../components/AdminModuleHeader';
 import { Upload } from 'lucide-react';
 
 interface DataImportModuleProps {
@@ -16,13 +16,23 @@ export const DataImportModule: React.FC<DataImportModuleProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold flex items-center">
-          <Upload className="h-6 w-6 mr-2 text-blue-600" />
-          Data Import & Management
-        </h2>
-        <p className="text-muted-foreground">Import and manage data for the Legislative Directory system</p>
-      </div>
+      <AdminModuleHeader
+        title="Data Import & Management"
+        description="Import and manage data for the Legislative Directory system"
+        icon={Upload}
+        iconColor="text-blue-600"
+        badge={{
+          text: "Legislative Directory",
+          variant: "secondary"
+        }}
+        searchPlaceholder="Search import records, logs..."
+        onSearch={(query) => {
+          console.log('Searching imports:', query);
+        }}
+        onRefresh={() => {
+          logActivity('data_import_refresh', { timestamp: new Date() });
+        }}
+      />
       
       <DataImportDashboard />
     </div>

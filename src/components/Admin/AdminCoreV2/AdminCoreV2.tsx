@@ -329,7 +329,7 @@ export const AdminCoreV2: React.FC = () => {
     
     switch (activeModule) {
       case 'dashboard':
-        return <AdminDashboard {...moduleProps} />;
+        return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
       case 'welcome':
         return <UnifiedAdminWelcome onModuleSelect={handleModuleChange} adminRole={adminRole} />;
       case 'users-roles':
@@ -404,6 +404,7 @@ export const AdminCoreV2: React.FC = () => {
           setSearchQuery={setSearchQuery}
           notifications={notifications}
           isMobile={isMobile}
+          onModuleNavigate={handleModuleChange}
         />
       )}
 
