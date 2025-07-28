@@ -3,14 +3,9 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { AppHeader } from '@/components/layout/AppHeader';
+import { CamerPulseDashboard } from '@/pages/CamerPulseDashboard';
 import { Dashboard } from '@/pages/Dashboard';
-import { LabelDesignerPage } from '@/components/LabelDesigner/LabelDesignerPage';
-import { AdvancedLabelBuilder } from '@/components/LabelDesigner/AdvancedLabelBuilder';
 import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
-import { PrintHistoryPage } from '@/components/LabelDesigner/PrintHistoryPage';
-import { ScannerInterface } from '@/components/LabelDesigner/ScannerInterface';
-import { TemplateManager } from '@/components/LabelDesigner/TemplateManager';
-import { BulkLabelGenerator } from '@/components/LabelDesigner/BulkLabelGenerator';
 import { SettingsPage } from '@/pages/SettingsPage';
 import AuthPage from '@/pages/AuthPage';
 import DeliveryCompaniesDirectory from '@/pages/DeliveryCompaniesDirectory';
@@ -77,6 +72,13 @@ function AppContent() {
         <Route path="/logistics/companies" element={<DeliveryCompaniesDirectory />} />
         <Route path="/logistics/join-company" element={<DeliveryCompanyRegister />} />
         
+        {/* Logistics Dashboard - Authenticated Routes */}
+        {user && (
+          <>
+            <Route path="/logistics/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
+          </>
+        )}
+        
         {/* Auth Route */}
         <Route path="/auth" element={<AuthPage />} />
         
@@ -86,16 +88,8 @@ function AppContent() {
         {/* Authenticated Routes */}
         {user && (
           <>
-            <Route path="/" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
-            <Route path="/dashboard" element={<AuthenticatedLayout><Dashboard /></AuthenticatedLayout>} />
-            <Route path="/designer" element={<AuthenticatedLayout><LabelDesignerPage /></AuthenticatedLayout>} />
-            <Route path="/advanced-builder" element={<AuthenticatedLayout><AdvancedLabelBuilder /></AuthenticatedLayout>} />
-            <Route path="/templates" element={<AuthenticatedLayout><TemplateManager /></AuthenticatedLayout>} />
-            <Route path="/bulk-generator" element={<AuthenticatedLayout><BulkLabelGenerator /></AuthenticatedLayout>} />
-            <Route path="/scanner" element={<AuthenticatedLayout><ScannerInterface /></AuthenticatedLayout>} />
-            <Route path="/tracking" element={<AuthenticatedLayout><TrackingPage /></AuthenticatedLayout>} />
-            <Route path="/tracking/:trackingNumber" element={<AuthenticatedLayout><TrackingPage /></AuthenticatedLayout>} />
-            <Route path="/history" element={<AuthenticatedLayout><PrintHistoryPage /></AuthenticatedLayout>} />
+            <Route path="/" element={<AuthenticatedLayout><CamerPulseDashboard /></AuthenticatedLayout>} />
+            <Route path="/dashboard" element={<AuthenticatedLayout><CamerPulseDashboard /></AuthenticatedLayout>} />
             <Route path="/settings" element={<AuthenticatedLayout><SettingsPage /></AuthenticatedLayout>} />
           </>
         )}
