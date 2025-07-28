@@ -13,7 +13,8 @@ import {
   AlertTriangle, CheckCircle, Clock, Menu, X, Search,
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
-  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck, Plug
+  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck, Plug,
+  Briefcase, Music
 } from 'lucide-react';
 
 // Import all feature modules
@@ -31,6 +32,8 @@ import { SettingsSyncManager } from './modules/SettingsSyncManager';
 import { IntelligencePanel } from './modules/IntelligencePanel';
 import { PoliticalPartiesManager } from './modules/PoliticalPartiesManager';
 import { NewsSystemManager } from './modules/NewsSystemManager';
+import { JobsManager } from './modules/JobsManager';
+import { ArtistManager } from './modules/ArtistManager';
 import { MarketplaceManager } from './modules/MarketplaceManager';
 import { StripeSettings } from '../StripeSettings';
 import { LegalDocumentsManager } from './modules/LegalDocumentsManager';
@@ -304,8 +307,11 @@ export const AdminCoreV2: React.FC = () => {
     
     // Business & Finance
     { id: 'company-directory', label: 'Company Directory', icon: Building2, color: 'text-orange-600', permission: 'companies' },
+    { id: 'jobs-management', label: 'Jobs Management', icon: Briefcase, color: 'text-blue-600', permission: 'jobs' },
+    { id: 'artist-management', label: 'Artist Management', icon: Music, color: 'text-purple-600', permission: 'artists' },
     { id: 'billionaire-tracker', label: 'Billionaire Tracker', icon: CreditCard, color: 'text-yellow-600', permission: 'companies' },
     { id: 'debt-monitor', label: 'Debt Monitor', icon: TrendingUp, color: 'text-red-600', permission: 'analytics' },
+    { id: 'marketplace', label: 'Marketplace', icon: Store, color: 'text-green-600', permission: 'marketplace' },
     { id: 'marketplace-admin', label: 'Marketplace Admin', icon: Store, color: 'text-green-600', permission: 'marketplace' },
     { id: 'logistics-admin', label: 'Logistics Admin', icon: Truck, color: 'text-purple-600', permission: 'logistics' },
     { id: 'stripe-settings', label: 'Stripe Settings', icon: CreditCard, color: 'text-blue-600', permission: 'marketplace' },
@@ -376,6 +382,10 @@ export const AdminCoreV2: React.FC = () => {
         return <PoliticalPartiesManager {...moduleProps} />;
       case 'news-system':
         return <NewsSystemManager {...moduleProps} />;
+      case 'jobs-management':
+        return <JobsManager {...moduleProps} />;
+      case 'artist-management':
+        return <ArtistManager {...moduleProps} />;
       case 'marketplace':
         return <MarketplaceManager {...moduleProps} />;
       case 'marketplace-admin':
