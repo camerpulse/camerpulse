@@ -88,19 +88,26 @@ const TrackShipment = () => {
         .from('shipments')
         .select('*')
         .eq('tracking_number', query.trim())
-        .single();
+        .maybeSingle();
 
       if (shipmentError) {
-        if (shipmentError.code === 'PGRST116') {
-          toast({
-            title: "Tracking Number Not Found",
-            description: "Please check your tracking number and try again.",
-            variant: "destructive"
-          });
-          setShipment(null);
-          return;
-        }
-        throw shipmentError;
+        toast({
+          title: "Error",
+          description: "Failed to fetch shipment information",
+          variant: "destructive"
+        });
+        setShipment(null);
+        return;
+      }
+
+      if (!shipmentData) {
+        toast({
+          title: "Tracking Number Not Found",
+          description: "Please check your tracking number and try again.",
+          variant: "destructive"
+        });
+        setShipment(null);
+        return;
       }
 
       setShipment(shipmentData);

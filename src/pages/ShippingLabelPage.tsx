@@ -26,12 +26,21 @@ const ShippingLabelPage = () => {
           .from('shipments')
           .select('*')
           .eq('tracking_number', trackingNumber)
-          .single();
+          .maybeSingle();
 
         if (error) {
           toast({
             title: "Error",
             description: "Failed to fetch shipment details",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        if (!data) {
+          toast({
+            title: "Label Not Found",
+            description: "No shipment found with this tracking number",
             variant: "destructive"
           });
           return;
