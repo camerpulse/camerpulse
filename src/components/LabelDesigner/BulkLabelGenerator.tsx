@@ -33,6 +33,8 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useLabelTemplates } from '@/hooks/useLabelTemplates';
 import { useLabelPrinting } from '@/hooks/useLabelPrinting';
+import { BulkPreviewModal } from './BulkPreviewModal';
+import { LabelPreview } from './LabelPreview';
 
 interface BulkData {
   id: string;
@@ -81,6 +83,7 @@ export const BulkLabelGenerator: React.FC = () => {
   const [previewEnabled, setPreviewEnabled] = useState(true);
   const [autoTrackingGeneration, setAutoTrackingGeneration] = useState(true);
   const [batchSize, setBatchSize] = useState(10);
+  const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Manual data entry
@@ -486,6 +489,24 @@ export const BulkLabelGenerator: React.FC = () => {
     }
   };
 
+  const handlePreviewAndPrint = (selectedItems: Array<Record<string, any>>) => {
+    // Handle actual printing logic here
+    console.log('Printing items:', selectedItems);
+    toast({
+      title: "Print Started",
+      description: `Printing ${selectedItems.length} labels`,
+    });
+  };
+
+  const handleExportFromPreview = (selectedItems: Array<Record<string, any>>, format: string) => {
+    // Handle export logic here
+    console.log('Exporting items:', selectedItems, 'Format:', format);
+    toast({
+      title: "Export Started",
+      description: `Exporting ${selectedItems.length} labels as ${format.toUpperCase()}`,
+    });
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -887,6 +908,18 @@ export const BulkLabelGenerator: React.FC = () => {
                   </Button>
                 )}
 
+                {bulkData.length > 0 && selectedTemplate && (
+                  <Button
+                    onClick={() => setPreviewModalOpen(true)}
+                    variant="outline"
+                    className="w-full"
+                    size="sm"
+                  >
+                    <Eye className="h-4 w-4 mr-2" />
+                    Preview Labels ({bulkData.filter(row => !row.validationErrors?.length).length})
+                  </Button>
+                )}
+
                 <Button
                   onClick={startBulkGeneration}
                   disabled={isProcessing || bulkData.length === 0 || !selectedTemplate}
@@ -952,6 +985,15 @@ export const BulkLabelGenerator: React.FC = () => {
           )}
         </div>
       </div>
+
+      <BulkPreviewModal
+        open={previewModalOpen}
+        onOpenChange={setPreviewModalOpen}
+        data={bulkData}
+        templateId={selectedTemplate}
+        onPrint={handlePreviewAndPrint}
+        onExport={handleExportFromPreview}
+      />
     </div>
   );
 };
