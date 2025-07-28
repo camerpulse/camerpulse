@@ -696,6 +696,48 @@ export type Database = {
         }
         Relationships: []
       }
+      analytics_events: {
+        Row: {
+          event_category: string
+          event_data: Json | null
+          event_name: string
+          id: string
+          ip_address: unknown | null
+          page_url: string | null
+          referrer: string | null
+          session_id: string | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          event_category: string
+          event_data?: Json | null
+          event_name: string
+          id?: string
+          ip_address?: unknown | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          event_category?: string
+          event_data?: Json | null
+          event_name?: string
+          id?: string
+          ip_address?: unknown | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ancestor_relationships: {
         Row: {
           ancestor_id: string | null
@@ -24758,6 +24800,42 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_analytics: {
+        Row: {
+          created_at: string | null
+          device_info: Json | null
+          event_timestamp: string
+          event_type: string
+          id: string
+          location_data: Json | null
+          metadata: Json | null
+          notification_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          device_info?: Json | null
+          event_timestamp?: string
+          event_type: string
+          id?: string
+          location_data?: Json | null
+          metadata?: Json | null
+          notification_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          device_info?: Json | null
+          event_timestamp?: string
+          event_type?: string
+          id?: string
+          location_data?: Json | null
+          metadata?: Json | null
+          notification_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notification_attachments: {
         Row: {
           attachment_type: string
@@ -24938,6 +25016,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notification_performance_metrics: {
+        Row: {
+          avg_click_time_seconds: number | null
+          avg_open_time_seconds: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          date_tracked: string
+          engagement_rate: number | null
+          id: string
+          notification_type: string
+          template_id: string | null
+          total_clicked: number | null
+          total_delivered: number | null
+          total_dismissed: number | null
+          total_expired: number | null
+          total_opened: number | null
+          total_sent: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          avg_click_time_seconds?: number | null
+          avg_open_time_seconds?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          date_tracked: string
+          engagement_rate?: number | null
+          id?: string
+          notification_type: string
+          template_id?: string | null
+          total_clicked?: number | null
+          total_delivered?: number | null
+          total_dismissed?: number | null
+          total_expired?: number | null
+          total_opened?: number | null
+          total_sent?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          avg_click_time_seconds?: number | null
+          avg_open_time_seconds?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          date_tracked?: string
+          engagement_rate?: number | null
+          id?: string
+          notification_type?: string
+          template_id?: string | null
+          total_clicked?: number | null
+          total_delivered?: number | null
+          total_dismissed?: number | null
+          total_expired?: number | null
+          total_opened?: number | null
+          total_sent?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       notification_preferences: {
         Row: {
@@ -38360,6 +38495,54 @@ export type Database = {
         }
         Relationships: []
       }
+      user_engagement_metrics: {
+        Row: {
+          actions_taken: number | null
+          avg_response_time_seconds: number | null
+          created_at: string | null
+          date_tracked: string
+          engagement_score: number | null
+          id: string
+          notifications_clicked: number | null
+          notifications_dismissed: number | null
+          notifications_opened: number | null
+          session_duration_minutes: number | null
+          total_notifications_received: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          actions_taken?: number | null
+          avg_response_time_seconds?: number | null
+          created_at?: string | null
+          date_tracked: string
+          engagement_score?: number | null
+          id?: string
+          notifications_clicked?: number | null
+          notifications_dismissed?: number | null
+          notifications_opened?: number | null
+          session_duration_minutes?: number | null
+          total_notifications_received?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          actions_taken?: number | null
+          avg_response_time_seconds?: number | null
+          created_at?: string | null
+          date_tracked?: string
+          engagement_score?: number | null
+          id?: string
+          notifications_clicked?: number | null
+          notifications_dismissed?: number | null
+          notifications_opened?: number | null
+          session_duration_minutes?: number | null
+          total_notifications_received?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_feed_preferences: {
         Row: {
           artist_content_weight: number | null
@@ -43274,6 +43457,15 @@ export type Database = {
         }
         Returns: undefined
       }
+      update_notification_performance_metrics: {
+        Args: {
+          p_notification_type: string
+          p_template_id: string
+          p_event_type: string
+          p_response_time_seconds?: number
+        }
+        Returns: undefined
+      }
       update_plugin_request_status: {
         Args: {
           p_request_id: string
@@ -43312,6 +43504,14 @@ export type Database = {
       }
       update_trending_search: {
         Args: { p_query: string }
+        Returns: undefined
+      }
+      update_user_engagement_metrics: {
+        Args: {
+          p_user_id: string
+          p_event_type: string
+          p_response_time_seconds?: number
+        }
         Returns: undefined
       }
       update_user_presence: {

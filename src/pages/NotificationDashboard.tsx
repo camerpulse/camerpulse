@@ -6,6 +6,8 @@ import { InteractiveNotificationManager } from '@/components/Notifications/Inter
 import { PushNotificationManager } from '@/components/Mobile/PushNotificationManager';
 import { PWAInstallPrompt } from '@/components/Mobile/PWAInstallPrompt';
 import { MobileNotificationFeed } from '@/components/Mobile/MobileNotificationFeed';
+import { AdvancedNotificationCenter } from '@/components/Notifications/AdvancedNotificationCenter';
+import { AnalyticsCenter } from '@/components/Analytics/AnalyticsCenter';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
 import { Activity, Bell } from 'lucide-react';
@@ -46,18 +48,25 @@ const NotificationDashboard: React.FC = () => {
             <PWAInstallPrompt />
           </div>
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            {/* Left Column - Feed & Mobile */}
-            <div className="xl:col-span-1 space-y-6">
-              <NotificationFeed />
-              <MobileNotificationFeed />
-            </div>
+          <div className="space-y-6">
+            {/* Main Analytics Dashboard */}
+            <AnalyticsCenter />
+            
+            {/* Advanced Features Grid */}
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              {/* Left Column - Feed & Mobile */}
+              <div className="xl:col-span-1 space-y-6">
+                <NotificationFeed />
+                <MobileNotificationFeed />
+              </div>
 
-            {/* Right Column - Status, Management & Push */}
-            <div className="xl:col-span-2 space-y-6">
-              <NotificationStatusTracker />
-              <PushNotificationManager />
-              <InteractiveNotificationManager />
+              {/* Right Column - Advanced Management */}
+              <div className="xl:col-span-2 space-y-6">
+                <AdvancedNotificationCenter />
+                <NotificationStatusTracker />
+                <PushNotificationManager />
+                <InteractiveNotificationManager />
+              </div>
             </div>
           </div>
         </div>
