@@ -4,7 +4,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/layout/AppSidebar';
 import { AppHeader } from '@/components/layout/AppHeader';
 import { CamerPulseDashboard } from '@/pages/CamerPulseDashboard';
-import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayout';
+import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayoutClean';
 import { Dashboard } from '@/pages/Dashboard';
 import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { SettingsPage } from '@/pages/SettingsPage';

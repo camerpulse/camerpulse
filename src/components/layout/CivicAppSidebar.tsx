@@ -77,12 +77,6 @@ const civicToolsItems = [
 
 const civicPlatformItems = [
   {
-    title: 'CamerLogistics',
-    url: '/logistics',
-    icon: Globe,
-    description: 'Shipping & Delivery Platform'
-  },
-  {
     title: 'Job Portal',
     url: '/jobs',
     icon: TrendingUp,
