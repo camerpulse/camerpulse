@@ -297,6 +297,9 @@ const App = () => {
               <Route path="/shipping/register" element={<ShippingRegistration />} />
               <Route path="/shipping/dashboard" element={<ShippingDashboard />} />
               <Route path="/admin/shipping" element={<AdminShippingManagement />} />
+              <Route path="/shipping/create" element={<CreateShipment />} />
+              <Route path="/shipping/track/:trackingNumber?" element={<TrackShipment />} />
+              <Route path="/shipping/manage" element={<ShipmentManagement />} />
               <Route path="/product/:id" element={<ProductDetail />} />
               <Route path="/vendor/:id" element={<VendorProfile />} />
               <Route path="/vendor-dashboard" element={

@@ -35632,6 +35632,239 @@ export type Database = {
           },
         ]
       }
+      shipment_notifications: {
+        Row: {
+          created_at: string
+          delivery_method: string
+          delivery_status: string | null
+          id: string
+          message_content: string
+          notification_type: string
+          recipient_email: string | null
+          recipient_phone: string | null
+          retry_count: number | null
+          sent_at: string | null
+          shipment_id: string
+        }
+        Insert: {
+          created_at?: string
+          delivery_method: string
+          delivery_status?: string | null
+          id?: string
+          message_content: string
+          notification_type: string
+          recipient_email?: string | null
+          recipient_phone?: string | null
+          retry_count?: number | null
+          sent_at?: string | null
+          shipment_id: string
+        }
+        Update: {
+          created_at?: string
+          delivery_method?: string
+          delivery_status?: string | null
+          id?: string
+          message_content?: string
+          notification_type?: string
+          recipient_email?: string | null
+          recipient_phone?: string | null
+          retry_count?: number | null
+          sent_at?: string | null
+          shipment_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_notifications_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipment_status_history: {
+        Row: {
+          description: string | null
+          id: string
+          location: string | null
+          shipment_id: string
+          status: Database["public"]["Enums"]["shipment_status"]
+          timestamp: string
+          updated_by: string | null
+          updated_by_role: string | null
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          location?: string | null
+          shipment_id: string
+          status: Database["public"]["Enums"]["shipment_status"]
+          timestamp?: string
+          updated_by?: string | null
+          updated_by_role?: string | null
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          location?: string | null
+          shipment_id?: string
+          status?: Database["public"]["Enums"]["shipment_status"]
+          timestamp?: string
+          updated_by?: string | null
+          updated_by_role?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_status_history_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipment_tracking_events: {
+        Row: {
+          coordinates: unknown | null
+          event_description: string
+          event_timestamp: string
+          event_type: string
+          facility_name: string | null
+          id: string
+          is_public: boolean | null
+          location: string | null
+          metadata: Json | null
+          shipment_id: string
+        }
+        Insert: {
+          coordinates?: unknown | null
+          event_description: string
+          event_timestamp?: string
+          event_type: string
+          facility_name?: string | null
+          id?: string
+          is_public?: boolean | null
+          location?: string | null
+          metadata?: Json | null
+          shipment_id: string
+        }
+        Update: {
+          coordinates?: unknown | null
+          event_description?: string
+          event_timestamp?: string
+          event_type?: string
+          facility_name?: string | null
+          id?: string
+          is_public?: boolean | null
+          location?: string | null
+          metadata?: Json | null
+          shipment_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_tracking_events_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipments: {
+        Row: {
+          actual_delivery_date: string | null
+          created_at: string
+          created_by: string | null
+          declared_value: number | null
+          destination_address: string
+          dimensions: Json | null
+          estimated_delivery_date: string | null
+          id: string
+          insurance_amount: number | null
+          is_fragile: boolean | null
+          is_hazardous: boolean | null
+          origin_address: string
+          package_details: Json
+          payment_status: string
+          receiver_info: Json
+          requires_signature: boolean | null
+          sender_info: Json
+          service_level: string
+          shipping_company_id: string
+          shipping_cost: number | null
+          shipping_type: string
+          special_instructions: string | null
+          status: Database["public"]["Enums"]["shipment_status"]
+          tracking_number: string
+          updated_at: string
+          weight_kg: number | null
+        }
+        Insert: {
+          actual_delivery_date?: string | null
+          created_at?: string
+          created_by?: string | null
+          declared_value?: number | null
+          destination_address: string
+          dimensions?: Json | null
+          estimated_delivery_date?: string | null
+          id?: string
+          insurance_amount?: number | null
+          is_fragile?: boolean | null
+          is_hazardous?: boolean | null
+          origin_address: string
+          package_details?: Json
+          payment_status?: string
+          receiver_info?: Json
+          requires_signature?: boolean | null
+          sender_info?: Json
+          service_level: string
+          shipping_company_id: string
+          shipping_cost?: number | null
+          shipping_type: string
+          special_instructions?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          tracking_number: string
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Update: {
+          actual_delivery_date?: string | null
+          created_at?: string
+          created_by?: string | null
+          declared_value?: number | null
+          destination_address?: string
+          dimensions?: Json | null
+          estimated_delivery_date?: string | null
+          id?: string
+          insurance_amount?: number | null
+          is_fragile?: boolean | null
+          is_hazardous?: boolean | null
+          origin_address?: string
+          package_details?: Json
+          payment_status?: string
+          receiver_info?: Json
+          requires_signature?: boolean | null
+          sender_info?: Json
+          service_level?: string
+          shipping_company_id?: string
+          shipping_cost?: number | null
+          shipping_type?: string
+          special_instructions?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          tracking_number?: string
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_shipping_company_id_fkey"
+            columns: ["shipping_company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipping_companies: {
         Row: {
           address: string
@@ -35918,6 +36151,115 @@ export type Database = {
           {
             foreignKeyName: "shipping_company_staff_company_id_fkey"
             columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipping_rates: {
+        Row: {
+          base_rate: number
+          created_at: string
+          destination_zone: string
+          effective_date: string
+          expires_date: string | null
+          fuel_surcharge_percent: number | null
+          id: string
+          is_active: boolean | null
+          origin_zone: string
+          per_kg_rate: number | null
+          service_type: string
+          shipping_company_id: string
+          updated_at: string
+          weight_max_kg: number | null
+          weight_min_kg: number
+        }
+        Insert: {
+          base_rate: number
+          created_at?: string
+          destination_zone: string
+          effective_date?: string
+          expires_date?: string | null
+          fuel_surcharge_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          origin_zone: string
+          per_kg_rate?: number | null
+          service_type: string
+          shipping_company_id: string
+          updated_at?: string
+          weight_max_kg?: number | null
+          weight_min_kg?: number
+        }
+        Update: {
+          base_rate?: number
+          created_at?: string
+          destination_zone?: string
+          effective_date?: string
+          expires_date?: string | null
+          fuel_surcharge_percent?: number | null
+          id?: string
+          is_active?: boolean | null
+          origin_zone?: string
+          per_kg_rate?: number | null
+          service_type?: string
+          shipping_company_id?: string
+          updated_at?: string
+          weight_max_kg?: number | null
+          weight_min_kg?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_rates_shipping_company_id_fkey"
+            columns: ["shipping_company_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipping_zones: {
+        Row: {
+          cities: string[] | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          postal_codes: string[] | null
+          regions: string[]
+          shipping_company_id: string
+          updated_at: string
+          zone_code: string
+          zone_name: string
+        }
+        Insert: {
+          cities?: string[] | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          postal_codes?: string[] | null
+          regions: string[]
+          shipping_company_id: string
+          updated_at?: string
+          zone_code: string
+          zone_name: string
+        }
+        Update: {
+          cities?: string[] | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          postal_codes?: string[] | null
+          regions?: string[]
+          shipping_company_id?: string
+          updated_at?: string
+          zone_code?: string
+          zone_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_zones_shipping_company_id_fkey"
+            columns: ["shipping_company_id"]
             isOneToOne: false
             referencedRelation: "shipping_companies"
             referencedColumns: ["id"]
@@ -42219,6 +42561,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      generate_tracking_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       generate_username_from_email: {
         Args: { email_input: string }
         Returns: string
@@ -43204,6 +43550,15 @@ export type Database = {
         | "positive"
         | "very_positive"
       shield_status: "active" | "protected" | "high_risk" | "inactive"
+      shipment_status:
+        | "pending"
+        | "picked_up"
+        | "in_transit"
+        | "out_for_delivery"
+        | "delivered"
+        | "exception"
+        | "returned"
+        | "cancelled"
       shipping_company_type: "bike" | "bus" | "van" | "plane" | "mixed"
       source_type:
         | "government_official"
@@ -43901,6 +44256,16 @@ export const Constants = {
         "very_positive",
       ],
       shield_status: ["active", "protected", "high_risk", "inactive"],
+      shipment_status: [
+        "pending",
+        "picked_up",
+        "in_transit",
+        "out_for_delivery",
+        "delivered",
+        "exception",
+        "returned",
+        "cancelled",
+      ],
       shipping_company_type: ["bike", "bus", "van", "plane", "mixed"],
       source_type: [
         "government_official",
