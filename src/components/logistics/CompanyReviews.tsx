@@ -2,8 +2,10 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Star, MessageSquare, User, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Star, MessageSquare, User, Clock, Flag } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { ReportReviewDialog } from './ReportReviewDialog';
 
 interface Review {
   id: string;
@@ -29,6 +31,8 @@ export const CompanyReviews: React.FC<CompanyReviewsProps> = ({
   reviews,
   loading
 }) => {
+  const [reportDialogOpen, setReportDialogOpen] = React.useState(false);
+  const [selectedReview, setSelectedReview] = React.useState<Review | null>(null);
   const getRatingColor = (rating: number) => {
     if (rating >= 4.5) return 'text-green-600';
     if (rating >= 3.5) return 'text-yellow-600';
@@ -176,9 +180,39 @@ export const CompanyReviews: React.FC<CompanyReviewsProps> = ({
                   </div>
                 )}
               </div>
+
+              {/* Report Button */}
+              <div className="flex justify-end pt-3 border-t border-border/30">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSelectedReview(review);
+                    setReportDialogOpen(true);
+                  }}
+                  className="text-muted-foreground hover:text-destructive text-xs"
+                >
+                  <Flag className="h-3 w-3 mr-1" />
+                  Report
+                </Button>
+              </div>
             </div>
           ))}
         </div>
+
+        {/* Report Dialog */}
+        {selectedReview && (
+          <ReportReviewDialog
+            open={reportDialogOpen}
+            onOpenChange={setReportDialogOpen}
+            reviewId={selectedReview.id}
+            reviewContent={selectedReview.review_text || 'No review text'}
+            onReported={() => {
+              // Could refresh reviews or show feedback
+              console.log('Review reported successfully');
+            }}
+          />
+        )}
       </CardContent>
     </Card>
   );

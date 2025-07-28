@@ -54,6 +54,8 @@ const DeliveryCompaniesDirectory = () => {
   // Use real data from database
   const { companies: dbCompanies, loading: companiesLoading } = useShippingCompanies();
 
+  const [minRating, setMinRating] = useState(0);
+
   const regions = [
     'All Regions', 'Adamawa', 'Centre', 'East', 'Far North', 'Littoral', 
     'North', 'Northwest', 'South', 'Southwest', 'West'
@@ -67,11 +69,12 @@ const DeliveryCompaniesDirectory = () => {
   const filteredCompanies = dbCompanies.filter(company => {
     const matchesSearch = (company.name || company.company_name || '').toLowerCase().includes(searchTerm.toLowerCase());
     const companyRating = company.rating || company.avg_rating || 0;
-    const matchesRating = companyRating >= ratingFilter[0];
+    const matchesRating = ratingFilter[0] === 0 || companyRating >= ratingFilter[0];
+    const matchesMinRating = minRating === 0 || companyRating >= minRating;
     const matchesVerified = !verifiedOnly || (company.isVerified || company.is_verified);
     const matchesPreferred = !preferredOnly || (company.partnershipStatus || company.partnership_status) === 'preferred';
     
-    return matchesSearch && matchesRating && matchesVerified && matchesPreferred;
+    return matchesSearch && matchesRating && matchesMinRating && matchesVerified && matchesPreferred;
   });
 
   const getPartnershipBadge = (status: string) => {
@@ -149,8 +152,36 @@ const DeliveryCompaniesDirectory = () => {
 
       {/* Rating Filter */}
       <div>
+        <Label className="text-sm font-medium mb-3 block">Minimum Rating</Label>
+        <div className="space-y-3">
+          <Slider
+            value={[minRating]}
+            onValueChange={(value) => setMinRating(value[0])}
+            max={5}
+            min={0}
+            step={0.5}
+            className="w-full"
+          />
+          <div className="flex items-center justify-between text-sm text-muted-foreground">
+            <span>Any Rating</span>
+            <div className="flex items-center gap-1">
+              {minRating > 0 && (
+                <>
+                  <Star className="h-3 w-3 fill-secondary text-secondary" />
+                  <span>{minRating}+</span>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* Legacy Rating Filter */}
+      <div>
         <Label className="text-sm font-medium mb-3 block">
-          Minimum Rating: {ratingFilter[0].toFixed(1)}★
+          Rating Filter: {ratingFilter[0].toFixed(1)}★
         </Label>
         <Slider
           value={ratingFilter}
@@ -200,6 +231,7 @@ const DeliveryCompaniesDirectory = () => {
           setSearchTerm('');
           setSelectedRegion('');
           setSelectedService('');
+          setMinRating(0);
           setRatingFilter([0]);
           setVerifiedOnly(false);
           setPreferredOnly(false);

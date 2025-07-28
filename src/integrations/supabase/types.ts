@@ -37860,6 +37860,56 @@ export type Database = {
           },
         ]
       }
+      shipping_rating_reports: {
+        Row: {
+          created_at: string
+          id: string
+          moderator_notes: string | null
+          rating_id: string
+          report_details: string | null
+          report_reason: string
+          reported_by: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          moderator_notes?: string | null
+          rating_id: string
+          report_details?: string | null
+          report_reason: string
+          reported_by: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          moderator_notes?: string | null
+          rating_id?: string
+          report_details?: string | null
+          report_reason?: string
+          reported_by?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_rating_reports_rating_id_fkey"
+            columns: ["rating_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_company_ratings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipping_zones: {
         Row: {
           cities: string[] | null
