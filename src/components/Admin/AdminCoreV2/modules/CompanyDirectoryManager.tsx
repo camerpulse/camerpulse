@@ -108,12 +108,12 @@ export const CompanyDirectoryManager: React.FC<CompanyDirectoryManagerProps> = (
 
   const filteredCompanies = companies.filter(company => {
     const matchesSearch = company.company_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         company.industry_category?.toLowerCase().includes(searchTerm.toLowerCase());
+                         company.sector?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || 
                          (statusFilter === 'verified' && company.status === 'approved') ||
                          (statusFilter === 'unverified' && company.status === 'pending') ||
                          (statusFilter === 'active' && company.status === 'approved');
-    const matchesRegion = regionFilter === 'all' || company.location === regionFilter;
+    const matchesRegion = regionFilter === 'all' || company.region === regionFilter;
     return matchesSearch && matchesStatus && matchesRegion;
   });
 
@@ -252,10 +252,10 @@ export const CompanyDirectoryManager: React.FC<CompanyDirectoryManagerProps> = (
                         label: company.status === 'approved' ? 'Verified' : 'Pending',
                         variant: company.status === 'approved' ? 'default' : 'outline'
                       }}
-                      tags={[company.industry_category, company.company_type].filter(Boolean)}
+                      tags={[company.sector, company.company_type].filter(Boolean)}
                       metadata={[
-                        { icon: MapPin, label: 'Location', value: company.location || 'N/A' },
-                        { icon: Users, label: 'Size', value: company.company_size || 'N/A' },
+                        { icon: MapPin, label: 'Location', value: company.physical_address || company.region || 'N/A' },
+                        { icon: Users, label: 'Size', value: company.employee_count_range || 'N/A' },
                         { icon: Globe, label: 'Website', value: company.website_url || 'N/A' },
                         { icon: Phone, label: 'Phone', value: company.phone_number || 'N/A' }
                       ]}
