@@ -86,9 +86,22 @@ export const useLabelTemplates = () => {
   const createTemplate = async (templateData: Partial<LabelTemplate>) => {
     setLoading(true);
     try {
+      // Ensure all required fields are provided
+      const insertData = {
+        template_name: templateData.template_name || 'Untitled Template',
+        template_type: templateData.template_type || 'shipping_label',
+        label_size: templateData.label_size || 'A4',
+        orientation: templateData.orientation || 'portrait',
+        template_config: templateData.template_config || {},
+        branding_config: templateData.branding_config || {},
+        fields_config: templateData.fields_config || {},
+        created_by: templateData.created_by || '',
+        ...templateData, // Override with any explicitly provided values
+      };
+      
       const { data, error } = await supabase
         .from('label_templates')
-        .insert(templateData)
+        .insert(insertData)
         .select()
         .single();
 

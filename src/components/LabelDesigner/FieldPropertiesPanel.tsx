@@ -186,7 +186,7 @@ export const FieldPropertiesPanel: React.FC<FieldPropertiesPanelProps> = ({
                 <Label className="text-xs">Font Weight</Label>
                 <Select
                   value={field.style?.fontWeight || 'normal'}
-                  onValueChange={(fontWeight) => updateStyle({ fontWeight })}
+                  onValueChange={(fontWeight) => updateStyle({ fontWeight: fontWeight as 'normal' | 'bold' })}
                 >
                   <SelectTrigger className="h-8">
                     <SelectValue />
@@ -203,7 +203,7 @@ export const FieldPropertiesPanel: React.FC<FieldPropertiesPanelProps> = ({
               <Label className="text-xs">Text Align</Label>
               <Select
                 value={field.style?.textAlign || 'left'}
-                onValueChange={(textAlign) => updateStyle({ textAlign })}
+                onValueChange={(textAlign) => updateStyle({ textAlign: textAlign as 'left' | 'center' | 'right' })}
               >
                 <SelectTrigger className="h-8">
                   <SelectValue />
@@ -370,7 +370,7 @@ export const FieldPropertiesPanel: React.FC<FieldPropertiesPanelProps> = ({
                 <Select
                   value={field.style?.border?.style || 'solid'}
                   onValueChange={(style) => updateStyle({
-                    border: { ...field.style?.border, style }
+                    border: { ...field.style?.border, style: style as 'solid' | 'dashed' | 'dotted' }
                   })}
                 >
                   <SelectTrigger className="h-8">
