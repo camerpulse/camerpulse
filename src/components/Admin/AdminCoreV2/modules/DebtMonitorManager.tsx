@@ -1,5 +1,6 @@
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { NationalDebtIntelligenceCore } from '@/components/AI/NationalDebtIntelligenceCore';
+import { AdminModuleHeader } from '../components/AdminModuleHeader';
 import { TrendingUp } from 'lucide-react';
 
 interface DebtMonitorManagerProps {
@@ -15,29 +16,25 @@ export const DebtMonitorManager: React.FC<DebtMonitorManagerProps> = ({
 }) => {
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-bold flex items-center">
-          <TrendingUp className="h-6 w-6 mr-2 text-red-600" />
-          National Debt Monitor
-        </h2>
-        <p className="text-muted-foreground">Monitor national debt and financial indicators</p>
-      </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Debt Management</CardTitle>
-          <CardDescription>National debt tracking and analysis tools</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="text-center py-12">
-            <TrendingUp className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Debt Monitor</h3>
-            <p className="text-muted-foreground">
-              Comprehensive debt tracking and alert system
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      <AdminModuleHeader
+        title="National Debt Monitor"
+        description="AI-powered debt monitoring, prediction, and civic impact analysis"
+        icon={TrendingUp}
+        iconColor="text-red-600"
+        badge={{
+          text: "AI Intelligence",
+          variant: "destructive"
+        }}
+        searchPlaceholder="Search debt records, alerts, predictions..."
+        onSearch={(query) => {
+          console.log('Searching debt data:', query);
+        }}
+        onRefresh={() => {
+          logActivity('debt_monitor_refresh', { timestamp: new Date() });
+        }}
+      />
+      
+      <NationalDebtIntelligenceCore />
     </div>
   );
 };
