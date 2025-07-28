@@ -16,7 +16,7 @@ interface InstitutionSubmission {
   description?: string;
   location: any;
   contact_info: any;
-  verification_status: 'pending' | 'verified' | 'flagged' | 'rejected' | 'under_review';
+  verification_status: 'pending' | 'verified' | 'flagged' | 'rejected' | 'under_review' | 'active' | 'suspended';
   verification_checklist: any;
   moderator_notes?: string;
   flagged_reasons?: string[];
@@ -33,7 +33,7 @@ interface ClaimRequest {
   id: string;
   institution_type: string;
   claim_reason?: string;
-  status: 'pending' | 'verified' | 'flagged' | 'rejected' | 'under_review';
+  status: 'pending' | 'verified' | 'flagged' | 'rejected' | 'under_review' | 'active' | 'suspended';
   created_at: string;
   claimant_user_id: string;
   evidence_documents?: string[];

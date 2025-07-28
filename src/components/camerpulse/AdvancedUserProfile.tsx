@@ -87,7 +87,7 @@ interface EnhancedProfile {
   profession?: string;
   civic_tagline?: string;
   profile_type: 'government_institution' | 'political_party' | 'company' | 'school' | 'ngo' | 'artist' | 'politician' | 'normal_user' | 'journalist' | 'activist' | 'camerpulse_official' | 'moderator';
-  verification_status: 'verified' | 'pending' | 'rejected' | 'under_review';
+  verification_status: 'verified' | 'pending' | 'rejected' | 'under_review' | 'active' | 'suspended';
   civic_influence_score: number;
   post_count: number;
   polls_created: number;
