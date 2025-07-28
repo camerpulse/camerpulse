@@ -1,0 +1,36 @@
+-- Create Cemac Track in shipping_companies table with correct enums
+INSERT INTO public.shipping_companies (
+  user_id,
+  company_name,
+  company_type,
+  email,
+  phone,
+  address,
+  city,
+  region,
+  country,
+  delivery_scope,
+  description,
+  verification_status,
+  verified_at,
+  subscription_tier,
+  subscription_active,
+  payment_status
+) VALUES (
+  'd435cdbe-b47c-4038-9b7b-83773324e80c',
+  'Cemac Track',
+  'mixed',
+  'cemactrack@gmail.com',
+  '+237123456789',
+  'Business District',
+  'Douala',
+  'Littoral',
+  'Cameroon',
+  'national',
+  'Professional logistics and shipping services across Cameroon',
+  'verified',
+  now(),
+  'medium_courier',
+  true,
+  'paid'
+);
