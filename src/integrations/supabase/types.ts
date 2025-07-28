@@ -332,6 +332,83 @@ export type Database = {
           },
         ]
       }
+      agency_branding_settings: {
+        Row: {
+          accent_color: string | null
+          agency_id: string | null
+          background_color: string | null
+          contact_info: Json | null
+          created_at: string | null
+          default_label_size: string | null
+          default_orientation: string | null
+          enable_thermal_printing: boolean | null
+          enable_watermark: boolean | null
+          font_sizes: Json | null
+          header_logo_url: string | null
+          id: string
+          logo_url: string | null
+          primary_color: string | null
+          primary_font: string | null
+          secondary_color: string | null
+          secondary_font: string | null
+          text_color: string | null
+          updated_at: string | null
+          watermark_url: string | null
+        }
+        Insert: {
+          accent_color?: string | null
+          agency_id?: string | null
+          background_color?: string | null
+          contact_info?: Json | null
+          created_at?: string | null
+          default_label_size?: string | null
+          default_orientation?: string | null
+          enable_thermal_printing?: boolean | null
+          enable_watermark?: boolean | null
+          font_sizes?: Json | null
+          header_logo_url?: string | null
+          id?: string
+          logo_url?: string | null
+          primary_color?: string | null
+          primary_font?: string | null
+          secondary_color?: string | null
+          secondary_font?: string | null
+          text_color?: string | null
+          updated_at?: string | null
+          watermark_url?: string | null
+        }
+        Update: {
+          accent_color?: string | null
+          agency_id?: string | null
+          background_color?: string | null
+          contact_info?: Json | null
+          created_at?: string | null
+          default_label_size?: string | null
+          default_orientation?: string | null
+          enable_thermal_printing?: boolean | null
+          enable_watermark?: boolean | null
+          font_sizes?: Json | null
+          header_logo_url?: string | null
+          id?: string
+          logo_url?: string | null
+          primary_color?: string | null
+          primary_font?: string | null
+          secondary_color?: string | null
+          secondary_font?: string | null
+          text_color?: string | null
+          updated_at?: string | null
+          watermark_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_branding_settings_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: true
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agency_responses: {
         Row: {
           agency_id: string
@@ -21545,6 +21622,175 @@ export type Database = {
         }
         Relationships: []
       }
+      label_print_history: {
+        Row: {
+          created_at: string | null
+          download_count: number | null
+          file_path: string | null
+          id: string
+          label_format: string | null
+          last_downloaded_at: string | null
+          print_settings: Json | null
+          print_type: string
+          printed_by: string
+          printer_type: string | null
+          shipment_id: string | null
+          template_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          download_count?: number | null
+          file_path?: string | null
+          id?: string
+          label_format?: string | null
+          last_downloaded_at?: string | null
+          print_settings?: Json | null
+          print_type: string
+          printed_by: string
+          printer_type?: string | null
+          shipment_id?: string | null
+          template_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          download_count?: number | null
+          file_path?: string | null
+          id?: string
+          label_format?: string | null
+          last_downloaded_at?: string | null
+          print_settings?: Json | null
+          print_type?: string
+          printed_by?: string
+          printer_type?: string | null
+          shipment_id?: string | null
+          template_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "label_print_history_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "label_print_history_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "label_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      label_scan_logs: {
+        Row: {
+          device_info: Json | null
+          id: string
+          ip_address: unknown | null
+          redirect_successful: boolean | null
+          redirected_to: string | null
+          scan_location: string | null
+          scan_type: string | null
+          scanned_at: string | null
+          shipment_id: string | null
+          tracking_number: string
+          user_agent: string | null
+        }
+        Insert: {
+          device_info?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          redirect_successful?: boolean | null
+          redirected_to?: string | null
+          scan_location?: string | null
+          scan_type?: string | null
+          scanned_at?: string | null
+          shipment_id?: string | null
+          tracking_number: string
+          user_agent?: string | null
+        }
+        Update: {
+          device_info?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          redirect_successful?: boolean | null
+          redirected_to?: string | null
+          scan_location?: string | null
+          scan_type?: string | null
+          scanned_at?: string | null
+          shipment_id?: string | null
+          tracking_number?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "label_scan_logs_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      label_templates: {
+        Row: {
+          agency_id: string | null
+          branding_config: Json | null
+          created_at: string | null
+          created_by: string
+          fields_config: Json | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          label_size: string
+          orientation: string | null
+          template_config: Json
+          template_name: string
+          template_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          agency_id?: string | null
+          branding_config?: Json | null
+          created_at?: string | null
+          created_by: string
+          fields_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          label_size?: string
+          orientation?: string | null
+          template_config?: Json
+          template_name: string
+          template_type?: string
+          updated_at?: string | null
+        }
+        Update: {
+          agency_id?: string | null
+          branding_config?: Json | null
+          created_at?: string | null
+          created_by?: string
+          fields_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          label_size?: string
+          orientation?: string | null
+          template_config?: Json
+          template_name?: string
+          template_type?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "label_templates_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       language_learning_progress: {
         Row: {
           created_at: string
@@ -38340,6 +38586,39 @@ export type Database = {
           is_active?: boolean | null
           max_size_mb?: number | null
           retention_hours?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      system_label_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_system_setting: boolean | null
+          requires_admin_approval: boolean | null
+          setting_description: string | null
+          setting_key: string
+          setting_value: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_system_setting?: boolean | null
+          requires_admin_approval?: boolean | null
+          setting_description?: string | null
+          setting_key: string
+          setting_value: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_system_setting?: boolean | null
+          requires_admin_approval?: boolean | null
+          setting_description?: string | null
+          setting_key?: string
+          setting_value?: Json
           updated_at?: string | null
         }
         Relationships: []
