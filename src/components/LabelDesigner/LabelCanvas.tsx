@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { TemplateField } from '@/utils/labelGeneration';
+import { LabelField } from '@/types/labelTypes';
 import { generateQRCode, generateBarcode, generateTrackingQRCode } from '@/utils/labelGeneration';
 
 interface LabelCanvasProps {
-  fields: TemplateField[];
+  fields: LabelField[];
   dimensions: { width: number; height: number };
-  selectedField: TemplateField | null;
-  onFieldSelect: (field: TemplateField | null) => void;
-  onFieldUpdate: (field: TemplateField) => void;
+  selectedField: string | null;
+  onFieldSelect: (fieldId: string | null) => void;
+  onFieldUpdate: (fieldId: string, updates: Partial<LabelField>) => void;
   shipmentData?: any;
   mode?: 'design' | 'preview';
 }
@@ -22,7 +22,7 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
   mode = 'design'
 }) => {
   const canvasRef = useRef<HTMLDivElement>(null);
-  const [dragging, setDragging] = useState<{ field: TemplateField; offset: { x: number; y: number } } | null>(null);
+  const [dragging, setDragging] = useState<{ field: LabelField; offset: { x: number; y: number } } | null>(null);
   const [qrCodes, setQrCodes] = useState<{ [key: string]: string }>({});
   const [barcodes, setBarcodes] = useState<{ [key: string]: string }>({});
 
@@ -33,22 +33,14 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
       const newBarcodes: { [key: string]: string } = {};
 
       for (const field of fields) {
-        if (field.type === 'qr_code' && field.enabled) {
+        if (field.field_type === 'qr_code') {
           try {
             let qrData = 'Sample QR Data';
             if (shipmentData?.tracking_number) {
-              if (field.data?.includeTrackingURL) {
-                qrData = await generateTrackingQRCode(
-                  shipmentData.tracking_number,
-                  undefined,
-                  { size: field.size.width }
-                );
-              } else {
-                qrData = await generateQRCode(
-                  shipmentData.tracking_number,
-                  { size: field.size.width }
-                );
-              }
+              qrData = await generateQRCode(
+                shipmentData.tracking_number,
+                { size: field.size.width }
+              );
             } else {
               qrData = await generateQRCode('SAMPLE-TRACKING-123', { size: field.size.width });
             }
@@ -58,14 +50,14 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
           }
         }
 
-        if (field.type === 'barcode' && field.enabled) {
+        if (field.field_type === 'barcode') {
           try {
             const barcodeData = shipmentData?.tracking_number || 'SAMPLE123';
             const barcodeImage = generateBarcode(barcodeData, {
-              format: field.data?.format || 'CODE128',
-              width: field.data?.width || 2,
+              format: 'CODE128',
+              width: 2,
               height: field.size.height,
-              displayValue: field.data?.displayValue !== false,
+              displayValue: true,
             });
             newBarcodes[field.id] = barcodeImage;
           } catch (error) {
@@ -81,7 +73,7 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
     generateCodes();
   }, [fields, shipmentData]);
 
-  const handleMouseDown = (e: React.MouseEvent, field: TemplateField) => {
+  const handleMouseDown = (e: React.MouseEvent, field: LabelField) => {
     if (mode === 'preview') return;
     
     e.preventDefault();
@@ -94,7 +86,7 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
     };
 
     setDragging({ field, offset });
-    onFieldSelect(field);
+    onFieldSelect(field.id);
   };
 
   const handleMouseMove = (e: React.MouseEvent) => {
@@ -108,22 +100,15 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
       y: Math.max(0, Math.min(dimensions.height - dragging.field.size.height, e.clientY - rect.top - dragging.offset.y)),
     };
 
-    const updatedField = {
-      ...dragging.field,
-      position: newPosition,
-    };
-
-    onFieldUpdate(updatedField);
+    onFieldUpdate(dragging.field.id, { position: newPosition });
   };
 
   const handleMouseUp = () => {
     setDragging(null);
   };
 
-  const renderField = (field: TemplateField) => {
-    if (!field.enabled) return null;
-
-    const isSelected = selectedField?.id === field.id;
+  const renderField = (field: LabelField) => {
+    const isSelected = selectedField === field.id;
     const style: React.CSSProperties = {
       position: 'absolute',
       left: field.position.x,
@@ -132,7 +117,6 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
       height: field.size.height,
       border: mode === 'design' ? (isSelected ? '2px solid #3b82f6' : '1px dashed #9ca3af') : 'none',
       cursor: mode === 'design' ? 'move' : 'default',
-      backgroundColor: field.style?.backgroundColor || 'transparent',
       display: 'flex',
       alignItems: 'center',
       justifyContent: field.style?.textAlign === 'center' ? 'center' : field.style?.textAlign === 'right' ? 'flex-end' : 'flex-start',
@@ -142,18 +126,17 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
 
     const textStyle: React.CSSProperties = {
       fontSize: field.style?.fontSize || 12,
-      fontFamily: field.style?.fontFamily || 'Roboto',
       fontWeight: field.style?.fontWeight || 'normal',
       color: field.style?.color || '#000000',
       wordWrap: 'break-word',
       overflow: 'hidden',
-      textAlign: field.style?.textAlign || 'left',
+      textAlign: (field.style?.textAlign as 'left' | 'center' | 'right') || 'left',
       lineHeight: 1.2,
     };
 
     let content: React.ReactNode = null;
 
-    switch (field.type) {
+    switch (field.field_type) {
       case 'text':
         content = (
           <div style={textStyle}>
@@ -194,23 +177,6 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
         );
         break;
 
-      case 'line':
-        content = (
-          <div 
-            style={{ 
-              width: '100%', 
-              height: '1px', 
-              backgroundColor: field.style?.color || '#000000',
-              border: 'none'
-            }} 
-          />
-        );
-        break;
-
-      case 'rectangle':
-        content = null; // Rectangle is just the container
-        break;
-
       default:
         content = <div style={textStyle}>{field.label}</div>;
     }
@@ -220,7 +186,7 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
         key={field.id}
         style={style}
         onMouseDown={(e) => handleMouseDown(e, field)}
-        onClick={() => mode === 'design' && onFieldSelect(field)}
+        onClick={() => mode === 'design' && onFieldSelect(field.id)}
       >
         {content}
         {mode === 'design' && isSelected && (
@@ -245,30 +211,26 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
     );
   };
 
-  const getFieldData = (field: TemplateField): string => {
+  const getFieldData = (field: LabelField): string => {
     if (!shipmentData) {
       return getSampleData(field.id);
     }
 
     switch (field.id) {
       case 'sender':
-        return formatSenderInfo(shipmentData.sender_info);
+        return formatSenderInfo(shipmentData.sender);
       case 'receiver':
-        return formatReceiverInfo(shipmentData.receiver_info);
+        return formatReceiverInfo(shipmentData.receiver);
       case 'tracking_number':
         return shipmentData.tracking_number || 'N/A';
       case 'service_level':
-        return shipmentData.service_level || 'Standard';
+        return shipmentData.shipping?.service || 'Standard';
       case 'weight':
-        return `${shipmentData.weight_kg || 0} kg`;
-      case 'dimensions':
-        const dims = shipmentData.dimensions;
-        return dims ? `${dims.length}×${dims.width}×${dims.height} cm` : 'N/A';
-      case 'estimated_delivery':
-        return shipmentData.estimated_delivery_date ? 
-          new Date(shipmentData.estimated_delivery_date).toLocaleDateString() : 'N/A';
+        return shipmentData.package?.weight || '0 kg';
+      case 'description':
+        return shipmentData.package?.description || 'Package';
       default:
-        return field.label;
+        return field.default_value || field.label;
     }
   };
 
@@ -284,10 +246,8 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
         return 'Priority Express';
       case 'weight':
         return '2.5 kg';
-      case 'dimensions':
-        return '30×20×15 cm';
-      case 'estimated_delivery':
-        return new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString();
+      case 'description':
+        return 'Sample Package';
       default:
         return 'Sample Text';
     }
@@ -297,10 +257,7 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
     if (!senderInfo) return 'Sender Information';
     return [
       senderInfo.name,
-      senderInfo.company,
       senderInfo.address,
-      senderInfo.phone,
-      senderInfo.email
     ].filter(Boolean).join('\n');
   };
 
@@ -308,10 +265,7 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
     if (!receiverInfo) return 'Receiver Information';
     return [
       receiverInfo.name,
-      receiverInfo.company,
       receiverInfo.address,
-      receiverInfo.phone,
-      receiverInfo.email
     ].filter(Boolean).join('\n');
   };
 
@@ -358,8 +312,8 @@ export const LabelCanvas: React.FC<LabelCanvasProps> = ({
       {mode === 'design' && (
         <div className="p-2 bg-muted text-xs text-muted-foreground border-t">
           Canvas: {dimensions.width}×{dimensions.height}px • 
-          Fields: {fields.filter(f => f.enabled).length} • 
-          {selectedField ? `Selected: ${selectedField.label}` : 'Click to select field'}
+          Fields: {fields.length} • 
+          {selectedField ? `Selected: ${fields.find(f => f.id === selectedField)?.label || 'Unknown'}` : 'Click to select field'}
         </div>
       )}
     </div>

@@ -2,11 +2,12 @@ import React from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { LabelCanvas } from './LabelCanvas';
+import { LabelField } from '@/types/labelTypes';
 
 interface PrintPreviewDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  fields: any[];
+  fields: LabelField[];
   dimensions: { width: number; height: number };
   shipmentData?: any;
 }
