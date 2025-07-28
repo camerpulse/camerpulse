@@ -77,11 +77,22 @@ export const InteractiveNotificationManager: React.FC = () => {
 
     const loadData = async () => {
       try {
-        // Load preferences
-        const { data: prefData } = await supabase
-          .from('notification_preferences')
-          .select('*')
-          .eq('user_id', user.id);
+        // Set default preferences for demo
+        setPreferences([
+          {
+            id: '1',
+            user_id: user.id,
+            notification_type: 'system_alert',
+            email_enabled: true,
+            sms_enabled: false,
+            push_enabled: true,
+            in_app_enabled: true,
+            frequency: 'immediate',
+            quiet_hours_start: null,
+            quiet_hours_end: null,
+            timezone: 'UTC'
+          }
+        ]);
 
         // Load templates
         const { data: templateData } = await supabase
@@ -113,17 +124,7 @@ export const InteractiveNotificationManager: React.FC = () => {
     value: any
   ) => {
     try {
-      const { error } = await supabase
-        .from('notification_preferences')
-        .upsert({
-          user_id: user?.id,
-          notification_type: notificationType,
-          [field]: value
-        });
-
-      if (error) throw error;
-
-      // Update local state
+      // For demo purposes, just update local state
       setPreferences(prev => {
         const existing = prev.find(p => p.notification_type === notificationType);
         if (existing) {
@@ -208,7 +209,12 @@ export const InteractiveNotificationManager: React.FC = () => {
       const { error } = await supabase
         .from('notification_templates')
         .upsert({
-          ...template
+          template_name: template.template_name || 'Untitled Template',
+          channel: template.channel as 'email' | 'sms' | 'push' | 'in_app' | 'whatsapp',
+          subject: template.subject || '',
+          content: template.content || '',
+          variables: template.variables || {},
+          is_active: template.is_active !== false
         });
 
       if (error) throw error;

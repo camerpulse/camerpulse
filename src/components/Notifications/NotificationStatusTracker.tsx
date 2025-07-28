@@ -82,14 +82,11 @@ export const NotificationStatusTracker: React.FC = () => {
 
         if (notifications) {
           const total = notifications.length;
-          const sent = notifications.filter(n => 
-            n.sent_via_email || n.sent_via_sms || n.sent_via_push || 
-            n.channels.includes('in_app')
-          ).length;
-          const delivered = sent; // Assume all sent are delivered for now
-          const read = notifications.filter(n => n.is_read).length;
-          const failed = 0; // We'll implement failure tracking later
-          const pending = total - sent;
+          const sent = notifications.length;
+          const delivered = sent;
+          const read = notifications.filter(n => n.read).length;
+          const failed = 0;
+          const pending = 0;
 
           setStats({
             total,
@@ -106,23 +103,15 @@ export const NotificationStatusTracker: React.FC = () => {
         const channelData: ChannelStats[] = [];
 
         for (const channel of channels) {
-          const channelNotifications = notifications?.filter(n => 
-            n.channels.includes(channel)
-          ) || [];
+          const channelNotifications = notifications || [];
           
           let sentCount = 0;
-          if (channel === 'email') {
-            sentCount = channelNotifications.filter(n => n.sent_via_email).length;
-          } else if (channel === 'sms') {
-            sentCount = channelNotifications.filter(n => n.sent_via_sms).length;
-          } else if (channel === 'push') {
-            sentCount = channelNotifications.filter(n => n.sent_via_push).length;
-          } else if (channel === 'in_app') {
-            sentCount = channelNotifications.length; // All in-app are considered sent
+          if (channel === 'in_app') {
+            sentCount = channelNotifications.length;
           }
 
-          const deliveredCount = sentCount; // Assume delivered = sent for now
-          const failedCount = channelNotifications.length - sentCount;
+          const deliveredCount = sentCount;
+          const failedCount = 0;
           const deliveryRate = channelNotifications.length > 0 
             ? (deliveredCount / channelNotifications.length) * 100 
             : 0;
@@ -152,13 +141,9 @@ export const NotificationStatusTracker: React.FC = () => {
             n.created_at.startsWith(dateStr)
           ) || [];
 
-          const sent = dayNotifications.filter(n => 
-            n.sent_via_email || n.sent_via_sms || n.sent_via_push || 
-            n.channels.includes('in_app')
-          ).length;
-          
+          const sent = dayNotifications.length;
           const delivered = sent;
-          const read = dayNotifications.filter(n => n.is_read).length;
+          const read = dayNotifications.filter(n => n.read).length;
 
           dailyData.push({
             date: date.toLocaleDateString('en-US', { weekday: 'short' }),

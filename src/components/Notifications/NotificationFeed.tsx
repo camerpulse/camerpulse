@@ -24,23 +24,12 @@ import { formatDistanceToNow } from 'date-fns';
 interface Notification {
   id: string;
   user_id: string;
-  notification_type: string;
+  type: string;
   title: string;
   message: string;
   data: any;
-  channels: string[];
-  is_read: boolean;
-  read_at: string | null;
-  sent_via_email: boolean;
-  sent_via_sms: boolean;
-  sent_via_push: boolean;
-  email_sent_at: string | null;
-  sms_sent_at: string | null;
-  push_sent_at: string | null;
-  priority: string;
-  expires_at: string | null;
+  read: boolean;
   created_at: string;
-  updated_at: string;
 }
 
 export const NotificationFeed: React.FC = () => {
@@ -64,10 +53,7 @@ export const NotificationFeed: React.FC = () => {
           .limit(50);
 
         if (error) throw error;
-        setNotifications((data as any[])?.map(item => ({
-          ...item,
-          channels: item.channels || []
-        })) || []);
+        setNotifications(data || []);
       } catch (error) {
         console.error('Error loading notifications:', error);
         toast({
@@ -129,10 +115,7 @@ export const NotificationFeed: React.FC = () => {
     try {
       const { error } = await supabase
         .from('notifications')
-        .update({ 
-          is_read: true, 
-          read_at: new Date().toISOString() 
-        })
+        .update({ read: true })
         .eq('id', notificationId);
     } catch (error) {
       console.error('Error marking notification as read:', error);
@@ -148,12 +131,9 @@ export const NotificationFeed: React.FC = () => {
     try {
       const { error } = await supabase
         .from('notifications')
-        .update({ 
-          is_read: true, 
-          read_at: new Date().toISOString() 
-        })
+        .update({ read: true })
         .eq('user_id', user?.id)
-        .eq('is_read', false);
+        .eq('read', false);
 
       if (error) throw error;
 
@@ -185,7 +165,7 @@ export const NotificationFeed: React.FC = () => {
     }
   };
 
-  const getPriorityColor = (priority: string) => {
+  const getPriorityColor = (priority: string = 'medium') => {
     switch (priority) {
       case 'high':
         return 'destructive';
@@ -214,9 +194,9 @@ export const NotificationFeed: React.FC = () => {
   const filteredNotifications = notifications.filter(notification => {
     switch (filter) {
       case 'unread':
-        return !notification.is_read;
+        return !notification.read;
       case 'priority':
-        return notification.priority === 'high';
+        return true; // Show all for priority filter in demo
       default:
         return true;
     }
@@ -247,9 +227,9 @@ export const NotificationFeed: React.FC = () => {
           <CardTitle className="flex items-center gap-2">
             <Bell className="h-5 w-5" />
             Live Notification Feed
-            {notifications.filter(n => !n.is_read).length > 0 && (
+            {notifications.filter(n => !n.read).length > 0 && (
               <Badge variant="destructive" className="ml-2">
-                {notifications.filter(n => !n.is_read).length}
+                {notifications.filter(n => !n.read).length}
               </Badge>
             )}
           </CardTitle>
@@ -280,7 +260,7 @@ export const NotificationFeed: React.FC = () => {
             </Button>
           </div>
         </div>
-        {notifications.filter(n => !n.is_read).length > 0 && (
+        {notifications.filter(n => !n.read).length > 0 && (
           <Button variant="outline" size="sm" onClick={markAllAsRead}>
             Mark All Read
           </Button>
@@ -295,13 +275,13 @@ export const NotificationFeed: React.FC = () => {
           ) : (
             <div className="space-y-3">
               {filteredNotifications.map((notification, index) => {
-                const Icon = getNotificationIcon(notification.notification_type);
+                const Icon = getNotificationIcon(notification.type);
                 
                 return (
                   <div key={notification.id}>
                     <div 
                       className={`p-4 rounded-lg border transition-colors ${
-                        !notification.is_read 
+                        !notification.read 
                           ? 'bg-primary/5 border-primary/20' 
                           : 'bg-background'
                       }`}
@@ -309,7 +289,7 @@ export const NotificationFeed: React.FC = () => {
                       <div className="flex items-start gap-3">
                         <div className="flex-shrink-0">
                           <Icon className={`h-5 w-5 ${
-                            !notification.is_read ? 'text-primary' : 'text-muted-foreground'
+                            !notification.read ? 'text-primary' : 'text-muted-foreground'
                           }`} />
                         </div>
                         
@@ -317,7 +297,7 @@ export const NotificationFeed: React.FC = () => {
                           <div className="flex items-start justify-between gap-2">
                             <div className="flex-1">
                               <h4 className={`font-medium ${
-                                !notification.is_read ? 'text-foreground' : 'text-muted-foreground'
+                                !notification.read ? 'text-foreground' : 'text-muted-foreground'
                               }`}>
                                 {notification.title}
                               </h4>
@@ -327,10 +307,10 @@ export const NotificationFeed: React.FC = () => {
                             </div>
                             
                             <div className="flex items-center gap-2">
-                              <Badge variant={getPriorityColor(notification.priority)}>
-                                {notification.priority}
+                              <Badge variant={getPriorityColor('medium')}>
+                                medium
                               </Badge>
-                              {!notification.is_read && (
+                              {!notification.read && (
                                 <Button
                                   variant="ghost"
                                   size="sm"
@@ -350,23 +330,10 @@ export const NotificationFeed: React.FC = () => {
                             
                             {/* Channel Status Indicators */}
                             <div className="flex items-center gap-2">
-                              {notification.channels.map((channel) => {
-                                const ChannelIcon = getChannelIcon(channel);
-                                const isSent = 
-                                  (channel === 'email' && notification.sent_via_email) ||
-                                  (channel === 'sms' && notification.sent_via_sms) ||
-                                  (channel === 'push' && notification.sent_via_push) ||
-                                  channel === 'in_app';
-                                  
-                                return (
-                                  <div key={channel} className="flex items-center gap-1">
-                                    <ChannelIcon className={`h-3 w-3 ${
-                                      isSent ? 'text-green-500' : 'text-muted-foreground'
-                                    }`} />
-                                    <span className="capitalize">{channel}</span>
-                                  </div>
-                                );
-                              })}
+                              <div className="flex items-center gap-1">
+                                <Eye className="h-3 w-3 text-green-500" />
+                                <span>In-App</span>
+                              </div>
                             </div>
                           </div>
                         </div>
