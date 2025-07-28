@@ -195,7 +195,7 @@ const CreateShipment = () => {
 
       const { data, error } = await supabase
         .from('shipments')
-        .insert(shipmentData)
+        .insert([shipmentData])
         .select()
         .single();
 
