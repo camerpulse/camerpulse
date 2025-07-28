@@ -24722,6 +24722,81 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_actions: {
+        Row: {
+          action_data: Json | null
+          action_type: string
+          action_url: string | null
+          created_at: string | null
+          id: string
+          is_primary: boolean | null
+          label: string
+          notification_id: string
+          style: string | null
+        }
+        Insert: {
+          action_data?: Json | null
+          action_type: string
+          action_url?: string | null
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          label: string
+          notification_id: string
+          style?: string | null
+        }
+        Update: {
+          action_data?: Json | null
+          action_type?: string
+          action_url?: string | null
+          created_at?: string | null
+          id?: string
+          is_primary?: boolean | null
+          label?: string
+          notification_id?: string
+          style?: string | null
+        }
+        Relationships: []
+      }
+      notification_attachments: {
+        Row: {
+          attachment_type: string
+          created_at: string | null
+          file_name: string | null
+          file_size: number | null
+          file_url: string
+          id: string
+          metadata: Json | null
+          mime_type: string | null
+          notification_id: string
+          thumbnail_url: string | null
+        }
+        Insert: {
+          attachment_type: string
+          created_at?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_url: string
+          id?: string
+          metadata?: Json | null
+          mime_type?: string | null
+          notification_id: string
+          thumbnail_url?: string | null
+        }
+        Update: {
+          attachment_type?: string
+          created_at?: string | null
+          file_name?: string | null
+          file_size?: number | null
+          file_url?: string
+          id?: string
+          metadata?: Json | null
+          mime_type?: string | null
+          notification_id?: string
+          thumbnail_url?: string | null
+        }
+        Relationships: []
+      }
       notification_flows: {
         Row: {
           channel: Database["public"]["Enums"]["notification_channel"]
@@ -34316,6 +34391,83 @@ export type Database = {
         }
         Relationships: []
       }
+      scheduled_notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string | null
+          created_by: string | null
+          data: Json | null
+          error_message: string | null
+          icon: string | null
+          id: string
+          max_retries: number | null
+          message: string
+          notification_type: string
+          priority: string
+          retry_count: number | null
+          scheduled_for: string
+          sent_at: string | null
+          status: string
+          target_regions: string[] | null
+          template_id: string | null
+          title: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          data?: Json | null
+          error_message?: string | null
+          icon?: string | null
+          id?: string
+          max_retries?: number | null
+          message: string
+          notification_type: string
+          priority?: string
+          retry_count?: number | null
+          scheduled_for: string
+          sent_at?: string | null
+          status?: string
+          target_regions?: string[] | null
+          template_id?: string | null
+          title: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          data?: Json | null
+          error_message?: string | null
+          icon?: string | null
+          id?: string
+          max_retries?: number | null
+          message?: string
+          notification_type?: string
+          priority?: string
+          retry_count?: number | null
+          scheduled_for?: string
+          sent_at?: string | null
+          status?: string
+          target_regions?: string[] | null
+          template_id?: string | null
+          title?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_notifications_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "notification_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       scholarship_applications: {
         Row: {
           applicant_email: string
@@ -42917,6 +43069,10 @@ export type Database = {
           p_result_data?: Json
         }
         Returns: string
+      }
+      process_scheduled_notifications: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       process_wallet_transaction: {
         Args: {
