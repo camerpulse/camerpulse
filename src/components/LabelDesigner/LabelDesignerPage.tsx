@@ -9,10 +9,11 @@ import { LabelCanvas } from './LabelCanvas';
 import { FieldEditor } from './FieldEditor';
 import { PrintPreviewDialog } from './PrintPreviewDialog';
 import { TemplateLibrary } from './TemplateLibrary';
+import { CodeGeneratorComponent } from './CodeGenerator';
 import { useLabelPrinting } from '@/hooks/useLabelPrinting';
 import { LabelField, LabelDimensions } from '@/types/labelTypes';
 import { LABEL_SIZES } from '@/utils/labelGeneration';
-import { Save, FileText, Printer, Eye, Library } from 'lucide-react';
+import { Save, FileText, Printer, Eye, Library, QrCode } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export const LabelDesignerPage: React.FC = () => {
@@ -161,89 +162,169 @@ export const LabelDesignerPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        <div className="lg:col-span-3">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle>Design Canvas</CardTitle>
-                  <CardDescription>
-                    Design your label layout by adding and positioning elements
-                  </CardDescription>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <Label htmlFor="size-select" className="text-sm">Size:</Label>
-                    <Select value={selectedSize} onValueChange={(value: keyof typeof LABEL_SIZES) => setSelectedSize(value)}>
-                      <SelectTrigger id="size-select" className="w-32">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Object.keys(LABEL_SIZES).map((size) => (
-                          <SelectItem key={size} value={size}>
-                            {size}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+      <Tabs defaultValue="designer" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="designer">Designer</TabsTrigger>
+          <TabsTrigger value="templates">Templates</TabsTrigger>
+          <TabsTrigger value="bulk">Bulk Generator</TabsTrigger>
+          <TabsTrigger value="codes">QR & Barcodes</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="designer" className="space-y-6 mt-6">
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-3">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle>Design Canvas</CardTitle>
+                    <CardDescription>
+                      Design your label layout by adding and positioning elements
+                    </CardDescription>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Label htmlFor="size-select" className="text-sm">Size:</Label>
+                      <Select value={selectedSize} onValueChange={(value: keyof typeof LABEL_SIZES) => setSelectedSize(value)}>
+                        <SelectTrigger id="size-select" className="w-32">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Object.keys(LABEL_SIZES).map((size) => (
+                            <SelectItem key={size} value={size}>
+                              {size}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent className="label-canvas">
-              <LabelCanvas
-                fields={fields}
-                dimensions={dimensions}
-                selectedField={selectedField}
-                onFieldSelect={setSelectedField}
-                onFieldUpdate={handleFieldUpdate}
-                shipmentData={shipmentData}
-                mode="design"
-              />
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText size={20} />
-                Template Settings
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="template-name">Template Name</Label>
-                <Input
-                  id="template-name"
-                  placeholder="Enter template name"
-                  value={templateName}
-                  onChange={(e) => setTemplateName(e.target.value)}
+              </CardHeader>
+              <CardContent className="label-canvas">
+                <LabelCanvas
+                  fields={fields}
+                  dimensions={dimensions}
+                  selectedField={selectedField}
+                  onFieldSelect={setSelectedField}
+                  onFieldUpdate={handleFieldUpdate}
+                  shipmentData={shipmentData}
+                  mode="design"
                 />
-              </div>
-              
-              <Button
-                onClick={handleSaveTemplate}
-                className="w-full flex items-center gap-2"
-                disabled={!templateName.trim() || fields.length === 0}
-              >
-                <Save size={16} />
-                Save Template
-              </Button>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
 
-          {selectedFieldData && (
-            <FieldEditor
-              field={selectedFieldData}
-              onUpdate={(updates) => handleFieldUpdate(selectedField!, updates)}
-              onRemove={() => handleFieldRemove(selectedField!)}
-            />
-          )}
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText size={20} />
+                  Template Settings
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="template-name">Template Name</Label>
+                  <Input
+                    id="template-name"
+                    placeholder="Enter template name"
+                    value={templateName}
+                    onChange={(e) => setTemplateName(e.target.value)}
+                  />
+                </div>
+                
+                <Button
+                  onClick={handleSaveTemplate}
+                  className="w-full flex items-center gap-2"
+                  disabled={!templateName.trim() || fields.length === 0}
+                >
+                  <Save size={16} />
+                  Save Template
+                </Button>
+              </CardContent>
+            </Card>
+
+            {selectedFieldData && (
+              <FieldEditor
+                field={selectedFieldData}
+                onUpdate={(updates) => handleFieldUpdate(selectedField!, updates)}
+                onRemove={() => handleFieldRemove(selectedField!)}
+              />
+            )}
+          </div>
         </div>
-      </div>
+        </TabsContent>
+
+        <TabsContent value="templates">
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Template Library</CardTitle>
+                <CardDescription>Browse and select from your saved templates</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <TemplateLibrary
+                  open={true}
+                  onOpenChange={() => {}}
+                  onSelectTemplate={(template) => {
+                    if (template.template_fields) {
+                      const templateFields = JSON.parse(template.template_fields as string) as LabelField[];
+                      setFields(templateFields);
+                    }
+                    setSelectedSize(template.label_size as keyof typeof LABEL_SIZES || 'A4');
+                    setTemplateName(template.template_name);
+                    toast({
+                      title: "Template loaded",
+                      description: `Template "${template.template_name}" has been loaded`,
+                    });
+                  }}
+                />
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="bulk">
+          <div className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Bulk Label Generator</CardTitle>
+                <CardDescription>Generate multiple labels from data sources</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Bulk generation functionality will be available here.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="codes">
+          <CodeGeneratorComponent 
+            onCodeGenerated={(dataUrl, type) => {
+              // Handle generated code integration with label designer
+              const codeField: LabelField = {
+                id: `code-${Date.now()}`,
+                type: 'image',
+                content: dataUrl,
+                position: { x: 50, y: 50 },
+                size: { width: 100, height: 100 },
+                style: {
+                  fontSize: 12,
+                  color: '#000000',
+                  textAlign: 'left'
+                }
+              };
+              setFields(prev => [...prev, codeField]);
+              toast({
+                title: "Code added to canvas",
+                description: `${type.toUpperCase()} code has been added to your label design`,
+              });
+            }}
+          />
+        </TabsContent>
+      </Tabs>
 
       <PrintPreviewDialog
         open={showPreview}
@@ -251,25 +332,6 @@ export const LabelDesignerPage: React.FC = () => {
         fields={fields}
         dimensions={dimensions}
         shipmentData={shipmentData}
-      />
-
-      <TemplateLibrary
-        open={showTemplates}
-        onOpenChange={setShowTemplates}
-        onSelectTemplate={(template) => {
-          // Load template fields
-          if (template.template_fields) {
-            const templateFields = JSON.parse(template.template_fields as string) as LabelField[];
-            setFields(templateFields);
-          }
-          setSelectedSize(template.label_size as keyof typeof LABEL_SIZES || 'A4');
-          setTemplateName(template.template_name);
-          setShowTemplates(false);
-          toast({
-            title: "Template loaded",
-            description: `Template "${template.template_name}" has been loaded`,
-          });
-        }}
       />
     </div>
   );
