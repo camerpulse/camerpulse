@@ -18,6 +18,7 @@ import { CompanyProfilePage } from '@/pages/logistics/CompanyProfilePage';
 import { LogisticsCompanyPortal } from '@/pages/logistics/LogisticsCompanyPortal';
 import { LogisticsShipments } from '@/pages/logistics/LogisticsShipments';
 import { LogisticsAdminPortal } from '@/pages/logistics/LogisticsAdminPortal';
+import { EnterpriseFeatures } from '@/pages/logistics/EnterpriseFeatures';
 
 // Logistics Authenticated Layout
 function LogisticsAuthenticatedLayout({ children }: { children: React.ReactNode }) {
@@ -77,6 +78,14 @@ export function PluginRouter({ user }: { user: any }) {
               <Route path="/company-portal" element={<LogisticsCompanyPortal />} />
               <Route path="/shipments" element={<LogisticsShipments />} />
               <Route path="/admin" element={<LogisticsAdminPortal />} />
+              <Route 
+                path="/enterprise" 
+                element={
+                  <LogisticsAuthenticatedLayout>
+                    <EnterpriseFeatures />
+                  </LogisticsAuthenticatedLayout>
+                }
+              />
             </>
           )}
         </>
