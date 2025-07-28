@@ -32,8 +32,27 @@ export const ContentModerationModule: React.FC<ContentModerationModuleProps> = (
   const { data: reportedContent, isLoading } = useQuery({
     queryKey: ['reported-content', statusFilter, contentTypeFilter, searchTerm],
     queryFn: async () => {
-      // Return mock data
-      return [];
+      // Return mock data with proper structure
+      return [
+        {
+          id: '1',
+          content_type: 'post',
+          status: 'pending',
+          reason: 'Inappropriate content reported',
+          created_at: new Date().toISOString(),
+          reported_by_profile: { display_name: 'User A' },
+          content_data: { text: 'Sample content that was reported for moderation review.' }
+        },
+        {
+          id: '2', 
+          content_type: 'comment',
+          status: 'pending',
+          reason: 'Spam content',
+          created_at: new Date(Date.now() - 86400000).toISOString(),
+          reported_by_profile: { display_name: 'User B' },
+          content_data: { text: 'Another sample content for review.' }
+        }
+      ];
     }
   });
 
@@ -51,7 +70,7 @@ export const ContentModerationModule: React.FC<ContentModerationModuleProps> = (
     }
   });
 
-  // Moderation action mutation
+  // Mock moderation action mutation
   const moderateContent = useMutation({
     mutationFn: async ({ 
       reportId, 
@@ -62,17 +81,9 @@ export const ContentModerationModule: React.FC<ContentModerationModuleProps> = (
       action: 'approve' | 'remove' | 'flag'; 
       moderatorNotes?: string; 
     }) => {
-      const { error } = await supabase
-        .from('content_reports')
-        .update({
-          status: action === 'approve' ? 'approved' : action === 'remove' ? 'removed' : 'flagged',
-          moderator_notes: moderatorNotes,
-          moderated_at: new Date().toISOString(),
-          moderated_by: (await supabase.auth.getUser()).data.user?.id
-        })
-        .eq('id', reportId);
-      
-      if (error) throw error;
+      // Mock implementation - will be replaced with actual database operations
+      await new Promise(resolve => setTimeout(resolve, 500));
+      return { reportId, action, moderatorNotes };
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['reported-content'] });
@@ -252,9 +263,6 @@ export const ContentModerationModule: React.FC<ContentModerationModuleProps> = (
                       <div className="bg-muted p-3 rounded text-sm">
                         {report.content_data.text && (
                           <p>{report.content_data.text.slice(0, 200)}...</p>
-                        )}
-                        {report.content_data.url && (
-                          <p className="text-blue-600">{report.content_data.url}</p>
                         )}
                       </div>
                     </div>

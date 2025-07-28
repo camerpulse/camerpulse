@@ -31,7 +31,7 @@ export const SystemSettingsModule: React.FC<SystemSettingsModuleProps> = ({
   const { data: settings, isLoading } = useQuery({
     queryKey: ['system-settings'],
     queryFn: async () => {
-      // Return mock settings
+      // Return mock settings with all required properties
       return {
         platform_name: { data: 'CamerPulse' },
         platform_version: { data: '1.0.0' },
@@ -41,23 +41,31 @@ export const SystemSettingsModule: React.FC<SystemSettingsModuleProps> = ({
         default_currency: { data: 'FCFA' },
         require_email_verification: { data: true },
         enable_2fa: { data: false },
-        session_timeout: { data: 60 }
+        session_timeout: { data: 60 },
+        auto_moderation_enabled: { data: true },
+        content_filtering_enabled: { data: true },
+        email_notifications_enabled: { data: true },
+        push_notifications_enabled: { data: true },
+        sms_notifications_enabled: { data: false },
+        auto_backup_enabled: { data: true },
+        backup_frequency_hours: { data: 24 },
+        data_retention_days: { data: 365 },
+        primary_color: { data: '#10b981' },
+        secondary_color: { data: '#3b82f6' },
+        dark_mode_default: { data: false },
+        api_rate_limit: { data: 1000 },
+        api_logging_enabled: { data: true },
+        api_analytics_enabled: { data: true }
       };
     }
   });
 
-  // Update setting mutation
+  // Mock update setting mutation
   const updateSetting = useMutation({
     mutationFn: async ({ key, value }: { key: string; value: any }) => {
-      const { error } = await supabase
-        .from('system_settings')
-        .upsert({ 
-          key, 
-          value: typeof value === 'object' ? value : { data: value },
-          updated_at: new Date().toISOString()
-        });
-      
-      if (error) throw error;
+      // Mock implementation - will be replaced with actual database operations
+      await new Promise(resolve => setTimeout(resolve, 300));
+      return { key, value };
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['system-settings'] });
