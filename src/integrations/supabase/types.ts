@@ -15747,6 +15747,56 @@ export type Database = {
         }
         Relationships: []
       }
+      escalation_history: {
+        Row: {
+          created_at: string | null
+          escalated_at: string | null
+          escalated_to: Json
+          escalation_level: number
+          escalation_reason: string | null
+          execution_id: string | null
+          id: string
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          response_deadline: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          escalated_at?: string | null
+          escalated_to?: Json
+          escalation_level: number
+          escalation_reason?: string | null
+          execution_id?: string | null
+          id?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          response_deadline?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          escalated_at?: string | null
+          escalated_to?: Json
+          escalation_level?: number
+          escalation_reason?: string | null
+          execution_id?: string | null
+          id?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          response_deadline?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "escalation_history_execution_id_fkey"
+            columns: ["execution_id"]
+            isOneToOne: false
+            referencedRelation: "workflow_executions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       event_agenda: {
         Row: {
           agenda_description: string | null
@@ -25211,6 +25261,54 @@ export type Database = {
           template_name?: string
           updated_at?: string
           variables?: Json | null
+        }
+        Relationships: []
+      }
+      notification_workflows: {
+        Row: {
+          actions: Json
+          conditions: Json
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          escalation_rules: Json | null
+          id: string
+          is_active: boolean | null
+          name: string
+          priority: number | null
+          trigger_config: Json
+          trigger_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          actions?: Json
+          conditions?: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          escalation_rules?: Json | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          priority?: number | null
+          trigger_config?: Json
+          trigger_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          actions?: Json
+          conditions?: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          escalation_rules?: Json | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          priority?: number | null
+          trigger_config?: Json
+          trigger_type?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -42357,6 +42455,153 @@ export type Database = {
         }
         Relationships: []
       }
+      workflow_conditions: {
+        Row: {
+          condition_order: number | null
+          condition_type: string
+          created_at: string | null
+          field_name: string
+          id: string
+          is_active: boolean | null
+          logical_operator: string | null
+          operator: string
+          value: Json
+          workflow_id: string | null
+        }
+        Insert: {
+          condition_order?: number | null
+          condition_type: string
+          created_at?: string | null
+          field_name: string
+          id?: string
+          is_active?: boolean | null
+          logical_operator?: string | null
+          operator: string
+          value: Json
+          workflow_id?: string | null
+        }
+        Update: {
+          condition_order?: number | null
+          condition_type?: string
+          created_at?: string | null
+          field_name?: string
+          id?: string
+          is_active?: boolean | null
+          logical_operator?: string | null
+          operator?: string
+          value?: Json
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_conditions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "notification_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflow_executions: {
+        Row: {
+          completed_at: string | null
+          created_at: string | null
+          error_message: string | null
+          escalation_level: number | null
+          execution_log: Json | null
+          id: string
+          next_escalation_at: string | null
+          started_at: string | null
+          status: string
+          trigger_data: Json
+          workflow_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          escalation_level?: number | null
+          execution_log?: Json | null
+          id?: string
+          next_escalation_at?: string | null
+          started_at?: string | null
+          status?: string
+          trigger_data?: Json
+          workflow_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string | null
+          error_message?: string | null
+          escalation_level?: number | null
+          execution_log?: Json | null
+          id?: string
+          next_escalation_at?: string | null
+          started_at?: string | null
+          status?: string
+          trigger_data?: Json
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_executions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "notification_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      workflow_routing_rules: {
+        Row: {
+          conditions: Json
+          created_at: string | null
+          delay_seconds: number | null
+          id: string
+          is_active: boolean | null
+          priority: number | null
+          rule_name: string
+          target_channels: Json
+          target_groups: Json | null
+          target_users: Json | null
+          workflow_id: string | null
+        }
+        Insert: {
+          conditions?: Json
+          created_at?: string | null
+          delay_seconds?: number | null
+          id?: string
+          is_active?: boolean | null
+          priority?: number | null
+          rule_name: string
+          target_channels?: Json
+          target_groups?: Json | null
+          target_users?: Json | null
+          workflow_id?: string | null
+        }
+        Update: {
+          conditions?: Json
+          created_at?: string | null
+          delay_seconds?: number | null
+          id?: string
+          is_active?: boolean | null
+          priority?: number | null
+          rule_name?: string
+          target_channels?: Json
+          target_groups?: Json | null
+          target_users?: Json | null
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_routing_rules_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "notification_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       election_forecast_summary: {
@@ -42861,6 +43106,10 @@ export type Database = {
         Args: { p_politician_id: string; p_admin_id: string }
         Returns: boolean
       }
+      evaluate_workflow_conditions: {
+        Args: { p_workflow_id: string; p_context_data: Json }
+        Returns: boolean
+      }
       execute_civic_mission: {
         Args: { p_mission_id: string }
         Returns: Json
@@ -42868,6 +43117,10 @@ export type Database = {
       execute_integration: {
         Args: { p_integration_id: string }
         Returns: Json
+      }
+      execute_workflow: {
+        Args: { p_workflow_id: string; p_trigger_data?: Json }
+        Returns: string
       }
       flag_behavioral_inconsistency: {
         Args: {
@@ -43244,6 +43497,10 @@ export type Database = {
           p_award_name?: string
         }
         Returns: number
+      }
+      process_escalations: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       process_legal_document: {
         Args: {
