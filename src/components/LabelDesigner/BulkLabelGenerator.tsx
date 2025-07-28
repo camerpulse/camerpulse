@@ -22,7 +22,7 @@ import {
   AlertCircle,
   RefreshCw
 } from 'lucide-react';
-import { toast } from 'sonner';
+import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface BulkData {
@@ -43,6 +43,7 @@ interface GenerationJob {
 
 export const BulkLabelGenerator: React.FC = () => {
   const { user } = useAuth();
+  const { toast } = useToast();
   const [activeTab, setActiveTab] = useState<'upload' | 'manual' | 'jobs'>('upload');
   const [bulkData, setBulkData] = useState<BulkData[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<string>('');
@@ -72,7 +73,11 @@ export const BulkLabelGenerator: React.FC = () => {
     } else if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
       handleCSVUpload(file);
     } else {
-      toast.error('Please upload a CSV or JSON file');
+      toast({
+        title: "Upload Error",
+        description: "Please upload a CSV or JSON file",
+        variant: "destructive",
+      });
     }
   };
 
@@ -87,7 +92,10 @@ export const BulkLabelGenerator: React.FC = () => {
             ...item
           }));
           setBulkData(processedData);
-          toast.success(`Loaded ${processedData.length} records from JSON`);
+          toast({
+            title: "Success",
+            description: `Loaded ${processedData.length} records from JSON`,
+          });
         } else {
           toast.error('JSON file must contain an array of objects');
         }
