@@ -21,7 +21,7 @@ import { Loader2 } from 'lucide-react';
 
 // Admin imports
 import Admin from '@/pages/Admin';
-import CamerPulseAdminCore from '@/pages/CamerPulseAdminCore';
+import { AdminRouteHandler } from '@/components/Admin/AdminCoreV2/components/AdminRouteHandler';
 import AdminRoutes from '@/pages/AdminRoutes';
 import ModerationDashboard from '@/pages/ModerationDashboard';
 import MarketplaceAdmin from '@/pages/MarketplaceAdmin';
@@ -76,14 +76,14 @@ function AppContent() {
             
             {/* Unified Admin Routes */}
             <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/core" element={<CamerPulseAdminCore />} />
-          <Route path="/admin/core/*" element={<CamerPulseAdminCore />} />
+           <Route path="/admin/core" element={<AdminRouteHandler />} />
+           <Route path="/admin/core/*" element={<AdminRouteHandler />} />
             <Route path="/admin/*" element={<AdminRoutes />} />
             
             {/* Legacy Admin Routes (Redirected to Core) */}
-            <Route path="/admin/moderation" element={<CamerPulseAdminCore />} />
-            <Route path="/admin/marketplace" element={<CamerPulseAdminCore />} />
-            <Route path="/admin/data-import" element={<CamerPulseAdminCore />} />
+            <Route path="/admin/moderation" element={<AdminRouteHandler />} />
+            <Route path="/admin/marketplace" element={<AdminRouteHandler />} />
+            <Route path="/admin/data-import" element={<AdminRouteHandler />} />
           </>
         )}
       </Routes>
