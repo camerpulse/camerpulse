@@ -35,14 +35,15 @@ serve(async (req) => {
     const { data: shipment, error: shipmentError } = await supabaseClient
       .from('shipments')
       .select(`
+        id,
         tracking_number,
         status,
         sender_info,
         receiver_info,
-        pickup_address,
-        delivery_address,
-        estimated_delivery,
-        actual_delivery,
+        origin_address,
+        destination_address,
+        estimated_delivery_date,
+        actual_delivery_date,
         created_at,
         updated_at
       `)
@@ -115,12 +116,12 @@ serve(async (req) => {
       )
     }
 
-    // Get tracking events (if tracking_events table exists)
+    // Get tracking events from shipment_tracking_events table
     const { data: events, error: eventsError } = await supabaseClient
-      .from('tracking_events')
+      .from('shipment_tracking_events')
       .select('*')
-      .eq('tracking_number', trackingNumber)
-      .order('event_timestamp', { ascending: true })
+      .eq('shipment_id', shipment.id)
+      .order('created_at', { ascending: true })
 
     // Combine shipment data with events
     const trackingData = {

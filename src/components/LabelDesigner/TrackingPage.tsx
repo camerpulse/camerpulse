@@ -191,21 +191,21 @@ export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: init
           address: shipment.destination_address || 'Unknown Address',
           phone: receiverInfo?.phone || '+237-698-765-432'
         },
-        deliveryType: shipment.service_level || 'Standard',
+        deliveryType: shipment.service_level ? shipment.service_level.charAt(0).toUpperCase() + shipment.service_level.slice(1) : 'Standard',
         estimatedDelivery: shipment.estimated_delivery_date || new Date().toISOString(),
         events: [
           {
             id: '1',
             timestamp: shipment.created_at,
-            location: 'Distribution Center',
+            location: 'Distribution Center - Douala',
             description: 'Package received and processed',
             status: 'in_transit'
           },
           {
             id: '2',
             timestamp: shipment.updated_at,
-            location: 'In Transit',
-            description: 'Package is on its way',
+            location: 'En Route to Destination',
+            description: `Package is on its way to ${shipment.destination_address}`,
             status: 'in_transit'
           }
         ],
@@ -220,11 +220,23 @@ export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: init
       setShipmentData(transformedData);
     } catch (err) {
       console.error('Tracking error:', err);
-      // Fallback to mock data if API fails
-      if (trackingNumber.toLowerCase().includes('cp2024')) {
-        setShipmentData(mockShipmentData);
+      
+      // More specific error handling
+      if (err instanceof Error) {
+        if (err.message.includes('not found')) {
+          setError(`Tracking number "${trackingNumber}" was not found in our system. Please verify the number and try again.`);
+        } else {
+          setError(`Error tracking package: ${err.message}`);
+        }
       } else {
-        setError('Tracking number not found. Please check the number and try again.');
+        setError('An unexpected error occurred while tracking your package. Please try again.');
+      }
+      
+      // Fallback to mock data for demo tracking numbers
+      if (trackingNumber.toLowerCase().includes('cp2024') || trackingNumber.toLowerCase().includes('demo')) {
+        setShipmentData(mockShipmentData);
+        setError(null); // Clear error if using mock data
+      } else {
         setShipmentData(null);
       }
     } finally {
