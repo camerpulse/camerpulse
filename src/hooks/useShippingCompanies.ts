@@ -4,19 +4,30 @@ import { supabase } from '@/integrations/supabase/client';
 export interface ShippingCompany {
   id: string;
   company_name: string;
-  company_code: string;
+  company_code?: string;
   description?: string;
   regions?: string[];
   services?: string[];
   contact_email?: string;
   contact_phone?: string;
   years_in_business?: number;
-  is_verified: boolean;
-  partnership_status: string;
+  is_verified?: boolean;
+  partnership_status?: string;
   logo_url?: string;
   created_at: string;
   avg_rating?: number;
   total_reviews?: number;
+  // Map database fields to expected UI fields
+  name?: string;
+  code?: string;
+  rating?: number;
+  totalReviews?: number;
+  contactEmail?: string;
+  contactPhone?: string;
+  yearsInBusiness?: number;
+  isVerified?: boolean;
+  partnershipStatus?: string;
+  vehicleTypes?: string[];
 }
 
 export const useShippingCompanies = () => {
@@ -39,7 +50,7 @@ export const useShippingCompanies = () => {
         throw companiesError;
       }
 
-      // Get ratings for each company
+      // Get ratings for each company and map fields for UI compatibility
       const companiesWithRatings = await Promise.all(
         (companiesData || []).map(async (company) => {
           const { data: ratingsData } = await supabase
@@ -51,8 +62,19 @@ export const useShippingCompanies = () => {
           return {
             ...company,
             avg_rating: avgRating,
-            total_reviews: totalReviews
-          };
+            total_reviews: totalReviews,
+            // Add UI-compatible mappings using actual database fields
+            name: company.company_name,
+            code: `SHIP-${company.id.slice(0, 6)}`, // Generate since company_code doesn't exist
+            rating: avgRating,
+            totalReviews: totalReviews,
+            contactEmail: company.email || '',
+            contactPhone: company.phone || '',
+            yearsInBusiness: new Date().getFullYear() - 2020, // Default
+            isVerified: company.verification_status === 'verified',
+            partnershipStatus: 'registered', // Default since field doesn't exist
+            vehicleTypes: ['Trucks', 'Vans'], // Default since not in schema
+          } as ShippingCompany;
         })
       );
 

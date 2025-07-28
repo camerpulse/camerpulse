@@ -65,10 +65,10 @@ const DeliveryCompaniesDirectory = () => {
   ];
 
   const filteredCompanies = dbCompanies.filter(company => {
-    const matchesSearch = company.company_name.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesRating = (company.avg_rating || 0) >= ratingFilter[0];
-    const matchesVerified = !verifiedOnly || company.is_verified;
-    const matchesPreferred = !preferredOnly || company.partnership_status === 'preferred';
+    const matchesSearch = (company.name || company.company_name || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesRating = (company.rating || company.avg_rating || 0) >= ratingFilter[0];
+    const matchesVerified = !verifiedOnly || (company.isVerified || company.is_verified);
+    const matchesPreferred = !preferredOnly || (company.partnershipStatus || company.partnership_status) === 'preferred';
     
     return matchesSearch && matchesRating && matchesVerified && matchesPreferred;
   });
@@ -273,10 +273,10 @@ const DeliveryCompaniesDirectory = () => {
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-bold">
-                    {filteredCompanies.length} Companies Found
+                    {companiesLoading ? 'Loading...' : `${filteredCompanies.length} Companies Found`}
                   </h2>
                   <p className="text-muted-foreground mt-1">
-                    Verified delivery partners ready to serve you
+                    {companiesLoading ? 'Fetching verified delivery partners...' : 'Verified delivery partners ready to serve you'}
                   </p>
                 </div>
                 
@@ -297,9 +297,23 @@ const DeliveryCompaniesDirectory = () => {
                 )}
               </div>
 
-              {/* Companies Grid - 4 columns desktop, 2 mobile */}
+              {/* Companies Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredCompanies.map((company) => (
+                {companiesLoading ? (
+                  // Loading skeleton
+                  Array.from({ length: 6 }).map((_, i) => (
+                    <MobileCard key={i} className="animate-pulse">
+                      <div className="h-48 bg-muted rounded-lg"></div>
+                    </MobileCard>
+                  ))
+                ) : filteredCompanies.length === 0 ? (
+                  <div className="col-span-full text-center py-12">
+                    <Building2 className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
+                    <h3 className="text-xl font-semibold mb-2">No Companies Found</h3>
+                    <p className="text-muted-foreground">Try adjusting your filters or search terms.</p>
+                  </div>
+                ) : (
+                  filteredCompanies.map((company) => (
                   <MobileCard key={company.id} className="group hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 bg-gradient-to-br from-card via-card to-card/95 border-border/40 overflow-hidden">
                     {/* Card Header with Company Branding */}
                     <div className="relative bg-gradient-to-r from-primary/5 via-primary/3 to-secondary/5 p-6 border-b border-border/30">
@@ -507,7 +521,8 @@ const DeliveryCompaniesDirectory = () => {
                     {/* Hover Overlay Effect */}
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-lg"></div>
                   </MobileCard>
-                ))}
+                  ))
+                )}
               </div>
               
               {/* No Results */}
