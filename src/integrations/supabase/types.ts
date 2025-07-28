@@ -13915,6 +13915,353 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_company_applications: {
+        Row: {
+          admin_notes: string | null
+          application_status: string | null
+          business_address: string
+          business_documents: Json | null
+          business_registration_number: string | null
+          company_name: string
+          company_size: string | null
+          contact_email: string
+          contact_person_name: string
+          contact_phone: string
+          created_at: string
+          id: string
+          insurance_details: Json | null
+          licenses_certifications: Json | null
+          logo_url: string | null
+          pricing_model: string | null
+          rejection_reason: string | null
+          service_capabilities: Json | null
+          service_regions: Json | null
+          social_media_links: Json | null
+          updated_at: string
+          user_id: string | null
+          vehicle_types: Json | null
+          verified_at: string | null
+          verified_by: string | null
+          website_url: string | null
+          years_in_business: number | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          application_status?: string | null
+          business_address: string
+          business_documents?: Json | null
+          business_registration_number?: string | null
+          company_name: string
+          company_size?: string | null
+          contact_email: string
+          contact_person_name: string
+          contact_phone: string
+          created_at?: string
+          id?: string
+          insurance_details?: Json | null
+          licenses_certifications?: Json | null
+          logo_url?: string | null
+          pricing_model?: string | null
+          rejection_reason?: string | null
+          service_capabilities?: Json | null
+          service_regions?: Json | null
+          social_media_links?: Json | null
+          updated_at?: string
+          user_id?: string | null
+          vehicle_types?: Json | null
+          verified_at?: string | null
+          verified_by?: string | null
+          website_url?: string | null
+          years_in_business?: number | null
+        }
+        Update: {
+          admin_notes?: string | null
+          application_status?: string | null
+          business_address?: string
+          business_documents?: Json | null
+          business_registration_number?: string | null
+          company_name?: string
+          company_size?: string | null
+          contact_email?: string
+          contact_person_name?: string
+          contact_phone?: string
+          created_at?: string
+          id?: string
+          insurance_details?: Json | null
+          licenses_certifications?: Json | null
+          logo_url?: string | null
+          pricing_model?: string | null
+          rejection_reason?: string | null
+          service_capabilities?: Json | null
+          service_regions?: Json | null
+          social_media_links?: Json | null
+          updated_at?: string
+          user_id?: string | null
+          vehicle_types?: Json | null
+          verified_at?: string | null
+          verified_by?: string | null
+          website_url?: string | null
+          years_in_business?: number | null
+        }
+        Relationships: []
+      }
+      delivery_company_profiles: {
+        Row: {
+          application_id: string | null
+          average_rating: number | null
+          business_address: string
+          company_code: string
+          company_name: string
+          company_size: string | null
+          contact_email: string
+          contact_person_name: string
+          contact_phone: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          is_verified: boolean | null
+          last_activity_at: string | null
+          logo_url: string | null
+          partner_since: string | null
+          partnership_status: string | null
+          pricing_model: string | null
+          profile_completion_score: number | null
+          service_capabilities: Json | null
+          service_regions: Json | null
+          social_media_links: Json | null
+          total_reviews: number | null
+          updated_at: string
+          user_id: string | null
+          vehicle_types: Json | null
+          website_url: string | null
+          years_in_business: number | null
+        }
+        Insert: {
+          application_id?: string | null
+          average_rating?: number | null
+          business_address: string
+          company_code: string
+          company_name: string
+          company_size?: string | null
+          contact_email: string
+          contact_person_name: string
+          contact_phone: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          last_activity_at?: string | null
+          logo_url?: string | null
+          partner_since?: string | null
+          partnership_status?: string | null
+          pricing_model?: string | null
+          profile_completion_score?: number | null
+          service_capabilities?: Json | null
+          service_regions?: Json | null
+          social_media_links?: Json | null
+          total_reviews?: number | null
+          updated_at?: string
+          user_id?: string | null
+          vehicle_types?: Json | null
+          website_url?: string | null
+          years_in_business?: number | null
+        }
+        Update: {
+          application_id?: string | null
+          average_rating?: number | null
+          business_address?: string
+          company_code?: string
+          company_name?: string
+          company_size?: string | null
+          contact_email?: string
+          contact_person_name?: string
+          contact_phone?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          is_verified?: boolean | null
+          last_activity_at?: string | null
+          logo_url?: string | null
+          partner_since?: string | null
+          partnership_status?: string | null
+          pricing_model?: string | null
+          profile_completion_score?: number | null
+          service_capabilities?: Json | null
+          service_regions?: Json | null
+          social_media_links?: Json | null
+          total_reviews?: number | null
+          updated_at?: string
+          user_id?: string | null
+          vehicle_types?: Json | null
+          website_url?: string | null
+          years_in_business?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_company_profiles_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_company_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_company_reviews: {
+        Row: {
+          company_id: string | null
+          created_at: string
+          helpful_count: number | null
+          id: string
+          is_verified: boolean | null
+          order_reference: string | null
+          rating: number
+          review_content: string | null
+          review_title: string | null
+          reviewer_id: string | null
+          reviewer_type: string | null
+          service_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id?: string | null
+          created_at?: string
+          helpful_count?: number | null
+          id?: string
+          is_verified?: boolean | null
+          order_reference?: string | null
+          rating: number
+          review_content?: string | null
+          review_title?: string | null
+          reviewer_id?: string | null
+          reviewer_type?: string | null
+          service_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string | null
+          created_at?: string
+          helpful_count?: number | null
+          id?: string
+          is_verified?: boolean | null
+          order_reference?: string | null
+          rating?: number
+          review_content?: string | null
+          review_title?: string | null
+          reviewer_id?: string | null
+          reviewer_type?: string | null
+          service_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_company_reviews_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_company_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_company_service_areas: {
+        Row: {
+          company_id: string | null
+          coverage_type: string | null
+          created_at: string
+          delivery_fee_structure: Json | null
+          estimated_delivery_time: string | null
+          id: string
+          is_active: boolean | null
+          region_name: string
+          updated_at: string
+        }
+        Insert: {
+          company_id?: string | null
+          coverage_type?: string | null
+          created_at?: string
+          delivery_fee_structure?: Json | null
+          estimated_delivery_time?: string | null
+          id?: string
+          is_active?: boolean | null
+          region_name: string
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string | null
+          coverage_type?: string | null
+          created_at?: string
+          delivery_fee_structure?: Json | null
+          estimated_delivery_time?: string | null
+          id?: string
+          is_active?: boolean | null
+          region_name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_company_service_areas_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_company_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      delivery_partnership_requests: {
+        Row: {
+          company_id: string | null
+          contact_preferences: Json | null
+          created_at: string
+          id: string
+          message: string
+          request_type: string | null
+          requesting_party_id: string | null
+          responded_at: string | null
+          responded_by: string | null
+          response_message: string | null
+          service_requirements: Json | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          company_id?: string | null
+          contact_preferences?: Json | null
+          created_at?: string
+          id?: string
+          message: string
+          request_type?: string | null
+          requesting_party_id?: string | null
+          responded_at?: string | null
+          responded_by?: string | null
+          response_message?: string | null
+          service_requirements?: Json | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          company_id?: string | null
+          contact_preferences?: Json | null
+          created_at?: string
+          id?: string
+          message?: string
+          request_type?: string | null
+          requesting_party_id?: string | null
+          responded_at?: string | null
+          responded_by?: string | null
+          response_message?: string | null
+          service_requirements?: Json | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_partnership_requests_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_company_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       developer_payouts: {
         Row: {
           commission_deducted: number
@@ -43851,6 +44198,10 @@ export type Database = {
         Returns: {
           predictions_created: number
         }[]
+      }
+      generate_delivery_company_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       generate_dispute_number: {
         Args: Record<PropertyKey, never>
