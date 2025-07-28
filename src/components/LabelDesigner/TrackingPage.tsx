@@ -133,18 +133,28 @@ export const TrackingPage: React.FC<TrackingPageProps> = ({ trackingNumber: init
     setError(null);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      // Call the tracking API endpoint
+      const response = await fetch(`https://wsiorhtiovwcajiarydw.supabase.co/functions/v1/track-shipment/${trackingNumber}`, {
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzaW9yaHRpb3Z3Y2FqaWFyeWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyODE3ODAsImV4cCI6MjA2Nzg1Nzc4MH0.4GKFhQTxlEzj6oTcfnAZQpPxPHW0nqGDEfBe-gVGoNE'}`,
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Tracking number not found');
+      }
+
+      const data = await response.json();
+      setShipmentData(data);
+    } catch (err) {
+      console.error('Tracking error:', err);
+      // Fallback to mock data if API fails
       if (trackingNumber.toLowerCase().includes('cp2024')) {
         setShipmentData(mockShipmentData);
       } else {
         setError('Tracking number not found. Please check the number and try again.');
         setShipmentData(null);
       }
-    } catch (err) {
-      setError('An error occurred while tracking your package. Please try again.');
-      setShipmentData(null);
     } finally {
       setLoading(false);
     }

@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import { Separator } from '@/components/ui/separator';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
 import { 
   Type, 
   Square, 
@@ -35,10 +36,19 @@ import {
   Palette,
   Grid,
   Move,
-  RotateCcw
+  RotateCcw,
+  Undo2,
+  Redo2,
+  Copy,
+  ClipboardCopy,
+  ZoomIn,
+  ZoomOut,
+  Upload,
+  FolderOpen
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLabelTemplates } from '@/hooks/useLabelTemplates';
 import { CodeGenerator } from '@/utils/codeGeneration';
 
 interface LabelElement {
@@ -96,6 +106,7 @@ const FONT_WEIGHTS = ['normal', 'bold', '300', '400', '500', '600', '700', '800'
 export const AdvancedLabelBuilder: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { createTemplate, fetchTemplates, templates } = useLabelTemplates();
   const canvasRef = useRef<HTMLDivElement>(null);
   const [templateName, setTemplateName] = useState('New Template');
   const [selectedElement, setSelectedElement] = useState<string | null>(null);
@@ -105,6 +116,11 @@ export const AdvancedLabelBuilder: React.FC = () => {
   const [snapToGrid, setSnapToGrid] = useState(true);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [history, setHistory] = useState<LabelElement[][]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
+  const [zoom, setZoom] = useState(100);
+  const [clipboard, setClipboard] = useState<LabelElement | null>(null);
+  const [showTemplateLibrary, setShowTemplateLibrary] = useState(false);
 
   // Handle drag and drop from field library
   const handleDragStart = useCallback((e: React.DragEvent, fieldType: any) => {
@@ -209,27 +225,39 @@ export const AdvancedLabelBuilder: React.FC = () => {
     return null;
   }, []);
 
-  // Save template
-  const saveTemplate = useCallback(() => {
-    const template: Template = {
-      id: `template-${Date.now()}`,
-      name: templateName,
-      elements,
-      dimensions: canvasDimensions,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+  // Save template to Supabase
+  const saveTemplate = useCallback(async () => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to save templates",
+        variant: "destructive",
+      });
+      return;
+    }
 
-    // Save to localStorage for now
-    const savedTemplates = JSON.parse(localStorage.getItem('labelTemplates') || '[]');
-    savedTemplates.push(template);
-    localStorage.setItem('labelTemplates', JSON.stringify(savedTemplates));
+    try {
+      const templateData = {
+        template_name: templateName,
+        template_type: 'shipping_label' as const,
+        label_size: 'custom',
+        orientation: 'portrait' as const,
+        template_config: {
+          elements,
+          canvasDimensions,
+        },
+        branding_config: {},
+        fields_config: {},
+        created_by: user.id,
+        is_default: false,
+        is_active: true,
+      };
 
-    toast({
-      title: "Template Saved",
-      description: `Template "${templateName}" has been saved successfully`,
-    });
-  }, [templateName, elements, canvasDimensions, toast]);
+      await createTemplate(templateData);
+    } catch (error) {
+      console.error('Error saving template:', error);
+    }
+  }, [templateName, elements, canvasDimensions, user, createTemplate]);
 
   // Print label
   const printLabel = useCallback(() => {
@@ -248,6 +276,87 @@ export const AdvancedLabelBuilder: React.FC = () => {
       description: "Label is being exported as PDF",
     });
   }, [toast]);
+
+  // Undo/Redo functionality
+  const addToHistory = useCallback((newElements: LabelElement[]) => {
+    const newHistory = history.slice(0, historyIndex + 1);
+    newHistory.push([...newElements]);
+    setHistory(newHistory);
+    setHistoryIndex(newHistory.length - 1);
+  }, [history, historyIndex]);
+
+  const undo = useCallback(() => {
+    if (historyIndex > 0) {
+      setHistoryIndex(historyIndex - 1);
+      setElements([...history[historyIndex - 1]]);
+    }
+  }, [history, historyIndex]);
+
+  const redo = useCallback(() => {
+    if (historyIndex < history.length - 1) {
+      setHistoryIndex(historyIndex + 1);
+      setElements([...history[historyIndex + 1]]);
+    }
+  }, [history, historyIndex]);
+
+  // Copy/Paste functionality
+  const copyElement = useCallback(() => {
+    if (selectedElement) {
+      const element = elements.find(el => el.id === selectedElement);
+      if (element) {
+        setClipboard({ ...element });
+        toast({
+          title: "Copied",
+          description: "Element copied to clipboard",
+        });
+      }
+    }
+  }, [selectedElement, elements, toast]);
+
+  const pasteElement = useCallback(() => {
+    if (clipboard) {
+      const newElement = {
+        ...clipboard,
+        id: `element-${Date.now()}`,
+        x: clipboard.x + 20,
+        y: clipboard.y + 20,
+      };
+      const newElements = [...elements, newElement];
+      setElements(newElements);
+      addToHistory(newElements);
+      setSelectedElement(newElement.id);
+      toast({
+        title: "Pasted",
+        description: "Element pasted from clipboard",
+      });
+    }
+  }, [clipboard, elements, addToHistory, toast]);
+
+  // Zoom functionality
+  const zoomIn = useCallback(() => {
+    setZoom(prev => Math.min(200, prev + 25));
+  }, []);
+
+  const zoomOut = useCallback(() => {
+    setZoom(prev => Math.max(50, prev - 25));
+  }, []);
+
+  // Load template from library
+  const loadTemplate = useCallback((template: any) => {
+    if (template.template_config?.elements) {
+      setElements(template.template_config.elements);
+      if (template.template_config.canvasDimensions) {
+        setCanvasDimensions(template.template_config.canvasDimensions);
+      }
+      setTemplateName(template.template_name);
+      addToHistory(template.template_config.elements);
+      setShowTemplateLibrary(false);
+      toast({
+        title: "Template Loaded",
+        description: `Template "${template.template_name}" loaded successfully`,
+      });
+    }
+  }, [addToHistory, toast]);
 
   const selectedElementData = selectedElement ? elements.find(el => el.id === selectedElement) : null;
 
