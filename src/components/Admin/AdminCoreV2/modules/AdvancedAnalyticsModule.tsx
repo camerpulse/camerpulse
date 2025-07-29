@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { AdminModuleHeader } from '../components/AdminModuleHeader';
 import { StatCard } from '../components/StatCard';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
 import { 
   BarChart3, TrendingUp, Brain, Zap, Eye, Target, 
   AlertCircle, Activity, Layers, Database, Clock, LineChart
@@ -22,42 +25,114 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
   stats
 }) => {
   const [activeTab, setActiveTab] = useState('sentiment');
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  // Mock data - replace with real data
-  const sentimentTrends = [
-    { id: 1, topic: 'Government Healthcare', sentiment: 'positive', score: 0.72, change: 0.15, volume: 2400 },
-    { id: 2, topic: 'Education Reform', sentiment: 'neutral', score: 0.45, change: -0.08, volume: 1890 },
-    { id: 3, topic: 'Infrastructure Development', sentiment: 'positive', score: 0.68, change: 0.12, volume: 3200 },
-    { id: 4, topic: 'Economic Policies', sentiment: 'negative', score: 0.28, change: -0.05, volume: 1650 }
-  ];
+  // Fetch sentiment trends
+  const { data: sentimentTrends, isLoading: sentimentLoading } = useQuery({
+    queryKey: ['sentiment_trends'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('sentiment_trends')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
 
-  const predictiveModels = [
-    { id: 1, name: 'Election Outcome Predictor', accuracy: 87.5, status: 'active', last_run: '2024-01-15' },
-    { id: 2, name: 'Economic Trend Forecaster', accuracy: 92.3, status: 'active', last_run: '2024-01-14' },
-    { id: 3, name: 'Public Sentiment Analyzer', accuracy: 89.1, status: 'training', last_run: '2024-01-13' },
-    { id: 4, name: 'Infrastructure Need Predictor', accuracy: 84.7, status: 'active', last_run: '2024-01-15' }
-  ];
+  // Fetch predictive models
+  const { data: predictiveModels, isLoading: modelsLoading } = useQuery({
+    queryKey: ['predictive_models'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('predictive_models')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
 
-  const realTimeStreams = [
-    { id: 1, source: 'Social Media Feed', events: 15600, rate: '2.4k/min', status: 'healthy' },
-    { id: 2, source: 'News Articles', events: 8900, rate: '450/min', status: 'healthy' },
-    { id: 3, source: 'Government Data', events: 3200, rate: '120/min', status: 'delayed' },
-    { id: 4, source: 'Economic Indicators', events: 1800, rate: '80/min', status: 'healthy' }
-  ];
+  // Fetch real-time data streams
+  const { data: realTimeStreams, isLoading: streamsLoading } = useQuery({
+    queryKey: ['real_time_data_streams'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('real_time_data_streams')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
 
-  const customReports = [
-    { id: 1, name: 'Weekly Civic Engagement Report', type: 'scheduled', frequency: 'weekly', last_generated: '2024-01-14' },
-    { id: 2, name: 'Political Sentiment Analysis', type: 'on_demand', frequency: 'manual', last_generated: '2024-01-15' },
-    { id: 3, name: 'Economic Performance Dashboard', type: 'real_time', frequency: 'continuous', last_generated: '2024-01-15' },
-    { id: 4, name: 'Social Media Trends Summary', type: 'scheduled', frequency: 'daily', last_generated: '2024-01-15' }
-  ];
+  // Fetch analytics reports
+  const { data: customReports, isLoading: reportsLoading } = useQuery({
+    queryKey: ['analytics_reports'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('analytics_reports')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+      
+      if (error) throw error;
+      return data || [];
+    }
+  });
 
-  const handleRunModel = (id: number) => {
-    logActivity('predictive_model_run', { model_id: id });
+  // Mutations for actions
+  const runModelMutation = useMutation({
+    mutationFn: async (modelId: string) => {
+      const { data, error } = await supabase
+        .from('prediction_results')
+        .insert({
+          model_id: modelId,
+          prediction_type: 'manual_run',
+          input_data: { triggered_by: 'admin', timestamp: new Date().toISOString() },
+          predicted_value: { status: 'initiated' }
+        });
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      toast({ title: "Model execution initiated", description: "The predictive model is now running." });
+      queryClient.invalidateQueries({ queryKey: ['predictive_models'] });
+    }
+  });
+
+  const generateReportMutation = useMutation({
+    mutationFn: async (reportId: string) => {
+      const { data, error } = await supabase
+        .from('analytics_reports')
+        .update({ last_generated_at: new Date().toISOString() })
+        .eq('id', reportId);
+      
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: () => {
+      toast({ title: "Report generated", description: "The analytics report has been generated successfully." });
+      queryClient.invalidateQueries({ queryKey: ['analytics_reports'] });
+    }
+  });
+
+  const handleRunModel = (modelId: string) => {
+    runModelMutation.mutate(modelId);
+    logActivity('predictive_model_run', { model_id: modelId });
   };
 
-  const handleGenerateReport = (id: number) => {
-    logActivity('custom_report_generated', { report_id: id });
+  const handleGenerateReport = (reportId: string) => {
+    generateReportMutation.mutate(reportId);
+    logActivity('custom_report_generated', { report_id: reportId });
   };
 
   return (

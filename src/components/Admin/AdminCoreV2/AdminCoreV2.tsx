@@ -94,6 +94,8 @@ import { ArtistPlatformModule } from './modules/ArtistPlatformModule';
 import { CulturalPreservationModule } from './modules/CulturalPreservationModule';
 import { AdvancedAnalyticsModule } from './modules/AdvancedAnalyticsModule';
 import { AIIntelligenceModule } from './modules/AIIntelligenceModule';
+import { InfrastructureManagementModule } from './modules/InfrastructureManagementModule';
+import { SystemAdministrationModule } from './modules/SystemAdministrationModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 interface AdminStats {
@@ -383,6 +385,10 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'advanced-analytics', label: 'Advanced Analytics', icon: BarChart3, color: 'text-purple-600', permission: 'analytics' },
     { id: 'ai-intelligence', label: 'AI Intelligence', icon: Brain, color: 'text-purple-600', permission: 'all' },
     
+    // Infrastructure & System Management (Phase 8)
+    { id: 'infrastructure-management', label: 'Infrastructure Management', icon: Settings, color: 'text-gray-600', permission: 'all' },
+    { id: 'system-administration', label: 'System Administration', icon: Database, color: 'text-blue-600', permission: 'all' },
+    
     // AI & Intelligence
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
@@ -555,6 +561,10 @@ export const AdminCoreV2: React.FC = () => {
         return <AdvancedAnalyticsModule {...moduleProps} />;
       case 'ai-intelligence':
         return <AIIntelligenceModule {...moduleProps} />;
+      case 'infrastructure-management':
+        return <InfrastructureManagementModule {...moduleProps} />;
+      case 'system-administration':
+        return <SystemAdministrationModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
