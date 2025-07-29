@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 import { 
   BarChart3, TrendingUp, Brain, Zap, Eye, Target, 
   AlertCircle, Activity, Layers, Database, Clock, LineChart
@@ -25,11 +25,11 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
   stats
 }) => {
   const [activeTab, setActiveTab] = useState('sentiment');
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
 
   // Fetch sentiment trends
-  const { data: sentimentTrends, isLoading: sentimentLoading } = useQuery({
+  const { data: sentimentTrends = [], isLoading: sentimentLoading } = useQuery({
     queryKey: ['sentiment_trends'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -43,27 +43,12 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
     }
   });
 
-  // Fetch predictive models
-  const { data: predictiveModels, isLoading: modelsLoading } = useQuery({
-    queryKey: ['predictive_models'],
+  // Fetch trending topics
+  const { data: trendingTopics = [], isLoading: topicsLoading } = useQuery({
+    queryKey: ['trending_topics'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('predictive_models')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(10);
-      
-      if (error) throw error;
-      return data || [];
-    }
-  });
-
-  // Fetch real-time data streams
-  const { data: realTimeStreams, isLoading: streamsLoading } = useQuery({
-    queryKey: ['real_time_data_streams'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('real_time_data_streams')
+        .from('trending_topics')
         .select('*')
         .order('created_at', { ascending: false })
         .limit(10);
@@ -74,7 +59,7 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
   });
 
   // Fetch analytics reports
-  const { data: customReports, isLoading: reportsLoading } = useQuery({
+  const { data: customReports = [], isLoading: reportsLoading } = useQuery({
     queryKey: ['analytics_reports'],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -88,51 +73,90 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
     }
   });
 
-  // Mutations for actions
-  const runModelMutation = useMutation({
-    mutationFn: async (modelId: string) => {
-      const { data, error } = await supabase
-        .from('prediction_results')
-        .insert({
-          model_id: modelId,
-          prediction_type: 'manual_run',
-          input_data: { triggered_by: 'admin', timestamp: new Date().toISOString() },
-          predicted_value: { status: 'initiated' }
-        });
+  const runPredictiveAnalysis = async () => {
+    try {
+      setIsLoading(true);
       
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      toast({ title: "Model execution initiated", description: "The predictive model is now running." });
-      queryClient.invalidateQueries({ queryKey: ['predictive_models'] });
-    }
-  });
+      // Call AI sentiment analyzer edge function
+      const { data, error } = await supabase.functions.invoke('ai-sentiment-analyzer', {
+        body: {
+          text: 'Sample civic complaint for analysis',
+          source: 'admin_manual_run',
+          region: 'Douala',
+          language: 'en'
+        }
+      });
 
-  const generateReportMutation = useMutation({
-    mutationFn: async (reportId: string) => {
+      if (error) throw error;
+      toast.success("Predictive analysis completed successfully");
+      queryClient.invalidateQueries({ queryKey: ['sentiment_trends'] });
+    } catch (error) {
+      console.error('Error running analysis:', error);
+      toast.error("Failed to run predictive analysis");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const generateInsights = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Call AI insights generator edge function
+      const { data, error } = await supabase.functions.invoke('ai-insights-generator', {
+        body: {
+          sources: ['civic_complaints', 'sentiment_trends', 'polls']
+        }
+      });
+
+      if (error) throw error;
+      toast.success("AI insights generated successfully");
+      queryClient.invalidateQueries({ queryKey: ['ai_insights'] });
+    } catch (error) {
+      console.error('Error generating insights:', error);
+      toast.error("Failed to generate insights");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const detectTrends = async () => {
+    try {
+      setIsLoading(true);
+      
+      // Call trend detector edge function
+      const { data, error } = await supabase.functions.invoke('trend-detector', {
+        body: {
+          timeframe: '24h',
+          threshold_multiplier: 2.0
+        }
+      });
+
+      if (error) throw error;
+      toast.success("Trend detection completed successfully");
+      queryClient.invalidateQueries({ queryKey: ['trending_topics'] });
+    } catch (error) {
+      console.error('Error detecting trends:', error);
+      toast.error("Failed to detect trends");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const generateReport = async (reportId: string) => {
+    try {
       const { data, error } = await supabase
         .from('analytics_reports')
         .update({ last_generated_at: new Date().toISOString() })
         .eq('id', reportId);
       
       if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      toast({ title: "Report generated", description: "The analytics report has been generated successfully." });
+      toast.success("Report generated successfully");
       queryClient.invalidateQueries({ queryKey: ['analytics_reports'] });
+    } catch (error) {
+      console.error('Error generating report:', error);
+      toast.error("Failed to generate report");
     }
-  });
-
-  const handleRunModel = (modelId: string) => {
-    runModelMutation.mutate(modelId);
-    logActivity('predictive_model_run', { model_id: modelId });
-  };
-
-  const handleGenerateReport = (reportId: string) => {
-    generateReportMutation.mutate(reportId);
-    logActivity('custom_report_generated', { report_id: reportId });
   };
 
   return (
@@ -159,7 +183,7 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Active Models"
-          value="12"
+          value="4"
           icon={Brain}
           description="AI/ML models running"
           badge={{ text: "Healthy", variant: "default" }}
@@ -173,14 +197,14 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
         />
         <StatCard
           title="Data Streams"
-          value="47"
+          value="12"
           icon={Activity}
           description="Real-time data sources"
           badge={{ text: "Active", variant: "default" }}
         />
         <StatCard
           title="Daily Insights"
-          value="156"
+          value={sentimentTrends.length.toString()}
           icon={Eye}
           trend={{ value: 12.8, isPositive: true, period: "this week" }}
           description="AI-generated insights"
@@ -191,8 +215,8 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="sentiment">Sentiment Analysis</TabsTrigger>
-          <TabsTrigger value="predictive">Predictive Models</TabsTrigger>
-          <TabsTrigger value="realtime">Real-time Streams</TabsTrigger>
+          <TabsTrigger value="predictive">AI Processing</TabsTrigger>
+          <TabsTrigger value="realtime">Trend Detection</TabsTrigger>
           <TabsTrigger value="reports">Custom Reports</TabsTrigger>
         </TabsList>
 
@@ -208,45 +232,59 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {sentimentTrends.map((trend) => (
-                  <div key={trend.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <div className={`h-12 w-12 rounded-full flex items-center justify-center ${
-                        trend.sentiment === 'positive' ? 'bg-green-100' :
-                        trend.sentiment === 'negative' ? 'bg-red-100' : 'bg-gray-100'
-                      }`}>
-                        <TrendingUp className={`h-6 w-6 ${
-                          trend.sentiment === 'positive' ? 'text-green-600' :
-                          trend.sentiment === 'negative' ? 'text-red-600' : 'text-gray-600'
-                        }`} />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">{trend.topic}</h4>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                          <span>Score: {trend.score.toFixed(2)}</span>
-                          <span>Volume: {trend.volume.toLocaleString()}</span>
-                          <span className={`flex items-center gap-1 ${
-                            trend.change > 0 ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {trend.change > 0 ? '↗' : '↘'} {Math.abs(trend.change).toFixed(2)}
-                          </span>
-                        </div>
-                      </div>
+              {sentimentLoading ? (
+                <div className="text-center py-8">Loading sentiment data...</div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="bg-card p-4 rounded-lg border">
+                      <h4 className="font-medium text-sm text-muted-foreground">Positive</h4>
+                      <p className="text-2xl font-bold text-green-600">
+                        {sentimentTrends.filter(t => t.sentiment_score > 0.6).length}
+                      </p>
+                      <p className="text-xs text-muted-foreground">+{sentimentTrends.filter(t => t.sentiment_score > 0.6).length} trending</p>
                     </div>
-                    <div className="text-right">
-                      <Badge 
-                        variant={
-                          trend.sentiment === 'positive' ? 'default' :
-                          trend.sentiment === 'negative' ? 'destructive' : 'secondary'
-                        }
-                      >
-                        {trend.sentiment}
-                      </Badge>
+                    <div className="bg-card p-4 rounded-lg border">
+                      <h4 className="font-medium text-sm text-muted-foreground">Negative</h4>
+                      <p className="text-2xl font-bold text-red-600">
+                        {sentimentTrends.filter(t => t.sentiment_score < 0.4).length}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{sentimentTrends.filter(t => t.sentiment_score < 0.4).length} declining</p>
+                    </div>
+                    <div className="bg-card p-4 rounded-lg border">
+                      <h4 className="font-medium text-sm text-muted-foreground">Total Volume</h4>
+                      <p className="text-2xl font-bold">{sentimentTrends.length}</p>
+                      <p className="text-xs text-muted-foreground">+{sentimentTrends.length} mentions</p>
+                    </div>
+                    <div className="bg-card p-4 rounded-lg border">
+                      <h4 className="font-medium text-sm text-muted-foreground">Velocity</h4>
+                      <p className="text-2xl font-bold text-blue-600">
+                        {(sentimentTrends.reduce((sum, t) => sum + t.sentiment_score, 0) / sentimentTrends.length || 0).toFixed(1)}%
+                      </p>
+                      <p className="text-xs text-muted-foreground">{sentimentTrends.filter(t => t.sentiment_score > 0.7).length} accelerating</p>
                     </div>
                   </div>
-                ))}
-              </div>
+
+                  <div className="mt-6">
+                    <h4 className="font-medium mb-4">Recent Sentiment Trends</h4>
+                    <div className="space-y-2">
+                      {sentimentTrends.slice(0, 5).map((trend, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded">
+                          <div>
+                            <h4 className="font-medium">{trend.topic}</h4>
+                            <p className="text-sm text-muted-foreground">
+                              Score: {(trend.sentiment_score * 100).toFixed(0)}%
+                            </p>
+                          </div>
+                          <Badge variant={trend.sentiment_score > 0.6 ? "default" : trend.sentiment_score < 0.4 ? "destructive" : "secondary"}>
+                            {trend.sentiment_score > 0.6 ? "Positive" : trend.sentiment_score < 0.4 ? "Negative" : "Neutral"}
+                          </Badge>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -256,54 +294,67 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Brain className="h-5 w-5" />
-                Predictive Analytics Models
+                AI Processing & Analysis
               </CardTitle>
               <CardDescription>
-                Manage AI/ML models for forecasting and predictions
+                Run AI-powered analysis and generate insights
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {predictiveModels.map((model) => (
-                  <div key={model.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 bg-gradient-to-br from-purple-400 to-blue-400 rounded-lg flex items-center justify-center">
-                        <Brain className="h-6 w-6 text-white" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">{model.name}</h4>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                          <span>Accuracy: {model.accuracy}%</span>
-                          <span>Last run: {model.last_run}</span>
-                        </div>
-                        <div className="w-40 bg-gray-200 rounded-full h-2 mt-2">
-                          <div 
-                            className="bg-purple-500 h-2 rounded-full" 
-                            style={{ width: `${model.accuracy}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Badge 
-                        variant={
-                          model.status === 'active' ? 'default' :
-                          model.status === 'training' ? 'secondary' : 'outline'
-                        }
-                      >
-                        {model.status}
-                      </Badge>
-                      {model.status === 'active' && (
-                        <Button 
-                          size="sm" 
-                          onClick={() => handleRunModel(model.id)}
-                        >
-                          Run Model
-                        </Button>
-                      )}
-                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Button 
+                    onClick={runPredictiveAnalysis} 
+                    disabled={isLoading}
+                    className="flex items-center gap-2"
+                  >
+                    <Brain className="h-4 w-4" />
+                    {isLoading ? "Analyzing..." : "Run Sentiment Analysis"}
+                  </Button>
+                  
+                  <Button 
+                    onClick={generateInsights} 
+                    disabled={isLoading}
+                    variant="outline"
+                    className="flex items-center gap-2"
+                  >
+                    <Eye className="h-4 w-4" />
+                    {isLoading ? "Generating..." : "Generate AI Insights"}
+                  </Button>
+                  
+                  <Button 
+                    onClick={detectTrends} 
+                    disabled={isLoading}
+                    variant="outline"
+                    className="flex items-center gap-2"
+                  >
+                    <TrendingUp className="h-4 w-4" />
+                    {isLoading ? "Detecting..." : "Detect Trends"}
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+                  <div className="bg-card p-4 rounded-lg border">
+                    <h4 className="font-medium text-sm text-muted-foreground">Sentiment Analyzer</h4>
+                    <p className="text-lg font-bold text-blue-600">Ready</p>
+                    <p className="text-xs text-muted-foreground">AI model active</p>
                   </div>
-                ))}
+                  <div className="bg-card p-4 rounded-lg border">
+                    <h4 className="font-medium text-sm text-muted-foreground">Insight Generator</h4>
+                    <p className="text-lg font-bold text-green-600">Ready</p>
+                    <p className="text-xs text-muted-foreground">AI model active</p>
+                  </div>
+                  <div className="bg-card p-4 rounded-lg border">
+                    <h4 className="font-medium text-sm text-muted-foreground">Trend Detector</h4>
+                    <p className="text-lg font-bold text-purple-600">Ready</p>
+                    <p className="text-xs text-muted-foreground">AI model active</p>
+                  </div>
+                  <div className="bg-card p-4 rounded-lg border">
+                    <h4 className="font-medium text-sm text-muted-foreground">Stream Processor</h4>
+                    <p className="text-lg font-bold text-orange-600">Ready</p>
+                    <p className="text-xs text-muted-foreground">Real-time processing</p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -314,46 +365,38 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Activity className="h-5 w-5" />
-                Real-time Data Streams
+                Trending Topics Detection
               </CardTitle>
               <CardDescription>
-                Monitor live data feeds and streaming analytics
+                Monitor emerging trends and topic popularity
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {realTimeStreams.map((stream) => (
-                  <div key={stream.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <div className={`h-12 w-12 rounded-full flex items-center justify-center ${
-                        stream.status === 'healthy' ? 'bg-green-100' :
-                        stream.status === 'delayed' ? 'bg-yellow-100' : 'bg-red-100'
-                      }`}>
-                        <Activity className={`h-6 w-6 ${
-                          stream.status === 'healthy' ? 'text-green-600' :
-                          stream.status === 'delayed' ? 'text-yellow-600' : 'text-red-600'
-                        }`} />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">{stream.source}</h4>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                          <span>{stream.events.toLocaleString()} events</span>
-                          <span>{stream.rate} rate</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <Badge 
-                        variant={
-                          stream.status === 'healthy' ? 'default' :
-                          stream.status === 'delayed' ? 'secondary' : 'destructive'
-                        }
-                      >
-                        {stream.status}
-                      </Badge>
-                    </div>
+                {trendingTopics.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No trending topics detected. Run trend detection to analyze data.
                   </div>
-                ))}
+                ) : (
+                  trendingTopics.map((topic, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border rounded">
+                      <div>
+                        <h4 className="font-medium">{topic.topic_name}</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Score: {topic.trending_score} | Mentions: {topic.mention_count}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${
+                          topic.trending_score > 50 ? 'bg-green-500' : 'bg-yellow-500'
+                        }`} />
+                        <Badge variant={topic.trending_score > 50 ? 'default' : 'secondary'}>
+                          {topic.trending_score > 50 ? 'Hot' : 'Emerging'}
+                        </Badge>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
@@ -372,31 +415,37 @@ export const AdvancedAnalyticsModule: React.FC<AdvancedAnalyticsModuleProps> = (
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {customReports.map((report) => (
-                  <div key={report.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <div className="h-12 w-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
-                        <BarChart3 className="h-6 w-6 text-white" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold">{report.name}</h4>
-                        <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
-                          <Badge variant="outline">{report.type}</Badge>
-                          <span>Frequency: {report.frequency}</span>
-                          <span>Last: {report.last_generated}</span>
+                {customReports.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No custom reports available. Create reports to analyze data patterns.
+                  </div>
+                ) : (
+                  customReports.map((report) => (
+                    <div key={report.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center gap-4">
+                        <div className="h-12 w-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-lg flex items-center justify-center">
+                          <BarChart3 className="h-6 w-6 text-white" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">{report.report_name}</h4>
+                          <div className="flex items-center gap-4 mt-1 text-sm text-muted-foreground">
+                            <Badge variant="outline">{report.report_type}</Badge>
+                            <span>Status: {report.status}</span>
+                            <span>Last: {report.last_generated_at ? new Date(report.last_generated_at).toLocaleDateString() : 'Never'}</span>
+                          </div>
                         </div>
                       </div>
+                      <div className="flex items-center gap-2">
+                        <Button 
+                          size="sm" 
+                          onClick={() => generateReport(report.id)}
+                        >
+                          Generate
+                        </Button>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button 
-                        size="sm" 
-                        onClick={() => handleGenerateReport(report.id)}
-                      >
-                        Generate
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </CardContent>
           </Card>
