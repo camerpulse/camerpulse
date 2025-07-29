@@ -527,6 +527,14 @@ export const AdminCoreV2: React.FC = () => {
         return <TaxManagementModule {...moduleProps} />;
       case 'procurement':
         return <ProcurementModule {...moduleProps} />;
+      case 'healthcare-management':
+        return <HealthcareManagementModule {...moduleProps} />;
+      case 'education-management':
+        return <EducationManagementModule {...moduleProps} />;
+      case 'health-analytics':
+        return <HealthAnalyticsModule {...moduleProps} />;
+      case 'education-analytics':
+        return <EducationAnalyticsModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
