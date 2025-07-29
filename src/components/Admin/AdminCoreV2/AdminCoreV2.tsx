@@ -102,6 +102,10 @@ import { DevOpsManagementModule } from './modules/DevOpsManagementModule';
 import { SecurityComplianceModule } from './modules/SecurityComplianceModule';
 import { IntegrationManagementModule } from './modules/IntegrationManagementModule';
 import { PerformanceAnalyticsModule } from './modules/PerformanceAnalyticsModule';
+import { AIContentGenerationModule } from './modules/AIContentGenerationModule';
+import { MachineLearningAnalyticsModule } from './modules/MachineLearningAnalyticsModule';
+import { VoiceInterfaceModule } from './modules/VoiceInterfaceModule';
+import { AIWorkflowAutomationModule } from './modules/AIWorkflowAutomationModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 // Import Missing Manager Components
@@ -665,6 +669,14 @@ export const AdminCoreV2: React.FC = () => {
         return <IntegrationManagementModule {...moduleProps} />;
       case 'performance-analytics':
         return <PerformanceAnalyticsModule {...moduleProps} />;
+      case 'ai-content-generation':
+        return <AIContentGenerationModule {...moduleProps} />;
+      case 'machine-learning-analytics':
+        return <MachineLearningAnalyticsModule {...moduleProps} />;
+      case 'voice-interface':
+        return <VoiceInterfaceModule {...moduleProps} />;
+      case 'ai-workflow-automation':
+        return <AIWorkflowAutomationModule {...moduleProps} />;
       
       // Additional Manager Cases  
       case 'election-manager':
