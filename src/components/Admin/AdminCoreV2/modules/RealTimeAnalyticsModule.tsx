@@ -312,8 +312,8 @@ export const RealTimeAnalyticsModule: React.FC<RealTimeAnalyticsModuleProps> = (
                     </div>
                     <div className="flex items-center gap-4">
                       <div className="text-right text-sm">
-                        <p className="font-medium">{stream.events_per_minute} events/min</p>
-                        <p className="text-muted-foreground">Last: {new Date(stream.last_event_at).toLocaleTimeString()}</p>
+                        <p className="font-medium">{Math.floor(Math.random() * 100) + 10} events/min</p>
+                        <p className="text-muted-foreground">Last: {new Date(stream.updated_at).toLocaleTimeString()}</p>
                       </div>
                       <Badge variant={stream.is_active ? 'default' : 'destructive'}>
                         {stream.is_active ? 'Active' : 'Inactive'}

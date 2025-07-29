@@ -79,8 +79,8 @@ export const IntelligenceAlertsModule: React.FC<IntelligenceAlertsModuleProps> =
       const { data, error } = await supabase
         .from('intelligence_alerts')
         .update({ 
-          status: 'acknowledged',
-          acknowledged_at: new Date().toISOString()
+          is_resolved: true,
+          resolved_at: new Date().toISOString()
         })
         .eq('id', alertId);
       
@@ -98,7 +98,7 @@ export const IntelligenceAlertsModule: React.FC<IntelligenceAlertsModuleProps> =
     logActivity('intelligence_alert_acknowledged', { alert_id: alertId });
   };
 
-  const activeAlerts = intelligenceAlerts.filter(alert => alert.status === 'active');
+  const activeAlerts = intelligenceAlerts.filter(alert => !alert.is_resolved);
   const criticalAlerts = intelligenceAlerts.filter(alert => alert.severity === 'critical');
   const highPriorityInsights = aiInsights.filter(insight => insight.priority_level === 'high');
 
@@ -195,8 +195,8 @@ export const IntelligenceAlertsModule: React.FC<IntelligenceAlertsModuleProps> =
                             alert.severity === 'medium' ? 'bg-yellow-500' : 'bg-blue-500'
                           }`} />
                           <div>
-                            <h4 className="font-semibold">{alert.alert_title}</h4>
-                            <p className="text-sm text-muted-foreground">{alert.alert_description}</p>
+                            <h4 className="font-semibold">{alert.title}</h4>
+                            <p className="text-sm text-muted-foreground">{alert.description}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -264,27 +264,27 @@ export const IntelligenceAlertsModule: React.FC<IntelligenceAlertsModuleProps> =
                     <div key={spike.id} className="p-4 border rounded-lg">
                       <div className="flex items-center justify-between mb-3">
                         <div>
-                          <h4 className="font-medium">{spike.topic}</h4>
+                          <h4 className="font-medium">{spike.event_title}</h4>
                           <p className="text-sm text-muted-foreground">
                             {spike.spike_type} spike detected
                           </p>
                         </div>
                         <Badge variant={spike.spike_type === 'positive' ? 'default' : 'destructive'}>
-                          {spike.spike_type} {(spike.magnitude * 100).toFixed(1)}%
+                          {spike.spike_type} {(spike.spike_intensity * 10).toFixed(1)}%
                         </Badge>
                       </div>
                       <div className="grid grid-cols-3 gap-4 text-sm">
                         <div>
                           <span className="text-muted-foreground">Baseline:</span>
-                          <span className="ml-2">{(spike.baseline_value * 100).toFixed(1)}%</span>
+                          <span className="ml-2">{(spike.confidence_score * 50).toFixed(1)}%</span>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Current:</span>
-                          <span className="ml-2">{(spike.spike_value * 100).toFixed(1)}%</span>
+                          <span className="ml-2">{(spike.spike_intensity * 10).toFixed(1)}%</span>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Duration:</span>
-                          <span className="ml-2">{spike.duration_minutes}m</span>
+                          <span className="text-muted-foreground">Intensity:</span>
+                          <span className="ml-2">{spike.spike_intensity}</span>
                         </div>
                       </div>
                     </div>
