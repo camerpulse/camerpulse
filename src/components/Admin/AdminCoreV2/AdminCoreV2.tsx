@@ -14,7 +14,8 @@ import {
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
   Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette, Truck, Plug,
-  Briefcase, Music, DollarSign, Calculator, GraduationCap, Star
+  Briefcase, Music, DollarSign, Calculator, GraduationCap, Star,
+  GitBranch, Mic, Crown
 } from 'lucide-react';
 
 // Import all feature modules
@@ -510,7 +511,25 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'risk-assessment-engine', label: 'Risk Assessment Engine', icon: AlertTriangle, color: 'text-orange-600', permission: 'all' },
     { id: 'emergency-response-system', label: 'Emergency Response System', icon: AlertTriangle, color: 'text-red-600', permission: 'all' },
     { id: 'disaster-management', label: 'Disaster Management', icon: Shield, color: 'text-orange-600', permission: 'emergency' },
-    { id: 'crisis-communication', label: 'Crisis Communication', icon: MessageSquare, color: 'text-red-600', permission: 'emergency' }
+    { id: 'crisis-communication', label: 'Crisis Communication', icon: MessageSquare, color: 'text-red-600', permission: 'emergency' },
+    
+    // Phase 8: Infrastructure & System Management  
+    { id: 'devops-management', label: 'DevOps Management', icon: GitBranch, color: 'text-orange-600', permission: 'all' },
+    { id: 'security-compliance', label: 'Security & Compliance', icon: ShieldCheck, color: 'text-red-600', permission: 'all' },
+    { id: 'integration-management', label: 'Integration Management', icon: Plug, color: 'text-blue-600', permission: 'all' },
+    { id: 'performance-analytics', label: 'Performance Analytics', icon: Activity, color: 'text-green-600', permission: 'all' },
+
+    // Phase 9: AI Automation & Machine Learning
+    { id: 'ai-content-generation', label: 'AI Content Generation', icon: Bot, color: 'text-purple-600', permission: 'all' },
+    { id: 'machine-learning-analytics', label: 'ML Analytics', icon: Brain, color: 'text-indigo-600', permission: 'all' },
+    { id: 'voice-interface', label: 'Voice Interface', icon: Mic, color: 'text-pink-600', permission: 'all' },
+    { id: 'ai-workflow-automation', label: 'AI Workflow Automation', icon: Workflow, color: 'text-violet-600', permission: 'all' },
+
+    // Phase 10: Advanced Analytics & Business Intelligence
+    { id: 'business-intelligence', label: 'Business Intelligence', icon: TrendingUp, color: 'text-emerald-600', permission: 'all' },
+    { id: 'data-visualization', label: 'Data Visualization', icon: BarChart3, color: 'text-teal-600', permission: 'all' },
+    { id: 'executive-dashboard', label: 'Executive Dashboard', icon: Crown, color: 'text-amber-600', permission: 'all' },
+    { id: 'advanced-reporting', label: 'Advanced Reporting', icon: FileText, color: 'text-slate-600', permission: 'all' }
   ].filter(module => hasPermission(module.permission));
 
   const renderActiveModule = () => {
