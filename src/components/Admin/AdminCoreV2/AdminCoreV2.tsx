@@ -94,6 +94,8 @@ import { ArtistPlatformModule } from './modules/ArtistPlatformModule';
 import { CulturalPreservationModule } from './modules/CulturalPreservationModule';
 import { AdvancedAnalyticsModule } from './modules/AdvancedAnalyticsModule';
 import { AIIntelligenceModule } from './modules/AIIntelligenceModule';
+import { IntelligenceAlertsModule } from './modules/IntelligenceAlertsModule';
+import { RealTimeAnalyticsModule } from './modules/RealTimeAnalyticsModule';
 import { InfrastructureManagementModule } from './modules/InfrastructureManagementModule';
 import { SystemAdministrationModule } from './modules/SystemAdministrationModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
