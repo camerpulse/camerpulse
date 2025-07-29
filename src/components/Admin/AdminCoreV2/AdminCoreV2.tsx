@@ -106,6 +106,10 @@ import { AIContentGenerationModule } from './modules/AIContentGenerationModule';
 import { MachineLearningAnalyticsModule } from './modules/MachineLearningAnalyticsModule';
 import { VoiceInterfaceModule } from './modules/VoiceInterfaceModule';
 import { AIWorkflowAutomationModule } from './modules/AIWorkflowAutomationModule';
+import { BusinessIntelligenceModule } from './modules/BusinessIntelligenceModule';
+import { DataVisualizationModule } from './modules/DataVisualizationModule';
+import { ExecutiveDashboardModule } from './modules/ExecutiveDashboardModule';
+import { AdvancedReportingModule } from './modules/AdvancedReportingModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 // Import Missing Manager Components
@@ -675,8 +679,18 @@ export const AdminCoreV2: React.FC = () => {
         return <MachineLearningAnalyticsModule {...moduleProps} />;
       case 'voice-interface':
         return <VoiceInterfaceModule {...moduleProps} />;
-      case 'ai-workflow-automation':
-        return <AIWorkflowAutomationModule {...moduleProps} />;
+        case 'ai-workflow-automation':
+          return <AIWorkflowAutomationModule {...moduleProps} />;
+        
+        // Phase 10: Advanced Analytics & Business Intelligence
+        case 'business-intelligence':
+          return <BusinessIntelligenceModule {...moduleProps} />;
+        case 'data-visualization':
+          return <DataVisualizationModule {...moduleProps} />;
+        case 'executive-dashboard':
+          return <ExecutiveDashboardModule {...moduleProps} />;
+        case 'advanced-reporting':
+          return <AdvancedReportingModule {...moduleProps} />;
       
       // Additional Manager Cases  
       case 'election-manager':
