@@ -6,6 +6,9 @@ import { AppHeader } from '@/components/layout/AppHeader';
 import { CamerPulseDashboard } from '@/pages/CamerPulseDashboard';
 import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayoutClean';
 import { Dashboard } from '@/pages/Dashboard';
+import { PoliticiansPage } from '@/pages/PoliticiansPage';
+import { PoliticalPartiesPage } from '@/pages/PoliticalPartiesPage';
+import { PoliticalRankingsPage } from '@/pages/PoliticalRankingsPage';
 import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import Feed from '@/pages/Feed';
@@ -71,6 +74,9 @@ function AppContent() {
             <Route path="/" element={<CivicAuthenticatedLayout><Feed /></CivicAuthenticatedLayout>} />
             <Route path="/feed" element={<CivicAuthenticatedLayout><Feed /></CivicAuthenticatedLayout>} />
             <Route path="/dashboard" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
+            <Route path="/politicians" element={<CivicAuthenticatedLayout><PoliticiansPage /></CivicAuthenticatedLayout>} />
+            <Route path="/political-parties" element={<CivicAuthenticatedLayout><PoliticalPartiesPage /></CivicAuthenticatedLayout>} />
+            <Route path="/political-rankings" element={<CivicAuthenticatedLayout><PoliticalRankingsPage /></CivicAuthenticatedLayout>} />
             <Route path="/settings" element={<CivicAuthenticatedLayout><SettingsPage /></CivicAuthenticatedLayout>} />
             <Route path="/shipping-labels" element={<CivicAuthenticatedLayout><ShippingLabels /></CivicAuthenticatedLayout>} />
             

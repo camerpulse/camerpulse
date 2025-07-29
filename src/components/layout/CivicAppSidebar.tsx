@@ -24,7 +24,9 @@ import {
   Heart,
   TrendingUp,
   MessageSquare,
-  Award
+  Award,
+  Flag,
+  Trophy
 } from 'lucide-react';
 
 const civicNavigationItems = [
@@ -56,6 +58,24 @@ const civicNavigationItems = [
 
 const civicToolsItems = [
   {
+    title: 'Politicians',
+    url: '/politicians',
+    icon: Users,
+    description: 'Elected representatives directory'
+  },
+  {
+    title: 'Political Parties',
+    url: '/political-parties',
+    icon: Flag,
+    description: 'Party platforms and performance'
+  },
+  {
+    title: 'Political Rankings',
+    url: '/political-rankings',
+    icon: Trophy,
+    description: 'Performance leaderboards'
+  },
+  {
     title: 'Transparency Portal',
     url: '/transparency',
     icon: Shield,
@@ -66,12 +86,6 @@ const civicToolsItems = [
     url: '/feed',
     icon: MessageSquare,
     description: 'Civic discussions'
-  },
-  {
-    title: 'Public Services',
-    url: '/services',
-    icon: Users,
-    description: 'Find local services'
   }
 ];
 
