@@ -386,6 +386,8 @@ export const AdminCoreV2: React.FC = () => {
     // Advanced Analytics & Intelligence (Phase 7)
     { id: 'advanced-analytics', label: 'Advanced Analytics', icon: BarChart3, color: 'text-purple-600', permission: 'analytics' },
     { id: 'ai-intelligence', label: 'AI Intelligence', icon: Brain, color: 'text-purple-600', permission: 'all' },
+    { id: 'intelligence-alerts', label: 'Intelligence Alerts', icon: AlertTriangle, color: 'text-orange-600', permission: 'all' },
+    { id: 'realtime-analytics', label: 'Real-Time Analytics', icon: Monitor, color: 'text-blue-600', permission: 'analytics' },
     
     // Infrastructure & System Management (Phase 8)
     { id: 'infrastructure-management', label: 'Infrastructure Management', icon: Settings, color: 'text-gray-600', permission: 'all' },
@@ -563,6 +565,10 @@ export const AdminCoreV2: React.FC = () => {
         return <AdvancedAnalyticsModule {...moduleProps} />;
       case 'ai-intelligence':
         return <AIIntelligenceModule {...moduleProps} />;
+      case 'intelligence-alerts':
+        return <IntelligenceAlertsModule {...moduleProps} />;
+      case 'realtime-analytics':
+        return <RealTimeAnalyticsModule {...moduleProps} />;
       case 'infrastructure-management':
         return <InfrastructureManagementModule {...moduleProps} />;
       case 'system-administration':
