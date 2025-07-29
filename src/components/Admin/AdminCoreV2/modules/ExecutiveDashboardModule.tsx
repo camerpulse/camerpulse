@@ -20,7 +20,11 @@ import {
   ArrowDownRight
 } from 'lucide-react';
 
-export const ExecutiveDashboardModule = () => {
+export const ExecutiveDashboardModule = ({ hasPermission, logActivity, stats }: {
+  hasPermission: (required: string) => boolean;
+  logActivity: (action: string, details: any) => Promise<void>;
+  stats: any;
+}) => {
   const [timeRange, setTimeRange] = useState('30d');
   const [activeView, setActiveView] = useState('overview');
 

@@ -17,7 +17,11 @@ import {
   CheckCircle
 } from 'lucide-react';
 
-export const BusinessIntelligenceModule = () => {
+export const BusinessIntelligenceModule = ({ hasPermission, logActivity, stats }: {
+  hasPermission: (required: string) => boolean;
+  logActivity: (action: string, details: any) => Promise<void>;
+  stats: any;
+}) => {
   const [activeView, setActiveView] = useState('overview');
   const [refreshing, setRefreshing] = useState(false);
 

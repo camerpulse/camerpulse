@@ -25,7 +25,11 @@ import {
   Copy
 } from 'lucide-react';
 
-export const AdvancedReportingModule = () => {
+export const AdvancedReportingModule = ({ hasPermission, logActivity, stats }: {
+  hasPermission: (required: string) => boolean;
+  logActivity: (action: string, details: any) => Promise<void>;
+  stats: any;
+}) => {
   const [activeView, setActiveView] = useState('reports');
   const [searchTerm, setSearchTerm] = useState('');
 

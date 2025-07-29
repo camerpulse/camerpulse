@@ -8,7 +8,6 @@ import {
   BarChart3, 
   LineChart, 
   PieChart, 
-  Scatter,
   TrendingUp,
   Settings,
   Download,
@@ -18,7 +17,11 @@ import {
   Plus
 } from 'lucide-react';
 
-export const DataVisualizationModule = () => {
+export const DataVisualizationModule = ({ hasPermission, logActivity, stats }: {
+  hasPermission: (required: string) => boolean;
+  logActivity: (action: string, details: any) => Promise<void>;
+  stats: any;
+}) => {
   const [selectedChart, setSelectedChart] = useState('bar');
   const [activeView, setActiveView] = useState('gallery');
 
@@ -26,7 +29,7 @@ export const DataVisualizationModule = () => {
     { id: 'bar', name: 'Bar Chart', icon: BarChart3, description: 'Compare categories' },
     { id: 'line', name: 'Line Chart', icon: LineChart, description: 'Show trends over time' },
     { id: 'pie', name: 'Pie Chart', icon: PieChart, description: 'Display proportions' },
-    { id: 'scatter', name: 'Scatter Plot', icon: Scatter, description: 'Show correlations' }
+    { id: 'scatter', name: 'Scatter Plot', icon: TrendingUp, description: 'Show correlations' }
   ];
 
   const visualizations = [
