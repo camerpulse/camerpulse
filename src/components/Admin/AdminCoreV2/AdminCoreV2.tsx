@@ -415,6 +415,15 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'regional-analytics', label: 'Regional Analytics', icon: MapPin, color: 'text-blue-600', permission: 'analytics' },
     { id: 'poll-templates', label: 'Poll Templates', icon: Palette, color: 'text-purple-600', permission: 'content' },
     
+    // Additional Content & Legal Modules
+    { id: 'security-management', label: 'Security Management', icon: Shield, color: 'text-red-600', permission: 'all' },
+    { id: 'news-management', label: 'News Management', icon: Newspaper, color: 'text-indigo-600', permission: 'content' },
+    { id: 'legal-documents-module', label: 'Legal Documents Module', icon: Scale, color: 'text-cyan-600', permission: 'legal' },
+    { id: 'educational-content', label: 'Educational Content', icon: GraduationCap, color: 'text-emerald-600', permission: 'education' },
+    { id: 'traditional-content', label: 'Traditional Content', icon: Globe, color: 'text-amber-600', permission: 'culture' },
+    { id: 'civic-engagement', label: 'Civic Engagement', icon: Users, color: 'text-teal-600', permission: 'civic' },
+    { id: 'legal-justice', label: 'Legal & Justice', icon: Scale, color: 'text-slate-600', permission: 'legal' },
+    
     // Security & Testing
     { id: 'role-access-test', label: 'Role Access Test', icon: Shield, color: 'text-orange-600', permission: 'all' },
     { id: 'security-audit', label: 'Security Audit', icon: Shield, color: 'text-red-600', permission: 'all' },
