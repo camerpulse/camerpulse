@@ -90,6 +90,10 @@ import { PoliticalManagementModule } from './modules/PoliticalManagementModule';
 import { SecurityFinanceModule } from './modules/SecurityFinanceModule';
 import { LegacyFeaturesModule } from './modules/LegacyFeaturesModule';
 import { PluginManagementModule } from './modules/PluginManagementModule';
+import { ArtistPlatformModule } from './modules/ArtistPlatformModule';
+import { CulturalPreservationModule } from './modules/CulturalPreservationModule';
+import { AdvancedAnalyticsModule } from './modules/AdvancedAnalyticsModule';
+import { AIIntelligenceModule } from './modules/AIIntelligenceModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 interface AdminStats {
@@ -371,6 +375,14 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'health-analytics', label: 'Health Analytics', icon: Activity, color: 'text-green-600', permission: 'analytics' },
     { id: 'education-analytics', label: 'Education Analytics', icon: BarChart3, color: 'text-indigo-600', permission: 'analytics' },
     
+    // Entertainment & Culture (Phase 6)
+    { id: 'artist-platform', label: 'Artist Platform', icon: Music, color: 'text-purple-600', permission: 'artists' },
+    { id: 'cultural-preservation', label: 'Cultural Preservation', icon: Globe, color: 'text-green-600', permission: 'culture' },
+    
+    // Advanced Analytics & Intelligence (Phase 7)
+    { id: 'advanced-analytics', label: 'Advanced Analytics', icon: BarChart3, color: 'text-purple-600', permission: 'analytics' },
+    { id: 'ai-intelligence', label: 'AI Intelligence', icon: Brain, color: 'text-purple-600', permission: 'all' },
+    
     // AI & Intelligence
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
@@ -535,6 +547,14 @@ export const AdminCoreV2: React.FC = () => {
         return <HealthAnalyticsModule {...moduleProps} />;
       case 'education-analytics':
         return <EducationAnalyticsModule {...moduleProps} />;
+      case 'artist-platform':
+        return <ArtistPlatformModule {...moduleProps} />;
+      case 'cultural-preservation':
+        return <CulturalPreservationModule {...moduleProps} />;
+      case 'advanced-analytics':
+        return <AdvancedAnalyticsModule {...moduleProps} />;
+      case 'ai-intelligence':
+        return <AIIntelligenceModule {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} onModuleNavigate={handleModuleChange} />;
     }
