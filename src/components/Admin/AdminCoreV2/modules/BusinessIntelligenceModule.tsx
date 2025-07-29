@@ -259,7 +259,7 @@ export const BusinessIntelligenceModule = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Consider implementing caching for API endpoints with response times > 500ms.
+                  Consider implementing caching for API endpoints with response times greater than 500ms.
                 </p>
                 <Button variant="link" className="p-0 h-auto mt-2">
                   Apply recommendations
