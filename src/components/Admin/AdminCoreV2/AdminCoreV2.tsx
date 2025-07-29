@@ -98,6 +98,10 @@ import { IntelligenceAlertsModule } from './modules/IntelligenceAlertsModule';
 import { RealTimeAnalyticsModule } from './modules/RealTimeAnalyticsModule';
 import { InfrastructureManagementModule } from './modules/InfrastructureManagementModule';
 import { SystemAdministrationModule } from './modules/SystemAdministrationModule';
+import { DevOpsManagementModule } from './modules/DevOpsManagementModule';
+import { SecurityComplianceModule } from './modules/SecurityComplianceModule';
+import { IntegrationManagementModule } from './modules/IntegrationManagementModule';
+import { PerformanceAnalyticsModule } from './modules/PerformanceAnalyticsModule';
 import { UnifiedAdminWelcome } from './components/UnifiedAdminWelcome';
 
 // Import Missing Manager Components
@@ -653,6 +657,14 @@ export const AdminCoreV2: React.FC = () => {
         return <InfrastructureManagementModule {...moduleProps} />;
       case 'system-administration':
         return <SystemAdministrationModule {...moduleProps} />;
+      case 'devops-management':
+        return <DevOpsManagementModule {...moduleProps} />;
+      case 'security-compliance':
+        return <SecurityComplianceModule {...moduleProps} />;
+      case 'integration-management':
+        return <IntegrationManagementModule {...moduleProps} />;
+      case 'performance-analytics':
+        return <PerformanceAnalyticsModule {...moduleProps} />;
       
       // Additional Manager Cases  
       case 'election-manager':
