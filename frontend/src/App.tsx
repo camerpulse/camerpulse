@@ -11,7 +11,7 @@ import { PoliticalPartiesPage } from '@/pages/PoliticalPartiesPage';
 import { PoliticalRankingsPage } from '@/pages/PoliticalRankingsPage';
 import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { SettingsPage } from '@/pages/SettingsPage';
-import Feed from '@/pages/Feed';
+import NewFeed from '@/pages/NewFeed';
 import AuthPage from '@/pages/AuthPage';
 import ShippingLabels from '@/pages/ShippingLabels';
 import { PublicHomePage } from '@/pages/PublicHomePage';
@@ -71,8 +71,8 @@ function AppContent() {
         {/* Authenticated Routes */}
         {user && (
           <>
-            <Route path="/" element={<CivicAuthenticatedLayout><Feed /></CivicAuthenticatedLayout>} />
-            <Route path="/feed" element={<CivicAuthenticatedLayout><Feed /></CivicAuthenticatedLayout>} />
+            <Route path="/" element={<CivicAuthenticatedLayout><NewFeed /></CivicAuthenticatedLayout>} />
+            <Route path="/feed" element={<CivicAuthenticatedLayout><NewFeed /></CivicAuthenticatedLayout>} />
             <Route path="/dashboard" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
             <Route path="/politicians" element={<CivicAuthenticatedLayout><PoliticiansPage /></CivicAuthenticatedLayout>} />
             <Route path="/political-parties" element={<CivicAuthenticatedLayout><PoliticalPartiesPage /></CivicAuthenticatedLayout>} />
