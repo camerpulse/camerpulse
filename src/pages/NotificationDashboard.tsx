@@ -6,7 +6,7 @@ import { InteractiveNotificationManager } from '@/components/Notifications/Inter
 import { PushNotificationManager } from '@/components/Mobile/PushNotificationManager';
 import { PWAInstallPrompt } from '@/components/Mobile/PWAInstallPrompt';
 import { MobileNotificationFeed } from '@/components/Mobile/MobileNotificationFeed';
-import { AdvancedNotificationCenter } from '@/components/Notifications/AdvancedNotificationCenter';
+import { UnifiedNotificationCenter } from '@/components/notifications/UnifiedNotificationCenter';
 import { AnalyticsCenter } from '@/components/Analytics/AnalyticsCenter';
 import { WorkflowAutomationCenter } from '@/components/Workflows/WorkflowAutomationCenter';
 import { useAuth } from '@/contexts/AuthContext';
@@ -58,8 +58,8 @@ const NotificationDashboard: React.FC = () => {
               {/* Workflow Automation */}
               <WorkflowAutomationCenter />
               
-              {/* Advanced Notification Features */}
-              <AdvancedNotificationCenter />
+              {/* Unified Notification Features */}
+              <UnifiedNotificationCenter />
             </div>
             
             {/* Supporting Features Grid */}
