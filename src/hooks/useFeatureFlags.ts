@@ -56,6 +56,14 @@ export const useFeatureFlags = () => {
   const isEventManagementDisabled = () => !isFeatureEnabled('event_management');
   const isCamerpulseIntelligenceDisabled = () => !isFeatureEnabled('camerpulse_intelligence');
 
+  // Phase 3 features
+  const isUnifiedAdminDashboardEnabled = () => isFeatureEnabled('unified_admin_dashboard');
+  const isSimplifiedNotificationsEnabled = () => isFeatureEnabled('simplified_notifications');
+  const isCoreSentimentAnalysisEnabled = () => isFeatureEnabled('core_sentiment_analysis');
+  const isAdvancedNotificationChannelsDisabled = () => !isFeatureEnabled('advanced_notification_channels');
+  const isComplexSentimentFeaturesDisabled = () => !isFeatureEnabled('complex_sentiment_features');
+  const isMultipleAdminInterfacesDisabled = () => !isFeatureEnabled('multiple_admin_interfaces');
+
   // Core civic features (should remain enabled)
   const isCivicPollingEnabled = () => isFeatureEnabled('civic_polling');
   const isCivicAlertsEnabled = () => isFeatureEnabled('civic_alerts');
@@ -82,6 +90,13 @@ export const useFeatureFlags = () => {
     isLegacyPluginSystemDisabled,
     isEventManagementDisabled,
     isCamerpulseIntelligenceDisabled,
+    // Phase 3 checks
+    isUnifiedAdminDashboardEnabled,
+    isSimplifiedNotificationsEnabled,
+    isCoreSentimentAnalysisEnabled,
+    isAdvancedNotificationChannelsDisabled,
+    isComplexSentimentFeaturesDisabled,
+    isMultipleAdminInterfacesDisabled,
     // Core feature checks
     isCivicPollingEnabled,
     isCivicAlertsEnabled,

@@ -184,6 +184,48 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_dashboard_modules: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          display_name: string
+          display_order: number
+          icon: string | null
+          id: string
+          is_enabled: boolean
+          module_name: string
+          required_permissions: string[] | null
+          route_path: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          display_name: string
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_enabled?: boolean
+          module_name: string
+          required_permissions?: string[] | null
+          route_path: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          display_name?: string
+          display_order?: number
+          icon?: string | null
+          id?: string
+          is_enabled?: boolean
+          module_name?: string
+          required_permissions?: string[] | null
+          route_path?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       advanced_sentiment_analysis: {
         Row: {
           analysis_metadata: Json | null
@@ -11896,6 +11938,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      core_sentiment_analysis: {
+        Row: {
+          analysis_metadata: Json | null
+          analyzed_at: string | null
+          confidence_score: number | null
+          content_id: string | null
+          content_text: string
+          content_type: string
+          created_at: string | null
+          id: string
+          language: string | null
+          region: string | null
+          sentiment_label: string | null
+          sentiment_score: number | null
+        }
+        Insert: {
+          analysis_metadata?: Json | null
+          analyzed_at?: string | null
+          confidence_score?: number | null
+          content_id?: string | null
+          content_text: string
+          content_type: string
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          region?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+        }
+        Update: {
+          analysis_metadata?: Json | null
+          analyzed_at?: string | null
+          confidence_score?: number | null
+          content_id?: string | null
+          content_text?: string
+          content_type?: string
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          region?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+        }
+        Relationships: []
       }
       corruption_case_sources: {
         Row: {
@@ -26030,8 +26117,10 @@ export type Database = {
           created_at: string
           id: string
           is_active: boolean
+          is_system_template: boolean | null
           subject: string | null
           template_name: string
+          template_type: string | null
           updated_at: string
           variables: Json | null
         }
@@ -26041,8 +26130,10 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          is_system_template?: boolean | null
           subject?: string | null
           template_name: string
+          template_type?: string | null
           updated_at?: string
           variables?: Json | null
         }
@@ -26052,8 +26143,10 @@ export type Database = {
           created_at?: string
           id?: string
           is_active?: boolean
+          is_system_template?: boolean | null
           subject?: string | null
           template_name?: string
+          template_type?: string | null
           updated_at?: string
           variables?: Json | null
         }
@@ -37318,6 +37411,48 @@ export type Database = {
           },
         ]
       }
+      simplified_notification_preferences: {
+        Row: {
+          created_at: string | null
+          email_enabled: boolean
+          email_frequency: string
+          id: string
+          push_enabled: boolean
+          quiet_hours_enabled: boolean
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          sms_enabled: boolean
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          email_enabled?: boolean
+          email_frequency?: string
+          id?: string
+          push_enabled?: boolean
+          quiet_hours_enabled?: boolean
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          sms_enabled?: boolean
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          email_enabled?: boolean
+          email_frequency?: string
+          id?: string
+          push_enabled?: boolean
+          quiet_hours_enabled?: boolean
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          sms_enabled?: boolean
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       smart_reply_suggestions: {
         Row: {
           confidence_scores: Json
@@ -39513,63 +39648,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      user_notification_preferences: {
-        Row: {
-          channel: Database["public"]["Enums"]["notification_channel"]
-          created_at: string
-          digest_time: string
-          email_enabled: boolean
-          email_frequency: string
-          event_type: Database["public"]["Enums"]["notification_event_type"]
-          id: string
-          in_app_enabled: boolean
-          is_enabled: boolean
-          priority_threshold: number
-          push_enabled: boolean
-          quiet_hours_end: string
-          quiet_hours_start: string
-          sms_enabled: boolean
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          channel: Database["public"]["Enums"]["notification_channel"]
-          created_at?: string
-          digest_time?: string
-          email_enabled?: boolean
-          email_frequency?: string
-          event_type: Database["public"]["Enums"]["notification_event_type"]
-          id?: string
-          in_app_enabled?: boolean
-          is_enabled?: boolean
-          priority_threshold?: number
-          push_enabled?: boolean
-          quiet_hours_end?: string
-          quiet_hours_start?: string
-          sms_enabled?: boolean
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          channel?: Database["public"]["Enums"]["notification_channel"]
-          created_at?: string
-          digest_time?: string
-          email_enabled?: boolean
-          email_frequency?: string
-          event_type?: Database["public"]["Enums"]["notification_event_type"]
-          id?: string
-          in_app_enabled?: boolean
-          is_enabled?: boolean
-          priority_threshold?: number
-          push_enabled?: boolean
-          quiet_hours_end?: string
-          quiet_hours_start?: string
-          sms_enabled?: boolean
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
       }
       user_notification_settings: {
         Row: {
