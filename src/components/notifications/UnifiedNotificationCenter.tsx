@@ -122,7 +122,8 @@ export const UnifiedNotificationCenter: React.FC<NotificationCenterProps> = ({
   };
 
   return (
-    <DropdownMenu>
+    <NotificationErrorBoundary>
+      <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-4 w-4" />
@@ -286,6 +287,9 @@ export const UnifiedNotificationCenter: React.FC<NotificationCenterProps> = ({
                     if (!notification.read_at) {
                       markAsRead(notification.id);
                     }
+                    
+                    trackNotificationClick(notification.id, notification.type, notification.action_url);
+                    
                     if (notification.action_url) {
                       window.location.href = notification.action_url;
                     }
@@ -370,5 +374,6 @@ export const UnifiedNotificationCenter: React.FC<NotificationCenterProps> = ({
         )}
       </DropdownMenuContent>
     </DropdownMenu>
+    </NotificationErrorBoundary>
   );
 };
