@@ -39425,6 +39425,39 @@ export type Database = {
         }
         Relationships: []
       }
+      system_feature_flags: {
+        Row: {
+          created_at: string | null
+          disabled_at: string | null
+          disabled_by: string | null
+          disabled_reason: string | null
+          feature_name: string
+          id: string
+          is_enabled: boolean
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          disabled_at?: string | null
+          disabled_by?: string | null
+          disabled_reason?: string | null
+          feature_name: string
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          disabled_at?: string | null
+          disabled_by?: string | null
+          disabled_reason?: string | null
+          feature_name?: string
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       system_label_settings: {
         Row: {
           created_at: string | null
