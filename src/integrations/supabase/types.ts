@@ -4913,6 +4913,74 @@ export type Database = {
           },
         ]
       }
+      authoritative_politicians: {
+        Row: {
+          confidence_score: number | null
+          constituency: string | null
+          created_at: string
+          data_sources: Json
+          full_name: string
+          id: string
+          is_current: boolean
+          last_updated: string
+          political_party_id: string | null
+          position_title: string
+          region: string
+          term_end_date: string | null
+          term_start_date: string | null
+          updated_at: string
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          constituency?: string | null
+          created_at?: string
+          data_sources?: Json
+          full_name: string
+          id?: string
+          is_current?: boolean
+          last_updated?: string
+          political_party_id?: string | null
+          position_title: string
+          region: string
+          term_end_date?: string | null
+          term_start_date?: string | null
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          constituency?: string | null
+          created_at?: string
+          data_sources?: Json
+          full_name?: string
+          id?: string
+          is_current?: boolean
+          last_updated?: string
+          political_party_id?: string | null
+          position_title?: string
+          region?: string
+          term_end_date?: string | null
+          term_start_date?: string | null
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "authoritative_politicians_political_party_id_fkey"
+            columns: ["political_party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       automated_moderation: {
         Row: {
           ai_model_used: string
@@ -40256,6 +40324,51 @@ export type Database = {
         }
         Relationships: []
       }
+      unified_admin_access: {
+        Row: {
+          access_reason: string | null
+          admin_level: number
+          created_at: string
+          expires_at: string | null
+          granted_at: string
+          granted_by: string | null
+          id: string
+          is_active: boolean
+          last_accessed: string | null
+          permissions: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_reason?: string | null
+          admin_level?: number
+          created_at?: string
+          expires_at?: string | null
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          last_accessed?: string | null
+          permissions?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_reason?: string | null
+          admin_level?: number
+          created_at?: string
+          expires_at?: string | null
+          granted_at?: string
+          granted_by?: string | null
+          id?: string
+          is_active?: boolean
+          last_accessed?: string | null
+          permissions?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_2fa: {
         Row: {
           backup_codes: string[] | null
@@ -45750,6 +45863,10 @@ export type Database = {
           issues_found: string[]
           recommendations: string[]
         }[]
+      }
+      safe_consolidate_user_profiles: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       sanitize_message_content: {
         Args: { content: string }
