@@ -17,7 +17,16 @@ export function PluginAwareLink({
   className,
   fallback = null 
 }: PluginAwareLinkProps) {
-  const { isPluginEnabled } = usePlugin();
+  const { isPluginEnabled, isLoading } = usePlugin();
+
+  // If plugins are loading, show the children to prevent homepage being stuck
+  if (isLoading) {
+    return (
+      <Link to={to} className={className}>
+        {children}
+      </Link>
+    );
+  }
 
   if (!isPluginEnabled(pluginName)) {
     return fallback;
