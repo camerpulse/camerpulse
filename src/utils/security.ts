@@ -428,37 +428,40 @@ export async function logSecurityEvent(
   severity: 'low' | 'medium' | 'high' | 'critical' = 'medium'
 ) {
   try {
+    // Detect threats in the action/details
+    const threats = detectSecurityThreats(JSON.stringify(details || {}));
+    
     // Enhanced logging with more details
     const logData = {
-      action,
-      resourceType,
-      resourceId,
-      details,
+      event_type: action,
+      event_category: resourceType,
       severity,
-      timestamp: new Date().toISOString(),
-      userAgent: navigator.userAgent,
-      url: window.location.href,
-      referrer: document.referrer
+      metadata: {
+        resourceId,
+        details,
+        threats: threats.length > 0 ? threats : undefined,
+        userAgent: navigator.userAgent,
+        url: window.location.href,
+        referrer: document.referrer,
+        timestamp: new Date().toISOString()
+      }
     };
     
     console.log('Security Event:', logData);
     
-    // Detect threats in the action/details
-    const threats = detectSecurityThreats(JSON.stringify(details || {}));
     if (threats.length > 0) {
       console.warn('Security threats detected:', threats);
-      logData.details = { ...logData.details, threats };
     }
     
-    // In production, this would call your audit logging function
-    // const { supabase } = await import('@/integrations/supabase/client');
-    // await supabase.rpc('log_security_event', {
-    //   p_action_type: action,
-    //   p_resource_type: resourceType,
-    //   p_resource_id: resourceId,
-    //   p_details: logData.details || {},
-    //   p_severity: severity
-    // });
+    // Log to Supabase audit table
+    const { supabase } = await import('@/integrations/supabase/client');
+    const { error } = await supabase
+      .from('security_audit_logs')
+      .insert(logData);
+    
+    if (error) {
+      console.error('Failed to log security event to database:', error);
+    }
   } catch (error) {
     console.error('Failed to log security event:', error);
   }

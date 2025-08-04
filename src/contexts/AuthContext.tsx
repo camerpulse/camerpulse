@@ -58,34 +58,47 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [userRoles, setUserRoles] = useState<string[]>([]);
 
-  // Fetch profile when user changes
+  // Fetch profile and user roles when user changes
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndRoles = async () => {
       if (!user) {
         setProfile(null);
+        setUserRoles([]);
         return;
       }
 
       try {
-        const { data, error } = await supabase
+        // Fetch user profile
+        const { data: profileData, error: profileError } = await supabase
           .from('user_profiles')
           .select('*')
           .eq('user_id', user.id)
           .single();
 
-        if (error && error.code !== 'PGRST116') {
-          console.error('Error fetching profile:', error);
-          return;
+        if (profileError && profileError.code !== 'PGRST116') {
+          console.error('Error fetching profile:', profileError);
+        } else {
+          setProfile(profileData);
         }
 
-        setProfile(data);
+        // Fetch user roles
+        const { data: rolesData, error: rolesError } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id);
+
+        if (rolesError) {
+          console.error('Error fetching roles:', rolesError);
+        } else {
+          setUserRoles(rolesData?.map(r => r.role) || []);
+        }
       } catch (err) {
-        console.error('Error fetching profile:', err);
+        console.error('Error fetching profile and roles:', err);
       }
     };
 
     if (user) {
-      fetchProfile();
+      fetchProfileAndRoles();
     }
   }, [user]);
 
@@ -151,8 +164,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const updateProfile = async (updates: Partial<UserProfile>) => {
     if (!user) return;
-    // Profile update logic would go here
-    setProfile(prev => prev ? { ...prev, ...updates } : null);
+    
+    try {
+      const { error } = await supabase
+        .from('user_profiles')
+        .update({
+          ...updates,
+          updated_at: new Date().toISOString()
+        })
+        .eq('user_id', user.id);
+
+      if (error) {
+        console.error('Error updating profile:', error);
+        throw error;
+      }
+
+      // Update local state
+      setProfile(prev => prev ? { ...prev, ...updates } : null);
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+      throw error;
+    }
   };
 
   const hasRole = (role: string) => userRoles.includes(role);
