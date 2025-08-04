@@ -16,6 +16,7 @@ import AuthPage from '@/pages/AuthPage';
 import ShippingLabels from '@/pages/ShippingLabels';
 import { PublicHomePage } from '@/pages/PublicHomePage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import { PluginProvider } from '@/contexts/PluginContext';
 import { PluginRouter } from '@/components/Plugin/PluginRouter';
 import { Toaster } from '@/components/ui/toaster';
@@ -103,13 +104,15 @@ function AppContent() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <PluginProvider>
-          <Router>
-            <AppContent />
-          </Router>
-        </PluginProvider>
-      </AuthProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <PluginProvider>
+            <Router>
+              <AppContent />
+            </Router>
+          </PluginProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 }

@@ -24,30 +24,33 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { NotificationCenter } from '@/components/notifications/NotificationCenter';
+import { LanguageSwitcher } from '@/components/ui/language-switcher';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const civicPageInfo = {
   '/': {
-    title: 'Civic Dashboard',
-    description: 'Your civic engagement overview'
+    title: 'nav.dashboard',
+    description: 'dashboard.description'
   },
   '/villages': {
-    title: 'Village Registry',
+    title: 'nav.villages',
     description: 'Connect with your ancestral village'
   },
   '/petitions': {
-    title: 'Petitions',
+    title: 'nav.petitions',
     description: 'Create and support community petitions'
   },
   '/civic-education': {
-    title: 'Civic Education',
+    title: 'nav.education',
     description: 'Learn about your rights and duties'
   },
   '/transparency': {
-    title: 'Transparency Portal',
+    title: 'nav.transparency',
     description: 'Government accountability and data'
   },
   '/feed': {
-    title: 'Community Feed',
+    title: 'nav.feed',
     description: 'Civic discussions and updates'
   },
   '/services': {
@@ -55,7 +58,7 @@ const civicPageInfo = {
     description: 'Find hospitals, schools, and services'
   },
   '/settings': {
-    title: 'Settings',
+    title: 'nav.settings',
     description: 'Manage your account and preferences'
   }
 };
@@ -63,6 +66,7 @@ const civicPageInfo = {
 export function CivicAppHeader() {
   const location = useLocation();
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [notifications] = useState([
     {
       id: '1',
@@ -112,52 +116,23 @@ export function CivicAppHeader() {
         <div className="flex items-center gap-3">
           <Globe className="h-6 w-6 text-primary" />
           <div>
-            <h1 className="font-semibold text-lg">{currentPage.title}</h1>
+            <h1 className="font-semibold text-lg">{t(currentPage.title)}</h1>
             <p className="text-sm text-muted-foreground">{currentPage.description}</p>
           </div>
         </div>
       </div>
 
       <div className="flex items-center gap-2">
+        {/* Language Switcher */}
+        <LanguageSwitcher />
+
         {/* Search */}
         <Button variant="ghost" size="icon">
           <Search className="h-4 w-4" />
         </Button>
 
         {/* Notifications */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="h-4 w-4" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                  {unreadCount}
-                </span>
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-80">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {notifications.map((notification) => (
-              <DropdownMenuItem key={notification.id} className={notification.unread ? 'bg-primary/5' : ''}>
-                <div className="space-y-1 w-full">
-                  <div className="flex items-center gap-2">
-                    {notification.type === 'petition' && <Vote className="h-4 w-4 text-blue-500" />}
-                    {notification.type === 'village' && <MapPin className="h-4 w-4 text-green-500" />}
-                    {notification.type === 'education' && <Globe className="h-4 w-4 text-purple-500" />}
-                    <p className="text-sm font-medium">{notification.message}</p>
-                  </div>
-                  <p className="text-xs text-muted-foreground">{notification.time}</p>
-                </div>
-              </DropdownMenuItem>
-            ))}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-center">
-              <span className="text-sm text-muted-foreground">View all notifications</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <NotificationCenter />
 
         {/* User Menu */}
         <DropdownMenu>

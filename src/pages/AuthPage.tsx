@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, Globe, Vote } from 'lucide-react';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 export default function AuthPage() {
   const { user, signIn, signUp, loading } = useAuth();
@@ -55,6 +56,7 @@ export default function AuthPage() {
     const password = formData.get('password') as string;
     const confirmPassword = formData.get('confirmPassword') as string;
     const fullName = formData.get('fullName') as string;
+    const userType = formData.get('userType') as string;
 
     if (password !== confirmPassword) {
       setError('Passwords do not match');
@@ -68,8 +70,13 @@ export default function AuthPage() {
       return;
     }
 
+    if (!userType) {
+      setError('Please select your user type');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const userType = formData.get('userType') as string;
       const { error } = await signUp(email, password, {
         emailRedirectTo: `${window.location.origin}/`,
         data: { 
@@ -81,6 +88,29 @@ export default function AuthPage() {
       if (error) {
         setError(error.message);
       } else {
+        // Create user profile immediately after signup
+        try {
+          const { error: profileError } = await supabase
+            .from('user_profiles')
+            .insert({
+              user_id: (await supabase.auth.getUser()).data.user?.id,
+              display_name: fullName,
+              first_name: fullName.split(' ')[0],
+              last_name: fullName.split(' ').slice(1).join(' '),
+              country: 'CM', // Default to Cameroon
+              user_type: userType,
+              profile_visibility: 'public',
+              allow_messages: true,
+              allow_friend_requests: true
+            });
+
+          if (profileError) {
+            console.error('Error creating user profile:', profileError);
+          }
+        } catch (profileErr) {
+          console.error('Profile creation error:', profileErr);
+        }
+
         toast.success('Account created successfully! Please check your email to verify your account.');
         navigate('/', { replace: true });
       }
