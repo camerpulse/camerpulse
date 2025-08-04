@@ -44,18 +44,52 @@ export const useFeatureFlags = () => {
     return flags[featureName] ?? true; // Default to enabled if not found
   };
 
+  // Phase 1 disabled features
   const isAshenDisabled = () => !isFeatureEnabled('ashen_ai_system');
   const isArtistRegistrationDisabled = () => !isFeatureEnabled('artist_registration');
   const isFanRegistrationDisabled = () => !isFeatureEnabled('fan_registration');
   const isPluginInstallationDisabled = () => !isFeatureEnabled('plugin_installation');
 
+  // Phase 2 disabled features
+  const isArtistPlatformDisabled = () => !isFeatureEnabled('artist_platform');
+  const isLegacyPluginSystemDisabled = () => !isFeatureEnabled('legacy_plugin_system');
+  const isEventManagementDisabled = () => !isFeatureEnabled('event_management');
+  const isCamerpulseIntelligenceDisabled = () => !isFeatureEnabled('camerpulse_intelligence');
+
+  // Core civic features (should remain enabled)
+  const isCivicPollingEnabled = () => isFeatureEnabled('civic_polling');
+  const isCivicAlertsEnabled = () => isFeatureEnabled('civic_alerts');
+  const isVillageManagementEnabled = () => isFeatureEnabled('village_management');
+  const isGovernmentTransparencyEnabled = () => isFeatureEnabled('government_transparency');
+  const isCitizenEngagementEnabled = () => isFeatureEnabled('citizen_engagement');
+
+  // Marketplace features
+  const isMarketplaceEnabled = () => isFeatureEnabled('marketplace');
+  const isJobBoardEnabled = () => isFeatureEnabled('job_board');
+  const isMessagingSystemEnabled = () => isFeatureEnabled('messaging_system');
+
   return {
     flags,
     loading,
     isFeatureEnabled,
+    // Phase 1 checks
     isAshenDisabled,
     isArtistRegistrationDisabled,
     isFanRegistrationDisabled,
-    isPluginInstallationDisabled
+    isPluginInstallationDisabled,
+    // Phase 2 checks
+    isArtistPlatformDisabled,
+    isLegacyPluginSystemDisabled,
+    isEventManagementDisabled,
+    isCamerpulseIntelligenceDisabled,
+    // Core feature checks
+    isCivicPollingEnabled,
+    isCivicAlertsEnabled,
+    isVillageManagementEnabled,
+    isGovernmentTransparencyEnabled,
+    isCitizenEngagementEnabled,
+    isMarketplaceEnabled,
+    isJobBoardEnabled,
+    isMessagingSystemEnabled
   };
 };
