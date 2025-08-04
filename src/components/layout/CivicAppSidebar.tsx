@@ -37,6 +37,12 @@ const civicNavigationItems = [
     description: 'Your civic engagement overview'
   },
   {
+    title: 'Community Feed',
+    url: '/feed',
+    icon: MessageSquare,
+    description: 'Civic discussions'
+  },
+  {
     title: 'Villages',
     url: '/villages',
     icon: MapPin,
@@ -47,12 +53,6 @@ const civicNavigationItems = [
     url: '/petitions',
     icon: Vote,
     description: 'Create and support petitions'
-  },
-  {
-    title: 'Civic Education',
-    url: '/civic-education',
-    icon: BookOpen,
-    description: 'Learn about your rights'
   }
 ];
 
@@ -64,28 +64,16 @@ const civicToolsItems = [
     description: 'Elected representatives directory'
   },
   {
-    title: 'Political Parties',
-    url: '/political-parties',
-    icon: Flag,
-    description: 'Party platforms and performance'
-  },
-  {
-    title: 'Political Rankings',
-    url: '/political-rankings',
-    icon: Trophy,
-    description: 'Performance leaderboards'
-  },
-  {
     title: 'Transparency Portal',
     url: '/transparency',
     icon: Shield,
     description: 'Government accountability'
   },
   {
-    title: 'Community Feed',
-    url: '/feed',
-    icon: MessageSquare,
-    description: 'Civic discussions'
+    title: 'Civic Education',
+    url: '/civic-education',
+    icon: BookOpen,
+    description: 'Learn about your rights'
   }
 ];
 

@@ -21,8 +21,16 @@ import {
   Clock
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useMobileDetection } from '@/hooks/useMobileDetection';
+import { MobileOptimizedDashboard } from '@/components/mobile/MobileOptimizedDashboard';
 
 export function CamerPulseDashboard() {
+  const { isMobile } = useMobileDetection();
+
+  // Return mobile-optimized version for mobile devices
+  if (isMobile) {
+    return <MobileOptimizedDashboard />;
+  }
   const stats = [
     { label: 'My Petitions', value: '3', icon: Vote, link: '/petitions' },
     { label: 'Village Connections', value: '12', icon: MapPin, link: '/villages' },

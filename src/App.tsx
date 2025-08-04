@@ -71,7 +71,7 @@ function AppContent() {
         {/* Authenticated Routes */}
         {user && (
           <>
-            <Route path="/" element={<CivicAuthenticatedLayout><NewFeed /></CivicAuthenticatedLayout>} />
+            <Route path="/" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
             <Route path="/feed" element={<CivicAuthenticatedLayout><NewFeed /></CivicAuthenticatedLayout>} />
             <Route path="/dashboard" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
             <Route path="/politicians" element={<CivicAuthenticatedLayout><PoliticiansPage /></CivicAuthenticatedLayout>} />
