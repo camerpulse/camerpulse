@@ -1,379 +1,285 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-import { 
-  Bell, 
-  Check, 
-  CheckCheck, 
-  Settings,
-  AlertTriangle,
-  Info,
-  MessageSquare,
-  Building,
-  Vote,
-  Briefcase,
-  ShoppingCart,
-  Users,
-  Shield,
-  Clock,
-  ExternalLink
-} from 'lucide-react';
-import { useUnifiedNotifications } from '@/hooks/useUnifiedNotifications';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { Bell, X, ExternalLink, AlertCircle, Info, CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 import { formatDistanceToNow } from 'date-fns';
-import { cn } from '@/lib/utils';
 
-interface NotificationCenterProps {
-  onPreferencesClick?: () => void;
+interface UnifiedNotification {
+  id: string;
+  user_id: string;
+  notification_type: string;
+  title: string;
+  message: string;
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  is_read: boolean;
+  action_url?: string;
+  metadata: any;
+  created_at: string;
+  updated_at: string;
+  expires_at?: string;
 }
 
-export const UnifiedNotificationCenter: React.FC<NotificationCenterProps> = ({
-  onPreferencesClick
+interface UnifiedNotificationCenterProps {
+  userId?: string;
+  isAdminView?: boolean;
+}
+
+export const UnifiedNotificationCenter: React.FC<UnifiedNotificationCenterProps> = ({ 
+  userId, 
+  isAdminView = false 
 }) => {
-  const { 
-    notifications, 
-    unreadCount, 
-    markAsRead, 
-    markAllAsRead,
-    getNotificationsByCategory,
-    getHighPriorityNotifications 
-  } = useUnifiedNotifications();
-  const { t } = useLanguage();
-  const [selectedTab, setSelectedTab] = useState('all');
+  const [notifications, setNotifications] = useState<UnifiedNotification[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
-  const getNotificationIcon = (type: string, sourceModule: string) => {
-    // Priority-based icons
-    if (type.includes('alert') || type.includes('urgent')) return AlertTriangle;
-    if (type.includes('security')) return Shield;
+  useEffect(() => {
+    fetchNotifications();
     
-    // Module-based icons
-    switch (sourceModule) {
-      case 'civic_alerts': return Vote;
-      case 'petitions': return Vote;
-      case 'villages': return Users;
-      case 'jobs': return Briefcase;
-      case 'marketplace': return ShoppingCart;
-      case 'community': return MessageSquare;
-      case 'admin': return Building;
-      case 'security': return Shield;
-      default: return Bell;
+    // Subscribe to real-time updates
+    const subscription = supabase
+      .channel('unified_notifications')
+      .on('postgres_changes', 
+        { 
+          event: '*', 
+          schema: 'public', 
+          table: 'unified_notifications',
+          filter: userId ? `user_id=eq.${userId}` : undefined
+        }, 
+        () => {
+          fetchNotifications();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [userId]);
+
+  const fetchNotifications = async () => {
+    try {
+      let query = supabase
+        .from('unified_notifications')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (userId && !isAdminView) {
+        query = query.eq('user_id', userId);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error('Error fetching notifications:', error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch notifications",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      setNotifications(data || []);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const getNotificationColor = (priority: number, category: string) => {
-    if (priority <= 2) return 'text-red-500'; // High priority
-    if (priority === 3) return 'text-yellow-500'; // Medium priority
-    
-    // Category-based colors for low priority
-    switch (category) {
-      case 'civic': return 'text-blue-500';
-      case 'community': return 'text-green-500';
-      case 'jobs': return 'text-purple-500';
-      case 'marketplace': return 'text-orange-500';
-      case 'admin': return 'text-gray-500';
-      case 'security': return 'text-red-500';
-      default: return 'text-gray-500';
+  const markAsRead = async (notificationId: string) => {
+    try {
+      const { error } = await supabase
+        .from('unified_notifications')
+        .update({ is_read: true })
+        .eq('id', notificationId);
+
+      if (error) {
+        console.error('Error marking notification as read:', error);
+        return;
+      }
+
+      setNotifications(prev => 
+        prev.map(notif => 
+          notif.id === notificationId 
+            ? { ...notif, is_read: true }
+            : notif
+        )
+      );
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
     }
   };
 
-  const getPriorityBadge = (priority: number) => {
-    if (priority === 1) return { label: 'Critical', variant: 'destructive' as const };
-    if (priority === 2) return { label: 'High', variant: 'destructive' as const };
-    if (priority === 3) return { label: 'Medium', variant: 'secondary' as const };
-    return null;
-  };
+  const markAllAsRead = async () => {
+    try {
+      const unreadIds = notifications
+        .filter(n => !n.is_read)
+        .map(n => n.id);
 
-  const getFilteredNotifications = () => {
-    switch (selectedTab) {
-      case 'unread':
-        return notifications.filter(n => !n.read_at);
-      case 'priority':
-        return getHighPriorityNotifications();
-      case 'civic':
-        return getNotificationsByCategory('civic');
-      case 'community':
-        return getNotificationsByCategory('community');
-      case 'jobs':
-        return getNotificationsByCategory('jobs');
-      case 'marketplace':
-        return getNotificationsByCategory('marketplace');
-      default:
-        return notifications;
+      if (unreadIds.length === 0) return;
+
+      const { error } = await supabase
+        .from('unified_notifications')
+        .update({ is_read: true })
+        .in('id', unreadIds);
+
+      if (error) {
+        console.error('Error marking all as read:', error);
+        return;
+      }
+
+      setNotifications(prev => 
+        prev.map(notif => ({ ...notif, is_read: true }))
+      );
+
+      toast({
+        title: "Success",
+        description: "All notifications marked as read"
+      });
+    } catch (error) {
+      console.error('Error marking all as read:', error);
     }
   };
 
-  const filteredNotifications = getFilteredNotifications();
-  const categoryUnreadCounts = {
-    civic: getNotificationsByCategory('civic').filter(n => !n.read_at).length,
-    community: getNotificationsByCategory('community').filter(n => !n.read_at).length,
-    jobs: getNotificationsByCategory('jobs').filter(n => !n.read_at).length,
-    marketplace: getNotificationsByCategory('marketplace').filter(n => !n.read_at).length,
-    priority: getHighPriorityNotifications().length,
+  const getNotificationIcon = (type: string, priority: string) => {
+    if (priority === 'urgent') return <AlertCircle className="h-4 w-4 text-destructive" />;
+    if (priority === 'high') return <AlertCircle className="h-4 w-4 text-orange-500" />;
+    if (type === 'system') return <Info className="h-4 w-4 text-blue-500" />;
+    return <Bell className="h-4 w-4 text-muted-foreground" />;
   };
+
+  const getPriorityColor = (priority: string) => {
+    switch (priority) {
+      case 'urgent': return 'destructive';
+      case 'high': return 'secondary';
+      case 'medium': return 'outline';
+      case 'low': return 'outline';
+      default: return 'outline';
+    }
+  };
+
+  const unreadCount = notifications.filter(n => !n.is_read).length;
+
+  if (isLoading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Bell className="h-5 w-5" />
+            Loading notifications...
+          </CardTitle>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
-    <NotificationErrorBoundary>
-      <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-4 w-4" />
-          {unreadCount > 0 && (
-            <Badge 
-              variant="destructive" 
-              className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
-            >
-              {unreadCount > 99 ? '99+' : unreadCount}
-            </Badge>
-          )}
-        </Button>
-      </DropdownMenuTrigger>
-      
-      <DropdownMenuContent align="end" className="w-96 max-h-[600px]">
-        <DropdownMenuLabel className="flex items-center justify-between py-3">
-          <span className="font-semibold">{t('dashboard.notifications')}</span>
-          <div className="flex gap-2">
-            {onPreferencesClick && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={onPreferencesClick}
-                className="h-6 px-2 text-xs"
-              >
-                <Settings className="h-3 w-3" />
-              </Button>
-            )}
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <Bell className="h-5 w-5" />
+            Notifications
             {unreadCount > 0 && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={markAllAsRead}
-                className="h-6 px-2 text-xs"
-              >
-                <CheckCheck className="h-3 w-3 mr-1" />
-                Mark all read
-              </Button>
+              <Badge variant="destructive" className="h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs">
+                {unreadCount}
+              </Badge>
             )}
-          </div>
-        </DropdownMenuLabel>
-        
-        <DropdownMenuSeparator />
-        
-        <div className="p-2">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-            <TabsList className="grid w-full grid-cols-3 text-xs">
-              <TabsTrigger value="all" className="text-xs">
-                All
-                {unreadCount > 0 && (
-                  <Badge variant="secondary" className="ml-1 h-4 w-4 text-xs p-0">
-                    {unreadCount}
-                  </Badge>
-                )}
-              </TabsTrigger>
-              <TabsTrigger value="unread" className="text-xs">
-                Unread
-                {unreadCount > 0 && (
-                  <Badge variant="destructive" className="ml-1 h-4 w-4 text-xs p-0">
-                    {unreadCount}
-                  </Badge>
-                )}
-              </TabsTrigger>
-              <TabsTrigger value="priority" className="text-xs">
-                Priority
-                {categoryUnreadCounts.priority > 0 && (
-                  <Badge variant="destructive" className="ml-1 h-4 w-4 text-xs p-0">
-                    {categoryUnreadCounts.priority}
-                  </Badge>
-                )}
-              </TabsTrigger>
-            </TabsList>
-
-            <div className="mt-2 flex gap-1 flex-wrap">
-              <Button
-                variant={selectedTab === 'civic' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSelectedTab('civic')}
-                className="text-xs h-6"
-              >
-                <Vote className="h-3 w-3 mr-1" />
-                Civic
-                {categoryUnreadCounts.civic > 0 && (
-                  <Badge variant="secondary" className="ml-1 h-3 w-3 text-xs p-0">
-                    {categoryUnreadCounts.civic}
-                  </Badge>
-                )}
-              </Button>
-              <Button
-                variant={selectedTab === 'community' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSelectedTab('community')}
-                className="text-xs h-6"
-              >
-                <Users className="h-3 w-3 mr-1" />
-                Community
-                {categoryUnreadCounts.community > 0 && (
-                  <Badge variant="secondary" className="ml-1 h-3 w-3 text-xs p-0">
-                    {categoryUnreadCounts.community}
-                  </Badge>
-                )}
-              </Button>
-              <Button
-                variant={selectedTab === 'jobs' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSelectedTab('jobs')}
-                className="text-xs h-6"
-              >
-                <Briefcase className="h-3 w-3 mr-1" />
-                Jobs
-                {categoryUnreadCounts.jobs > 0 && (
-                  <Badge variant="secondary" className="ml-1 h-3 w-3 text-xs p-0">
-                    {categoryUnreadCounts.jobs}
-                  </Badge>
-                )}
-              </Button>
-              <Button
-                variant={selectedTab === 'marketplace' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSelectedTab('marketplace')}
-                className="text-xs h-6"
-              >
-                <ShoppingCart className="h-3 w-3 mr-1" />
-                Market
-                {categoryUnreadCounts.marketplace > 0 && (
-                  <Badge variant="secondary" className="ml-1 h-3 w-3 text-xs p-0">
-                    {categoryUnreadCounts.marketplace}
-                  </Badge>
-                )}
-              </Button>
-            </div>
-          </Tabs>
+          </CardTitle>
+          {unreadCount > 0 && (
+            <Button variant="outline" size="sm" onClick={markAllAsRead}>
+              Mark All Read
+            </Button>
+          )}
         </div>
-
-        <DropdownMenuSeparator />
-        
-        <ScrollArea className="h-80">
-          {filteredNotifications.length === 0 ? (
-            <div className="p-4 text-center text-muted-foreground">
-              <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
-              <p className="text-sm">
-                {selectedTab === 'unread' ? 'No unread notifications' : 'No notifications yet'}
-              </p>
-            </div>
-          ) : (
-            filteredNotifications.map((notification) => {
-              const Icon = getNotificationIcon(notification.type, notification.source_module);
-              const iconColor = getNotificationColor(notification.priority, notification.category);
-              const priorityBadge = getPriorityBadge(notification.priority);
-              const isExpired = notification.expires_at && new Date(notification.expires_at) < new Date();
-              
-              return (
-                <DropdownMenuItem
+      </CardHeader>
+      
+      <CardContent>
+        {notifications.length === 0 ? (
+          <div className="text-center text-muted-foreground py-8">
+            <CheckCircle className="h-12 w-12 mx-auto mb-4 text-green-500" />
+            <p>No notifications</p>
+          </div>
+        ) : (
+          <ScrollArea className="h-96">
+            <div className="space-y-4">
+              {notifications.map((notification) => (
+                <div
                   key={notification.id}
-                  className={cn(
-                    "p-4 cursor-pointer block",
-                    !notification.read_at && "bg-primary/5",
-                    isExpired && "opacity-60"
-                  )}
-                  onClick={() => {
-                    if (!notification.read_at) {
-                      markAsRead(notification.id);
-                    }
-                    
-                    trackNotificationClick(notification.id, notification.type, notification.action_url);
-                    
-                    if (notification.action_url) {
-                      window.location.href = notification.action_url;
-                    }
-                  }}
+                  className={`p-4 rounded-lg border transition-colors ${
+                    notification.is_read ? 'bg-background' : 'bg-muted/50'
+                  }`}
                 >
-                  <div className="flex items-start gap-3 w-full">
-                    <div className={cn(
-                      "w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0",
-                      notification.priority <= 2 && "bg-red-100 dark:bg-red-900/20"
-                    )}>
-                      <Icon className={cn("h-4 w-4", iconColor)} />
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-1">
-                        <h4 className="font-medium text-sm truncate">
-                          {notification.title}
-                        </h4>
-                        <div className="flex items-center gap-1 flex-shrink-0">
-                          {priorityBadge && (
-                            <Badge variant={priorityBadge.variant} className="text-xs py-0 px-1">
-                              {priorityBadge.label}
-                            </Badge>
-                          )}
-                          {!notification.read_at && (
-                            <div className="w-2 h-2 bg-primary rounded-full" />
-                          )}
-                          {notification.action_url && (
-                            <ExternalLink className="h-3 w-3 text-muted-foreground" />
-                          )}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 flex-1">
+                      {getNotificationIcon(notification.notification_type, notification.priority)}
+                      
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-medium text-sm">{notification.title}</h4>
+                          <Badge 
+                            variant={getPriorityColor(notification.priority)}
+                            className="h-5 text-xs"
+                          >
+                            {notification.priority}
+                          </Badge>
                         </div>
-                      </div>
-                      
-                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
-                        {notification.body}
-                      </p>
-                      
-                      <div className="flex items-center justify-between mt-2">
-                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                          <Clock className="h-3 w-3" />
+                        
+                        <p className="text-sm text-muted-foreground">
+                          {notification.message}
+                        </p>
+                        
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
                           <span>
                             {formatDistanceToNow(new Date(notification.created_at), { addSuffix: true })}
                           </span>
-                          {notification.source_module !== 'system' && (
-                            <Badge variant="outline" className="text-xs py-0 px-1">
-                              {notification.source_module}
-                            </Badge>
-                          )}
+                          <span className="capitalize">
+                            {notification.notification_type.replace('_', ' ')}
+                          </span>
                         </div>
-                        
-                        {notification.requires_action && (
-                          <Badge variant="secondary" className="text-xs py-0">
-                            Action Required
-                          </Badge>
-                        )}
                       </div>
-
-                      {isExpired && (
-                        <div className="mt-1">
-                          <Badge variant="outline" className="text-xs py-0 text-muted-foreground">
-                            Expired
-                          </Badge>
-                        </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      {notification.action_url && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          asChild
+                        >
+                          <a 
+                            href={notification.action_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1"
+                          >
+                            <ExternalLink className="h-3 w-3" />
+                          </a>
+                        </Button>
+                      )}
+                      
+                      {!notification.is_read && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => markAsRead(notification.id)}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
                       )}
                     </div>
                   </div>
-                </DropdownMenuItem>
-              );
-            })
-          )}
-        </ScrollArea>
-        
-        {filteredNotifications.length > 0 && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="text-center p-2">
-              <Button variant="ghost" size="sm" className="w-full">
-                View all notifications
-              </Button>
-            </DropdownMenuItem>
-          </>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
         )}
-      </DropdownMenuContent>
-    </DropdownMenu>
-    </NotificationErrorBoundary>
+      </CardContent>
+    </Card>
   );
 };

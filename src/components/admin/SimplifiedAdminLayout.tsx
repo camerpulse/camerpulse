@@ -1,17 +1,17 @@
 import { Outlet } from 'react-router-dom';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { UnifiedAdminSidebar } from './UnifiedAdminSidebar';
+import { SimplifiedAdminSidebar } from './SimplifiedAdminSidebar';
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbLink, BreadcrumbSeparator, BreadcrumbPage } from '@/components/ui/breadcrumb';
 import { useLocation } from 'react-router-dom';
 
-export const UnifiedAdminLayout = () => {
+export const SimplifiedAdminLayout = () => {
   const location = useLocation();
   const pathSegments = location.pathname.split('/').filter(Boolean);
 
   return (
     <SidebarProvider collapsedWidth={56}>
       <div className="min-h-screen flex w-full">
-        <UnifiedAdminSidebar />
+        <SimplifiedAdminSidebar />
         
         <div className="flex-1 flex flex-col">
           {/* Header */}
@@ -53,7 +53,7 @@ export const UnifiedAdminLayout = () => {
 
             <div className="flex items-center gap-2">
               <div className="text-sm text-muted-foreground">
-                Unified Admin Dashboard
+                Admin Dashboard
               </div>
             </div>
           </header>

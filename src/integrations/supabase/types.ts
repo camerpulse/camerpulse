@@ -184,48 +184,6 @@ export type Database = {
         }
         Relationships: []
       }
-      admin_dashboard_modules: {
-        Row: {
-          created_at: string | null
-          description: string | null
-          display_name: string
-          display_order: number
-          icon: string | null
-          id: string
-          is_enabled: boolean
-          module_name: string
-          required_permissions: string[] | null
-          route_path: string
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          description?: string | null
-          display_name: string
-          display_order?: number
-          icon?: string | null
-          id?: string
-          is_enabled?: boolean
-          module_name: string
-          required_permissions?: string[] | null
-          route_path: string
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          description?: string | null
-          display_name?: string
-          display_order?: number
-          icon?: string | null
-          id?: string
-          is_enabled?: boolean
-          module_name?: string
-          required_permissions?: string[] | null
-          route_path?: string
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       advanced_sentiment_analysis: {
         Row: {
           analysis_metadata: Json | null
@@ -6232,53 +6190,6 @@ export type Database = {
         }
         Relationships: []
       }
-      cache_status_tracking: {
-        Row: {
-          cache_layer: string
-          completed_at: string | null
-          error_message: string | null
-          id: string
-          items_cleared: number | null
-          metadata: Json | null
-          operation_id: string | null
-          size_cleared_mb: number | null
-          started_at: string | null
-          status: string
-        }
-        Insert: {
-          cache_layer: string
-          completed_at?: string | null
-          error_message?: string | null
-          id?: string
-          items_cleared?: number | null
-          metadata?: Json | null
-          operation_id?: string | null
-          size_cleared_mb?: number | null
-          started_at?: string | null
-          status?: string
-        }
-        Update: {
-          cache_layer?: string
-          completed_at?: string | null
-          error_message?: string | null
-          id?: string
-          items_cleared?: number | null
-          metadata?: Json | null
-          operation_id?: string | null
-          size_cleared_mb?: number | null
-          started_at?: string | null
-          status?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "cache_status_tracking_operation_id_fkey"
-            columns: ["operation_id"]
-            isOneToOne: false
-            referencedRelation: "cache_flush_operations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       calendar_event_participants: {
         Row: {
           attendance_year: number
@@ -6743,57 +6654,6 @@ export type Database = {
           topic_text?: string
           trend_status?: string | null
           volume_score?: number | null
-        }
-        Relationships: []
-      }
-      camerpulse_module_registry: {
-        Row: {
-          component_type: string
-          created_at: string
-          error_count: number | null
-          file_path: string
-          health_status: string
-          id: string
-          last_error_at: string | null
-          last_health_check: string | null
-          metadata: Json | null
-          module_id: string
-          module_name: string
-          monitoring_enabled: boolean | null
-          route_path: string | null
-          updated_at: string
-        }
-        Insert: {
-          component_type?: string
-          created_at?: string
-          error_count?: number | null
-          file_path: string
-          health_status?: string
-          id?: string
-          last_error_at?: string | null
-          last_health_check?: string | null
-          metadata?: Json | null
-          module_id: string
-          module_name: string
-          monitoring_enabled?: boolean | null
-          route_path?: string | null
-          updated_at?: string
-        }
-        Update: {
-          component_type?: string
-          created_at?: string
-          error_count?: number | null
-          file_path?: string
-          health_status?: string
-          id?: string
-          last_error_at?: string | null
-          last_health_check?: string | null
-          metadata?: Json | null
-          module_id?: string
-          module_name?: string
-          monitoring_enabled?: boolean | null
-          route_path?: string | null
-          updated_at?: string
         }
         Relationships: []
       }
@@ -10606,47 +10466,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "claim_documents_claim_id_fkey"
-            columns: ["claim_id"]
-            isOneToOne: false
-            referencedRelation: "institution_claims"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      claim_notifications: {
-        Row: {
-          claim_id: string
-          created_at: string | null
-          id: string
-          is_read: boolean | null
-          message: string
-          notification_type: string
-          recipient_id: string
-          title: string
-        }
-        Insert: {
-          claim_id: string
-          created_at?: string | null
-          id?: string
-          is_read?: boolean | null
-          message: string
-          notification_type: string
-          recipient_id: string
-          title: string
-        }
-        Update: {
-          claim_id?: string
-          created_at?: string | null
-          id?: string
-          is_read?: boolean | null
-          message?: string
-          notification_type?: string
-          recipient_id?: string
-          title?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "claim_notifications_claim_id_fkey"
             columns: ["claim_id"]
             isOneToOne: false
             referencedRelation: "institution_claims"
@@ -26110,48 +25929,6 @@ export type Database = {
           },
         ]
       }
-      notification_templates: {
-        Row: {
-          channel: Database["public"]["Enums"]["notification_channel"]
-          content: string
-          created_at: string
-          id: string
-          is_active: boolean
-          is_system_template: boolean | null
-          subject: string | null
-          template_name: string
-          template_type: string | null
-          updated_at: string
-          variables: Json | null
-        }
-        Insert: {
-          channel: Database["public"]["Enums"]["notification_channel"]
-          content: string
-          created_at?: string
-          id?: string
-          is_active?: boolean
-          is_system_template?: boolean | null
-          subject?: string | null
-          template_name: string
-          template_type?: string | null
-          updated_at?: string
-          variables?: Json | null
-        }
-        Update: {
-          channel?: Database["public"]["Enums"]["notification_channel"]
-          content?: string
-          created_at?: string
-          id?: string
-          is_active?: boolean
-          is_system_template?: boolean | null
-          subject?: string | null
-          template_name?: string
-          template_type?: string | null
-          updated_at?: string
-          variables?: Json | null
-        }
-        Relationships: []
-      }
       notification_workflows: {
         Row: {
           actions: Json
@@ -35170,83 +34947,6 @@ export type Database = {
         }
         Relationships: []
       }
-      scheduled_notifications: {
-        Row: {
-          action_url: string | null
-          created_at: string | null
-          created_by: string | null
-          data: Json | null
-          error_message: string | null
-          icon: string | null
-          id: string
-          max_retries: number | null
-          message: string
-          notification_type: string
-          priority: string
-          retry_count: number | null
-          scheduled_for: string
-          sent_at: string | null
-          status: string
-          target_regions: string[] | null
-          template_id: string | null
-          title: string
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          action_url?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          data?: Json | null
-          error_message?: string | null
-          icon?: string | null
-          id?: string
-          max_retries?: number | null
-          message: string
-          notification_type: string
-          priority?: string
-          retry_count?: number | null
-          scheduled_for: string
-          sent_at?: string | null
-          status?: string
-          target_regions?: string[] | null
-          template_id?: string | null
-          title: string
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          action_url?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          data?: Json | null
-          error_message?: string | null
-          icon?: string | null
-          id?: string
-          max_retries?: number | null
-          message?: string
-          notification_type?: string
-          priority?: string
-          retry_count?: number | null
-          scheduled_for?: string
-          sent_at?: string | null
-          status?: string
-          target_regions?: string[] | null
-          template_id?: string | null
-          title?: string
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "scheduled_notifications_template_id_fkey"
-            columns: ["template_id"]
-            isOneToOne: false
-            referencedRelation: "notification_templates"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       scholarship_applications: {
         Row: {
           applicant_email: string
@@ -39153,6 +38853,51 @@ export type Database = {
           is_active?: boolean
           last_accessed?: string | null
           permissions?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      unified_notifications: {
+        Row: {
+          action_url: string | null
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_read: boolean
+          message: string
+          metadata: Json | null
+          notification_type: string
+          priority: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message: string
+          metadata?: Json | null
+          notification_type?: string
+          priority?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          metadata?: Json | null
+          notification_type?: string
+          priority?: string
+          title?: string
           updated_at?: string
           user_id?: string
         }
@@ -43324,51 +43069,6 @@ export type Database = {
           updated_at?: string
           user_id?: string
           webhook_secret?: string
-        }
-        Relationships: []
-      }
-      whatsapp_message_logs: {
-        Row: {
-          delivered_at: string | null
-          delivery_status: string | null
-          error_message: string | null
-          id: string
-          message_content: string | null
-          metadata: Json | null
-          phone_number: string
-          sendchamp_message_id: string | null
-          sent_at: string | null
-          status: string | null
-          template_name: string | null
-          user_id: string
-        }
-        Insert: {
-          delivered_at?: string | null
-          delivery_status?: string | null
-          error_message?: string | null
-          id?: string
-          message_content?: string | null
-          metadata?: Json | null
-          phone_number: string
-          sendchamp_message_id?: string | null
-          sent_at?: string | null
-          status?: string | null
-          template_name?: string | null
-          user_id: string
-        }
-        Update: {
-          delivered_at?: string | null
-          delivery_status?: string | null
-          error_message?: string | null
-          id?: string
-          message_content?: string | null
-          metadata?: Json | null
-          phone_number?: string
-          sendchamp_message_id?: string | null
-          sent_at?: string | null
-          status?: string | null
-          template_name?: string | null
-          user_id?: string
         }
         Relationships: []
       }
