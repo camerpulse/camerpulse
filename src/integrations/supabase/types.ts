@@ -40872,27 +40872,54 @@ export type Database = {
         Row: {
           channel: Database["public"]["Enums"]["notification_channel"]
           created_at: string
+          digest_time: string
+          email_enabled: boolean
+          email_frequency: string
           event_type: Database["public"]["Enums"]["notification_event_type"]
           id: string
+          in_app_enabled: boolean
           is_enabled: boolean
+          priority_threshold: number
+          push_enabled: boolean
+          quiet_hours_end: string
+          quiet_hours_start: string
+          sms_enabled: boolean
           updated_at: string
           user_id: string
         }
         Insert: {
           channel: Database["public"]["Enums"]["notification_channel"]
           created_at?: string
+          digest_time?: string
+          email_enabled?: boolean
+          email_frequency?: string
           event_type: Database["public"]["Enums"]["notification_event_type"]
           id?: string
+          in_app_enabled?: boolean
           is_enabled?: boolean
+          priority_threshold?: number
+          push_enabled?: boolean
+          quiet_hours_end?: string
+          quiet_hours_start?: string
+          sms_enabled?: boolean
           updated_at?: string
           user_id: string
         }
         Update: {
           channel?: Database["public"]["Enums"]["notification_channel"]
           created_at?: string
+          digest_time?: string
+          email_enabled?: boolean
+          email_frequency?: string
           event_type?: Database["public"]["Enums"]["notification_event_type"]
           id?: string
+          in_app_enabled?: boolean
           is_enabled?: boolean
+          priority_threshold?: number
+          push_enabled?: boolean
+          quiet_hours_end?: string
+          quiet_hours_start?: string
+          sms_enabled?: boolean
           updated_at?: string
           user_id?: string
         }
@@ -41390,6 +41417,36 @@ export type Database = {
           verification_type?: string | null
           website_url?: string | null
           work_experience?: Json | null
+        }
+        Relationships: []
+      }
+      user_push_tokens: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          platform: string
+          token: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          platform: string
+          token: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          platform?: string
+          token?: string
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

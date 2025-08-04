@@ -5,6 +5,34 @@ const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+
+// Rate limiting configuration
+const RATE_LIMITS = {
+  per_user_per_minute: 10,
+  per_ip_per_minute: 50,
+  per_user_per_hour: 100
+};
+
+// In-memory rate limiting (for production, use Redis)
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
+
+function checkRateLimit(key: string, limit: number, windowMs: number): boolean {
+  const now = Date.now();
+  const entry = rateLimitStore.get(key);
+  
+  if (!entry || now > entry.resetTime) {
+    rateLimitStore.set(key, { count: 1, resetTime: now + windowMs });
+    return true;
+  }
+  
+  if (entry.count >= limit) {
+    return false;
+  }
+  
+  entry.count++;
+  return true;
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -179,7 +207,7 @@ async function deliverNotification(notificationId: string, payload: Notification
       switch (channel) {
         case 'push':
           // Trigger push notification service
-          await supabase.functions.invoke('send-push-notification', {
+          await supabase.functions.invoke('push-notification-service', {
             body: {
               user_id: recipientId,
               title: payload.title,
@@ -193,15 +221,13 @@ async function deliverNotification(notificationId: string, payload: Notification
 
         case 'email':
           // Trigger email notification service
-          await supabase.functions.invoke('send-senator-notifications', {
+          await supabase.functions.invoke('email-notification-service', {
             body: {
-              type: 'general',
-              recipientEmail: recipientId, // This should be email, needs user lookup
-              data: {
-                title: payload.title,
-                message: payload.body,
-                actionUrl: payload.action_url,
-              }
+              user_id: recipientId,
+              subject: payload.title,
+              content: payload.body,
+              priority: payload.priority === 1 ? 'urgent' : payload.priority === 2 ? 'high' : 'medium',
+              variables: payload.data || {}
             }
           });
           await logDelivery(notificationId, channel, 'sent');
@@ -369,7 +395,36 @@ serve(async (req) => {
   }
 
   try {
+    // Get client IP for rate limiting
+    const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
+    
+    // Rate limiting checks
+    if (!checkRateLimit(`ip:${clientIP}`, RATE_LIMITS.per_ip_per_minute, 60000)) {
+      return new Response(JSON.stringify({ error: 'Rate limit exceeded for IP' }), {
+        status: 429,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders },
+      });
+    }
+
     const payload: NotificationPayload = await req.json();
+    
+    // Additional rate limiting by sender
+    if (payload.sender_id) {
+      const userKey = `user:${payload.sender_id}`;
+      if (!checkRateLimit(userKey, RATE_LIMITS.per_user_per_minute, 60000)) {
+        return new Response(JSON.stringify({ error: 'Rate limit exceeded for user' }), {
+          status: 429,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+      }
+      
+      if (!checkRateLimit(`${userKey}:hour`, RATE_LIMITS.per_user_per_hour, 3600000)) {
+        return new Response(JSON.stringify({ error: 'Hourly rate limit exceeded for user' }), {
+          status: 429,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders },
+        });
+      }
+    }
 
     console.log('Processing notification:', {
       type: payload.type,
