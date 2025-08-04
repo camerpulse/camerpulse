@@ -29,122 +29,120 @@ export default function NewFeed() {
   } = useFeedAlgorithm();
 
   return (
-    <CivicAuthenticatedLayout>
-      <div className="min-h-screen bg-background font-inter">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          {/* Header */}
-          <FeedHeader 
-            civicEventsActive={civicEventsActive}
-            onRefresh={refreshFeed}
-            loading={loading}
-          />
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+        {/* Header */}
+        <FeedHeader 
+          civicEventsActive={civicEventsActive}
+          onRefresh={refreshFeed}
+          loading={loading}
+        />
 
-          {/* Filters */}
-          <FeedFilters 
-            filters={filters}
-            onFiltersChange={setFilters}
-            userPreferences={userPreferences}
-            onPreferencesUpdate={updatePreferences}
-          />
+        {/* Filters */}
+        <FeedFilters 
+          filters={filters}
+          onFiltersChange={setFilters}
+          userPreferences={userPreferences}
+          onPreferencesUpdate={updatePreferences}
+        />
 
-          {/* Feed Tabs */}
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid w-full grid-cols-6 mb-6 bg-card font-inter">
-              <TabsTrigger value="all" className="text-sm font-medium">All</TabsTrigger>
-              <TabsTrigger value="civic" className="text-sm font-medium">Civic</TabsTrigger>
-              <TabsTrigger value="jobs" className="text-sm font-medium">Jobs</TabsTrigger>
-              <TabsTrigger value="artists" className="text-sm font-medium">Artists</TabsTrigger>
-              <TabsTrigger value="villages" className="text-sm font-medium">Villages</TabsTrigger>
-              <TabsTrigger value="marketplace" className="text-sm font-medium">Market</TabsTrigger>
-            </TabsList>
+        {/* Feed Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-6 mb-6 bg-card">
+            <TabsTrigger value="all" className="text-xs sm:text-sm font-medium">All</TabsTrigger>
+            <TabsTrigger value="civic" className="text-xs sm:text-sm font-medium">Civic</TabsTrigger>
+            <TabsTrigger value="jobs" className="text-xs sm:text-sm font-medium">Jobs</TabsTrigger>
+            <TabsTrigger value="artists" className="text-xs sm:text-sm font-medium">Artists</TabsTrigger>
+            <TabsTrigger value="villages" className="text-xs sm:text-sm font-medium">Villages</TabsTrigger>
+            <TabsTrigger value="marketplace" className="text-xs sm:text-sm font-medium">Market</TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="all">
-              <UnifiedFeedContent 
-                feedItems={feedItems}
-                contentType="all"
-                filters={filters}
-                loading={loading}
-                error={error}
-                hasNextPage={hasNextPage}
-                onLoadMore={loadMoreItems}
-                onRefresh={refreshFeed}
-              />
-            </TabsContent>
+          <TabsContent value="all">
+            <UnifiedFeedContent 
+              feedItems={feedItems}
+              contentType="all"
+              filters={filters}
+              loading={loading}
+              error={error}
+              hasNextPage={hasNextPage}
+              onLoadMore={loadMoreItems}
+              onRefresh={refreshFeed}
+            />
+          </TabsContent>
 
-            <TabsContent value="civic">
-              <UnifiedFeedContent 
-                feedItems={feedItems.filter(item => 
-                  item.content_type === 'pulse' || 
-                  item.content_type === 'political_update' ||
-                  item.content_type === 'petition'
-                )}
-                contentType="civic"
-                filters={filters}
-                loading={loading}
-                error={error}
-                hasNextPage={hasNextPage}
-                onLoadMore={loadMoreItems}
-                onRefresh={refreshFeed}
-              />
-            </TabsContent>
+          <TabsContent value="civic">
+            <UnifiedFeedContent 
+              feedItems={feedItems.filter(item => 
+                item.content_type === 'pulse' || 
+                item.content_type === 'political_update' ||
+                item.content_type === 'petition'
+              )}
+              contentType="civic"
+              filters={filters}
+              loading={loading}
+              error={error}
+              hasNextPage={hasNextPage}
+              onLoadMore={loadMoreItems}
+              onRefresh={refreshFeed}
+            />
+          </TabsContent>
 
-            <TabsContent value="jobs">
-              <UnifiedFeedContent 
-                feedItems={feedItems.filter(item => item.content_type === 'job')}
-                contentType="jobs"
-                filters={filters}
-                loading={loading}
-                error={error}
-                hasNextPage={hasNextPage}
-                onLoadMore={loadMoreItems}
-                onRefresh={refreshFeed}
-              />
-            </TabsContent>
+          <TabsContent value="jobs">
+            <UnifiedFeedContent 
+              feedItems={feedItems.filter(item => item.content_type === 'job')}
+              contentType="jobs"
+              filters={filters}
+              loading={loading}
+              error={error}
+              hasNextPage={hasNextPage}
+              onLoadMore={loadMoreItems}
+              onRefresh={refreshFeed}
+            />
+          </TabsContent>
 
-            <TabsContent value="artists">
-              <UnifiedFeedContent 
-                feedItems={feedItems.filter(item => item.content_type === 'artist_content')}
-                contentType="artists"
-                filters={filters}
-                loading={loading}
-                error={error}
-                hasNextPage={hasNextPage}
-                onLoadMore={loadMoreItems}
-                onRefresh={refreshFeed}
-              />
-            </TabsContent>
+          <TabsContent value="artists">
+            <UnifiedFeedContent 
+              feedItems={feedItems.filter(item => item.content_type === 'artist_content')}
+              contentType="artists"
+              filters={filters}
+              loading={loading}
+              error={error}
+              hasNextPage={hasNextPage}
+              onLoadMore={loadMoreItems}
+              onRefresh={refreshFeed}
+            />
+          </TabsContent>
 
-            <TabsContent value="villages">
-              <UnifiedFeedContent 
-                feedItems={feedItems.filter(item => item.content_type === 'village_update')}
-                contentType="villages"
-                filters={filters}
-                loading={loading}
-                error={error}
-                hasNextPage={hasNextPage}
-                onLoadMore={loadMoreItems}
-                onRefresh={refreshFeed}
-              />
-            </TabsContent>
+          <TabsContent value="villages">
+            <UnifiedFeedContent 
+              feedItems={feedItems.filter(item => item.content_type === 'village_update')}
+              contentType="villages"
+              filters={filters}
+              loading={loading}
+              error={error}
+              hasNextPage={hasNextPage}
+              onLoadMore={loadMoreItems}
+              onRefresh={refreshFeed}
+            />
+          </TabsContent>
 
-            <TabsContent value="marketplace">
-              <UnifiedFeedContent 
-                feedItems={feedItems.filter(item => 
-                  item.content_type === 'marketplace' ||
-                  item.content_type === 'business_listing'
-                )}
-                contentType="marketplace"
-                filters={filters}
-                loading={loading}
-                error={error}
-                hasNextPage={hasNextPage}
-                onLoadMore={loadMoreItems}
-                onRefresh={refreshFeed}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
+          <TabsContent value="marketplace">
+            <UnifiedFeedContent 
+              feedItems={feedItems.filter(item => 
+                item.content_type === 'marketplace' ||
+                item.content_type === 'business_listing'
+              )}
+              contentType="marketplace"
+              filters={filters}
+              loading={loading}
+              error={error}
+              hasNextPage={hasNextPage}
+              onLoadMore={loadMoreItems}
+              onRefresh={refreshFeed}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
-    </CivicAuthenticatedLayout>
+    </div>
   );
 }
