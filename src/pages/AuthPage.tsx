@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Package, QrCode } from 'lucide-react';
+import { Loader2, Globe, Vote } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AuthPage() {
@@ -69,9 +69,13 @@ export default function AuthPage() {
     }
 
     try {
+      const userType = formData.get('userType') as string;
       const { error } = await signUp(email, password, {
         emailRedirectTo: `${window.location.origin}/`,
-        data: { full_name: fullName }
+        data: { 
+          full_name: fullName,
+          user_type: userType
+        }
       });
       
       if (error) {
@@ -100,27 +104,27 @@ export default function AuthPage() {
       <div className="w-full max-w-md space-y-6">
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Package className="h-8 w-8 text-primary" />
-            <QrCode className="h-8 w-8 text-primary" />
+            <Globe className="h-8 w-8 text-primary" />
+            <Vote className="h-8 w-8 text-primary" />
           </div>
-          <h1 className="text-3xl font-bold">Label System</h1>
+          <h1 className="text-3xl font-bold">CamerPulse</h1>
           <p className="text-muted-foreground">
-            Professional label printing and management platform
+            Democracy in Your Hands
           </p>
         </div>
 
         <Card>
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl text-center">Welcome</CardTitle>
+            <CardTitle className="text-2xl text-center">Welcome to CamerPulse</CardTitle>
             <CardDescription className="text-center">
-              Sign in to your account or create a new one
+              Join Cameroon's premier civic engagement platform
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="signin">Sign In</TabsTrigger>
-                <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                <TabsTrigger value="signup">Join CamerPulse</TabsTrigger>
               </TabsList>
               
               <TabsContent value="signin" className="space-y-4">
@@ -184,6 +188,24 @@ export default function AuthPage() {
                       disabled={isSubmitting}
                     />
                   </div>
+                  
+                  <div className="space-y-2">
+                    <Label htmlFor="user-type">User Type</Label>
+                    <select 
+                      name="userType" 
+                      className="w-full p-2 border rounded-md bg-background"
+                      required
+                      disabled={isSubmitting}
+                    >
+                      <option value="">Select your role</option>
+                      <option value="citizen">Citizen</option>
+                      <option value="diaspora">Diaspora Member</option>
+                      <option value="government_official">Government Official</option>
+                      <option value="civil_society">Civil Society</option>
+                      <option value="student">Student</option>
+                    </select>
+                  </div>
+                  
                   <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
                     <Input
@@ -237,7 +259,7 @@ export default function AuthPage() {
                         Creating account...
                       </>
                     ) : (
-                      'Create Account'
+                      'Join CamerPulse'
                     )}
                   </Button>
                 </form>
