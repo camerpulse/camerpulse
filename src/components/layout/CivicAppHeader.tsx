@@ -24,7 +24,7 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { NotificationCenter } from '@/components/notifications/NotificationCenter';
+import { UnifiedNotificationCenter } from '@/components/notifications/UnifiedNotificationCenter';
 import { LanguageSwitcher } from '@/components/ui/language-switcher';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -132,7 +132,7 @@ export function CivicAppHeader() {
         </Button>
 
         {/* Notifications */}
-        <NotificationCenter />
+        <UnifiedNotificationCenter />
 
         {/* User Menu */}
         <DropdownMenu>
