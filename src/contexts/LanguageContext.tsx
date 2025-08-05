@@ -42,56 +42,38 @@ const translations = {
 };
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  
-  // Extract language from current path
+  const [language, setLanguageState] = useState<Language>('en');
+
+  // Simplified language handling without path extraction
   const extractLanguageFromPath = (path: string): { language: Language; cleanPath: string } => {
-    const segments = path.split('/').filter(Boolean);
-    
-    if (segments[0] === 'en' || segments[0] === 'fr') {
-      return {
-        language: segments[0] as Language,
-        cleanPath: '/' + segments.slice(1).join('/')
-      };
-    }
-    
-    // Default to English if no language prefix
+    // Always return current language and the clean path
     return {
-      language: 'en',
+      language,
       cleanPath: path
     };
   };
 
-  const { language: currentLanguage } = extractLanguageFromPath(location.pathname);
-  const [language, setLanguageState] = useState<Language>(currentLanguage);
-
-  // Update language when path changes
-  useEffect(() => {
-    const { language: pathLanguage } = extractLanguageFromPath(location.pathname);
-    setLanguageState(pathLanguage);
-  }, [location.pathname]);
-
   const setLanguage = (newLanguage: Language) => {
-    const { cleanPath } = extractLanguageFromPath(location.pathname);
-    const newPath = `/${newLanguage}${cleanPath === '/' ? '' : cleanPath}`;
-    navigate(newPath, { replace: true });
     setLanguageState(newLanguage);
+    // Store in localStorage for persistence
+    localStorage.setItem('camerpulse_language', newLanguage);
   };
+
+  // Load saved language preference on mount
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem('camerpulse_language') as Language;
+    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'fr')) {
+      setLanguageState(savedLanguage);
+    }
+  }, []);
 
   const t = (key: string): string => {
     return translations[language][key as keyof typeof translations['en']] || key;
   };
 
   const getLocalizedPath = (path: string): string => {
-    // If path already has language prefix, return as is
-    if (path.startsWith('/en/') || path.startsWith('/fr/')) {
-      return path;
-    }
-    
-    // Add current language prefix
-    const cleanPath = path.startsWith('/') ? path : `/${path}`;
-    return `/${language}${cleanPath === '/' ? '' : cleanPath}`;
+    // Return the path as-is since we're not using language prefixes in URLs
+    return path;
   };
 
   return (
