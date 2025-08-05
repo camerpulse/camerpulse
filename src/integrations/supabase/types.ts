@@ -13340,6 +13340,63 @@ export type Database = {
         }
         Relationships: []
       }
+      development_roadmap: {
+        Row: {
+          actual_effort_hours: number | null
+          allocated_budget: number | null
+          completion_percentage: number | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          end_date: string
+          id: string
+          planned_gaps: string[] | null
+          quarter: string | null
+          start_date: string
+          status: string | null
+          team_capacity_hours: number | null
+          theme: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          actual_effort_hours?: number | null
+          allocated_budget?: number | null
+          completion_percentage?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_date: string
+          id?: string
+          planned_gaps?: string[] | null
+          quarter?: string | null
+          start_date: string
+          status?: string | null
+          team_capacity_hours?: number | null
+          theme?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          actual_effort_hours?: number | null
+          allocated_budget?: number | null
+          completion_percentage?: number | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_date?: string
+          id?: string
+          planned_gaps?: string[] | null
+          quarter?: string | null
+          start_date?: string
+          status?: string | null
+          team_capacity_hours?: number | null
+          theme?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       device_tokens: {
         Row: {
           created_at: string
@@ -17293,6 +17350,99 @@ export type Database = {
             columns: ["category_id"]
             isOneToOne: false
             referencedRelation: "forum_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      gap_assessment_sessions: {
+        Row: {
+          assessment_date: string
+          could_have_count: number | null
+          created_at: string
+          description: string | null
+          facilitator_id: string | null
+          id: string
+          methodology: string | null
+          must_have_count: number | null
+          participants: string[] | null
+          scope_areas: string[] | null
+          should_have_count: number | null
+          status: string | null
+          title: string
+          total_gaps_identified: number | null
+          updated_at: string
+          wont_have_count: number | null
+        }
+        Insert: {
+          assessment_date?: string
+          could_have_count?: number | null
+          created_at?: string
+          description?: string | null
+          facilitator_id?: string | null
+          id?: string
+          methodology?: string | null
+          must_have_count?: number | null
+          participants?: string[] | null
+          scope_areas?: string[] | null
+          should_have_count?: number | null
+          status?: string | null
+          title: string
+          total_gaps_identified?: number | null
+          updated_at?: string
+          wont_have_count?: number | null
+        }
+        Update: {
+          assessment_date?: string
+          could_have_count?: number | null
+          created_at?: string
+          description?: string | null
+          facilitator_id?: string | null
+          id?: string
+          methodology?: string | null
+          must_have_count?: number | null
+          participants?: string[] | null
+          scope_areas?: string[] | null
+          should_have_count?: number | null
+          status?: string | null
+          title?: string
+          total_gaps_identified?: number | null
+          updated_at?: string
+          wont_have_count?: number | null
+        }
+        Relationships: []
+      }
+      gap_session_links: {
+        Row: {
+          created_at: string
+          gap_id: string | null
+          id: string
+          session_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          gap_id?: string | null
+          id?: string
+          session_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          gap_id?: string | null
+          id?: string
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gap_session_links_gap_id_fkey"
+            columns: ["gap_id"]
+            isOneToOne: false
+            referencedRelation: "platform_gaps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "gap_session_links_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "gap_assessment_sessions"
             referencedColumns: ["id"]
           },
         ]
@@ -27096,6 +27246,78 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      platform_gaps: {
+        Row: {
+          affected_modules: string[] | null
+          assigned_to: string | null
+          business_justification: string | null
+          calculated_priority_score: number | null
+          category: Database["public"]["Enums"]["gap_category"]
+          created_at: string
+          created_by: string | null
+          description: string | null
+          effort_score: number
+          estimated_effort_hours: number | null
+          feasibility_score: number
+          id: string
+          impact_score: number
+          priority_level: Database["public"]["Enums"]["priority_level"]
+          risk_score: number
+          stakeholders: string[] | null
+          status: Database["public"]["Enums"]["gap_status"]
+          target_completion_date: string | null
+          technical_notes: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          affected_modules?: string[] | null
+          assigned_to?: string | null
+          business_justification?: string | null
+          calculated_priority_score?: number | null
+          category: Database["public"]["Enums"]["gap_category"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          effort_score?: number
+          estimated_effort_hours?: number | null
+          feasibility_score?: number
+          id?: string
+          impact_score?: number
+          priority_level?: Database["public"]["Enums"]["priority_level"]
+          risk_score?: number
+          stakeholders?: string[] | null
+          status?: Database["public"]["Enums"]["gap_status"]
+          target_completion_date?: string | null
+          technical_notes?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          affected_modules?: string[] | null
+          assigned_to?: string | null
+          business_justification?: string | null
+          calculated_priority_score?: number | null
+          category?: Database["public"]["Enums"]["gap_category"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          effort_score?: number
+          estimated_effort_hours?: number | null
+          feasibility_score?: number
+          id?: string
+          impact_score?: number
+          priority_level?: Database["public"]["Enums"]["priority_level"]
+          risk_score?: number
+          stakeholders?: string[] | null
+          status?: Database["public"]["Enums"]["gap_status"]
+          target_completion_date?: string | null
+          technical_notes?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       platform_performance_data: {
         Row: {
@@ -43568,6 +43790,19 @@ export type Database = {
         | "private"
         | "ngo"
         | "other"
+      gap_category:
+        | "feature"
+        | "performance"
+        | "security"
+        | "compliance"
+        | "user_experience"
+        | "technical_debt"
+      gap_status:
+        | "identified"
+        | "in_progress"
+        | "completed"
+        | "deferred"
+        | "cancelled"
       grant_status: "draft" | "open" | "closed" | "suspended"
       hospital_ownership:
         | "government"
@@ -43722,6 +43957,7 @@ export type Database = {
         | "voter_turnout"
         | "civic_participation"
       pricing_type: "free" | "paid" | "streaming_only"
+      priority_level: "must_have" | "should_have" | "could_have" | "wont_have"
       product_type:
         | "song"
         | "album"
@@ -44246,6 +44482,21 @@ export const Constants = {
         "ngo",
         "other",
       ],
+      gap_category: [
+        "feature",
+        "performance",
+        "security",
+        "compliance",
+        "user_experience",
+        "technical_debt",
+      ],
+      gap_status: [
+        "identified",
+        "in_progress",
+        "completed",
+        "deferred",
+        "cancelled",
+      ],
       grant_status: ["draft", "open", "closed", "suspended"],
       hospital_ownership: [
         "government",
@@ -44418,6 +44669,7 @@ export const Constants = {
         "civic_participation",
       ],
       pricing_type: ["free", "paid", "streaming_only"],
+      priority_level: ["must_have", "should_have", "could_have", "wont_have"],
       product_type: [
         "song",
         "album",
