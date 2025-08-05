@@ -13,6 +13,8 @@ import JobBoard from '@/pages/jobs/JobBoard';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { PluginProvider } from '@/contexts/PluginContext';
+import Petitions from '@/pages/Petitions';
+import PetitionDetail from '@/pages/PetitionDetail';
 import { Toaster } from '@/components/ui/toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
@@ -92,10 +94,12 @@ function AppContent() {
             } />
             <Route path="/petitions" element={
               <CivicAuthenticatedLayout>
-                <div className="p-8 text-center">
-                  <h2 className="text-2xl font-bold mb-4">Petitions & Polls</h2>
-                  <p className="text-muted-foreground">Coming Soon - Civic engagement platform</p>
-                </div>
+                <Petitions />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/petitions/:id" element={
+              <CivicAuthenticatedLayout>
+                <PetitionDetail />
               </CivicAuthenticatedLayout>
             } />
             <Route path="/villages" element={
