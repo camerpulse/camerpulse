@@ -1,7 +1,7 @@
 import React from 'react';
 import { SidebarProvider } from '@/components/ui/sidebar';
-import { CivicAppSidebar } from '@/components/layout/CivicAppSidebar';
-import { CivicAppHeader } from '@/components/layout/CivicAppHeader';
+import { ModernSidebar } from '@/components/layout/ModernSidebar';
+import { ModernHeader } from '@/components/layout/ModernHeader';
 import { Toaster } from '@/components/ui/toaster';
 import { OnboardingManager } from '@/components/onboarding/OnboardingManager';
 import { MobileBottomNav } from '@/components/mobile/MobileBottomNav';
@@ -17,9 +17,9 @@ export function CivicAuthenticatedLayout({ children }: CivicAuthenticatedLayoutP
   return (
     <SidebarProvider>
       <div className="min-h-screen flex w-full bg-background">
-        {!isMobile && <CivicAppSidebar />}
+        {!isMobile && <ModernSidebar />}
         <div className="flex-1 flex flex-col">
-          <CivicAppHeader />
+          <ModernHeader />
           <main className={`flex-1 overflow-auto ${isMobile ? 'pb-16' : ''}`}>
             {children}
           </main>

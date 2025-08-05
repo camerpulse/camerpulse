@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HomePage } from '@/pages/HomePage';
 import AuthPage from '@/pages/AuthPage';
-import { CamerPulseDashboard } from '@/pages/CamerPulseDashboard';
-import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayout';
+import ModernDashboard from '@/pages/ModernDashboard';
+import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayoutClean';
 import { PoliticiansPage } from '@/pages/PoliticiansPage';
 import { PoliticalPartiesPage } from '@/pages/PoliticalPartiesPage';
 import { SettingsPage } from '@/pages/SettingsPage';
@@ -56,7 +56,7 @@ function AppContent() {
         <Route path="/" element={
           user ? (
             <CivicAuthenticatedLayout>
-              <CamerPulseDashboard />
+              <ModernDashboard />
             </CivicAuthenticatedLayout>
           ) : (
             <HomePage />
@@ -68,7 +68,7 @@ function AppContent() {
           <>
             <Route path="/dashboard" element={
               <CivicAuthenticatedLayout>
-                <CamerPulseDashboard />
+                <ModernDashboard />
               </CivicAuthenticatedLayout>
             } />
             <Route path="/feed" element={
