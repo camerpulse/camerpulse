@@ -1,34 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { SidebarProvider } from '@/components/ui/sidebar';
-import { AppSidebar } from '@/components/layout/AppSidebar';
-import { AppHeader } from '@/components/layout/AppHeader';
+import { HomePage } from '@/pages/HomePage';
+import AuthPage from '@/pages/AuthPage';
 import { CamerPulseDashboard } from '@/pages/CamerPulseDashboard';
 import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayoutClean';
-import { Dashboard } from '@/pages/Dashboard';
 import { PoliticiansPage } from '@/pages/PoliticiansPage';
 import { PoliticalPartiesPage } from '@/pages/PoliticalPartiesPage';
 import { PoliticalRankingsPage } from '@/pages/PoliticalRankingsPage';
-import { TrackingPage } from '@/components/LabelDesigner/TrackingPage';
 import { SettingsPage } from '@/pages/SettingsPage';
 import NewFeed from '@/pages/NewFeed';
-import AuthPage from '@/pages/AuthPage';
-import ShippingLabels from '@/pages/ShippingLabels';
-import { HomePage } from '@/pages/HomePage';
+import JobBoard from '@/pages/jobs/JobBoard';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { PluginProvider } from '@/contexts/PluginContext';
-// Plugin system removed in Phase 7 simplification
 import { Toaster } from '@/components/ui/toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
-
-// Admin imports
-import Admin from '@/pages/Admin';
-import AdminRoutes from '@/pages/AdminRoutes';
-import ModerationDashboard from '@/pages/ModerationDashboard';
-import MarketplaceAdmin from '@/pages/MarketplaceAdmin';
-import AdminDataImport from '@/pages/AdminDataImport';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,14 +26,16 @@ const queryClient = new QueryClient({
   },
 });
 
-
 function AppContent() {
   const { user, loading } = useAuth();
 
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+          <p className="text-muted-foreground">Loading CamerPulse...</p>
+        </div>
       </div>
     );
   }
@@ -54,31 +43,90 @@ function AppContent() {
   return (
     <>
       <Routes>
-        {/* Public Routes - No auth required */}
+        {/* Public Routes */}
         <Route path="/auth" element={<AuthPage />} />
         
-        {/* Default home page for non-authenticated users */}
-        {!user && <Route path="*" element={<HomePage />} />}
+        {/* Home Route - Shows different content based on auth */}
+        <Route path="/" element={
+          user ? (
+            <CivicAuthenticatedLayout>
+              <CamerPulseDashboard />
+            </CivicAuthenticatedLayout>
+          ) : (
+            <HomePage />
+          )
+        } />
         
         {/* Authenticated Routes */}
         {user && (
           <>
-            <Route path="/" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
-            <Route path="/dashboard" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
-            <Route path="/feed" element={<CivicAuthenticatedLayout><NewFeed /></CivicAuthenticatedLayout>} />
-            <Route path="/politicians" element={<CivicAuthenticatedLayout><PoliticiansPage /></CivicAuthenticatedLayout>} />
-            <Route path="/political-parties" element={<CivicAuthenticatedLayout><PoliticalPartiesPage /></CivicAuthenticatedLayout>} />
-            <Route path="/political-rankings" element={<CivicAuthenticatedLayout><PoliticalRankingsPage /></CivicAuthenticatedLayout>} />
-            <Route path="/villages" element={<CivicAuthenticatedLayout><div className="p-8 text-center">Villages - Coming Soon</div></CivicAuthenticatedLayout>} />
-            <Route path="/civic-education" element={<CivicAuthenticatedLayout><div className="p-8 text-center">Civic Education - Coming Soon</div></CivicAuthenticatedLayout>} />
-            <Route path="/transparency" element={<CivicAuthenticatedLayout><div className="p-8 text-center">Transparency - Coming Soon</div></CivicAuthenticatedLayout>} />
-            <Route path="/settings" element={<CivicAuthenticatedLayout><SettingsPage /></CivicAuthenticatedLayout>} />
+            <Route path="/dashboard" element={
+              <CivicAuthenticatedLayout>
+                <CamerPulseDashboard />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/feed" element={
+              <CivicAuthenticatedLayout>
+                <NewFeed />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/politicians" element={
+              <CivicAuthenticatedLayout>
+                <PoliticiansPage />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/political-parties" element={
+              <CivicAuthenticatedLayout>
+                <PoliticalPartiesPage />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/political-rankings" element={
+              <CivicAuthenticatedLayout>
+                <PoliticalRankingsPage />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/jobs" element={
+              <CivicAuthenticatedLayout>
+                <JobBoard />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/villages" element={
+              <CivicAuthenticatedLayout>
+                <div className="p-8 text-center">
+                  <h2 className="text-2xl font-bold mb-4">Villages & Communities</h2>
+                  <p className="text-muted-foreground">Coming Soon - Connect with your ancestral heritage</p>
+                </div>
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/civic-education" element={
+              <CivicAuthenticatedLayout>
+                <div className="p-8 text-center">
+                  <h2 className="text-2xl font-bold mb-4">Civic Education</h2>
+                  <p className="text-muted-foreground">Coming Soon - Learn about democratic processes</p>
+                </div>
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/transparency" element={
+              <CivicAuthenticatedLayout>
+                <div className="p-8 text-center">
+                  <h2 className="text-2xl font-bold mb-4">Transparency Portal</h2>
+                  <p className="text-muted-foreground">Coming Soon - Government transparency tracking</p>
+                </div>
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/settings" element={
+              <CivicAuthenticatedLayout>
+                <SettingsPage />
+              </CivicAuthenticatedLayout>
+            } />
           </>
         )}
+
+        {/* Catch all for non-authenticated users */}
+        {!user && <Route path="*" element={<HomePage />} />}
       </Routes>
       
-      {/* Toaster for public routes */}
-      {!user && <Toaster />}
+      <Toaster />
     </>
   );
 }
