@@ -16,6 +16,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -117,6 +118,7 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
   isModal = false,
   onClose
 }) => {
+  const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
   
@@ -312,7 +314,7 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
     }
 
     // Navigate to messenger with conversation starter
-    window.location.href = `/messenger?startConversation=${userId}`;
+    navigate(`/messenger?startConversation=${userId}`);
   };
 
   const handleShare = async () => {

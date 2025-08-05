@@ -3,7 +3,7 @@ import { SidebarProvider } from '@/components/ui/sidebar';
 import { CivicAppSidebar } from '@/components/layout/CivicAppSidebar';
 import { CivicAppHeader } from '@/components/layout/CivicAppHeader';
 import { Toaster } from '@/components/ui/toaster';
-import { UserOnboarding } from '@/components/onboarding/UserOnboarding';
+import { EnhancedOnboarding } from '@/components/onboarding/EnhancedOnboarding';
 import { MobileBottomNav } from '@/components/camerpulse/MobileBottomNav';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
 import { useAuth } from '@/contexts/AuthContext';
@@ -85,7 +85,7 @@ export function CivicAuthenticatedLayout({ children }: CivicAuthenticatedLayoutP
         )}
       </div>
       
-      <UserOnboarding
+      <EnhancedOnboarding
         isVisible={showOnboarding}
         onComplete={() => setShowOnboarding(false)}
         onDismiss={() => setShowOnboarding(false)}

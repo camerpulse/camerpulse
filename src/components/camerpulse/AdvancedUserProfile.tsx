@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -179,6 +180,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
   onClose,
   isModal = true
 }) => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
   
@@ -719,7 +721,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => window.location.href = `/messenger?startConversation=${userId}`}
+                  onClick={() => navigate(`/messenger?startConversation=${userId}`)}
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Message

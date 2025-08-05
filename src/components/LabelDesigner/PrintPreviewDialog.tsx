@@ -127,7 +127,7 @@ export const PrintPreviewDialog: React.FC<PrintPreviewDialogProps> = ({
     } else {
       // Fallback for browsers that don't support Web Share API
       try {
-        await navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(window.location.origin + window.location.pathname);
         toast({
           title: "Link copied",
           description: "Preview link copied to clipboard",

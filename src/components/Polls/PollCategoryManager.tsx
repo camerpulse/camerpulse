@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -32,6 +33,7 @@ interface Poll {
 }
 
 const PollCategoryManager: React.FC = () => {
+  const navigate = useNavigate();
   const [categories, setCategories] = useState<PollCategory[]>([]);
   const [polls, setPolls] = useState<Poll[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -290,7 +292,7 @@ const PollCategoryManager: React.FC = () => {
                 <Button 
                   className="w-full" 
                   size="sm"
-                  onClick={() => window.location.href = `/polls/${poll.id}`}
+                  onClick={() => navigate(`/polls/${poll.id}`)}
                 >
                   {isExpired(poll.ends_at) ? 'View Results' : 'Vote Now'}
                 </Button>
