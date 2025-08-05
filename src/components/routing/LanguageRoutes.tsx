@@ -2,38 +2,63 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { LegacyRedirectHandler } from './LegacyRedirectHandler';
 
-// Import existing pages
+// Import all existing pages from App.tsx
 import Index from '@/pages/Index';
+import Auth from '@/pages/Auth';
 import { AuthPage } from '@/pages/AuthPage';
-import Feed from '@/pages/Feed';
 import CivicFeed from '@/pages/CivicFeed';
+import PulseFeed from '@/pages/PulseFeed';
+import Feed from '@/pages/Feed';
 import Politicians from '@/pages/Politicians';
-import PoliticianDetailPage from '@/pages/PoliticianDetailPage';
-import SenatorsPage from '@/pages/SenatorsPage';
-import SenatorDetailPage from '@/pages/SenatorDetailPage';
-import MPsPage from '@/pages/MPsPage';
-import MPDetailPage from '@/pages/MPDetailPage';
-import MinistersPage from '@/pages/MinistersPage';
-import MinisterDetailPage from '@/pages/MinisterDetailPage';
+import Security from '@/pages/Security';
+import AdvancedDirectory from '@/pages/AdvancedDirectory';
+import MinistryProfile from '@/pages/MinistryProfile';
+import CouncilProfile from '@/pages/CouncilProfile';
+import Marketplace from '@/pages/Marketplace';
+import Polls from '@/pages/Polls';
+import PollsLandingPage from '@/pages/PollsLandingPage';
+import PollsDashboard from '@/pages/PollsDashboard';
+import PollsDiscovery from '@/pages/PollsDiscovery';
+import Donations from '@/pages/Donations';
+import Social from '@/pages/Social';
+import News from '@/pages/News';
+import Admin from '@/pages/Admin';
+import DesignSystemCore from '@/pages/DesignSystemCore';
+import CamerPulseAdminCore from '@/pages/CamerPulseAdminCore';
 import PoliticalParties from '@/pages/PoliticalParties';
 import PoliticalPartyDetail from '@/pages/PoliticalPartyDetail';
-import VillagesDirectory from '@/pages/VillagesDirectory';
-import VillageProfile from '@/pages/VillageProfile';
-import Marketplace from '@/pages/Marketplace';
-import JobBoard from '@/pages/JobBoard';
+import PoliticaAI from '@/pages/PoliticaAI';
+import CamerPulseIntelligence from '@/pages/CamerPulseIntelligence';
+import IntelligenceDashboard from '@/pages/IntelligenceDashboard';
+import IntelligenceDashboardDebug from '@/pages/IntelligenceDashboardDebug';
+import CivicPublicPortal from '@/pages/CivicPublicPortal';
+import ArtistLanding from '@/pages/ArtistLanding';
+import ArtistRegister from '@/pages/ArtistRegister';
+import ArtistDashboard from '@/pages/ArtistDashboard';
+import Officials from '@/pages/Officials';
+import Judiciary from '@/pages/Judiciary';
 import MessengerPage from '@/pages/MessengerPage';
 import NotificationSettingsPage from '@/pages/NotificationSettingsPage';
-import ProfilePage from '@/pages/ProfilePage';
+import { ProfilePage } from '@/pages/profile/ProfilePage';
 import ProfileSlugPage from '@/pages/ProfileSlugPage';
 import AdminDashboard from '@/pages/AdminDashboard';
-import Admin from '@/pages/Admin';
-import PollsLandingPage from '@/pages/PollsLandingPage';
-import PollsDiscovery from '@/pages/PollsDiscovery';
+import AdminDataImport from '@/pages/AdminDataImport';
+import AuditRegistryPage from '@/pages/AuditRegistryPage';
+import SenatorsPage from '@/pages/Senators';
+import { SenatorDetailPage } from '@/pages/SenatorDetailPage';
+import MPsPage from '@/pages/MPsPage';
+import { MPDetailPage } from '@/pages/MPDetailPage';
+import MinistersPage from '@/pages/MinistersPage';
+import { MinisterDetailPage } from '@/pages/MinisterDetailPage';
+import { PoliticianDetailPage } from '@/pages/PoliticianDetailPage';
+import VillagesDirectory from '@/pages/VillagesDirectory';
+import VillageProfile from '@/pages/VillageProfile';
+import JobBoard from '@/pages/jobs/JobBoard';
 import PollResultsPage from '@/pages/PollResultsPage';
 import PollEmbedViewerPage from '@/pages/PollEmbedViewerPage';
 import PollEmbedGeneratorPage from '@/pages/PollEmbedGeneratorPage';
 
-// Import components that need to be created
+// Import new pages
 import CivicDashboard from '@/pages/CivicDashboard';
 import PetitionsPage from '@/pages/PetitionsPage';
 import PetitionDetailPage from '@/pages/PetitionDetailPage';
@@ -146,6 +171,34 @@ const LanguageRoutesInner: React.FC = () => {
       <Route path="admin/dashboard" element={<AdminDashboard />} />
       <Route path="admin/users" element={<AdminDashboard />} />
       <Route path="admin/content" element={<AdminDashboard />} />
+      <Route path="admin/data-import" element={<AdminDataImport />} />
+      <Route path="admin/design-core" element={<DesignSystemCore />} />
+      <Route path="admin/core" element={<CamerPulseAdminCore />} />
+      
+      {/* Additional routes from original App.tsx */}
+      <Route path="security" element={<Security />} />
+      <Route path="donations" element={<Donations />} />
+      <Route path="social" element={<Social />} />
+      <Route path="news" element={<News />} />
+      <Route path="pulse-feed" element={<PulseFeed />} />
+      <Route path="politica-ai" element={<PoliticaAI />} />
+      <Route path="intelligence" element={<CamerPulseIntelligence />} />
+      <Route path="intelligence/dashboard" element={<IntelligenceDashboard />} />
+      <Route path="intelligence/debug" element={<IntelligenceDashboardDebug />} />
+      <Route path="civic-portal" element={<CivicPublicPortal />} />
+      <Route path="artist-landing" element={<ArtistLanding />} />
+      <Route path="artist-register" element={<ArtistRegister />} />
+      <Route path="artist-dashboard" element={<ArtistDashboard />} />
+      <Route path="officials" element={<Officials />} />
+      <Route path="judiciary" element={<Judiciary />} />
+      <Route path="audit-registry" element={<AuditRegistryPage />} />
+      <Route path="advanced-directory" element={<AdvancedDirectory />} />
+      <Route path="ministry/:id" element={<MinistryProfile />} />
+      <Route path="council/:id" element={<CouncilProfile />} />
+      <Route path="dashboard/polls" element={<PollsDashboard />} />
+      
+      {/* Fallback for 404 */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

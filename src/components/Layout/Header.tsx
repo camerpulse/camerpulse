@@ -63,31 +63,34 @@ export const Header = () => {
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center space-x-1">
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/diaspora-connect">DiasporaConnect</Link>
+              <Link to="/en/civic-dashboard">Dashboard</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/polls">Polls</Link>
+              <Link to="/en/petitions">Petitions</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/politicians">Politicians</Link>
+              <Link to="/en/polls">Polls</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/senators">Senators</Link>
+              <Link to="/en/politicians">Politicians</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/legislation">Legislation</Link>
+              <Link to="/en/senators">Senators</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/judiciary">Judiciary</Link>
+              <Link to="/en/villages">Villages</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/messenger">Messenger</Link>
+              <Link to="/en/marketplace">Marketplace</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/analytics">Analytics</Link>
+              <Link to="/en/jobs">Jobs</Link>
             </Button>
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
-              <Link to="/schools">Services</Link>
+              <Link to="/en/judiciary">Judiciary</Link>
+            </Button>
+            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+              <Link to="/en/messages">Messenger</Link>
             </Button>
           </nav>
 
@@ -130,13 +133,13 @@ export const Header = () => {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <Link to="/social" className="cursor-pointer">
+                    <Link to="/en/profile" className="cursor-pointer">
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to="/messenger" className="cursor-pointer">
+                    <Link to="/en/messages" className="cursor-pointer">
                       <MessageSquare className="mr-2 h-4 w-4" />
                       Messenger
                     </Link>
@@ -155,10 +158,10 @@ export const Header = () => {
             ) : (
               <div className="flex items-center gap-2">
                 <Button asChild variant="ghost" size="sm" className="text-foreground hover:bg-primary/10">
-                  <Link to="/auth">Sign In</Link>
+                  <Link to="/en/auth">Sign In</Link>
                 </Button>
                 <Button asChild size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
-                  <Link to="/auth">Sign Up</Link>
+                  <Link to="/en/auth">Sign Up</Link>
                 </Button>
               </div>
             )}
@@ -180,31 +183,34 @@ export const Header = () => {
           <nav className="lg:hidden mt-4 pb-4 border-t border-border/20">
             <div className="grid grid-cols-1 gap-2 mt-4">
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/diaspora-connect" onClick={() => setMobileMenuOpen(false)}>🌍 DiasporaConnect</Link>
+                <Link to="/en/civic-dashboard" onClick={() => setMobileMenuOpen(false)}>📊 Dashboard</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Polls</Link>
+                <Link to="/en/petitions" onClick={() => setMobileMenuOpen(false)}>📝 Petitions</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
+                <Link to="/en/polls" onClick={() => setMobileMenuOpen(false)}>🗳️ Polls</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/senators" onClick={() => setMobileMenuOpen(false)}>🏛️ Senators</Link>
+                <Link to="/en/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/legislation" onClick={() => setMobileMenuOpen(false)}>📜 Legislation</Link>
+                <Link to="/en/senators" onClick={() => setMobileMenuOpen(false)}>🏛️ Senators</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/judiciary" onClick={() => setMobileMenuOpen(false)}>⚖️ Judiciary</Link>
+                <Link to="/en/villages" onClick={() => setMobileMenuOpen(false)}>🏘️ Villages</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/messenger" onClick={() => setMobileMenuOpen(false)}>💬 Messenger</Link>
+                <Link to="/en/marketplace" onClick={() => setMobileMenuOpen(false)}>🛒 Marketplace</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/analytics" onClick={() => setMobileMenuOpen(false)}>📊 Analytics</Link>
+                <Link to="/en/jobs" onClick={() => setMobileMenuOpen(false)}>💼 Jobs</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
-                <Link to="/schools" onClick={() => setMobileMenuOpen(false)}>🏫 Services</Link>
+                <Link to="/en/judiciary" onClick={() => setMobileMenuOpen(false)}>⚖️ Judiciary</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
+                <Link to="/en/messages" onClick={() => setMobileMenuOpen(false)}>💬 Messenger</Link>
               </Button>
             </div>
           </nav>
