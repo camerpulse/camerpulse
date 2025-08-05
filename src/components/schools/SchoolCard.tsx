@@ -250,7 +250,10 @@ export function SchoolCard({ school, onUpdate }: SchoolCardProps) {
               variant="outline" 
               size="sm" 
               className="flex-1"
-              onClick={() => window.location.href = URLBuilder.institutions.schools.detail(school)}
+              onClick={() => {
+                const url = URLBuilder.institutions.schools.detail(school);
+                window.location.href = url;
+              }}
             >
               <Eye className="h-3 w-3 mr-1" />
               View Details

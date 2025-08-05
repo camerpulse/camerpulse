@@ -132,7 +132,10 @@ export function HospitalCard({ hospital, onViewDetails, onRate }: HospitalCardPr
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={() => window.location.href = URLBuilder.institutions.hospitals.detail(hospital)}
+            onClick={() => {
+              const url = URLBuilder.institutions.hospitals.detail(hospital);
+              window.location.href = url;
+            }}
             className="flex-1"
           >
             View Details
