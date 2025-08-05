@@ -7,45 +7,45 @@
   :root {
     /* === CamerPulse Design System v2.0 === */
     
-    /* Brand Colors - Cameroon Flag Inspired */
-    --primary: 140 84% 32%;           /* Cameroon Forest Green */
+    /* Brand Colors - Modern CamerPulse Theme */
+    --primary: 258 85% 55%;           /* Royal Purple */
     --primary-foreground: 0 0% 100%;  /* Pure White */
-    --primary-50: 140 84% 96%;        /* Lightest green tint */
-    --primary-100: 140 84% 91%;       /* Very light green */
-    --primary-200: 140 84% 82%;       /* Light green */
-    --primary-300: 140 84% 73%;       /* Medium-light green */
-    --primary-400: 140 84% 52%;       /* Medium green */
-    --primary-500: 140 84% 32%;       /* Base primary */
-    --primary-600: 140 84% 28%;       /* Dark green */
-    --primary-700: 140 84% 24%;       /* Darker green */
-    --primary-800: 140 84% 20%;       /* Very dark green */
-    --primary-900: 140 84% 16%;       /* Darkest green */
+    --primary-50: 258 85% 96%;        /* Lightest purple tint */
+    --primary-100: 258 85% 91%;       /* Very light purple */
+    --primary-200: 258 85% 82%;       /* Light purple */
+    --primary-300: 258 85% 73%;       /* Medium-light purple */
+    --primary-400: 258 85% 64%;       /* Medium purple */
+    --primary-500: 258 85% 55%;       /* Base primary */
+    --primary-600: 258 85% 46%;       /* Dark purple */
+    --primary-700: 258 85% 37%;       /* Darker purple */
+    --primary-800: 258 85% 28%;       /* Very dark purple */
+    --primary-900: 258 85% 19%;       /* Darkest purple */
     
-    --secondary: 45 100% 60%;         /* Vibrant Golden Yellow */
-    --secondary-foreground: 220 26% 14%; /* Dark text for contrast */
-    --secondary-50: 45 100% 97%;      /* Lightest yellow tint */
-    --secondary-100: 45 100% 93%;     /* Very light yellow */
-    --secondary-200: 45 100% 85%;     /* Light yellow */
-    --secondary-300: 45 100% 77%;     /* Medium-light yellow */
-    --secondary-400: 45 100% 68%;     /* Medium yellow */
-    --secondary-500: 45 100% 60%;     /* Base secondary */
-    --secondary-600: 45 100% 52%;     /* Dark yellow */
-    --secondary-700: 45 90% 44%;      /* Darker yellow */
-    --secondary-800: 45 80% 36%;      /* Very dark yellow */
-    --secondary-900: 45 70% 28%;      /* Darkest yellow */
+    --secondary: 195 100% 55%;        /* Modern Cyan */
+    --secondary-foreground: 0 0% 100%; /* White text for contrast */
+    --secondary-50: 195 100% 96%;     /* Lightest cyan tint */
+    --secondary-100: 195 100% 91%;    /* Very light cyan */
+    --secondary-200: 195 100% 82%;    /* Light cyan */
+    --secondary-300: 195 100% 73%;    /* Medium-light cyan */
+    --secondary-400: 195 100% 64%;    /* Medium cyan */
+    --secondary-500: 195 100% 55%;    /* Base secondary */
+    --secondary-600: 195 100% 46%;    /* Dark cyan */
+    --secondary-700: 195 90% 37%;     /* Darker cyan */
+    --secondary-800: 195 80% 28%;     /* Very dark cyan */
+    --secondary-900: 195 70% 19%;     /* Darkest cyan */
     
-    --accent: 0 84% 55%;              /* Cameroon Red */
+    --accent: 25 95% 58%;             /* Vibrant Orange */
     --accent-foreground: 0 0% 100%;   /* White text */
-    --accent-50: 0 84% 97%;           /* Lightest red tint */
-    --accent-100: 0 84% 93%;          /* Very light red */
-    --accent-200: 0 84% 85%;          /* Light red */
-    --accent-300: 0 84% 77%;          /* Medium-light red */
-    --accent-400: 0 84% 66%;          /* Medium red */
-    --accent-500: 0 84% 55%;          /* Base accent */
-    --accent-600: 0 84% 47%;          /* Dark red */
-    --accent-700: 0 84% 39%;          /* Darker red */
-    --accent-800: 0 84% 31%;          /* Very dark red */
-    --accent-900: 0 84% 23%;          /* Darkest red */
+    --accent-50: 25 95% 96%;          /* Lightest orange tint */
+    --accent-100: 25 95% 91%;         /* Very light orange */
+    --accent-200: 25 95% 82%;         /* Light orange */
+    --accent-300: 25 95% 73%;         /* Medium-light orange */
+    --accent-400: 25 95% 66%;         /* Medium orange */
+    --accent-500: 25 95% 58%;         /* Base accent */
+    --accent-600: 25 95% 50%;         /* Dark orange */
+    --accent-700: 25 85% 42%;         /* Darker orange */
+    --accent-800: 25 75% 34%;         /* Very dark orange */
+    --accent-900: 25 65% 26%;         /* Darkest orange */
     
     /* Neutral Scale */
     --background: 0 0% 100%;          /* Pure White */
