@@ -180,6 +180,7 @@ import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PluginProvider } from "./contexts/PluginContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
@@ -193,9 +194,10 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <PluginProvider>
-          <TooltipProvider>
-            <PanAfricaProvider>
-              <MobileProvider>
+          <LanguageProvider>
+            <TooltipProvider>
+              <PanAfricaProvider>
+                <MobileProvider>
                 <BrowserRouter>
                   <Toaster />
                   <Sonner />
@@ -424,8 +426,9 @@ const App = () => {
               </MobileProvider>
             </PanAfricaProvider>
           </TooltipProvider>
-        </PluginProvider>
-      </AuthProvider>
+        </LanguageProvider>
+      </PluginProvider>
+    </AuthProvider>
     </QueryClientProvider>
   );
 };
