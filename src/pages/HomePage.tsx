@@ -15,54 +15,54 @@ import {
   TrendingUp,
   MessageSquare,
   ArrowRight,
-  ChevronRight,
-  Star,
   CheckCircle,
   Activity,
-  Eye
+  Eye,
+  Star,
+  Zap
 } from 'lucide-react';
 
 export function HomePage() {
   const features = [
     { 
-      title: 'Politicians', 
-      description: 'Complete profiles, track records, and transparency scores',
+      title: 'Civic Engagement', 
+      description: 'Participate in democracy through petitions, polls, and public discourse',
+      icon: Vote, 
+      link: '/auth',
+      count: 'Join Now',
+      color: 'text-cm-green'
+    },
+    { 
+      title: 'Political Transparency', 
+      description: 'Track politicians, parties, and government accountability in real-time',
       icon: Users, 
-      link: '/politicians',
-      count: '540+',
-      color: 'text-primary'
+      link: '/auth',
+      count: '540+ Tracked',
+      color: 'text-cm-red'
     },
     { 
-      title: 'Political Parties', 
-      description: 'Party manifestos, leadership, and policy positions',
-      icon: Building2, 
-      link: '/political-parties',
-      count: '25+',
-      color: 'text-accent'
-    },
-    { 
-      title: 'Villages & Communities', 
-      description: 'Connect with your roots and local governance',
+      title: 'Village Heritage', 
+      description: 'Discover your roots and connect with your ancestral communities',
       icon: MapPin, 
-      link: '/villages',
-      count: '2.8K+',
-      color: 'text-secondary'
+      link: '/auth',
+      count: '15K+ Villages',
+      color: 'text-cm-yellow'
     },
     { 
       title: 'Civic Education', 
-      description: 'Learn about democracy, rights, and civic duties',
+      description: 'Learn about your rights, constitution, and democratic processes',
       icon: BookOpen, 
-      link: '/civic-education',
-      count: 'Free',
-      color: 'text-cm-green'
+      link: '/auth',
+      count: 'Free Access',
+      color: 'text-primary'
     }
   ];
 
   const stats = [
-    { label: 'Active Citizens', value: '125K+', icon: Users, color: 'text-primary' },
-    { label: 'Villages Mapped', value: '2.8K+', icon: MapPin, color: 'text-secondary' },
-    { label: 'Politicians Tracked', value: '540+', icon: Building2, color: 'text-accent' },
-    { label: 'Transparency Reports', value: '15K+', icon: Eye, color: 'text-cm-green' }
+    { label: 'Active Citizens', value: '2.5M+', icon: Users, color: 'text-cm-green' },
+    { label: 'Villages Mapped', value: '15.8K+', icon: MapPin, color: 'text-cm-yellow' },
+    { label: 'Politicians Tracked', value: '540+', icon: Building2, color: 'text-cm-red' },
+    { label: 'Platform Uptime', value: '99.9%', icon: Activity, color: 'text-primary' }
   ];
 
   const benefits = [
@@ -77,16 +77,16 @@ export function HomePage() {
       icon: CheckCircle
     },
     {
-      title: 'Civic Empowerment',
-      description: 'Tools and education to actively participate in democratic processes',
-      icon: Vote
+      title: 'Heritage Connection',
+      description: 'Discover your village heritage and connect with your roots',
+      icon: Heart
     }
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Modern Header */}
-      <header className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-md">
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur-md">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center gap-3">
@@ -95,23 +95,15 @@ export function HomePage() {
               </div>
               <div>
                 <h1 className="text-2xl font-bold text-foreground">CamerPulse</h1>
-                <p className="text-xs text-muted-foreground">Civic Transparency Platform</p>
+                <p className="text-xs text-muted-foreground">Democratic Transparency Platform</p>
               </div>
             </Link>
             
-            <nav className="hidden md:flex items-center gap-8">
-              <Link to="/politicians" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-                Politicians
-              </Link>
-              <Link to="/political-parties" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-                Parties
-              </Link>
-              <Link to="/villages" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-                Villages
-              </Link>
-              <Link to="/civic-education" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
-                Learn
-              </Link>
+            <nav className="hidden md:flex items-center gap-6">
+              <span className="text-sm text-muted-foreground">Transparency</span>
+              <span className="text-sm text-muted-foreground">Heritage</span>
+              <span className="text-sm text-muted-foreground">Education</span>
+              <span className="text-sm text-muted-foreground">Democracy</span>
             </nav>
             
             <Link to="/auth">
@@ -126,24 +118,32 @@ export function HomePage() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-background via-primary/5 to-secondary/5" />
+        <section className="relative py-20 md:py-32 overflow-hidden">
+          {/* Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-primary/5">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_50%,_hsl(var(--cm-green)/_0.1)_0%,_transparent_40%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,_hsl(var(--cm-red)/_0.1)_0%,_transparent_40%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_80%,_hsl(var(--cm-yellow)/_0.1)_0%,_transparent_40%)]" />
+          </div>
+          
           <div className="relative container mx-auto px-4">
-            <div className="text-center max-w-4xl mx-auto">
-              <Badge variant="outline" className="mb-8 px-6 py-2 border-primary/20 text-primary">
-                <Heart className="h-4 w-4 mr-2" />
-                Empowering Democracy in Cameroon
+            <div className="text-center max-w-5xl mx-auto">
+              <Badge className="mb-8 bg-gradient-flag text-white border-0 px-6 py-3 text-sm font-medium">
+                <Star className="w-4 h-4 mr-2" />
+                CamerPulse — Democratic Transparency Platform 🇨🇲
               </Badge>
               
-              <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8">
-                <span className="text-gradient-patriotic">Transparent</span>
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8">
+                <span className="text-cm-green">Transparent</span>{' '}
+                <span className="text-cm-red">Democracy</span>
                 <br />
-                <span className="text-foreground">Governance</span>
+                <span className="text-foreground">for All</span>{' '}
+                <span className="text-cm-yellow">Cameroonians</span>
               </h1>
               
-              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-                Your comprehensive platform for political transparency, civic engagement, 
-                and democratic participation across Cameroon.
+              <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-4xl mx-auto leading-relaxed">
+                Your comprehensive platform for civic engagement, political transparency, 
+                and community connection. Track leaders, participate in democracy, and discover your heritage.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
@@ -153,17 +153,19 @@ export function HomePage() {
                     Join the Movement
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="px-8 py-4 text-lg border-primary/20 hover:bg-primary/5">
-                  <Eye className="h-5 w-5 mr-2" />
-                  Explore Platform
-                </Button>
+                <Link to="/auth">
+                  <Button size="lg" variant="outline" className="px-8 py-4 text-lg border-primary/20 hover:bg-primary/5">
+                    <Eye className="h-5 w-5 mr-2" />
+                    Explore Platform
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 bg-muted/30">
+        <section className="py-16 bg-muted/20">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
               {stats.map((stat, index) => (
@@ -211,8 +213,8 @@ export function HomePage() {
                       <CardContent className="text-center px-6 pb-8">
                         <p className="text-muted-foreground mb-6 leading-relaxed">{feature.description}</p>
                         <div className="flex items-center justify-center text-primary group-hover:translate-x-2 transition-transform duration-300">
-                          <span className="text-sm font-medium">Explore</span>
-                          <ChevronRight className="h-4 w-4 ml-1" />
+                          <span className="text-sm font-medium">Get Started</span>
+                          <ArrowRight className="h-4 w-4 ml-1" />
                         </div>
                       </CardContent>
                     </div>
@@ -224,7 +226,7 @@ export function HomePage() {
         </section>
 
         {/* Benefits Section */}
-        <section className="py-24 bg-muted/30">
+        <section className="py-24 bg-muted/20">
           <div className="container mx-auto px-4">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
@@ -251,7 +253,7 @@ export function HomePage() {
           </div>
         </section>
 
-        {/* CTA Section */}
+        {/* Final CTA Section */}
         <section className="py-24 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-patriotic" />
           <div className="relative container mx-auto px-4 text-center">
@@ -259,13 +261,13 @@ export function HomePage() {
               Ready to Make a Difference?
             </h2>
             <p className="text-xl text-white/90 mb-12 max-w-3xl mx-auto">
-              Join thousands of Cameroonians building a more transparent and accountable democracy
+              Join millions of Cameroonians building a more transparent, accountable, and connected democracy
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link to="/auth">
                 <Button size="lg" variant="secondary" className="px-8 py-4 text-lg bg-white text-primary hover:bg-white/90 hover:shadow-xl transition-all duration-300">
                   <Users className="h-5 w-5 mr-2" />
-                  Create Account
+                  Create Free Account
                 </Button>
               </Link>
               <Button size="lg" variant="ghost" className="px-8 py-4 text-lg text-white hover:bg-white/10 border border-white/20">
@@ -277,7 +279,7 @@ export function HomePage() {
         </section>
       </main>
 
-      {/* Modern Footer */}
+      {/* Footer */}
       <footer className="border-t bg-card/50 backdrop-blur-sm py-16">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
@@ -301,20 +303,20 @@ export function HomePage() {
             <div>
               <h4 className="font-semibold mb-6 text-foreground">Platform</h4>
               <ul className="space-y-3 text-sm">
-                <li><Link to="/politicians" className="text-muted-foreground hover:text-primary transition-colors">Politicians</Link></li>
-                <li><Link to="/political-parties" className="text-muted-foreground hover:text-primary transition-colors">Political Parties</Link></li>
-                <li><Link to="/villages" className="text-muted-foreground hover:text-primary transition-colors">Villages</Link></li>
-                <li><Link to="/civic-education" className="text-muted-foreground hover:text-primary transition-colors">Education</Link></li>
+                <li><Link to="/auth" className="text-muted-foreground hover:text-primary transition-colors">Join Platform</Link></li>
+                <li><span className="text-muted-foreground">Political Transparency</span></li>
+                <li><span className="text-muted-foreground">Village Heritage</span></li>
+                <li><span className="text-muted-foreground">Civic Education</span></li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-semibold mb-6 text-foreground">Support</h4>
               <ul className="space-y-3 text-sm">
-                <li><Link to="/auth" className="text-muted-foreground hover:text-primary transition-colors">Join Platform</Link></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Help Center</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Contact Us</a></li>
-                <li><a href="#" className="text-muted-foreground hover:text-primary transition-colors">Privacy Policy</a></li>
+                <li><Link to="/auth" className="text-muted-foreground hover:text-primary transition-colors">Login</Link></li>
+                <li><span className="text-muted-foreground">Help Center</span></li>
+                <li><span className="text-muted-foreground">Contact Us</span></li>
+                <li><span className="text-muted-foreground">Privacy Policy</span></li>
               </ul>
             </div>
           </div>
