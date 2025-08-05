@@ -90,6 +90,14 @@ function AppContent() {
                 <JobBoard />
               </CivicAuthenticatedLayout>
             } />
+            <Route path="/petitions" element={
+              <CivicAuthenticatedLayout>
+                <div className="p-8 text-center">
+                  <h2 className="text-2xl font-bold mb-4">Petitions & Polls</h2>
+                  <p className="text-muted-foreground">Coming Soon - Civic engagement platform</p>
+                </div>
+              </CivicAuthenticatedLayout>
+            } />
             <Route path="/villages" element={
               <CivicAuthenticatedLayout>
                 <div className="p-8 text-center">

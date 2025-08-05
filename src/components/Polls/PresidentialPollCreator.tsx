@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BallotPollStyle } from './PollStyles/BallotPollStyle';
@@ -21,6 +22,7 @@ import {
 export const PresidentialPollCreator = () => {
   const { user, profile } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [pollCreated, setPollCreated] = useState(false);
   const [createdPollId, setCreatedPollId] = useState<string>('');
@@ -213,7 +215,7 @@ export const PresidentialPollCreator = () => {
 
           <div className="flex justify-center">
             <Button 
-              onClick={() => window.location.href = '/polls'} 
+              onClick={() => navigate('/polls')} 
               className="bg-cm-green hover:bg-cm-green/90"
             >
               View Polls Dashboard

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CardPollStyle } from './PollStyles/CardPollStyle';
@@ -12,6 +13,7 @@ import { Vote, Eye, CheckCircle, Shield, Share2, BarChart3 } from 'lucide-react'
 export const CivicPollCreator = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [pollCreated, setPollCreated] = useState(false);
   
@@ -97,7 +99,7 @@ export const CivicPollCreator = () => {
             <li>• Enabled with geo-analytics and comment system</li>
           </ul>
           <Button 
-            onClick={() => window.location.href = '/polls'} 
+            onClick={() => navigate('/polls')} 
             className="bg-cm-green hover:bg-cm-green/90"
           >
             View All Polls
