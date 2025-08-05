@@ -14,7 +14,7 @@ import { SettingsPage } from '@/pages/SettingsPage';
 import NewFeed from '@/pages/NewFeed';
 import AuthPage from '@/pages/AuthPage';
 import ShippingLabels from '@/pages/ShippingLabels';
-import { CamerPulseHomePage } from '@/pages/CamerPulseHomePage';
+import { HomePage } from '@/pages/HomePage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { PluginProvider } from '@/contexts/PluginContext';
@@ -55,34 +55,24 @@ function AppContent() {
     <>
       <Routes>
         {/* Public Routes - No auth required */}
-        <Route path="/public" element={<CamerPulseHomePage />} />
-        <Route path="/public/tracking" element={<TrackingPage />} />
-        <Route path="/public/tracking/:trackingNumber" element={<TrackingPage />} />
-        
-        {/* Logistics Routes - Simplified */}
-        <Route path="/logistics" element={<div className="p-8 text-center">Logistics Module - Under Reconstruction</div>} />
-        
-        {/* Auth Route */}
         <Route path="/auth" element={<AuthPage />} />
         
-        {/* Default redirect based on authentication */}
-        {!user && <Route path="*" element={<CamerPulseHomePage />} />}
+        {/* Default home page for non-authenticated users */}
+        {!user && <Route path="*" element={<HomePage />} />}
         
         {/* Authenticated Routes */}
         {user && (
           <>
             <Route path="/" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
-            <Route path="/feed" element={<CivicAuthenticatedLayout><NewFeed /></CivicAuthenticatedLayout>} />
             <Route path="/dashboard" element={<CivicAuthenticatedLayout><CamerPulseDashboard /></CivicAuthenticatedLayout>} />
+            <Route path="/feed" element={<CivicAuthenticatedLayout><NewFeed /></CivicAuthenticatedLayout>} />
             <Route path="/politicians" element={<CivicAuthenticatedLayout><PoliticiansPage /></CivicAuthenticatedLayout>} />
             <Route path="/political-parties" element={<CivicAuthenticatedLayout><PoliticalPartiesPage /></CivicAuthenticatedLayout>} />
             <Route path="/political-rankings" element={<CivicAuthenticatedLayout><PoliticalRankingsPage /></CivicAuthenticatedLayout>} />
+            <Route path="/villages" element={<CivicAuthenticatedLayout><div className="p-8 text-center">Villages - Coming Soon</div></CivicAuthenticatedLayout>} />
+            <Route path="/civic-education" element={<CivicAuthenticatedLayout><div className="p-8 text-center">Civic Education - Coming Soon</div></CivicAuthenticatedLayout>} />
+            <Route path="/transparency" element={<CivicAuthenticatedLayout><div className="p-8 text-center">Transparency - Coming Soon</div></CivicAuthenticatedLayout>} />
             <Route path="/settings" element={<CivicAuthenticatedLayout><SettingsPage /></CivicAuthenticatedLayout>} />
-            <Route path="/shipping-labels" element={<CivicAuthenticatedLayout><ShippingLabels /></CivicAuthenticatedLayout>} />
-            
-            {/* Unified Admin Routes */}
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/admin/*" element={<AdminRoutes />} />
           </>
         )}
       </Routes>
