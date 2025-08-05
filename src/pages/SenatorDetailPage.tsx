@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useSenator, useSenatorRatings } from '@/hooks/useSenators';
+import { useSenatorSlug } from '@/hooks/useSlugResolver';
+import { useSenatorRatings } from '@/hooks/useSenators';
 import { useSenatorFollowing } from '@/hooks/useSenatorFollowing';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -30,10 +30,9 @@ import { ClaimProfileModal } from '@/components/Politics/ClaimProfileModal';
 import { SuggestEditModal } from '@/components/Politics/SuggestEditModal';
 
 export const SenatorDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const { data: senator, isLoading } = useSenator(id!);
-  const { data: ratings } = useSenatorRatings(id!);
-  const { isFollowing, followerCount, follow, unfollow } = useSenatorFollowing(id!);
+  const { entity: senator, loading: isLoading, error, entityId } = useSenatorSlug();
+  const { data: ratings } = useSenatorRatings(entityId!);
+  const { isFollowing, followerCount, follow, unfollow } = useSenatorFollowing(entityId!);
   
   const [showMessaging, setShowMessaging] = useState(false);
   const [showRating, setShowRating] = useState(false);

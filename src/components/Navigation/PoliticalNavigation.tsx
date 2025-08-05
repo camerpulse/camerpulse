@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { URLBuilder } from '@/utils/slugUtils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,28 +10,28 @@ import { cn } from '@/lib/utils';
 const politicalSections = [
   {
     title: 'Politicians',
-    href: '/politicians',
+    href: URLBuilder.politicians.list(),
     icon: Users,
     description: 'All political figures',
     color: 'bg-blue-500'
   },
   {
     title: 'Senators',
-    href: '/senators',
+    href: URLBuilder.senators.list(),
     icon: Crown,
     description: 'Upper house members',
     color: 'bg-purple-500'
   },
   {
     title: 'MPs',
-    href: '/mps',
+    href: URLBuilder.mps.list(),
     icon: Building,
     description: 'National Assembly members',
     color: 'bg-green-500'
   },
   {
     title: 'Ministers',
-    href: '/ministers',
+    href: URLBuilder.ministers.list(),
     icon: Scale,
     description: 'Cabinet ministers',
     color: 'bg-red-500'

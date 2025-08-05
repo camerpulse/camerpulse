@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useVillageSlug } from '@/hooks/useSlugResolver';
 import { 
   MapPin, Star, Users, Crown, Calendar, Phone, Globe, 
   Facebook, MessageCircle, Plus, ChevronRight, Heart,
@@ -68,8 +69,8 @@ interface VillageData {
 }
 
 const VillageProfile = () => {
-  const { id } = useParams<{ id: string }>();
-  const [village, setVillage] = useState<VillageData | null>(null);
+  const { entity: village, loading: villageLoading, error, entityId } = useVillageSlug();
+  const [villageData, setVillageData] = useState<VillageData | null>(null);
   const [leaders, setLeaders] = useState([]);
   const [projects, setProjects] = useState([]);
   const [billionaires, setBillionaires] = useState([]);
@@ -81,24 +82,17 @@ const VillageProfile = () => {
   const [userMembership, setUserMembership] = useState(null);
 
   useEffect(() => {
-    if (id) {
-      fetchVillageData();
+    if (village) {
+      setVillageData(village);
+      fetchRelatedData();
       incrementViewCount();
     }
-  }, [id]);
+  }, [village, entityId]);
 
-  const fetchVillageData = async () => {
+  const fetchRelatedData = async () => {
+    if (!entityId) return;
+    
     try {
-      // Fetch village basic info
-      const { data: villageData, error: villageError } = await supabase
-        .from('villages')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (villageError) throw villageError;
-      setVillage(villageData);
-
       // Fetch related data
       const [
         leadersResponse,
@@ -109,13 +103,13 @@ const VillageProfile = () => {
         conflictsResponse,
         photosResponse
       ] = await Promise.all([
-        supabase.from('village_leaders').select('*').eq('village_id', id),
-        supabase.from('village_projects').select('*').eq('village_id', id),
-        supabase.from('village_billionaires').select('*').eq('village_id', id),
-        supabase.from('village_celebrities').select('*').eq('village_id', id),
-        supabase.from('village_petitions').select('*').eq('village_id', id),
-        supabase.from('village_conflicts').select('*').eq('village_id', id),
-        supabase.from('village_photos').select('*').eq('village_id', id)
+        supabase.from('village_leaders').select('*').eq('village_id', entityId),
+        supabase.from('village_projects').select('*').eq('village_id', entityId),
+        supabase.from('village_billionaires').select('*').eq('village_id', entityId),
+        supabase.from('village_celebrities').select('*').eq('village_id', entityId),
+        supabase.from('village_petitions').select('*').eq('village_id', entityId),
+        supabase.from('village_conflicts').select('*').eq('village_id', entityId),
+        supabase.from('village_photos').select('*').eq('village_id', entityId)
       ]);
 
       setLeaders(leadersResponse.data || []);
@@ -135,11 +129,13 @@ const VillageProfile = () => {
   };
 
   const incrementViewCount = async () => {
+    if (!entityId || !villageData) return;
+    
     try {
       await supabase
         .from('villages')
-        .update({ view_count: (village?.view_count || 0) + 1 })
-        .eq('id', id);
+        .update({ view_count: (villageData?.view_count || 0) + 1 })
+        .eq('id', entityId);
     } catch (error) {
       console.error('Error incrementing view count:', error);
     }
@@ -157,7 +153,7 @@ const VillageProfile = () => {
       const { error } = await supabase
         .from('village_memberships')
         .insert({
-          village_id: id,
+          village_id: entityId,
           user_id: user.id,
           membership_type: 'son_daughter'
         });
@@ -165,7 +161,7 @@ const VillageProfile = () => {
       if (error) throw error;
       
       toast.success('Successfully claimed as son/daughter of this village!');
-      fetchVillageData(); // Refresh data
+      fetchRelatedData(); // Refresh data
     } catch (error) {
       console.error('Error claiming membership:', error);
       toast.error('Failed to claim membership');
@@ -203,7 +199,7 @@ const VillageProfile = () => {
     }
   };
 
-  if (loading) {
+  if (villageLoading || loading) {
     return (
       <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-8">
@@ -221,7 +217,7 @@ const VillageProfile = () => {
     );
   }
 
-  if (!village) {
+  if (!villageData) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="text-center p-8">
@@ -247,8 +243,8 @@ const VillageProfile = () => {
           <div className="flex flex-col md:flex-row items-start gap-6">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold">{village.village_name}</h1>
-                {village.is_verified && (
+                <h1 className="text-4xl font-bold">{villageData.village_name}</h1>
+                {villageData.is_verified && (
                   <Badge variant="secondary" className="text-white border-white">
                     <Crown className="h-4 w-4 mr-1" />
                     Verified
@@ -258,25 +254,25 @@ const VillageProfile = () => {
               
               <div className="flex items-center text-lg opacity-90 mb-4">
                 <MapPin className="h-5 w-5 mr-2" />
-                {village.subdivision}, {village.division}, {village.region}
+                {villageData.subdivision}, {villageData.division}, {villageData.region}
               </div>
 
-              {village.village_motto && (
+              {villageData.village_motto && (
                 <blockquote className="text-lg italic opacity-90 mb-4">
-                  "{village.village_motto}"
+                  "{villageData.village_motto}"
                 </blockquote>
               )}
 
               <div className="flex items-center gap-6 text-sm">
                 <div className="flex items-center">
-                  {renderStars(village.overall_rating)}
+                  {renderStars(villageData.overall_rating)}
                   <span className="ml-2 font-medium">
-                    {village.overall_rating.toFixed(1)} ({village.total_ratings_count} reviews)
+                    {villageData.overall_rating.toFixed(1)} ({villageData.total_ratings_count} reviews)
                   </span>
                 </div>
                 <div className="flex items-center">
                   <Eye className="h-4 w-4 mr-1" />
-                  {village.view_count} views
+                  {villageData.view_count} views
                 </div>
               </div>
             </div>
@@ -292,12 +288,12 @@ const VillageProfile = () => {
               </Button>
               
               <div className="flex gap-2">
-                {village.whatsapp_link && (
+                {villageData.whatsapp_link && (
                   <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
                     <MessageCircle className="h-4 w-4" />
                   </Button>
                 )}
-                {village.facebook_link && (
+                {villageData.facebook_link && (
                   <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
                     <Facebook className="h-4 w-4" />
                   </Button>
@@ -316,27 +312,27 @@ const VillageProfile = () => {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
             <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-primary">{village.sons_daughters_count}</div>
+              <div className="text-2xl font-bold text-primary">{villageData.sons_daughters_count}</div>
               <div className="text-sm text-muted-foreground">Sons & Daughters</div>
             </Card>
             <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-secondary">{village.infrastructure_score}</div>
+              <div className="text-2xl font-bold text-secondary">{villageData.infrastructure_score}</div>
               <div className="text-sm text-muted-foreground">Infrastructure</div>
             </Card>
             <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-accent">{village.education_score}</div>
+              <div className="text-2xl font-bold text-accent">{villageData.education_score}</div>
               <div className="text-sm text-muted-foreground">Education</div>
             </Card>
             <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-success">{village.health_score}</div>
+              <div className="text-2xl font-bold text-success">{villageData.health_score}</div>
               <div className="text-sm text-muted-foreground">Health</div>
             </Card>
             <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-warning">{village.governance_score}</div>
+              <div className="text-2xl font-bold text-warning">{villageData.governance_score}</div>
               <div className="text-sm text-muted-foreground">Governance</div>
             </Card>
             <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-info">{village.diaspora_engagement_score}</div>
+              <div className="text-2xl font-bold text-info">{villageData.diaspora_engagement_score}</div>
               <div className="text-sm text-muted-foreground">Diaspora</div>
             </Card>
             <Card className="text-center p-4">
@@ -381,49 +377,49 @@ const VillageProfile = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {village.year_founded && (
+                  {villageData.year_founded && (
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Founded</label>
-                      <div className="font-semibold">{village.year_founded}</div>
+                      <div className="font-semibold">{villageData.year_founded}</div>
                     </div>
                   )}
-                  {village.population_estimate && (
+                  {villageData.population_estimate && (
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Population</label>
-                      <div className="font-semibold">{village.population_estimate.toLocaleString()}</div>
+                      <div className="font-semibold">{villageData.population_estimate.toLocaleString()}</div>
                     </div>
                   )}
-                  {village.traditional_languages.length > 0 && (
+                  {villageData.traditional_languages.length > 0 && (
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Languages</label>
-                      <div className="font-semibold">{village.traditional_languages.join(', ')}</div>
+                      <div className="font-semibold">{villageData.traditional_languages.join(', ')}</div>
                     </div>
                   )}
-                  {village.ethnic_groups.length > 0 && (
+                  {villageData.ethnic_groups.length > 0 && (
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Ethnic Groups</label>
-                      <div className="font-semibold">{village.ethnic_groups.join(', ')}</div>
+                      <div className="font-semibold">{villageData.ethnic_groups.join(', ')}</div>
                     </div>
                   )}
-                  {village.totem_symbol && (
+                  {villageData.totem_symbol && (
                     <div>
                       <label className="text-sm font-medium text-muted-foreground">Totem/Symbol</label>
-                      <div className="font-semibold">{village.totem_symbol}</div>
+                      <div className="font-semibold">{villageData.totem_symbol}</div>
                     </div>
                   )}
                 </div>
 
-                {village.founding_story && (
+                {villageData.founding_story && (
                   <div>
                     <h4 className="font-semibold mb-2">Founding Story</h4>
-                    <p className="text-muted-foreground">{village.founding_story}</p>
+                    <p className="text-muted-foreground">{villageData.founding_story}</p>
                   </div>
                 )}
 
-                {village.migration_legend && (
+                {villageData.migration_legend && (
                   <div>
                     <h4 className="font-semibold mb-2">Migration Legend</h4>
-                    <p className="text-muted-foreground">{village.migration_legend}</p>
+                    <p className="text-muted-foreground">{villageData.migration_legend}</p>
                   </div>
                 )}
               </CardContent>
@@ -440,14 +436,14 @@ const VillageProfile = () => {
               <CardContent>
                 <div className="space-y-4">
                   {[
-                    { label: 'Infrastructure', score: village.infrastructure_score, max: 20, color: 'primary' },
-                    { label: 'Education', score: village.education_score, max: 10, color: 'secondary' },
-                    { label: 'Health', score: village.health_score, max: 10, color: 'accent' },
-                    { label: 'Peace & Security', score: village.peace_security_score, max: 10, color: 'success' },
-                    { label: 'Economic Activity', score: village.economic_activity_score, max: 10, color: 'warning' },
-                    { label: 'Governance', score: village.governance_score, max: 10, color: 'info' },
-                    { label: 'Social Spirit', score: village.social_spirit_score, max: 10, color: 'primary' },
-                    { label: 'Diaspora Engagement', score: village.diaspora_engagement_score, max: 10, color: 'secondary' }
+                    { label: 'Infrastructure', score: villageData.infrastructure_score, max: 20, color: 'primary' },
+                    { label: 'Education', score: villageData.education_score, max: 10, color: 'secondary' },
+                    { label: 'Health', score: villageData.health_score, max: 10, color: 'accent' },
+                    { label: 'Peace & Security', score: villageData.peace_security_score, max: 10, color: 'success' },
+                    { label: 'Economic Activity', score: villageData.economic_activity_score, max: 10, color: 'warning' },
+                    { label: 'Governance', score: villageData.governance_score, max: 10, color: 'info' },
+                    { label: 'Social Spirit', score: villageData.social_spirit_score, max: 10, color: 'primary' },
+                    { label: 'Diaspora Engagement', score: villageData.diaspora_engagement_score, max: 10, color: 'secondary' }
                   ].map((item) => (
                     <div key={item.label} className="space-y-2">
                       <div className="flex justify-between items-center">
@@ -465,27 +461,27 @@ const VillageProfile = () => {
           </TabsContent>
 
           <TabsContent value="membership">
-            <VillageMembership villageId={id!} villageName={village.village_name} />
+            <VillageMembership villageId={entityId!} villageName={villageData.village_name} />
           </TabsContent>
 
           <TabsContent value="leaders">
-            <VillageLeadership villageId={id!} villageName={village.village_name} />
+            <VillageLeadership villageId={entityId!} villageName={villageData.village_name} />
           </TabsContent>
 
           <TabsContent value="projects">
-            <VillageProjects villageId={id!} villageName={village.village_name} />
+            <VillageProjects villageId={entityId!} villageName={villageData.village_name} />
           </TabsContent>
 
           <TabsContent value="people">
-            <VillageNotablePeople villageId={id!} villageName={village.village_name} />
+            <VillageNotablePeople villageId={entityId!} villageName={villageData.village_name} />
           </TabsContent>
 
           <TabsContent value="civic">
-            <VillageCivicActivity villageId={id!} villageName={village.village_name} />
+            <VillageCivicActivity villageId={entityId!} villageName={villageData.village_name} />
           </TabsContent>
 
           <TabsContent value="gallery">
-            <VillagePhotoGallery villageId={id!} />
+            <VillagePhotoGallery villageId={entityId!} />
           </TabsContent>
 
           <TabsContent value="chat">
@@ -501,15 +497,15 @@ const VillageProfile = () => {
           </TabsContent>
 
           <TabsContent value="discussions" className="space-y-6">
-            <VillageDiscussions villageId={id!} />
+            <VillageDiscussions villageId={entityId!} />
           </TabsContent>
 
           <TabsContent value="events" className="space-y-6">
-            <VillageEvents villageId={id!} />
+            <VillageEvents villageId={entityId!} />
           </TabsContent>
 
           <TabsContent value="comments" className="space-y-6">
-            <VillageComments villageId={id!} />
+            <VillageComments villageId={entityId!} />
           </TabsContent>
         </Tabs>
       </div>
