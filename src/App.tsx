@@ -12,6 +12,8 @@ import { CivicEducationPage } from '@/pages/CivicEducationPage';
 import { TransparencyPage } from '@/pages/TransparencyPage';
 import NewFeed from '@/pages/NewFeed';
 import JobBoard from '@/pages/jobs/JobBoard';
+import ProfilePage from '@/pages/ProfilePage';
+import PoliticalRankingsPage from '@/pages/PoliticalRankingsPage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { PluginProvider } from '@/contexts/PluginContext';
@@ -117,6 +119,16 @@ function AppContent() {
             <Route path="/settings" element={
               <CivicAuthenticatedLayout>
                 <SettingsPage />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/profile" element={
+              <CivicAuthenticatedLayout>
+                <ProfilePage />
+              </CivicAuthenticatedLayout>
+            } />
+            <Route path="/political-rankings" element={
+              <CivicAuthenticatedLayout>
+                <PoliticalRankingsPage />
               </CivicAuthenticatedLayout>
             } />
           </>
