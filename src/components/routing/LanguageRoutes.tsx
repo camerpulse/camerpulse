@@ -36,6 +36,8 @@ import PollEmbedGeneratorPage from '@/pages/PollEmbedGeneratorPage';
 // Import new pages
 import CivicDashboard from '@/pages/CivicDashboard';
 import PetitionsPage from '@/pages/PetitionsPage';
+import VillagesDirectoryPage from '@/pages/VillagesDirectoryPage';
+import CivicEducationHub from '@/pages/CivicEducationHub';
 import PetitionDetailPage from '@/pages/PetitionDetailPage';
 import JobDetailPage from '@/pages/JobDetailPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
@@ -65,8 +67,11 @@ export const AppRouter: React.FC = () => {
         <Route path="/civic-feed" element={<CivicFeed />} />
         
         {/* Villages */}
-        <Route path="/villages" element={<VillagesDirectory />} />
+        <Route path="/villages" element={<VillagesDirectoryPage />} />
         <Route path="/villages/:villageSlug" element={<VillageProfile />} />
+        
+        {/* Civic Education */}
+        <Route path="/civic-education" element={<CivicEducationHub />} />
         
         {/* Politicians */}
         <Route path="/politicians" element={<Politicians />} />
