@@ -14,7 +14,7 @@ import { SettingsPage } from '@/pages/SettingsPage';
 import NewFeed from '@/pages/NewFeed';
 import AuthPage from '@/pages/AuthPage';
 import ShippingLabels from '@/pages/ShippingLabels';
-import { PublicHomePage } from '@/pages/PublicHomePage';
+import { CamerPulseHomePage } from '@/pages/CamerPulseHomePage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { PluginProvider } from '@/contexts/PluginContext';
@@ -55,7 +55,7 @@ function AppContent() {
     <>
       <Routes>
         {/* Public Routes - No auth required */}
-        <Route path="/public" element={<PublicHomePage />} />
+        <Route path="/public" element={<CamerPulseHomePage />} />
         <Route path="/public/tracking" element={<TrackingPage />} />
         <Route path="/public/tracking/:trackingNumber" element={<TrackingPage />} />
         
@@ -66,7 +66,7 @@ function AppContent() {
         <Route path="/auth" element={<AuthPage />} />
         
         {/* Default redirect based on authentication */}
-        {!user && <Route path="*" element={<PublicHomePage />} />}
+        {!user && <Route path="*" element={<CamerPulseHomePage />} />}
         
         {/* Authenticated Routes */}
         {user && (

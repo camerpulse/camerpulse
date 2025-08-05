@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import {
   Sidebar,
   SidebarContent,
@@ -9,94 +9,77 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarHeader,
+  SidebarFooter,
   useSidebar,
 } from '@/components/ui/sidebar';
+import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import {
+  Globe,
   Home,
-  MapPin,
   Vote,
+  Users,
+  MapPin,
   BookOpen,
   Shield,
-  Users,
   Settings,
-  Globe,
-  Heart,
+  Bell,
   TrendingUp,
-  MessageSquare,
-  Award,
-  Flag,
-  Trophy
+  Building2,
+  Menu
 } from 'lucide-react';
 
-const civicNavigationItems = [
+const navigationItems = [
   {
     title: 'Dashboard',
     url: '/',
-    icon: Home,
-    description: 'Your civic engagement overview'
+    icon: Home
   },
   {
-    title: 'Community Feed',
+    title: 'Feed',
     url: '/feed',
-    icon: MessageSquare,
-    description: 'Civic discussions'
+    icon: TrendingUp
+  },
+  {
+    title: 'Politicians',
+    url: '/politicians',
+    icon: Users
+  },
+  {
+    title: 'Political Parties',
+    url: '/political-parties',
+    icon: Building2
+  },
+  {
+    title: 'Rankings',
+    url: '/political-rankings',
+    icon: Vote
   },
   {
     title: 'Villages',
     url: '/villages',
-    icon: MapPin,
-    description: 'Connect with your heritage'
+    icon: MapPin
   },
   {
-    title: 'Petitions',
-    url: '/petitions',
-    icon: Vote,
-    description: 'Create and support petitions'
-  }
-];
-
-const civicToolsItems = [
-  {
-    title: 'Politicians',
-    url: '/politicians',
-    icon: Users,
-    description: 'Elected representatives directory'
-  },
-  {
-    title: 'Transparency Portal',
-    url: '/transparency',
-    icon: Shield,
-    description: 'Government accountability'
-  },
-  {
-    title: 'Civic Education',
+    title: 'Education',
     url: '/civic-education',
-    icon: BookOpen,
-    description: 'Learn about your rights'
-  }
-];
-
-const civicPlatformItems = [
+    icon: BookOpen
+  },
   {
-    title: 'Job Portal',
-    url: '/jobs',
-    icon: TrendingUp,
-    description: 'Employment opportunities'
-  }
-];
-
-const systemItems = [
+    title: 'Transparency',
+    url: '/transparency',
+    icon: Shield
+  },
   {
     title: 'Settings',
     url: '/settings',
-    icon: Settings,
-    description: 'Account preferences'
+    icon: Settings
   }
 ];
 
 export function CivicAppSidebar() {
-  const { state } = useSidebar();
+  const { collapsed } = useSidebar();
   const location = useLocation();
 
   const isActive = (path: string) => {
@@ -106,157 +89,50 @@ export function CivicAppSidebar() {
     return location.pathname.startsWith(path);
   };
 
-  const getNavClassName = (path: string) => {
-    const baseClasses = "w-full justify-start h-auto p-3 text-left";
-    if (isActive(path)) {
-      return `${baseClasses} bg-primary/10 text-primary border-r-2 border-primary`;
-    }
-    return `${baseClasses} hover:bg-muted/50`;
-  };
-
   return (
-    <Sidebar className={`border-r ${state === 'collapsed' ? 'w-16' : 'w-64'}`}>
-      {/* Logo/Brand Section */}
-      <div className="p-4 border-b">
+    <Sidebar className={collapsed ? "w-14" : "w-64"} collapsible>
+      <SidebarHeader className="p-4">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Globe className="w-5 h-5 text-primary-foreground" />
-          </div>
-          {state !== 'collapsed' && (
+          <Globe className="h-6 w-6 text-primary" />
+          {!collapsed && (
             <div>
-              <h2 className="font-bold text-lg">CamerPulse</h2>
-              <p className="text-xs text-muted-foreground">Civic Engagement Platform</p>
+              <h2 className="font-bold">CamerPulse</h2>
+              <p className="text-xs text-muted-foreground">Civic Platform</p>
             </div>
           )}
         </div>
-      </div>
+      </SidebarHeader>
 
-      <SidebarContent className="px-2">
-        {/* Main Civic Navigation */}
+      <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Civic Engagement</SidebarGroupLabel>
+          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {civicNavigationItems.map((item) => (
+              {navigationItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getNavClassName(item.url)}>
-                    <NavLink to={item.url} end={item.url === '/'}>
-                      <item.icon className="w-5 h-5 mr-3 flex-shrink-0" />
-                      {state !== 'collapsed' && (
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium truncate">{item.title}</div>
-                          <div className="text-xs text-muted-foreground truncate">
-                            {item.description}
-                          </div>
-                        </div>
-                      )}
-                    </NavLink>
+                  <SidebarMenuButton asChild isActive={isActive(item.url)}>
+                    <Link to={item.url} className="flex items-center gap-2">
+                      <item.icon className="h-4 w-4" />
+                      {!collapsed && <span>{item.title}</span>}
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+      </SidebarContent>
 
-        {/* Civic Tools */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Civic Tools</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {civicToolsItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getNavClassName(item.url)}>
-                    <NavLink to={item.url}>
-                      <item.icon className="w-5 h-5 mr-3 flex-shrink-0" />
-                      {state !== 'collapsed' && (
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium truncate">{item.title}</div>
-                          <div className="text-xs text-muted-foreground truncate">
-                            {item.description}
-                          </div>
-                        </div>
-                      )}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Other Platforms */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Other Services</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {civicPlatformItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getNavClassName(item.url)}>
-                    <NavLink to={item.url}>
-                      <item.icon className="w-5 h-5 mr-3 flex-shrink-0" />
-                      {state !== 'collapsed' && (
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium truncate">{item.title}</div>
-                          <div className="text-xs text-muted-foreground truncate">
-                            {item.description}
-                          </div>
-                        </div>
-                      )}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* System */}
-        <SidebarGroup>
-          <SidebarGroupLabel>System</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {systemItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getNavClassName(item.url)}>
-                    <NavLink to={item.url}>
-                      <item.icon className="w-5 h-5 mr-3 flex-shrink-0" />
-                      {state !== 'collapsed' && (
-                        <div className="flex-1 min-w-0">
-                          <div className="font-medium truncate">{item.title}</div>
-                          <div className="text-xs text-muted-foreground truncate">
-                            {item.description}
-                          </div>
-                        </div>
-                      )}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Activity Summary - Only show when expanded */}
-        {state !== 'collapsed' && (
-          <div className="mt-auto p-4 border-t">
-            <div className="text-xs text-muted-foreground mb-2">Recent Activity</div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-xs">Village connection: 2 new</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <span className="text-xs">Petitions: 1 signed</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span className="text-xs">Learning: Chapter completed</span>
-              </div>
-            </div>
+      <SidebarFooter className="p-4">
+        {!collapsed && (
+          <div className="space-y-2">
+            <Badge variant="outline" className="justify-center">
+              <Bell className="h-3 w-3 mr-1" />
+              3 Updates
+            </Badge>
           </div>
         )}
-      </SidebarContent>
+      </SidebarFooter>
     </Sidebar>
   );
 }

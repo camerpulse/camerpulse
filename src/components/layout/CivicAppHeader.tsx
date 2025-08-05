@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   DropdownMenu,
@@ -11,168 +12,113 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SidebarTrigger } from '@/components/ui/sidebar';
-import { 
-  Bell, 
-  Search, 
-  Settings, 
-  LogOut, 
-  User,
-  Globe,
-  Vote,
-  MapPin
-} from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
-import { toast } from 'sonner';
-import { UnifiedNotificationCenter } from '@/components/notifications/UnifiedNotificationCenter';
-import { LanguageSwitcher } from '@/components/ui/language-switcher';
-import { useLanguage } from '@/contexts/LanguageContext';
-
-const civicPageInfo = {
-  '/': {
-    title: 'nav.dashboard',
-    description: 'dashboard.description'
-  },
-  '/villages': {
-    title: 'nav.villages',
-    description: 'Connect with your ancestral village'
-  },
-  '/petitions': {
-    title: 'nav.petitions',
-    description: 'Create and support community petitions'
-  },
-  '/civic-education': {
-    title: 'nav.education',
-    description: 'Learn about your rights and duties'
-  },
-  '/transparency': {
-    title: 'nav.transparency',
-    description: 'Government accountability and data'
-  },
-  '/feed': {
-    title: 'nav.feed',
-    description: 'Civic discussions and updates'
-  },
-  '/services': {
-    title: 'Public Services',
-    description: 'Find hospitals, schools, and services'
-  },
-  '/settings': {
-    title: 'nav.settings',
-    description: 'Manage your account and preferences'
-  }
-};
+import {
+  Bell,
+  Search,
+  User,
+  Settings,
+  LogOut,
+  Globe
+} from 'lucide-react';
 
 export function CivicAppHeader() {
-  const location = useLocation();
-  const { user } = useAuth();
-  const { t } = useLanguage();
-  const [notifications] = useState([
-    {
-      id: '1',
-      type: 'petition',
-      message: 'New petition in your region: "Clean Water Initiative"',
-      time: '30 min ago',
-      unread: true
-    },
-    {
-      id: '2',
-      type: 'village',
-      message: 'Your village page has 5 new members',
-      time: '2 hours ago',
-      unread: true
-    },
-    {
-      id: '3',
-      type: 'education',
-      message: 'Weekly civic quiz is now available',
-      time: '1 day ago',
-      unread: false
-    }
-  ]);
-
-  const currentPage = civicPageInfo[location.pathname as keyof typeof civicPageInfo] || {
-    title: 'CamerPulse',
-    description: 'Civic engagement platform'
-  };
-
-  const handleSignOut = async () => {
-    try {
-      await supabase.auth.signOut();
-      toast.success('Signed out successfully');
-    } catch (error) {
-      console.error('Error signing out:', error);
-      toast.error('Error signing out');
-    }
-  };
-
-  const unreadCount = notifications.filter(n => n.unread).length;
+  const { user, signOut } = useAuth();
 
   return (
-    <header className="flex h-16 items-center border-b bg-background px-6">
-      <div className="flex items-center gap-4 flex-1">
-        <SidebarTrigger />
-        
-        <div className="flex items-center gap-3">
-          <Globe className="h-6 w-6 text-primary" />
-          <div>
-            <h1 className="font-semibold text-lg">{t(currentPage.title)}</h1>
-            <p className="text-sm text-muted-foreground">{currentPage.description}</p>
+    <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex h-14 items-center justify-between px-4">
+        <div className="flex items-center gap-4">
+          <SidebarTrigger className="lg:hidden" />
+          <div className="hidden md:flex items-center gap-2">
+            <Globe className="h-5 w-5 text-primary" />
+            <span className="font-semibold">CamerPulse</span>
           </div>
         </div>
-      </div>
 
-      <div className="flex items-center gap-2">
-        {/* Language Switcher */}
-        <LanguageSwitcher />
+        <div className="flex items-center gap-2">
+          {/* Search Button */}
+          <Button variant="ghost" size="sm">
+            <Search className="h-4 w-4" />
+            <span className="hidden sm:inline ml-2">Search</span>
+          </Button>
 
-        {/* Search */}
-        <Button variant="ghost" size="icon">
-          <Search className="h-4 w-4" />
-        </Button>
+          {/* Notifications */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm" className="relative">
+                <Bell className="h-4 w-4" />
+                <Badge className="absolute -top-1 -right-1 h-4 w-4 p-0 text-xs">
+                  3
+                </Badge>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80 z-50 bg-background border shadow-lg">
+              <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-medium">New petition in your region</p>
+                  <p className="text-xs text-muted-foreground">30 minutes ago</p>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-medium">Village page updated</p>
+                  <p className="text-xs text-muted-foreground">2 hours ago</p>
+                </div>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-medium">Weekly quiz available</p>
+                  <p className="text-xs text-muted-foreground">1 day ago</p>
+                </div>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-        {/* Notifications */}
-        <UnifiedNotificationCenter />
-
-        {/* User Menu */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-              <Avatar className="h-8 w-8">
-                <AvatarImage src={user?.user_metadata?.avatar_url} alt={user?.email || 'User'} />
-                <AvatarFallback>
-                  {user?.email?.charAt(0).toUpperCase() || 'U'}
-                </AvatarFallback>
-              </Avatar>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  {user?.user_metadata?.full_name || 'Civic User'}
-                </p>
-                <p className="text-xs leading-none text-muted-foreground">
-                  {user?.email}
-                </p>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <User className="mr-2 h-4 w-4" />
-              <span>Profile</span>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Settings className="mr-2 h-4 w-4" />
-              <span>Settings</span>
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleSignOut}>
-              <LogOut className="mr-2 h-4 w-4" />
-              <span>Log out</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          {/* User Menu */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                <Avatar className="h-8 w-8">
+                  <AvatarImage src="/avatar.png" alt="User" />
+                  <AvatarFallback>
+                    {user?.email?.charAt(0).toUpperCase() || 'U'}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 z-50 bg-background border shadow-lg" align="end" forceMount>
+              <DropdownMenuLabel className="font-normal">
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium leading-none">Account</p>
+                  <p className="text-xs leading-none text-muted-foreground">
+                    {user?.email || 'user@example.com'}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/profile" className="flex items-center">
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/settings" className="flex items-center">
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => signOut()}>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
     </header>
   );
