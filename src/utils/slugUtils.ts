@@ -50,100 +50,112 @@ export function generateSlug(text: string, id?: string): string {
 }
 
 /**
- * Creates SEO-friendly URLs for different entity types
+ * Creates SEO-friendly URLs for different entity types with language support
  */
 export class URLBuilder {
+  private static getLanguagePrefix(): string {
+    // Get current language from URL or default to 'en'
+    const path = typeof window !== 'undefined' ? window.location.pathname : '';
+    const segments = path.split('/').filter(Boolean);
+    
+    if (segments[0] === 'en' || segments[0] === 'fr') {
+      return `/${segments[0]}`;
+    }
+    
+    return '/en'; // Default to English
+  }
+
   static politicians = {
-    list: () => '/politicians',
+    list: () => `${URLBuilder.getLanguagePrefix()}/politicians`,
     detail: (entity: PoliticianEntity) => {
       const slug = entity.slug || generateSlug(entity.name, entity.id);
-      return `/politicians/${slug}`;
+      return `${URLBuilder.getLanguagePrefix()}/politicians/${slug}`;
     }
   };
 
   static senators = {
-    list: () => '/senators',
+    list: () => `${URLBuilder.getLanguagePrefix()}/senators`,
     detail: (entity: PoliticianEntity) => {
       const slug = entity.slug || generateSlug(entity.name, entity.id);
-      return `/senators/${slug}`;
+      return `${URLBuilder.getLanguagePrefix()}/senators/${slug}`;
     }
   };
 
   static mps = {
-    list: () => '/mps',
+    list: () => `${URLBuilder.getLanguagePrefix()}/mps`,
     detail: (entity: PoliticianEntity) => {
       const slug = entity.slug || generateSlug(entity.name, entity.id);
-      return `/mps/${slug}`;
+      return `${URLBuilder.getLanguagePrefix()}/mps/${slug}`;
     }
   };
 
   static ministers = {
-    list: () => '/ministers',
+    list: () => `${URLBuilder.getLanguagePrefix()}/ministers`,
     detail: (entity: PoliticianEntity) => {
       const slug = entity.slug || generateSlug(entity.name, entity.id);
-      return `/ministers/${slug}`;
+      return `${URLBuilder.getLanguagePrefix()}/ministers/${slug}`;
     }
   };
 
   static villages = {
-    list: () => '/villages',
+    list: () => `${URLBuilder.getLanguagePrefix()}/villages`,
     detail: (entity: VillageEntity) => {
       const slug = entity.slug || generateSlug(`${entity.name}-${entity.region}`, entity.id);
-      return `/villages/${slug}`;
+      return `${URLBuilder.getLanguagePrefix()}/villages/${slug}`;
     }
   };
 
   static institutions = {
     hospitals: {
-      list: () => '/hospitals',
+      list: () => `${URLBuilder.getLanguagePrefix()}/hospitals`,
       detail: (entity: InstitutionEntity) => {
         const slug = entity.slug || generateSlug(entity.name, entity.id);
-        return `/hospitals/${slug}`;
+        return `${URLBuilder.getLanguagePrefix()}/hospitals/${slug}`;
       }
     },
     schools: {
-      list: () => '/schools',
+      list: () => `${URLBuilder.getLanguagePrefix()}/schools`,
       detail: (entity: InstitutionEntity) => {
         const slug = entity.slug || generateSlug(entity.name, entity.id);
-        return `/schools/${slug}`;
+        return `${URLBuilder.getLanguagePrefix()}/schools/${slug}`;
       }
     },
     pharmacies: {
-      list: () => '/pharmacies',
+      list: () => `${URLBuilder.getLanguagePrefix()}/pharmacies`,
       detail: (entity: InstitutionEntity) => {
         const slug = entity.slug || generateSlug(entity.name, entity.id);
-        return `/pharmacies/${slug}`;
+        return `${URLBuilder.getLanguagePrefix()}/pharmacies/${slug}`;
       }
     }
   };
 
   static petitions = {
-    list: () => '/petitions',
+    list: () => `${URLBuilder.getLanguagePrefix()}/petitions`,
     detail: (entity: SluggedEntity & { title: string }) => {
       const slug = entity.slug || generateSlug(entity.title, entity.id);
-      return `/petitions/${slug}`;
+      return `${URLBuilder.getLanguagePrefix()}/petitions/${slug}`;
     },
-    create: () => '/petitions/create'
+    create: () => `${URLBuilder.getLanguagePrefix()}/petitions/create`
   };
 
   static events = {
-    list: () => '/events',
+    list: () => `${URLBuilder.getLanguagePrefix()}/events`,
     detail: (entity: SluggedEntity & { title: string }) => {
       const slug = entity.slug || generateSlug(entity.title, entity.id);
-      return `/events/${slug}`;
+      return `${URLBuilder.getLanguagePrefix()}/events/${slug}`;
     }
   };
 
   static profiles = {
-    user: (userId: string) => `/profile/${userId}`,
-    slug: (username: string) => `/@${username}`
+    user: (userId: string) => `${URLBuilder.getLanguagePrefix()}/profile/${userId}`,
+    slug: (username: string) => `${URLBuilder.getLanguagePrefix()}/@${username}`
   };
 
   static admin = {
-    dashboard: () => '/admin/dashboard',
-    politicians: () => '/admin/politicians',
-    villages: () => '/admin/villages',
-    moderation: () => '/moderation-center'
+    dashboard: () => `${URLBuilder.getLanguagePrefix()}/admin/dashboard`,
+    politicians: () => `${URLBuilder.getLanguagePrefix()}/admin/politicians`,
+    villages: () => `${URLBuilder.getLanguagePrefix()}/admin/villages`,
+    moderation: () => `${URLBuilder.getLanguagePrefix()}/moderation-center`
   };
 }
 
