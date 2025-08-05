@@ -6,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { CalendarDays, Clock, DollarSign, Users, Plus, Filter } from 'lucide-react';
 import { useRoadmapItems, usePlatformGaps } from '@/hooks/usePriorityAssessment';
 import { format, differenceInDays, parseISO } from 'date-fns';
+import { RoadmapForm } from './RoadmapForm';
 
 const statusColors = {
   planning: 'bg-blue-100 text-blue-800',
@@ -23,6 +24,7 @@ export const RoadmapPlanner: React.FC<RoadmapPlannerProps> = ({
   onCreateItem,
   onEditItem,
 }) => {
+  const [showForm, setShowForm] = React.useState(false);
   const { data: roadmapItems, isLoading: roadmapLoading } = useRoadmapItems();
   const { data: gaps, isLoading: gapsLoading } = usePlatformGaps();
 
@@ -183,7 +185,7 @@ export const RoadmapPlanner: React.FC<RoadmapPlannerProps> = ({
             <Filter className="h-4 w-4 mr-2" />
             Filter
           </Button>
-          <Button onClick={onCreateItem}>
+          <Button onClick={() => setShowForm(true)}>
             <Plus className="h-4 w-4 mr-2" />
             Add Roadmap Item
           </Button>
@@ -221,77 +223,87 @@ export const RoadmapPlanner: React.FC<RoadmapPlannerProps> = ({
         </Card>
       </div>
 
+      {/* Roadmap Form */}
+      {showForm && (
+        <RoadmapForm 
+          onSuccess={() => setShowForm(false)}
+          onCancel={() => setShowForm(false)}
+        />
+      )}
+
       {/* Roadmap Sections */}
-      <div className="space-y-8">
-        {/* Active Items */}
-        {activeItems.length > 0 && (
-          <div>
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full" />
-              Active Initiatives
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {activeItems.map(item => (
-                <RoadmapItemCard key={item.id} item={item} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Upcoming Items */}
-        {upcomingItems.length > 0 && (
-          <div>
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <div className="w-3 h-3 bg-blue-500 rounded-full" />
-              Planned Initiatives
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {upcomingItems.map(item => (
-                <RoadmapItemCard key={item.id} item={item} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Completed Items */}
-        {completedItems.length > 0 && (
-          <div>
-            <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <div className="w-3 h-3 bg-gray-500 rounded-full" />
-              Completed Initiatives
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {completedItems.slice(0, 6).map(item => (
-                <RoadmapItemCard key={item.id} item={item} />
-              ))}
-            </div>
-            {completedItems.length > 6 && (
-              <div className="text-center mt-4">
-                <Button variant="outline">
-                  View All Completed ({completedItems.length})
-                </Button>
+      {!showForm && (
+        <div className="space-y-8">
+          {/* Active Items */}
+          {activeItems.length > 0 && (
+            <div>
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <div className="w-3 h-3 bg-green-500 rounded-full" />
+                Active Initiatives
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {activeItems.map(item => (
+                  <RoadmapItemCard key={item.id} item={item} />
+                ))}
               </div>
-            )}
-          </div>
-        )}
+            </div>
+          )}
 
-        {/* Empty State */}
-        {!roadmapItems?.length && (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <CalendarDays className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">No roadmap items yet</h3>
-              <p className="text-muted-foreground mb-4">
-                Start planning your platform improvements by creating your first roadmap item.
-              </p>
-              <Button onClick={onCreateItem}>
-                <Plus className="h-4 w-4 mr-2" />
-                Create First Roadmap Item
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-      </div>
+          {/* Upcoming Items */}
+          {upcomingItems.length > 0 && (
+            <div>
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full" />
+                Planned Initiatives
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {upcomingItems.map(item => (
+                  <RoadmapItemCard key={item.id} item={item} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Completed Items */}
+          {completedItems.length > 0 && (
+            <div>
+              <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
+                <div className="w-3 h-3 bg-gray-500 rounded-full" />
+                Completed Initiatives
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {completedItems.slice(0, 6).map(item => (
+                  <RoadmapItemCard key={item.id} item={item} />
+                ))}
+              </div>
+              {completedItems.length > 6 && (
+                <div className="text-center mt-4">
+                  <Button variant="outline">
+                    View All Completed ({completedItems.length})
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!roadmapItems?.length && (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <CalendarDays className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                <h3 className="text-lg font-medium mb-2">No roadmap items yet</h3>
+                <p className="text-muted-foreground mb-4">
+                  Start planning your platform improvements by creating your first roadmap item.
+                </p>
+                <Button onClick={() => setShowForm(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create First Roadmap Item
+                </Button>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -27,6 +27,8 @@ import { ProfilePage } from '@/pages/profile/ProfilePage';
 import ProfileSlugPage from '@/pages/ProfileSlugPage';
 import AdminDashboard from '@/pages/AdminDashboard';
 import Admin from '@/pages/Admin';
+import AdminCoreV2Page from '@/pages/admin/AdminCoreV2Page';
+import PriorityAssessmentDashboard from '@/pages/admin/PriorityAssessmentDashboard';
 import PollsLandingPage from '@/pages/PollsLandingPage';
 import PollsDiscovery from '@/pages/PollsDiscovery';
 import PollResultsPage from '@/pages/PollResultsPage';
@@ -132,8 +134,9 @@ export const AppRouter: React.FC = () => {
         <Route path="/performance" element={<PerformanceMonitoringPage />} />
         
         {/* Admin */}
-        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin" element={<AdminCoreV2Page />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        <Route path="/admin/priority-assessment" element={<PriorityAssessmentDashboard />} />
       </Routes>
     </>
   );

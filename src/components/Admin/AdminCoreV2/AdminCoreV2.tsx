@@ -40,6 +40,7 @@ import { RegionalAnalyticsManager } from './modules/RegionalAnalyticsManager';
 import RoleAccessTestSuite from './tests/RoleAccessTestSuite';
 import SecurityAuditSuite from './security/SecurityAuditSuite';
 import { PollTemplatesManager } from './PollTemplatesManager';
+import PriorityAssessmentDashboard from '@/pages/admin/PriorityAssessmentDashboard';
 import { ModuleAutoSync } from './core/ModuleAutoSync';
 import { ActivityLogger } from './core/ActivityLogger';
 import { NotificationCenter } from './core/NotificationCenter';
@@ -267,6 +268,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'security-audit', label: 'Security Audit', icon: Shield, color: 'text-red-600', permission: 'all' },
     { id: 'poll-templates', label: 'Poll Templates', icon: Palette, color: 'text-purple-600', permission: 'content' },
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
+    { id: 'priority-assessment', label: 'Priority Assessment', icon: TrendingUp, color: 'text-amber-600', permission: 'all' },
     { id: 'settings-sync', label: 'Settings & Sync', icon: Settings, color: 'text-gray-500', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
 
@@ -318,6 +320,8 @@ export const AdminCoreV2: React.FC = () => {
         return <SecurityAuditSuite hasPermission={hasPermission} adminRole={adminRole} currentUser={user} />;
       case 'poll-templates':
         return <PollTemplatesManager hasPermission={hasPermission} logActivity={logActivity} />;
+      case 'priority-assessment':
+        return <PriorityAssessmentDashboard />;
       case 'settings-sync':
         return <SettingsSyncManager {...moduleProps} systemModules={systemModules} onAutoSync={() => autoSyncMutation.mutate()} />;
       default:
