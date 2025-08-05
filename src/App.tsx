@@ -193,23 +193,23 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <PluginProvider>
-          <LanguageProvider>
-            <TooltipProvider>
-              <PanAfricaProvider>
-                <MobileProvider>
+          <TooltipProvider>
+            <PanAfricaProvider>
+              <MobileProvider>
                 <BrowserRouter>
-                  <Toaster />
-                  <Sonner />
-                  <PWAInstallPrompt />
-                  <OfflineIndicator />
-                  <LanguageRoutes />
+                  <LanguageProvider>
+                    <Toaster />
+                    <Sonner />
+                    <PWAInstallPrompt />
+                    <OfflineIndicator />
+                    <LanguageRoutes />
+                  </LanguageProvider>
                 </BrowserRouter>
               </MobileProvider>
             </PanAfricaProvider>
           </TooltipProvider>
-        </LanguageProvider>
-      </PluginProvider>
-    </AuthProvider>
+        </PluginProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
