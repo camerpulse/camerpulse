@@ -38,8 +38,8 @@ export const MinisterDetailPage: React.FC = () => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   // Mock data - replace with actual data fetching
-  const minister = {
-    id: id || '1',
+  const mockMinister = {
+    id: entityId || '1',
     name: 'Dr. Minette Libom Li Likeng',
     position: 'Minister of Posts and Telecommunications',
     ministry: 'Ministry of Posts and Telecommunications',
@@ -90,6 +90,9 @@ export const MinisterDetailPage: React.FC = () => {
     ]
   };
 
+  // Use actual data if available, otherwise use mock data
+  const ministerData = minister || mockMinister;
+
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').slice(0, 2);
   };
@@ -108,9 +111,9 @@ export const MinisterDetailPage: React.FC = () => {
               {/* Profile Image */}
               <div className="flex-shrink-0">
                 <Avatar className="h-32 w-32 mx-auto md:mx-0">
-                  <AvatarImage src={minister.photo} />
+                  <AvatarImage src={ministerData.photo} />
                   <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-                    {getInitials(minister.name)}
+                    {getInitials(ministerData.name)}
                   </AvatarFallback>
                 </Avatar>
               </div>
@@ -120,27 +123,27 @@ export const MinisterDetailPage: React.FC = () => {
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-                      <h1 className="text-3xl font-bold">{minister.name}</h1>
-                      {minister.isVerified && (
+                      <h1 className="text-3xl font-bold">{ministerData.name}</h1>
+                      {ministerData.isVerified && (
                         <CheckCircle className="h-6 w-6 text-blue-500" />
                       )}
                     </div>
-                    <p className="text-xl text-muted-foreground mb-1">{minister.position}</p>
-                    <p className="text-lg text-primary mb-3">{minister.ministry}</p>
+                    <p className="text-xl text-muted-foreground mb-1">{ministerData.position}</p>
+                    <p className="text-lg text-primary mb-3">{ministerData.ministry}</p>
                     
                     <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-4">
-                      <Badge variant="secondary">{minister.party}</Badge>
+                      <Badge variant="secondary">{ministerData.party}</Badge>
                       <Badge variant="outline">
                         <MapPin className="h-3 w-3 mr-1" />
-                        {minister.region}
+                        {ministerData.region}
                       </Badge>
                       <Badge variant="outline">
                         <Calendar className="h-3 w-3 mr-1" />
-                        {minister.stats.yearsInOffice} years in office
+                        {ministerData.stats.yearsInOffice} years in office
                       </Badge>
                       <Badge variant="outline">
                         <Briefcase className="h-3 w-3 mr-1" />
-                        {minister.stats.budgetManaged} budget
+                        {ministerData.stats.budgetManaged} budget
                       </Badge>
                     </div>
 
@@ -151,16 +154,16 @@ export const MinisterDetailPage: React.FC = () => {
                           <Star
                             key={star}
                             className={`h-4 w-4 ${
-                              star <= minister.rating
+                              star <= ministerData.rating
                                 ? 'fill-yellow-400 text-yellow-400'
                                 : 'text-gray-300'
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="font-medium">{minister.rating}</span>
+                      <span className="font-medium">{ministerData.rating}</span>
                       <span className="text-sm text-muted-foreground">
-                        ({minister.totalRatings} ratings)
+                        ({ministerData.totalRatings} ratings)
                       </span>
                     </div>
                   </div>
@@ -210,7 +213,7 @@ export const MinisterDetailPage: React.FC = () => {
                       </Button>
                     </div>
 
-                    {!minister.isClaimed && (
+                    {!ministerData.isClaimed && (
                       <Button 
                         variant="outline" 
                         onClick={() => setShowClaim(true)}
@@ -231,25 +234,25 @@ export const MinisterDetailPage: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{minister.stats.yearsInOffice}</div>
+              <div className="text-2xl font-bold text-primary">{ministerData.stats.yearsInOffice}</div>
               <div className="text-sm text-muted-foreground">Years in Office</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{minister.stats.projectsLaunched}</div>
+              <div className="text-2xl font-bold text-primary">{ministerData.stats.projectsLaunched}</div>
               <div className="text-sm text-muted-foreground">Projects Launched</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-lg font-bold text-primary">{minister.stats.budgetManaged}</div>
+              <div className="text-lg font-bold text-primary">{ministerData.stats.budgetManaged}</div>
               <div className="text-sm text-muted-foreground">Budget Managed</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{minister.stats.followers.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-primary">{ministerData.stats.followers.toLocaleString()}</div>
               <div className="text-sm text-muted-foreground">Followers</div>
             </CardContent>
           </Card>
@@ -272,14 +275,14 @@ export const MinisterDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground leading-relaxed mb-6">
-                  {minister.biography}
+                  {ministerData.biography}
                 </p>
                 
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="font-semibold mb-3">Key Achievements</h3>
                     <ul className="space-y-3">
-                      {minister.achievements.map((achievement, index) => (
+                      {ministerData.achievements.map((achievement, index) => (
                         <li key={index} className="flex items-start gap-3">
                           <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
                           <span>{achievement}</span>
@@ -291,7 +294,7 @@ export const MinisterDetailPage: React.FC = () => {
                   <div>
                     <h3 className="font-semibold mb-3">Education</h3>
                     <ul className="space-y-3">
-                      {minister.education.map((edu, index) => (
+                      {ministerData.education.map((edu, index) => (
                         <li key={index} className="flex items-start gap-3">
                           <Award className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                           <span>{edu}</span>
@@ -311,7 +314,7 @@ export const MinisterDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {minister.departments.map((department, index) => (
+                  {ministerData.departments.map((department, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <Building2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                       <span>{department}</span>
@@ -329,7 +332,7 @@ export const MinisterDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {minister.recentInitiatives.map((initiative, index) => (
+                  {ministerData.recentInitiatives.map((initiative, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <FileText className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                       <span>{initiative}</span>
@@ -348,19 +351,19 @@ export const MinisterDetailPage: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-muted-foreground" />
-                  <a href={`mailto:${minister.contact.email}`} className="text-blue-600 hover:underline">
-                    {minister.contact.email}
+                  <a href={`mailto:${ministerData.contact.email}`} className="text-blue-600 hover:underline">
+                    {ministerData.contact.email}
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="h-5 w-5 text-muted-foreground" />
-                  <a href={`tel:${minister.contact.phone}`} className="text-blue-600 hover:underline">
-                    {minister.contact.phone}
+                  <a href={`tel:${ministerData.contact.phone}`} className="text-blue-600 hover:underline">
+                    {ministerData.contact.phone}
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Globe className="h-5 w-5 text-muted-foreground" />
-                  <a href={minister.contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  <a href={ministerData.contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                     Official Ministry Website
                   </a>
                 </div>
@@ -395,32 +398,32 @@ export const MinisterDetailPage: React.FC = () => {
       <MessagingModal
         open={showMessaging}
         onClose={() => setShowMessaging(false)}
-        recipientId={minister.id}
-        recipientName={minister.name}
+        recipientId={ministerData.id}
+        recipientName={ministerData.name}
         recipientType="minister"
       />
 
       <RatingModal
         open={showRating}
         onClose={() => setShowRating(false)}
-        entityId={minister.id}
-        entityName={minister.name}
+        entityId={ministerData.id}
+        entityName={ministerData.name}
         entityType="minister"
       />
 
       <ClaimProfileModal
         open={showClaim}
         onClose={() => setShowClaim(false)}
-        profileId={minister.id}
-        profileName={minister.name}
+        profileId={ministerData.id}
+        profileName={ministerData.name}
         profileType="minister"
       />
 
       <SuggestEditModal
         open={showSuggestEdit}
         onClose={() => setShowSuggestEdit(false)}
-        profileId={minister.id}
-        profileName={minister.name}
+        profileId={ministerData.id}
+        profileName={ministerData.name}
         profileType="minister"
       />
     </div>

@@ -37,8 +37,8 @@ export const MPDetailPage: React.FC = () => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   // Mock data - replace with actual data fetching
-  const mp = {
-    id: id || '1',
+  const mockMP = {
+    id: entityId || '1',
     name: 'Hon. Cavaye Yeguie Djibril',
     position: 'Speaker of the National Assembly',
     party: 'CPDM',
@@ -79,6 +79,9 @@ export const MPDetailPage: React.FC = () => {
     ]
   };
 
+  // Use actual data if available, otherwise use mock data
+  const mpData = mp || mockMP;
+
   const getInitials = (name: string) => {
     return name.split(' ').map(n => n[0]).join('').slice(0, 2);
   };
@@ -97,9 +100,9 @@ export const MPDetailPage: React.FC = () => {
               {/* Profile Image */}
               <div className="flex-shrink-0">
                 <Avatar className="h-32 w-32 mx-auto md:mx-0">
-                  <AvatarImage src={mp.photo} />
+                  <AvatarImage src={mpData.photo} />
                   <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-                    {getInitials(mp.name)}
+                    {getInitials(mpData.name)}
                   </AvatarFallback>
                 </Avatar>
               </div>
@@ -109,26 +112,26 @@ export const MPDetailPage: React.FC = () => {
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-                      <h1 className="text-3xl font-bold">{mp.name}</h1>
-                      {mp.isVerified && (
+                      <h1 className="text-3xl font-bold">{mpData.name}</h1>
+                      {mpData.isVerified && (
                         <CheckCircle className="h-6 w-6 text-blue-500" />
                       )}
                     </div>
-                    <p className="text-xl text-muted-foreground mb-3">{mp.position}</p>
+                    <p className="text-xl text-muted-foreground mb-3">{mpData.position}</p>
                     
                     <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-4">
-                      <Badge variant="secondary">{mp.party}</Badge>
+                      <Badge variant="secondary">{mpData.party}</Badge>
                       <Badge variant="outline">
                         <MapPin className="h-3 w-3 mr-1" />
-                        {mp.region}
+                        {mpData.region}
                       </Badge>
                       <Badge variant="outline">
                         <Building className="h-3 w-3 mr-1" />
-                        {mp.constituency}
+                        {mpData.constituency}
                       </Badge>
                       <Badge variant="outline">
                         <Calendar className="h-3 w-3 mr-1" />
-                        {mp.stats.yearsInParliament} years in Parliament
+                        {mpData.stats.yearsInParliament} years in Parliament
                       </Badge>
                     </div>
 
@@ -139,16 +142,16 @@ export const MPDetailPage: React.FC = () => {
                           <Star
                             key={star}
                             className={`h-4 w-4 ${
-                              star <= mp.rating
+                              star <= mpData.rating
                                 ? 'fill-yellow-400 text-yellow-400'
                                 : 'text-gray-300'
                             }`}
                           />
                         ))}
                       </div>
-                      <span className="font-medium">{mp.rating}</span>
+                      <span className="font-medium">{mpData.rating}</span>
                       <span className="text-sm text-muted-foreground">
-                        ({mp.totalRatings} ratings)
+                        ({mpData.totalRatings} ratings)
                       </span>
                     </div>
                   </div>
@@ -198,7 +201,7 @@ export const MPDetailPage: React.FC = () => {
                       </Button>
                     </div>
 
-                    {!mp.isClaimed && (
+                    {!mpData.isClaimed && (
                       <Button 
                         variant="outline" 
                         onClick={() => setShowClaim(true)}
@@ -219,25 +222,25 @@ export const MPDetailPage: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{mp.stats.yearsInParliament}</div>
+              <div className="text-2xl font-bold text-primary">{mpData.stats.yearsInParliament}</div>
               <div className="text-sm text-muted-foreground">Years in Parliament</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{mp.stats.billsSponsored}</div>
+              <div className="text-2xl font-bold text-primary">{mpData.stats.billsSponsored}</div>
               <div className="text-sm text-muted-foreground">Bills Sponsored</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{mp.stats.motionsRaised}</div>
+              <div className="text-2xl font-bold text-primary">{mpData.stats.motionsRaised}</div>
               <div className="text-sm text-muted-foreground">Motions Raised</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{mp.stats.followers.toLocaleString()}</div>
+              <div className="text-2xl font-bold text-primary">{mpData.stats.followers.toLocaleString()}</div>
               <div className="text-sm text-muted-foreground">Followers</div>
             </CardContent>
           </Card>
@@ -260,13 +263,13 @@ export const MPDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground leading-relaxed">
-                  {mp.biography}
+                  {mpData.biography}
                 </p>
                 
                 <div className="mt-6">
                   <h3 className="font-semibold mb-3">Key Achievements</h3>
                   <ul className="space-y-3">
-                    {mp.achievements.map((achievement, index) => (
+                    {mpData.achievements.map((achievement, index) => (
                       <li key={index} className="flex items-start gap-3">
                         <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
                         <span>{achievement}</span>
@@ -285,7 +288,7 @@ export const MPDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {mp.committees.map((committee, index) => (
+                  {mpData.committees.map((committee, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <Users className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                       <span>{committee}</span>
@@ -303,7 +306,7 @@ export const MPDetailPage: React.FC = () => {
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3">
-                  {mp.legislation.map((bill, index) => (
+                  {mpData.legislation.map((bill, index) => (
                     <li key={index} className="flex items-start gap-3">
                       <FileText className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                       <span>{bill}</span>
@@ -322,19 +325,19 @@ export const MPDetailPage: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-3">
                   <Mail className="h-5 w-5 text-muted-foreground" />
-                  <a href={`mailto:${mp.contact.email}`} className="text-blue-600 hover:underline">
-                    {mp.contact.email}
+                  <a href={`mailto:${mpData.contact.email}`} className="text-blue-600 hover:underline">
+                    {mpData.contact.email}
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Phone className="h-5 w-5 text-muted-foreground" />
-                  <a href={`tel:${mp.contact.phone}`} className="text-blue-600 hover:underline">
-                    {mp.contact.phone}
+                  <a href={`tel:${mpData.contact.phone}`} className="text-blue-600 hover:underline">
+                    {mpData.contact.phone}
                   </a>
                 </div>
                 <div className="flex items-center gap-3">
                   <Globe className="h-5 w-5 text-muted-foreground" />
-                  <a href={mp.contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                  <a href={mpData.contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
                     Official Parliament Page
                   </a>
                 </div>
@@ -369,32 +372,32 @@ export const MPDetailPage: React.FC = () => {
       <MessagingModal
         open={showMessaging}
         onClose={() => setShowMessaging(false)}
-        recipientId={mp.id}
-        recipientName={mp.name}
+        recipientId={mpData.id}
+        recipientName={mpData.name}
         recipientType="mp"
       />
 
       <RatingModal
         open={showRating}
         onClose={() => setShowRating(false)}
-        entityId={mp.id}
-        entityName={mp.name}
+        entityId={mpData.id}
+        entityName={mpData.name}
         entityType="mp"
       />
 
       <ClaimProfileModal
         open={showClaim}
         onClose={() => setShowClaim(false)}
-        profileId={mp.id}
-        profileName={mp.name}
+        profileId={mpData.id}
+        profileName={mpData.name}
         profileType="mp"
       />
 
       <SuggestEditModal
         open={showSuggestEdit}
         onClose={() => setShowSuggestEdit(false)}
-        profileId={mp.id}
-        profileName={mp.name}
+        profileId={mpData.id}
+        profileName={mpData.name}
         profileType="mp"
       />
     </div>
