@@ -35,6 +35,9 @@ import { useMobileDetection } from '@/hooks/useMobileDetection';
 export function ModernDashboard() {
   const { isMobile } = useMobileDetection();
   
+  // Debug logging
+  console.log('ModernDashboard is rendering!', { isMobile });
+  
   // If mobile, we could return a mobile-optimized version
   // For now, keeping the responsive design approach
   
