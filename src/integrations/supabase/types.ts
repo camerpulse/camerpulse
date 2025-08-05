@@ -31640,6 +31640,7 @@ export type Database = {
           civic_interests: string[] | null
           civic_tagline: string | null
           contact_info: Json | null
+          contact_visibility: string | null
           contribution_level: string | null
           cover_image_url: string | null
           cover_photo_url: string | null
@@ -31696,6 +31697,7 @@ export type Database = {
           civic_interests?: string[] | null
           civic_tagline?: string | null
           contact_info?: Json | null
+          contact_visibility?: string | null
           contribution_level?: string | null
           cover_image_url?: string | null
           cover_photo_url?: string | null
@@ -31752,6 +31754,7 @@ export type Database = {
           civic_interests?: string[] | null
           civic_tagline?: string | null
           contact_info?: Json | null
+          contact_visibility?: string | null
           contribution_level?: string | null
           cover_image_url?: string | null
           cover_photo_url?: string | null
@@ -34367,6 +34370,33 @@ export type Database = {
           timestamp?: string | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      security_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          created_at: string | null
+          description: string | null
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
