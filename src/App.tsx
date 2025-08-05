@@ -184,6 +184,7 @@ import { PluginProvider } from "./contexts/PluginContext";
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
 import DynamicCountryRouter from "./components/routing/DynamicCountryRouter";
+import { LegacyRedirectHandler } from "./components/routing/LegacyRedirectHandler";
 
 const queryClient = new QueryClient();
 
@@ -200,39 +201,41 @@ const App = () => {
                   <Sonner />
                   <PWAInstallPrompt />
                   <OfflineIndicator />
-                  <Routes>
-                    <Route path="/test" element={<TestPage />} />
-          <Route path="/jobs" element={<JobBoard />} />
-          <Route path="/jobs/home" element={<JobsHome />} />
-          <Route path="/jobs/ecosystem" element={<WorkforceEcosystemHub />} />
-          <Route path="/jobs/company" element={<CompanyPortal />} />
-          <Route path="/jobs/leaderboard" element={<RegionalHiringLeaderboard />} />
-          <Route path="/jobs/campaigns" element={<CampaignDashboard />} />
-          <Route path="/jobs/campaigns/:campaignId" element={<CampaignPublicPage />} />
-          <Route path="/jobs/analytics" element={<SponsorAnalyticsDashboard />} />
-        <Route path="/transparency" element={<TransparencyHub />} />
-        <Route path="/transparency/government" element={<GovernmentTransparency />} />
-        <Route path="/judiciary" element={<JudicialTransparency />} />
-        <Route path="/transparency/elections" element={<ElectoralTransparency />} />
-           <Route path="/transparency/workforce" element={<PublicWorkforceDashboard />} />
-           <Route path="/transparency/policy-impact" element={<PolicyImpactDashboard />} />
-          <Route path="/experts" element={<ExpertMarketplace />} />
-          <Route path="/experts/portal" element={<ExpertPortal />} />
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/profile/:username" element={<ProfilePage />} />
-          <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
-              <Route path="/" element={<Index />} />
-              <Route path="/auth" element={<AuthPage />} />
-              <Route path="/feed" element={<Feed />} />
-              <Route path="/civic-feed" element={<CivicFeed />} />
-              <Route path="/politicians" element={<Politicians />} />
-              <Route path="/politicians/:id" element={<PoliticianDetailPage />} />
-              <Route path="/senators" element={<SenatorsPage />} />
-              <Route path="/senators/:id" element={<SenatorDetailPage />} />
-              <Route path="/mps" element={<MPsPage />} />
-              <Route path="/mps/:id" element={<MPDetailPage />} />
-              <Route path="/ministers" element={<MinistersPage />} />
-              <Route path="/ministers/:id" element={<MinisterDetailPage />} />
+                  <LegacyRedirectHandler />
+          <Routes>
+                     <Route path="/test" element={<TestPage />} />
+           <Route path="/jobs" element={<JobBoard />} />
+           <Route path="/jobs/home" element={<JobsHome />} />
+           <Route path="/jobs/ecosystem" element={<WorkforceEcosystemHub />} />
+           <Route path="/jobs/company" element={<CompanyPortal />} />
+           <Route path="/jobs/leaderboard" element={<RegionalHiringLeaderboard />} />
+           <Route path="/jobs/campaigns" element={<CampaignDashboard />} />
+           <Route path="/jobs/campaigns/:campaignId" element={<CampaignPublicPage />} />
+           <Route path="/jobs/analytics" element={<SponsorAnalyticsDashboard />} />
+         <Route path="/transparency" element={<TransparencyHub />} />
+         <Route path="/transparency/government" element={<GovernmentTransparency />} />
+         <Route path="/judiciary" element={<JudicialTransparency />} />
+         <Route path="/transparency/elections" element={<ElectoralTransparency />} />
+            <Route path="/transparency/workforce" element={<PublicWorkforceDashboard />} />
+            <Route path="/transparency/policy-impact" element={<PolicyImpactDashboard />} />
+           <Route path="/experts" element={<ExpertMarketplace />} />
+           <Route path="/experts/portal" element={<ExpertPortal />} />
+           <Route path="/profile" element={<ProfilePage />} />
+           <Route path="/profile/:username" element={<ProfilePage />} />
+           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
+               <Route path="/" element={<Index />} />
+               <Route path="/auth" element={<AuthPage />} />
+               <Route path="/feed" element={<Feed />} />
+               <Route path="/civic-feed" element={<CivicFeed />} />
+               {/* Political Entities - SEO-friendly slug routes */}
+               <Route path="/politicians" element={<Politicians />} />
+               <Route path="/politicians/:id" element={<PoliticianDetailPage />} />
+               <Route path="/senators" element={<SenatorsPage />} />
+               <Route path="/senators/:id" element={<SenatorDetailPage />} />
+               <Route path="/mps" element={<MPsPage />} />
+               <Route path="/mps/:id" element={<MPDetailPage />} />
+               <Route path="/ministers" element={<MinistersPage />} />
+               <Route path="/ministers/:id" element={<MinisterDetailPage />} />
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/data-import" element={<AdminDataImport />} />
               <Route path="/audit-registry" element={<AuditRegistryPage />} />
@@ -348,14 +351,17 @@ const App = () => {
         <Route path="/profile-test" element={<ProfileValidationTest />} />
         <Route path="/feature-test" element={<ProfileFeatureTest />} />
         <Route path="/system-test" element={<ProfileSystemTester />} />
-          <Route path="/events" element={<Events />} />
+           {/* Events - SEO-friendly slug routes */}
+           <Route path="/events" element={<Events />} />
+           <Route path="/events/:id" element={<Events />} />
           <Route path="/calendar" element={<EventCalendarPage />} />
           <Route path="/verify-certificate" element={<CertificateVerificationPage />} />
-          <Route path="/villages" element={<VillagesDirectory />} />
-          <Route path="/villages/directory" element={<VillagesDirectory />} />
-          <Route path="/villages/add" element={<AddVillage />} />
-          <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
-          <Route path="/villages/:id" element={<VillageProfile />} />
+           {/* Village Directory - SEO-friendly slug routes */}
+           <Route path="/villages" element={<VillagesDirectory />} />
+           <Route path="/villages/directory" element={<VillagesDirectory />} />
+           <Route path="/villages/add" element={<AddVillage />} />
+           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
+           <Route path="/villages/:id" element={<VillageProfile />} />
           <Route path="/search" element={<AdvancedSearchPage />} />
           <Route path="/economics" element={<EconomicsPage />} />
           <Route path="/civic" element={<CivicParticipationPage />} />
@@ -364,9 +370,10 @@ const App = () => {
               <Route path="/analytics/dashboard" element={<AnalyticsDashboard />} />
               <Route path="/analytics/sentiment" element={<SentimentAnalysis />} />
               <Route path="/analytics/predictive" element={<PredictiveAnalytics />} />
+              {/* Institution Directories - SEO-friendly slug routes */}
               <Route path="/schools" element={<SchoolsDirectory />} />
-          <Route path="/hospitals" element={<HospitalsDirectory />} />
-          <Route path="/pharmacies" element={<PharmaciesDirectory />} />
+           <Route path="/hospitals" element={<HospitalsDirectory />} />
+           <Route path="/pharmacies" element={<PharmaciesDirectory />} />
           <Route path="/map" element={<ServicesMap />} />
           <Route path="/interactive-map" element={<InteractiveMap />} />
           <Route path="/services-search" element={<UnifiedServicesSearch />} />
@@ -377,9 +384,10 @@ const App = () => {
            <Route path="/analytics/:institutionId" element={<InstitutionAnalytics />} />
            <Route path="/moderators/onboarding" element={<ModeratorOnboarding />} />
            <Route path="/moderators/dashboard" element={<ModerationDashboard />} />
-           <Route path="/petitions" element={<PetitionsPlatform />} />
-           <Route path="/petitions/:id" element={<PetitionDetail />} />
-           <Route path="/petitions/create" element={<CreatePetition />} />
+            {/* Petitions - SEO-friendly slug routes */}
+            <Route path="/petitions" element={<PetitionsPlatform />} />
+            <Route path="/petitions/:id" element={<PetitionDetail />} />
+            <Route path="/petitions/create" element={<CreatePetition />} />
            <Route path="/civic-tools" element={<CivicTools />} />
            <Route path="/enhanced-polls" element={<EnhancedPolls />} />
            <Route path="/politician-performance" element={<PoliticianPerformance />} />
