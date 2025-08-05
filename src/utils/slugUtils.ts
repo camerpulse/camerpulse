@@ -35,11 +35,11 @@ export function generateSlug(text: string, id?: string): string {
   if (!text) return id || 'item';
   
   let slug = text
-    .toLowerCase()
-    .trim()
-    .replace(/[^\w\s-]/g, '') // Remove special characters
-    .replace(/[\s_-]+/g, '-') // Replace spaces/underscores with hyphens
-    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+    .toString()                        // Cast to string
+    .toLowerCase()                    // Lowercase
+    .trim()                          // Remove whitespace at start/end
+    .replace(/[\s\W-]+/g, '-')       // Replace spaces/non-word chars with hyphen
+    .replace(/^-+|-+$/g, '');        // Remove leading/trailing hyphens
   
   // Append ID if provided
   if (id) {
