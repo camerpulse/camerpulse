@@ -181,7 +181,7 @@ import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PluginProvider } from "./contexts/PluginContext";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import { LanguageRoutes } from "./components/routing/LanguageRoutes";
+import { AppRouter } from "./components/routing/LanguageRoutes";
 
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
@@ -202,7 +202,7 @@ const App = () => {
                     <Sonner />
                     <PWAInstallPrompt />
                     <OfflineIndicator />
-                    <LanguageRoutes />
+                    <AppRouter />
                   </LanguageProvider>
                 </BrowserRouter>
               </MobileProvider>
