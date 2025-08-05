@@ -29288,7 +29288,7 @@ export type Database = {
           timeline_roles: Json | null
           transparency_rating: number | null
           updated_at: string | null
-          user_id: string | null
+          user_id: string
           verification_notes: string | null
           verified: boolean | null
         }
@@ -29350,7 +29350,7 @@ export type Database = {
           timeline_roles?: Json | null
           transparency_rating?: number | null
           updated_at?: string | null
-          user_id?: string | null
+          user_id: string
           verification_notes?: string | null
           verified?: boolean | null
         }
@@ -29412,7 +29412,7 @@ export type Database = {
           timeline_roles?: Json | null
           transparency_rating?: number | null
           updated_at?: string | null
-          user_id?: string | null
+          user_id?: string
           verification_notes?: string | null
           verified?: boolean | null
         }
