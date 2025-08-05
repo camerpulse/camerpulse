@@ -13,13 +13,15 @@ import {
   FileText,
   MapPin
 } from 'lucide-react';
+import { MainLayout } from '@/components/layout/MainLayout';
 
 /**
- * Civic Dashboard - User's personalized civic engagement overview
+ * Enhanced Civic Dashboard - User's personalized civic engagement overview
  */
 const CivicDashboard: React.FC = () => {
   return (
-    <div className="container mx-auto px-4 py-6 space-y-6">
+    <MainLayout>
+      <div className="container mx-auto px-4 py-6 space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-3xl font-bold">Civic Dashboard</h1>
@@ -169,6 +171,7 @@ const CivicDashboard: React.FC = () => {
         </CardContent>
       </Card>
     </div>
+  </MainLayout>
   );
 };
 
