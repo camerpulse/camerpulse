@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useMPSlug } from '@/hooks/useSlugResolver';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -29,7 +29,7 @@ import { ClaimProfileModal } from '@/components/Politics/ClaimProfileModal';
 import { SuggestEditModal } from '@/components/Politics/SuggestEditModal';
 
 export const MPDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { entity: mp, loading, error, entityId } = useMPSlug();
   const [showMessaging, setShowMessaging] = useState(false);
   const [showRating, setShowRating] = useState(false);
   const [showClaim, setShowClaim] = useState(false);

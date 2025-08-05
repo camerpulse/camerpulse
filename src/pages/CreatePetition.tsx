@@ -1,12 +1,13 @@
 import React from 'react';
 import { CreatePetitionForm } from '@/components/petitions/CreatePetitionForm';
 import { useNavigate } from 'react-router-dom';
+import { URLBuilder } from '@/utils/slugUtils';
 
 export default function CreatePetition() {
   const navigate = useNavigate();
 
   const handleSubmit = (petitionId: string) => {
-    navigate(`/petitions/${petitionId}`);
+    navigate(URLBuilder.petitions.detail({ id: petitionId, title: 'petition' }));
   };
 
   const handleCancel = () => {

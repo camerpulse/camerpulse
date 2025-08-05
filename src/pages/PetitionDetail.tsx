@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { usePetitionSlug } from '@/hooks/useSlugResolver';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,10 +31,10 @@ interface Petition {
 }
 
 export default function PetitionDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { entity: petition, loading: petitionLoading, error, entityId } = usePetitionSlug();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [petition, setPetition] = useState<Petition | null>(null);
+  const [petitionData, setPetitionData] = useState<Petition | null>(null);
   const [loading, setLoading] = useState(true);
   const [hasSigned, setHasSigned] = useState(false);
   const [user, setUser] = useState(null);
@@ -44,11 +45,12 @@ export default function PetitionDetail() {
       setUser(user);
     });
 
-    if (id) {
-      fetchPetition();
+    if (petition) {
+      setPetitionData(petition);
+      fetchAdditionalData();
       checkIfSigned();
     }
-  }, [id]);
+  }, [petition, entityId]);
 
   const fetchPetition = async () => {
     try {
@@ -79,7 +81,7 @@ export default function PetitionDetail() {
       const { data } = await supabase
         .from('petition_signatures')
         .select('id')
-        .eq('petition_id', id)
+        .eq('petition_id', entityId)
         .eq('user_id', user.id)
         .single();
       
@@ -114,7 +116,7 @@ export default function PetitionDetail() {
     }
   };
 
-  if (loading) {
+  if (petitionLoading || loading) {
     return (
       <div className="min-h-screen bg-background py-8">
         <div className="container mx-auto px-4">
@@ -129,7 +131,7 @@ export default function PetitionDetail() {
     );
   }
 
-  if (!petition) {
+  if (!petitionData) {
     return (
       <div className="min-h-screen bg-background py-8">
         <div className="container mx-auto px-4">

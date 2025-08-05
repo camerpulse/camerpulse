@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { URLBuilder } from '@/utils/slugUtils';
 import { PetitionList } from '@/components/petitions/PetitionList';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,7 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Search, Plus, TrendingUp, Users, FileText, Filter } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const CATEGORIES = [
   { value: 'all', label: 'All Categories', icon: '📋' },
@@ -42,7 +43,7 @@ export default function PetitionsPlatform() {
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/petitions/create">
+            <Link to={URLBuilder.petitions.create()}>
               <Button size="lg" variant="secondary" className="petition-btn-create">
                 <Plus className="h-5 w-5 mr-2" />
                 Start a Petition
@@ -167,7 +168,7 @@ export default function PetitionsPlatform() {
               Create your petition today and rally your community around the causes that matter.
             </p>
             <div className="flex justify-center gap-4">
-              <Link to="/petitions/create">
+              <Link to={URLBuilder.petitions.create()}>
                 <Button variant="secondary" size="lg">
                   <FileText className="h-5 w-5 mr-2" />
                   Create Petition

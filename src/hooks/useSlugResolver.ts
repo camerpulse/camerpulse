@@ -138,3 +138,17 @@ export function useEventSlug() {
     table: 'events'
   });
 }
+
+export function useMPSlug() {
+  return useSlugResolver({
+    table: 'politicians',
+    // MPs are stored in politicians table with specific role filter
+  });
+}
+
+export function useMinisterSlug() {
+  return useSlugResolver({
+    table: 'politicians',
+    // Ministers are stored in politicians table with specific role filter
+  });
+}

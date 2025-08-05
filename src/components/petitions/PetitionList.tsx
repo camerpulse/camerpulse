@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { URLBuilder } from '@/utils/slugUtils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Users, Clock, MapPin, Target, TrendingUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 
 interface Petition {
@@ -140,7 +141,7 @@ export const PetitionList: React.FC<PetitionListProps> = ({
               }
             </p>
           </div>
-          <Link to="/petitions/create">
+          <Link to={URLBuilder.petitions.create()}>
             <Button>Create the First Petition</Button>
           </Link>
         </CardContent>
@@ -169,7 +170,7 @@ export const PetitionList: React.FC<PetitionListProps> = ({
                     )}
                   </div>
                   
-                  <Link to={`/petitions/${petition.id}`}>
+                  <Link to={URLBuilder.petitions.detail({ id: petition.id, title: petition.title })}>
                     <h3 className="text-xl font-semibold hover:text-primary transition-colors line-clamp-2">
                       {petition.title}
                     </h3>
@@ -216,7 +217,7 @@ export const PetitionList: React.FC<PetitionListProps> = ({
 
               {/* Actions */}
               <div className="flex gap-3 pt-2">
-                <Link to={`/petitions/${petition.id}`} className="flex-1">
+                <Link to={URLBuilder.petitions.detail({ id: petition.id, title: petition.title })} className="flex-1">
                   <Button variant="default" className="w-full petition-btn-sign">
                     Sign Petition
                   </Button>
