@@ -25,6 +25,7 @@ import MessengerPage from '@/pages/MessengerPage';
 import NotificationSettingsPage from '@/pages/NotificationSettingsPage';
 import { ProfilePage } from '@/pages/profile/ProfilePage';
 import ProfileSlugPage from '@/pages/ProfileSlugPage';
+import UnifiedProfilePage from '@/pages/UnifiedProfilePage';
 import AdminDashboard from '@/pages/AdminDashboard';
 import Admin from '@/pages/Admin';
 import AdminCoreV2Page from '@/pages/admin/AdminCoreV2Page';
@@ -119,8 +120,13 @@ export const AppRouter: React.FC = () => {
         <Route path="/notifications" element={<NotificationSettingsPage />} />
         
         {/* User Profiles */}
-        <Route path="/profile/:username" element={<ProfilePage />} />
-        <Route path="/@:username" element={<ProfileSlugPage />} />
+        <Route path="/profile/:username" element={<UnifiedProfilePage />} />
+        <Route path="/u/:userId" element={<UnifiedProfilePage />} />
+        <Route path="/@:username" element={<UnifiedProfilePage />} />
+        
+        {/* Legacy Profile Routes */}
+        <Route path="/profile/:username/legacy" element={<ProfilePage />} />
+        <Route path="/profile-slug/:slug" element={<ProfileSlugPage />} />
         
         {/* Polls */}
         <Route path="/polls" element={<PollsLandingPage />} />
