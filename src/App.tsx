@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HomePage } from '@/pages/HomePage';
 import AuthPage from '@/pages/AuthPage';
 import { CamerPulseDashboard } from '@/pages/CamerPulseDashboard';
-import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayoutClean';
+import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayout';
 import { PoliticiansPage } from '@/pages/PoliticiansPage';
 import { PoliticalPartiesPage } from '@/pages/PoliticalPartiesPage';
 import { PoliticalRankingsPage } from '@/pages/PoliticalRankingsPage';

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
@@ -78,6 +79,7 @@ const LANGUAGES = [
 export const ArtistSubmissionSystem: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const [currentStep, setCurrentStep] = React.useState(1);
   const [searchResults, setSearchResults] = React.useState<ExistingArtist[]>([]);
@@ -555,9 +557,9 @@ export const ArtistSubmissionSystem: React.FC = () => {
           Your artist application has been submitted for verification. 
           You'll receive a notification once it's reviewed and approved.
         </p>
-        <Button onClick={() => window.location.href = '/'}>
-          Return to Home
-        </Button>
+        <Link to="/">
+          <Button>Back to Home</Button>
+        </Link>
       </CardContent>
     </Card>
   );
@@ -565,7 +567,7 @@ export const ArtistSubmissionSystem: React.FC = () => {
   // Redirect if not logged in
   if (!user) {
     React.useEffect(() => {
-      window.location.href = '/auth?returnTo=/camerplay/submit-artist';
+      navigate('/auth?returnTo=/camerplay/submit-artist');
     }, []);
     return null;
   }

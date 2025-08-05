@@ -3,7 +3,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { UnifiedFeedContent } from '@/components/feed/UnifiedFeedContent';
 import { FeedHeader } from '@/components/feed/FeedHeader';
 import { FeedFilters } from '@/components/feed/FeedFilters';
-import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayout';
 import { useFeedAlgorithm } from '@/hooks/useFeedAlgorithm';
 
 export default function NewFeed() {

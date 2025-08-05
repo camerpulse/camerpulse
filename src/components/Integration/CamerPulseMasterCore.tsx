@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -229,9 +230,9 @@ export const CamerPulseMasterCore: React.FC = () => {
         <p className="text-muted-foreground mb-4">
           Please sign in to access the CamerPulse platform.
         </p>
-        <Button onClick={() => window.location.href = '/auth'}>
-          Sign In
-        </Button>
+        <Link to="/auth">
+          <Button>Join CamerPulse</Button>
+        </Link>
       </div>
     );
   }
