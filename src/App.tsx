@@ -6,8 +6,10 @@ import { CamerPulseDashboard } from '@/pages/CamerPulseDashboard';
 import { CivicAuthenticatedLayout } from '@/components/layout/CivicAuthenticatedLayout';
 import { PoliticiansPage } from '@/pages/PoliticiansPage';
 import { PoliticalPartiesPage } from '@/pages/PoliticalPartiesPage';
-import { PoliticalRankingsPage } from '@/pages/PoliticalRankingsPage';
 import { SettingsPage } from '@/pages/SettingsPage';
+import { VillagesPage } from '@/pages/VillagesPage';
+import { CivicEducationPage } from '@/pages/CivicEducationPage';
+import { TransparencyPage } from '@/pages/TransparencyPage';
 import NewFeed from '@/pages/NewFeed';
 import JobBoard from '@/pages/jobs/JobBoard';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
@@ -82,16 +84,6 @@ function AppContent() {
                 <PoliticalPartiesPage />
               </CivicAuthenticatedLayout>
             } />
-            <Route path="/political-rankings" element={
-              <CivicAuthenticatedLayout>
-                <PoliticalRankingsPage />
-              </CivicAuthenticatedLayout>
-            } />
-            <Route path="/jobs" element={
-              <CivicAuthenticatedLayout>
-                <JobBoard />
-              </CivicAuthenticatedLayout>
-            } />
             <Route path="/petitions" element={
               <CivicAuthenticatedLayout>
                 <Petitions />
@@ -102,28 +94,24 @@ function AppContent() {
                 <PetitionDetail />
               </CivicAuthenticatedLayout>
             } />
+            <Route path="/jobs" element={
+              <CivicAuthenticatedLayout>
+                <JobBoard />
+              </CivicAuthenticatedLayout>
+            } />
             <Route path="/villages" element={
               <CivicAuthenticatedLayout>
-                <div className="p-8 text-center">
-                  <h2 className="text-2xl font-bold mb-4">Villages & Communities</h2>
-                  <p className="text-muted-foreground">Coming Soon - Connect with your ancestral heritage</p>
-                </div>
+                <VillagesPage />
               </CivicAuthenticatedLayout>
             } />
             <Route path="/civic-education" element={
               <CivicAuthenticatedLayout>
-                <div className="p-8 text-center">
-                  <h2 className="text-2xl font-bold mb-4">Civic Education</h2>
-                  <p className="text-muted-foreground">Coming Soon - Learn about democratic processes</p>
-                </div>
+                <CivicEducationPage />
               </CivicAuthenticatedLayout>
             } />
             <Route path="/transparency" element={
               <CivicAuthenticatedLayout>
-                <div className="p-8 text-center">
-                  <h2 className="text-2xl font-bold mb-4">Transparency Portal</h2>
-                  <p className="text-muted-foreground">Coming Soon - Government transparency tracking</p>
-                </div>
+                <TransparencyPage />
               </CivicAuthenticatedLayout>
             } />
             <Route path="/settings" element={
