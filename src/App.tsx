@@ -18,7 +18,7 @@ import { PublicHomePage } from '@/pages/PublicHomePage';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { PluginProvider } from '@/contexts/PluginContext';
-import { PluginRouter } from '@/components/Plugin/PluginRouter';
+// Plugin system removed in Phase 7 simplification
 import { Toaster } from '@/components/ui/toaster';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
@@ -59,8 +59,8 @@ function AppContent() {
         <Route path="/public/tracking" element={<TrackingPage />} />
         <Route path="/public/tracking/:trackingNumber" element={<TrackingPage />} />
         
-        {/* Plugin Routes */}
-        <Route path="/logistics/*" element={<PluginRouter user={user} />} />
+        {/* Logistics Routes - Simplified */}
+        <Route path="/logistics" element={<div className="p-8 text-center">Logistics Module - Under Reconstruction</div>} />
         
         {/* Auth Route */}
         <Route path="/auth" element={<AuthPage />} />

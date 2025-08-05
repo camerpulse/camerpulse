@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { PluginAwareLink } from '@/components/Plugin/PluginAwareLink';
+// Plugin system removed in Phase 7 simplification
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -112,12 +112,12 @@ export function PublicHomePage() {
                   </Button>
                 </Link>
               </div>
-              <PluginAwareLink pluginName="camer-logistics" to="/logistics">
+              <Link to="/logistics">
                 <Button variant="outline" size="sm">
                   <Building2 className="h-4 w-4 mr-2" />
                   <span className="hidden sm:inline">Logistics</span>
                 </Button>
-              </PluginAwareLink>
+              </Link>
               <Link to="/auth">
                 <Button size="sm">
                   <Shield className="h-4 w-4 mr-2" />
@@ -339,7 +339,7 @@ export function PublicHomePage() {
             <div>
               <h4 className="font-medium mb-3">Services</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li><PluginAwareLink pluginName="camer-logistics" to="/logistics" className="hover:text-foreground transition-colors">Logistics Platform</PluginAwareLink></li>
+                <li><Link to="/logistics" className="hover:text-foreground transition-colors">Logistics Platform</Link></li>
                 <li><Link to="/jobs" className="hover:text-foreground transition-colors">Job Portal</Link></li>
                 <li><Link to="/directory" className="hover:text-foreground transition-colors">Services Directory</Link></li>
               </ul>
