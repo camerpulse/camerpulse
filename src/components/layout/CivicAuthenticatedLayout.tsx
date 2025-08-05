@@ -7,7 +7,7 @@ import { UserOnboarding } from '@/components/onboarding/UserOnboarding';
 import { MobileBottomNav } from '@/components/camerpulse/MobileBottomNav';
 import { useMobileDetection } from '@/hooks/useMobileDetection';
 import { useAuth } from '@/contexts/AuthContext';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface CivicAuthenticatedLayoutProps {
   children: React.ReactNode;
@@ -17,6 +17,7 @@ export function CivicAuthenticatedLayout({ children }: CivicAuthenticatedLayoutP
   const { user } = useAuth();
   const { isMobile } = useMobileDetection();
   const location = useLocation();
+  const navigate = useNavigate();
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
 
@@ -59,7 +60,7 @@ export function CivicAuthenticatedLayout({ children }: CivicAuthenticatedLayoutP
     
     const path = tabToPath[tab];
     if (path && path !== location.pathname) {
-      window.location.href = path;
+      navigate(path);
     }
   };
 
