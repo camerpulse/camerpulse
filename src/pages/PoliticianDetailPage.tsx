@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { usePoliticianSlug } from '@/hooks/useSlugResolver';
+import { URLBuilder, SEOHelper } from '@/utils/slugUtils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,48 +27,64 @@ import { ClaimProfileModal } from '@/components/Politics/ClaimProfileModal';
 import { SuggestEditModal } from '@/components/Politics/SuggestEditModal';
 
 export const PoliticianDetailPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const { entity: politician, loading, error, entityId } = usePoliticianSlug();
   const [showMessaging, setShowMessaging] = useState(false);
   const [showRating, setShowRating] = useState(false);
   const [showClaim, setShowClaim] = useState(false);
   const [showSuggestEdit, setShowSuggestEdit] = useState(false);
   const [isFollowing, setIsFollowing] = useState(false);
 
-  // Mock data - replace with actual data fetching
-  const politician = {
-    id: id || '1',
-    name: 'Hon. Paul Biya',
-    position: 'President of the Republic',
-    party: 'CPDM',
-    region: 'Centre',
-    photo: '',
-    rating: 4.2,
-    totalRatings: 1234,
-    isVerified: true,
-    isClaimed: false,
-    biography: 'Paul Biya has been serving as the President of Cameroon since 1982. He is one of the longest-serving heads of state in Africa and has led significant development initiatives across the country.',
-    achievements: [
-      'Infrastructure Development Projects',
-      'Educational Reforms',
-      'Economic Stabilization Programs',
-      'Peace and Security Initiatives'
-    ],
-    contact: {
-      email: 'contact@presidency.gov.cm',
-      phone: '+237 222 220 025',
-      website: 'https://www.prc.cm'
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background p-4 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Loading politician profile...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !politician) {
+    return (
+      <div className="min-h-screen bg-background p-4 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold mb-2">Politician Not Found</h1>
+          <p className="text-muted-foreground mb-4">{error || 'The politician profile you\'re looking for doesn\'t exist.'}</p>
+          <Link to="/politicians" className="text-primary hover:underline">
+            ← Back to Politicians
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // Use real data from politician entity
+  const politicianData = {
+    id: politician.id,
+    name: politician.name,
+    position: politician.role_title || politician.position || 'Politician',
+    party: politician.party || politician.political_party,
+    region: politician.region,
+    photo: politician.profile_image_url || politician.photo_url,
+    rating: politician.average_rating || 0,
+    totalRatings: politician.total_ratings || 0,
+    isVerified: politician.verified || false,
+    isClaimed: politician.claimed || false,
+    biography: politician.bio || politician.biography || 'No biography available.',
+    achievements: politician.achievements || [],
+    contact: politician.contact || {
+      email: politician.email,
+      phone: politician.phone,
+      website: politician.website
     },
     stats: {
-      yearsInOffice: 41,
-      billsSponsored: 45,
-      projectsCompleted: 120,
-      followers: 25000
+      yearsInOffice: politician.years_in_office || 0,
+      billsSponsored: politician.bills_sponsored || 0,
+      projectsCompleted: politician.projects_completed || 0,
+      followers: politician.follower_count || 0
     },
-    socialMedia: {
-      twitter: '@PaulBiya_Official',
-      facebook: 'PaulBiyaOfficial',
-      instagram: '@paulbiya_official'
-    }
+    socialMedia: politician.social_media || {}
   };
 
   const getInitials = (name: string) => {
@@ -87,9 +105,9 @@ export const PoliticianDetailPage: React.FC = () => {
               {/* Profile Image */}
               <div className="flex-shrink-0">
                 <Avatar className="h-32 w-32 mx-auto md:mx-0">
-                  <AvatarImage src={politician.photo} />
+                  <AvatarImage src={politicianData.photo} />
                   <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
-                    {getInitials(politician.name)}
+                    {getInitials(politicianData.name)}
                   </AvatarFallback>
                 </Avatar>
               </div>

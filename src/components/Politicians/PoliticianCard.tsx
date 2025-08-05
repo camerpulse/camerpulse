@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
+import { URLBuilder } from '@/utils/slugUtils';
+import { Link } from 'react-router-dom';
 import { VerificationBadge } from '@/components/AI/VerificationBadge';
 import { AIVerificationModal } from '@/components/AI/AIVerificationModal';
 import { 
@@ -208,10 +210,15 @@ export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) 
             Message
           </Button>
           
-          <Button variant="default" size="sm" className="flex-1">
-            <ExternalLink className="w-4 h-4 mr-2" />
-            View Profile
-          </Button>
+          <Link 
+            to={URLBuilder.politicians.detail(politician)}
+            className="flex-1"
+          >
+            <Button variant="default" size="sm" className="w-full">
+              <ExternalLink className="w-4 h-4 mr-2" />
+              View Profile
+            </Button>
+          </Link>
         </div>
 
         <MessagingModal
