@@ -119,19 +119,24 @@ const servicesItems = [
 // Tools & Analytics
 const toolsItems = [
   {
+    title: 'Search',
+    url: '/search',
+    icon: Search,
+  },
+  {
     title: 'Analytics',
     url: '/analytics',
+    icon: BarChart3,
+  },
+  {
+    title: 'Performance',
+    url: '/performance',
     icon: BarChart3,
   },
   {
     title: 'Notifications',
     url: '/notifications',
     icon: Bell,
-  },
-  {
-    title: 'Search',
-    url: '/search',
-    icon: Search,
   },
 ];
 

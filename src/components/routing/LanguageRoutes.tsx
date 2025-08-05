@@ -38,6 +38,8 @@ import CivicDashboard from '@/pages/CivicDashboard';
 import PetitionsPage from '@/pages/PetitionsPage';
 import VillagesDirectoryPage from '@/pages/VillagesDirectoryPage';
 import CivicEducationHub from '@/pages/CivicEducationHub';
+import AdvancedSearchPage from '@/pages/AdvancedSearchPage';
+import PerformanceMonitoringPage from '@/pages/PerformanceMonitoringPage';
 import PetitionDetailPage from '@/pages/PetitionDetailPage';
 import JobDetailPage from '@/pages/JobDetailPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
@@ -124,6 +126,10 @@ export const AppRouter: React.FC = () => {
         <Route path="/polls/results/:poll_id" element={<PollResultsPage />} />
         <Route path="/polls/embed/:poll_id" element={<PollEmbedViewerPage />} />
         <Route path="/polls/embed-generator/:poll_id" element={<PollEmbedGeneratorPage />} />
+        
+        {/* Advanced Features */}
+        <Route path="/search" element={<AdvancedSearchPage />} />
+        <Route path="/performance" element={<PerformanceMonitoringPage />} />
         
         {/* Admin */}
         <Route path="/admin" element={<Admin />} />
