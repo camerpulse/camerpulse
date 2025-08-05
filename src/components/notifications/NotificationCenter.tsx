@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -16,6 +17,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { formatDistanceToNow } from 'date-fns';
 
 export const NotificationCenter: React.FC = () => {
+  const navigate = useNavigate();
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
   const { t } = useLanguage();
 
@@ -91,7 +93,7 @@ export const NotificationCenter: React.FC = () => {
                       markAsRead(notification.id);
                     }
                     if (notification.action_url) {
-                      window.location.href = notification.action_url;
+                      navigate(notification.action_url);
                     }
                   }}
                 >

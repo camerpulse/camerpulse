@@ -323,7 +323,10 @@ export const useUnifiedNotifications = () => {
               duration: 5000,
               action: newNotification.action_url ? {
                 label: 'View',
-                onClick: () => window.location.href = newNotification.action_url!
+                onClick: () => {
+                  const navigate = window.history.pushState({}, '', newNotification.action_url!);
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                }
               } : undefined,
             });
           }
