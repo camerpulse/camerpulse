@@ -1,140 +1,171 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* CamerPulse Modern Brand Colors */
-    --primary: 140 90% 28%;           /* Rich Cameroon Green */
-    --primary-foreground: 0 0% 100%;  /* White text */
-    --primary-glow: 140 90% 35%;      /* Lighter green for glows */
+    /* === CamerPulse Design System v2.0 === */
     
-    --secondary: 40 95% 55%;          /* Warm Golden Yellow */
-    --secondary-foreground: 0 0% 0%;  /* Black text */
+    /* Brand Colors - Cameroon Flag Inspired */
+    --primary: 140 84% 32%;           /* Cameroon Forest Green */
+    --primary-foreground: 0 0% 100%;  /* Pure White */
+    --primary-50: 140 84% 96%;        /* Lightest green tint */
+    --primary-100: 140 84% 91%;       /* Very light green */
+    --primary-200: 140 84% 82%;       /* Light green */
+    --primary-300: 140 84% 73%;       /* Medium-light green */
+    --primary-400: 140 84% 52%;       /* Medium green */
+    --primary-500: 140 84% 32%;       /* Base primary */
+    --primary-600: 140 84% 28%;       /* Dark green */
+    --primary-700: 140 84% 24%;       /* Darker green */
+    --primary-800: 140 84% 20%;       /* Very dark green */
+    --primary-900: 140 84% 16%;       /* Darkest green */
     
-    --accent: 348 85% 47%;            /* Vibrant Red */
+    --secondary: 45 100% 60%;         /* Vibrant Golden Yellow */
+    --secondary-foreground: 220 26% 14%; /* Dark text for contrast */
+    --secondary-50: 45 100% 97%;      /* Lightest yellow tint */
+    --secondary-100: 45 100% 93%;     /* Very light yellow */
+    --secondary-200: 45 100% 85%;     /* Light yellow */
+    --secondary-300: 45 100% 77%;     /* Medium-light yellow */
+    --secondary-400: 45 100% 68%;     /* Medium yellow */
+    --secondary-500: 45 100% 60%;     /* Base secondary */
+    --secondary-600: 45 100% 52%;     /* Dark yellow */
+    --secondary-700: 45 90% 44%;      /* Darker yellow */
+    --secondary-800: 45 80% 36%;      /* Very dark yellow */
+    --secondary-900: 45 70% 28%;      /* Darkest yellow */
+    
+    --accent: 0 84% 55%;              /* Cameroon Red */
     --accent-foreground: 0 0% 100%;   /* White text */
+    --accent-50: 0 84% 97%;           /* Lightest red tint */
+    --accent-100: 0 84% 93%;          /* Very light red */
+    --accent-200: 0 84% 85%;          /* Light red */
+    --accent-300: 0 84% 77%;          /* Medium-light red */
+    --accent-400: 0 84% 66%;          /* Medium red */
+    --accent-500: 0 84% 55%;          /* Base accent */
+    --accent-600: 0 84% 47%;          /* Dark red */
+    --accent-700: 0 84% 39%;          /* Darker red */
+    --accent-800: 0 84% 31%;          /* Very dark red */
+    --accent-900: 0 84% 23%;          /* Darkest red */
     
-    /* Modern Background & Surface Colors */
+    /* Neutral Scale */
     --background: 0 0% 100%;          /* Pure White */
     --foreground: 220 26% 14%;        /* Rich Dark Blue-Gray */
     
-    --card: 0 0% 100%;                /* White */
-    --card-foreground: 220 26% 14%;   /* Rich Dark Blue-Gray */
+    --neutral-50: 210 40% 98%;        /* Lightest gray */
+    --neutral-100: 210 30% 95%;       /* Very light gray */
+    --neutral-200: 210 25% 90%;       /* Light gray */
+    --neutral-300: 210 20% 82%;       /* Medium-light gray */
+    --neutral-400: 210 15% 65%;       /* Medium gray */
+    --neutral-500: 210 12% 48%;       /* Base neutral */
+    --neutral-600: 210 15% 35%;       /* Dark gray */
+    --neutral-700: 210 20% 25%;       /* Darker gray */
+    --neutral-800: 210 25% 18%;       /* Very dark gray */
+    --neutral-900: 220 26% 14%;       /* Darkest gray */
     
-    --popover: 0 0% 100%;             /* White */
-    --popover-foreground: 220 26% 14%; /* Rich Dark Blue-Gray */
+    /* Surface Colors */
+    --card: 0 0% 100%;                /* White cards */
+    --card-foreground: 220 26% 14%;   /* Dark text on cards */
+    --popover: 0 0% 100%;             /* White popovers */
+    --popover-foreground: 220 26% 14%; /* Dark text in popovers */
     
-    --muted: 210 40% 98%;             /* Very Light Gray */
-    --muted-foreground: 220 15% 45%;  /* Medium Gray */
+    --muted: 210 40% 98%;             /* Muted background */
+    --muted-foreground: 210 15% 45%;  /* Muted text */
     
-    --border: 214 32% 91%;            /* Light border */
-    --input: 0 0% 100%;               /* White input background */
-    --ring: 140 90% 28%;              /* Focus ring - primary */
+    --border: 210 25% 90%;            /* Light borders */
+    --input: 0 0% 100%;               /* White inputs */
+    --ring: 140 84% 32%;              /* Focus rings */
     
-    /* Status Colors */
-    --destructive: 0 84% 60%;         /* Red */
-    --destructive-foreground: 0 0% 100%; /* White */
+    /* Semantic Colors */
+    --success: 142 71% 45%;           /* Success green */
+    --success-foreground: 0 0% 100%;  /* White on success */
+    --warning: 38 92% 50%;            /* Warning orange */
+    --warning-foreground: 0 0% 100%;  /* White on warning */
+    --destructive: 0 84% 60%;         /* Destructive red */
+    --destructive-foreground: 0 0% 100%; /* White on destructive */
+    --info: 217 91% 60%;              /* Info blue */
+    --info-foreground: 0 0% 100%;     /* White on info */
     
-    /* Modern CamerPulse Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(140 90% 28%) 0%, hsl(140 90% 35%) 50%, hsl(40 95% 55%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(348 85% 47%) 0%, hsl(348 85% 55%) 100%);
-    --gradient-patriotic: linear-gradient(45deg, hsl(140 90% 28%) 0%, hsl(348 85% 47%) 50%, hsl(40 95% 55%) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(220 26% 14%) 0%, hsl(140 90% 28%) 50%, hsl(40 95% 55%) 100%);
+    /* Modern Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-400)) 100%);
+    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--secondary-400)) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--accent-400)) 100%);
+    --gradient-patriotic: linear-gradient(45deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--secondary)) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-400)) 50%, hsl(var(--secondary)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--background)) 0%, hsl(var(--neutral-50)) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--neutral-50)) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(var(--neutral-900)) 0%, hsl(var(--primary)) 50%, hsl(var(--secondary)) 100%);
     
-    /* Modern Shadows */
-    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
-    --shadow: 0 1px 3px 0 hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
-    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
-    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
-    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.1), 0 8px 10px -6px hsl(0 0% 0% / 0.1);
-    --shadow-2xl: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
-    --shadow-elegant: 0 20px 40px -10px hsl(140 90% 28% / 0.2);
-    --shadow-glow: 0 0 30px hsl(140 90% 35% / 0.3);
-    --shadow-premium: 0 25px 50px -12px hsl(220 26% 14% / 0.25), 0 0 40px hsl(140 90% 28% / 0.1);
+    /* Shadows & Elevations */
+    --shadow-xs: 0 1px 2px 0 hsl(0 0% 0% / 0.03);
+    --shadow-sm: 0 1px 3px 0 hsl(0 0% 0% / 0.06), 0 1px 2px -1px hsl(0 0% 0% / 0.06);
+    --shadow: 0 4px 6px -1px hsl(0 0% 0% / 0.08), 0 2px 4px -2px hsl(0 0% 0% / 0.08);
+    --shadow-md: 0 10px 15px -3px hsl(0 0% 0% / 0.08), 0 4px 6px -4px hsl(0 0% 0% / 0.08);
+    --shadow-lg: 0 20px 25px -5px hsl(0 0% 0% / 0.08), 0 8px 10px -6px hsl(0 0% 0% / 0.08);
+    --shadow-xl: 0 25px 50px -12px hsl(0 0% 0% / 0.2);
+    --shadow-2xl: 0 40px 80px -20px hsl(0 0% 0% / 0.25);
+    --shadow-elegant: 0 20px 40px -10px hsl(var(--primary) / 0.15);
+    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.2);
+    --shadow-premium: 0 25px 50px -12px hsl(var(--neutral-900) / 0.25), 0 0 40px hsl(var(--primary) / 0.1);
     
-    /* Sidebar Colors */
+    /* Sidebar System */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 26% 14%;
-    --sidebar-primary: 140 90% 28%;
+    --sidebar-primary: 140 84% 32%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 40% 98%;
     --sidebar-accent-foreground: 220 26% 14%;
-    --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 140 90% 28%;
+    --sidebar-border: 210 25% 90%;
+    --sidebar-ring: 140 84% 32%;
     
-    /* Directory & Services Colors */
-    --directory-school: 217 91% 60%;     /* School blue */
-    --directory-hospital: 0 84% 60%;     /* Hospital red */
-    --directory-pharmacy: 142 71% 45%;   /* Pharmacy green */
-    --directory-village: 38 85% 55%;     /* Village golden ochre */
-    --directory-verified: 123 67% 42%;   /* Verified green */
-    --directory-pending: 38 92% 50%;     /* Pending orange */
-    --directory-rejected: 0 84% 60%;     /* Rejected red */
+    /* Cameroon Flag Colors (Refined) */
+    --cm-green: 140 84% 32%;             /* Official Cameroon Green */
+    --cm-red: 0 84% 55%;                 /* Official Cameroon Red */
+    --cm-yellow: 45 100% 60%;            /* Official Cameroon Yellow */
     
-    /* Institution Status Colors */
-    --status-active: 123 67% 42%;        /* Active green */
-    --status-inactive: 0 0% 45%;         /* Inactive gray */
-    --status-verified: 217 91% 60%;      /* Verified blue */
-    --status-claimed: 51 100% 50%;       /* Claimed yellow */
-    --status-sponsored: 271 76% 53%;     /* Sponsored purple */
+    /* Typography Scale */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --font-size-5xl: 3rem;
     
-    /* Message Priority Colors */
-    --message-urgent: 0 84% 60%;         /* Urgent red */
-    --message-normal: 217 91% 60%;       /* Normal blue */
-    --message-support: 123 67% 42%;      /* Support green */
+    /* Spacing System */
+    --space-0: 0;
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
     
-    /* Rating Colors */
-    --rating-excellent: 123 67% 42%;     /* 5 stars - green */
-    --rating-good: 142 71% 45%;          /* 4 stars - light green */
-    --rating-average: 51 100% 50%;       /* 3 stars - yellow */
-    --rating-poor: 25 95% 53%;           /* 2 stars - orange */
-    --rating-terrible: 0 84% 60%;        /* 1 star - red */
-
-    /* Cameroonian Flag Colors */
-    --cm-green: 140 90% 28%;             /* Cameroon Green */
-    --cm-green-light: 140 90% 35%;       /* Light Green */
-    --cm-red: 348 85% 47%;               /* Cameroon Red */
-    --cm-red-light: 348 85% 55%;         /* Light Red */
-    --cm-yellow: 40 95% 55%;             /* Cameroon Yellow */
-    --cm-yellow-light: 40 95% 65%;       /* Light Yellow */
-
+    /* Touch & Mobile */
+    --touch-target: 44px;
+    --touch-padding: 12px;
+    
+    /* Animations */
+    --animation-fast: 150ms;
+    --animation-normal: 300ms;
+    --animation-slow: 500ms;
+    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-in-out-cubic: cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Border Radius System */
     --radius: 0.75rem;
-  }
-
-  /* Mobile-First Responsive Typography */
-  --text-xs: 0.75rem;     /* 12px */
-  --text-sm: 0.875rem;    /* 14px */
-  --text-base: 1rem;      /* 16px */
-  --text-lg: 1.125rem;    /* 18px */
-  --text-xl: 1.25rem;     /* 20px */
-  --text-2xl: 1.5rem;     /* 24px */
-  --text-3xl: 1.875rem;   /* 30px */
-  --text-4xl: 2.25rem;    /* 36px */
-  
-  /* Mobile-Optimized Spacing */
-  --space-1: 0.25rem;     /* 4px */
-  --space-2: 0.5rem;      /* 8px */
-  --space-3: 0.75rem;     /* 12px */
-  --space-4: 1rem;        /* 16px */
-  --space-5: 1.25rem;     /* 20px */
-  --space-6: 1.5rem;      /* 24px */
-  --space-8: 2rem;        /* 32px */
-  --space-10: 2.5rem;     /* 40px */
-  --space-12: 3rem;       /* 48px */
-  
-  /* Touch-Friendly Sizing */
-  --touch-target: 44px;   /* Minimum touch target size */
-  --touch-padding: 12px;  /* Comfortable padding for touch */
-  
-  /* Mobile-First Animations */
-  --animation-fast: 150ms;
-  --animation-normal: 300ms;
-  --animation-slow: 500ms;
-  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-  --ease-in-out-cubic: cubic-bezier(0.4, 0, 0.2, 1);
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+    --radius-full: 9999px;
   }
 
   .dark {
