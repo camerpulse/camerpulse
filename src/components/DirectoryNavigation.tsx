@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { URLBuilder } from '@/utils/slugUtils';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   School, 
   Building2, 
@@ -14,6 +15,7 @@ import {
 
 export const DirectoryNavigation = () => {
   const location = useLocation();
+  const { getLocalizedPath } = useLanguage();
 
   const navigationItems = [
     {
@@ -45,13 +47,13 @@ export const DirectoryNavigation = () => {
   const adminItems = [
     {
       name: "Moderation",
-      href: "/admin/moderation",
+      href: getLocalizedPath('/admin/moderation'),
       icon: Shield,
       description: "Review & verify institutions"
     },
     {
       name: "Sponsored Listings",
-      href: "/admin/sponsored",
+      href: getLocalizedPath('/admin/sponsored'),
       icon: Star,
       description: "Manage promoted content"
     }
@@ -106,7 +108,7 @@ export const DirectoryNavigation = () => {
         <div className="bg-white rounded-xl shadow-lg p-6">
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Quick Actions</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Link to="/directory/claim">
+            <Link to={getLocalizedPath('/directory/claim')}>
               <Button className="w-full h-16 bg-green-600 hover:bg-green-700 text-left justify-start">
                 <Plus className="h-5 w-5 mr-3" />
                 <div>
@@ -116,7 +118,7 @@ export const DirectoryNavigation = () => {
               </Button>
             </Link>
             
-            <Link to="/directory/search">
+            <Link to={getLocalizedPath('/directory/search')}>
               <Button className="w-full h-16 bg-blue-600 hover:bg-blue-700 text-left justify-start">
                 <Search className="h-5 w-5 mr-3" />
                 <div>
@@ -126,7 +128,7 @@ export const DirectoryNavigation = () => {
               </Button>
             </Link>
 
-            <Link to="/admin/sponsored">
+            <Link to={getLocalizedPath('/admin/sponsored')}>
               <Button className="w-full h-16 bg-purple-600 hover:bg-purple-700 text-left justify-start">
                 <Star className="h-5 w-5 mr-3" />
                 <div>

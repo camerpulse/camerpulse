@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { URLBuilder } from '@/utils/slugUtils';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { 
   Heart, 
   Github, 
@@ -26,6 +27,7 @@ import {
 } from "lucide-react";
 
 export const Footer = () => {
+  const { getLocalizedPath } = useLanguage();
   return (
     <footer className="bg-gradient-to-br from-muted/30 to-background mt-16 py-12 px-4 border-t border-border/50">
       <div className="container mx-auto">
@@ -64,11 +66,11 @@ export const Footer = () => {
               Civic Engagement
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/polls" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/polls')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Vote className="w-3 h-3" />
                 Polls & Voting
               </Link>
-              <Link to="/legislation" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/legislation')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Scale className="w-3 h-3" />
                 Legislative Tracker
               </Link>
@@ -84,15 +86,15 @@ export const Footer = () => {
                 <Calendar className="w-3 h-3" />
                 Civic Events
               </Link>
-              <Link to="/government-projects" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/government-projects')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Target className="w-3 h-3" />
                 Gov Projects
               </Link>
-              <Link to="/analytics" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/analytics')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <TrendingUp className="w-3 h-3" />
                 Analytics
               </Link>
-              <Link to="/civic-education" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/civic-education')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Globe className="w-3 h-3" />
                 Civic Education
               </Link>
@@ -106,15 +108,15 @@ export const Footer = () => {
               Services Directory
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/ministries" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/ministries')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Building className="w-3 h-3" />
                 Government Ministries
               </Link>
-              <Link to="/councils" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/councils')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <MapPin className="w-3 h-3" />
                 Local Councils
               </Link>
-              <Link to="/companies" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/companies')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Briefcase className="w-3 h-3" />
                 Companies
               </Link>
@@ -134,7 +136,7 @@ export const Footer = () => {
                 <Crown className="w-3 h-3" />
                 Villages
               </Link>
-              <Link to="/institutions" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/institutions')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Building className="w-3 h-3" />
                 Institutions
               </Link>
@@ -148,27 +150,27 @@ export const Footer = () => {
               Governance & Transparency
             </h3>
             <div className="space-y-2 text-sm">
-              <Link to="/national-debt" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/national-debt')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <BarChart3 className="w-3 h-3" />
                 National Debt
               </Link>
-              <Link to="/billionaires" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/billionaires')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Crown className="w-3 h-3" />
                 Billionaire Tracker
               </Link>
-              <Link to="/election-forecast" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/election-forecast')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <TrendingUp className="w-3 h-3" />
                 Election Forecast
               </Link>
-              <Link to="/political-parties" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/political-parties')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Users className="w-3 h-3" />
                 Political Parties
               </Link>
-              <Link to="/camerplay" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/camerplay')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Music className="w-3 h-3" />
                 CamerPlay Music
               </Link>
-              <Link to="/rewards" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/rewards')} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <DollarSign className="w-3 h-3" />
                 Rewards Center
               </Link>
@@ -179,22 +181,22 @@ export const Footer = () => {
           <div className="space-y-4">
             <h3 className="font-semibold">Support & Community</h3>
             <div className="space-y-2 text-sm">
-              <Link to="/auth" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/auth')} className="block text-muted-foreground hover:text-primary transition-colors">
                 Sign In / Register
               </Link>
-              <Link to="/help" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/help')} className="block text-muted-foreground hover:text-primary transition-colors">
                 Help Center
               </Link>
-              <Link to="/contact" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/contact')} className="block text-muted-foreground hover:text-primary transition-colors">
                 Contact Us
               </Link>
-              <Link to="/privacy" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/privacy')} className="block text-muted-foreground hover:text-primary transition-colors">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/terms')} className="block text-muted-foreground hover:text-primary transition-colors">
                 Terms of Service
               </Link>
-              <Link to="/community" className="block text-muted-foreground hover:text-primary transition-colors">
+              <Link to={getLocalizedPath('/community')} className="block text-muted-foreground hover:text-primary transition-colors">
                 Community Guidelines
               </Link>
             </div>

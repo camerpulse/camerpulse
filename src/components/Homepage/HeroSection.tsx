@@ -14,8 +14,10 @@ import {
   Brain
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export const HeroSection = () => {
+  const { getLocalizedPath } = useLanguage();
   const features = [
     { 
       icon: TrendingUp, 
@@ -89,19 +91,19 @@ export const HeroSection = () => {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Button asChild size="lg" className="bg-gradient-primary hover:shadow-green transition-all duration-300 px-8 py-3">
-              <Link to="/pulse">
+              <Link to={getLocalizedPath('/pulse')}>
                 <Zap className="w-5 h-5 mr-2" />
                 Start Pulsing
               </Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="border-primary hover:bg-primary/5 px-8 py-3">
-              <Link to="/camerpulse-intelligence">
+              <Link to={getLocalizedPath('/camerpulse-intelligence')}>
                 <Brain className="w-5 h-5 mr-2" />
                 Intelligence Dashboard
               </Link>
             </Button>
             <Button asChild variant="ghost" size="lg" className="text-cm-red hover:bg-cm-red/10 px-8 py-3">
-              <Link to="/donate">
+              <Link to={getLocalizedPath('/donate')}>
                 <Heart className="w-5 h-5 mr-2" />
                 Donate Now
               </Link>

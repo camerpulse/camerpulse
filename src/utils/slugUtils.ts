@@ -181,24 +181,42 @@ export function parseSlugForId(slug: string): string | null {
 /**
  * Legacy URL redirect mappings
  */
-export const LEGACY_REDIRECTS: Record<string, (id: string) => string> = {
-  '/politician/:id': (id: string) => `/politicians/${id}`,
-  '/village-info/:id': (id: string) => `/villages/${id}`,
-  '/user-profile/:id': (id: string) => `/profile/${id}`,
-  '/ministry/:id': (id: string) => `/ministries/${id}`,
-  '/council/:id': (id: string) => `/councils/${id}`,
+export const LEGACY_REDIRECTS: Record<string, (id: string, lang?: string) => string> = {
+  '/politician/:id': (id: string, lang = 'en') => `/${lang}/politicians/${id}`,
+  '/village-info/:id': (id: string, lang = 'en') => `/${lang}/villages/${id}`,
+  '/user-profile/:id': (id: string, lang = 'en') => `/${lang}/profile/${id}`,
+  '/ministry/:id': (id: string, lang = 'en') => `/${lang}/ministries/${id}`,
+  '/council/:id': (id: string, lang = 'en') => `/${lang}/councils/${id}`,
+  // Legacy patterns without language prefixes
+  '/:lang/politician/:id': (id: string, lang = 'en') => `/${lang}/politicians/${id}`,
+  '/:lang/village-info/:id': (id: string, lang = 'en') => `/${lang}/villages/${id}`,
+  '/:lang/user-profile/:id': (id: string, lang = 'en') => `/${lang}/profile/${id}`,
 };
 
 /**
  * Checks if a URL is a legacy format and returns the new URL
  */
 export function getLegacyRedirect(pathname: string): string | null {
+  // Extract language from path if present
+  const segments = pathname.split('/').filter(Boolean);
+  let detectedLang = 'en';
+  
+  if (segments[0] === 'en' || segments[0] === 'fr') {
+    detectedLang = segments[0];
+  }
+
   for (const [pattern, generator] of Object.entries(LEGACY_REDIRECTS)) {
-    const regex = new RegExp(pattern.replace(':id', '([^/]+)'));
+    let regexPattern = pattern
+      .replace(':lang', '(en|fr)')
+      .replace(':id', '([^/]+)');
+    
+    const regex = new RegExp(`^${regexPattern}$`);
     const match = pathname.match(regex);
     
     if (match) {
-      return generator(match[1]);
+      const id = match[match.length - 1]; // Last captured group is always the ID
+      const lang = match[1] || detectedLang; // First group might be language
+      return generator(id, lang);
     }
   }
   
