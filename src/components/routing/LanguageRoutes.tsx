@@ -38,7 +38,7 @@ import CivicDashboard from '@/pages/CivicDashboard';
 import PetitionsPage from '@/pages/PetitionsPage';
 import VillagesDirectoryPage from '@/pages/VillagesDirectoryPage';
 import CivicEducationHub from '@/pages/CivicEducationHub';
-import AdvancedSearchPage from '@/pages/AdvancedSearchPage';
+import { AdvancedSearchPage } from '@/pages/AdvancedSearchPage';
 import PerformanceMonitoringPage from '@/pages/PerformanceMonitoringPage';
 import PetitionDetailPage from '@/pages/PetitionDetailPage';
 import JobDetailPage from '@/pages/JobDetailPage';
