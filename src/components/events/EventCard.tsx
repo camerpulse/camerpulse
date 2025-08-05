@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { URLBuilder } from '@/utils/slugUtils';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -120,11 +121,12 @@ export const EventCard = ({ event, onRsvpUpdate, variant = 'card' }: EventCardPr
       await navigator.share({
         title: event.name,
         text: event.short_description || event.description,
-        url: window.location.href + '/events/' + event.id
+        url: URLBuilder.events.detail({ id: event.id, title: event.name })
       });
     } catch {
       // Fallback to copying to clipboard
-      await navigator.clipboard.writeText(window.location.href + '/events/' + event.id);
+      const eventUrl = URLBuilder.events.detail({ id: event.id, title: event.name });
+      await navigator.clipboard.writeText(window.location.origin + eventUrl);
       toast.success('Event link copied to clipboard');
     }
   };

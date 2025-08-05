@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { URLBuilder } from '@/utils/slugUtils';
 import { 
   MapPin, 
   Star, 
@@ -249,7 +250,7 @@ export function SchoolCard({ school, onUpdate }: SchoolCardProps) {
               variant="outline" 
               size="sm" 
               className="flex-1"
-              onClick={() => setShowDetails(true)}
+              onClick={() => window.location.href = URLBuilder.institutions.schools.detail(school)}
             >
               <Eye className="h-3 w-3 mr-1" />
               View Details

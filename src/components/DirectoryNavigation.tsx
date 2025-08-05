@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { URLBuilder } from '@/utils/slugUtils';
 import { 
   School, 
   Building2, 
@@ -17,25 +18,25 @@ export const DirectoryNavigation = () => {
   const navigationItems = [
     {
       name: "Schools",
-      href: "/directory/schools",
+      href: URLBuilder.institutions.schools.list(),
       icon: School,
       description: "Educational institutions"
     },
     {
       name: "Hospitals", 
-      href: "/directory/hospitals",
+      href: URLBuilder.institutions.hospitals.list(),
       icon: Building2,
       description: "Healthcare facilities"
     },
     {
       name: "Pharmacies",
-      href: "/directory/pharmacies", 
+      href: URLBuilder.institutions.pharmacies.list(), 
       icon: Pill,
       description: "Medicine & health services"
     },
     {
       name: "Villages",
-      href: "/directory/villages",
+      href: URLBuilder.villages.list(),
       icon: MapPin,
       description: "Community directories"
     }

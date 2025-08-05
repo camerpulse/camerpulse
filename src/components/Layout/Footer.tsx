@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { URLBuilder } from '@/utils/slugUtils';
 import { 
   Heart, 
   Github, 
@@ -71,15 +72,15 @@ export const Footer = () => {
                 <Scale className="w-3 h-3" />
                 Legislative Tracker
               </Link>
-              <Link to="/politicians" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={URLBuilder.politicians.list()} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Users className="w-3 h-3" />
                 Politicians
               </Link>
-              <Link to="/petitions" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={URLBuilder.petitions.list()} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <FileText className="w-3 h-3" />
                 Petitions
               </Link>
-              <Link to="/events" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={URLBuilder.events.list()} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Calendar className="w-3 h-3" />
                 Civic Events
               </Link>
@@ -117,19 +118,19 @@ export const Footer = () => {
                 <Briefcase className="w-3 h-3" />
                 Companies
               </Link>
-              <Link to="/schools" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={URLBuilder.institutions.schools.list()} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Building className="w-3 h-3" />
                 Schools
               </Link>
-              <Link to="/hospitals" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={URLBuilder.institutions.hospitals.list()} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Heart className="w-3 h-3" />
                 Hospitals
               </Link>
-              <Link to="/pharmacies" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={URLBuilder.institutions.pharmacies.list()} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Shield className="w-3 h-3" />
                 Pharmacies
               </Link>
-              <Link to="/villages" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+              <Link to={URLBuilder.villages.list()} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                 <Crown className="w-3 h-3" />
                 Villages
               </Link>

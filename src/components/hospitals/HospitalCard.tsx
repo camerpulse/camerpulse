@@ -3,6 +3,7 @@ import { MapPin, Star, Phone, Clock, Shield, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { URLBuilder } from '@/utils/slugUtils';
 
 interface Hospital {
   id: string;
@@ -131,7 +132,7 @@ export function HospitalCard({ hospital, onViewDetails, onRate }: HospitalCardPr
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={() => onViewDetails(hospital)}
+            onClick={() => window.location.href = URLBuilder.institutions.hospitals.detail(hospital)}
             className="flex-1"
           >
             View Details
