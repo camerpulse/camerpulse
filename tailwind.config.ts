@@ -55,6 +55,7 @@ const config: Config = {
         "cm-red": "hsl(var(--cm-red))",
         "cm-yellow": "hsl(var(--cm-yellow))",
         "cm-green": "hsl(var(--cm-green))",
+        "primary-glow": "hsl(var(--primary-glow))",
       },
       borderRadius: {
         lg: "var(--radius)",
