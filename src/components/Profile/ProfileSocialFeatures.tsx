@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -49,7 +48,6 @@ export const ProfileSocialFeatures: React.FC<ProfileSocialFeaturesProps> = ({
   profileData,
   isOwnProfile = false
 }) => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
   const { reportProfile, rateProfile } = useProfileSystem();
@@ -64,7 +62,7 @@ export const ProfileSocialFeatures: React.FC<ProfileSocialFeaturesProps> = ({
 
   const handleStartConversation = () => {
     const conversationUrl = `/messenger?startConversation=${userId}`;
-    navigate(conversationUrl);
+    window.location.href = conversationUrl;
   };
 
   const handleShareProfile = () => {

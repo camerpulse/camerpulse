@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,8 +7,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Globe, LogIn, UserPlus, Mail, Lock } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
 
-export default function DiasporaAuth() {
+export const DiasporaAuth = () => {
   const { signIn, signUp } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ export default function DiasporaAuth() {
           description: "You have successfully signed in."
         });
         // Check if user has diaspora profile, redirect accordingly
-        navigate('/diaspora/dashboard');
+        window.location.href = '/diaspora/dashboard';
       }
     } catch (error) {
       console.error('Sign in error:', error);

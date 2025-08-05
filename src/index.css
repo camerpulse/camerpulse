@@ -1,171 +1,132 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* === CamerPulse Design System v2.0 === */
+    /* CamerPulse Modern Brand Colors */
+    --primary: 140 90% 28%;           /* Rich Cameroon Green */
+    --primary-foreground: 0 0% 100%;  /* White text */
+    --primary-glow: 140 90% 35%;      /* Lighter green for glows */
     
-    /* Brand Colors - Modern CamerPulse Theme */
-    --primary: 258 85% 55%;           /* Royal Purple */
-    --primary-foreground: 0 0% 100%;  /* Pure White */
-    --primary-50: 258 85% 96%;        /* Lightest purple tint */
-    --primary-100: 258 85% 91%;       /* Very light purple */
-    --primary-200: 258 85% 82%;       /* Light purple */
-    --primary-300: 258 85% 73%;       /* Medium-light purple */
-    --primary-400: 258 85% 64%;       /* Medium purple */
-    --primary-500: 258 85% 55%;       /* Base primary */
-    --primary-600: 258 85% 46%;       /* Dark purple */
-    --primary-700: 258 85% 37%;       /* Darker purple */
-    --primary-800: 258 85% 28%;       /* Very dark purple */
-    --primary-900: 258 85% 19%;       /* Darkest purple */
+    --secondary: 40 95% 55%;          /* Warm Golden Yellow */
+    --secondary-foreground: 0 0% 0%;  /* Black text */
     
-    --secondary: 195 100% 55%;        /* Modern Cyan */
-    --secondary-foreground: 0 0% 100%; /* White text for contrast */
-    --secondary-50: 195 100% 96%;     /* Lightest cyan tint */
-    --secondary-100: 195 100% 91%;    /* Very light cyan */
-    --secondary-200: 195 100% 82%;    /* Light cyan */
-    --secondary-300: 195 100% 73%;    /* Medium-light cyan */
-    --secondary-400: 195 100% 64%;    /* Medium cyan */
-    --secondary-500: 195 100% 55%;    /* Base secondary */
-    --secondary-600: 195 100% 46%;    /* Dark cyan */
-    --secondary-700: 195 90% 37%;     /* Darker cyan */
-    --secondary-800: 195 80% 28%;     /* Very dark cyan */
-    --secondary-900: 195 70% 19%;     /* Darkest cyan */
-    
-    --accent: 25 95% 58%;             /* Vibrant Orange */
+    --accent: 348 85% 47%;            /* Vibrant Red */
     --accent-foreground: 0 0% 100%;   /* White text */
-    --accent-50: 25 95% 96%;          /* Lightest orange tint */
-    --accent-100: 25 95% 91%;         /* Very light orange */
-    --accent-200: 25 95% 82%;         /* Light orange */
-    --accent-300: 25 95% 73%;         /* Medium-light orange */
-    --accent-400: 25 95% 66%;         /* Medium orange */
-    --accent-500: 25 95% 58%;         /* Base accent */
-    --accent-600: 25 95% 50%;         /* Dark orange */
-    --accent-700: 25 85% 42%;         /* Darker orange */
-    --accent-800: 25 75% 34%;         /* Very dark orange */
-    --accent-900: 25 65% 26%;         /* Darkest orange */
     
-    /* Neutral Scale */
+    /* Modern Background & Surface Colors */
     --background: 0 0% 100%;          /* Pure White */
     --foreground: 220 26% 14%;        /* Rich Dark Blue-Gray */
     
-    --neutral-50: 210 40% 98%;        /* Lightest gray */
-    --neutral-100: 210 30% 95%;       /* Very light gray */
-    --neutral-200: 210 25% 90%;       /* Light gray */
-    --neutral-300: 210 20% 82%;       /* Medium-light gray */
-    --neutral-400: 210 15% 65%;       /* Medium gray */
-    --neutral-500: 210 12% 48%;       /* Base neutral */
-    --neutral-600: 210 15% 35%;       /* Dark gray */
-    --neutral-700: 210 20% 25%;       /* Darker gray */
-    --neutral-800: 210 25% 18%;       /* Very dark gray */
-    --neutral-900: 220 26% 14%;       /* Darkest gray */
+    --card: 0 0% 100%;                /* White */
+    --card-foreground: 220 26% 14%;   /* Rich Dark Blue-Gray */
     
-    /* Surface Colors */
-    --card: 0 0% 100%;                /* White cards */
-    --card-foreground: 220 26% 14%;   /* Dark text on cards */
-    --popover: 0 0% 100%;             /* White popovers */
-    --popover-foreground: 220 26% 14%; /* Dark text in popovers */
+    --popover: 0 0% 100%;             /* White */
+    --popover-foreground: 220 26% 14%; /* Rich Dark Blue-Gray */
     
-    --muted: 210 40% 98%;             /* Muted background */
-    --muted-foreground: 210 15% 45%;  /* Muted text */
+    --muted: 210 40% 98%;             /* Very Light Gray */
+    --muted-foreground: 220 15% 45%;  /* Medium Gray */
     
-    --border: 210 25% 90%;            /* Light borders */
-    --input: 0 0% 100%;               /* White inputs */
-    --ring: 140 84% 32%;              /* Focus rings */
+    --border: 214 32% 91%;            /* Light border */
+    --input: 0 0% 100%;               /* White input background */
+    --ring: 140 90% 28%;              /* Focus ring - primary */
     
-    /* Semantic Colors */
-    --success: 142 71% 45%;           /* Success green */
-    --success-foreground: 0 0% 100%;  /* White on success */
-    --warning: 38 92% 50%;            /* Warning orange */
-    --warning-foreground: 0 0% 100%;  /* White on warning */
-    --destructive: 0 84% 60%;         /* Destructive red */
-    --destructive-foreground: 0 0% 100%; /* White on destructive */
-    --info: 217 91% 60%;              /* Info blue */
-    --info-foreground: 0 0% 100%;     /* White on info */
+    /* Status Colors */
+    --destructive: 0 84% 60%;         /* Red */
+    --destructive-foreground: 0 0% 100%; /* White */
     
-    /* Modern Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-400)) 100%);
-    --gradient-secondary: linear-gradient(135deg, hsl(var(--secondary)) 0%, hsl(var(--secondary-400)) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(var(--accent-400)) 100%);
-    --gradient-patriotic: linear-gradient(45deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 50%, hsl(var(--secondary)) 100%);
-    --gradient-hero: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--primary-400)) 50%, hsl(var(--secondary)) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(var(--background)) 0%, hsl(var(--neutral-50)) 100%);
-    --gradient-subtle: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--neutral-50)) 100%);
-    --gradient-premium: linear-gradient(135deg, hsl(var(--neutral-900)) 0%, hsl(var(--primary)) 50%, hsl(var(--secondary)) 100%);
+    /* Modern CamerPulse Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(140 90% 28%) 0%, hsl(140 90% 35%) 50%, hsl(40 95% 55%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(210 40% 98%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(348 85% 47%) 0%, hsl(348 85% 55%) 100%);
+    --gradient-patriotic: linear-gradient(45deg, hsl(140 90% 28%) 0%, hsl(348 85% 47%) 50%, hsl(40 95% 55%) 100%);
+    --gradient-premium: linear-gradient(135deg, hsl(220 26% 14%) 0%, hsl(140 90% 28%) 50%, hsl(40 95% 55%) 100%);
     
-    /* Shadows & Elevations */
-    --shadow-xs: 0 1px 2px 0 hsl(0 0% 0% / 0.03);
-    --shadow-sm: 0 1px 3px 0 hsl(0 0% 0% / 0.06), 0 1px 2px -1px hsl(0 0% 0% / 0.06);
-    --shadow: 0 4px 6px -1px hsl(0 0% 0% / 0.08), 0 2px 4px -2px hsl(0 0% 0% / 0.08);
-    --shadow-md: 0 10px 15px -3px hsl(0 0% 0% / 0.08), 0 4px 6px -4px hsl(0 0% 0% / 0.08);
-    --shadow-lg: 0 20px 25px -5px hsl(0 0% 0% / 0.08), 0 8px 10px -6px hsl(0 0% 0% / 0.08);
-    --shadow-xl: 0 25px 50px -12px hsl(0 0% 0% / 0.2);
-    --shadow-2xl: 0 40px 80px -20px hsl(0 0% 0% / 0.25);
-    --shadow-elegant: 0 20px 40px -10px hsl(var(--primary) / 0.15);
-    --shadow-glow: 0 0 30px hsl(var(--primary) / 0.2);
-    --shadow-premium: 0 25px 50px -12px hsl(var(--neutral-900) / 0.25), 0 0 40px hsl(var(--primary) / 0.1);
+    /* Modern Shadows */
+    --shadow-sm: 0 1px 2px 0 hsl(0 0% 0% / 0.05);
+    --shadow: 0 1px 3px 0 hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
+    --shadow-md: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
+    --shadow-lg: 0 10px 15px -3px hsl(0 0% 0% / 0.1), 0 4px 6px -4px hsl(0 0% 0% / 0.1);
+    --shadow-xl: 0 20px 25px -5px hsl(0 0% 0% / 0.1), 0 8px 10px -6px hsl(0 0% 0% / 0.1);
+    --shadow-2xl: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
+    --shadow-elegant: 0 20px 40px -10px hsl(140 90% 28% / 0.2);
+    --shadow-glow: 0 0 30px hsl(140 90% 35% / 0.3);
+    --shadow-premium: 0 25px 50px -12px hsl(220 26% 14% / 0.25), 0 0 40px hsl(140 90% 28% / 0.1);
     
-    /* Sidebar System */
+    /* Sidebar Colors */
     --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 220 26% 14%;
-    --sidebar-primary: 140 84% 32%;
+    --sidebar-primary: 140 90% 28%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 210 40% 98%;
     --sidebar-accent-foreground: 220 26% 14%;
-    --sidebar-border: 210 25% 90%;
-    --sidebar-ring: 140 84% 32%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 140 90% 28%;
     
-    /* Cameroon Flag Colors (Refined) */
-    --cm-green: 140 84% 32%;             /* Official Cameroon Green */
-    --cm-red: 0 84% 55%;                 /* Official Cameroon Red */
-    --cm-yellow: 45 100% 60%;            /* Official Cameroon Yellow */
+    /* Directory & Services Colors */
+    --directory-school: 217 91% 60%;     /* School blue */
+    --directory-hospital: 0 84% 60%;     /* Hospital red */
+    --directory-pharmacy: 142 71% 45%;   /* Pharmacy green */
+    --directory-village: 38 85% 55%;     /* Village golden ochre */
+    --directory-verified: 123 67% 42%;   /* Verified green */
+    --directory-pending: 38 92% 50%;     /* Pending orange */
+    --directory-rejected: 0 84% 60%;     /* Rejected red */
     
-    /* Typography Scale */
-    --font-size-xs: 0.75rem;
-    --font-size-sm: 0.875rem;
-    --font-size-base: 1rem;
-    --font-size-lg: 1.125rem;
-    --font-size-xl: 1.25rem;
-    --font-size-2xl: 1.5rem;
-    --font-size-3xl: 1.875rem;
-    --font-size-4xl: 2.25rem;
-    --font-size-5xl: 3rem;
+    /* Institution Status Colors */
+    --status-active: 123 67% 42%;        /* Active green */
+    --status-inactive: 0 0% 45%;         /* Inactive gray */
+    --status-verified: 217 91% 60%;      /* Verified blue */
+    --status-claimed: 51 100% 50%;       /* Claimed yellow */
+    --status-sponsored: 271 76% 53%;     /* Sponsored purple */
     
-    /* Spacing System */
-    --space-0: 0;
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-5: 1.25rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
-    --space-10: 2.5rem;
-    --space-12: 3rem;
-    --space-16: 4rem;
-    --space-20: 5rem;
-    --space-24: 6rem;
+    /* Message Priority Colors */
+    --message-urgent: 0 84% 60%;         /* Urgent red */
+    --message-normal: 217 91% 60%;       /* Normal blue */
+    --message-support: 123 67% 42%;      /* Support green */
     
-    /* Touch & Mobile */
-    --touch-target: 44px;
-    --touch-padding: 12px;
+    /* Rating Colors */
+    --rating-excellent: 123 67% 42%;     /* 5 stars - green */
+    --rating-good: 142 71% 45%;          /* 4 stars - light green */
+    --rating-average: 51 100% 50%;       /* 3 stars - yellow */
+    --rating-poor: 25 95% 53%;           /* 2 stars - orange */
+    --rating-terrible: 0 84% 60%;        /* 1 star - red */
     
-    /* Animations */
-    --animation-fast: 150ms;
-    --animation-normal: 300ms;
-    --animation-slow: 500ms;
-    --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
-    --ease-in-out-cubic: cubic-bezier(0.4, 0, 0.2, 1);
-    
-    /* Border Radius System */
     --radius: 0.75rem;
-    --radius-sm: 0.5rem;
-    --radius-md: 0.75rem;
-    --radius-lg: 1rem;
-    --radius-xl: 1.5rem;
-    --radius-full: 9999px;
+  }
+
+  /* Mobile-First Responsive Typography */
+  --text-xs: 0.75rem;     /* 12px */
+  --text-sm: 0.875rem;    /* 14px */
+  --text-base: 1rem;      /* 16px */
+  --text-lg: 1.125rem;    /* 18px */
+  --text-xl: 1.25rem;     /* 20px */
+  --text-2xl: 1.5rem;     /* 24px */
+  --text-3xl: 1.875rem;   /* 30px */
+  --text-4xl: 2.25rem;    /* 36px */
+  
+  /* Mobile-Optimized Spacing */
+  --space-1: 0.25rem;     /* 4px */
+  --space-2: 0.5rem;      /* 8px */
+  --space-3: 0.75rem;     /* 12px */
+  --space-4: 1rem;        /* 16px */
+  --space-5: 1.25rem;     /* 20px */
+  --space-6: 1.5rem;      /* 24px */
+  --space-8: 2rem;        /* 32px */
+  --space-10: 2.5rem;     /* 40px */
+  --space-12: 3rem;       /* 48px */
+  
+  /* Touch-Friendly Sizing */
+  --touch-target: 44px;   /* Minimum touch target size */
+  --touch-padding: 12px;  /* Comfortable padding for touch */
+  
+  /* Mobile-First Animations */
+  --animation-fast: 150ms;
+  --animation-normal: 300ms;
+  --animation-slow: 500ms;
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-cubic: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
@@ -234,11 +195,13 @@
     @apply min-w-[44px];
   }
   
+  /* Mobile-optimized button spacing */
   .mobile-nav-button {
     @apply min-h-[60px] min-w-[60px] flex flex-col items-center justify-center;
     touch-action: manipulation;
   }
   
+  /* Prevent text selection on UI elements */
   .no-select {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -320,7 +283,6 @@
       padding-right: env(safe-area-inset-right);
     }
   }
-}
 
 @layer utilities {
   .bg-gradient-patriotic {
@@ -333,46 +295,6 @@
   
   .bg-gradient-card {
     background: var(--gradient-card);
-  }
-
-  .bg-gradient-flag {
-    background: linear-gradient(90deg, hsl(var(--cm-green)) 33.33%, hsl(var(--cm-red)) 33.33% 66.66%, hsl(var(--cm-yellow)) 66.66%);
-  }
-
-  .bg-gradient-primary {
-    background: var(--gradient-primary);
-  }
-  
-  .text-primary {
-    color: hsl(var(--primary));
-  }
-  
-  .text-secondary {
-    color: hsl(var(--secondary));
-  }
-  
-  .text-accent {
-    color: hsl(var(--accent));
-  }
-  
-  .text-cm-green {
-    color: hsl(var(--cm-green));
-  }
-  
-  .text-cm-red {
-    color: hsl(var(--cm-red));
-  }
-  
-  .text-cm-yellow {
-    color: hsl(var(--cm-yellow));
-  }
-
-  .bg-gradient-civic {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)));
-  }
-
-  .bg-gradient-pulse {
-    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)), hsl(var(--accent)));
   }
   
   .text-responsive {

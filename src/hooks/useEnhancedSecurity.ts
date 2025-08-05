@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { sanitizeInput, detectSecurityThreats, logSecurityEvent } from '@/utils/security';
-import { sanitizeHtml, stripHtml } from '@/utils/htmlSanitizer';
 
 interface SecurityEvent {
   id: string;
@@ -30,36 +29,13 @@ export const useEnhancedSecurity = () => {
   
   const [isLoading, setIsLoading] = useState(false);
 
-  // Enhanced input validation with multiple sanitization layers
-  const validateInput = async (input: string, context: string = 'general', allowHtml: boolean = false) => {
-    // First layer: basic sanitization
-    const basicSanitized = sanitizeInput(input);
-    
-    // Second layer: HTML sanitization if HTML is allowed
-    const htmlSanitized = allowHtml ? sanitizeHtml(input) : stripHtml(input);
-    
-    // Third layer: threat detection
+  // Validate and sanitize input with threat detection
+  const validateInput = async (input: string, context: string = 'general') => {
+    const sanitized = sanitizeInput(input);
     const threats = detectSecurityThreats(input);
     
-    // Enhanced threat scoring
-    let riskScore = 0;
-    threats.forEach(threat => {
-      switch (threat) {
-        case 'sql_injection':
-        case 'xss_attempt':
-          riskScore += 10;
-          break;
-        case 'path_traversal':
-        case 'command_injection':
-          riskScore += 8;
-          break;
-        default:
-          riskScore += 5;
-      }
-    });
-    
-    if (threats.length > 0 || riskScore >= 5) {
-      // Log security threat detection with enhanced details
+    if (threats.length > 0) {
+      // Log security threat detection
       await logSecurityEvent(
         'threat_detected',
         'input_validation',
@@ -67,30 +43,24 @@ export const useEnhancedSecurity = () => {
         {
           context,
           threats,
-          risk_score: riskScore,
           original_input_length: input.length,
-          sanitized_input_length: basicSanitized.length,
-          html_sanitized_length: htmlSanitized.length,
-          user_agent: navigator.userAgent,
-          timestamp: new Date().toISOString()
+          sanitized_input_length: sanitized.length
         },
-        riskScore >= 10 ? 'critical' : 'high'
+        'high'
       );
       
       return {
         isValid: false,
-        sanitized: allowHtml ? htmlSanitized : basicSanitized,
+        sanitized,
         threats,
-        riskScore,
-        reason: `Security threats detected (Risk Score: ${riskScore}): ${threats.join(', ')}`
+        reason: `Security threats detected: ${threats.join(', ')}`
       };
     }
     
     return {
       isValid: true,
-      sanitized: allowHtml ? htmlSanitized : basicSanitized,
+      sanitized,
       threats: [],
-      riskScore: 0,
       reason: 'Input validated successfully'
     };
   };

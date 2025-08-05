@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -38,7 +37,6 @@ const PollUserDashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (user) {
@@ -141,7 +139,7 @@ const PollUserDashboard: React.FC = () => {
             <p className="text-muted-foreground mb-4">
               Please sign in to view your poll dashboard and activity.
             </p>
-            <Button onClick={() => navigate('/auth')}>
+            <Button onClick={() => window.location.href = '/auth'}>
               Sign In
             </Button>
           </CardContent>
@@ -246,7 +244,7 @@ const PollUserDashboard: React.FC = () => {
                 <div className="text-center py-8">
                   <Vote className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground">No voting activity yet.</p>
-                  <Button className="mt-4" onClick={() => navigate('/polls')}>
+                  <Button className="mt-4" onClick={() => window.location.href = '/polls'}>
                     Explore Polls
                   </Button>
                 </div>
@@ -279,7 +277,7 @@ const PollUserDashboard: React.FC = () => {
                           <Button 
                             size="sm" 
                             variant="outline"
-                            onClick={() => navigate(`/polls/${vote.poll_id}`)}
+                            onClick={() => window.location.href = `/polls/${vote.poll_id}`}
                           >
                             View
                           </Button>
@@ -318,7 +316,7 @@ const PollUserDashboard: React.FC = () => {
                       </div>
                       <Button 
                         size="sm"
-                        onClick={() => navigate(`/polls/${vote.poll_id}`)}
+                        onClick={() => window.location.href = `/polls/${vote.poll_id}`}
                       >
                         View Results
                       </Button>
@@ -353,7 +351,7 @@ const PollUserDashboard: React.FC = () => {
                       <Button 
                         size="sm" 
                         variant="outline"
-                        onClick={() => navigate(`/polls/${vote.poll_id}`)}
+                        onClick={() => window.location.href = `/polls/${vote.poll_id}`}
                       >
                         View Results
                       </Button>

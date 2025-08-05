@@ -7,7 +7,6 @@ import { Progress } from '@/components/ui/progress';
 import { Clock, Users, BookOpen, Play, CheckCircle, Star } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { createSafeHtmlProps } from '@/utils/htmlSanitizer';
 
 interface EducationalContentProps {
   selectedLanguage: string;
@@ -164,7 +163,7 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
               <div className="prose dark:prose-invert max-w-none">
                 <div 
                   className="whitespace-pre-wrap text-gray-700 dark:text-gray-300 leading-relaxed"
-                  {...createSafeHtmlProps(getContent(selectedModule))}
+                  dangerouslySetInnerHTML={{ __html: getContent(selectedModule) }}
                 />
               </div>
 

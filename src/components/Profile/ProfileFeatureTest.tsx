@@ -33,7 +33,6 @@ interface TestResult {
 }
 
 export const ProfileFeatureTest: React.FC = () => {
-  const navigate = useNavigate();
   const { user, loading } = useAuth();
   const [testResults, setTestResults] = useState<TestResult[]>([]);
   const [running, setRunning] = useState(false);
@@ -283,7 +282,7 @@ export const ProfileFeatureTest: React.FC = () => {
             <p className="text-muted-foreground mb-4">
               You must be logged in to test profile features. Please authenticate first.
             </p>
-            <Button variant="outline" onClick={() => navigate('/auth')}>
+            <Button variant="outline" onClick={() => window.location.href = '/auth'}>
               Go to Login
             </Button>
           </CardContent>

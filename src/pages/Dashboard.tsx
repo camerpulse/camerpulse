@@ -1,306 +1,205 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { AppLayout } from '@/components/Layout/AppLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   BarChart3, 
-  Package, 
-  Printer, 
-  QrCode, 
-  TrendingUp, 
-  Clock,
-  Users,
-  FileText,
-  Plus,
+  Building2, 
+  Calendar, 
+  FileText, 
+  Globe, 
+  MapPin, 
+  Music, 
+  PieChart, 
+  Users, 
+  Vote,
+  Briefcase,
+  ShoppingBag,
+  MessageCircle,
+  Search,
+  TrendingUp,
+  Shield,
   Eye,
-  Download
+  Heart
 } from 'lucide-react';
-import { formatDate, formatRelativeTime } from '@/utils/dateUtils';
 
-// Mock data - replace with real data from hooks
-const dashboardStats = {
-  totalLabels: 1247,
-  todayLabels: 23,
-  totalScans: 856,
-  todayScans: 12,
-  templates: 8,
-  printJobs: 45,
-  avgProcessingTime: '2.3s',
-  successRate: 98.5
-};
-
-const recentActivity = [
-  {
-    id: '1',
-    type: 'print',
-    description: 'Printed 15 shipping labels',
-    timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 min ago
-    status: 'success'
-  },
-  {
-    id: '2',
-    type: 'scan',
-    description: 'Scanned QR code for package TRK-001234',
-    timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(), // 45 min ago
-    status: 'success'
-  },
-  {
-    id: '3',
-    type: 'template',
-    description: 'Created new shipping template',
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
-    status: 'success'
-  },
-  {
-    id: '4',
-    type: 'print',
-    description: 'Bulk generation completed - 50 labels',
-    timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(), // 3 hours ago
-    status: 'success'
-  }
-];
-
-const quickActions = [
-  {
-    title: 'Create Label',
-    description: 'Design a new shipping label',
-    icon: Plus,
-    href: '/designer',
-    color: 'bg-blue-500'
-  },
-  {
-    title: 'Scan Code',
-    description: 'Scan barcode or QR code',
-    icon: QrCode,
-    href: '/scanner',
-    color: 'bg-green-500'
-  },
-  {
-    title: 'Print History',
-    description: 'View recent print jobs',
-    icon: Clock,
-    href: '/history',
-    color: 'bg-purple-500'
-  },
-  {
-    title: 'Templates',
-    description: 'Manage label templates',
-    icon: FileText,
-    href: '/templates',
-    color: 'bg-orange-500'
-  }
-];
-
-export function Dashboard() {
-  const [timeframe, setTimeframe] = useState<'today' | 'week' | 'month'>('today');
-
-  const getActivityIcon = (type: string) => {
-    switch (type) {
-      case 'print':
-        return Printer;
-      case 'scan':
-        return QrCode;
-      case 'template':
-        return FileText;
-      default:
-        return Package;
+const Dashboard = () => {
+  const quickLinks = [
+    {
+      category: "Civic Engagement",
+      items: [
+        { title: "Browse Polls", description: "Participate in community polls", href: "/polls", icon: Vote },
+        { title: "Politicians", description: "Explore political figures", href: "/politicians", icon: Users },
+        { title: "Senators", description: "Browse senate members", href: "/senators", icon: Users },
+        { title: "Ministers", description: "Government ministers", href: "/ministers", icon: Users },
+        { title: "MPs", description: "Member of Parliament", href: "/mps", icon: Users },
+        { title: "Political Parties", description: "Explore party platforms", href: "/political-parties", icon: Users }
+      ]
+    },
+    {
+      category: "Transparency & Analytics",
+      items: [
+        { title: "Transparency Hub", description: "Government transparency dashboard", href: "/transparency", icon: Eye },
+        { title: "National Debt", description: "Track national debt", href: "/national-debt-tracker", icon: TrendingUp },
+        { title: "Billionaire Tracker", description: "Monitor wealth concentration", href: "/billionaire-tracker", icon: PieChart },
+        { title: "Election Forecast", description: "Election predictions", href: "/election-forecast", icon: BarChart3 },
+        { title: "Budget Explorer", description: "Government budget analysis", href: "/budget-explorer", icon: PieChart },
+        { title: "Analytics", description: "Platform analytics", href: "/analytics", icon: BarChart3 }
+      ]
+    },
+    {
+      category: "Services & Directory",
+      items: [
+        { title: "Services Map", description: "Find services near you", href: "/services-map", icon: MapPin },
+        { title: "Companies", description: "Business directory", href: "/company-directory", icon: Building2 },
+        { title: "Schools", description: "Educational institutions", href: "/schools-directory", icon: Building2 },
+        { title: "Hospitals", description: "Healthcare facilities", href: "/hospitals-directory", icon: Heart },
+        { title: "Villages", description: "Community villages", href: "/villages-directory", icon: MapPin },
+        { title: "Job Board", description: "Employment opportunities", href: "/jobs", icon: Briefcase }
+      ]
+    },
+    {
+      category: "Entertainment & Social",
+      items: [
+        { title: "CamerPlay", description: "Music platform", href: "/camerplay", icon: Music },
+        { title: "Upload Music", description: "Share your music", href: "/camerplay/upload", icon: Music },
+        { title: "Events", description: "Discover events", href: "/camerplay/events", icon: Calendar },
+        { title: "Artist Portal", description: "For artists", href: "/artist-landing", icon: Music },
+        { title: "Marketplace", description: "Buy and sell", href: "/marketplace", icon: ShoppingBag },
+        { title: "Messenger", description: "Chat with others", href: "/messenger", icon: MessageCircle }
+      ]
     }
-  };
+  ];
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">
-            Welcome back! Here's what's happening with your labels.
-          </p>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Download className="w-4 h-4 mr-2" />
-            Export Report
-          </Button>
-          <Button size="sm">
-            <Plus className="w-4 h-4 mr-2" />
-            New Label
-          </Button>
-        </div>
-      </div>
-
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Labels</CardTitle>
-            <Package className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{dashboardStats.totalLabels.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+{dashboardStats.todayLabels}</span> today
+    <AppLayout>
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
+        <div className="container mx-auto px-4 py-8">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+              Platform Dashboard
+            </h1>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              Your central hub for civic engagement, transparency, and community services
             </p>
-          </CardContent>
-        </Card>
+          </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Scans</CardTitle>
-            <QrCode className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{dashboardStats.totalScans.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">
-              <span className="text-green-600">+{dashboardStats.todayScans}</span> today
-            </p>
-          </CardContent>
-        </Card>
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <Vote className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <div className="text-2xl font-bold">1,234</div>
+                <div className="text-sm text-muted-foreground">Active Polls</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <Users className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <div className="text-2xl font-bold">567</div>
+                <div className="text-sm text-muted-foreground">Politicians</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <Building2 className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <div className="text-2xl font-bold">2,890</div>
+                <div className="text-sm text-muted-foreground">Services</div>
+              </CardContent>
+            </Card>
+            <Card className="text-center">
+              <CardContent className="pt-6">
+                <Music className="w-8 h-8 mx-auto mb-2 text-primary" />
+                <div className="text-2xl font-bold">45K</div>
+                <div className="text-sm text-muted-foreground">Songs</div>
+              </CardContent>
+            </Card>
+          </div>
 
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Templates</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{dashboardStats.templates}</div>
-            <p className="text-xs text-muted-foreground">
-              2 active designs
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Success Rate</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{dashboardStats.successRate}%</div>
-            <Progress value={dashboardStats.successRate} className="mt-2" />
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        
-        {/* Quick Actions */}
-        <Card className="lg:col-span-1">
-          <CardHeader>
-            <CardTitle>Quick Actions</CardTitle>
-            <CardDescription>
-              Common tasks and shortcuts
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {quickActions.map((action) => (
-              <Button
-                key={action.title}
-                variant="outline"
-                className="w-full justify-start h-auto p-4"
-                asChild
-              >
-                <a href={action.href}>
-                  <div className={`w-8 h-8 rounded-lg ${action.color} flex items-center justify-center mr-3`}>
-                    <action.icon className="w-4 h-4 text-white" />
+          {/* Quick Links */}
+          <div className="space-y-8">
+            {quickLinks.map((category) => (
+              <Card key={category.category} className="overflow-hidden">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Shield className="w-5 h-5 text-primary" />
+                    {category.category}
+                  </CardTitle>
+                  <CardDescription>
+                    Explore {category.category.toLowerCase()} features and services
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {category.items.map((item) => {
+                      const Icon = item.icon;
+                      return (
+                        <Button
+                          key={item.href}
+                          asChild
+                          variant="ghost"
+                          className="h-auto p-4 text-left justify-start hover:bg-primary/5 hover:border-primary/20 border border-transparent transition-all"
+                        >
+                          <Link to={item.href}>
+                            <div className="flex items-start gap-3">
+                              <div className="p-2 rounded-lg bg-primary/10">
+                                <Icon className="w-5 h-5 text-primary" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-foreground mb-1">
+                                  {item.title}
+                                </div>
+                                <div className="text-sm text-muted-foreground line-clamp-2">
+                                  {item.description}
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        </Button>
+                      );
+                    })}
                   </div>
-                  <div className="text-left">
-                    <div className="font-medium">{action.title}</div>
-                    <div className="text-sm text-muted-foreground">{action.description}</div>
-                  </div>
-                </a>
-              </Button>
+                </CardContent>
+              </Card>
             ))}
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Recent Activity */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>
-              Latest actions in your label system
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentActivity.map((activity) => {
-                const Icon = getActivityIcon(activity.type);
-                return (
-                  <div key={activity.id} className="flex items-center gap-4">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <div className="flex-1">
-                      <p className="text-sm font-medium">{activity.description}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatRelativeTime(activity.timestamp)}
-                      </p>
-                    </div>
-                    <Badge variant={activity.status === 'success' ? 'default' : 'destructive'}>
-                      {activity.status}
-                    </Badge>
-                  </div>
-                );
-              })}
-            </div>
-          </CardContent>
-        </Card>
+          {/* Featured Section */}
+          <Card className="mt-12 bg-gradient-to-r from-primary/5 to-secondary/5 border-primary/20">
+            <CardHeader className="text-center">
+              <CardTitle className="text-2xl">Stay Engaged</CardTitle>
+              <CardDescription>
+                Participate in your community and stay informed about government activities
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button asChild size="lg" className="bg-primary hover:bg-primary/90">
+                <Link to="/polls">
+                  <Vote className="w-4 h-4 mr-2" />
+                  Participate in Polls
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link to="/transparency">
+                  <Eye className="w-4 h-4 mr-2" />
+                  Explore Transparency
+                </Link>
+              </Button>
+              <Button asChild size="lg" variant="outline">
+                <Link to="/camerplay">
+                  <Music className="w-4 h-4 mr-2" />
+                  Discover Music
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
-
-      {/* Analytics Tabs */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BarChart3 className="w-5 h-5" />
-            Analytics & Reports
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Tabs value={timeframe} onValueChange={(value: any) => setTimeframe(value)}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="today">Today</TabsTrigger>
-              <TabsTrigger value="week">This Week</TabsTrigger>
-              <TabsTrigger value="month">This Month</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="today" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">{dashboardStats.todayLabels}</div>
-                  <div className="text-sm text-muted-foreground">Labels Printed</div>
-                </div>
-                <div className="text-center p-4 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">{dashboardStats.todayScans}</div>
-                  <div className="text-sm text-muted-foreground">QR Codes Scanned</div>
-                </div>
-                <div className="text-center p-4 bg-muted/50 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">{dashboardStats.avgProcessingTime}</div>
-                  <div className="text-sm text-muted-foreground">Avg Processing Time</div>
-                </div>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="week" className="space-y-4">
-              <div className="text-center py-8 text-muted-foreground">
-                <BarChart3 className="w-12 h-12 mx-auto mb-4" />
-                <p>Weekly analytics would be displayed here</p>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="month" className="space-y-4">
-              <div className="text-center py-8 text-muted-foreground">
-                <BarChart3 className="w-12 h-12 mx-auto mb-4" />
-                <p>Monthly analytics would be displayed here</p>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
-    </div>
+    </AppLayout>
   );
-}
+};
+
+export default Dashboard;

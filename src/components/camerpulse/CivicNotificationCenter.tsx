@@ -5,7 +5,6 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { Button } from '@/components/ui/button';
@@ -67,7 +66,6 @@ export const CivicNotificationCenter: React.FC = () => {
     filterByType,
     filterByRegion 
   } = useCivicNotifications();
-  const navigate = useNavigate();
   
   const [activeFilter, setActiveFilter] = useState('all');
   const [regionFilter, setRegionFilter] = useState('all');
@@ -233,12 +231,7 @@ export const CivicNotificationCenter: React.FC = () => {
                       markAsRead(notification.id);
                     }
                     if (notification.action_url) {
-                      // Use React Router navigation for internal URLs
-                      if (notification.action_url.startsWith('/')) {
-                        navigate(notification.action_url);
-                      } else {
-                        window.open(notification.action_url, '_blank');
-                      }
+                      window.location.href = notification.action_url;
                     }
                   }}
                 >

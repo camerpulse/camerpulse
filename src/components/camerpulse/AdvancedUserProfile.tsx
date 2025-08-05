@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -88,7 +87,7 @@ interface EnhancedProfile {
   profession?: string;
   civic_tagline?: string;
   profile_type: 'government_institution' | 'political_party' | 'company' | 'school' | 'ngo' | 'artist' | 'politician' | 'normal_user' | 'journalist' | 'activist' | 'camerpulse_official' | 'moderator';
-  verification_status: 'verified' | 'pending' | 'rejected' | 'under_review' | 'active' | 'suspended';
+  verification_status: 'verified' | 'pending' | 'rejected' | 'under_review';
   civic_influence_score: number;
   post_count: number;
   polls_created: number;
@@ -180,7 +179,6 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
   onClose,
   isModal = true
 }) => {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { toast } = useToast();
   
@@ -721,7 +719,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => navigate(`/messenger?startConversation=${userId}`)}
+                  onClick={() => window.location.href = `/messenger?startConversation=${userId}`}
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Message

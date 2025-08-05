@@ -5,9 +5,7 @@ import {
   validatePasswordStrength, 
   authRateLimiter, 
   logSecurityEvent,
-  detectSecurityThreats,
-  sanitizeInput,
-  filterInappropriateContent
+  detectSecurityThreats 
 } from '@/utils/security';
 import { useToast } from '@/hooks/use-toast';
 

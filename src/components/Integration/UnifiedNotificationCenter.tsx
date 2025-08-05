@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -52,7 +51,6 @@ interface NotificationPreferences {
 export const UnifiedNotificationCenter: React.FC = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('all');
   const [showOnlyUnread, setShowOnlyUnread] = useState(false);
 
@@ -233,12 +231,7 @@ export const UnifiedNotificationCenter: React.FC = () => {
     }
 
     if (notification.action_url) {
-      // Use React Router navigation for internal URLs
-      if (notification.action_url.startsWith('/')) {
-        navigate(notification.action_url);
-      } else {
-        window.open(notification.action_url, '_blank');
-      }
+      window.location.href = notification.action_url;
     }
   };
 

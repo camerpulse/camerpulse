@@ -14,134 +14,46 @@ export type Database = {
   }
   public: {
     Tables: {
-      ab_test_configs: {
+      activity_annotations: {
         Row: {
+          activity_id: string
+          admin_id: string
+          annotation_tag: string | null
+          comment_text: string
           created_at: string
-          description: string | null
-          end_date: string | null
+          created_by_name: string
           id: string
-          is_active: boolean
-          start_date: string
-          success_metrics: Json
-          test_name: string
-          traffic_allocation: Json
           updated_at: string
         }
         Insert: {
+          activity_id: string
+          admin_id: string
+          annotation_tag?: string | null
+          comment_text: string
           created_at?: string
-          description?: string | null
-          end_date?: string | null
+          created_by_name: string
           id?: string
-          is_active?: boolean
-          start_date?: string
-          success_metrics?: Json
-          test_name: string
-          traffic_allocation?: Json
           updated_at?: string
         }
         Update: {
+          activity_id?: string
+          admin_id?: string
+          annotation_tag?: string | null
+          comment_text?: string
           created_at?: string
-          description?: string | null
-          end_date?: string | null
+          created_by_name?: string
           id?: string
-          is_active?: boolean
-          start_date?: string
-          success_metrics?: Json
-          test_name?: string
-          traffic_allocation?: Json
           updated_at?: string
         }
-        Relationships: []
-      }
-      admin_activity_logs: {
-        Row: {
-          action_details: Json | null
-          action_type: string
-          admin_user_id: string
-          created_at: string
-          id: string
-          ip_address: unknown | null
-          target_id: string | null
-          target_type: string
-          user_agent: string | null
-        }
-        Insert: {
-          action_details?: Json | null
-          action_type: string
-          admin_user_id: string
-          created_at?: string
-          id?: string
-          ip_address?: unknown | null
-          target_id?: string | null
-          target_type: string
-          user_agent?: string | null
-        }
-        Update: {
-          action_details?: Json | null
-          action_type?: string
-          admin_user_id?: string
-          created_at?: string
-          id?: string
-          ip_address?: unknown | null
-          target_id?: string | null
-          target_type?: string
-          user_agent?: string | null
-        }
-        Relationships: []
-      }
-      admin_alerts: {
-        Row: {
-          alert_category: string
-          alert_data: Json | null
-          alert_type: string
-          assigned_admin_id: string | null
-          auto_generated: boolean
-          created_at: string
-          expires_at: string | null
-          id: string
-          is_read: boolean
-          message: string
-          read_at: string | null
-          related_entity_id: string | null
-          related_entity_type: string | null
-          severity: string
-          title: string
-        }
-        Insert: {
-          alert_category: string
-          alert_data?: Json | null
-          alert_type: string
-          assigned_admin_id?: string | null
-          auto_generated?: boolean
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_read?: boolean
-          message: string
-          read_at?: string | null
-          related_entity_id?: string | null
-          related_entity_type?: string | null
-          severity?: string
-          title: string
-        }
-        Update: {
-          alert_category?: string
-          alert_data?: Json | null
-          alert_type?: string
-          assigned_admin_id?: string | null
-          auto_generated?: boolean
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_read?: boolean
-          message?: string
-          read_at?: string | null
-          related_entity_id?: string | null
-          related_entity_type?: string | null
-          severity?: string
-          title?: string
-        }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "activity_annotations_activity_id_fkey"
+            columns: ["activity_id"]
+            isOneToOne: false
+            referencedRelation: "camerpulse_activity_timeline"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       advanced_sentiment_analysis: {
         Row: {
@@ -197,6 +109,56 @@ export type Database = {
         }
         Relationships: []
       }
+      agency_action_logs: {
+        Row: {
+          action_description: string
+          action_type: string
+          agency_id: string
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          target_id: string | null
+          target_resource: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action_description: string
+          action_type: string
+          agency_id: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_resource?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action_description?: string
+          action_type?: string
+          agency_id?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          target_id?: string | null
+          target_resource?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agency_action_logs_agency_id_fkey"
+            columns: ["agency_id"]
+            isOneToOne: false
+            referencedRelation: "government_agencies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agency_alert_routing: {
         Row: {
           agency_id: string
@@ -237,83 +199,6 @@ export type Database = {
             columns: ["agency_id"]
             isOneToOne: false
             referencedRelation: "government_agencies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      agency_branding_settings: {
-        Row: {
-          accent_color: string | null
-          agency_id: string | null
-          background_color: string | null
-          contact_info: Json | null
-          created_at: string | null
-          default_label_size: string | null
-          default_orientation: string | null
-          enable_thermal_printing: boolean | null
-          enable_watermark: boolean | null
-          font_sizes: Json | null
-          header_logo_url: string | null
-          id: string
-          logo_url: string | null
-          primary_color: string | null
-          primary_font: string | null
-          secondary_color: string | null
-          secondary_font: string | null
-          text_color: string | null
-          updated_at: string | null
-          watermark_url: string | null
-        }
-        Insert: {
-          accent_color?: string | null
-          agency_id?: string | null
-          background_color?: string | null
-          contact_info?: Json | null
-          created_at?: string | null
-          default_label_size?: string | null
-          default_orientation?: string | null
-          enable_thermal_printing?: boolean | null
-          enable_watermark?: boolean | null
-          font_sizes?: Json | null
-          header_logo_url?: string | null
-          id?: string
-          logo_url?: string | null
-          primary_color?: string | null
-          primary_font?: string | null
-          secondary_color?: string | null
-          secondary_font?: string | null
-          text_color?: string | null
-          updated_at?: string | null
-          watermark_url?: string | null
-        }
-        Update: {
-          accent_color?: string | null
-          agency_id?: string | null
-          background_color?: string | null
-          contact_info?: Json | null
-          created_at?: string | null
-          default_label_size?: string | null
-          default_orientation?: string | null
-          enable_thermal_printing?: boolean | null
-          enable_watermark?: boolean | null
-          font_sizes?: Json | null
-          header_logo_url?: string | null
-          id?: string
-          logo_url?: string | null
-          primary_color?: string | null
-          primary_font?: string | null
-          secondary_color?: string | null
-          secondary_font?: string | null
-          text_color?: string | null
-          updated_at?: string | null
-          watermark_url?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "agency_branding_settings_agency_id_fkey"
-            columns: ["agency_id"]
-            isOneToOne: true
-            referencedRelation: "shipping_companies"
             referencedColumns: ["id"]
           },
         ]
@@ -373,57 +258,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      agriculture_data: {
-        Row: {
-          challenges: Json | null
-          created_at: string | null
-          crop_type: string
-          harvest_season: string | null
-          id: string
-          irrigation_method: string | null
-          land_area_hectares: number | null
-          opportunities: Json | null
-          planting_season: string | null
-          region: string
-          soil_type: string | null
-          updated_at: string | null
-          village_id: string | null
-          yield_per_hectare: number | null
-        }
-        Insert: {
-          challenges?: Json | null
-          created_at?: string | null
-          crop_type: string
-          harvest_season?: string | null
-          id?: string
-          irrigation_method?: string | null
-          land_area_hectares?: number | null
-          opportunities?: Json | null
-          planting_season?: string | null
-          region: string
-          soil_type?: string | null
-          updated_at?: string | null
-          village_id?: string | null
-          yield_per_hectare?: number | null
-        }
-        Update: {
-          challenges?: Json | null
-          created_at?: string | null
-          crop_type?: string
-          harvest_season?: string | null
-          id?: string
-          irrigation_method?: string | null
-          land_area_hectares?: number | null
-          opportunities?: Json | null
-          planting_season?: string | null
-          region?: string
-          soil_type?: string | null
-          updated_at?: string | null
-          village_id?: string | null
-          yield_per_hectare?: number | null
-        }
-        Relationships: []
       }
       ai_generation_schedule: {
         Row: {
@@ -682,169 +516,6 @@ export type Database = {
         }
         Relationships: []
       }
-      analytics_events: {
-        Row: {
-          event_category: string
-          event_data: Json | null
-          event_name: string
-          id: string
-          ip_address: unknown | null
-          page_url: string | null
-          referrer: string | null
-          session_id: string | null
-          timestamp: string | null
-          user_agent: string | null
-          user_id: string | null
-        }
-        Insert: {
-          event_category: string
-          event_data?: Json | null
-          event_name: string
-          id?: string
-          ip_address?: unknown | null
-          page_url?: string | null
-          referrer?: string | null
-          session_id?: string | null
-          timestamp?: string | null
-          user_agent?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          event_category?: string
-          event_data?: Json | null
-          event_name?: string
-          id?: string
-          ip_address?: unknown | null
-          page_url?: string | null
-          referrer?: string | null
-          session_id?: string | null
-          timestamp?: string | null
-          user_agent?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      analytics_reports: {
-        Row: {
-          configuration: Json
-          created_at: string
-          data_sources: Json
-          description: string | null
-          filters: Json
-          id: string
-          is_public: boolean
-          last_generated_at: string | null
-          report_name: string
-          report_type: string
-          schedule_config: Json | null
-          shared_with: string[] | null
-          status: string
-          updated_at: string
-          user_id: string
-          visualization_config: Json
-        }
-        Insert: {
-          configuration?: Json
-          created_at?: string
-          data_sources?: Json
-          description?: string | null
-          filters?: Json
-          id?: string
-          is_public?: boolean
-          last_generated_at?: string | null
-          report_name: string
-          report_type: string
-          schedule_config?: Json | null
-          shared_with?: string[] | null
-          status?: string
-          updated_at?: string
-          user_id: string
-          visualization_config?: Json
-        }
-        Update: {
-          configuration?: Json
-          created_at?: string
-          data_sources?: Json
-          description?: string | null
-          filters?: Json
-          id?: string
-          is_public?: boolean
-          last_generated_at?: string | null
-          report_name?: string
-          report_type?: string
-          schedule_config?: Json | null
-          shared_with?: string[] | null
-          status?: string
-          updated_at?: string
-          user_id?: string
-          visualization_config?: Json
-        }
-        Relationships: []
-      }
-      ancestor_relationships: {
-        Row: {
-          ancestor_id: string | null
-          created_at: string | null
-          id: string
-          marriage_date: string | null
-          marriage_village_id: string | null
-          related_ancestor_id: string | null
-          relationship_notes: string | null
-          relationship_type: string
-          traditional_ceremony: boolean | null
-          updated_at: string | null
-          verified: boolean | null
-        }
-        Insert: {
-          ancestor_id?: string | null
-          created_at?: string | null
-          id?: string
-          marriage_date?: string | null
-          marriage_village_id?: string | null
-          related_ancestor_id?: string | null
-          relationship_notes?: string | null
-          relationship_type: string
-          traditional_ceremony?: boolean | null
-          updated_at?: string | null
-          verified?: boolean | null
-        }
-        Update: {
-          ancestor_id?: string | null
-          created_at?: string | null
-          id?: string
-          marriage_date?: string | null
-          marriage_village_id?: string | null
-          related_ancestor_id?: string | null
-          relationship_notes?: string | null
-          relationship_type?: string
-          traditional_ceremony?: boolean | null
-          updated_at?: string | null
-          verified?: boolean | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "ancestor_relationships_ancestor_id_fkey"
-            columns: ["ancestor_id"]
-            isOneToOne: false
-            referencedRelation: "village_ancestors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ancestor_relationships_marriage_village_id_fkey"
-            columns: ["marriage_village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "ancestor_relationships_related_ancestor_id_fkey"
-            columns: ["related_ancestor_id"]
-            isOneToOne: false
-            referencedRelation: "village_ancestors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       api_configurations: {
         Row: {
           additional_config: Json | null
@@ -881,151 +552,65 @@ export type Database = {
         }
         Relationships: []
       }
-      api_integrations: {
+      application_reviews: {
         Row: {
-          api_endpoint: string | null
-          api_key_hash: string | null
-          company_id: string | null
-          configuration: Json | null
-          created_at: string | null
+          application_id: string
+          committee_id: string | null
+          created_at: string
+          criteria_scores: Json
           id: string
-          integration_name: string
-          integration_type: string
-          is_active: boolean | null
-          last_sync_at: string | null
-          rate_limit: number | null
-          updated_at: string | null
-          webhook_url: string | null
+          is_final: boolean
+          recommendation: string | null
+          review_comments: string | null
+          reviewed_at: string
+          reviewer_user_id: string
+          total_score: number
+          updated_at: string
         }
         Insert: {
-          api_endpoint?: string | null
-          api_key_hash?: string | null
-          company_id?: string | null
-          configuration?: Json | null
-          created_at?: string | null
+          application_id: string
+          committee_id?: string | null
+          created_at?: string
+          criteria_scores?: Json
           id?: string
-          integration_name: string
-          integration_type: string
-          is_active?: boolean | null
-          last_sync_at?: string | null
-          rate_limit?: number | null
-          updated_at?: string | null
-          webhook_url?: string | null
+          is_final?: boolean
+          recommendation?: string | null
+          review_comments?: string | null
+          reviewed_at?: string
+          reviewer_user_id: string
+          total_score?: number
+          updated_at?: string
         }
         Update: {
-          api_endpoint?: string | null
-          api_key_hash?: string | null
-          company_id?: string | null
-          configuration?: Json | null
-          created_at?: string | null
+          application_id?: string
+          committee_id?: string | null
+          created_at?: string
+          criteria_scores?: Json
           id?: string
-          integration_name?: string
-          integration_type?: string
-          is_active?: boolean | null
-          last_sync_at?: string | null
-          rate_limit?: number | null
-          updated_at?: string | null
-          webhook_url?: string | null
+          is_final?: boolean
+          recommendation?: string | null
+          review_comments?: string | null
+          reviewed_at?: string
+          reviewer_user_id?: string
+          total_score?: number
+          updated_at?: string
         }
         Relationships: [
           {
-            foreignKeyName: "api_integrations_company_id_fkey"
-            columns: ["company_id"]
+            foreignKeyName: "application_reviews_application_id_fkey"
+            columns: ["application_id"]
             isOneToOne: false
-            referencedRelation: "shipping_companies"
+            referencedRelation: "grant_applications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "application_reviews_committee_id_fkey"
+            columns: ["committee_id"]
+            isOneToOne: false
+            referencedRelation: "grant_review_committees"
             referencedColumns: ["id"]
           },
         ]
-      }
-      api_keys: {
-        Row: {
-          api_key: string
-          created_at: string
-          expires_at: string | null
-          id: string
-          is_active: boolean
-          key_name: string
-          key_prefix: string
-          last_used_at: string | null
-          permissions: string[]
-          rate_limit_config: Json | null
-          scopes: string[] | null
-          updated_at: string
-          usage_count: number | null
-          user_id: string
-        }
-        Insert: {
-          api_key: string
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_active?: boolean
-          key_name: string
-          key_prefix: string
-          last_used_at?: string | null
-          permissions?: string[]
-          rate_limit_config?: Json | null
-          scopes?: string[] | null
-          updated_at?: string
-          usage_count?: number | null
-          user_id: string
-        }
-        Update: {
-          api_key?: string
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_active?: boolean
-          key_name?: string
-          key_prefix?: string
-          last_used_at?: string | null
-          permissions?: string[]
-          rate_limit_config?: Json | null
-          scopes?: string[] | null
-          updated_at?: string
-          usage_count?: number | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      api_performance_logs: {
-        Row: {
-          created_at: string
-          endpoint_path: string
-          http_method: string
-          id: string
-          request_size_bytes: number | null
-          response_size_bytes: number | null
-          response_time_ms: number
-          status_code: number
-          user_agent: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          endpoint_path: string
-          http_method: string
-          id?: string
-          request_size_bytes?: number | null
-          response_size_bytes?: number | null
-          response_time_ms: number
-          status_code: number
-          user_agent?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          endpoint_path?: string
-          http_method?: string
-          id?: string
-          request_size_bytes?: number | null
-          response_size_bytes?: number | null
-          response_time_ms?: number
-          status_code?: number
-          user_agent?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
       }
       approval_ratings: {
         Row: {
@@ -1064,30 +649,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      archived_artist_data: {
-        Row: {
-          archive_reason: string | null
-          archived_at: string | null
-          data_snapshot: Json
-          id: string
-          original_table: string
-        }
-        Insert: {
-          archive_reason?: string | null
-          archived_at?: string | null
-          data_snapshot: Json
-          id?: string
-          original_table: string
-        }
-        Update: {
-          archive_reason?: string | null
-          archived_at?: string | null
-          data_snapshot?: Json
-          id?: string
-          original_table?: string
-        }
-        Relationships: []
       }
       artist_analytics: {
         Row: {
@@ -1417,6 +978,60 @@ export type Database = {
           },
         ]
       }
+      artist_notifications: {
+        Row: {
+          action_url: string | null
+          artist_id: string
+          created_at: string
+          data: Json | null
+          expires_at: string | null
+          id: string
+          is_read: boolean
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          priority: string
+          read_at: string | null
+          sent_via_email: boolean
+          sent_via_sms: boolean
+          title: string
+          user_id: string
+        }
+        Insert: {
+          action_url?: string | null
+          artist_id: string
+          created_at?: string
+          data?: Json | null
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message: string
+          notification_type: Database["public"]["Enums"]["notification_type"]
+          priority?: string
+          read_at?: string | null
+          sent_via_email?: boolean
+          sent_via_sms?: boolean
+          title: string
+          user_id: string
+        }
+        Update: {
+          action_url?: string | null
+          artist_id?: string
+          created_at?: string
+          data?: Json | null
+          expires_at?: string | null
+          id?: string
+          is_read?: boolean
+          message?: string
+          notification_type?: Database["public"]["Enums"]["notification_type"]
+          priority?: string
+          read_at?: string | null
+          sent_via_email?: boolean
+          sent_via_sms?: boolean
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       artist_platform_connections: {
         Row: {
           api_credentials: Json | null
@@ -1473,6 +1088,59 @@ export type Database = {
           {
             foreignKeyName: "artist_platform_connections_artist_id_fkey"
             columns: ["artist_id"]
+            isOneToOne: false
+            referencedRelation: "artist_memberships"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      artist_profile_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_reason: string | null
+          claim_type: string
+          claimed_artist_id: string | null
+          created_at: string
+          evidence_files: string[] | null
+          id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          claimed_artist_id?: string | null
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_reason?: string | null
+          claim_type?: string
+          claimed_artist_id?: string | null
+          created_at?: string
+          evidence_files?: string[] | null
+          id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "artist_profile_claims_claimed_artist_id_fkey"
+            columns: ["claimed_artist_id"]
             isOneToOne: false
             referencedRelation: "artist_memberships"
             referencedColumns: ["id"]
@@ -1838,7 +1506,15 @@ export type Database = {
           step_order?: number
           step_type?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_ashen_logs_request"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_dev_requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ashen_civic_memory: {
         Row: {
@@ -2030,6 +1706,66 @@ export type Database = {
           },
         ]
       }
+      ashen_dev_requests: {
+        Row: {
+          build_duration_seconds: number | null
+          build_mode: string
+          completed_at: string | null
+          created_at: string
+          created_by: string
+          error_message: string | null
+          estimated_complexity: number | null
+          id: string
+          metadata: Json
+          preview_before_build: boolean
+          priority_level: number
+          request_prompt: string
+          request_type: string
+          started_at: string | null
+          status: string
+          target_users: string[]
+          use_civic_memory: boolean
+        }
+        Insert: {
+          build_duration_seconds?: number | null
+          build_mode?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by: string
+          error_message?: string | null
+          estimated_complexity?: number | null
+          id?: string
+          metadata?: Json
+          preview_before_build?: boolean
+          priority_level?: number
+          request_prompt: string
+          request_type?: string
+          started_at?: string | null
+          status?: string
+          target_users?: string[]
+          use_civic_memory?: boolean
+        }
+        Update: {
+          build_duration_seconds?: number | null
+          build_mode?: string
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string
+          error_message?: string | null
+          estimated_complexity?: number | null
+          id?: string
+          metadata?: Json
+          preview_before_build?: boolean
+          priority_level?: number
+          request_prompt?: string
+          request_type?: string
+          started_at?: string | null
+          status?: string
+          target_users?: string[]
+          use_civic_memory?: boolean
+        }
+        Relationships: []
+      }
       ashen_error_logs: {
         Row: {
           component_path: string
@@ -2115,7 +1851,15 @@ export type Database = {
           request_id?: string
           validation_status?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_ashen_dependencies_request"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_dev_requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ashen_feature_registry: {
         Row: {
@@ -2265,7 +2009,15 @@ export type Database = {
           reverted_at?: string | null
           schema_definition?: Json | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "fk_ashen_artifacts_request"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_dev_requests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ashen_generated_plugins: {
         Row: {
@@ -2511,6 +2263,53 @@ export type Database = {
           },
         ]
       }
+      ashen_jr_performance: {
+        Row: {
+          accuracy_score: number | null
+          agent_id: string
+          created_at: string
+          feedback_score: number | null
+          id: string
+          interactions_count: number | null
+          knowledge_gaps: Json | null
+          metric_date: string
+          response_time_avg_ms: number | null
+          suggested_improvements: Json | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          agent_id: string
+          created_at?: string
+          feedback_score?: number | null
+          id?: string
+          interactions_count?: number | null
+          knowledge_gaps?: Json | null
+          metric_date?: string
+          response_time_avg_ms?: number | null
+          suggested_improvements?: Json | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          agent_id?: string
+          created_at?: string
+          feedback_score?: number | null
+          id?: string
+          interactions_count?: number | null
+          knowledge_gaps?: Json | null
+          metric_date?: string
+          response_time_avg_ms?: number | null
+          suggested_improvements?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_jr_performance_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_jr_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ashen_jr_training_sessions: {
         Row: {
           agent_id: string
@@ -2563,6 +2362,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ashen_learning_insights: {
+        Row: {
+          applicable_contexts: Json | null
+          confidence_score: number | null
+          created_at: string
+          example_cases: Json | null
+          id: string
+          insight_type: string
+          is_active: boolean | null
+          last_applied: string | null
+          learned_rules: Json | null
+          pattern_description: string | null
+          pattern_name: string
+          success_rate: number | null
+          updated_at: string
+          usage_frequency: number | null
+        }
+        Insert: {
+          applicable_contexts?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          example_cases?: Json | null
+          id?: string
+          insight_type: string
+          is_active?: boolean | null
+          last_applied?: string | null
+          learned_rules?: Json | null
+          pattern_description?: string | null
+          pattern_name: string
+          success_rate?: number | null
+          updated_at?: string
+          usage_frequency?: number | null
+        }
+        Update: {
+          applicable_contexts?: Json | null
+          confidence_score?: number | null
+          created_at?: string
+          example_cases?: Json | null
+          id?: string
+          insight_type?: string
+          is_active?: boolean | null
+          last_applied?: string | null
+          learned_rules?: Json | null
+          pattern_description?: string | null
+          pattern_name?: string
+          success_rate?: number | null
+          updated_at?: string
+          usage_frequency?: number | null
+        }
+        Relationships: []
       }
       ashen_learning_patterns: {
         Row: {
@@ -3109,6 +2959,54 @@ export type Database = {
           },
         ]
       }
+      ashen_security_breaches: {
+        Row: {
+          breach_name: string
+          breach_type: string
+          created_at: string
+          current_risk_level: string | null
+          exploit_method: string
+          fix_suggestions: Json | null
+          id: string
+          last_replayed_at: string | null
+          original_date: string | null
+          patch_status: string | null
+          replay_details: Json | null
+          replay_result: string
+          target_module: string
+        }
+        Insert: {
+          breach_name: string
+          breach_type: string
+          created_at?: string
+          current_risk_level?: string | null
+          exploit_method: string
+          fix_suggestions?: Json | null
+          id?: string
+          last_replayed_at?: string | null
+          original_date?: string | null
+          patch_status?: string | null
+          replay_details?: Json | null
+          replay_result?: string
+          target_module: string
+        }
+        Update: {
+          breach_name?: string
+          breach_type?: string
+          created_at?: string
+          current_risk_level?: string | null
+          exploit_method?: string
+          fix_suggestions?: Json | null
+          id?: string
+          last_replayed_at?: string | null
+          original_date?: string | null
+          patch_status?: string | null
+          replay_details?: Json | null
+          replay_result?: string
+          target_module?: string
+        }
+        Relationships: []
+      }
       ashen_security_config: {
         Row: {
           config_key: string
@@ -3136,6 +3034,69 @@ export type Database = {
           is_active?: boolean | null
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      ashen_security_logs: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          affected_files: string[] | null
+          attack_vector: string
+          created_at: string
+          detection_method: string
+          exploit_details: Json | null
+          exploit_risk_score: number
+          id: string
+          module_name: string
+          patch_applied: boolean | null
+          patch_available: boolean | null
+          patch_details: Json | null
+          patched_at: string | null
+          remediation_steps: string[] | null
+          severity: string
+          status: string
+          vulnerability_type: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_files?: string[] | null
+          attack_vector: string
+          created_at?: string
+          detection_method: string
+          exploit_details?: Json | null
+          exploit_risk_score?: number
+          id?: string
+          module_name: string
+          patch_applied?: boolean | null
+          patch_available?: boolean | null
+          patch_details?: Json | null
+          patched_at?: string | null
+          remediation_steps?: string[] | null
+          severity?: string
+          status?: string
+          vulnerability_type: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_files?: string[] | null
+          attack_vector?: string
+          created_at?: string
+          detection_method?: string
+          exploit_details?: Json | null
+          exploit_risk_score?: number
+          id?: string
+          module_name?: string
+          patch_applied?: boolean | null
+          patch_available?: boolean | null
+          patch_details?: Json | null
+          patched_at?: string | null
+          remediation_steps?: string[] | null
+          severity?: string
+          status?: string
+          vulnerability_type?: string
         }
         Relationships: []
       }
@@ -3275,7 +3236,74 @@ export type Database = {
           target_element?: string | null
           timestamp_ms?: number
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ashen_simulation_replay_logs_result_id_fkey"
+            columns: ["result_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_simulation_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ashen_simulation_results: {
+        Row: {
+          browser: string | null
+          created_at: string
+          device_model: string | null
+          device_type: string
+          errors_found: number | null
+          execution_date: string
+          id: string
+          performance_metrics: Json | null
+          results_summary: Json | null
+          status: string
+          test_duration_ms: number | null
+          test_id: string
+          ux_score: number | null
+          warnings_found: number | null
+        }
+        Insert: {
+          browser?: string | null
+          created_at?: string
+          device_model?: string | null
+          device_type: string
+          errors_found?: number | null
+          execution_date?: string
+          id?: string
+          performance_metrics?: Json | null
+          results_summary?: Json | null
+          status?: string
+          test_duration_ms?: number | null
+          test_id: string
+          ux_score?: number | null
+          warnings_found?: number | null
+        }
+        Update: {
+          browser?: string | null
+          created_at?: string
+          device_model?: string | null
+          device_type?: string
+          errors_found?: number | null
+          execution_date?: string
+          id?: string
+          performance_metrics?: Json | null
+          results_summary?: Json | null
+          status?: string
+          test_duration_ms?: number | null
+          test_id?: string
+          ux_score?: number | null
+          warnings_found?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ashen_simulation_results_test_id_fkey"
+            columns: ["test_id"]
+            isOneToOne: false
+            referencedRelation: "ashen_simulation_tests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ashen_simulation_test_paths: {
         Row: {
@@ -3430,6 +3458,60 @@ export type Database = {
           },
         ]
       }
+      ashen_snapshot_retention_config: {
+        Row: {
+          auto_cleanup_enabled: boolean | null
+          auto_rollback_on_critical_error: boolean | null
+          auto_snapshot_enabled: boolean | null
+          auto_snapshot_frequency: string | null
+          auto_snapshot_time: string | null
+          created_at: string
+          emergency_restore_enabled: boolean | null
+          id: string
+          is_active: boolean | null
+          max_age_days: number | null
+          max_snapshots: number | null
+          policy_name: string
+          pre_patch_snapshots: boolean | null
+          pre_plugin_snapshots: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          auto_cleanup_enabled?: boolean | null
+          auto_rollback_on_critical_error?: boolean | null
+          auto_snapshot_enabled?: boolean | null
+          auto_snapshot_frequency?: string | null
+          auto_snapshot_time?: string | null
+          created_at?: string
+          emergency_restore_enabled?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          max_age_days?: number | null
+          max_snapshots?: number | null
+          policy_name: string
+          pre_patch_snapshots?: boolean | null
+          pre_plugin_snapshots?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          auto_cleanup_enabled?: boolean | null
+          auto_rollback_on_critical_error?: boolean | null
+          auto_snapshot_enabled?: boolean | null
+          auto_snapshot_frequency?: string | null
+          auto_snapshot_time?: string | null
+          created_at?: string
+          emergency_restore_enabled?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          max_age_days?: number | null
+          max_snapshots?: number | null
+          policy_name?: string
+          pre_patch_snapshots?: boolean | null
+          pre_plugin_snapshots?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ashen_style_patterns: {
         Row: {
           confidence_score: number | null
@@ -3466,6 +3548,33 @@ export type Database = {
           pattern_example?: Json | null
           updated_at?: string
           usage_frequency?: number | null
+        }
+        Relationships: []
+      }
+      ashen_sync_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          id: string
+          is_active: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value?: Json
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -4238,74 +4347,6 @@ export type Database = {
           },
         ]
       }
-      authoritative_politicians: {
-        Row: {
-          confidence_score: number | null
-          constituency: string | null
-          created_at: string
-          data_sources: Json
-          full_name: string
-          id: string
-          is_current: boolean
-          last_updated: string
-          political_party_id: string | null
-          position_title: string
-          region: string
-          term_end_date: string | null
-          term_start_date: string | null
-          updated_at: string
-          verification_status: string
-          verified_at: string | null
-          verified_by: string | null
-        }
-        Insert: {
-          confidence_score?: number | null
-          constituency?: string | null
-          created_at?: string
-          data_sources?: Json
-          full_name: string
-          id?: string
-          is_current?: boolean
-          last_updated?: string
-          political_party_id?: string | null
-          position_title: string
-          region: string
-          term_end_date?: string | null
-          term_start_date?: string | null
-          updated_at?: string
-          verification_status?: string
-          verified_at?: string | null
-          verified_by?: string | null
-        }
-        Update: {
-          confidence_score?: number | null
-          constituency?: string | null
-          created_at?: string
-          data_sources?: Json
-          full_name?: string
-          id?: string
-          is_current?: boolean
-          last_updated?: string
-          political_party_id?: string | null
-          position_title?: string
-          region?: string
-          term_end_date?: string | null
-          term_start_date?: string | null
-          updated_at?: string
-          verification_status?: string
-          verified_at?: string | null
-          verified_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "authoritative_politicians_political_party_id_fkey"
-            columns: ["political_party_id"]
-            isOneToOne: false
-            referencedRelation: "political_parties"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       automated_moderation: {
         Row: {
           ai_model_used: string
@@ -4678,6 +4719,59 @@ export type Database = {
             columns: ["nomination_id"]
             isOneToOne: false
             referencedRelation: "award_nominations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      award_jury: {
+        Row: {
+          assigned_categories: string[] | null
+          award_id: string | null
+          bio: string | null
+          conflict_categories: string[] | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          jury_name: string
+          jury_title: string | null
+          updated_at: string | null
+          user_id: string | null
+          weight_percentage: number | null
+        }
+        Insert: {
+          assigned_categories?: string[] | null
+          award_id?: string | null
+          bio?: string | null
+          conflict_categories?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          jury_name: string
+          jury_title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          weight_percentage?: number | null
+        }
+        Update: {
+          assigned_categories?: string[] | null
+          award_id?: string | null
+          bio?: string | null
+          conflict_categories?: string[] | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          jury_name?: string
+          jury_title?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          weight_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "award_jury_award_id_fkey"
+            columns: ["award_id"]
+            isOneToOne: false
+            referencedRelation: "awards"
             referencedColumns: ["id"]
           },
         ]
@@ -5838,52 +5932,49 @@ export type Database = {
         }
         Relationships: []
       }
-      calendar_event_participants: {
+      cache_status_tracking: {
         Row: {
-          attendance_year: number
-          confirmed_attendance: boolean | null
-          contribution_type: string | null
-          created_at: string
-          event_id: string
+          cache_layer: string
+          completed_at: string | null
+          error_message: string | null
           id: string
-          notes: string | null
-          participation_type: string
-          role_description: string | null
-          user_id: string
-          village_id: string | null
+          items_cleared: number | null
+          metadata: Json | null
+          operation_id: string | null
+          size_cleared_mb: number | null
+          started_at: string | null
+          status: string
         }
         Insert: {
-          attendance_year: number
-          confirmed_attendance?: boolean | null
-          contribution_type?: string | null
-          created_at?: string
-          event_id: string
+          cache_layer: string
+          completed_at?: string | null
+          error_message?: string | null
           id?: string
-          notes?: string | null
-          participation_type: string
-          role_description?: string | null
-          user_id: string
-          village_id?: string | null
+          items_cleared?: number | null
+          metadata?: Json | null
+          operation_id?: string | null
+          size_cleared_mb?: number | null
+          started_at?: string | null
+          status?: string
         }
         Update: {
-          attendance_year?: number
-          confirmed_attendance?: boolean | null
-          contribution_type?: string | null
-          created_at?: string
-          event_id?: string
+          cache_layer?: string
+          completed_at?: string | null
+          error_message?: string | null
           id?: string
-          notes?: string | null
-          participation_type?: string
-          role_description?: string | null
-          user_id?: string
-          village_id?: string | null
+          items_cleared?: number | null
+          metadata?: Json | null
+          operation_id?: string | null
+          size_cleared_mb?: number | null
+          started_at?: string | null
+          status?: string
         }
         Relationships: [
           {
-            foreignKeyName: "calendar_event_participants_event_id_fkey"
-            columns: ["event_id"]
+            foreignKeyName: "cache_status_tracking_operation_id_fkey"
+            columns: ["operation_id"]
             isOneToOne: false
-            referencedRelation: "traditional_calendar_events"
+            referencedRelation: "cache_flush_operations"
             referencedColumns: ["id"]
           },
         ]
@@ -6008,6 +6099,57 @@ export type Database = {
         }
         Relationships: []
       }
+      camerpulse_intelligence_alerts: {
+        Row: {
+          acknowledged: boolean | null
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          affected_regions: string[] | null
+          alert_type: string
+          auto_generated: boolean | null
+          created_at: string
+          description: string | null
+          id: string
+          recommended_actions: string[] | null
+          related_content_ids: string[] | null
+          sentiment_data: Json | null
+          severity: string
+          title: string
+        }
+        Insert: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_regions?: string[] | null
+          alert_type: string
+          auto_generated?: boolean | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          recommended_actions?: string[] | null
+          related_content_ids?: string[] | null
+          sentiment_data?: Json | null
+          severity: string
+          title: string
+        }
+        Update: {
+          acknowledged?: boolean | null
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          affected_regions?: string[] | null
+          alert_type?: string
+          auto_generated?: boolean | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          recommended_actions?: string[] | null
+          related_content_ids?: string[] | null
+          sentiment_data?: Json | null
+          severity?: string
+          title?: string
+        }
+        Relationships: []
+      }
       camerpulse_intelligence_config: {
         Row: {
           auto_updated: boolean | null
@@ -6092,6 +6234,42 @@ export type Database = {
           political_leaning?: string | null
           sentiment_impact?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      camerpulse_intelligence_learning_logs: {
+        Row: {
+          applied_at: string | null
+          confidence_improvement: number | null
+          created_at: string
+          id: string
+          input_data: Json
+          learning_type: string
+          model_adjustment: Json | null
+          pattern_identified: string | null
+          validation_score: number | null
+        }
+        Insert: {
+          applied_at?: string | null
+          confidence_improvement?: number | null
+          created_at?: string
+          id?: string
+          input_data: Json
+          learning_type: string
+          model_adjustment?: Json | null
+          pattern_identified?: string | null
+          validation_score?: number | null
+        }
+        Update: {
+          applied_at?: string | null
+          confidence_improvement?: number | null
+          created_at?: string
+          id?: string
+          input_data?: Json
+          learning_type?: string
+          model_adjustment?: Json | null
+          pattern_identified?: string | null
+          validation_score?: number | null
         }
         Relationships: []
       }
@@ -6215,6 +6393,114 @@ export type Database = {
         }
         Relationships: []
       }
+      camerpulse_intelligence_sentiment_logs: {
+        Row: {
+          audio_emotion_analysis: Json | null
+          audio_transcript: string | null
+          author_handle: string | null
+          author_influence_score: number | null
+          city_detected: string | null
+          confidence_score: number | null
+          content_category: string[] | null
+          content_id: string | null
+          content_text: string
+          coordinates: Json | null
+          created_at: string
+          emotional_tone: string[] | null
+          engagement_metrics: Json | null
+          facial_emotion_scores: Json | null
+          flagged_for_review: boolean | null
+          hashtags: string[] | null
+          id: string
+          keywords_detected: string[] | null
+          language_detected: string | null
+          locality_detected: string | null
+          media_metadata: Json | null
+          media_type: string | null
+          media_url: string | null
+          mentions: string[] | null
+          multimodal_confidence: number | null
+          platform: string
+          processed_at: string | null
+          region_detected: string | null
+          sentiment_polarity: string
+          sentiment_score: number | null
+          subdivision_detected: string | null
+          threat_level: string | null
+          visual_emotions: Json | null
+        }
+        Insert: {
+          audio_emotion_analysis?: Json | null
+          audio_transcript?: string | null
+          author_handle?: string | null
+          author_influence_score?: number | null
+          city_detected?: string | null
+          confidence_score?: number | null
+          content_category?: string[] | null
+          content_id?: string | null
+          content_text: string
+          coordinates?: Json | null
+          created_at?: string
+          emotional_tone?: string[] | null
+          engagement_metrics?: Json | null
+          facial_emotion_scores?: Json | null
+          flagged_for_review?: boolean | null
+          hashtags?: string[] | null
+          id?: string
+          keywords_detected?: string[] | null
+          language_detected?: string | null
+          locality_detected?: string | null
+          media_metadata?: Json | null
+          media_type?: string | null
+          media_url?: string | null
+          mentions?: string[] | null
+          multimodal_confidence?: number | null
+          platform: string
+          processed_at?: string | null
+          region_detected?: string | null
+          sentiment_polarity: string
+          sentiment_score?: number | null
+          subdivision_detected?: string | null
+          threat_level?: string | null
+          visual_emotions?: Json | null
+        }
+        Update: {
+          audio_emotion_analysis?: Json | null
+          audio_transcript?: string | null
+          author_handle?: string | null
+          author_influence_score?: number | null
+          city_detected?: string | null
+          confidence_score?: number | null
+          content_category?: string[] | null
+          content_id?: string | null
+          content_text?: string
+          coordinates?: Json | null
+          created_at?: string
+          emotional_tone?: string[] | null
+          engagement_metrics?: Json | null
+          facial_emotion_scores?: Json | null
+          flagged_for_review?: boolean | null
+          hashtags?: string[] | null
+          id?: string
+          keywords_detected?: string[] | null
+          language_detected?: string | null
+          locality_detected?: string | null
+          media_metadata?: Json | null
+          media_type?: string | null
+          media_url?: string | null
+          mentions?: string[] | null
+          multimodal_confidence?: number | null
+          platform?: string
+          processed_at?: string | null
+          region_detected?: string | null
+          sentiment_polarity?: string
+          sentiment_score?: number | null
+          subdivision_detected?: string | null
+          threat_level?: string | null
+          visual_emotions?: Json | null
+        }
+        Relationships: []
+      }
       camerpulse_intelligence_trending_topics: {
         Row: {
           category: string | null
@@ -6266,6 +6552,57 @@ export type Database = {
           topic_text?: string
           trend_status?: string | null
           volume_score?: number | null
+        }
+        Relationships: []
+      }
+      camerpulse_module_registry: {
+        Row: {
+          component_type: string
+          created_at: string
+          error_count: number | null
+          file_path: string
+          health_status: string
+          id: string
+          last_error_at: string | null
+          last_health_check: string | null
+          metadata: Json | null
+          module_id: string
+          module_name: string
+          monitoring_enabled: boolean | null
+          route_path: string | null
+          updated_at: string
+        }
+        Insert: {
+          component_type?: string
+          created_at?: string
+          error_count?: number | null
+          file_path: string
+          health_status?: string
+          id?: string
+          last_error_at?: string | null
+          last_health_check?: string | null
+          metadata?: Json | null
+          module_id: string
+          module_name: string
+          monitoring_enabled?: boolean | null
+          route_path?: string | null
+          updated_at?: string
+        }
+        Update: {
+          component_type?: string
+          created_at?: string
+          error_count?: number | null
+          file_path?: string
+          health_status?: string
+          id?: string
+          last_error_at?: string | null
+          last_health_check?: string | null
+          metadata?: Json | null
+          module_id?: string
+          module_name?: string
+          monitoring_enabled?: boolean | null
+          route_path?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -6477,99 +6814,6 @@ export type Database = {
           },
         ]
       }
-      ceremonial_events: {
-        Row: {
-          access_restrictions: string | null
-          attendance_count: number | null
-          audio_recordings: string[] | null
-          ceremony_name: string
-          ceremony_type: string
-          created_at: string
-          cultural_significance: string | null
-          description: string | null
-          duration_days: number | null
-          event_date: string | null
-          historical_notes: string | null
-          id: string
-          is_annual: boolean | null
-          is_public: boolean
-          is_sacred: boolean | null
-          location: string | null
-          lunar_calendar_based: boolean | null
-          modern_adaptations: string | null
-          participants_roles: Json | null
-          photos: string[] | null
-          preparation_days: number | null
-          required_materials: Json | null
-          ritual_steps: Json | null
-          status: string | null
-          updated_at: string
-          user_id: string
-          videos: string[] | null
-          village_id: string
-        }
-        Insert: {
-          access_restrictions?: string | null
-          attendance_count?: number | null
-          audio_recordings?: string[] | null
-          ceremony_name: string
-          ceremony_type: string
-          created_at?: string
-          cultural_significance?: string | null
-          description?: string | null
-          duration_days?: number | null
-          event_date?: string | null
-          historical_notes?: string | null
-          id?: string
-          is_annual?: boolean | null
-          is_public?: boolean
-          is_sacred?: boolean | null
-          location?: string | null
-          lunar_calendar_based?: boolean | null
-          modern_adaptations?: string | null
-          participants_roles?: Json | null
-          photos?: string[] | null
-          preparation_days?: number | null
-          required_materials?: Json | null
-          ritual_steps?: Json | null
-          status?: string | null
-          updated_at?: string
-          user_id: string
-          videos?: string[] | null
-          village_id: string
-        }
-        Update: {
-          access_restrictions?: string | null
-          attendance_count?: number | null
-          audio_recordings?: string[] | null
-          ceremony_name?: string
-          ceremony_type?: string
-          created_at?: string
-          cultural_significance?: string | null
-          description?: string | null
-          duration_days?: number | null
-          event_date?: string | null
-          historical_notes?: string | null
-          id?: string
-          is_annual?: boolean | null
-          is_public?: boolean
-          is_sacred?: boolean | null
-          location?: string | null
-          lunar_calendar_based?: boolean | null
-          modern_adaptations?: string | null
-          participants_roles?: Json | null
-          photos?: string[] | null
-          preparation_days?: number | null
-          required_materials?: Json | null
-          ritual_steps?: Json | null
-          status?: string | null
-          updated_at?: string
-          user_id?: string
-          videos?: string[] | null
-          village_id?: string
-        }
-        Relationships: []
-      }
       certificate_templates: {
         Row: {
           created_at: string | null
@@ -6640,208 +6884,6 @@ export type Database = {
             columns: ["certificate_id"]
             isOneToOne: false
             referencedRelation: "event_certificates"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      chat_attachments: {
-        Row: {
-          created_at: string
-          file_name: string
-          file_size: number | null
-          file_type: string
-          file_url: string
-          id: string
-          message_id: string
-        }
-        Insert: {
-          created_at?: string
-          file_name: string
-          file_size?: number | null
-          file_type: string
-          file_url: string
-          id?: string
-          message_id: string
-        }
-        Update: {
-          created_at?: string
-          file_name?: string
-          file_size?: number | null
-          file_type?: string
-          file_url?: string
-          id?: string
-          message_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_attachments_message_id_fkey"
-            columns: ["message_id"]
-            isOneToOne: false
-            referencedRelation: "chat_messages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      chat_conversations: {
-        Row: {
-          conversation_type: string
-          created_at: string
-          customer_id: string
-          id: string
-          last_message_at: string | null
-          related_product_id: string | null
-          status: string
-          updated_at: string
-          vendor_id: string
-        }
-        Insert: {
-          conversation_type?: string
-          created_at?: string
-          customer_id: string
-          id?: string
-          last_message_at?: string | null
-          related_product_id?: string | null
-          status?: string
-          updated_at?: string
-          vendor_id: string
-        }
-        Update: {
-          conversation_type?: string
-          created_at?: string
-          customer_id?: string
-          id?: string
-          last_message_at?: string | null
-          related_product_id?: string | null
-          status?: string
-          updated_at?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_conversations_related_product_id_fkey"
-            columns: ["related_product_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "chat_conversations_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      chat_media: {
-        Row: {
-          conversation_id: string | null
-          created_at: string | null
-          download_count: number | null
-          file_name: string
-          file_path: string
-          file_size: number | null
-          id: string
-          is_deleted: boolean | null
-          media_type: string
-          message_id: string | null
-          mime_type: string | null
-          storage_bucket: string
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          conversation_id?: string | null
-          created_at?: string | null
-          download_count?: number | null
-          file_name: string
-          file_path: string
-          file_size?: number | null
-          id?: string
-          is_deleted?: boolean | null
-          media_type?: string
-          message_id?: string | null
-          mime_type?: string | null
-          storage_bucket?: string
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          conversation_id?: string | null
-          created_at?: string | null
-          download_count?: number | null
-          file_name?: string
-          file_path?: string
-          file_size?: number | null
-          id?: string
-          is_deleted?: boolean | null
-          media_type?: string
-          message_id?: string | null
-          mime_type?: string | null
-          storage_bucket?: string
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_media_conversation_id_fkey"
-            columns: ["conversation_id"]
-            isOneToOne: false
-            referencedRelation: "chat_conversations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "chat_media_message_id_fkey"
-            columns: ["message_id"]
-            isOneToOne: false
-            referencedRelation: "chat_messages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      chat_messages: {
-        Row: {
-          content: string
-          conversation_id: string
-          created_at: string
-          id: string
-          is_read: boolean
-          message_type: string
-          metadata: Json | null
-          read_at: string | null
-          sender_id: string
-          sender_type: string
-        }
-        Insert: {
-          content: string
-          conversation_id: string
-          created_at?: string
-          id?: string
-          is_read?: boolean
-          message_type?: string
-          metadata?: Json | null
-          read_at?: string | null
-          sender_id: string
-          sender_type: string
-        }
-        Update: {
-          content?: string
-          conversation_id?: string
-          created_at?: string
-          id?: string
-          is_read?: boolean
-          message_type?: string
-          metadata?: Json | null
-          read_at?: string | null
-          sender_id?: string
-          sender_type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "chat_messages_conversation_id_fkey"
-            columns: ["conversation_id"]
-            isOneToOne: false
-            referencedRelation: "chat_conversations"
             referencedColumns: ["id"]
           },
         ]
@@ -6968,6 +7010,42 @@ export type Database = {
           is_certification?: boolean
           points_awarded?: number
           user_id?: string
+        }
+        Relationships: []
+      }
+      civic_alerts: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          priority: string
+          regions: string[] | null
+          sender_id: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          priority: string
+          regions?: string[] | null
+          sender_id?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          priority?: string
+          regions?: string[] | null
+          sender_id?: string | null
+          title?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -9793,6 +9871,108 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_shield_moderators: {
+        Row: {
+          active_cases: number
+          created_at: string
+          encryption_certified: boolean
+          id: string
+          last_active: string | null
+          max_case_load: number
+          moderator_name: string
+          regions_covered: string[] | null
+          security_clearance_level: number
+          specializations: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active_cases?: number
+          created_at?: string
+          encryption_certified?: boolean
+          id?: string
+          last_active?: string | null
+          max_case_load?: number
+          moderator_name: string
+          regions_covered?: string[] | null
+          security_clearance_level?: number
+          specializations?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active_cases?: number
+          created_at?: string
+          encryption_certified?: boolean
+          id?: string
+          last_active?: string | null
+          max_case_load?: number
+          moderator_name?: string
+          regions_covered?: string[] | null
+          security_clearance_level?: number
+          specializations?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      civic_shield_protection: {
+        Row: {
+          activated_by: string | null
+          activation_reason: string | null
+          auto_protection_triggered: boolean
+          created_at: string
+          id: string
+          ip_obfuscation_enabled: boolean
+          protection_alias: string
+          protection_expiry: string | null
+          protection_measures: Json | null
+          public_profile_hidden: boolean
+          risk_score: number
+          shield_status: Database["public"]["Enums"]["shield_status"]
+          threat_indicators: Json | null
+          updated_at: string
+          user_id: string | null
+          visibility_cloaked: boolean
+        }
+        Insert: {
+          activated_by?: string | null
+          activation_reason?: string | null
+          auto_protection_triggered?: boolean
+          created_at?: string
+          id?: string
+          ip_obfuscation_enabled?: boolean
+          protection_alias: string
+          protection_expiry?: string | null
+          protection_measures?: Json | null
+          public_profile_hidden?: boolean
+          risk_score?: number
+          shield_status?: Database["public"]["Enums"]["shield_status"]
+          threat_indicators?: Json | null
+          updated_at?: string
+          user_id?: string | null
+          visibility_cloaked?: boolean
+        }
+        Update: {
+          activated_by?: string | null
+          activation_reason?: string | null
+          auto_protection_triggered?: boolean
+          created_at?: string
+          id?: string
+          ip_obfuscation_enabled?: boolean
+          protection_alias?: string
+          protection_expiry?: string | null
+          protection_measures?: Json | null
+          public_profile_hidden?: boolean
+          risk_score?: number
+          shield_status?: Database["public"]["Enums"]["shield_status"]
+          threat_indicators?: Json | null
+          updated_at?: string
+          user_id?: string | null
+          visibility_cloaked?: boolean
+        }
+        Relationships: []
+      }
       civic_simulation_results: {
         Row: {
           affected_regions: string[] | null
@@ -10049,78 +10229,91 @@ export type Database = {
           },
         ]
       }
-      commission_tracking: {
+      claim_notifications: {
         Row: {
-          commission_amount: number
-          commission_rate: number
-          created_at: string
-          gross_amount: number
+          claim_id: string
+          created_at: string | null
           id: string
-          net_revenue: number
-          order_id: string | null
-          paid_out_at: string | null
-          payment_processing_fee: number | null
-          status: string
-          transaction_id: string
-          updated_at: string
-          vendor_id: string
-          vendor_payout: number
+          is_read: boolean | null
+          message: string
+          notification_type: string
+          recipient_id: string
+          title: string
         }
         Insert: {
-          commission_amount: number
-          commission_rate: number
-          created_at?: string
-          gross_amount: number
+          claim_id: string
+          created_at?: string | null
           id?: string
-          net_revenue: number
-          order_id?: string | null
-          paid_out_at?: string | null
-          payment_processing_fee?: number | null
-          status?: string
-          transaction_id: string
-          updated_at?: string
-          vendor_id: string
-          vendor_payout: number
+          is_read?: boolean | null
+          message: string
+          notification_type: string
+          recipient_id: string
+          title: string
         }
         Update: {
-          commission_amount?: number
-          commission_rate?: number
-          created_at?: string
-          gross_amount?: number
+          claim_id?: string
+          created_at?: string | null
           id?: string
-          net_revenue?: number
-          order_id?: string | null
-          paid_out_at?: string | null
-          payment_processing_fee?: number | null
-          status?: string
-          transaction_id?: string
-          updated_at?: string
-          vendor_id?: string
-          vendor_payout?: number
+          is_read?: boolean | null
+          message?: string
+          notification_type?: string
+          recipient_id?: string
+          title?: string
         }
         Relationships: [
           {
-            foreignKeyName: "commission_tracking_order_id_fkey"
-            columns: ["order_id"]
+            foreignKeyName: "claim_notifications_claim_id_fkey"
+            columns: ["claim_id"]
             isOneToOne: false
-            referencedRelation: "marketplace_orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "commission_tracking_transaction_id_fkey"
-            columns: ["transaction_id"]
-            isOneToOne: false
-            referencedRelation: "payment_transactions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "commission_tracking_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
+            referencedRelation: "institution_claims"
             referencedColumns: ["id"]
           },
         ]
+      }
+      claim_requests: {
+        Row: {
+          claim_reason: string | null
+          claimant_user_id: string
+          created_at: string
+          evidence_documents: string[] | null
+          id: string
+          institution_id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          status: Database["public"]["Enums"]["verification_status"]
+          updated_at: string
+        }
+        Insert: {
+          claim_reason?: string | null
+          claimant_user_id: string
+          created_at?: string
+          evidence_documents?: string[] | null
+          id?: string
+          institution_id: string
+          institution_type: Database["public"]["Enums"]["institution_type"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          updated_at?: string
+        }
+        Update: {
+          claim_reason?: string | null
+          claimant_user_id?: string
+          created_at?: string
+          evidence_documents?: string[] | null
+          id?: string
+          institution_id?: string
+          institution_type?: Database["public"]["Enums"]["institution_type"]
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          status?: Database["public"]["Enums"]["verification_status"]
+          updated_at?: string
+        }
+        Relationships: []
       }
       community_events: {
         Row: {
@@ -10412,47 +10605,6 @@ export type Database = {
           },
         ]
       }
-      company_metrics: {
-        Row: {
-          company_id: string | null
-          created_at: string | null
-          id: string
-          metadata: Json | null
-          metric_date: string
-          metric_type: string
-          metric_value: number
-          period_type: string | null
-        }
-        Insert: {
-          company_id?: string | null
-          created_at?: string | null
-          id?: string
-          metadata?: Json | null
-          metric_date: string
-          metric_type: string
-          metric_value: number
-          period_type?: string | null
-        }
-        Update: {
-          company_id?: string | null
-          created_at?: string | null
-          id?: string
-          metadata?: Json | null
-          metric_date?: string
-          metric_type?: string
-          metric_value?: number
-          period_type?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "company_metrics_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       company_payments: {
         Row: {
           amount: number
@@ -10596,53 +10748,6 @@ export type Database = {
             columns: ["company_id"]
             isOneToOne: false
             referencedRelation: "companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      company_tenants: {
-        Row: {
-          billing_plan: string | null
-          branding_config: Json | null
-          company_id: string | null
-          created_at: string | null
-          custom_domain: string | null
-          feature_flags: Json | null
-          id: string
-          is_white_label: boolean | null
-          tenant_slug: string
-          updated_at: string | null
-        }
-        Insert: {
-          billing_plan?: string | null
-          branding_config?: Json | null
-          company_id?: string | null
-          created_at?: string | null
-          custom_domain?: string | null
-          feature_flags?: Json | null
-          id?: string
-          is_white_label?: boolean | null
-          tenant_slug: string
-          updated_at?: string | null
-        }
-        Update: {
-          billing_plan?: string | null
-          branding_config?: Json | null
-          company_id?: string | null
-          created_at?: string | null
-          custom_domain?: string | null
-          feature_flags?: Json | null
-          id?: string
-          is_white_label?: boolean | null
-          tenant_slug?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "company_tenants_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
             referencedColumns: ["id"]
           },
         ]
@@ -10874,54 +10979,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      content_reports: {
-        Row: {
-          content_data: Json | null
-          content_id: string
-          content_type: string
-          created_at: string
-          id: string
-          moderated_at: string | null
-          moderated_by: string | null
-          moderator_notes: string | null
-          reason: string
-          reported_user_id: string | null
-          reporter_id: string
-          status: string
-          updated_at: string
-        }
-        Insert: {
-          content_data?: Json | null
-          content_id: string
-          content_type: string
-          created_at?: string
-          id?: string
-          moderated_at?: string | null
-          moderated_by?: string | null
-          moderator_notes?: string | null
-          reason: string
-          reported_user_id?: string | null
-          reporter_id: string
-          status?: string
-          updated_at?: string
-        }
-        Update: {
-          content_data?: Json | null
-          content_id?: string
-          content_type?: string
-          created_at?: string
-          id?: string
-          moderated_at?: string | null
-          moderated_by?: string | null
-          moderator_notes?: string | null
-          reason?: string
-          reported_user_id?: string | null
-          reporter_id?: string
-          status?: string
-          updated_at?: string
-        }
-        Relationships: []
       }
       content_tags: {
         Row: {
@@ -11199,50 +11256,95 @@ export type Database = {
         }
         Relationships: []
       }
-      core_sentiment_analysis: {
+      copyright_violations: {
         Row: {
-          analysis_metadata: Json | null
-          analyzed_at: string | null
-          confidence_score: number | null
-          content_id: string | null
-          content_text: string
-          content_type: string
-          created_at: string | null
+          admin_notes: string | null
+          artist_id: string
+          created_at: string
+          detection_confidence: number
+          dmca_claim_sent: boolean
+          fingerprint_id: string
           id: string
-          language: string | null
-          region: string | null
-          sentiment_label: string | null
-          sentiment_score: number | null
+          metadata: Json | null
+          platform_response: string | null
+          platform_type: Database["public"]["Enums"]["platform_type"]
+          reported_at: string | null
+          resolved_at: string | null
+          screenshot_url: string | null
+          status: Database["public"]["Enums"]["violation_status"]
+          track_id: string
+          updated_at: string
+          video_evidence_url: string | null
+          violation_description: string | null
+          violation_type: string
+          violation_url: string
+          violator_channel_url: string | null
+          violator_username: string | null
         }
         Insert: {
-          analysis_metadata?: Json | null
-          analyzed_at?: string | null
-          confidence_score?: number | null
-          content_id?: string | null
-          content_text: string
-          content_type: string
-          created_at?: string | null
+          admin_notes?: string | null
+          artist_id: string
+          created_at?: string
+          detection_confidence?: number
+          dmca_claim_sent?: boolean
+          fingerprint_id: string
           id?: string
-          language?: string | null
-          region?: string | null
-          sentiment_label?: string | null
-          sentiment_score?: number | null
+          metadata?: Json | null
+          platform_response?: string | null
+          platform_type: Database["public"]["Enums"]["platform_type"]
+          reported_at?: string | null
+          resolved_at?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["violation_status"]
+          track_id: string
+          updated_at?: string
+          video_evidence_url?: string | null
+          violation_description?: string | null
+          violation_type: string
+          violation_url: string
+          violator_channel_url?: string | null
+          violator_username?: string | null
         }
         Update: {
-          analysis_metadata?: Json | null
-          analyzed_at?: string | null
-          confidence_score?: number | null
-          content_id?: string | null
-          content_text?: string
-          content_type?: string
-          created_at?: string | null
+          admin_notes?: string | null
+          artist_id?: string
+          created_at?: string
+          detection_confidence?: number
+          dmca_claim_sent?: boolean
+          fingerprint_id?: string
           id?: string
-          language?: string | null
-          region?: string | null
-          sentiment_label?: string | null
-          sentiment_score?: number | null
+          metadata?: Json | null
+          platform_response?: string | null
+          platform_type?: Database["public"]["Enums"]["platform_type"]
+          reported_at?: string | null
+          resolved_at?: string | null
+          screenshot_url?: string | null
+          status?: Database["public"]["Enums"]["violation_status"]
+          track_id?: string
+          updated_at?: string
+          video_evidence_url?: string | null
+          violation_description?: string | null
+          violation_type?: string
+          violation_url?: string
+          violator_channel_url?: string | null
+          violator_username?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "copyright_violations_fingerprint_id_fkey"
+            columns: ["fingerprint_id"]
+            isOneToOne: false
+            referencedRelation: "audio_fingerprints"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "copyright_violations_track_id_fkey"
+            columns: ["track_id"]
+            isOneToOne: false
+            referencedRelation: "music_tracks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       corruption_case_sources: {
         Row: {
@@ -11284,6 +11386,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "corruption_case_sources_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "corruption_cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      corruption_case_updates: {
+        Row: {
+          added_by: string | null
+          case_id: string
+          created_at: string
+          id: string
+          new_status: string | null
+          previous_status: string | null
+          source_reference: string | null
+          update_date: string
+          update_description: string
+          update_type: string
+        }
+        Insert: {
+          added_by?: string | null
+          case_id: string
+          created_at?: string
+          id?: string
+          new_status?: string | null
+          previous_status?: string | null
+          source_reference?: string | null
+          update_date: string
+          update_description: string
+          update_type: string
+        }
+        Update: {
+          added_by?: string | null
+          case_id?: string
+          created_at?: string
+          id?: string
+          new_status?: string | null
+          previous_status?: string | null
+          source_reference?: string | null
+          update_date?: string
+          update_description?: string
+          update_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "corruption_case_updates_case_id_fkey"
             columns: ["case_id"]
             isOneToOne: false
             referencedRelation: "corruption_cases"
@@ -11487,60 +11636,6 @@ export type Database = {
           },
         ]
       }
-      custom_connectors: {
-        Row: {
-          code_template: string | null
-          configuration_template: Json
-          connector_name: string
-          connector_type: string
-          created_at: string
-          description: string | null
-          documentation: string | null
-          id: string
-          is_public: boolean
-          is_verified: boolean
-          tags: string[] | null
-          test_config: Json | null
-          updated_at: string
-          user_id: string
-          version: string | null
-        }
-        Insert: {
-          code_template?: string | null
-          configuration_template?: Json
-          connector_name: string
-          connector_type: string
-          created_at?: string
-          description?: string | null
-          documentation?: string | null
-          id?: string
-          is_public?: boolean
-          is_verified?: boolean
-          tags?: string[] | null
-          test_config?: Json | null
-          updated_at?: string
-          user_id: string
-          version?: string | null
-        }
-        Update: {
-          code_template?: string | null
-          configuration_template?: Json
-          connector_name?: string
-          connector_type?: string
-          created_at?: string
-          description?: string | null
-          documentation?: string | null
-          id?: string
-          is_public?: boolean
-          is_verified?: boolean
-          tags?: string[] | null
-          test_config?: Json | null
-          updated_at?: string
-          user_id?: string
-          version?: string | null
-        }
-        Relationships: []
-      }
       custom_emojis: {
         Row: {
           created_at: string
@@ -11709,212 +11804,6 @@ export type Database = {
           updated_at?: string
           user_id?: string
           visualization_settings?: Json | null
-        }
-        Relationships: []
-      }
-      customer_addresses: {
-        Row: {
-          address_type: string
-          city: string
-          country: string
-          created_at: string
-          customer_id: string
-          id: string
-          is_default: boolean
-          postal_code: string | null
-          region: string
-          street_address: string
-          updated_at: string
-        }
-        Insert: {
-          address_type?: string
-          city: string
-          country?: string
-          created_at?: string
-          customer_id: string
-          id?: string
-          is_default?: boolean
-          postal_code?: string | null
-          region: string
-          street_address: string
-          updated_at?: string
-        }
-        Update: {
-          address_type?: string
-          city?: string
-          country?: string
-          created_at?: string
-          customer_id?: string
-          id?: string
-          is_default?: boolean
-          postal_code?: string | null
-          region?: string
-          street_address?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      customer_notifications: {
-        Row: {
-          action_url: string | null
-          created_at: string
-          customer_id: string
-          expires_at: string | null
-          id: string
-          is_read: boolean
-          message: string
-          metadata: Json | null
-          notification_type: string
-          title: string
-        }
-        Insert: {
-          action_url?: string | null
-          created_at?: string
-          customer_id: string
-          expires_at?: string | null
-          id?: string
-          is_read?: boolean
-          message: string
-          metadata?: Json | null
-          notification_type: string
-          title: string
-        }
-        Update: {
-          action_url?: string | null
-          created_at?: string
-          customer_id?: string
-          expires_at?: string | null
-          id?: string
-          is_read?: boolean
-          message?: string
-          metadata?: Json | null
-          notification_type?: string
-          title?: string
-        }
-        Relationships: []
-      }
-      customer_preferences: {
-        Row: {
-          created_at: string
-          currency_preference: string
-          customer_id: string
-          id: string
-          language_preference: string
-          marketing_consent: boolean
-          notification_preferences: Json
-          preferred_categories: string[] | null
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          currency_preference?: string
-          customer_id: string
-          id?: string
-          language_preference?: string
-          marketing_consent?: boolean
-          notification_preferences?: Json
-          preferred_categories?: string[] | null
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          currency_preference?: string
-          customer_id?: string
-          id?: string
-          language_preference?: string
-          marketing_consent?: boolean
-          notification_preferences?: Json
-          preferred_categories?: string[] | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
-      customer_wishlist: {
-        Row: {
-          created_at: string
-          customer_id: string
-          id: string
-          product_id: string
-        }
-        Insert: {
-          created_at?: string
-          customer_id: string
-          id?: string
-          product_id: string
-        }
-        Update: {
-          created_at?: string
-          customer_id?: string
-          id?: string
-          product_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "customer_wishlist_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      data_export_jobs: {
-        Row: {
-          completed_at: string | null
-          created_at: string
-          data_query: Json
-          error_message: string | null
-          expires_at: string | null
-          export_name: string
-          export_type: string
-          file_path: string | null
-          file_size_bytes: number | null
-          filters: Json
-          format: string
-          id: string
-          processed_records: number | null
-          progress_percentage: number
-          status: string
-          total_records: number | null
-          user_id: string
-        }
-        Insert: {
-          completed_at?: string | null
-          created_at?: string
-          data_query: Json
-          error_message?: string | null
-          expires_at?: string | null
-          export_name: string
-          export_type: string
-          file_path?: string | null
-          file_size_bytes?: number | null
-          filters?: Json
-          format?: string
-          id?: string
-          processed_records?: number | null
-          progress_percentage?: number
-          status?: string
-          total_records?: number | null
-          user_id: string
-        }
-        Update: {
-          completed_at?: string | null
-          created_at?: string
-          data_query?: Json
-          error_message?: string | null
-          expires_at?: string | null
-          export_name?: string
-          export_type?: string
-          file_path?: string | null
-          file_size_bytes?: number | null
-          filters?: Json
-          format?: string
-          id?: string
-          processed_records?: number | null
-          progress_percentage?: number
-          status?: string
-          total_records?: number | null
-          user_id?: string
         }
         Relationships: []
       }
@@ -12583,6 +12472,45 @@ export type Database = {
           },
         ]
       }
+      debt_predictions: {
+        Row: {
+          confidence_level: number | null
+          created_at: string
+          created_by_ai: boolean | null
+          factors_considered: Json | null
+          id: string
+          predicted_debt_to_gdp: number | null
+          predicted_total_debt_fcfa: number | null
+          predicted_total_debt_usd: number | null
+          prediction_date: string
+          prediction_model: string | null
+        }
+        Insert: {
+          confidence_level?: number | null
+          created_at?: string
+          created_by_ai?: boolean | null
+          factors_considered?: Json | null
+          id?: string
+          predicted_debt_to_gdp?: number | null
+          predicted_total_debt_fcfa?: number | null
+          predicted_total_debt_usd?: number | null
+          prediction_date: string
+          prediction_model?: string | null
+        }
+        Update: {
+          confidence_level?: number | null
+          created_at?: string
+          created_by_ai?: boolean | null
+          factors_considered?: Json | null
+          id?: string
+          predicted_debt_to_gdp?: number | null
+          predicted_total_debt_fcfa?: number | null
+          predicted_total_debt_usd?: number | null
+          prediction_date?: string
+          prediction_model?: string | null
+        }
+        Relationships: []
+      }
       debt_records: {
         Row: {
           ai_analysis_summary: string | null
@@ -12876,353 +12804,6 @@ export type Database = {
         }
         Relationships: []
       }
-      delivery_company_applications: {
-        Row: {
-          admin_notes: string | null
-          application_status: string | null
-          business_address: string
-          business_documents: Json | null
-          business_registration_number: string | null
-          company_name: string
-          company_size: string | null
-          contact_email: string
-          contact_person_name: string
-          contact_phone: string
-          created_at: string
-          id: string
-          insurance_details: Json | null
-          licenses_certifications: Json | null
-          logo_url: string | null
-          pricing_model: string | null
-          rejection_reason: string | null
-          service_capabilities: Json | null
-          service_regions: Json | null
-          social_media_links: Json | null
-          updated_at: string
-          user_id: string | null
-          vehicle_types: Json | null
-          verified_at: string | null
-          verified_by: string | null
-          website_url: string | null
-          years_in_business: number | null
-        }
-        Insert: {
-          admin_notes?: string | null
-          application_status?: string | null
-          business_address: string
-          business_documents?: Json | null
-          business_registration_number?: string | null
-          company_name: string
-          company_size?: string | null
-          contact_email: string
-          contact_person_name: string
-          contact_phone: string
-          created_at?: string
-          id?: string
-          insurance_details?: Json | null
-          licenses_certifications?: Json | null
-          logo_url?: string | null
-          pricing_model?: string | null
-          rejection_reason?: string | null
-          service_capabilities?: Json | null
-          service_regions?: Json | null
-          social_media_links?: Json | null
-          updated_at?: string
-          user_id?: string | null
-          vehicle_types?: Json | null
-          verified_at?: string | null
-          verified_by?: string | null
-          website_url?: string | null
-          years_in_business?: number | null
-        }
-        Update: {
-          admin_notes?: string | null
-          application_status?: string | null
-          business_address?: string
-          business_documents?: Json | null
-          business_registration_number?: string | null
-          company_name?: string
-          company_size?: string | null
-          contact_email?: string
-          contact_person_name?: string
-          contact_phone?: string
-          created_at?: string
-          id?: string
-          insurance_details?: Json | null
-          licenses_certifications?: Json | null
-          logo_url?: string | null
-          pricing_model?: string | null
-          rejection_reason?: string | null
-          service_capabilities?: Json | null
-          service_regions?: Json | null
-          social_media_links?: Json | null
-          updated_at?: string
-          user_id?: string | null
-          vehicle_types?: Json | null
-          verified_at?: string | null
-          verified_by?: string | null
-          website_url?: string | null
-          years_in_business?: number | null
-        }
-        Relationships: []
-      }
-      delivery_company_profiles: {
-        Row: {
-          application_id: string | null
-          average_rating: number | null
-          business_address: string
-          company_code: string
-          company_name: string
-          company_size: string | null
-          contact_email: string
-          contact_person_name: string
-          contact_phone: string
-          created_at: string
-          id: string
-          is_active: boolean | null
-          is_verified: boolean | null
-          last_activity_at: string | null
-          logo_url: string | null
-          partner_since: string | null
-          partnership_status: string | null
-          pricing_model: string | null
-          profile_completion_score: number | null
-          service_capabilities: Json | null
-          service_regions: Json | null
-          social_media_links: Json | null
-          total_reviews: number | null
-          updated_at: string
-          user_id: string | null
-          vehicle_types: Json | null
-          website_url: string | null
-          years_in_business: number | null
-        }
-        Insert: {
-          application_id?: string | null
-          average_rating?: number | null
-          business_address: string
-          company_code: string
-          company_name: string
-          company_size?: string | null
-          contact_email: string
-          contact_person_name: string
-          contact_phone: string
-          created_at?: string
-          id?: string
-          is_active?: boolean | null
-          is_verified?: boolean | null
-          last_activity_at?: string | null
-          logo_url?: string | null
-          partner_since?: string | null
-          partnership_status?: string | null
-          pricing_model?: string | null
-          profile_completion_score?: number | null
-          service_capabilities?: Json | null
-          service_regions?: Json | null
-          social_media_links?: Json | null
-          total_reviews?: number | null
-          updated_at?: string
-          user_id?: string | null
-          vehicle_types?: Json | null
-          website_url?: string | null
-          years_in_business?: number | null
-        }
-        Update: {
-          application_id?: string | null
-          average_rating?: number | null
-          business_address?: string
-          company_code?: string
-          company_name?: string
-          company_size?: string | null
-          contact_email?: string
-          contact_person_name?: string
-          contact_phone?: string
-          created_at?: string
-          id?: string
-          is_active?: boolean | null
-          is_verified?: boolean | null
-          last_activity_at?: string | null
-          logo_url?: string | null
-          partner_since?: string | null
-          partnership_status?: string | null
-          pricing_model?: string | null
-          profile_completion_score?: number | null
-          service_capabilities?: Json | null
-          service_regions?: Json | null
-          social_media_links?: Json | null
-          total_reviews?: number | null
-          updated_at?: string
-          user_id?: string | null
-          vehicle_types?: Json | null
-          website_url?: string | null
-          years_in_business?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "delivery_company_profiles_application_id_fkey"
-            columns: ["application_id"]
-            isOneToOne: false
-            referencedRelation: "delivery_company_applications"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      delivery_company_reviews: {
-        Row: {
-          company_id: string | null
-          created_at: string
-          helpful_count: number | null
-          id: string
-          is_verified: boolean | null
-          order_reference: string | null
-          rating: number
-          review_content: string | null
-          review_title: string | null
-          reviewer_id: string | null
-          reviewer_type: string | null
-          service_type: string | null
-          updated_at: string
-        }
-        Insert: {
-          company_id?: string | null
-          created_at?: string
-          helpful_count?: number | null
-          id?: string
-          is_verified?: boolean | null
-          order_reference?: string | null
-          rating: number
-          review_content?: string | null
-          review_title?: string | null
-          reviewer_id?: string | null
-          reviewer_type?: string | null
-          service_type?: string | null
-          updated_at?: string
-        }
-        Update: {
-          company_id?: string | null
-          created_at?: string
-          helpful_count?: number | null
-          id?: string
-          is_verified?: boolean | null
-          order_reference?: string | null
-          rating?: number
-          review_content?: string | null
-          review_title?: string | null
-          reviewer_id?: string | null
-          reviewer_type?: string | null
-          service_type?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "delivery_company_reviews_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "delivery_company_profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      delivery_company_service_areas: {
-        Row: {
-          company_id: string | null
-          coverage_type: string | null
-          created_at: string
-          delivery_fee_structure: Json | null
-          estimated_delivery_time: string | null
-          id: string
-          is_active: boolean | null
-          region_name: string
-          updated_at: string
-        }
-        Insert: {
-          company_id?: string | null
-          coverage_type?: string | null
-          created_at?: string
-          delivery_fee_structure?: Json | null
-          estimated_delivery_time?: string | null
-          id?: string
-          is_active?: boolean | null
-          region_name: string
-          updated_at?: string
-        }
-        Update: {
-          company_id?: string | null
-          coverage_type?: string | null
-          created_at?: string
-          delivery_fee_structure?: Json | null
-          estimated_delivery_time?: string | null
-          id?: string
-          is_active?: boolean | null
-          region_name?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "delivery_company_service_areas_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "delivery_company_profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      delivery_partnership_requests: {
-        Row: {
-          company_id: string | null
-          contact_preferences: Json | null
-          created_at: string
-          id: string
-          message: string
-          request_type: string | null
-          requesting_party_id: string | null
-          responded_at: string | null
-          responded_by: string | null
-          response_message: string | null
-          service_requirements: Json | null
-          status: string | null
-          updated_at: string
-        }
-        Insert: {
-          company_id?: string | null
-          contact_preferences?: Json | null
-          created_at?: string
-          id?: string
-          message: string
-          request_type?: string | null
-          requesting_party_id?: string | null
-          responded_at?: string | null
-          responded_by?: string | null
-          response_message?: string | null
-          service_requirements?: Json | null
-          status?: string | null
-          updated_at?: string
-        }
-        Update: {
-          company_id?: string | null
-          contact_preferences?: Json | null
-          created_at?: string
-          id?: string
-          message?: string
-          request_type?: string | null
-          requesting_party_id?: string | null
-          responded_at?: string | null
-          responded_by?: string | null
-          response_message?: string | null
-          service_requirements?: Json | null
-          status?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "delivery_partnership_requests_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "delivery_company_profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       developer_payouts: {
         Row: {
           commission_deducted: number
@@ -13337,42 +12918,6 @@ export type Database = {
           total_feedback_count?: number | null
           transparency_rating?: number | null
           updated_at?: string
-        }
-        Relationships: []
-      }
-      device_tokens: {
-        Row: {
-          created_at: string
-          device_info: Json | null
-          device_token: string
-          device_type: string
-          id: string
-          is_active: boolean
-          last_used_at: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          device_info?: Json | null
-          device_token: string
-          device_type: string
-          id?: string
-          is_active?: boolean
-          last_used_at?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          device_info?: Json | null
-          device_token?: string
-          device_type?: string
-          id?: string
-          is_active?: boolean
-          last_used_at?: string | null
-          updated_at?: string
-          user_id?: string
         }
         Relationships: []
       }
@@ -13912,6 +13457,13 @@ export type Database = {
             referencedRelation: "diaspora_profiles"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "diaspora_townhall_registrations_townhall_id_fkey"
+            columns: ["townhall_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_virtual_townhalls"
+            referencedColumns: ["id"]
+          },
         ]
       }
       diaspora_transaction_logs: {
@@ -13949,6 +13501,83 @@ export type Database = {
           {
             foreignKeyName: "diaspora_transaction_logs_diaspora_profile_id_fkey"
             columns: ["diaspora_profile_id"]
+            isOneToOne: false
+            referencedRelation: "diaspora_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      diaspora_virtual_townhalls: {
+        Row: {
+          agenda: Json | null
+          created_at: string
+          description: string | null
+          duration_minutes: number | null
+          event_type: string
+          id: string
+          livestream_url: string | null
+          max_participants: number | null
+          meeting_link: string | null
+          meeting_password: string | null
+          organizer_id: string | null
+          platform: string
+          recording_url: string | null
+          regions_focus: string[] | null
+          registration_required: boolean | null
+          scheduled_date: string
+          status: string
+          title: string
+          topics: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          agenda?: Json | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          event_type?: string
+          id?: string
+          livestream_url?: string | null
+          max_participants?: number | null
+          meeting_link?: string | null
+          meeting_password?: string | null
+          organizer_id?: string | null
+          platform?: string
+          recording_url?: string | null
+          regions_focus?: string[] | null
+          registration_required?: boolean | null
+          scheduled_date: string
+          status?: string
+          title: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          agenda?: Json | null
+          created_at?: string
+          description?: string | null
+          duration_minutes?: number | null
+          event_type?: string
+          id?: string
+          livestream_url?: string | null
+          max_participants?: number | null
+          meeting_link?: string | null
+          meeting_password?: string | null
+          organizer_id?: string | null
+          platform?: string
+          recording_url?: string | null
+          regions_focus?: string[] | null
+          registration_required?: boolean | null
+          scheduled_date?: string
+          status?: string
+          title?: string
+          topics?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diaspora_virtual_townhalls_organizer_id_fkey"
+            columns: ["organizer_id"]
             isOneToOne: false
             referencedRelation: "diaspora_profiles"
             referencedColumns: ["id"]
@@ -14352,63 +13981,6 @@ export type Database = {
           sector_focus?: string | null
           updated_at?: string
           views_count?: number | null
-        }
-        Relationships: []
-      }
-      economic_opportunities: {
-        Row: {
-          application_deadline: string | null
-          contact_info: Json | null
-          created_at: string | null
-          created_by: string | null
-          description: string | null
-          eligibility_criteria: Json | null
-          funding_amount: number | null
-          funding_currency: string | null
-          id: string
-          opportunity_type: string
-          priority_level: string | null
-          region: string
-          status: string | null
-          title: string
-          updated_at: string | null
-          village_id: string | null
-        }
-        Insert: {
-          application_deadline?: string | null
-          contact_info?: Json | null
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          eligibility_criteria?: Json | null
-          funding_amount?: number | null
-          funding_currency?: string | null
-          id?: string
-          opportunity_type: string
-          priority_level?: string | null
-          region: string
-          status?: string | null
-          title: string
-          updated_at?: string | null
-          village_id?: string | null
-        }
-        Update: {
-          application_deadline?: string | null
-          contact_info?: Json | null
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          eligibility_criteria?: Json | null
-          funding_amount?: number | null
-          funding_currency?: string | null
-          id?: string
-          opportunity_type?: string
-          priority_level?: string | null
-          region?: string
-          status?: string | null
-          title?: string
-          updated_at?: string | null
-          village_id?: string | null
         }
         Relationships: []
       }
@@ -15193,56 +14765,6 @@ export type Database = {
         }
         Relationships: []
       }
-      escalation_history: {
-        Row: {
-          created_at: string | null
-          escalated_at: string | null
-          escalated_to: Json
-          escalation_level: number
-          escalation_reason: string | null
-          execution_id: string | null
-          id: string
-          resolution_notes: string | null
-          resolved_at: string | null
-          resolved_by: string | null
-          response_deadline: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          escalated_at?: string | null
-          escalated_to?: Json
-          escalation_level: number
-          escalation_reason?: string | null
-          execution_id?: string | null
-          id?: string
-          resolution_notes?: string | null
-          resolved_at?: string | null
-          resolved_by?: string | null
-          response_deadline?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          escalated_at?: string | null
-          escalated_to?: Json
-          escalation_level?: number
-          escalation_reason?: string | null
-          execution_id?: string | null
-          id?: string
-          resolution_notes?: string | null
-          resolved_at?: string | null
-          resolved_by?: string | null
-          response_deadline?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "escalation_history_execution_id_fkey"
-            columns: ["execution_id"]
-            isOneToOne: false
-            referencedRelation: "workflow_executions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       event_agenda: {
         Row: {
           agenda_description: string | null
@@ -15476,6 +14998,54 @@ export type Database = {
             columns: ["event_id"]
             isOneToOne: false
             referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_chat_messages: {
+        Row: {
+          created_at: string | null
+          event_id: string
+          id: string
+          is_deleted: boolean | null
+          message_content: string
+          reply_to_id: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          event_id: string
+          id?: string
+          is_deleted?: boolean | null
+          message_content: string
+          reply_to_id?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          event_id?: string
+          id?: string
+          is_deleted?: boolean | null
+          message_content?: string
+          reply_to_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_chat_messages_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_chat_messages_reply_to_id_fkey"
+            columns: ["reply_to_id"]
+            isOneToOne: false
+            referencedRelation: "event_chat_messages"
             referencedColumns: ["id"]
           },
         ]
@@ -16001,8 +15571,14 @@ export type Database = {
           id: string
           is_featured: boolean | null
           language: string | null
+          livestream_password: string | null
+          livestream_type: string | null
+          livestream_url: string | null
           max_attendees: number | null
           organizer_id: string
+          organizer_type: string
+          performing_artists: string[] | null
+          platform_commission_percentage: number | null
           status: Database["public"]["Enums"]["event_status"] | null
           ticket_sale_deadline: string | null
           title: string
@@ -16027,8 +15603,14 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           language?: string | null
+          livestream_password?: string | null
+          livestream_type?: string | null
+          livestream_url?: string | null
           max_attendees?: number | null
           organizer_id: string
+          organizer_type?: string
+          performing_artists?: string[] | null
+          platform_commission_percentage?: number | null
           status?: Database["public"]["Enums"]["event_status"] | null
           ticket_sale_deadline?: string | null
           title: string
@@ -16053,8 +15635,14 @@ export type Database = {
           id?: string
           is_featured?: boolean | null
           language?: string | null
+          livestream_password?: string | null
+          livestream_type?: string | null
+          livestream_url?: string | null
           max_attendees?: number | null
           organizer_id?: string
+          organizer_type?: string
+          performing_artists?: string[] | null
+          platform_commission_percentage?: number | null
           status?: Database["public"]["Enums"]["event_status"] | null
           ticket_sale_deadline?: string | null
           title?: string
@@ -16416,6 +16004,53 @@ export type Database = {
           },
         ]
       }
+      fan_badges: {
+        Row: {
+          artist_id: string | null
+          badge_description: string | null
+          badge_icon_url: string | null
+          badge_name: string
+          badge_type: Database["public"]["Enums"]["badge_type"]
+          earned_at: string
+          earned_for_month: string | null
+          fan_id: string
+          id: string
+          is_active: boolean | null
+        }
+        Insert: {
+          artist_id?: string | null
+          badge_description?: string | null
+          badge_icon_url?: string | null
+          badge_name: string
+          badge_type: Database["public"]["Enums"]["badge_type"]
+          earned_at?: string
+          earned_for_month?: string | null
+          fan_id: string
+          id?: string
+          is_active?: boolean | null
+        }
+        Update: {
+          artist_id?: string | null
+          badge_description?: string | null
+          badge_icon_url?: string | null
+          badge_name?: string
+          badge_type?: Database["public"]["Enums"]["badge_type"]
+          earned_at?: string
+          earned_for_month?: string | null
+          fan_id?: string
+          id?: string
+          is_active?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_badges_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fan_club_memberships: {
         Row: {
           expires_at: string | null
@@ -16492,6 +16127,56 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      fan_leaderboards: {
+        Row: {
+          created_at: string
+          current_rank: number
+          fan_id: string
+          id: string
+          last_activity_at: string | null
+          leaderboard_type: string
+          monthly_points: number | null
+          reference_id: string | null
+          total_points: number
+          updated_at: string
+          weekly_points: number | null
+        }
+        Insert: {
+          created_at?: string
+          current_rank: number
+          fan_id: string
+          id?: string
+          last_activity_at?: string | null
+          leaderboard_type: string
+          monthly_points?: number | null
+          reference_id?: string | null
+          total_points?: number
+          updated_at?: string
+          weekly_points?: number | null
+        }
+        Update: {
+          created_at?: string
+          current_rank?: number
+          fan_id?: string
+          id?: string
+          last_activity_at?: string | null
+          leaderboard_type?: string
+          monthly_points?: number | null
+          reference_id?: string | null
+          total_points?: number
+          updated_at?: string
+          weekly_points?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fan_leaderboards_fan_id_fkey"
+            columns: ["fan_id"]
+            isOneToOne: false
+            referencedRelation: "fan_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       fan_notifications: {
         Row: {
@@ -16946,6 +16631,54 @@ export type Database = {
           },
         ]
       }
+      feed_content_scores: {
+        Row: {
+          authenticity_score: number | null
+          civic_relevance_score: number | null
+          content_id: string
+          content_type: string
+          created_at: string | null
+          engagement_prediction: number | null
+          expires_at: string | null
+          geographic_relevance: number | null
+          id: string
+          region: string | null
+          time_sensitivity_score: number | null
+          total_score: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          authenticity_score?: number | null
+          civic_relevance_score?: number | null
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          engagement_prediction?: number | null
+          expires_at?: string | null
+          geographic_relevance?: number | null
+          id?: string
+          region?: string | null
+          time_sensitivity_score?: number | null
+          total_score?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          authenticity_score?: number | null
+          civic_relevance_score?: number | null
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          engagement_prediction?: number | null
+          expires_at?: string | null
+          geographic_relevance?: number | null
+          id?: string
+          region?: string | null
+          time_sensitivity_score?: number | null
+          total_score?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       feed_diversity_tracking: {
         Row: {
           artist_content_shown: number | null
@@ -17023,6 +16756,42 @@ export type Database = {
           },
         ]
       }
+      feed_interactions: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string | null
+          dwell_time_seconds: number | null
+          engagement_quality: number | null
+          id: string
+          interaction_type: string
+          metadata: Json | null
+          user_id: string
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          dwell_time_seconds?: number | null
+          engagement_quality?: number | null
+          id?: string
+          interaction_type: string
+          metadata?: Json | null
+          user_id: string
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          dwell_time_seconds?: number | null
+          engagement_quality?: number | null
+          id?: string
+          interaction_type?: string
+          metadata?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       feed_items: {
         Row: {
           action_url: string | null
@@ -17070,74 +16839,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      fleet_vehicles: {
-        Row: {
-          capacity_kg: number | null
-          company_id: string | null
-          created_at: string | null
-          current_location: Json | null
-          driver_id: string | null
-          id: string
-          insurance_expiry: string | null
-          last_maintenance_date: string | null
-          license_plate: string | null
-          make_model: string | null
-          next_maintenance_due: string | null
-          status: string | null
-          updated_at: string | null
-          vehicle_number: string
-          vehicle_type: string
-          vin_number: string | null
-          year: number | null
-        }
-        Insert: {
-          capacity_kg?: number | null
-          company_id?: string | null
-          created_at?: string | null
-          current_location?: Json | null
-          driver_id?: string | null
-          id?: string
-          insurance_expiry?: string | null
-          last_maintenance_date?: string | null
-          license_plate?: string | null
-          make_model?: string | null
-          next_maintenance_due?: string | null
-          status?: string | null
-          updated_at?: string | null
-          vehicle_number: string
-          vehicle_type: string
-          vin_number?: string | null
-          year?: number | null
-        }
-        Update: {
-          capacity_kg?: number | null
-          company_id?: string | null
-          created_at?: string | null
-          current_location?: Json | null
-          driver_id?: string | null
-          id?: string
-          insurance_expiry?: string | null
-          last_maintenance_date?: string | null
-          license_plate?: string | null
-          make_model?: string | null
-          next_maintenance_due?: string | null
-          status?: string | null
-          updated_at?: string | null
-          vehicle_number?: string
-          vehicle_type?: string
-          vin_number?: string | null
-          year?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fleet_vehicles_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       follows: {
         Row: {
@@ -18945,162 +18646,6 @@ export type Database = {
         }
         Relationships: []
       }
-      insurance_claims: {
-        Row: {
-          adjuster_notes: string | null
-          approved_amount: number | null
-          claim_number: string
-          claimed_amount: number
-          created_at: string | null
-          created_by: string | null
-          documents: Json | null
-          id: string
-          incident_date: string
-          incident_description: string
-          policy_id: string | null
-          shipment_id: string | null
-          status: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          adjuster_notes?: string | null
-          approved_amount?: number | null
-          claim_number: string
-          claimed_amount: number
-          created_at?: string | null
-          created_by?: string | null
-          documents?: Json | null
-          id?: string
-          incident_date: string
-          incident_description: string
-          policy_id?: string | null
-          shipment_id?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          adjuster_notes?: string | null
-          approved_amount?: number | null
-          claim_number?: string
-          claimed_amount?: number
-          created_at?: string | null
-          created_by?: string | null
-          documents?: Json | null
-          id?: string
-          incident_date?: string
-          incident_description?: string
-          policy_id?: string | null
-          shipment_id?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "insurance_claims_policy_id_fkey"
-            columns: ["policy_id"]
-            isOneToOne: false
-            referencedRelation: "insurance_policies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      insurance_policies: {
-        Row: {
-          company_id: string | null
-          coverage_amount: number | null
-          created_at: string | null
-          end_date: string | null
-          id: string
-          policy_document_url: string | null
-          policy_number: string
-          policy_type: string
-          premium_amount: number | null
-          provider_name: string
-          start_date: string | null
-          status: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          company_id?: string | null
-          coverage_amount?: number | null
-          created_at?: string | null
-          end_date?: string | null
-          id?: string
-          policy_document_url?: string | null
-          policy_number: string
-          policy_type: string
-          premium_amount?: number | null
-          provider_name: string
-          start_date?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          company_id?: string | null
-          coverage_amount?: number | null
-          created_at?: string | null
-          end_date?: string | null
-          id?: string
-          policy_document_url?: string | null
-          policy_number?: string
-          policy_type?: string
-          premium_amount?: number | null
-          provider_name?: string
-          start_date?: string | null
-          status?: string | null
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "insurance_policies_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      integration_analytics: {
-        Row: {
-          created_at: string
-          id: string
-          integration_id: string | null
-          metadata: Json | null
-          metric_type: string
-          metric_value: number
-          period_end: string
-          period_start: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          integration_id?: string | null
-          metadata?: Json | null
-          metric_type: string
-          metric_value?: number
-          period_end: string
-          period_start: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          integration_id?: string | null
-          metadata?: Json | null
-          metric_type?: string
-          metric_value?: number
-          period_end?: string
-          period_start?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "integration_analytics_integration_id_fkey"
-            columns: ["integration_id"]
-            isOneToOne: false
-            referencedRelation: "user_integrations"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       integration_auth_secrets: {
         Row: {
           created_at: string
@@ -19182,145 +18727,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      integration_logs_v2: {
-        Row: {
-          api_key_id: string | null
-          created_at: string
-          error_message: string | null
-          event_type: string
-          id: string
-          integration_id: string | null
-          ip_address: unknown | null
-          processing_time_ms: number | null
-          request_headers: Json | null
-          request_method: string | null
-          request_payload: Json | null
-          request_url: string | null
-          response_body: Json | null
-          response_status: number | null
-          user_agent: string | null
-          webhook_endpoint_id: string | null
-        }
-        Insert: {
-          api_key_id?: string | null
-          created_at?: string
-          error_message?: string | null
-          event_type: string
-          id?: string
-          integration_id?: string | null
-          ip_address?: unknown | null
-          processing_time_ms?: number | null
-          request_headers?: Json | null
-          request_method?: string | null
-          request_payload?: Json | null
-          request_url?: string | null
-          response_body?: Json | null
-          response_status?: number | null
-          user_agent?: string | null
-          webhook_endpoint_id?: string | null
-        }
-        Update: {
-          api_key_id?: string | null
-          created_at?: string
-          error_message?: string | null
-          event_type?: string
-          id?: string
-          integration_id?: string | null
-          ip_address?: unknown | null
-          processing_time_ms?: number | null
-          request_headers?: Json | null
-          request_method?: string | null
-          request_payload?: Json | null
-          request_url?: string | null
-          response_body?: Json | null
-          response_status?: number | null
-          user_agent?: string | null
-          webhook_endpoint_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "integration_logs_v2_api_key_id_fkey"
-            columns: ["api_key_id"]
-            isOneToOne: false
-            referencedRelation: "api_keys"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "integration_logs_v2_integration_id_fkey"
-            columns: ["integration_id"]
-            isOneToOne: false
-            referencedRelation: "user_integrations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "integration_logs_v2_webhook_endpoint_id_fkey"
-            columns: ["webhook_endpoint_id"]
-            isOneToOne: false
-            referencedRelation: "webhook_endpoints"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      integration_services: {
-        Row: {
-          auth_config: Json
-          auth_type: string
-          configuration_schema: Json
-          created_at: string
-          created_by: string | null
-          description: string | null
-          display_name: string
-          icon_url: string | null
-          id: string
-          is_active: boolean
-          is_system: boolean
-          rate_limits: Json | null
-          service_name: string
-          service_type: string
-          supported_events: string[] | null
-          updated_at: string
-          webhook_config: Json | null
-        }
-        Insert: {
-          auth_config?: Json
-          auth_type: string
-          configuration_schema?: Json
-          created_at?: string
-          created_by?: string | null
-          description?: string | null
-          display_name: string
-          icon_url?: string | null
-          id?: string
-          is_active?: boolean
-          is_system?: boolean
-          rate_limits?: Json | null
-          service_name: string
-          service_type: string
-          supported_events?: string[] | null
-          updated_at?: string
-          webhook_config?: Json | null
-        }
-        Update: {
-          auth_config?: Json
-          auth_type?: string
-          configuration_schema?: Json
-          created_at?: string
-          created_by?: string | null
-          description?: string | null
-          display_name?: string
-          icon_url?: string | null
-          id?: string
-          is_active?: boolean
-          is_system?: boolean
-          rate_limits?: Json | null
-          service_name?: string
-          service_type?: string
-          supported_events?: string[] | null
-          updated_at?: string
-          webhook_config?: Json | null
-        }
-        Relationships: []
       }
       integration_usage_stats: {
         Row: {
@@ -20310,321 +19716,6 @@ export type Database = {
         }
         Relationships: []
       }
-      label_print_history: {
-        Row: {
-          created_at: string | null
-          download_count: number | null
-          file_path: string | null
-          id: string
-          label_format: string | null
-          last_downloaded_at: string | null
-          print_settings: Json | null
-          print_type: string
-          printed_by: string
-          printer_type: string | null
-          shipment_id: string | null
-          template_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          download_count?: number | null
-          file_path?: string | null
-          id?: string
-          label_format?: string | null
-          last_downloaded_at?: string | null
-          print_settings?: Json | null
-          print_type: string
-          printed_by: string
-          printer_type?: string | null
-          shipment_id?: string | null
-          template_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          download_count?: number | null
-          file_path?: string | null
-          id?: string
-          label_format?: string | null
-          last_downloaded_at?: string | null
-          print_settings?: Json | null
-          print_type?: string
-          printed_by?: string
-          printer_type?: string | null
-          shipment_id?: string | null
-          template_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "label_print_history_shipment_id_fkey"
-            columns: ["shipment_id"]
-            isOneToOne: false
-            referencedRelation: "shipments"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "label_print_history_template_id_fkey"
-            columns: ["template_id"]
-            isOneToOne: false
-            referencedRelation: "label_templates"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      label_scan_logs: {
-        Row: {
-          device_info: Json | null
-          id: string
-          ip_address: unknown | null
-          redirect_successful: boolean | null
-          redirected_to: string | null
-          scan_location: string | null
-          scan_type: string | null
-          scanned_at: string | null
-          shipment_id: string | null
-          tracking_number: string
-          user_agent: string | null
-        }
-        Insert: {
-          device_info?: Json | null
-          id?: string
-          ip_address?: unknown | null
-          redirect_successful?: boolean | null
-          redirected_to?: string | null
-          scan_location?: string | null
-          scan_type?: string | null
-          scanned_at?: string | null
-          shipment_id?: string | null
-          tracking_number: string
-          user_agent?: string | null
-        }
-        Update: {
-          device_info?: Json | null
-          id?: string
-          ip_address?: unknown | null
-          redirect_successful?: boolean | null
-          redirected_to?: string | null
-          scan_location?: string | null
-          scan_type?: string | null
-          scanned_at?: string | null
-          shipment_id?: string | null
-          tracking_number?: string
-          user_agent?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "label_scan_logs_shipment_id_fkey"
-            columns: ["shipment_id"]
-            isOneToOne: false
-            referencedRelation: "shipments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      label_templates: {
-        Row: {
-          agency_id: string | null
-          branding_config: Json | null
-          created_at: string | null
-          created_by: string | null
-          fields_config: Json | null
-          id: string
-          is_active: boolean | null
-          is_default: boolean | null
-          label_size: string
-          orientation: string | null
-          template_config: Json
-          template_name: string
-          template_type: string
-          updated_at: string | null
-        }
-        Insert: {
-          agency_id?: string | null
-          branding_config?: Json | null
-          created_at?: string | null
-          created_by?: string | null
-          fields_config?: Json | null
-          id?: string
-          is_active?: boolean | null
-          is_default?: boolean | null
-          label_size?: string
-          orientation?: string | null
-          template_config?: Json
-          template_name: string
-          template_type?: string
-          updated_at?: string | null
-        }
-        Update: {
-          agency_id?: string | null
-          branding_config?: Json | null
-          created_at?: string | null
-          created_by?: string | null
-          fields_config?: Json | null
-          id?: string
-          is_active?: boolean | null
-          is_default?: boolean | null
-          label_size?: string
-          orientation?: string | null
-          template_config?: Json
-          template_name?: string
-          template_type?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "label_templates_agency_id_fkey"
-            columns: ["agency_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      language_learning_progress: {
-        Row: {
-          created_at: string
-          entry_id: string
-          id: string
-          language_name: string
-          last_practiced_at: string | null
-          mastery_level: string | null
-          practice_count: number | null
-          updated_at: string
-          user_id: string
-          village_id: string
-        }
-        Insert: {
-          created_at?: string
-          entry_id: string
-          id?: string
-          language_name: string
-          last_practiced_at?: string | null
-          mastery_level?: string | null
-          practice_count?: number | null
-          updated_at?: string
-          user_id: string
-          village_id: string
-        }
-        Update: {
-          created_at?: string
-          entry_id?: string
-          id?: string
-          language_name?: string
-          last_practiced_at?: string | null
-          mastery_level?: string | null
-          practice_count?: number | null
-          updated_at?: string
-          user_id?: string
-          village_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "language_learning_progress_entry_id_fkey"
-            columns: ["entry_id"]
-            isOneToOne: false
-            referencedRelation: "language_preservation"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      language_preservation: {
-        Row: {
-          audio_pronunciation: string | null
-          category: string | null
-          context_usage: string | null
-          contributor_name: string | null
-          contributor_role: string | null
-          created_at: string
-          cultural_context: string | null
-          difficulty_level: string | null
-          english_translation: string | null
-          entry_type: string
-          etymology: string | null
-          example_sentences: Json | null
-          french_translation: string | null
-          grammatical_notes: string | null
-          id: string
-          is_endangered: boolean | null
-          language_code: string | null
-          language_name: string
-          local_term: string
-          practice_count: number | null
-          pronunciation: string | null
-          related_terms: string[] | null
-          speaker_generation: string | null
-          updated_at: string
-          user_id: string
-          verification_status: string | null
-          verified_at: string | null
-          verified_by: string | null
-          views_count: number | null
-          village_id: string
-        }
-        Insert: {
-          audio_pronunciation?: string | null
-          category?: string | null
-          context_usage?: string | null
-          contributor_name?: string | null
-          contributor_role?: string | null
-          created_at?: string
-          cultural_context?: string | null
-          difficulty_level?: string | null
-          english_translation?: string | null
-          entry_type: string
-          etymology?: string | null
-          example_sentences?: Json | null
-          french_translation?: string | null
-          grammatical_notes?: string | null
-          id?: string
-          is_endangered?: boolean | null
-          language_code?: string | null
-          language_name: string
-          local_term: string
-          practice_count?: number | null
-          pronunciation?: string | null
-          related_terms?: string[] | null
-          speaker_generation?: string | null
-          updated_at?: string
-          user_id: string
-          verification_status?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-          views_count?: number | null
-          village_id: string
-        }
-        Update: {
-          audio_pronunciation?: string | null
-          category?: string | null
-          context_usage?: string | null
-          contributor_name?: string | null
-          contributor_role?: string | null
-          created_at?: string
-          cultural_context?: string | null
-          difficulty_level?: string | null
-          english_translation?: string | null
-          entry_type?: string
-          etymology?: string | null
-          example_sentences?: Json | null
-          french_translation?: string | null
-          grammatical_notes?: string | null
-          id?: string
-          is_endangered?: boolean | null
-          language_code?: string | null
-          language_name?: string
-          local_term?: string
-          practice_count?: number | null
-          pronunciation?: string | null
-          related_terms?: string[] | null
-          speaker_generation?: string | null
-          updated_at?: string
-          user_id?: string
-          verification_status?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-          views_count?: number | null
-          village_id?: string
-        }
-        Relationships: []
-      }
       legal_cases: {
         Row: {
           case_documents: Json | null
@@ -21209,189 +20300,6 @@ export type Database = {
         }
         Relationships: []
       }
-      logistics_api_integrations: {
-        Row: {
-          api_endpoint: string | null
-          configuration: Json | null
-          created_at: string
-          id: string
-          integration_name: string
-          integration_type: string
-          is_active: boolean
-          tenant_id: string | null
-          updated_at: string
-          webhook_url: string | null
-        }
-        Insert: {
-          api_endpoint?: string | null
-          configuration?: Json | null
-          created_at?: string
-          id?: string
-          integration_name: string
-          integration_type: string
-          is_active?: boolean
-          tenant_id?: string | null
-          updated_at?: string
-          webhook_url?: string | null
-        }
-        Update: {
-          api_endpoint?: string | null
-          configuration?: Json | null
-          created_at?: string
-          id?: string
-          integration_name?: string
-          integration_type?: string
-          is_active?: boolean
-          tenant_id?: string | null
-          updated_at?: string
-          webhook_url?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "logistics_api_integrations_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "logistics_tenants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      logistics_fleet_vehicles: {
-        Row: {
-          created_at: string
-          driver_name: string | null
-          id: string
-          last_location: Json | null
-          license_plate: string
-          maintenance_due: string | null
-          status: string
-          tenant_id: string | null
-          updated_at: string
-          vehicle_number: string
-          vehicle_type: string
-        }
-        Insert: {
-          created_at?: string
-          driver_name?: string | null
-          id?: string
-          last_location?: Json | null
-          license_plate: string
-          maintenance_due?: string | null
-          status?: string
-          tenant_id?: string | null
-          updated_at?: string
-          vehicle_number: string
-          vehicle_type: string
-        }
-        Update: {
-          created_at?: string
-          driver_name?: string | null
-          id?: string
-          last_location?: Json | null
-          license_plate?: string
-          maintenance_due?: string | null
-          status?: string
-          tenant_id?: string | null
-          updated_at?: string
-          vehicle_number?: string
-          vehicle_type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "logistics_fleet_vehicles_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "logistics_tenants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      logistics_insurance_policies: {
-        Row: {
-          coverage_amount: number | null
-          created_at: string
-          end_date: string | null
-          id: string
-          is_active: boolean
-          policy_number: string
-          policy_type: string
-          premium_amount: number | null
-          provider_name: string
-          start_date: string | null
-          tenant_id: string | null
-          updated_at: string
-        }
-        Insert: {
-          coverage_amount?: number | null
-          created_at?: string
-          end_date?: string | null
-          id?: string
-          is_active?: boolean
-          policy_number: string
-          policy_type: string
-          premium_amount?: number | null
-          provider_name: string
-          start_date?: string | null
-          tenant_id?: string | null
-          updated_at?: string
-        }
-        Update: {
-          coverage_amount?: number | null
-          created_at?: string
-          end_date?: string | null
-          id?: string
-          is_active?: boolean
-          policy_number?: string
-          policy_type?: string
-          premium_amount?: number | null
-          provider_name?: string
-          start_date?: string | null
-          tenant_id?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "logistics_insurance_policies_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "logistics_tenants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      logistics_tenants: {
-        Row: {
-          contact_email: string
-          created_at: string
-          domain: string
-          id: string
-          is_active: boolean
-          name: string
-          settings: Json | null
-          updated_at: string
-        }
-        Insert: {
-          contact_email: string
-          created_at?: string
-          domain: string
-          id?: string
-          is_active?: boolean
-          name: string
-          settings?: Json | null
-          updated_at?: string
-        }
-        Update: {
-          contact_email?: string
-          created_at?: string
-          domain?: string
-          id?: string
-          is_active?: boolean
-          name?: string
-          settings?: Json | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       manual_fix_history: {
         Row: {
           action_type: string
@@ -21510,257 +20418,9 @@ export type Database = {
           },
         ]
       }
-      marketplace_cart: {
-        Row: {
-          created_at: string | null
-          id: string
-          product_id: string | null
-          quantity: number
-          session_id: string | null
-          updated_at: string | null
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          product_id?: string | null
-          quantity: number
-          session_id?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          product_id?: string | null
-          quantity?: number
-          session_id?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_cart_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_disputes: {
-        Row: {
-          admin_notes: string | null
-          assigned_admin_id: string | null
-          compensation_amount: number | null
-          created_at: string
-          customer_evidence: Json | null
-          customer_id: string
-          dispute_category: string
-          dispute_number: string
-          dispute_reason: string
-          dispute_type: string
-          id: string
-          order_id: string | null
-          priority_level: string
-          product_id: string | null
-          resolution_details: string | null
-          resolved_at: string | null
-          status: string
-          updated_at: string
-          vendor_id: string
-          vendor_response: Json | null
-        }
-        Insert: {
-          admin_notes?: string | null
-          assigned_admin_id?: string | null
-          compensation_amount?: number | null
-          created_at?: string
-          customer_evidence?: Json | null
-          customer_id: string
-          dispute_category: string
-          dispute_number: string
-          dispute_reason: string
-          dispute_type: string
-          id?: string
-          order_id?: string | null
-          priority_level?: string
-          product_id?: string | null
-          resolution_details?: string | null
-          resolved_at?: string | null
-          status?: string
-          updated_at?: string
-          vendor_id: string
-          vendor_response?: Json | null
-        }
-        Update: {
-          admin_notes?: string | null
-          assigned_admin_id?: string | null
-          compensation_amount?: number | null
-          created_at?: string
-          customer_evidence?: Json | null
-          customer_id?: string
-          dispute_category?: string
-          dispute_number?: string
-          dispute_reason?: string
-          dispute_type?: string
-          id?: string
-          order_id?: string | null
-          priority_level?: string
-          product_id?: string | null
-          resolution_details?: string | null
-          resolved_at?: string | null
-          status?: string
-          updated_at?: string
-          vendor_id?: string
-          vendor_response?: Json | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_disputes_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_disputes_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_disputes_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_order_items: {
-        Row: {
-          created_at: string | null
-          id: string
-          order_id: string | null
-          product_id: string | null
-          product_snapshot: Json | null
-          quantity: number
-          total_price: number
-          unit_price: number
-          vendor_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          order_id?: string | null
-          product_id?: string | null
-          product_snapshot?: Json | null
-          quantity: number
-          total_price: number
-          unit_price: number
-          vendor_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          order_id?: string | null
-          product_id?: string | null
-          product_snapshot?: Json | null
-          quantity?: number
-          total_price?: number
-          unit_price?: number
-          vendor_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_order_items_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_order_items_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_order_items_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_orders: {
-        Row: {
-          billing_address: Json | null
-          created_at: string | null
-          currency: string | null
-          customer_email: string
-          customer_id: string | null
-          id: string
-          metadata: Json | null
-          notes: string | null
-          order_number: string
-          order_status: string | null
-          payment_method: string | null
-          payment_status: string | null
-          shipping_address: Json | null
-          stripe_payment_intent_id: string | null
-          stripe_session_id: string | null
-          total_amount: number
-          updated_at: string | null
-        }
-        Insert: {
-          billing_address?: Json | null
-          created_at?: string | null
-          currency?: string | null
-          customer_email: string
-          customer_id?: string | null
-          id?: string
-          metadata?: Json | null
-          notes?: string | null
-          order_number: string
-          order_status?: string | null
-          payment_method?: string | null
-          payment_status?: string | null
-          shipping_address?: Json | null
-          stripe_payment_intent_id?: string | null
-          stripe_session_id?: string | null
-          total_amount: number
-          updated_at?: string | null
-        }
-        Update: {
-          billing_address?: Json | null
-          created_at?: string | null
-          currency?: string | null
-          customer_email?: string
-          customer_id?: string | null
-          id?: string
-          metadata?: Json | null
-          notes?: string | null
-          order_number?: string
-          order_status?: string | null
-          payment_method?: string | null
-          payment_status?: string | null
-          shipping_address?: Json | null
-          stripe_payment_intent_id?: string | null
-          stripe_session_id?: string | null
-          total_amount?: number
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
       marketplace_products: {
         Row: {
           category: string | null
-          category_id: string | null
           created_at: string | null
           currency: string | null
           description: string | null
@@ -21775,7 +20435,6 @@ export type Database = {
         }
         Insert: {
           category?: string | null
-          category_id?: string | null
           created_at?: string | null
           currency?: string | null
           description?: string | null
@@ -21790,7 +20449,6 @@ export type Database = {
         }
         Update: {
           category?: string | null
-          category_id?: string | null
           created_at?: string | null
           currency?: string | null
           description?: string | null
@@ -21805,137 +20463,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "marketplace_products_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "product_categories"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "marketplace_products_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_reviews: {
-        Row: {
-          created_at: string | null
-          customer_id: string | null
-          helpful_votes: number | null
-          id: string
-          images: string[] | null
-          is_verified_purchase: boolean | null
-          order_id: string | null
-          product_id: string | null
-          rating: number
-          review_text: string | null
-          title: string | null
-          updated_at: string | null
-          vendor_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          customer_id?: string | null
-          helpful_votes?: number | null
-          id?: string
-          images?: string[] | null
-          is_verified_purchase?: boolean | null
-          order_id?: string | null
-          product_id?: string | null
-          rating: number
-          review_text?: string | null
-          title?: string | null
-          updated_at?: string | null
-          vendor_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          customer_id?: string | null
-          helpful_votes?: number | null
-          id?: string
-          images?: string[] | null
-          is_verified_purchase?: boolean | null
-          order_id?: string | null
-          product_id?: string | null
-          rating?: number
-          review_text?: string | null
-          title?: string | null
-          updated_at?: string | null
-          vendor_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_reviews_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_reviews_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_products"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "marketplace_reviews_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      marketplace_vendor_analytics: {
-        Row: {
-          avg_order_value: number | null
-          avg_rating: number | null
-          created_at: string | null
-          customer_count: number | null
-          id: string
-          metric_date: string
-          page_views: number | null
-          total_orders: number | null
-          total_products_sold: number | null
-          total_revenue: number | null
-          total_reviews: number | null
-          vendor_id: string | null
-        }
-        Insert: {
-          avg_order_value?: number | null
-          avg_rating?: number | null
-          created_at?: string | null
-          customer_count?: number | null
-          id?: string
-          metric_date: string
-          page_views?: number | null
-          total_orders?: number | null
-          total_products_sold?: number | null
-          total_revenue?: number | null
-          total_reviews?: number | null
-          vendor_id?: string | null
-        }
-        Update: {
-          avg_order_value?: number | null
-          avg_rating?: number | null
-          created_at?: string | null
-          customer_count?: number | null
-          id?: string
-          metric_date?: string
-          page_views?: number | null
-          total_orders?: number | null
-          total_products_sold?: number | null
-          total_revenue?: number | null
-          total_reviews?: number | null
-          vendor_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_vendor_analytics_vendor_id_fkey"
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "marketplace_vendors"
@@ -21945,95 +20473,45 @@ export type Database = {
       }
       marketplace_vendors: {
         Row: {
-          address: string | null
           business_name: string
-          contact_email: string | null
-          contact_phone: string | null
           created_at: string | null
           description: string | null
           id: string
-          is_active: boolean | null
-          is_verified: boolean | null
           kyc_document_url: string | null
-          logo_url: string | null
           rating: number | null
           total_sales: number | null
           updated_at: string | null
           user_id: string
           vendor_id: string
           verification_status: string | null
-          website_url: string | null
         }
         Insert: {
-          address?: string | null
           business_name: string
-          contact_email?: string | null
-          contact_phone?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
-          is_active?: boolean | null
-          is_verified?: boolean | null
           kyc_document_url?: string | null
-          logo_url?: string | null
           rating?: number | null
           total_sales?: number | null
           updated_at?: string | null
           user_id: string
           vendor_id: string
           verification_status?: string | null
-          website_url?: string | null
         }
         Update: {
-          address?: string | null
           business_name?: string
-          contact_email?: string | null
-          contact_phone?: string | null
           created_at?: string | null
           description?: string | null
           id?: string
-          is_active?: boolean | null
-          is_verified?: boolean | null
           kyc_document_url?: string | null
-          logo_url?: string | null
           rating?: number | null
           total_sales?: number | null
           updated_at?: string | null
           user_id?: string
           vendor_id?: string
           verification_status?: string | null
-          website_url?: string | null
         }
         Relationships: []
-      }
-      marketplace_wishlists: {
-        Row: {
-          created_at: string
-          id: string
-          product_id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          product_id: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          product_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "marketplace_wishlists_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_products"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       media_alerts: {
         Row: {
@@ -24680,117 +23158,6 @@ export type Database = {
         }
         Relationships: []
       }
-      notification_actions: {
-        Row: {
-          action_data: Json | null
-          action_type: string
-          action_url: string | null
-          created_at: string | null
-          id: string
-          is_primary: boolean | null
-          label: string
-          notification_id: string
-          style: string | null
-        }
-        Insert: {
-          action_data?: Json | null
-          action_type: string
-          action_url?: string | null
-          created_at?: string | null
-          id?: string
-          is_primary?: boolean | null
-          label: string
-          notification_id: string
-          style?: string | null
-        }
-        Update: {
-          action_data?: Json | null
-          action_type?: string
-          action_url?: string | null
-          created_at?: string | null
-          id?: string
-          is_primary?: boolean | null
-          label?: string
-          notification_id?: string
-          style?: string | null
-        }
-        Relationships: []
-      }
-      notification_analytics: {
-        Row: {
-          created_at: string | null
-          device_info: Json | null
-          event_timestamp: string
-          event_type: string
-          id: string
-          location_data: Json | null
-          metadata: Json | null
-          notification_id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          device_info?: Json | null
-          event_timestamp?: string
-          event_type: string
-          id?: string
-          location_data?: Json | null
-          metadata?: Json | null
-          notification_id: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          device_info?: Json | null
-          event_timestamp?: string
-          event_type?: string
-          id?: string
-          location_data?: Json | null
-          metadata?: Json | null
-          notification_id?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      notification_attachments: {
-        Row: {
-          attachment_type: string
-          created_at: string | null
-          file_name: string | null
-          file_size: number | null
-          file_url: string
-          id: string
-          metadata: Json | null
-          mime_type: string | null
-          notification_id: string
-          thumbnail_url: string | null
-        }
-        Insert: {
-          attachment_type: string
-          created_at?: string | null
-          file_name?: string | null
-          file_size?: number | null
-          file_url: string
-          id?: string
-          metadata?: Json | null
-          mime_type?: string | null
-          notification_id: string
-          thumbnail_url?: string | null
-        }
-        Update: {
-          attachment_type?: string
-          created_at?: string | null
-          file_name?: string | null
-          file_size?: number | null
-          file_url?: string
-          id?: string
-          metadata?: Json | null
-          mime_type?: string | null
-          notification_id?: string
-          thumbnail_url?: string | null
-        }
-        Relationships: []
-      }
       notification_flows: {
         Row: {
           channel: Database["public"]["Enums"]["notification_channel"]
@@ -24933,111 +23300,6 @@ export type Database = {
           },
         ]
       }
-      notification_performance_metrics: {
-        Row: {
-          avg_click_time_seconds: number | null
-          avg_open_time_seconds: number | null
-          conversion_rate: number | null
-          created_at: string | null
-          date_tracked: string
-          engagement_rate: number | null
-          id: string
-          notification_type: string
-          template_id: string | null
-          total_clicked: number | null
-          total_delivered: number | null
-          total_dismissed: number | null
-          total_expired: number | null
-          total_opened: number | null
-          total_sent: number | null
-          updated_at: string | null
-        }
-        Insert: {
-          avg_click_time_seconds?: number | null
-          avg_open_time_seconds?: number | null
-          conversion_rate?: number | null
-          created_at?: string | null
-          date_tracked: string
-          engagement_rate?: number | null
-          id?: string
-          notification_type: string
-          template_id?: string | null
-          total_clicked?: number | null
-          total_delivered?: number | null
-          total_dismissed?: number | null
-          total_expired?: number | null
-          total_opened?: number | null
-          total_sent?: number | null
-          updated_at?: string | null
-        }
-        Update: {
-          avg_click_time_seconds?: number | null
-          avg_open_time_seconds?: number | null
-          conversion_rate?: number | null
-          created_at?: string | null
-          date_tracked?: string
-          engagement_rate?: number | null
-          id?: string
-          notification_type?: string
-          template_id?: string | null
-          total_clicked?: number | null
-          total_delivered?: number | null
-          total_dismissed?: number | null
-          total_expired?: number | null
-          total_opened?: number | null
-          total_sent?: number | null
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      notification_preferences: {
-        Row: {
-          created_at: string
-          email_enabled: boolean
-          frequency: string
-          id: string
-          in_app_enabled: boolean
-          notification_type: Database["public"]["Enums"]["notification_type"]
-          push_enabled: boolean
-          quiet_hours_end: string | null
-          quiet_hours_start: string | null
-          sms_enabled: boolean
-          timezone: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          email_enabled?: boolean
-          frequency?: string
-          id?: string
-          in_app_enabled?: boolean
-          notification_type: Database["public"]["Enums"]["notification_type"]
-          push_enabled?: boolean
-          quiet_hours_end?: string | null
-          quiet_hours_start?: string | null
-          sms_enabled?: boolean
-          timezone?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          email_enabled?: boolean
-          frequency?: string
-          id?: string
-          in_app_enabled?: boolean
-          notification_type?: Database["public"]["Enums"]["notification_type"]
-          push_enabled?: boolean
-          quiet_hours_end?: string | null
-          quiet_hours_start?: string | null
-          sms_enabled?: boolean
-          timezone?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       notification_queue: {
         Row: {
           channel: Database["public"]["Enums"]["notification_channel"]
@@ -25094,51 +23356,39 @@ export type Database = {
           },
         ]
       }
-      notification_workflows: {
+      notification_templates: {
         Row: {
-          actions: Json
-          conditions: Json
-          created_at: string | null
-          created_by: string | null
-          description: string | null
-          escalation_rules: Json | null
+          channel: Database["public"]["Enums"]["notification_channel"]
+          content: string
+          created_at: string
           id: string
-          is_active: boolean | null
-          name: string
-          priority: number | null
-          trigger_config: Json
-          trigger_type: string
-          updated_at: string | null
+          is_active: boolean
+          subject: string | null
+          template_name: string
+          updated_at: string
+          variables: Json | null
         }
         Insert: {
-          actions?: Json
-          conditions?: Json
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          escalation_rules?: Json | null
+          channel: Database["public"]["Enums"]["notification_channel"]
+          content: string
+          created_at?: string
           id?: string
-          is_active?: boolean | null
-          name: string
-          priority?: number | null
-          trigger_config?: Json
-          trigger_type: string
-          updated_at?: string | null
+          is_active?: boolean
+          subject?: string | null
+          template_name: string
+          updated_at?: string
+          variables?: Json | null
         }
         Update: {
-          actions?: Json
-          conditions?: Json
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          escalation_rules?: Json | null
+          channel?: Database["public"]["Enums"]["notification_channel"]
+          content?: string
+          created_at?: string
           id?: string
-          is_active?: boolean | null
-          name?: string
-          priority?: number | null
-          trigger_config?: Json
-          trigger_type?: string
-          updated_at?: string | null
+          is_active?: boolean
+          subject?: string | null
+          template_name?: string
+          updated_at?: string
+          variables?: Json | null
         }
         Relationships: []
       }
@@ -25234,138 +23484,9 @@ export type Database = {
           },
         ]
       }
-      oral_traditions: {
-        Row: {
-          audio_url: string | null
-          created_at: string
-          cultural_significance: string | null
-          description: string | null
-          duration_seconds: number | null
-          elder_age: number | null
-          elder_name: string | null
-          id: string
-          is_public: boolean
-          keywords: string[] | null
-          language: string
-          likes_count: number | null
-          preservation_priority: string | null
-          recorded_at: string | null
-          title: string
-          tradition_type: string
-          transcript: string | null
-          updated_at: string
-          user_id: string
-          verification_status: string | null
-          verified_at: string | null
-          verified_by: string | null
-          video_url: string | null
-          views_count: number | null
-          village_id: string
-        }
-        Insert: {
-          audio_url?: string | null
-          created_at?: string
-          cultural_significance?: string | null
-          description?: string | null
-          duration_seconds?: number | null
-          elder_age?: number | null
-          elder_name?: string | null
-          id?: string
-          is_public?: boolean
-          keywords?: string[] | null
-          language?: string
-          likes_count?: number | null
-          preservation_priority?: string | null
-          recorded_at?: string | null
-          title: string
-          tradition_type?: string
-          transcript?: string | null
-          updated_at?: string
-          user_id: string
-          verification_status?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-          video_url?: string | null
-          views_count?: number | null
-          village_id: string
-        }
-        Update: {
-          audio_url?: string | null
-          created_at?: string
-          cultural_significance?: string | null
-          description?: string | null
-          duration_seconds?: number | null
-          elder_age?: number | null
-          elder_name?: string | null
-          id?: string
-          is_public?: boolean
-          keywords?: string[] | null
-          language?: string
-          likes_count?: number | null
-          preservation_priority?: string | null
-          recorded_at?: string | null
-          title?: string
-          tradition_type?: string
-          transcript?: string | null
-          updated_at?: string
-          user_id?: string
-          verification_status?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-          video_url?: string | null
-          views_count?: number | null
-          village_id?: string
-        }
-        Relationships: []
-      }
-      order_tracking_events: {
-        Row: {
-          created_at: string
-          created_by: string | null
-          description: string
-          estimated_delivery: string | null
-          id: string
-          location: string | null
-          order_id: string
-          status: string
-          tracking_number: string | null
-        }
-        Insert: {
-          created_at?: string
-          created_by?: string | null
-          description: string
-          estimated_delivery?: string | null
-          id?: string
-          location?: string | null
-          order_id: string
-          status: string
-          tracking_number?: string | null
-        }
-        Update: {
-          created_at?: string
-          created_by?: string | null
-          description?: string
-          estimated_delivery?: string | null
-          id?: string
-          location?: string | null
-          order_id?: string
-          status?: string
-          tracking_number?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "order_tracking_events_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_orders"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       orders: {
         Row: {
           amount: number
-          buyer_id: string | null
           created_at: string
           currency: string | null
           customer_email: string | null
@@ -25386,7 +23507,6 @@ export type Database = {
         }
         Insert: {
           amount: number
-          buyer_id?: string | null
           created_at?: string
           currency?: string | null
           customer_email?: string | null
@@ -25407,7 +23527,6 @@ export type Database = {
         }
         Update: {
           amount?: number
-          buyer_id?: string | null
           created_at?: string
           currency?: string | null
           customer_email?: string | null
@@ -25442,6 +23561,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pan_africa_civic_mesh_nodes: {
+        Row: {
+          api_endpoints: Json | null
+          capital_city: string
+          civic_issues_count: number | null
+          country_code: string
+          country_name: string
+          created_at: string | null
+          cross_border_enabled: boolean | null
+          currency_code: string
+          data_quality_score: number | null
+          data_sources: Json | null
+          flag_emoji: string
+          id: string
+          intelligence_sharing_enabled: boolean | null
+          is_active: boolean | null
+          last_sync_at: string | null
+          legislators_count: number | null
+          mesh_status: string | null
+          ministers_count: number | null
+          parties_count: number | null
+          primary_language: string
+          region: string
+          scraper_config: Json | null
+          supported_languages: string[] | null
+          sync_frequency_hours: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          api_endpoints?: Json | null
+          capital_city: string
+          civic_issues_count?: number | null
+          country_code: string
+          country_name: string
+          created_at?: string | null
+          cross_border_enabled?: boolean | null
+          currency_code: string
+          data_quality_score?: number | null
+          data_sources?: Json | null
+          flag_emoji: string
+          id?: string
+          intelligence_sharing_enabled?: boolean | null
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          legislators_count?: number | null
+          mesh_status?: string | null
+          ministers_count?: number | null
+          parties_count?: number | null
+          primary_language?: string
+          region: string
+          scraper_config?: Json | null
+          supported_languages?: string[] | null
+          sync_frequency_hours?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          api_endpoints?: Json | null
+          capital_city?: string
+          civic_issues_count?: number | null
+          country_code?: string
+          country_name?: string
+          created_at?: string | null
+          cross_border_enabled?: boolean | null
+          currency_code?: string
+          data_quality_score?: number | null
+          data_sources?: Json | null
+          flag_emoji?: string
+          id?: string
+          intelligence_sharing_enabled?: boolean | null
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          legislators_count?: number | null
+          mesh_status?: string | null
+          ministers_count?: number | null
+          parties_count?: number | null
+          primary_language?: string
+          region?: string
+          scraper_config?: Json | null
+          supported_languages?: string[] | null
+          sync_frequency_hours?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       pan_africa_config: {
         Row: {
@@ -26008,6 +24211,62 @@ export type Database = {
           },
         ]
       }
+      party_claims: {
+        Row: {
+          admin_notes: string | null
+          claim_fee_amount: number
+          created_at: string
+          documents_uploaded: string[] | null
+          id: string
+          party_id: string
+          payment_method: string | null
+          payment_reference: string | null
+          payment_status: string | null
+          processed_at: string | null
+          processed_by: string | null
+          status: string | null
+          user_id: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          claim_fee_amount?: number
+          created_at?: string
+          documents_uploaded?: string[] | null
+          id?: string
+          party_id: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string | null
+          user_id: string
+        }
+        Update: {
+          admin_notes?: string | null
+          claim_fee_amount?: number
+          created_at?: string
+          documents_uploaded?: string[] | null
+          id?: string
+          party_id?: string
+          payment_method?: string | null
+          payment_reference?: string | null
+          payment_status?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          status?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "party_claims_party_id_fkey"
+            columns: ["party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       party_logo_verifications: {
         Row: {
           admin_notes: string | null
@@ -26266,75 +24525,6 @@ export type Database = {
         }
         Relationships: []
       }
-      payment_disputes: {
-        Row: {
-          admin_notes: string | null
-          created_at: string
-          customer_evidence: Json | null
-          customer_id: string
-          dispute_amount: number
-          dispute_reason: string
-          dispute_type: string
-          id: string
-          resolved_at: string | null
-          resolved_by: string | null
-          status: string
-          transaction_id: string
-          updated_at: string
-          vendor_id: string
-          vendor_response: Json | null
-        }
-        Insert: {
-          admin_notes?: string | null
-          created_at?: string
-          customer_evidence?: Json | null
-          customer_id: string
-          dispute_amount: number
-          dispute_reason: string
-          dispute_type: string
-          id?: string
-          resolved_at?: string | null
-          resolved_by?: string | null
-          status?: string
-          transaction_id: string
-          updated_at?: string
-          vendor_id: string
-          vendor_response?: Json | null
-        }
-        Update: {
-          admin_notes?: string | null
-          created_at?: string
-          customer_evidence?: Json | null
-          customer_id?: string
-          dispute_amount?: number
-          dispute_reason?: string
-          dispute_type?: string
-          id?: string
-          resolved_at?: string | null
-          resolved_by?: string | null
-          status?: string
-          transaction_id?: string
-          updated_at?: string
-          vendor_id?: string
-          vendor_response?: Json | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "payment_disputes_transaction_id_fkey"
-            columns: ["transaction_id"]
-            isOneToOne: false
-            referencedRelation: "payment_transactions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "payment_disputes_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       payment_gateway_config: {
         Row: {
           commission_percentage: number
@@ -26403,78 +24593,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      payment_transactions: {
-        Row: {
-          amount: number
-          created_at: string
-          currency: string
-          customer_id: string
-          id: string
-          metadata: Json | null
-          order_id: string | null
-          payment_method: string | null
-          payment_status: string
-          platform_commission: number | null
-          stripe_payment_intent_id: string | null
-          stripe_session_id: string | null
-          transaction_fee: number | null
-          updated_at: string
-          vendor_id: string
-          vendor_payout: number | null
-        }
-        Insert: {
-          amount: number
-          created_at?: string
-          currency?: string
-          customer_id: string
-          id?: string
-          metadata?: Json | null
-          order_id?: string | null
-          payment_method?: string | null
-          payment_status?: string
-          platform_commission?: number | null
-          stripe_payment_intent_id?: string | null
-          stripe_session_id?: string | null
-          transaction_fee?: number | null
-          updated_at?: string
-          vendor_id: string
-          vendor_payout?: number | null
-        }
-        Update: {
-          amount?: number
-          created_at?: string
-          currency?: string
-          customer_id?: string
-          id?: string
-          metadata?: Json | null
-          order_id?: string | null
-          payment_method?: string | null
-          payment_status?: string
-          platform_commission?: number | null
-          stripe_payment_intent_id?: string | null
-          stripe_session_id?: string | null
-          transaction_fee?: number | null
-          updated_at?: string
-          vendor_id?: string
-          vendor_payout?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "payment_transactions_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "payment_transactions_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       performance_alerts: {
         Row: {
@@ -26596,45 +24714,6 @@ export type Database = {
           predicted_value?: number
           scenario_assumptions?: Json | null
           updated_at?: string
-        }
-        Relationships: []
-      }
-      performance_metrics: {
-        Row: {
-          created_at: string
-          dimensions: Json
-          id: string
-          metric_category: string
-          metric_name: string
-          metric_unit: string
-          metric_value: number
-          session_id: string | null
-          timestamp: string
-          user_id: string | null
-        }
-        Insert: {
-          created_at?: string
-          dimensions?: Json
-          id?: string
-          metric_category: string
-          metric_name: string
-          metric_unit: string
-          metric_value: number
-          session_id?: string | null
-          timestamp?: string
-          user_id?: string | null
-        }
-        Update: {
-          created_at?: string
-          dimensions?: Json
-          id?: string
-          metric_category?: string
-          metric_name?: string
-          metric_unit?: string
-          metric_value?: number
-          session_id?: string | null
-          timestamp?: string
-          user_id?: string | null
         }
         Relationships: []
       }
@@ -26996,6 +25075,53 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "pharmacy_claims_pharmacy_id_fkey"
+            columns: ["pharmacy_id"]
+            isOneToOne: false
+            referencedRelation: "pharmacies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pharmacy_monetization: {
+        Row: {
+          amount_fcfa: number
+          created_at: string
+          expires_at: string | null
+          feature_type: string
+          id: string
+          payment_reference: string | null
+          payment_status: string | null
+          pharmacy_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_fcfa: number
+          created_at?: string
+          expires_at?: string | null
+          feature_type: string
+          id?: string
+          payment_reference?: string | null
+          payment_status?: string | null
+          pharmacy_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_fcfa?: number
+          created_at?: string
+          expires_at?: string | null
+          feature_type?: string
+          id?: string
+          payment_reference?: string | null
+          payment_status?: string | null
+          pharmacy_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pharmacy_monetization_pharmacy_id_fkey"
             columns: ["pharmacy_id"]
             isOneToOne: false
             referencedRelation: "pharmacies"
@@ -28108,6 +26234,86 @@ export type Database = {
           version_id?: string
         }
         Relationships: []
+      }
+      plugin_stress_tests: {
+        Row: {
+          cpu_usage_percent: number | null
+          crash_detected: boolean | null
+          created_at: string
+          device_type: string
+          error_count: number | null
+          error_logs: Json | null
+          executed_at: string
+          id: string
+          memory_leak_detected: boolean | null
+          memory_usage_mb: number | null
+          network_condition: string
+          performance_score: number | null
+          plugin_id: string
+          render_time_ms: number | null
+          screen_resolution: string
+          screenshot_url: string | null
+          test_details: Json | null
+          test_duration_ms: number | null
+          test_result: string
+          test_scenario: string
+          test_type: string
+        }
+        Insert: {
+          cpu_usage_percent?: number | null
+          crash_detected?: boolean | null
+          created_at?: string
+          device_type?: string
+          error_count?: number | null
+          error_logs?: Json | null
+          executed_at?: string
+          id?: string
+          memory_leak_detected?: boolean | null
+          memory_usage_mb?: number | null
+          network_condition?: string
+          performance_score?: number | null
+          plugin_id: string
+          render_time_ms?: number | null
+          screen_resolution?: string
+          screenshot_url?: string | null
+          test_details?: Json | null
+          test_duration_ms?: number | null
+          test_result?: string
+          test_scenario: string
+          test_type: string
+        }
+        Update: {
+          cpu_usage_percent?: number | null
+          crash_detected?: boolean | null
+          created_at?: string
+          device_type?: string
+          error_count?: number | null
+          error_logs?: Json | null
+          executed_at?: string
+          id?: string
+          memory_leak_detected?: boolean | null
+          memory_usage_mb?: number | null
+          network_condition?: string
+          performance_score?: number | null
+          plugin_id?: string
+          render_time_ms?: number | null
+          screen_resolution?: string
+          screenshot_url?: string | null
+          test_details?: Json | null
+          test_duration_ms?: number | null
+          test_result?: string
+          test_scenario?: string
+          test_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "plugin_stress_tests_plugin_id_fkey"
+            columns: ["plugin_id"]
+            isOneToOne: false
+            referencedRelation: "plugin_registry"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       plugin_submissions: {
         Row: {
@@ -29288,7 +27494,7 @@ export type Database = {
           timeline_roles: Json | null
           transparency_rating: number | null
           updated_at: string | null
-          user_id: string
+          user_id: string | null
           verification_notes: string | null
           verified: boolean | null
         }
@@ -29350,7 +27556,7 @@ export type Database = {
           timeline_roles?: Json | null
           transparency_rating?: number | null
           updated_at?: string | null
-          user_id: string
+          user_id?: string | null
           verification_notes?: string | null
           verified?: boolean | null
         }
@@ -29412,7 +27618,7 @@ export type Database = {
           timeline_roles?: Json | null
           transparency_rating?: number | null
           updated_at?: string | null
-          user_id?: string
+          user_id?: string | null
           verification_notes?: string | null
           verified?: boolean | null
         }
@@ -29760,6 +27966,35 @@ export type Database = {
         }
         Relationships: []
       }
+      poll_comment_likes: {
+        Row: {
+          comment_id: string
+          created_at: string | null
+          id: string
+          user_id: string
+        }
+        Insert: {
+          comment_id: string
+          created_at?: string | null
+          id?: string
+          user_id: string
+        }
+        Update: {
+          comment_id?: string
+          created_at?: string | null
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_comment_likes_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "poll_comments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       poll_comments: {
         Row: {
           content: string
@@ -29907,6 +28142,60 @@ export type Database = {
           },
         ]
       }
+      poll_fraud_settings: {
+        Row: {
+          alert_threshold: number | null
+          created_at: string | null
+          enable_captcha: boolean | null
+          enable_fingerprinting: boolean | null
+          enable_rate_limiting: boolean | null
+          id: string
+          max_votes_per_ip: number | null
+          max_votes_per_session: number | null
+          poll_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          alert_threshold?: number | null
+          created_at?: string | null
+          enable_captcha?: boolean | null
+          enable_fingerprinting?: boolean | null
+          enable_rate_limiting?: boolean | null
+          id?: string
+          max_votes_per_ip?: number | null
+          max_votes_per_session?: number | null
+          poll_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          alert_threshold?: number | null
+          created_at?: string | null
+          enable_captcha?: boolean | null
+          enable_fingerprinting?: boolean | null
+          enable_rate_limiting?: boolean | null
+          id?: string
+          max_votes_per_ip?: number | null
+          max_votes_per_session?: number | null
+          poll_id?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_fraud_settings_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: true
+            referencedRelation: "poll_statistics"
+            referencedColumns: ["poll_id"]
+          },
+          {
+            foreignKeyName: "poll_fraud_settings_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: true
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       poll_impact_tracking: {
         Row: {
           confidence_score: number | null
@@ -30016,6 +28305,64 @@ export type Database = {
           sync_status?: string | null
         }
         Relationships: []
+      }
+      poll_moderation_log: {
+        Row: {
+          action_reason: string | null
+          action_type: string
+          admin_id: string
+          created_at: string
+          creator_notified: boolean | null
+          id: string
+          metadata: Json | null
+          poll_id: string
+          report_id: string | null
+        }
+        Insert: {
+          action_reason?: string | null
+          action_type: string
+          admin_id: string
+          created_at?: string
+          creator_notified?: boolean | null
+          id?: string
+          metadata?: Json | null
+          poll_id: string
+          report_id?: string | null
+        }
+        Update: {
+          action_reason?: string | null
+          action_type?: string
+          admin_id?: string
+          created_at?: string
+          creator_notified?: boolean | null
+          id?: string
+          metadata?: Json | null
+          poll_id?: string
+          report_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_moderation_log_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "poll_statistics"
+            referencedColumns: ["poll_id"]
+          },
+          {
+            foreignKeyName: "poll_moderation_log_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "poll_moderation_log_report_id_fkey"
+            columns: ["report_id"]
+            isOneToOne: false
+            referencedRelation: "poll_reports"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       poll_moderation_settings: {
         Row: {
@@ -30329,6 +28676,38 @@ export type Database = {
           },
         ]
       }
+      poll_template_usage: {
+        Row: {
+          created_at: string
+          id: string
+          poll_id: string
+          template_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          poll_id: string
+          template_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          poll_id?: string
+          template_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_template_usage_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "poll_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       poll_templates: {
         Row: {
           color_theme: Json
@@ -30418,6 +28797,66 @@ export type Database = {
           viewed_at?: string
         }
         Relationships: []
+      }
+      poll_vote_log: {
+        Row: {
+          created_at: string | null
+          device_fingerprint: string | null
+          hashed_ip: string
+          id: string
+          poll_id: string
+          region: string | null
+          session_id: string | null
+          suspicious_flag: boolean | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+          vote_option: number
+        }
+        Insert: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          hashed_ip: string
+          id?: string
+          poll_id: string
+          region?: string | null
+          session_id?: string | null
+          suspicious_flag?: boolean | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          vote_option: number
+        }
+        Update: {
+          created_at?: string | null
+          device_fingerprint?: string | null
+          hashed_ip?: string
+          id?: string
+          poll_id?: string
+          region?: string | null
+          session_id?: string | null
+          suspicious_flag?: boolean | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          vote_option?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "poll_vote_log_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "poll_statistics"
+            referencedColumns: ["poll_id"]
+          },
+          {
+            foreignKeyName: "poll_vote_log_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       poll_votes: {
         Row: {
@@ -30592,6 +29031,96 @@ export type Database = {
           },
         ]
       }
+      polls_ai_generated: {
+        Row: {
+          admin_edited: boolean
+          ai_confidence_score: number
+          ai_reasoning: Json | null
+          created_at: string
+          duplicate_check_passed: boolean
+          edit_history: Json | null
+          generation_prompt: string | null
+          generation_trigger: string
+          id: string
+          original_options: string[] | null
+          original_question: string | null
+          performance_metrics: Json | null
+          poll_id: string | null
+          regional_data: Json | null
+          security_clearance: boolean
+          sentiment_analysis: Json | null
+          social_metrics: Json | null
+          source_platform: string | null
+          topic_category: string
+          trending_keywords: string[] | null
+          updated_at: string
+          urgency_level: string
+        }
+        Insert: {
+          admin_edited?: boolean
+          ai_confidence_score?: number
+          ai_reasoning?: Json | null
+          created_at?: string
+          duplicate_check_passed?: boolean
+          edit_history?: Json | null
+          generation_prompt?: string | null
+          generation_trigger: string
+          id?: string
+          original_options?: string[] | null
+          original_question?: string | null
+          performance_metrics?: Json | null
+          poll_id?: string | null
+          regional_data?: Json | null
+          security_clearance?: boolean
+          sentiment_analysis?: Json | null
+          social_metrics?: Json | null
+          source_platform?: string | null
+          topic_category: string
+          trending_keywords?: string[] | null
+          updated_at?: string
+          urgency_level?: string
+        }
+        Update: {
+          admin_edited?: boolean
+          ai_confidence_score?: number
+          ai_reasoning?: Json | null
+          created_at?: string
+          duplicate_check_passed?: boolean
+          edit_history?: Json | null
+          generation_prompt?: string | null
+          generation_trigger?: string
+          id?: string
+          original_options?: string[] | null
+          original_question?: string | null
+          performance_metrics?: Json | null
+          poll_id?: string | null
+          regional_data?: Json | null
+          security_clearance?: boolean
+          sentiment_analysis?: Json | null
+          social_metrics?: Json | null
+          source_platform?: string | null
+          topic_category?: string
+          trending_keywords?: string[] | null
+          updated_at?: string
+          urgency_level?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "polls_ai_generated_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "poll_statistics"
+            referencedColumns: ["poll_id"]
+          },
+          {
+            foreignKeyName: "polls_ai_generated_poll_id_fkey"
+            columns: ["poll_id"]
+            isOneToOne: false
+            referencedRelation: "polls"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       prediction_results: {
         Row: {
           accuracy_when_resolved: number | null
@@ -30723,199 +29252,98 @@ export type Database = {
         }
         Relationships: []
       }
-      pricing_config: {
+      professional_profiles: {
         Row: {
-          amount: number
-          billing_cycle: string | null
-          config_key: string
-          config_type: string
+          availability_status: string | null
+          certifications: Json | null
           created_at: string
-          currency: string
-          description: string | null
+          department: string | null
+          education: Json | null
           id: string
-          is_active: boolean
+          organization_name: string | null
+          portfolio_links: Json | null
+          position_title: string | null
+          profile_id: string
+          salary_range: string | null
+          skills: string[] | null
           updated_at: string
+          years_experience: number | null
         }
         Insert: {
-          amount?: number
-          billing_cycle?: string | null
-          config_key: string
-          config_type: string
+          availability_status?: string | null
+          certifications?: Json | null
           created_at?: string
-          currency?: string
-          description?: string | null
+          department?: string | null
+          education?: Json | null
           id?: string
-          is_active?: boolean
+          organization_name?: string | null
+          portfolio_links?: Json | null
+          position_title?: string | null
+          profile_id: string
+          salary_range?: string | null
+          skills?: string[] | null
           updated_at?: string
+          years_experience?: number | null
         }
         Update: {
-          amount?: number
-          billing_cycle?: string | null
-          config_key?: string
-          config_type?: string
+          availability_status?: string | null
+          certifications?: Json | null
           created_at?: string
-          currency?: string
-          description?: string | null
+          department?: string | null
+          education?: Json | null
           id?: string
-          is_active?: boolean
+          organization_name?: string | null
+          portfolio_links?: Json | null
+          position_title?: string | null
+          profile_id?: string
+          salary_range?: string | null
+          skills?: string[] | null
           updated_at?: string
+          years_experience?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "professional_profiles_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
-      product_categories: {
+      profile_achievement_types: {
         Row: {
-          created_at: string
+          category: string
+          created_at: string | null
+          criteria: Json | null
           description: string | null
+          icon: string | null
           id: string
-          is_active: boolean
+          is_active: boolean | null
           name: string
-          parent_category_id: string | null
-          sort_order: number | null
+          points_value: number | null
         }
         Insert: {
-          created_at?: string
+          category: string
+          created_at?: string | null
+          criteria?: Json | null
           description?: string | null
+          icon?: string | null
           id?: string
-          is_active?: boolean
+          is_active?: boolean | null
           name: string
-          parent_category_id?: string | null
-          sort_order?: number | null
+          points_value?: number | null
         }
         Update: {
-          created_at?: string
+          category?: string
+          created_at?: string | null
+          criteria?: Json | null
           description?: string | null
+          icon?: string | null
           id?: string
-          is_active?: boolean
+          is_active?: boolean | null
           name?: string
-          parent_category_id?: string | null
-          sort_order?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "product_categories_parent_category_id_fkey"
-            columns: ["parent_category_id"]
-            isOneToOne: false
-            referencedRelation: "product_categories"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      product_recommendations: {
-        Row: {
-          confidence_score: number
-          created_at: string
-          expires_at: string | null
-          id: string
-          is_clicked: boolean
-          is_purchased: boolean
-          metadata: Json | null
-          product_id: string
-          reason_tags: string[] | null
-          recommendation_type: string
-          user_id: string
-        }
-        Insert: {
-          confidence_score?: number
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_clicked?: boolean
-          is_purchased?: boolean
-          metadata?: Json | null
-          product_id: string
-          reason_tags?: string[] | null
-          recommendation_type: string
-          user_id: string
-        }
-        Update: {
-          confidence_score?: number
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_clicked?: boolean
-          is_purchased?: boolean
-          metadata?: Json | null
-          product_id?: string
-          reason_tags?: string[] | null
-          recommendation_type?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "product_recommendations_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      product_recommendations_cache: {
-        Row: {
-          confidence_score: number
-          created_at: string
-          expires_at: string
-          id: string
-          product_id: string | null
-          recommendation_type: string
-          recommended_products: Json
-          user_id: string
-        }
-        Insert: {
-          confidence_score?: number
-          created_at?: string
-          expires_at?: string
-          id?: string
-          product_id?: string | null
-          recommendation_type: string
-          recommended_products?: Json
-          user_id: string
-        }
-        Update: {
-          confidence_score?: number
-          created_at?: string
-          expires_at?: string
-          id?: string
-          product_id?: string | null
-          recommendation_type?: string
-          recommended_products?: Json
-          user_id?: string
-        }
-        Relationships: []
-      }
-      product_views: {
-        Row: {
-          created_at: string
-          device_type: string | null
-          id: string
-          last_viewed_at: string
-          product_id: string
-          session_id: string | null
-          updated_at: string
-          user_id: string
-          view_count: number
-        }
-        Insert: {
-          created_at?: string
-          device_type?: string | null
-          id?: string
-          last_viewed_at?: string
-          product_id: string
-          session_id?: string | null
-          updated_at?: string
-          user_id: string
-          view_count?: number
-        }
-        Update: {
-          created_at?: string
-          device_type?: string | null
-          id?: string
-          last_viewed_at?: string
-          product_id?: string
-          session_id?: string | null
-          updated_at?: string
-          user_id?: string
-          view_count?: number
+          points_value?: number | null
         }
         Relationships: []
       }
@@ -31640,7 +30068,6 @@ export type Database = {
           civic_interests: string[] | null
           civic_tagline: string | null
           contact_info: Json | null
-          contact_visibility: string | null
           contribution_level: string | null
           cover_image_url: string | null
           cover_photo_url: string | null
@@ -31697,7 +30124,6 @@ export type Database = {
           civic_interests?: string[] | null
           civic_tagline?: string | null
           contact_info?: Json | null
-          contact_visibility?: string | null
           contribution_level?: string | null
           cover_image_url?: string | null
           cover_photo_url?: string | null
@@ -31754,7 +30180,6 @@ export type Database = {
           civic_interests?: string[] | null
           civic_tagline?: string | null
           contact_info?: Json | null
-          contact_visibility?: string | null
           contribution_level?: string | null
           cover_image_url?: string | null
           cover_photo_url?: string | null
@@ -32596,6 +31021,57 @@ export type Database = {
         }
         Relationships: []
       }
+      promise_sentiment_correlations: {
+        Row: {
+          affected_regions: string[] | null
+          analysis_metadata: Json | null
+          baseline_sentiment: number | null
+          confidence_score: number | null
+          correlation_date: string | null
+          correlation_strength: number | null
+          created_at: string | null
+          dominant_emotion: string | null
+          id: string
+          post_event_sentiment: number | null
+          promise_id: string | null
+          promise_type: string
+          related_sentiment_log_ids: string[] | null
+          sentiment_shift_intensity: number | null
+        }
+        Insert: {
+          affected_regions?: string[] | null
+          analysis_metadata?: Json | null
+          baseline_sentiment?: number | null
+          confidence_score?: number | null
+          correlation_date?: string | null
+          correlation_strength?: number | null
+          created_at?: string | null
+          dominant_emotion?: string | null
+          id?: string
+          post_event_sentiment?: number | null
+          promise_id?: string | null
+          promise_type: string
+          related_sentiment_log_ids?: string[] | null
+          sentiment_shift_intensity?: number | null
+        }
+        Update: {
+          affected_regions?: string[] | null
+          analysis_metadata?: Json | null
+          baseline_sentiment?: number | null
+          confidence_score?: number | null
+          correlation_date?: string | null
+          correlation_strength?: number | null
+          created_at?: string | null
+          dominant_emotion?: string | null
+          id?: string
+          post_event_sentiment?: number | null
+          promise_id?: string | null
+          promise_type?: string
+          related_sentiment_log_ids?: string[] | null
+          sentiment_shift_intensity?: number | null
+        }
+        Relationships: []
+      }
       pulse_comments: {
         Row: {
           content: string
@@ -32725,48 +31201,6 @@ export type Database = {
           sentiment_score?: number | null
           shares_count?: number | null
           updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
-      push_notifications: {
-        Row: {
-          action_taken: boolean
-          created_at: string
-          data: Json | null
-          delivered_at: string | null
-          delivery_status: string
-          id: string
-          message: string
-          notification_type: string
-          read_at: string | null
-          title: string
-          user_id: string
-        }
-        Insert: {
-          action_taken?: boolean
-          created_at?: string
-          data?: Json | null
-          delivered_at?: string | null
-          delivery_status?: string
-          id?: string
-          message: string
-          notification_type: string
-          read_at?: string | null
-          title: string
-          user_id: string
-        }
-        Update: {
-          action_taken?: boolean
-          created_at?: string
-          data?: Json | null
-          delivered_at?: string | null
-          delivery_status?: string
-          id?: string
-          message?: string
-          notification_type?: string
-          read_at?: string | null
-          title?: string
           user_id?: string
         }
         Relationships: []
@@ -32903,72 +31337,6 @@ export type Database = {
         }
         Relationships: []
       }
-      realtime_analytics_events: {
-        Row: {
-          browser: string | null
-          city: string | null
-          country: string | null
-          custom_properties: Json
-          device_type: string | null
-          event_category: string
-          event_label: string | null
-          event_type: string
-          event_value: number | null
-          id: string
-          ip_address: unknown | null
-          os: string | null
-          page_url: string | null
-          referrer: string | null
-          region: string | null
-          session_id: string | null
-          timestamp: string
-          user_agent: string | null
-          user_id: string | null
-        }
-        Insert: {
-          browser?: string | null
-          city?: string | null
-          country?: string | null
-          custom_properties?: Json
-          device_type?: string | null
-          event_category: string
-          event_label?: string | null
-          event_type: string
-          event_value?: number | null
-          id?: string
-          ip_address?: unknown | null
-          os?: string | null
-          page_url?: string | null
-          referrer?: string | null
-          region?: string | null
-          session_id?: string | null
-          timestamp?: string
-          user_agent?: string | null
-          user_id?: string | null
-        }
-        Update: {
-          browser?: string | null
-          city?: string | null
-          country?: string | null
-          custom_properties?: Json
-          device_type?: string | null
-          event_category?: string
-          event_label?: string | null
-          event_type?: string
-          event_value?: number | null
-          id?: string
-          ip_address?: unknown | null
-          os?: string | null
-          page_url?: string | null
-          referrer?: string | null
-          region?: string | null
-          session_id?: string | null
-          timestamp?: string
-          user_agent?: string | null
-          user_id?: string | null
-        }
-        Relationships: []
-      }
       realtime_notifications: {
         Row: {
           acknowledged_by: string[] | null
@@ -33086,92 +31454,6 @@ export type Database = {
         }
         Relationships: []
       }
-      recipe_reviews: {
-        Row: {
-          created_at: string
-          id: string
-          modifications_made: string | null
-          photos: string[] | null
-          rating: number
-          recipe_id: string
-          review_text: string | null
-          tried_recipe: boolean | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          modifications_made?: string | null
-          photos?: string[] | null
-          rating: number
-          recipe_id: string
-          review_text?: string | null
-          tried_recipe?: boolean | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          modifications_made?: string | null
-          photos?: string[] | null
-          rating?: number
-          recipe_id?: string
-          review_text?: string | null
-          tried_recipe?: boolean | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "recipe_reviews_recipe_id_fkey"
-            columns: ["recipe_id"]
-            isOneToOne: false
-            referencedRelation: "traditional_recipes"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      recommendation_events: {
-        Row: {
-          ab_test_group: string
-          clicked_at: string | null
-          clicked_product_id: string | null
-          context: Json
-          conversion_value: number | null
-          converted: boolean
-          created_at: string
-          id: string
-          product_ids: string[]
-          recommendation_type: string
-          user_id: string
-        }
-        Insert: {
-          ab_test_group?: string
-          clicked_at?: string | null
-          clicked_product_id?: string | null
-          context?: Json
-          conversion_value?: number | null
-          converted?: boolean
-          created_at?: string
-          id?: string
-          product_ids?: string[]
-          recommendation_type: string
-          user_id: string
-        }
-        Update: {
-          ab_test_group?: string
-          clicked_at?: string | null
-          clicked_product_id?: string | null
-          context?: Json
-          conversion_value?: number | null
-          converted?: boolean
-          created_at?: string
-          id?: string
-          product_ids?: string[]
-          recommendation_type?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       regional_hiring_stats: {
         Row: {
           active_employers: number
@@ -33258,59 +31540,6 @@ export type Database = {
           source_url?: string
         }
         Relationships: []
-      }
-      report_executions: {
-        Row: {
-          completed_at: string | null
-          created_at: string
-          error_message: string | null
-          execution_status: string
-          execution_time_ms: number | null
-          file_format: string | null
-          file_path: string | null
-          id: string
-          report_id: string
-          result_data: Json | null
-          result_metadata: Json
-          user_id: string
-        }
-        Insert: {
-          completed_at?: string | null
-          created_at?: string
-          error_message?: string | null
-          execution_status?: string
-          execution_time_ms?: number | null
-          file_format?: string | null
-          file_path?: string | null
-          id?: string
-          report_id: string
-          result_data?: Json | null
-          result_metadata?: Json
-          user_id: string
-        }
-        Update: {
-          completed_at?: string | null
-          created_at?: string
-          error_message?: string | null
-          execution_status?: string
-          execution_time_ms?: number | null
-          file_format?: string | null
-          file_path?: string | null
-          id?: string
-          report_id?: string
-          result_data?: Json | null
-          result_metadata?: Json
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "fk_report_executions_report_id"
-            columns: ["report_id"]
-            isOneToOne: false
-            referencedRelation: "analytics_reports"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       report_instances: {
         Row: {
@@ -33841,143 +32070,6 @@ export type Database = {
         }
         Relationships: []
       }
-      scholarship_applications: {
-        Row: {
-          applicant_email: string
-          applicant_name: string
-          applicant_phone: string | null
-          applicant_user_id: string
-          application_data: Json | null
-          created_at: string | null
-          id: string
-          region: string
-          review_notes: string | null
-          reviewed_at: string | null
-          reviewed_by: string | null
-          scholarship_id: string
-          status: string | null
-          submitted_at: string | null
-          updated_at: string | null
-          village: string | null
-        }
-        Insert: {
-          applicant_email: string
-          applicant_name: string
-          applicant_phone?: string | null
-          applicant_user_id: string
-          application_data?: Json | null
-          created_at?: string | null
-          id?: string
-          region: string
-          review_notes?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          scholarship_id: string
-          status?: string | null
-          submitted_at?: string | null
-          updated_at?: string | null
-          village?: string | null
-        }
-        Update: {
-          applicant_email?: string
-          applicant_name?: string
-          applicant_phone?: string | null
-          applicant_user_id?: string
-          application_data?: Json | null
-          created_at?: string | null
-          id?: string
-          region?: string
-          review_notes?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          scholarship_id?: string
-          status?: string | null
-          submitted_at?: string | null
-          updated_at?: string | null
-          village?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "scholarship_applications_scholarship_id_fkey"
-            columns: ["scholarship_id"]
-            isOneToOne: false
-            referencedRelation: "scholarship_programs"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      scholarship_programs: {
-        Row: {
-          amount_xaf: number | null
-          application_end_date: string | null
-          application_start_date: string | null
-          available_slots: number | null
-          contact_email: string | null
-          contact_phone: string | null
-          created_at: string | null
-          created_by: string | null
-          description: string | null
-          eligibility_criteria: Json | null
-          id: string
-          program_name: string
-          provider_organization: string
-          regions_eligible: Json | null
-          required_documents: Json | null
-          scholarship_type: string
-          selection_criteria: Json | null
-          status: string | null
-          target_level: string
-          updated_at: string | null
-          website_url: string | null
-        }
-        Insert: {
-          amount_xaf?: number | null
-          application_end_date?: string | null
-          application_start_date?: string | null
-          available_slots?: number | null
-          contact_email?: string | null
-          contact_phone?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          eligibility_criteria?: Json | null
-          id?: string
-          program_name: string
-          provider_organization: string
-          regions_eligible?: Json | null
-          required_documents?: Json | null
-          scholarship_type: string
-          selection_criteria?: Json | null
-          status?: string | null
-          target_level: string
-          updated_at?: string | null
-          website_url?: string | null
-        }
-        Update: {
-          amount_xaf?: number | null
-          application_end_date?: string | null
-          application_start_date?: string | null
-          available_slots?: number | null
-          contact_email?: string | null
-          contact_phone?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          eligibility_criteria?: Json | null
-          id?: string
-          program_name?: string
-          provider_organization?: string
-          regions_eligible?: Json | null
-          required_documents?: Json | null
-          scholarship_type?: string
-          selection_criteria?: Json | null
-          status?: string | null
-          target_level?: string
-          updated_at?: string | null
-          website_url?: string | null
-        }
-        Relationships: []
-      }
       school_claims: {
         Row: {
           admin_notes: string | null
@@ -34370,33 +32462,6 @@ export type Database = {
           timestamp?: string | null
           user_agent?: string | null
           user_id?: string | null
-        }
-        Relationships: []
-      }
-      security_config: {
-        Row: {
-          config_key: string
-          config_value: Json
-          created_at: string | null
-          description: string | null
-          id: string
-          updated_at: string | null
-        }
-        Insert: {
-          config_key: string
-          config_value: Json
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          updated_at?: string | null
-        }
-        Update: {
-          config_key?: string
-          config_value?: Json
-          created_at?: string | null
-          description?: string | null
-          id?: string
-          updated_at?: string | null
         }
         Relationships: []
       }
@@ -35045,6 +33110,101 @@ export type Database = {
           },
         ]
       }
+      sentiment_export_requests: {
+        Row: {
+          created_at: string
+          date_range: Json
+          download_url: string | null
+          expires_at: string | null
+          export_data: Json | null
+          export_type: string
+          id: string
+          requested_by: string
+          status: string
+          subject_filter: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          date_range?: Json
+          download_url?: string | null
+          expires_at?: string | null
+          export_data?: Json | null
+          export_type: string
+          id?: string
+          requested_by: string
+          status?: string
+          subject_filter?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          date_range?: Json
+          download_url?: string | null
+          expires_at?: string | null
+          export_data?: Json | null
+          export_type?: string
+          id?: string
+          requested_by?: string
+          status?: string
+          subject_filter?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      sentiment_spikes: {
+        Row: {
+          confidence_score: number
+          created_at: string
+          detected_cause: string | null
+          event_source: string | null
+          event_title: string | null
+          id: string
+          manual_annotation: string | null
+          spike_intensity: number
+          spike_type: string
+          timeline_id: string
+          updated_at: string
+          verified_by: string | null
+        }
+        Insert: {
+          confidence_score?: number
+          created_at?: string
+          detected_cause?: string | null
+          event_source?: string | null
+          event_title?: string | null
+          id?: string
+          manual_annotation?: string | null
+          spike_intensity?: number
+          spike_type: string
+          timeline_id: string
+          updated_at?: string
+          verified_by?: string | null
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string
+          detected_cause?: string | null
+          event_source?: string | null
+          event_title?: string | null
+          id?: string
+          manual_annotation?: string | null
+          spike_intensity?: number
+          spike_type?: string
+          timeline_id?: string
+          updated_at?: string
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sentiment_spikes_timeline_id_fkey"
+            columns: ["timeline_id"]
+            isOneToOne: false
+            referencedRelation: "civic_sentiment_timeline"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sentiment_trends: {
         Row: {
           created_at: string
@@ -35136,901 +33296,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      shipment_notifications: {
-        Row: {
-          created_at: string
-          delivery_method: string
-          delivery_status: string | null
-          id: string
-          message_content: string
-          notification_type: string
-          recipient_email: string | null
-          recipient_phone: string | null
-          retry_count: number | null
-          sent_at: string | null
-          shipment_id: string
-        }
-        Insert: {
-          created_at?: string
-          delivery_method: string
-          delivery_status?: string | null
-          id?: string
-          message_content: string
-          notification_type: string
-          recipient_email?: string | null
-          recipient_phone?: string | null
-          retry_count?: number | null
-          sent_at?: string | null
-          shipment_id: string
-        }
-        Update: {
-          created_at?: string
-          delivery_method?: string
-          delivery_status?: string | null
-          id?: string
-          message_content?: string
-          notification_type?: string
-          recipient_email?: string | null
-          recipient_phone?: string | null
-          retry_count?: number | null
-          sent_at?: string | null
-          shipment_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipment_notifications_shipment_id_fkey"
-            columns: ["shipment_id"]
-            isOneToOne: false
-            referencedRelation: "shipments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipment_status_history: {
-        Row: {
-          description: string | null
-          id: string
-          location: string | null
-          shipment_id: string
-          status: Database["public"]["Enums"]["shipment_status"]
-          timestamp: string
-          updated_by: string | null
-          updated_by_role: string | null
-        }
-        Insert: {
-          description?: string | null
-          id?: string
-          location?: string | null
-          shipment_id: string
-          status: Database["public"]["Enums"]["shipment_status"]
-          timestamp?: string
-          updated_by?: string | null
-          updated_by_role?: string | null
-        }
-        Update: {
-          description?: string | null
-          id?: string
-          location?: string | null
-          shipment_id?: string
-          status?: Database["public"]["Enums"]["shipment_status"]
-          timestamp?: string
-          updated_by?: string | null
-          updated_by_role?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipment_status_history_shipment_id_fkey"
-            columns: ["shipment_id"]
-            isOneToOne: false
-            referencedRelation: "shipments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipment_tracking_events: {
-        Row: {
-          coordinates: unknown | null
-          event_description: string
-          event_timestamp: string
-          event_type: string
-          facility_name: string | null
-          id: string
-          is_public: boolean | null
-          location: string | null
-          metadata: Json | null
-          shipment_id: string
-        }
-        Insert: {
-          coordinates?: unknown | null
-          event_description: string
-          event_timestamp?: string
-          event_type: string
-          facility_name?: string | null
-          id?: string
-          is_public?: boolean | null
-          location?: string | null
-          metadata?: Json | null
-          shipment_id: string
-        }
-        Update: {
-          coordinates?: unknown | null
-          event_description?: string
-          event_timestamp?: string
-          event_type?: string
-          facility_name?: string | null
-          id?: string
-          is_public?: boolean | null
-          location?: string | null
-          metadata?: Json | null
-          shipment_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipment_tracking_events_shipment_id_fkey"
-            columns: ["shipment_id"]
-            isOneToOne: false
-            referencedRelation: "shipments"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipments: {
-        Row: {
-          actual_delivery_date: string | null
-          created_at: string
-          created_by: string | null
-          declared_value: number | null
-          destination_address: string
-          dimensions: Json | null
-          estimated_delivery_date: string | null
-          id: string
-          insurance_amount: number | null
-          is_fragile: boolean | null
-          is_hazardous: boolean | null
-          order_id: string | null
-          origin_address: string
-          package_details: Json
-          payment_status: string
-          receiver_info: Json
-          requires_signature: boolean | null
-          sender_info: Json
-          service_level: string
-          shipping_company_id: string
-          shipping_cost: number | null
-          shipping_type: string
-          special_instructions: string | null
-          status: Database["public"]["Enums"]["shipment_status"]
-          tracking_number: string
-          updated_at: string
-          weight_kg: number | null
-        }
-        Insert: {
-          actual_delivery_date?: string | null
-          created_at?: string
-          created_by?: string | null
-          declared_value?: number | null
-          destination_address: string
-          dimensions?: Json | null
-          estimated_delivery_date?: string | null
-          id?: string
-          insurance_amount?: number | null
-          is_fragile?: boolean | null
-          is_hazardous?: boolean | null
-          order_id?: string | null
-          origin_address: string
-          package_details?: Json
-          payment_status?: string
-          receiver_info?: Json
-          requires_signature?: boolean | null
-          sender_info?: Json
-          service_level: string
-          shipping_company_id: string
-          shipping_cost?: number | null
-          shipping_type: string
-          special_instructions?: string | null
-          status?: Database["public"]["Enums"]["shipment_status"]
-          tracking_number: string
-          updated_at?: string
-          weight_kg?: number | null
-        }
-        Update: {
-          actual_delivery_date?: string | null
-          created_at?: string
-          created_by?: string | null
-          declared_value?: number | null
-          destination_address?: string
-          dimensions?: Json | null
-          estimated_delivery_date?: string | null
-          id?: string
-          insurance_amount?: number | null
-          is_fragile?: boolean | null
-          is_hazardous?: boolean | null
-          order_id?: string | null
-          origin_address?: string
-          package_details?: Json
-          payment_status?: string
-          receiver_info?: Json
-          requires_signature?: boolean | null
-          sender_info?: Json
-          service_level?: string
-          shipping_company_id?: string
-          shipping_cost?: number | null
-          shipping_type?: string
-          special_instructions?: string | null
-          status?: Database["public"]["Enums"]["shipment_status"]
-          tracking_number?: string
-          updated_at?: string
-          weight_kg?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipments_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "shipments_shipping_company_id_fkey"
-            columns: ["shipping_company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipping_companies: {
-        Row: {
-          address: string
-          admin_notes: string | null
-          average_rating: number | null
-          brand_colors: Json | null
-          city: string
-          company_name: string
-          company_type: Database["public"]["Enums"]["shipping_company_type"]
-          completed_shipments: number | null
-          country: string
-          created_at: string
-          delivery_scope: Database["public"]["Enums"]["delivery_scope"]
-          delivery_timeframes: Json | null
-          description: string | null
-          email: string
-          id: string
-          logo_url: string | null
-          payment_status: string | null
-          phone: string
-          price_list: Json | null
-          region: string
-          registration_fee_paid: number | null
-          rejection_reason: string | null
-          stripe_customer_id: string | null
-          subscription_active: boolean
-          subscription_expires_at: string | null
-          subscription_tier: Database["public"]["Enums"]["subscription_tier"]
-          tax_number: string | null
-          terms_conditions: string | null
-          total_reviews: number | null
-          total_shipments: number | null
-          updated_at: string
-          user_id: string
-          verification_status: Database["public"]["Enums"]["verification_status"]
-          verified_at: string | null
-          verified_by: string | null
-          website_url: string | null
-        }
-        Insert: {
-          address: string
-          admin_notes?: string | null
-          average_rating?: number | null
-          brand_colors?: Json | null
-          city: string
-          company_name: string
-          company_type: Database["public"]["Enums"]["shipping_company_type"]
-          completed_shipments?: number | null
-          country?: string
-          created_at?: string
-          delivery_scope?: Database["public"]["Enums"]["delivery_scope"]
-          delivery_timeframes?: Json | null
-          description?: string | null
-          email: string
-          id?: string
-          logo_url?: string | null
-          payment_status?: string | null
-          phone: string
-          price_list?: Json | null
-          region: string
-          registration_fee_paid?: number | null
-          rejection_reason?: string | null
-          stripe_customer_id?: string | null
-          subscription_active?: boolean
-          subscription_expires_at?: string | null
-          subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
-          tax_number?: string | null
-          terms_conditions?: string | null
-          total_reviews?: number | null
-          total_shipments?: number | null
-          updated_at?: string
-          user_id: string
-          verification_status?: Database["public"]["Enums"]["verification_status"]
-          verified_at?: string | null
-          verified_by?: string | null
-          website_url?: string | null
-        }
-        Update: {
-          address?: string
-          admin_notes?: string | null
-          average_rating?: number | null
-          brand_colors?: Json | null
-          city?: string
-          company_name?: string
-          company_type?: Database["public"]["Enums"]["shipping_company_type"]
-          completed_shipments?: number | null
-          country?: string
-          created_at?: string
-          delivery_scope?: Database["public"]["Enums"]["delivery_scope"]
-          delivery_timeframes?: Json | null
-          description?: string | null
-          email?: string
-          id?: string
-          logo_url?: string | null
-          payment_status?: string | null
-          phone?: string
-          price_list?: Json | null
-          region?: string
-          registration_fee_paid?: number | null
-          rejection_reason?: string | null
-          stripe_customer_id?: string | null
-          subscription_active?: boolean
-          subscription_expires_at?: string | null
-          subscription_tier?: Database["public"]["Enums"]["subscription_tier"]
-          tax_number?: string | null
-          terms_conditions?: string | null
-          total_reviews?: number | null
-          total_shipments?: number | null
-          updated_at?: string
-          user_id?: string
-          verification_status?: Database["public"]["Enums"]["verification_status"]
-          verified_at?: string | null
-          verified_by?: string | null
-          website_url?: string | null
-        }
-        Relationships: []
-      }
-      shipping_company_branches: {
-        Row: {
-          address: string
-          branch_code: string
-          branch_name: string
-          city: string
-          company_id: string
-          created_at: string
-          email: string | null
-          id: string
-          is_active: boolean | null
-          is_main_branch: boolean | null
-          manager_name: string | null
-          operating_hours: Json | null
-          phone: string
-          region: string
-          services_offered: Json | null
-          updated_at: string
-        }
-        Insert: {
-          address: string
-          branch_code: string
-          branch_name: string
-          city: string
-          company_id: string
-          created_at?: string
-          email?: string | null
-          id?: string
-          is_active?: boolean | null
-          is_main_branch?: boolean | null
-          manager_name?: string | null
-          operating_hours?: Json | null
-          phone: string
-          region: string
-          services_offered?: Json | null
-          updated_at?: string
-        }
-        Update: {
-          address?: string
-          branch_code?: string
-          branch_name?: string
-          city?: string
-          company_id?: string
-          created_at?: string
-          email?: string | null
-          id?: string
-          is_active?: boolean | null
-          is_main_branch?: boolean | null
-          manager_name?: string | null
-          operating_hours?: Json | null
-          phone?: string
-          region?: string
-          services_offered?: Json | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_company_branches_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipping_company_documents: {
-        Row: {
-          company_id: string
-          created_at: string
-          document_name: string
-          document_type: string
-          document_url: string
-          id: string
-          updated_at: string
-          uploaded_by: string
-          verification_notes: string | null
-          verified: boolean | null
-          verified_at: string | null
-          verified_by: string | null
-        }
-        Insert: {
-          company_id: string
-          created_at?: string
-          document_name: string
-          document_type: string
-          document_url: string
-          id?: string
-          updated_at?: string
-          uploaded_by: string
-          verification_notes?: string | null
-          verified?: boolean | null
-          verified_at?: string | null
-          verified_by?: string | null
-        }
-        Update: {
-          company_id?: string
-          created_at?: string
-          document_name?: string
-          document_type?: string
-          document_url?: string
-          id?: string
-          updated_at?: string
-          uploaded_by?: string
-          verification_notes?: string | null
-          verified?: boolean | null
-          verified_at?: string | null
-          verified_by?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_company_documents_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipping_company_ratings: {
-        Row: {
-          company_id: string
-          created_at: string
-          customer_service_rating: number | null
-          id: string
-          overall_rating: number
-          packaging_rating: number | null
-          pricing_rating: number | null
-          reliability_rating: number | null
-          review_text: string | null
-          speed_rating: number | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          company_id: string
-          created_at?: string
-          customer_service_rating?: number | null
-          id?: string
-          overall_rating: number
-          packaging_rating?: number | null
-          pricing_rating?: number | null
-          reliability_rating?: number | null
-          review_text?: string | null
-          speed_rating?: number | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          company_id?: string
-          created_at?: string
-          customer_service_rating?: number | null
-          id?: string
-          overall_rating?: number
-          packaging_rating?: number | null
-          pricing_rating?: number | null
-          reliability_rating?: number | null
-          review_text?: string | null
-          speed_rating?: number | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      shipping_company_staff: {
-        Row: {
-          branch_id: string | null
-          company_id: string
-          created_at: string
-          created_by: string
-          hired_at: string | null
-          id: string
-          is_active: boolean | null
-          permissions: Json | null
-          role: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          branch_id?: string | null
-          company_id: string
-          created_at?: string
-          created_by: string
-          hired_at?: string | null
-          id?: string
-          is_active?: boolean | null
-          permissions?: Json | null
-          role?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          branch_id?: string | null
-          company_id?: string
-          created_at?: string
-          created_by?: string
-          hired_at?: string | null
-          id?: string
-          is_active?: boolean | null
-          permissions?: Json | null
-          role?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_company_staff_branch_id_fkey"
-            columns: ["branch_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_company_branches"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "shipping_company_staff_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipping_label_templates: {
-        Row: {
-          created_at: string | null
-          created_by: string | null
-          description: string | null
-          height_mm: number
-          id: string
-          is_default: boolean | null
-          name: string
-          template_data: Json
-          updated_at: string | null
-          width_mm: number
-        }
-        Insert: {
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          height_mm?: number
-          id?: string
-          is_default?: boolean | null
-          name: string
-          template_data?: Json
-          updated_at?: string | null
-          width_mm?: number
-        }
-        Update: {
-          created_at?: string | null
-          created_by?: string | null
-          description?: string | null
-          height_mm?: number
-          id?: string
-          is_default?: boolean | null
-          name?: string
-          template_data?: Json
-          updated_at?: string | null
-          width_mm?: number
-        }
-        Relationships: []
-      }
-      shipping_labels: {
-        Row: {
-          barcode_data: string | null
-          company_id: string | null
-          created_at: string | null
-          created_by: string | null
-          id: string
-          label_data: Json | null
-          package_details: Json | null
-          printed_at: string | null
-          qr_code_data: string | null
-          recipient_address: Json
-          recipient_name: string
-          sender_address: Json
-          sender_name: string
-          status: string | null
-          template_id: string | null
-          tracking_number: string
-          updated_at: string | null
-        }
-        Insert: {
-          barcode_data?: string | null
-          company_id?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          id?: string
-          label_data?: Json | null
-          package_details?: Json | null
-          printed_at?: string | null
-          qr_code_data?: string | null
-          recipient_address: Json
-          recipient_name: string
-          sender_address: Json
-          sender_name: string
-          status?: string | null
-          template_id?: string | null
-          tracking_number: string
-          updated_at?: string | null
-        }
-        Update: {
-          barcode_data?: string | null
-          company_id?: string | null
-          created_at?: string | null
-          created_by?: string | null
-          id?: string
-          label_data?: Json | null
-          package_details?: Json | null
-          printed_at?: string | null
-          qr_code_data?: string | null
-          recipient_address?: Json
-          recipient_name?: string
-          sender_address?: Json
-          sender_name?: string
-          status?: string | null
-          template_id?: string | null
-          tracking_number?: string
-          updated_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_labels_company_id_fkey"
-            columns: ["company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "shipping_labels_template_id_fkey"
-            columns: ["template_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_label_templates"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipping_rates: {
-        Row: {
-          base_rate: number
-          created_at: string
-          destination_zone: string
-          effective_date: string
-          expires_date: string | null
-          fuel_surcharge_percent: number | null
-          id: string
-          is_active: boolean | null
-          origin_zone: string
-          per_kg_rate: number | null
-          service_type: string
-          shipping_company_id: string
-          updated_at: string
-          weight_max_kg: number | null
-          weight_min_kg: number
-        }
-        Insert: {
-          base_rate: number
-          created_at?: string
-          destination_zone: string
-          effective_date?: string
-          expires_date?: string | null
-          fuel_surcharge_percent?: number | null
-          id?: string
-          is_active?: boolean | null
-          origin_zone: string
-          per_kg_rate?: number | null
-          service_type: string
-          shipping_company_id: string
-          updated_at?: string
-          weight_max_kg?: number | null
-          weight_min_kg?: number
-        }
-        Update: {
-          base_rate?: number
-          created_at?: string
-          destination_zone?: string
-          effective_date?: string
-          expires_date?: string | null
-          fuel_surcharge_percent?: number | null
-          id?: string
-          is_active?: boolean | null
-          origin_zone?: string
-          per_kg_rate?: number | null
-          service_type?: string
-          shipping_company_id?: string
-          updated_at?: string
-          weight_max_kg?: number | null
-          weight_min_kg?: number
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_rates_shipping_company_id_fkey"
-            columns: ["shipping_company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipping_rating_reports: {
-        Row: {
-          created_at: string
-          id: string
-          moderator_notes: string | null
-          rating_id: string
-          report_details: string | null
-          report_reason: string
-          reported_by: string
-          reviewed_at: string | null
-          reviewed_by: string | null
-          status: string
-          updated_at: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          moderator_notes?: string | null
-          rating_id: string
-          report_details?: string | null
-          report_reason: string
-          reported_by: string
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          status?: string
-          updated_at?: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          moderator_notes?: string | null
-          rating_id?: string
-          report_details?: string | null
-          report_reason?: string
-          reported_by?: string
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          status?: string
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_rating_reports_rating_id_fkey"
-            columns: ["rating_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_company_ratings"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      shipping_zones: {
-        Row: {
-          cities: string[] | null
-          created_at: string
-          id: string
-          is_active: boolean | null
-          postal_codes: string[] | null
-          regions: string[]
-          shipping_company_id: string
-          updated_at: string
-          zone_code: string
-          zone_name: string
-        }
-        Insert: {
-          cities?: string[] | null
-          created_at?: string
-          id?: string
-          is_active?: boolean | null
-          postal_codes?: string[] | null
-          regions: string[]
-          shipping_company_id: string
-          updated_at?: string
-          zone_code: string
-          zone_name: string
-        }
-        Update: {
-          cities?: string[] | null
-          created_at?: string
-          id?: string
-          is_active?: boolean | null
-          postal_codes?: string[] | null
-          regions?: string[]
-          shipping_company_id?: string
-          updated_at?: string
-          zone_code?: string
-          zone_name?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "shipping_zones_shipping_company_id_fkey"
-            columns: ["shipping_company_id"]
-            isOneToOne: false
-            referencedRelation: "shipping_companies"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      simplified_notification_preferences: {
-        Row: {
-          created_at: string | null
-          email_enabled: boolean
-          email_frequency: string
-          id: string
-          push_enabled: boolean
-          quiet_hours_enabled: boolean
-          quiet_hours_end: string | null
-          quiet_hours_start: string | null
-          sms_enabled: boolean
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          email_enabled?: boolean
-          email_frequency?: string
-          id?: string
-          push_enabled?: boolean
-          quiet_hours_enabled?: boolean
-          quiet_hours_end?: string | null
-          quiet_hours_start?: string | null
-          sms_enabled?: boolean
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          email_enabled?: boolean
-          email_frequency?: string
-          id?: string
-          push_enabled?: boolean
-          quiet_hours_enabled?: boolean
-          quiet_hours_end?: string | null
-          quiet_hours_start?: string | null
-          sms_enabled?: boolean
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
       }
       smart_reply_suggestions: {
         Row: {
@@ -36718,68 +33983,44 @@ export type Database = {
         }
         Relationships: []
       }
-      system_feature_flags: {
+      system_cache_config: {
         Row: {
+          auto_flush_enabled: boolean | null
+          auto_flush_interval_hours: number | null
+          cache_layer: string
+          config_metadata: Json | null
           created_at: string | null
-          disabled_at: string | null
-          disabled_by: string | null
-          disabled_reason: string | null
-          feature_name: string
+          flush_priority: number | null
           id: string
-          is_enabled: boolean
+          is_active: boolean | null
+          max_size_mb: number | null
+          retention_hours: number | null
           updated_at: string | null
         }
         Insert: {
+          auto_flush_enabled?: boolean | null
+          auto_flush_interval_hours?: number | null
+          cache_layer: string
+          config_metadata?: Json | null
           created_at?: string | null
-          disabled_at?: string | null
-          disabled_by?: string | null
-          disabled_reason?: string | null
-          feature_name: string
+          flush_priority?: number | null
           id?: string
-          is_enabled?: boolean
+          is_active?: boolean | null
+          max_size_mb?: number | null
+          retention_hours?: number | null
           updated_at?: string | null
         }
         Update: {
+          auto_flush_enabled?: boolean | null
+          auto_flush_interval_hours?: number | null
+          cache_layer?: string
+          config_metadata?: Json | null
           created_at?: string | null
-          disabled_at?: string | null
-          disabled_by?: string | null
-          disabled_reason?: string | null
-          feature_name?: string
+          flush_priority?: number | null
           id?: string
-          is_enabled?: boolean
-          updated_at?: string | null
-        }
-        Relationships: []
-      }
-      system_label_settings: {
-        Row: {
-          created_at: string | null
-          id: string
-          is_system_setting: boolean | null
-          requires_admin_approval: boolean | null
-          setting_description: string | null
-          setting_key: string
-          setting_value: Json
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          is_system_setting?: boolean | null
-          requires_admin_approval?: boolean | null
-          setting_description?: string | null
-          setting_key: string
-          setting_value: Json
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          is_system_setting?: boolean | null
-          requires_admin_approval?: boolean | null
-          setting_description?: string | null
-          setting_key?: string
-          setting_value?: Json
+          is_active?: boolean | null
+          max_size_mb?: number | null
+          retention_hours?: number | null
           updated_at?: string | null
         }
         Relationships: []
@@ -36811,39 +34052,6 @@ export type Database = {
           interval_ms?: number | null
           refresh_time?: string
           success?: boolean
-        }
-        Relationships: []
-      }
-      system_settings: {
-        Row: {
-          category: string
-          created_at: string
-          description: string | null
-          id: string
-          is_public: boolean
-          key: string
-          updated_at: string
-          value: Json
-        }
-        Insert: {
-          category?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          is_public?: boolean
-          key: string
-          updated_at?: string
-          value?: Json
-        }
-        Update: {
-          category?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          is_public?: boolean
-          key?: string
-          updated_at?: string
-          value?: Json
         }
         Relationships: []
       }
@@ -37183,228 +34391,66 @@ export type Database = {
         }
         Relationships: []
       }
-      traditional_calendar_events: {
+      trend_detection: {
         Row: {
-          agricultural_season: string | null
-          audio_recordings: string[] | null
-          calendar_type: string
-          ceremonial_items: Json | null
-          challenges_faced: string | null
-          community_involvement_level: string | null
-          created_at: string
-          created_by: string
-          dress_code: string | null
-          duration_days: number | null
-          economic_impact: string | null
-          end_date: string | null
-          event_category: string
-          event_description: string
-          event_name: string
-          event_type: string
-          historical_significance: string | null
-          id: string
-          is_public_event: boolean
-          is_unesco_recognized: boolean | null
-          location_details: string | null
-          lunar_day: number | null
-          lunar_month: number | null
-          modern_adaptations: string | null
-          next_occurrence: string | null
-          occurs_annually: boolean
-          organizer_contact: string | null
-          participant_roles: Json | null
-          photo_urls: string[] | null
-          preservation_status: string | null
-          related_events: string[] | null
-          required_preparations: Json | null
-          solar_day: number | null
-          solar_month: number | null
-          songs_and_dances: Json | null
-          start_date: string | null
-          storytelling_elements: Json | null
-          traditional_foods: Json | null
-          traditional_practices: Json | null
-          updated_at: string
-          video_urls: string[] | null
-          village_id: string | null
-          visitor_policy: string | null
-        }
-        Insert: {
-          agricultural_season?: string | null
-          audio_recordings?: string[] | null
-          calendar_type?: string
-          ceremonial_items?: Json | null
-          challenges_faced?: string | null
-          community_involvement_level?: string | null
-          created_at?: string
-          created_by: string
-          dress_code?: string | null
-          duration_days?: number | null
-          economic_impact?: string | null
-          end_date?: string | null
-          event_category?: string
-          event_description: string
-          event_name: string
-          event_type: string
-          historical_significance?: string | null
-          id?: string
-          is_public_event?: boolean
-          is_unesco_recognized?: boolean | null
-          location_details?: string | null
-          lunar_day?: number | null
-          lunar_month?: number | null
-          modern_adaptations?: string | null
-          next_occurrence?: string | null
-          occurs_annually?: boolean
-          organizer_contact?: string | null
-          participant_roles?: Json | null
-          photo_urls?: string[] | null
-          preservation_status?: string | null
-          related_events?: string[] | null
-          required_preparations?: Json | null
-          solar_day?: number | null
-          solar_month?: number | null
-          songs_and_dances?: Json | null
-          start_date?: string | null
-          storytelling_elements?: Json | null
-          traditional_foods?: Json | null
-          traditional_practices?: Json | null
-          updated_at?: string
-          video_urls?: string[] | null
-          village_id?: string | null
-          visitor_policy?: string | null
-        }
-        Update: {
-          agricultural_season?: string | null
-          audio_recordings?: string[] | null
-          calendar_type?: string
-          ceremonial_items?: Json | null
-          challenges_faced?: string | null
-          community_involvement_level?: string | null
-          created_at?: string
-          created_by?: string
-          dress_code?: string | null
-          duration_days?: number | null
-          economic_impact?: string | null
-          end_date?: string | null
-          event_category?: string
-          event_description?: string
-          event_name?: string
-          event_type?: string
-          historical_significance?: string | null
-          id?: string
-          is_public_event?: boolean
-          is_unesco_recognized?: boolean | null
-          location_details?: string | null
-          lunar_day?: number | null
-          lunar_month?: number | null
-          modern_adaptations?: string | null
-          next_occurrence?: string | null
-          occurs_annually?: boolean
-          organizer_contact?: string | null
-          participant_roles?: Json | null
-          photo_urls?: string[] | null
-          preservation_status?: string | null
-          related_events?: string[] | null
-          required_preparations?: Json | null
-          solar_day?: number | null
-          solar_month?: number | null
-          songs_and_dances?: Json | null
-          start_date?: string | null
-          storytelling_elements?: Json | null
-          traditional_foods?: Json | null
-          traditional_practices?: Json | null
-          updated_at?: string
-          video_urls?: string[] | null
-          village_id?: string | null
-          visitor_policy?: string | null
-        }
-        Relationships: []
-      }
-      traditional_recipes: {
-        Row: {
-          cooking_time_minutes: number | null
-          created_at: string
-          cultural_significance: string | null
+          affected_demographics: Json | null
+          alert_generated: boolean
+          category: string
+          confidence_level: number
+          data_sources: string[]
           description: string | null
-          difficulty_level: string | null
-          family_lineage: string | null
+          first_detected_at: string
+          geographic_scope: string[] | null
+          growth_rate: number | null
           id: string
-          ingredients: Json
-          instructions: Json
-          is_public: boolean
-          is_sacred: boolean | null
-          likes_count: number | null
-          modern_adaptations: string | null
-          nutritional_notes: string | null
-          occasion: string[] | null
-          origin_story: string | null
-          recipe_name: string
-          recipe_photos: string[] | null
-          saves_count: number | null
-          season: string[] | null
-          serving_size: number | null
-          updated_at: string
-          user_id: string
-          video_url: string | null
-          views_count: number | null
-          village_id: string
+          keywords: string[]
+          last_updated_at: string
+          momentum_score: number
+          peak_timestamp: string | null
+          related_entities: Json | null
+          status: string
+          trend_name: string
+          trend_type: Database["public"]["Enums"]["trend_type"]
         }
         Insert: {
-          cooking_time_minutes?: number | null
-          created_at?: string
-          cultural_significance?: string | null
+          affected_demographics?: Json | null
+          alert_generated?: boolean
+          category: string
+          confidence_level: number
+          data_sources: string[]
           description?: string | null
-          difficulty_level?: string | null
-          family_lineage?: string | null
+          first_detected_at?: string
+          geographic_scope?: string[] | null
+          growth_rate?: number | null
           id?: string
-          ingredients?: Json
-          instructions?: Json
-          is_public?: boolean
-          is_sacred?: boolean | null
-          likes_count?: number | null
-          modern_adaptations?: string | null
-          nutritional_notes?: string | null
-          occasion?: string[] | null
-          origin_story?: string | null
-          recipe_name: string
-          recipe_photos?: string[] | null
-          saves_count?: number | null
-          season?: string[] | null
-          serving_size?: number | null
-          updated_at?: string
-          user_id: string
-          video_url?: string | null
-          views_count?: number | null
-          village_id: string
+          keywords: string[]
+          last_updated_at?: string
+          momentum_score?: number
+          peak_timestamp?: string | null
+          related_entities?: Json | null
+          status?: string
+          trend_name: string
+          trend_type: Database["public"]["Enums"]["trend_type"]
         }
         Update: {
-          cooking_time_minutes?: number | null
-          created_at?: string
-          cultural_significance?: string | null
+          affected_demographics?: Json | null
+          alert_generated?: boolean
+          category?: string
+          confidence_level?: number
+          data_sources?: string[]
           description?: string | null
-          difficulty_level?: string | null
-          family_lineage?: string | null
+          first_detected_at?: string
+          geographic_scope?: string[] | null
+          growth_rate?: number | null
           id?: string
-          ingredients?: Json
-          instructions?: Json
-          is_public?: boolean
-          is_sacred?: boolean | null
-          likes_count?: number | null
-          modern_adaptations?: string | null
-          nutritional_notes?: string | null
-          occasion?: string[] | null
-          origin_story?: string | null
-          recipe_name?: string
-          recipe_photos?: string[] | null
-          saves_count?: number | null
-          season?: string[] | null
-          serving_size?: number | null
-          updated_at?: string
-          user_id?: string
-          video_url?: string | null
-          views_count?: number | null
-          village_id?: string
+          keywords?: string[]
+          last_updated_at?: string
+          momentum_score?: number
+          peak_timestamp?: string | null
+          related_entities?: Json | null
+          status?: string
+          trend_name?: string
+          trend_type?: Database["public"]["Enums"]["trend_type"]
         }
         Relationships: []
       }
@@ -37587,96 +34633,6 @@ export type Database = {
         }
         Relationships: []
       }
-      unified_admin_access: {
-        Row: {
-          access_reason: string | null
-          admin_level: number
-          created_at: string
-          expires_at: string | null
-          granted_at: string
-          granted_by: string | null
-          id: string
-          is_active: boolean
-          last_accessed: string | null
-          permissions: Json
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          access_reason?: string | null
-          admin_level?: number
-          created_at?: string
-          expires_at?: string | null
-          granted_at?: string
-          granted_by?: string | null
-          id?: string
-          is_active?: boolean
-          last_accessed?: string | null
-          permissions?: Json
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          access_reason?: string | null
-          admin_level?: number
-          created_at?: string
-          expires_at?: string | null
-          granted_at?: string
-          granted_by?: string | null
-          id?: string
-          is_active?: boolean
-          last_accessed?: string | null
-          permissions?: Json
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      unified_notifications: {
-        Row: {
-          action_url: string | null
-          created_at: string
-          expires_at: string | null
-          id: string
-          is_read: boolean
-          message: string
-          metadata: Json | null
-          notification_type: string
-          priority: string
-          title: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          action_url?: string | null
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_read?: boolean
-          message: string
-          metadata?: Json | null
-          notification_type?: string
-          priority?: string
-          title: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          action_url?: string | null
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_read?: boolean
-          message?: string
-          metadata?: Json | null
-          notification_type?: string
-          priority?: string
-          title?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       user_2fa: {
         Row: {
           backup_codes: string[] | null
@@ -37738,7 +34694,15 @@ export type Database = {
           progress_data?: Json | null
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_type_id_fkey"
+            columns: ["achievement_type_id"]
+            isOneToOne: false
+            referencedRelation: "profile_achievement_types"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_activity_feed: {
         Row: {
@@ -37809,45 +34773,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      user_behavior_tracking: {
-        Row: {
-          action_type: string
-          context_data: Json | null
-          created_at: string
-          id: string
-          ip_address: unknown | null
-          session_id: string | null
-          target_id: string
-          target_type: string
-          user_agent: string | null
-          user_id: string
-        }
-        Insert: {
-          action_type: string
-          context_data?: Json | null
-          created_at?: string
-          id?: string
-          ip_address?: unknown | null
-          session_id?: string | null
-          target_id: string
-          target_type: string
-          user_agent?: string | null
-          user_id: string
-        }
-        Update: {
-          action_type?: string
-          context_data?: Json | null
-          created_at?: string
-          id?: string
-          ip_address?: unknown | null
-          session_id?: string | null
-          target_id?: string
-          target_type?: string
-          user_agent?: string | null
-          user_id?: string
-        }
-        Relationships: []
       }
       user_civic_metrics: {
         Row: {
@@ -37992,54 +34917,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_engagement_metrics: {
-        Row: {
-          actions_taken: number | null
-          avg_response_time_seconds: number | null
-          created_at: string | null
-          date_tracked: string
-          engagement_score: number | null
-          id: string
-          notifications_clicked: number | null
-          notifications_dismissed: number | null
-          notifications_opened: number | null
-          session_duration_minutes: number | null
-          total_notifications_received: number | null
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          actions_taken?: number | null
-          avg_response_time_seconds?: number | null
-          created_at?: string | null
-          date_tracked: string
-          engagement_score?: number | null
-          id?: string
-          notifications_clicked?: number | null
-          notifications_dismissed?: number | null
-          notifications_opened?: number | null
-          session_duration_minutes?: number | null
-          total_notifications_received?: number | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          actions_taken?: number | null
-          avg_response_time_seconds?: number | null
-          created_at?: string | null
-          date_tracked?: string
-          engagement_score?: number | null
-          id?: string
-          notifications_clicked?: number | null
-          notifications_dismissed?: number | null
-          notifications_opened?: number | null
-          session_duration_minutes?: number | null
-          total_notifications_received?: number | null
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: []
-      }
       user_feed_preferences: {
         Row: {
           artist_content_weight: number | null
@@ -38103,70 +34980,35 @@ export type Database = {
         }
         Relationships: []
       }
-      user_integrations: {
+      user_notification_preferences: {
         Row: {
-          configuration: Json
-          connection_name: string
-          connection_status: string
+          channel: Database["public"]["Enums"]["notification_channel"]
           created_at: string
-          credentials: Json | null
-          expires_at: string | null
+          event_type: Database["public"]["Enums"]["notification_event_type"]
           id: string
-          is_active: boolean
-          last_error: string | null
-          last_test_at: string | null
-          retry_count: number | null
-          service_id: string
+          is_enabled: boolean
           updated_at: string
           user_id: string
-          webhook_secret: string | null
-          webhook_url: string | null
         }
         Insert: {
-          configuration?: Json
-          connection_name: string
-          connection_status?: string
+          channel: Database["public"]["Enums"]["notification_channel"]
           created_at?: string
-          credentials?: Json | null
-          expires_at?: string | null
+          event_type: Database["public"]["Enums"]["notification_event_type"]
           id?: string
-          is_active?: boolean
-          last_error?: string | null
-          last_test_at?: string | null
-          retry_count?: number | null
-          service_id: string
+          is_enabled?: boolean
           updated_at?: string
           user_id: string
-          webhook_secret?: string | null
-          webhook_url?: string | null
         }
         Update: {
-          configuration?: Json
-          connection_name?: string
-          connection_status?: string
+          channel?: Database["public"]["Enums"]["notification_channel"]
           created_at?: string
-          credentials?: Json | null
-          expires_at?: string | null
+          event_type?: Database["public"]["Enums"]["notification_event_type"]
           id?: string
-          is_active?: boolean
-          last_error?: string | null
-          last_test_at?: string | null
-          retry_count?: number | null
-          service_id?: string
+          is_enabled?: boolean
           updated_at?: string
           user_id?: string
-          webhook_secret?: string | null
-          webhook_url?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "user_integrations_service_id_fkey"
-            columns: ["service_id"]
-            isOneToOne: false
-            referencedRelation: "integration_services"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       user_notification_settings: {
         Row: {
@@ -38663,36 +35505,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_push_tokens: {
-        Row: {
-          created_at: string
-          id: string
-          is_active: boolean
-          platform: string
-          token: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          is_active?: boolean
-          platform: string
-          token: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          is_active?: boolean
-          platform?: string
-          token?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
       user_roles: {
         Row: {
           granted_at: string | null
@@ -38741,33 +35553,6 @@ export type Database = {
         }
         Relationships: []
       }
-      user_similarity_scores: {
-        Row: {
-          calculated_at: string
-          id: string
-          similarity_score: number
-          similarity_type: string
-          user_id_1: string
-          user_id_2: string
-        }
-        Insert: {
-          calculated_at?: string
-          id?: string
-          similarity_score?: number
-          similarity_type?: string
-          user_id_1: string
-          user_id_2: string
-        }
-        Update: {
-          calculated_at?: string
-          id?: string
-          similarity_score?: number
-          similarity_type?: string
-          user_id_1?: string
-          user_id_2?: string
-        }
-        Relationships: []
-      }
       user_trust_feedback: {
         Row: {
           comment: string | null
@@ -38812,72 +35597,6 @@ export type Database = {
           },
         ]
       }
-      user_village_ancestry: {
-        Row: {
-          ancestor_id: string | null
-          connection_story: string | null
-          connection_strength: string | null
-          connection_type: string | null
-          created_at: string | null
-          evidence_type: string[] | null
-          generation_distance: number | null
-          id: string
-          is_primary_village: boolean | null
-          updated_at: string | null
-          user_id: string | null
-          verification_votes: number | null
-          verified_by_community: boolean | null
-          village_id: string | null
-        }
-        Insert: {
-          ancestor_id?: string | null
-          connection_story?: string | null
-          connection_strength?: string | null
-          connection_type?: string | null
-          created_at?: string | null
-          evidence_type?: string[] | null
-          generation_distance?: number | null
-          id?: string
-          is_primary_village?: boolean | null
-          updated_at?: string | null
-          user_id?: string | null
-          verification_votes?: number | null
-          verified_by_community?: boolean | null
-          village_id?: string | null
-        }
-        Update: {
-          ancestor_id?: string | null
-          connection_story?: string | null
-          connection_strength?: string | null
-          connection_type?: string | null
-          created_at?: string | null
-          evidence_type?: string[] | null
-          generation_distance?: number | null
-          id?: string
-          is_primary_village?: boolean | null
-          updated_at?: string | null
-          user_id?: string | null
-          verification_votes?: number | null
-          verified_by_community?: boolean | null
-          village_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "user_village_ancestry_ancestor_id_fkey"
-            columns: ["ancestor_id"]
-            isOneToOne: false
-            referencedRelation: "village_ancestors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "user_village_ancestry_village_id_fkey"
-            columns: ["village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       user_whatsapp_preferences: {
         Row: {
           country_code: string | null
@@ -38914,257 +35633,6 @@ export type Database = {
         }
         Relationships: []
       }
-      vehicle_tracking: {
-        Row: {
-          created_at: string | null
-          engine_status: string | null
-          fuel_level: number | null
-          id: string
-          latitude: number
-          longitude: number
-          speed_kmh: number | null
-          timestamp: string | null
-          vehicle_id: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          engine_status?: string | null
-          fuel_level?: number | null
-          id?: string
-          latitude: number
-          longitude: number
-          speed_kmh?: number | null
-          timestamp?: string | null
-          vehicle_id?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          engine_status?: string | null
-          fuel_level?: number | null
-          id?: string
-          latitude?: number
-          longitude?: number
-          speed_kmh?: number | null
-          timestamp?: string | null
-          vehicle_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vehicle_tracking_vehicle_id_fkey"
-            columns: ["vehicle_id"]
-            isOneToOne: false
-            referencedRelation: "fleet_vehicles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      vendor_compliance_checks: {
-        Row: {
-          check_status: string
-          check_type: string
-          checked_by_admin_id: string | null
-          compliance_score: number | null
-          created_at: string
-          id: string
-          issues_found: Json | null
-          next_check_due: string | null
-          recommendations: Json | null
-          updated_at: string
-          vendor_id: string
-        }
-        Insert: {
-          check_status?: string
-          check_type: string
-          checked_by_admin_id?: string | null
-          compliance_score?: number | null
-          created_at?: string
-          id?: string
-          issues_found?: Json | null
-          next_check_due?: string | null
-          recommendations?: Json | null
-          updated_at?: string
-          vendor_id: string
-        }
-        Update: {
-          check_status?: string
-          check_type?: string
-          checked_by_admin_id?: string | null
-          compliance_score?: number | null
-          created_at?: string
-          id?: string
-          issues_found?: Json | null
-          next_check_due?: string | null
-          recommendations?: Json | null
-          updated_at?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vendor_compliance_checks_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      vendor_performance_metrics: {
-        Row: {
-          calculated_at: string
-          id: string
-          metric_data: Json | null
-          metric_period: string
-          metric_type: string
-          metric_value: number
-          period_end: string
-          period_start: string
-          vendor_id: string
-        }
-        Insert: {
-          calculated_at?: string
-          id?: string
-          metric_data?: Json | null
-          metric_period: string
-          metric_type: string
-          metric_value?: number
-          period_end: string
-          period_start: string
-          vendor_id: string
-        }
-        Update: {
-          calculated_at?: string
-          id?: string
-          metric_data?: Json | null
-          metric_period?: string
-          metric_type?: string
-          metric_value?: number
-          period_end?: string
-          period_start?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vendor_performance_metrics_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      vendor_ratings_summary: {
-        Row: {
-          average_rating: number
-          average_response_time_hours: number | null
-          created_at: string
-          five_star_count: number
-          four_star_count: number
-          id: string
-          last_calculated_at: string
-          one_star_count: number
-          response_rate: number | null
-          three_star_count: number
-          total_reviews: number
-          two_star_count: number
-          updated_at: string
-          vendor_id: string
-        }
-        Insert: {
-          average_rating?: number
-          average_response_time_hours?: number | null
-          created_at?: string
-          five_star_count?: number
-          four_star_count?: number
-          id?: string
-          last_calculated_at?: string
-          one_star_count?: number
-          response_rate?: number | null
-          three_star_count?: number
-          total_reviews?: number
-          two_star_count?: number
-          updated_at?: string
-          vendor_id: string
-        }
-        Update: {
-          average_rating?: number
-          average_response_time_hours?: number | null
-          created_at?: string
-          five_star_count?: number
-          four_star_count?: number
-          id?: string
-          last_calculated_at?: string
-          one_star_count?: number
-          response_rate?: number | null
-          three_star_count?: number
-          total_reviews?: number
-          two_star_count?: number
-          updated_at?: string
-          vendor_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "vendor_ratings_summary_vendor_id_fkey"
-            columns: ["vendor_id"]
-            isOneToOne: false
-            referencedRelation: "marketplace_vendors"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      vendor_subscriptions: {
-        Row: {
-          amount: number
-          cancelled_at: string | null
-          created_at: string
-          currency: string
-          features: Json | null
-          id: string
-          interval: string
-          plan_type: string
-          status: string
-          stripe_customer_id: string | null
-          stripe_session_id: string | null
-          stripe_subscription_id: string | null
-          updated_at: string
-          user_id: string
-          vendor_id: string | null
-        }
-        Insert: {
-          amount: number
-          cancelled_at?: string | null
-          created_at?: string
-          currency?: string
-          features?: Json | null
-          id?: string
-          interval?: string
-          plan_type: string
-          status?: string
-          stripe_customer_id?: string | null
-          stripe_session_id?: string | null
-          stripe_subscription_id?: string | null
-          updated_at?: string
-          user_id: string
-          vendor_id?: string | null
-        }
-        Update: {
-          amount?: number
-          cancelled_at?: string | null
-          created_at?: string
-          currency?: string
-          features?: Json | null
-          id?: string
-          interval?: string
-          plan_type?: string
-          status?: string
-          stripe_customer_id?: string | null
-          stripe_session_id?: string | null
-          stripe_subscription_id?: string | null
-          updated_at?: string
-          user_id?: string
-          vendor_id?: string | null
-        }
-        Relationships: []
-      }
       village_analytics: {
         Row: {
           created_at: string
@@ -39197,154 +35665,6 @@ export type Database = {
           session_id?: string | null
           user_agent?: string | null
           user_id?: string | null
-          village_id?: string
-        }
-        Relationships: []
-      }
-      village_ancestors: {
-        Row: {
-          birth_village_id: string | null
-          birth_year: number | null
-          created_at: string | null
-          death_village_id: string | null
-          death_year: number | null
-          family_name: string | null
-          full_name: string
-          gender: string | null
-          given_names: string[] | null
-          id: string
-          migration_story: string | null
-          notable_achievements: string | null
-          occupation: string | null
-          oral_stories: string | null
-          photo_urls: string[] | null
-          privacy_level: string | null
-          traditional_title: string | null
-          updated_at: string | null
-          user_id: string | null
-          verification_notes: string | null
-          verified_by_elders: boolean | null
-          village_id: string | null
-        }
-        Insert: {
-          birth_village_id?: string | null
-          birth_year?: number | null
-          created_at?: string | null
-          death_village_id?: string | null
-          death_year?: number | null
-          family_name?: string | null
-          full_name: string
-          gender?: string | null
-          given_names?: string[] | null
-          id?: string
-          migration_story?: string | null
-          notable_achievements?: string | null
-          occupation?: string | null
-          oral_stories?: string | null
-          photo_urls?: string[] | null
-          privacy_level?: string | null
-          traditional_title?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-          verification_notes?: string | null
-          verified_by_elders?: boolean | null
-          village_id?: string | null
-        }
-        Update: {
-          birth_village_id?: string | null
-          birth_year?: number | null
-          created_at?: string | null
-          death_village_id?: string | null
-          death_year?: number | null
-          family_name?: string | null
-          full_name?: string
-          gender?: string | null
-          given_names?: string[] | null
-          id?: string
-          migration_story?: string | null
-          notable_achievements?: string | null
-          occupation?: string | null
-          oral_stories?: string | null
-          photo_urls?: string[] | null
-          privacy_level?: string | null
-          traditional_title?: string | null
-          updated_at?: string | null
-          user_id?: string | null
-          verification_notes?: string | null
-          verified_by_elders?: boolean | null
-          village_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "village_ancestors_birth_village_id_fkey"
-            columns: ["birth_village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "village_ancestors_death_village_id_fkey"
-            columns: ["death_village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "village_ancestors_village_id_fkey"
-            columns: ["village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      village_announcements: {
-        Row: {
-          announcement_type: string
-          attachments: Json | null
-          content: string
-          created_at: string
-          expires_at: string | null
-          id: string
-          is_pinned: boolean
-          priority: string
-          reactions: Json | null
-          title: string
-          updated_at: string
-          user_id: string
-          views_count: number
-          village_id: string
-        }
-        Insert: {
-          announcement_type?: string
-          attachments?: Json | null
-          content: string
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_pinned?: boolean
-          priority?: string
-          reactions?: Json | null
-          title: string
-          updated_at?: string
-          user_id: string
-          views_count?: number
-          village_id: string
-        }
-        Update: {
-          announcement_type?: string
-          attachments?: Json | null
-          content?: string
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          is_pinned?: boolean
-          priority?: string
-          reactions?: Json | null
-          title?: string
-          updated_at?: string
-          user_id?: string
-          views_count?: number
           village_id?: string
         }
         Relationships: []
@@ -39716,284 +36036,6 @@ export type Database = {
           },
         ]
       }
-      village_corruption_reports: {
-        Row: {
-          anonymous_report: boolean
-          created_at: string
-          description: string
-          evidence_urls: string[] | null
-          id: string
-          related_official_id: string | null
-          related_project_id: string | null
-          report_type: string
-          reporter_user_id: string | null
-          review_notes: string | null
-          reviewed_at: string | null
-          reviewed_by: string | null
-          severity_level: string
-          status: string
-          title: string
-          updated_at: string
-          village_id: string
-        }
-        Insert: {
-          anonymous_report?: boolean
-          created_at?: string
-          description: string
-          evidence_urls?: string[] | null
-          id?: string
-          related_official_id?: string | null
-          related_project_id?: string | null
-          report_type: string
-          reporter_user_id?: string | null
-          review_notes?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          severity_level?: string
-          status?: string
-          title: string
-          updated_at?: string
-          village_id: string
-        }
-        Update: {
-          anonymous_report?: boolean
-          created_at?: string
-          description?: string
-          evidence_urls?: string[] | null
-          id?: string
-          related_official_id?: string | null
-          related_project_id?: string | null
-          report_type?: string
-          reporter_user_id?: string | null
-          review_notes?: string | null
-          reviewed_at?: string | null
-          reviewed_by?: string | null
-          severity_level?: string
-          status?: string
-          title?: string
-          updated_at?: string
-          village_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "village_corruption_reports_village_id_fkey"
-            columns: ["village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      village_cultural_connections: {
-        Row: {
-          connection_type: string
-          created_at: string
-          created_by: string
-          description: string
-          documentation_links: string[] | null
-          evidence_type: string[] | null
-          historical_context: string | null
-          id: string
-          research_sources: Json | null
-          similarity_score: number | null
-          updated_at: string
-          verification_date: string | null
-          verified_by_scholars: boolean | null
-          village_a_id: string
-          village_b_id: string
-        }
-        Insert: {
-          connection_type: string
-          created_at?: string
-          created_by: string
-          description: string
-          documentation_links?: string[] | null
-          evidence_type?: string[] | null
-          historical_context?: string | null
-          id?: string
-          research_sources?: Json | null
-          similarity_score?: number | null
-          updated_at?: string
-          verification_date?: string | null
-          verified_by_scholars?: boolean | null
-          village_a_id: string
-          village_b_id: string
-        }
-        Update: {
-          connection_type?: string
-          created_at?: string
-          created_by?: string
-          description?: string
-          documentation_links?: string[] | null
-          evidence_type?: string[] | null
-          historical_context?: string | null
-          id?: string
-          research_sources?: Json | null
-          similarity_score?: number | null
-          updated_at?: string
-          verification_date?: string | null
-          verified_by_scholars?: boolean | null
-          village_a_id?: string
-          village_b_id?: string
-        }
-        Relationships: []
-      }
-      village_cultural_events: {
-        Row: {
-          created_at: string
-          cultural_elements: Json | null
-          cultural_significance: string | null
-          current_participants: number
-          description: string
-          elder_involvement: Json | null
-          end_date: string | null
-          event_type: string
-          heritage_preservation_goal: string | null
-          id: string
-          is_public: boolean
-          location: string | null
-          max_participants: number | null
-          media_urls: Json | null
-          organizer_user_id: string
-          registration_deadline: string | null
-          registration_required: boolean
-          requirements: Json | null
-          start_date: string
-          status: string
-          title: string
-          updated_at: string
-          village_id: string
-        }
-        Insert: {
-          created_at?: string
-          cultural_elements?: Json | null
-          cultural_significance?: string | null
-          current_participants?: number
-          description: string
-          elder_involvement?: Json | null
-          end_date?: string | null
-          event_type?: string
-          heritage_preservation_goal?: string | null
-          id?: string
-          is_public?: boolean
-          location?: string | null
-          max_participants?: number | null
-          media_urls?: Json | null
-          organizer_user_id: string
-          registration_deadline?: string | null
-          registration_required?: boolean
-          requirements?: Json | null
-          start_date: string
-          status?: string
-          title: string
-          updated_at?: string
-          village_id: string
-        }
-        Update: {
-          created_at?: string
-          cultural_elements?: Json | null
-          cultural_significance?: string | null
-          current_participants?: number
-          description?: string
-          elder_involvement?: Json | null
-          end_date?: string | null
-          event_type?: string
-          heritage_preservation_goal?: string | null
-          id?: string
-          is_public?: boolean
-          location?: string | null
-          max_participants?: number | null
-          media_urls?: Json | null
-          organizer_user_id?: string
-          registration_deadline?: string | null
-          registration_required?: boolean
-          requirements?: Json | null
-          start_date?: string
-          status?: string
-          title?: string
-          updated_at?: string
-          village_id?: string
-        }
-        Relationships: []
-      }
-      village_cultural_heritage: {
-        Row: {
-          category: string
-          community_involvement: string | null
-          contributor_user_id: string
-          created_at: string
-          description: string
-          documentation: Json | null
-          expert_validation: Json | null
-          heritage_type: string
-          historical_period: string | null
-          id: string
-          is_featured: boolean
-          likes_count: number
-          media_urls: Json | null
-          preservation_actions: Json | null
-          preservation_status: string
-          related_knowledge_ids: string[] | null
-          significance_level: string
-          threats: Json | null
-          title: string
-          updated_at: string
-          views_count: number
-          village_id: string
-          visibility: string
-        }
-        Insert: {
-          category?: string
-          community_involvement?: string | null
-          contributor_user_id: string
-          created_at?: string
-          description: string
-          documentation?: Json | null
-          expert_validation?: Json | null
-          heritage_type?: string
-          historical_period?: string | null
-          id?: string
-          is_featured?: boolean
-          likes_count?: number
-          media_urls?: Json | null
-          preservation_actions?: Json | null
-          preservation_status?: string
-          related_knowledge_ids?: string[] | null
-          significance_level?: string
-          threats?: Json | null
-          title: string
-          updated_at?: string
-          views_count?: number
-          village_id: string
-          visibility?: string
-        }
-        Update: {
-          category?: string
-          community_involvement?: string | null
-          contributor_user_id?: string
-          created_at?: string
-          description?: string
-          documentation?: Json | null
-          expert_validation?: Json | null
-          heritage_type?: string
-          historical_period?: string | null
-          id?: string
-          is_featured?: boolean
-          likes_count?: number
-          media_urls?: Json | null
-          preservation_actions?: Json | null
-          preservation_status?: string
-          related_knowledge_ids?: string[] | null
-          significance_level?: string
-          threats?: Json | null
-          title?: string
-          updated_at?: string
-          views_count?: number
-          village_id?: string
-          visibility?: string
-        }
-        Relationships: []
-      }
       village_data: {
         Row: {
           chief_contact: string | null
@@ -40124,54 +36166,6 @@ export type Database = {
           },
         ]
       }
-      village_discussion_messages: {
-        Row: {
-          attachments: Json | null
-          content: string
-          created_at: string
-          deleted_at: string | null
-          discussion_id: string
-          edited_at: string | null
-          id: string
-          is_deleted: boolean
-          is_edited: boolean
-          message_type: string
-          parent_message_id: string | null
-          reactions: Json | null
-          user_id: string
-        }
-        Insert: {
-          attachments?: Json | null
-          content: string
-          created_at?: string
-          deleted_at?: string | null
-          discussion_id: string
-          edited_at?: string | null
-          id?: string
-          is_deleted?: boolean
-          is_edited?: boolean
-          message_type?: string
-          parent_message_id?: string | null
-          reactions?: Json | null
-          user_id: string
-        }
-        Update: {
-          attachments?: Json | null
-          content?: string
-          created_at?: string
-          deleted_at?: string | null
-          discussion_id?: string
-          edited_at?: string | null
-          id?: string
-          is_deleted?: boolean
-          is_edited?: boolean
-          message_type?: string
-          parent_message_id?: string | null
-          reactions?: Json | null
-          user_id?: string
-        }
-        Relationships: []
-      }
       village_discussions: {
         Row: {
           category: string
@@ -40228,137 +36222,6 @@ export type Database = {
           },
         ]
       }
-      village_edit_requests: {
-        Row: {
-          contact_info: string | null
-          created_at: string
-          evidence_links: string | null
-          id: string
-          proposed_changes: Json
-          reviewed_at: string | null
-          reviewer_id: string | null
-          reviewer_notes: string | null
-          status: string
-          update_description: string
-          update_reason: string
-          updated_at: string
-          user_id: string
-          village_id: string
-        }
-        Insert: {
-          contact_info?: string | null
-          created_at?: string
-          evidence_links?: string | null
-          id?: string
-          proposed_changes?: Json
-          reviewed_at?: string | null
-          reviewer_id?: string | null
-          reviewer_notes?: string | null
-          status?: string
-          update_description: string
-          update_reason: string
-          updated_at?: string
-          user_id: string
-          village_id: string
-        }
-        Update: {
-          contact_info?: string | null
-          created_at?: string
-          evidence_links?: string | null
-          id?: string
-          proposed_changes?: Json
-          reviewed_at?: string | null
-          reviewer_id?: string | null
-          reviewer_notes?: string | null
-          status?: string
-          update_description?: string
-          update_reason?: string
-          updated_at?: string
-          user_id?: string
-          village_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "village_edit_requests_village_id_fkey"
-            columns: ["village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      village_elder_knowledge: {
-        Row: {
-          audio_url: string | null
-          category: string
-          content: string
-          created_at: string
-          elder_user_id: string
-          id: string
-          images: Json | null
-          is_public: boolean
-          knowledge_type: string
-          language: string
-          preservation_priority: string
-          submitted_by_user_id: string | null
-          tags: string[] | null
-          title: string
-          updated_at: string
-          verification_status: string
-          verified_at: string | null
-          verified_by: string | null
-          video_url: string | null
-          views_count: number
-          village_id: string
-        }
-        Insert: {
-          audio_url?: string | null
-          category?: string
-          content: string
-          created_at?: string
-          elder_user_id: string
-          id?: string
-          images?: Json | null
-          is_public?: boolean
-          knowledge_type?: string
-          language?: string
-          preservation_priority?: string
-          submitted_by_user_id?: string | null
-          tags?: string[] | null
-          title: string
-          updated_at?: string
-          verification_status?: string
-          verified_at?: string | null
-          verified_by?: string | null
-          video_url?: string | null
-          views_count?: number
-          village_id: string
-        }
-        Update: {
-          audio_url?: string | null
-          category?: string
-          content?: string
-          created_at?: string
-          elder_user_id?: string
-          id?: string
-          images?: Json | null
-          is_public?: boolean
-          knowledge_type?: string
-          language?: string
-          preservation_priority?: string
-          submitted_by_user_id?: string | null
-          tags?: string[] | null
-          title?: string
-          updated_at?: string
-          verification_status?: string
-          verified_at?: string | null
-          verified_by?: string | null
-          video_url?: string | null
-          views_count?: number
-          village_id?: string
-        }
-        Relationships: []
-      }
       village_events: {
         Row: {
           created_at: string
@@ -40411,110 +36274,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "village_events_village_id_fkey"
-            columns: ["village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      village_family_trees: {
-        Row: {
-          collaborators: string[] | null
-          created_at: string | null
-          created_by: string | null
-          founding_ancestor_id: string | null
-          id: string
-          is_founding_lineage: boolean | null
-          tree_description: string | null
-          tree_metadata: Json | null
-          tree_name: string
-          tree_visibility: string | null
-          updated_at: string | null
-          village_id: string | null
-        }
-        Insert: {
-          collaborators?: string[] | null
-          created_at?: string | null
-          created_by?: string | null
-          founding_ancestor_id?: string | null
-          id?: string
-          is_founding_lineage?: boolean | null
-          tree_description?: string | null
-          tree_metadata?: Json | null
-          tree_name: string
-          tree_visibility?: string | null
-          updated_at?: string | null
-          village_id?: string | null
-        }
-        Update: {
-          collaborators?: string[] | null
-          created_at?: string | null
-          created_by?: string | null
-          founding_ancestor_id?: string | null
-          id?: string
-          is_founding_lineage?: boolean | null
-          tree_description?: string | null
-          tree_metadata?: Json | null
-          tree_name?: string
-          tree_visibility?: string | null
-          updated_at?: string | null
-          village_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "village_family_trees_founding_ancestor_id_fkey"
-            columns: ["founding_ancestor_id"]
-            isOneToOne: false
-            referencedRelation: "village_ancestors"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "village_family_trees_village_id_fkey"
-            columns: ["village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      village_genealogy_dna: {
-        Row: {
-          confidence_level: number | null
-          dna_provider: string | null
-          ethnic_composition: Json | null
-          genetic_village_matches: string[] | null
-          id: string
-          privacy_level: string | null
-          uploaded_at: string | null
-          user_id: string | null
-          village_id: string | null
-        }
-        Insert: {
-          confidence_level?: number | null
-          dna_provider?: string | null
-          ethnic_composition?: Json | null
-          genetic_village_matches?: string[] | null
-          id?: string
-          privacy_level?: string | null
-          uploaded_at?: string | null
-          user_id?: string | null
-          village_id?: string | null
-        }
-        Update: {
-          confidence_level?: number | null
-          dna_provider?: string | null
-          ethnic_composition?: Json | null
-          genetic_village_matches?: string[] | null
-          id?: string
-          privacy_level?: string | null
-          uploaded_at?: string | null
-          user_id?: string | null
-          village_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "village_genealogy_dna_village_id_fkey"
             columns: ["village_id"]
             isOneToOne: false
             referencedRelation: "villages"
@@ -40621,137 +36380,6 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "village_memberships_village_id_fkey"
-            columns: ["village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      village_migration_patterns: {
-        Row: {
-          created_at: string | null
-          created_by: string | null
-          cultural_impact: string | null
-          documented_evidence: string[] | null
-          family_groups_involved: number | null
-          from_village_id: string | null
-          id: string
-          migration_period_end: number | null
-          migration_period_start: number | null
-          migration_reason: string | null
-          migration_route: string | null
-          migration_season: string | null
-          oral_tradition_account: string | null
-          pattern_frequency: string | null
-          to_village_id: string | null
-          updated_at: string | null
-          verified_by_elders: boolean | null
-        }
-        Insert: {
-          created_at?: string | null
-          created_by?: string | null
-          cultural_impact?: string | null
-          documented_evidence?: string[] | null
-          family_groups_involved?: number | null
-          from_village_id?: string | null
-          id?: string
-          migration_period_end?: number | null
-          migration_period_start?: number | null
-          migration_reason?: string | null
-          migration_route?: string | null
-          migration_season?: string | null
-          oral_tradition_account?: string | null
-          pattern_frequency?: string | null
-          to_village_id?: string | null
-          updated_at?: string | null
-          verified_by_elders?: boolean | null
-        }
-        Update: {
-          created_at?: string | null
-          created_by?: string | null
-          cultural_impact?: string | null
-          documented_evidence?: string[] | null
-          family_groups_involved?: number | null
-          from_village_id?: string | null
-          id?: string
-          migration_period_end?: number | null
-          migration_period_start?: number | null
-          migration_reason?: string | null
-          migration_route?: string | null
-          migration_season?: string | null
-          oral_tradition_account?: string | null
-          pattern_frequency?: string | null
-          to_village_id?: string | null
-          updated_at?: string | null
-          verified_by_elders?: boolean | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "village_migration_patterns_from_village_id_fkey"
-            columns: ["from_village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "village_migration_patterns_to_village_id_fkey"
-            columns: ["to_village_id"]
-            isOneToOne: false
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      village_monthly_votes: {
-        Row: {
-          access_to_services_rating: number | null
-          comment: string | null
-          created_at: string
-          development_progress_rating: number | null
-          id: string
-          is_diaspora_vote: boolean | null
-          leadership_transparency_rating: number | null
-          overall_satisfaction_rating: number | null
-          updated_at: string
-          village_id: string
-          village_unity_rating: number | null
-          vote_month: string
-          voter_user_id: string
-        }
-        Insert: {
-          access_to_services_rating?: number | null
-          comment?: string | null
-          created_at?: string
-          development_progress_rating?: number | null
-          id?: string
-          is_diaspora_vote?: boolean | null
-          leadership_transparency_rating?: number | null
-          overall_satisfaction_rating?: number | null
-          updated_at?: string
-          village_id: string
-          village_unity_rating?: number | null
-          vote_month?: string
-          voter_user_id: string
-        }
-        Update: {
-          access_to_services_rating?: number | null
-          comment?: string | null
-          created_at?: string
-          development_progress_rating?: number | null
-          id?: string
-          is_diaspora_vote?: boolean | null
-          leadership_transparency_rating?: number | null
-          overall_satisfaction_rating?: number | null
-          updated_at?: string
-          village_id?: string
-          village_unity_rating?: number | null
-          vote_month?: string
-          voter_user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "village_monthly_votes_village_id_fkey"
             columns: ["village_id"]
             isOneToOne: false
             referencedRelation: "villages"
@@ -41046,99 +36674,6 @@ export type Database = {
         }
         Relationships: []
       }
-      village_relationships: {
-        Row: {
-          contact_frequency: string | null
-          created_at: string
-          created_by: string
-          cultural_exchanges: Json | null
-          current_activities: Json | null
-          description: string | null
-          distance_km: number | null
-          documentation_links: string[] | null
-          economic_benefits: Json | null
-          established_by: string | null
-          established_year: number | null
-          historical_context: string | null
-          id: string
-          is_verified: boolean
-          language_barrier_level: string | null
-          photo_urls: string[] | null
-          relationship_status: string
-          relationship_strength: string
-          relationship_type: string
-          shared_projects: string[] | null
-          source_village_id: string
-          target_village_id: string
-          transport_methods: string[] | null
-          travel_time_hours: number | null
-          updated_at: string
-          verification_notes: string | null
-          verified_at: string | null
-          verified_by: string | null
-        }
-        Insert: {
-          contact_frequency?: string | null
-          created_at?: string
-          created_by: string
-          cultural_exchanges?: Json | null
-          current_activities?: Json | null
-          description?: string | null
-          distance_km?: number | null
-          documentation_links?: string[] | null
-          economic_benefits?: Json | null
-          established_by?: string | null
-          established_year?: number | null
-          historical_context?: string | null
-          id?: string
-          is_verified?: boolean
-          language_barrier_level?: string | null
-          photo_urls?: string[] | null
-          relationship_status?: string
-          relationship_strength?: string
-          relationship_type: string
-          shared_projects?: string[] | null
-          source_village_id: string
-          target_village_id: string
-          transport_methods?: string[] | null
-          travel_time_hours?: number | null
-          updated_at?: string
-          verification_notes?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-        }
-        Update: {
-          contact_frequency?: string | null
-          created_at?: string
-          created_by?: string
-          cultural_exchanges?: Json | null
-          current_activities?: Json | null
-          description?: string | null
-          distance_km?: number | null
-          documentation_links?: string[] | null
-          economic_benefits?: Json | null
-          established_by?: string | null
-          established_year?: number | null
-          historical_context?: string | null
-          id?: string
-          is_verified?: boolean
-          language_barrier_level?: string | null
-          photo_urls?: string[] | null
-          relationship_status?: string
-          relationship_strength?: string
-          relationship_type?: string
-          shared_projects?: string[] | null
-          source_village_id?: string
-          target_village_id?: string
-          transport_methods?: string[] | null
-          travel_time_hours?: number | null
-          updated_at?: string
-          verification_notes?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-        }
-        Relationships: []
-      }
       village_submissions: {
         Row: {
           admin_notes: string | null
@@ -41238,68 +36773,6 @@ export type Database = {
         }
         Relationships: []
       }
-      village_transparency_metrics: {
-        Row: {
-          citizen_satisfaction_score: number | null
-          civic_engagement_score: number | null
-          corruption_reports_count: number | null
-          created_at: string
-          development_progress_score: number | null
-          id: string
-          last_calculated_at: string | null
-          official_performance_score: number | null
-          overall_reputation_score: number | null
-          project_completion_rate: number | null
-          reputation_badge: string | null
-          transparency_score: number | null
-          updated_at: string
-          verified_corruption_count: number | null
-          village_id: string
-        }
-        Insert: {
-          citizen_satisfaction_score?: number | null
-          civic_engagement_score?: number | null
-          corruption_reports_count?: number | null
-          created_at?: string
-          development_progress_score?: number | null
-          id?: string
-          last_calculated_at?: string | null
-          official_performance_score?: number | null
-          overall_reputation_score?: number | null
-          project_completion_rate?: number | null
-          reputation_badge?: string | null
-          transparency_score?: number | null
-          updated_at?: string
-          verified_corruption_count?: number | null
-          village_id: string
-        }
-        Update: {
-          citizen_satisfaction_score?: number | null
-          civic_engagement_score?: number | null
-          corruption_reports_count?: number | null
-          created_at?: string
-          development_progress_score?: number | null
-          id?: string
-          last_calculated_at?: string | null
-          official_performance_score?: number | null
-          overall_reputation_score?: number | null
-          project_completion_rate?: number | null
-          reputation_badge?: string | null
-          transparency_score?: number | null
-          updated_at?: string
-          verified_corruption_count?: number | null
-          village_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "village_transparency_metrics_village_id_fkey"
-            columns: ["village_id"]
-            isOneToOne: true
-            referencedRelation: "villages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       villages: {
         Row: {
           achievements_score: number | null
@@ -41307,41 +36780,27 @@ export type Database = {
           community_chat_link: string | null
           created_at: string
           created_by: string | null
-          development_partners: Json | null
           diaspora_engagement_score: number | null
           division: string
           economic_activity_score: number | null
           education_score: number | null
-          electricity_coverage_percentage: number | null
           ethnic_groups: string[] | null
           facebook_link: string | null
-          flag_image_url: string | null
           founding_story: string | null
           governance_score: number | null
           gps_latitude: number | null
           gps_longitude: number | null
           health_score: number | null
-          hospitals_count: number | null
           id: string
           infrastructure_score: number | null
           is_verified: boolean | null
-          latitude: number | null
-          logo_image_url: string | null
-          longitude: number | null
-          main_economic_activity: string | null
           migration_legend: string | null
-          mtn_coverage: boolean | null
-          nexttel_coverage: boolean | null
           notable_events: string | null
           oral_traditions: string | null
-          orange_coverage: boolean | null
           overall_rating: number | null
           peace_security_score: number | null
           population_estimate: number | null
           region: string
-          road_network_km: number | null
-          schools_count: number | null
-          slug: string | null
           social_spirit_score: number | null
           sons_daughters_count: number | null
           subdivision: string
@@ -41351,11 +36810,8 @@ export type Database = {
           updated_at: string
           verification_notes: string | null
           view_count: number | null
-          village_anthem_url: string | null
           village_motto: string | null
           village_name: string
-          village_scorecard_rating: number | null
-          water_sources_count: number | null
           whatsapp_link: string | null
           year_founded: number | null
         }
@@ -41365,41 +36821,27 @@ export type Database = {
           community_chat_link?: string | null
           created_at?: string
           created_by?: string | null
-          development_partners?: Json | null
           diaspora_engagement_score?: number | null
           division: string
           economic_activity_score?: number | null
           education_score?: number | null
-          electricity_coverage_percentage?: number | null
           ethnic_groups?: string[] | null
           facebook_link?: string | null
-          flag_image_url?: string | null
           founding_story?: string | null
           governance_score?: number | null
           gps_latitude?: number | null
           gps_longitude?: number | null
           health_score?: number | null
-          hospitals_count?: number | null
           id?: string
           infrastructure_score?: number | null
           is_verified?: boolean | null
-          latitude?: number | null
-          logo_image_url?: string | null
-          longitude?: number | null
-          main_economic_activity?: string | null
           migration_legend?: string | null
-          mtn_coverage?: boolean | null
-          nexttel_coverage?: boolean | null
           notable_events?: string | null
           oral_traditions?: string | null
-          orange_coverage?: boolean | null
           overall_rating?: number | null
           peace_security_score?: number | null
           population_estimate?: number | null
           region: string
-          road_network_km?: number | null
-          schools_count?: number | null
-          slug?: string | null
           social_spirit_score?: number | null
           sons_daughters_count?: number | null
           subdivision: string
@@ -41409,11 +36851,8 @@ export type Database = {
           updated_at?: string
           verification_notes?: string | null
           view_count?: number | null
-          village_anthem_url?: string | null
           village_motto?: string | null
           village_name: string
-          village_scorecard_rating?: number | null
-          water_sources_count?: number | null
           whatsapp_link?: string | null
           year_founded?: number | null
         }
@@ -41423,41 +36862,27 @@ export type Database = {
           community_chat_link?: string | null
           created_at?: string
           created_by?: string | null
-          development_partners?: Json | null
           diaspora_engagement_score?: number | null
           division?: string
           economic_activity_score?: number | null
           education_score?: number | null
-          electricity_coverage_percentage?: number | null
           ethnic_groups?: string[] | null
           facebook_link?: string | null
-          flag_image_url?: string | null
           founding_story?: string | null
           governance_score?: number | null
           gps_latitude?: number | null
           gps_longitude?: number | null
           health_score?: number | null
-          hospitals_count?: number | null
           id?: string
           infrastructure_score?: number | null
           is_verified?: boolean | null
-          latitude?: number | null
-          logo_image_url?: string | null
-          longitude?: number | null
-          main_economic_activity?: string | null
           migration_legend?: string | null
-          mtn_coverage?: boolean | null
-          nexttel_coverage?: boolean | null
           notable_events?: string | null
           oral_traditions?: string | null
-          orange_coverage?: boolean | null
           overall_rating?: number | null
           peace_security_score?: number | null
           population_estimate?: number | null
           region?: string
-          road_network_km?: number | null
-          schools_count?: number | null
-          slug?: string | null
           social_spirit_score?: number | null
           sons_daughters_count?: number | null
           subdivision?: string
@@ -41467,11 +36892,8 @@ export type Database = {
           updated_at?: string
           verification_notes?: string | null
           view_count?: number | null
-          village_anthem_url?: string | null
           village_motto?: string | null
           village_name?: string
-          village_scorecard_rating?: number | null
-          water_sources_count?: number | null
           whatsapp_link?: string | null
           year_founded?: number | null
         }
@@ -41753,96 +37175,48 @@ export type Database = {
         }
         Relationships: []
       }
-      weather_data: {
+      whatsapp_message_logs: {
         Row: {
-          created_at: string | null
-          date: string
-          humidity_percentage: number | null
+          delivered_at: string | null
+          delivery_status: string | null
+          error_message: string | null
           id: string
-          rainfall_mm: number | null
-          region: string
-          temperature_celsius: number | null
-          updated_at: string | null
-          village_id: string | null
-          weather_condition: string | null
-          wind_speed_kmh: number | null
+          message_content: string | null
+          metadata: Json | null
+          phone_number: string
+          sendchamp_message_id: string | null
+          sent_at: string | null
+          status: string | null
+          template_name: string | null
+          user_id: string
         }
         Insert: {
-          created_at?: string | null
-          date: string
-          humidity_percentage?: number | null
+          delivered_at?: string | null
+          delivery_status?: string | null
+          error_message?: string | null
           id?: string
-          rainfall_mm?: number | null
-          region: string
-          temperature_celsius?: number | null
-          updated_at?: string | null
-          village_id?: string | null
-          weather_condition?: string | null
-          wind_speed_kmh?: number | null
+          message_content?: string | null
+          metadata?: Json | null
+          phone_number: string
+          sendchamp_message_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          template_name?: string | null
+          user_id: string
         }
         Update: {
-          created_at?: string | null
-          date?: string
-          humidity_percentage?: number | null
+          delivered_at?: string | null
+          delivery_status?: string | null
+          error_message?: string | null
           id?: string
-          rainfall_mm?: number | null
-          region?: string
-          temperature_celsius?: number | null
-          updated_at?: string | null
-          village_id?: string | null
-          weather_condition?: string | null
-          wind_speed_kmh?: number | null
-        }
-        Relationships: []
-      }
-      webhook_endpoints: {
-        Row: {
-          allowed_origins: string[] | null
-          created_at: string
-          endpoint_name: string
-          endpoint_url: string
-          event_filters: Json | null
-          id: string
-          is_active: boolean
-          last_triggered_at: string | null
-          rate_limit_config: Json | null
-          total_triggers: number | null
-          transformation_rules: Json | null
-          updated_at: string
-          user_id: string
-          webhook_secret: string
-        }
-        Insert: {
-          allowed_origins?: string[] | null
-          created_at?: string
-          endpoint_name: string
-          endpoint_url: string
-          event_filters?: Json | null
-          id?: string
-          is_active?: boolean
-          last_triggered_at?: string | null
-          rate_limit_config?: Json | null
-          total_triggers?: number | null
-          transformation_rules?: Json | null
-          updated_at?: string
-          user_id: string
-          webhook_secret: string
-        }
-        Update: {
-          allowed_origins?: string[] | null
-          created_at?: string
-          endpoint_name?: string
-          endpoint_url?: string
-          event_filters?: Json | null
-          id?: string
-          is_active?: boolean
-          last_triggered_at?: string | null
-          rate_limit_config?: Json | null
-          total_triggers?: number | null
-          transformation_rules?: Json | null
-          updated_at?: string
+          message_content?: string | null
+          metadata?: Json | null
+          phone_number?: string
+          sendchamp_message_id?: string | null
+          sent_at?: string | null
+          status?: string | null
+          template_name?: string | null
           user_id?: string
-          webhook_secret?: string
         }
         Relationships: []
       }
@@ -41969,173 +37343,8 @@ export type Database = {
         }
         Relationships: []
       }
-      workflow_conditions: {
-        Row: {
-          condition_order: number | null
-          condition_type: string
-          created_at: string | null
-          field_name: string
-          id: string
-          is_active: boolean | null
-          logical_operator: string | null
-          operator: string
-          value: Json
-          workflow_id: string | null
-        }
-        Insert: {
-          condition_order?: number | null
-          condition_type: string
-          created_at?: string | null
-          field_name: string
-          id?: string
-          is_active?: boolean | null
-          logical_operator?: string | null
-          operator: string
-          value: Json
-          workflow_id?: string | null
-        }
-        Update: {
-          condition_order?: number | null
-          condition_type?: string
-          created_at?: string | null
-          field_name?: string
-          id?: string
-          is_active?: boolean | null
-          logical_operator?: string | null
-          operator?: string
-          value?: Json
-          workflow_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "workflow_conditions_workflow_id_fkey"
-            columns: ["workflow_id"]
-            isOneToOne: false
-            referencedRelation: "notification_workflows"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      workflow_executions: {
-        Row: {
-          completed_at: string | null
-          created_at: string | null
-          error_message: string | null
-          escalation_level: number | null
-          execution_log: Json | null
-          id: string
-          next_escalation_at: string | null
-          started_at: string | null
-          status: string
-          trigger_data: Json
-          workflow_id: string | null
-        }
-        Insert: {
-          completed_at?: string | null
-          created_at?: string | null
-          error_message?: string | null
-          escalation_level?: number | null
-          execution_log?: Json | null
-          id?: string
-          next_escalation_at?: string | null
-          started_at?: string | null
-          status?: string
-          trigger_data?: Json
-          workflow_id?: string | null
-        }
-        Update: {
-          completed_at?: string | null
-          created_at?: string | null
-          error_message?: string | null
-          escalation_level?: number | null
-          execution_log?: Json | null
-          id?: string
-          next_escalation_at?: string | null
-          started_at?: string | null
-          status?: string
-          trigger_data?: Json
-          workflow_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "workflow_executions_workflow_id_fkey"
-            columns: ["workflow_id"]
-            isOneToOne: false
-            referencedRelation: "notification_workflows"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      workflow_routing_rules: {
-        Row: {
-          conditions: Json
-          created_at: string | null
-          delay_seconds: number | null
-          id: string
-          is_active: boolean | null
-          priority: number | null
-          rule_name: string
-          target_channels: Json
-          target_groups: Json | null
-          target_users: Json | null
-          workflow_id: string | null
-        }
-        Insert: {
-          conditions?: Json
-          created_at?: string | null
-          delay_seconds?: number | null
-          id?: string
-          is_active?: boolean | null
-          priority?: number | null
-          rule_name: string
-          target_channels?: Json
-          target_groups?: Json | null
-          target_users?: Json | null
-          workflow_id?: string | null
-        }
-        Update: {
-          conditions?: Json
-          created_at?: string | null
-          delay_seconds?: number | null
-          id?: string
-          is_active?: boolean | null
-          priority?: number | null
-          rule_name?: string
-          target_channels?: Json
-          target_groups?: Json | null
-          target_users?: Json | null
-          workflow_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "workflow_routing_rules_workflow_id_fkey"
-            columns: ["workflow_id"]
-            isOneToOne: false
-            referencedRelation: "notification_workflows"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
     }
     Views: {
-      active_features: {
-        Row: {
-          disabled_reason: string | null
-          feature_name: string | null
-          is_enabled: boolean | null
-        }
-        Insert: {
-          disabled_reason?: string | null
-          feature_name?: string | null
-          is_enabled?: boolean | null
-        }
-        Update: {
-          disabled_reason?: string | null
-          feature_name?: string | null
-          is_enabled?: boolean | null
-        }
-        Relationships: []
-      }
       election_forecast_summary: {
         Row: {
           last_updated: string | null
@@ -42301,18 +37510,6 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: number
       }
-      calculate_company_ratings: {
-        Args: { company_uuid: string }
-        Returns: {
-          avg_overall_rating: number
-          avg_reliability_rating: number
-          avg_speed_rating: number
-          avg_customer_service_rating: number
-          avg_pricing_rating: number
-          avg_packaging_rating: number
-          total_reviews: number
-        }[]
-      }
       calculate_connection_fee: {
         Args: {
           p_company_size: Database["public"]["Enums"]["company_size"]
@@ -42407,22 +37604,6 @@ export type Database = {
         Args: { p_senator_id: string }
         Returns: number
       }
-      calculate_user_similarities: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      calculate_vendor_performance_metrics: {
-        Args: {
-          p_vendor_id: string
-          p_period_start: string
-          p_period_end: string
-        }
-        Returns: undefined
-      }
-      calculate_village_reputation_index: {
-        Args: { p_village_id: string }
-        Returns: undefined
-      }
       can_upload_cover_photo: {
         Args: { user_id: string }
         Returns: boolean
@@ -42443,10 +37624,6 @@ export type Database = {
         Returns: {
           alerts_created: number
         }[]
-      }
-      check_inventory_levels: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
       }
       check_performance_milestones: {
         Args: {
@@ -42565,31 +37742,6 @@ export type Database = {
         }
         Returns: string
       }
-      create_notification: {
-        Args: {
-          p_user_id: string
-          p_notification_type: Database["public"]["Enums"]["notification_type"]
-          p_title: string
-          p_message: string
-          p_data?: Json
-          p_related_shipment_id?: string
-          p_related_order_id?: string
-          p_priority?: string
-        }
-        Returns: string
-      }
-      create_realtime_notification: {
-        Args: {
-          p_user_id: string
-          p_type: string
-          p_title: string
-          p_message: string
-          p_data?: Json
-          p_priority?: string
-          p_action_url?: string
-        }
-        Returns: string
-      }
       create_system_snapshot: {
         Args: {
           p_snapshot_name: string
@@ -42650,10 +37802,6 @@ export type Database = {
         Args: { p_politician_id: string; p_admin_id: string }
         Returns: boolean
       }
-      evaluate_workflow_conditions: {
-        Args: { p_workflow_id: string; p_context_data: Json }
-        Returns: boolean
-      }
       execute_civic_mission: {
         Args: { p_mission_id: string }
         Returns: Json
@@ -42661,10 +37809,6 @@ export type Database = {
       execute_integration: {
         Args: { p_integration_id: string }
         Returns: Json
-      }
-      execute_workflow: {
-        Args: { p_workflow_id: string; p_trigger_data?: Json }
-        Returns: string
       }
       flag_behavioral_inconsistency: {
         Args: {
@@ -42683,10 +37827,6 @@ export type Database = {
           p_target_conversation_id: string
           p_forward_context?: string
         }
-        Returns: string
-      }
-      generate_api_key: {
-        Args: { key_name: string; user_uuid: string }
         Returns: string
       }
       generate_artist_id: {
@@ -42710,23 +37850,11 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: number
       }
-      generate_company_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
       generate_debt_predictions: {
         Args: { p_years_ahead?: number }
         Returns: {
           predictions_created: number
         }[]
-      }
-      generate_delivery_company_code: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
-      generate_dispute_number: {
-        Args: Record<PropertyKey, never>
-        Returns: string
       }
       generate_election_forecast: {
         Args: Record<PropertyKey, never>
@@ -42738,10 +37866,6 @@ export type Database = {
       }
       generate_job_slug: {
         Args: { job_title: string; company_name: string }
-        Returns: string
-      }
-      generate_order_number: {
-        Args: Record<PropertyKey, never>
         Returns: string
       }
       generate_poll_api_key: {
@@ -42772,10 +37896,6 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
-      generate_tracking_number: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
       generate_username_from_email: {
         Args: { email_input: string }
         Returns: string
@@ -42788,10 +37908,6 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
-      generate_village_slug: {
-        Args: { village_name: string; region_name: string }
-        Returns: string
-      }
       get_agent_suggestions: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -42800,17 +37916,6 @@ export type Database = {
           suggestion_type: string
           suggestion_message: string
           priority: number
-        }[]
-      }
-      get_analytics_summary: {
-        Args: { p_user_id: string; p_start_date?: string; p_end_date?: string }
-        Returns: {
-          total_events: number
-          unique_sessions: number
-          avg_session_duration: number
-          top_pages: Json
-          device_breakdown: Json
-          hourly_activity: Json
         }[]
       }
       get_audit_statistics: {
@@ -42938,13 +38043,6 @@ export type Database = {
         }
         Returns: Json
       }
-      get_similar_users: {
-        Args: { target_user_id: string; limit_users?: number }
-        Returns: {
-          user_id: string
-          similarity_score: number
-        }[]
-      }
       get_sync_guard_status: {
         Args: Record<PropertyKey, never>
         Returns: Json
@@ -42968,14 +38066,6 @@ export type Database = {
       }
       increment_poll_view_count: {
         Args: { p_poll_id: string; p_user_id?: string }
-        Returns: undefined
-      }
-      increment_product_view: {
-        Args: {
-          p_product_id: string
-          p_user_id?: string
-          p_session_id?: string
-        }
         Returns: undefined
       }
       learn_from_manual_fix: {
@@ -43061,10 +38151,6 @@ export type Database = {
         }
         Returns: number
       }
-      process_escalations: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
       process_legal_document: {
         Args: {
           p_document_id: string
@@ -43072,10 +38158,6 @@ export type Database = {
           p_result_data?: Json
         }
         Returns: string
-      }
-      process_scheduled_notifications: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
       }
       process_wallet_transaction: {
         Args: {
@@ -43136,10 +38218,6 @@ export type Database = {
           issues_found: string[]
           recommendations: string[]
         }[]
-      }
-      safe_consolidate_user_profiles: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
       }
       sanitize_message_content: {
         Args: { content: string }
@@ -43248,10 +38326,6 @@ export type Database = {
         Args: { p_connection_id: string }
         Returns: Json
       }
-      test_integration_connection: {
-        Args: { integration_uuid: string }
-        Returns: Json
-      }
       toggle_poll_bookmark: {
         Args: { p_poll_id: string; p_user_id: string }
         Returns: boolean
@@ -43282,15 +38356,6 @@ export type Database = {
           p_session_id: string
           p_active_users?: number
           p_new_participant?: boolean
-        }
-        Returns: undefined
-      }
-      update_notification_performance_metrics: {
-        Args: {
-          p_notification_type: string
-          p_template_id: string
-          p_event_type: string
-          p_response_time_seconds?: number
         }
         Returns: undefined
       }
@@ -43334,20 +38399,8 @@ export type Database = {
         Args: { p_query: string }
         Returns: undefined
       }
-      update_user_engagement_metrics: {
-        Args: {
-          p_user_id: string
-          p_event_type: string
-          p_response_time_seconds?: number
-        }
-        Returns: undefined
-      }
       update_user_presence: {
         Args: { p_status: string; p_device_info?: Json }
-        Returns: undefined
-      }
-      update_vendor_presence: {
-        Args: { p_vendor_id: string; p_status: string; p_device_info?: Json }
         Returns: undefined
       }
       validate_password_strength: {
@@ -43460,7 +38513,6 @@ export type Database = {
         | "election_event"
         | "policy_document"
         | "government_statement"
-        | "village"
       civic_event_type:
         | "civic"
         | "campaign"
@@ -43493,7 +38545,6 @@ export type Database = {
         | "magistrate_court"
         | "district_court"
       crawl_status: "scheduled" | "running" | "completed" | "failed" | "paused"
-      delivery_scope: "local" | "national" | "international"
       disclosure_type:
         | "corruption"
         | "misconduct"
@@ -43805,16 +38856,6 @@ export type Database = {
         | "positive"
         | "very_positive"
       shield_status: "active" | "protected" | "high_risk" | "inactive"
-      shipment_status:
-        | "pending"
-        | "picked_up"
-        | "in_transit"
-        | "out_for_delivery"
-        | "delivered"
-        | "exception"
-        | "returned"
-        | "cancelled"
-      shipping_company_type: "bike" | "bus" | "van" | "plane" | "mixed"
       source_type:
         | "government_official"
         | "parliamentary"
@@ -43839,11 +38880,6 @@ export type Database = {
         | "approved"
         | "rejected"
         | "needs_clarification"
-      subscription_tier:
-        | "small_agent"
-        | "medium_courier"
-        | "nationwide_express"
-        | "white_label"
       threat_level: "low" | "medium" | "high" | "critical"
       ticket_type:
         | "regular"
@@ -43862,13 +38898,7 @@ export type Database = {
         | "refund"
       trend_type: "rising" | "declining" | "viral" | "anomaly" | "normal"
       user_type: "artist" | "fan" | "admin" | "event_attendee"
-      verification_status:
-        | "pending"
-        | "verified"
-        | "rejected"
-        | "under_review"
-        | "active"
-        | "suspended"
+      verification_status: "pending" | "verified" | "rejected" | "under_review"
       verification_status_enum:
         | "pending"
         | "verified"
@@ -44125,7 +39155,6 @@ export const Constants = {
         "election_event",
         "policy_document",
         "government_statement",
-        "village",
       ],
       civic_event_type: [
         "civic",
@@ -44162,7 +39191,6 @@ export const Constants = {
         "district_court",
       ],
       crawl_status: ["scheduled", "running", "completed", "failed", "paused"],
-      delivery_scope: ["local", "national", "international"],
       disclosure_type: [
         "corruption",
         "misconduct",
@@ -44511,17 +39539,6 @@ export const Constants = {
         "very_positive",
       ],
       shield_status: ["active", "protected", "high_risk", "inactive"],
-      shipment_status: [
-        "pending",
-        "picked_up",
-        "in_transit",
-        "out_for_delivery",
-        "delivered",
-        "exception",
-        "returned",
-        "cancelled",
-      ],
-      shipping_company_type: ["bike", "bus", "van", "plane", "mixed"],
       source_type: [
         "government_official",
         "parliamentary",
@@ -44549,12 +39566,6 @@ export const Constants = {
         "rejected",
         "needs_clarification",
       ],
-      subscription_tier: [
-        "small_agent",
-        "medium_courier",
-        "nationwide_express",
-        "white_label",
-      ],
       threat_level: ["low", "medium", "high", "critical"],
       ticket_type: [
         "regular",
@@ -44575,14 +39586,7 @@ export const Constants = {
       ],
       trend_type: ["rising", "declining", "viral", "anomaly", "normal"],
       user_type: ["artist", "fan", "admin", "event_attendee"],
-      verification_status: [
-        "pending",
-        "verified",
-        "rejected",
-        "under_review",
-        "active",
-        "suspended",
-      ],
+      verification_status: ["pending", "verified", "rejected", "under_review"],
       verification_status_enum: [
         "pending",
         "verified",

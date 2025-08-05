@@ -2,82 +2,17 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { useRecommendations } from '@/hooks/useRecommendations';
 import { useNavigate } from 'react-router-dom';
 import { Star, X, MapPin, Users, Sparkles } from 'lucide-react';
-import { useState, useEffect } from 'react';
-import { supabase } from '@/integrations/supabase/client';
-
-interface VillageRecommendation {
-  id: string;
-  village_id: string;
-  recommendation_type: string;
-  confidence_score: number;
-  reason: string;
-  village?: {
-    name: string;
-    region: string;
-  };
-}
 
 export const VillageRecommendations: React.FC = () => {
-  const [recommendations, setRecommendations] = useState<VillageRecommendation[]>([]);
-  const [loading, setLoading] = useState(false);
+  const { recommendations, loading, markClicked, dismissRecommendation } = useRecommendations();
   const navigate = useNavigate();
-
-  const fetchRecommendations = async () => {
-    setLoading(true);
-    try {
-      const { data } = await supabase
-        .from('village_recommendations')
-        .select(`
-          *,
-          village:villages(name, region)
-        `)
-        .limit(5);
-      
-      setRecommendations((data as any) || []);
-    } catch (error) {
-      console.error('Error fetching village recommendations:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchRecommendations();
-  }, []);
 
   const handleVillageClick = (villageId: string, recommendationId: string) => {
     markClicked(recommendationId);
     navigate(`/villages/${villageId}`);
-  };
-
-  const markClicked = async (recommendationId: string) => {
-    try {
-      await supabase
-        .from('village_recommendations')
-        .update({ is_clicked: true })
-        .eq('id', recommendationId);
-    } catch (error) {
-      console.error('Error marking recommendation as clicked:', error);
-    }
-  };
-
-  const dismissRecommendation = async (recommendationId: string) => {
-    try {
-      await supabase
-        .from('village_recommendations')
-        .delete()
-        .eq('id', recommendationId);
-      
-      setRecommendations(prev => prev.filter(rec => rec.id !== recommendationId));
-    } catch (error) {
-      console.error('Error dismissing recommendation:', error);
-    }
-  };
-
-  const refreshRecommendations = () => {
-    fetchRecommendations();
   };
 
   if (loading) {

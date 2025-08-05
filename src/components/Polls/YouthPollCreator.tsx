@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartPollStyle } from './PollStyles/ChartPollStyle';
@@ -22,7 +21,6 @@ import {
 export const YouthPollCreator = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [pollCreated, setPollCreated] = useState(false);
   const [createdPollId, setCreatedPollId] = useState<string>('');
@@ -171,7 +169,7 @@ export const YouthPollCreator = () => {
 
           <div className="flex justify-center">
             <Button 
-              onClick={() => navigate('/polls')} 
+              onClick={() => window.location.href = '/polls'} 
               className="bg-primary hover:bg-primary/90"
             >
               View All Polls

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -36,7 +35,6 @@ const DONATION_INTERESTS = [
 ];
 
 export const DiasporaProfileSetup = () => {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     full_name: '',
     country_of_residence: '',
@@ -61,7 +59,7 @@ export const DiasporaProfileSetup = () => {
     e.preventDefault();
     createProfile.mutate(formData, {
       onSuccess: () => {
-        navigate('/diaspora/dashboard');
+        window.location.href = '/diaspora/dashboard';
       }
     });
   };

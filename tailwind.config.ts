@@ -1,219 +1,171 @@
 import type { Config } from "tailwindcss";
 
-const config: Config = {
-  darkMode: ["class"],
-  content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
-  ],
-  prefix: "",
-  theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
-    },
-    extend: {
-      colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-          50: "hsl(var(--primary-50))",
-          100: "hsl(var(--primary-100))",
-          200: "hsl(var(--primary-200))",
-          300: "hsl(var(--primary-300))",
-          400: "hsl(var(--primary-400))",
-          500: "hsl(var(--primary-500))",
-          600: "hsl(var(--primary-600))",
-          700: "hsl(var(--primary-700))",
-          800: "hsl(var(--primary-800))",
-          900: "hsl(var(--primary-900))",
-        },
-        
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-          50: "hsl(var(--secondary-50))",
-          100: "hsl(var(--secondary-100))",
-          200: "hsl(var(--secondary-200))",
-          300: "hsl(var(--secondary-300))",
-          400: "hsl(var(--secondary-400))",
-          500: "hsl(var(--secondary-500))",
-          600: "hsl(var(--secondary-600))",
-          700: "hsl(var(--secondary-700))",
-          800: "hsl(var(--secondary-800))",
-          900: "hsl(var(--secondary-900))",
-        },
-        
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-          50: "hsl(var(--accent-50))",
-          100: "hsl(var(--accent-100))",
-          200: "hsl(var(--accent-200))",
-          300: "hsl(var(--accent-300))",
-          400: "hsl(var(--accent-400))",
-          500: "hsl(var(--accent-500))",
-          600: "hsl(var(--accent-600))",
-          700: "hsl(var(--accent-700))",
-          800: "hsl(var(--accent-800))",
-          900: "hsl(var(--accent-900))",
-        },
-        
-        neutral: {
-          50: "hsl(var(--neutral-50))",
-          100: "hsl(var(--neutral-100))",
-          200: "hsl(var(--neutral-200))",
-          300: "hsl(var(--neutral-300))",
-          400: "hsl(var(--neutral-400))",
-          500: "hsl(var(--neutral-500))",
-          600: "hsl(var(--neutral-600))",
-          700: "hsl(var(--neutral-700))",
-          800: "hsl(var(--neutral-800))",
-          900: "hsl(var(--neutral-900))",
-        },
-        
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        
-        success: {
-          DEFAULT: "hsl(var(--success))",
-          foreground: "hsl(var(--success-foreground))",
-        },
-        
-        warning: {
-          DEFAULT: "hsl(var(--warning))",
-          foreground: "hsl(var(--warning-foreground))",
-        },
-        
-        info: {
-          DEFAULT: "hsl(var(--info))",
-          foreground: "hsl(var(--info-foreground))",
-        },
-        
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        
-        // Cameroon Flag Colors
-        "cm-red": "hsl(var(--cm-red))",
-        "cm-yellow": "hsl(var(--cm-yellow))",
-        "cm-green": "hsl(var(--cm-green))",
-      },
-      
-      fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        display: ["Space Grotesk", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "monospace"],
-      },
-      
-      fontSize: {
-        "xs": ["0.75rem", { lineHeight: "1rem" }],
-        "sm": ["0.875rem", { lineHeight: "1.25rem" }],
-        "base": ["1rem", { lineHeight: "1.5rem" }],
-        "lg": ["1.125rem", { lineHeight: "1.75rem" }],
-        "xl": ["1.25rem", { lineHeight: "1.75rem" }],
-        "2xl": ["1.5rem", { lineHeight: "2rem" }],
-        "3xl": ["1.875rem", { lineHeight: "2.25rem" }],
-        "4xl": ["2.25rem", { lineHeight: "2.5rem" }],
-        "5xl": ["3rem", { lineHeight: "1" }],
-        "6xl": ["3.75rem", { lineHeight: "1" }],
-        "7xl": ["4.5rem", { lineHeight: "1" }],
-        "8xl": ["6rem", { lineHeight: "1" }],
-        "9xl": ["8rem", { lineHeight: "1" }],
-      },
-      
-      spacing: {
-        "xs": "var(--space-1)",
-        "sm": "var(--space-2)",
-        "md": "var(--space-4)",
-        "lg": "var(--space-6)",
-        "xl": "var(--space-8)",
-        "2xl": "var(--space-10)",
-        "3xl": "var(--space-12)",
-        "touch": "var(--touch-target)",
-      },
-      
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
-      },
-      
-      boxShadow: {
-        "xs": "var(--shadow-xs)",
-        "sm": "var(--shadow-sm)",
-        "DEFAULT": "var(--shadow)",
-        "md": "var(--shadow-md)",
-        "lg": "var(--shadow-lg)",
-        "xl": "var(--shadow-xl)",
-        "2xl": "var(--shadow-2xl)",
-        "elegant": "var(--shadow-elegant)",
-        "glow": "var(--shadow-glow)",
-        "premium": "var(--shadow-premium)",
-      },
-      
-      backgroundImage: {
-        "gradient-primary": "var(--gradient-primary)",
-        "gradient-secondary": "var(--gradient-secondary)",
-        "gradient-accent": "var(--gradient-accent)",
-        "gradient-patriotic": "var(--gradient-patriotic)",
-        "gradient-hero": "var(--gradient-hero)",
-        "gradient-card": "var(--gradient-card)",
-        "gradient-subtle": "var(--gradient-subtle)",
-        "gradient-premium": "var(--gradient-premium)",
-      },
-      
-      transitionTimingFunction: {
-        "ease-out-quart": "var(--ease-out-quart)",
-        "ease-in-out-cubic": "var(--ease-in-out-cubic)",
-      },
-      
-      transitionDuration: {
-        "fast": "var(--animation-fast)",
-        "normal": "var(--animation-normal)",
-        "slow": "var(--animation-slow)",
-      },
-      keyframes: {
-        "accordion-down": {
-          from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
-        },
-        "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
-          to: { height: "0" },
-        },
-      },
-      animation: {
-        "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-      },
-    },
-  },
-  plugins: [require("tailwindcss-animate")],
+export default {
+	
+	content: [
+		"./pages/**/*.{ts,tsx}",
+		"./components/**/*.{ts,tsx}",
+		"./app/**/*.{ts,tsx}",
+		"./src/**/*.{ts,tsx}",
+	],
+	prefix: "",
+	theme: {
+		container: {
+			center: true,
+			padding: '2rem',
+			screens: {
+				'2xl': '1400px'
+			}
+		},
+		extend: {
+			fontFamily: {
+				sans: ['Inter', 'system-ui', 'sans-serif'],
+				inter: ['Inter', 'system-ui', 'sans-serif'],
+				serif: ['Playfair Display', 'serif'],
+				playfair: ['Playfair Display', 'serif'],
+				grotesk: ['Space Grotesk', 'sans-serif'],
+				mono: ['JetBrains Mono', 'monospace']
+			},
+			screens: {
+				'xs': '375px',
+				'safe-area': '414px',
+			},
+			spacing: {
+				'safe-top': 'env(safe-area-inset-top)',
+				'safe-bottom': 'env(safe-area-inset-bottom)',
+				'safe-left': 'env(safe-area-inset-left)',
+				'safe-right': 'env(safe-area-inset-right)',
+			},
+			colors: {
+				border: 'hsl(var(--border))',
+				input: 'hsl(var(--input))',
+				ring: 'hsl(var(--ring))',
+				background: 'hsl(var(--background))',
+				foreground: 'hsl(var(--foreground))',
+				primary: {
+					DEFAULT: 'hsl(var(--primary))',
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))'
+				},
+				secondary: {
+					DEFAULT: 'hsl(var(--secondary))',
+					foreground: 'hsl(var(--secondary-foreground))'
+				},
+				destructive: {
+					DEFAULT: 'hsl(var(--destructive))',
+					foreground: 'hsl(var(--destructive-foreground))'
+				},
+				muted: {
+					DEFAULT: 'hsl(var(--muted))',
+					foreground: 'hsl(var(--muted-foreground))'
+				},
+				accent: {
+					DEFAULT: 'hsl(var(--accent))',
+					foreground: 'hsl(var(--accent-foreground))'
+				},
+				popover: {
+					DEFAULT: 'hsl(var(--popover))',
+					foreground: 'hsl(var(--popover-foreground))'
+				},
+				card: {
+					DEFAULT: 'hsl(var(--card))',
+					foreground: 'hsl(var(--card-foreground))'
+				},
+				sidebar: {
+					DEFAULT: 'hsl(var(--sidebar-background))',
+					foreground: 'hsl(var(--sidebar-foreground))',
+					primary: 'hsl(var(--sidebar-primary))',
+					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+					accent: 'hsl(var(--sidebar-accent))',
+					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+					border: 'hsl(var(--sidebar-border))',
+					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Cameroonian Flag Colors
+				'cm-green': {
+					DEFAULT: 'hsl(var(--cm-green))',
+					light: 'hsl(var(--cm-green-light))'
+				},
+				'cm-red': {
+					DEFAULT: 'hsl(var(--cm-red))',
+					light: 'hsl(var(--cm-red-light))'
+				},
+				'cm-yellow': {
+					DEFAULT: 'hsl(var(--cm-yellow))',
+					light: 'hsl(var(--cm-yellow-light))'
+				},
+				// Directory Service Colors
+				'directory-school': 'hsl(var(--directory-school))',
+				'directory-hospital': 'hsl(var(--directory-hospital))',
+				'directory-pharmacy': 'hsl(var(--directory-pharmacy))',
+				'directory-village': 'hsl(var(--directory-village))',
+				'directory-verified': 'hsl(var(--directory-verified))',
+				'directory-pending': 'hsl(var(--directory-pending))',
+				'directory-rejected': 'hsl(var(--directory-rejected))',
+				// Institution Status Colors
+				'status-active': 'hsl(var(--status-active))',
+				'status-inactive': 'hsl(var(--status-inactive))',
+				'status-verified': 'hsl(var(--status-verified))',
+				'status-claimed': 'hsl(var(--status-claimed))',
+				'status-sponsored': 'hsl(var(--status-sponsored))',
+				// Message Priority Colors
+				'message-urgent': 'hsl(var(--message-urgent))',
+				'message-normal': 'hsl(var(--message-normal))',
+				'message-support': 'hsl(var(--message-support))',
+				// Rating Colors
+				'rating-excellent': 'hsl(var(--rating-excellent))',
+				'rating-good': 'hsl(var(--rating-good))',
+				'rating-average': 'hsl(var(--rating-average))',
+				'rating-poor': 'hsl(var(--rating-poor))',
+				'rating-terrible': 'hsl(var(--rating-terrible))'
+			},
+			backgroundImage: {
+				'gradient-flag': 'var(--gradient-flag)',
+				'gradient-primary': 'var(--gradient-primary)',
+				'gradient-civic': 'var(--gradient-civic)',
+				'gradient-pulse': 'var(--gradient-pulse)',
+				// Lux Aeterna Enhanced Gradients
+				'gradient-lux-primary': 'var(--gradient-lux-primary)',
+				'gradient-lux-divine': 'var(--gradient-lux-divine)',
+				'gradient-lux-noble': 'var(--gradient-lux-noble)',
+				'gradient-lux-celebration': 'var(--gradient-lux-celebration)',
+				// Directory Service Gradients
+				'gradient-directory-schools': 'var(--gradient-directory-schools)',
+				'gradient-directory-hospitals': 'var(--gradient-directory-hospitals)',
+				'gradient-directory-pharmacies': 'var(--gradient-directory-pharmacies)',
+				'gradient-directory-villages': 'var(--gradient-directory-villages)',
+				'gradient-verification': 'var(--gradient-verification)',
+				'gradient-sponsorship': 'var(--gradient-sponsorship)'
+			},
+			boxShadow: {
+				'green': 'var(--shadow-green)',
+				'red': 'var(--shadow-red)',
+				'yellow': 'var(--shadow-yellow)',
+				'elegant': 'var(--shadow-elegant)',
+				'glow': 'var(--shadow-glow)',
+				// Directory Service Shadows
+				'directory-school': 'var(--shadow-directory-school)',
+				'directory-hospital': 'var(--shadow-directory-hospital)',
+				'directory-pharmacy': 'var(--shadow-directory-pharmacy)',
+				'directory-village': 'var(--shadow-directory-village)',
+				'verified': 'var(--shadow-verified)',
+				'sponsored': 'var(--shadow-sponsored)',
+				// Lux Aeterna Shadows
+				'lux-divine': 'var(--shadow-lux-divine)',
+				'lux-sacred': 'var(--shadow-lux-sacred)',
+				'lux-ethereal': 'var(--shadow-lux-ethereal)',
+				'lux-celebration': 'var(--shadow-lux-celebration)'
+			},
+			transitionTimingFunction: {
+				'smooth': 'cubic-bezier(0.4, 0, 0.2, 1)',
+				'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)'
+			},
+			borderRadius: {
+				lg: 'var(--radius)',
+				md: 'calc(var(--radius) - 2px)',
+				sm: 'calc(var(--radius) - 4px)'
+			}
+		}
+	},
+	plugins: [require("tailwindcss-animate")],
 } satisfies Config;
-
-export default config;

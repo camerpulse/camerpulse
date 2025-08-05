@@ -8,11 +8,10 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/contexts/AuthContext';
 import { User, Mail, Phone, Globe, MapPin, Save, Loader2 } from 'lucide-react';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 export const ProfileManager: React.FC = () => {
   const { profile, updateProfile, loading } = useAuth();
-  const { toast } = useToast();
   const [updating, setUpdating] = useState(false);
   const [formData, setFormData] = useState({
     display_name: profile?.display_name || '',
@@ -27,19 +26,13 @@ export const ProfileManager: React.FC = () => {
     e.preventDefault();
     setUpdating(true);
 
-    try {
-      await updateProfile(formData);
-      toast({
-        title: "Success",
-        description: "Profile updated successfully",
-      });
-    } catch (error) {
-      toast({
-        title: "Update Error",
-        description: "Failed to update profile",
-        variant: "destructive",
-      });
+    const { error } = await updateProfile(formData);
+
+    if (error) {
+      toast.error('Failed to update profile');
       console.error('Error updating profile:', error);
+    } else {
+      toast.success('Profile updated successfully');
     }
 
     setUpdating(false);

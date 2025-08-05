@@ -12,25 +12,25 @@ export const useRoleAccess = () => {
     
     // Role-based access
     isUser: hasRole('user'),
-    isAdmin: isAdmin,
+    isAdmin: isAdmin(),
     isModerator: hasRole('moderator'),
     isCompany: hasRole('company'),
     isExpert: hasRole('expert'),
     isGovernment: hasRole('government'),
     
     // Combined role checks
-    isAdminOrModerator: isAdmin || hasRole('moderator'),
+    isAdminOrModerator: isAdmin() || hasRole('moderator'),
     isCompanyOrExpert: hasRole('company') || hasRole('expert'),
     
     // Permission helpers
-    canModerate: isAdmin || hasRole('moderator'),
-    canManageUsers: isAdmin,
-    canCreateCompanyProfile: hasRole('company') || isAdmin,
-    canCreateExpertProfile: hasRole('expert') || isAdmin,
-    canAccessGovernmentFeatures: hasRole('government') || isAdmin,
+    canModerate: isAdmin() || hasRole('moderator'),
+    canManageUsers: isAdmin(),
+    canCreateCompanyProfile: hasRole('company') || isAdmin(),
+    canCreateExpertProfile: hasRole('expert') || isAdmin(),
+    canAccessGovernmentFeatures: hasRole('government') || isAdmin(),
     
     // Get all user roles
-    getAllRoles: () => userRoles || [],
+    getAllRoles: () => userRoles.map(role => role.role),
     
     // Check if user has any of the specified roles
     hasAnyRole: (roles: string[]) => roles.some(role => hasRole(role)),

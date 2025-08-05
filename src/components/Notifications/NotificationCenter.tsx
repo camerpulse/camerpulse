@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { formatDistanceToNow } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,7 +31,6 @@ import {
 import { useNotifications, type PulseNotification } from '@/hooks/useNotifications';
 
 export const NotificationCenter: React.FC = () => {
-  const navigate = useNavigate();
   const { 
     unreadCount, 
     notifications, 
@@ -107,7 +106,7 @@ export const NotificationCenter: React.FC = () => {
     }
     
     if (notification.action_url) {
-      navigate(notification.action_url);
+      window.location.href = notification.action_url;
     }
   };
 

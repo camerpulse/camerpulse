@@ -8,7 +8,6 @@ import { BookOpen, CheckCircle, Clock, Star, Award, Target } from 'lucide-react'
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { renderTextWithBreaks } from '@/utils/htmlSanitizer';
 
 interface Guideline {
   id: string;
@@ -274,7 +273,7 @@ export function ModeratorTraining() {
                             <div className="prose prose-sm max-w-none">
                               <div 
                                 dangerouslySetInnerHTML={{ 
-                                  __html: renderTextWithBreaks(guideline.content)
+                                  __html: guideline.content.replace(/\n/g, '<br />') 
                                 }} 
                               />
                             </div>

@@ -29,7 +29,6 @@ const priorityConfig = {
 };
 
 export function ModeratorNotifications() {
-  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
@@ -219,7 +218,7 @@ export function ModeratorNotifications() {
                             <Button 
                               variant="outline" 
                               size="sm"
-                              onClick={() => navigate(notification.action_url!)}
+                              onClick={() => window.location.href = notification.action_url!}
                             >
                               View Details
                             </Button>
