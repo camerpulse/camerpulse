@@ -3,15 +3,19 @@ import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { 
   Home, 
+  Radio, 
   Users, 
   ShoppingBag, 
+  Bell,
   User,
+  Settings,
   Vote,
   Activity,
-  Building2,
-  Music,
-  Briefcase,
-  MessageCircle
+  Calendar,
+  MapPin,
+  Shield,
+  BookOpen,
+  Globe
 } from 'lucide-react';
 
 interface NavItem {
@@ -33,13 +37,14 @@ const navItems: NavItem[] = [
     id: 'feed',
     label: 'Feed',
     icon: Activity,
-    path: '/advanced-feed'
+    path: '/feed'
   },
   {
-    id: 'polls',
-    label: 'Polls',
-    icon: Vote,
-    path: '/polls',
+    id: 'pulse',
+    label: 'Pulse',
+    icon: Radio,
+    path: '/pulse',
+    badge: 3,
   },
   {
     id: 'politicians',
@@ -48,22 +53,34 @@ const navItems: NavItem[] = [
     path: '/politicians',
   },
   {
-    id: 'services',
-    label: 'Services',
-    icon: Building2,
-    path: '/services-map',
+    id: 'calendar',
+    label: 'Calendar',
+    icon: Calendar,
+    path: '/calendar',
   },
   {
-    id: 'camerplay',
-    label: 'Music',
-    icon: Music,
-    path: '/camerplay',
+    id: 'education',
+    label: 'Civics',
+    icon: BookOpen,
+    path: '/civic-education',
   },
   {
-    id: 'jobs',
-    label: 'Jobs',
-    icon: Briefcase,
-    path: '/jobs',
+    id: 'polls',
+    label: 'Polls',
+    icon: Vote,
+    path: '/polls',
+  },
+  {
+    id: 'civic-shield',
+    label: 'Shield',
+    icon: Shield,
+    path: '/civic-shield',
+  },
+  {
+    id: 'diaspora',
+    label: 'Diaspora',
+    icon: Globe,
+    path: '/diaspora-connect',
   },
   {
     id: 'marketplace',
@@ -72,17 +89,17 @@ const navItems: NavItem[] = [
     path: '/marketplace',
   },
   {
-    id: 'messenger',
-    label: 'Chat',
-    icon: MessageCircle,
-    path: '/messenger',
-  },
-  {
     id: 'profile',
     label: 'Profile',
     icon: User,
-    path: '/profile',
-  }
+    path: '/social',
+  },
+  {
+    id: 'admin',
+    label: 'Admin',
+    icon: Settings,
+    path: '/admin/core',
+  },
 ];
 
 export const MobileNavigation = () => {

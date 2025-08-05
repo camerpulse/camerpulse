@@ -8,7 +8,6 @@ export interface UserProfile {
   id: string;
   user_id: string;
   username?: string;
-  profile_slug?: string;
   display_name?: string;
   first_name?: string;
   last_name?: string;
@@ -103,27 +102,6 @@ export const useUserProfile = () => {
       return data;
     } catch (error) {
       console.error('Error fetching profile by username:', error);
-      return null;
-    }
-  };
-
-  // Get profile by slug
-  const getProfileBySlug = async (slug: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('profile_slug', slug)
-        .single();
-      
-      if (error) {
-        console.error('Error fetching profile by slug:', error);
-        return null;
-      }
-      
-      return data;
-    } catch (error) {
-      console.error('Error fetching profile by slug:', error);
       return null;
     }
   };
@@ -347,14 +325,12 @@ export const useUserProfile = () => {
     loading,
     getUserProfile,
     getProfileByUsername,
-    getProfileBySlug,
     upsertUserProfile,
     updateProfileCompletionScore,
     sendConnectionRequest,
     respondToConnection,
     getConnections,
     trackProfileView,
-    searchProfiles,
-    setUserProfile
+    searchProfiles
   };
 };

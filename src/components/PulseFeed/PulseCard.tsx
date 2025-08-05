@@ -61,7 +61,7 @@ export const PulseCard = ({ pulse }: { pulse: PulseProps }) => {
           <div className="flex items-center gap-3">
             <Avatar 
               className="w-10 h-10 cursor-pointer hover:ring-2 hover:ring-primary/20 transition-all"
-              onClick={() => navigate(`/@${pulse.user.username}`)}
+              onClick={() => navigate(`/profile/${pulse.user.username}`)}
             >
               <AvatarImage src={pulse.user.avatar} />
               <AvatarFallback className="bg-primary text-primary-foreground">
@@ -73,7 +73,7 @@ export const PulseCard = ({ pulse }: { pulse: PulseProps }) => {
               <div className="flex items-center gap-2">
                 <h4 
                   className="font-semibold text-foreground cursor-pointer hover:text-primary transition-colors"
-                  onClick={() => navigate(`/@${pulse.user.username}`)}
+                  onClick={() => navigate(`/profile/${pulse.user.username}`)}
                 >
                   {pulse.user.name}
                 </h4>

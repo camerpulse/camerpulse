@@ -5,12 +5,11 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
-import AuthFlow from "./pages/AuthFlow";
-import Messages from "./pages/Messages";
+import Auth from "./pages/Auth";
+import { AuthPage } from "./pages/AuthPage";
 import CivicFeed from "./pages/CivicFeed";
 import PulseFeed from "./pages/PulseFeed";
 import Feed from "./pages/Feed";
-import AdvancedFeed from "./pages/AdvancedFeed";
 import Politicians from "./pages/Politicians";
 import Security from "./pages/Security";
 import AdvancedDirectory from "./pages/AdvancedDirectory";
@@ -78,7 +77,7 @@ import CamerPulseMaster from "./pages/CamerPulseMaster";
 import CamerPlayHome from "./pages/CamerPlayHome";
 import EcosystemDashboard from "./pages/EcosystemDashboard";
 import FanPortal from "./pages/FanPortal";
-import UserProfile from "./pages/UserProfile";
+import UserProfilePage from "./pages/UserProfilePage";
 import ProfileSlugPage from "./pages/ProfileSlugPage";
 import { ProfileValidationTest } from "./components/Profile/ProfileValidationTest";
 import { ProfileFeatureTest } from "./components/Profile/ProfileFeatureTest";
@@ -87,7 +86,6 @@ import Events from "./pages/Events";
 import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
 import VillagesDirectory from "./pages/VillagesDirectory";
-import ChiefsDirectory from "./pages/ChiefsDirectory";
 import VillageProfile from "./pages/VillageProfile";
 import { Analytics } from "./pages/Analytics";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
@@ -124,7 +122,7 @@ import InstitutionDirectory from "./pages/InstitutionDirectory";
 import ClaimModerationDashboard from "./pages/ClaimModerationDashboard";
 import InstitutionOwnerDashboard from "./pages/InstitutionOwnerDashboard";
 import { GovProjectTracker } from "./pages/GovProjectTracker";
-import SettingsPage from "./pages/SettingsPage";
+import UserManagement from "./pages/UserManagement";
 import CivicParticipationHub from "./pages/CivicParticipationHub";
 import ModerationCenter from "./pages/ModerationCenter";
 import SocialCommunity from "./pages/SocialCommunity";
@@ -152,7 +150,6 @@ import { SenatorDetailPage } from "./pages/SenatorDetailPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataImport from "./pages/AdminDataImport";
 import AuditRegistryPage from "./pages/AuditRegistryPage";
-import UserPollOverview from "./pages/UserPollOverview";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";
@@ -177,16 +174,12 @@ import PolicyImpactDashboard from "./pages/transparency/PolicyImpactDashboard";
 import { ExpertMarketplace } from "./pages/experts/ExpertMarketplace";
 import { ExpertPortal } from "./pages/experts/ExpertPortal";
 import { ProfilePage } from "./pages/profile/ProfilePage";
-import Profile from "./pages/Profile";
-import PollTemplatesPage from "./pages/PollTemplatesPage";
 import JobsSetupTest from "./tests/JobsSetupTest";
-import Dashboard from "./pages/Dashboard";
 
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { PluginProvider } from "./contexts/PluginContext";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
 
 import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
 import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
@@ -225,29 +218,12 @@ const App = () => {
            <Route path="/transparency/policy-impact" element={<PolicyImpactDashboard />} />
           <Route path="/experts" element={<ExpertMarketplace />} />
           <Route path="/experts/portal" element={<ExpertPortal />} />
-          <Route path="/poll-templates" element={<PollTemplatesPage />} />
-           <Route path="/profile" element={
-             <ProtectedRoute>
-               <Profile />
-             </ProtectedRoute>
-           } />
-           <Route path="/profile/:userId" element={<Profile />} />
-          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/profile/:username" element={<ProfilePage />} />
           <Route path="/jobs/setup-test" element={<JobsSetupTest />} />
-                    <Route path="/" element={<Index />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/auth" element={<AuthFlow />} />
-                <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
-                <Route path="/feed" element={
-                  <ProtectedRoute>
-                    <Feed />
-                  </ProtectedRoute>
-                } />
-                <Route path="/advanced-feed" element={
-                  <ProtectedRoute>
-                    <AdvancedFeed />
-                  </ProtectedRoute>
-                } />
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<AuthPage />} />
+              <Route path="/feed" element={<Feed />} />
               <Route path="/civic-feed" element={<CivicFeed />} />
               <Route path="/politicians" element={<Politicians />} />
               <Route path="/politicians/:id" element={<PoliticianDetailPage />} />
@@ -267,26 +243,9 @@ const App = () => {
           <Route path="/polls/results/:poll_id" element={<PollResultsPage />} />
           <Route path="/polls/embed/:poll_id" element={<PollEmbedViewerPage />} />
           <Route path="/polls/embed-generator/:poll_id" element={<PollEmbedGeneratorPage />} />
-           <Route path="/messenger" element={
-             <ProtectedRoute>
-               <MessengerPage />
-             </ProtectedRoute>
-           } />
-           <Route path="/notification-settings" element={
-             <ProtectedRoute>
-               <NotificationSettingsPage />
-             </ProtectedRoute>
-           } />
-               <Route path="/dashboard/polls" element={
-                 <ProtectedRoute>
-                   <PollsDashboard />
-                 </ProtectedRoute>
-               } />
-               <Route path="/polls/overview" element={
-                 <ProtectedRoute>
-                   <UserPollOverview />
-                 </ProtectedRoute>
-               } />
+          <Route path="/messenger" element={<MessengerPage />} />
+          <Route path="/notification-settings" element={<NotificationSettingsPage />} />
+              <Route path="/dashboard/polls" element={<PollsDashboard />} />
               <Route path="/political-parties" element={<PoliticalParties />} />
               <Route path="/donate" element={<Donations />} />
               <Route path="/social" element={<Social />} />
@@ -384,8 +343,8 @@ const App = () => {
           <Route path="/rewards" element={<RewardsCenter />} />
               <Route path="/poll-archive" element={<PollArchive />} />
               <Route path="/camerpulse-master" element={<CamerPulseMaster />} />
-              <Route path="/user/:userId" element={<UserProfile />} />
-              <Route path="/@:slug" element={<UserProfile />} />
+              <Route path="/profile/:userId" element={<UserProfilePage />} />
+              <Route path="/@:slug" element={<ProfileSlugPage />} />
         <Route path="/profile-test" element={<ProfileValidationTest />} />
         <Route path="/feature-test" element={<ProfileFeatureTest />} />
         <Route path="/system-test" element={<ProfileSystemTester />} />
@@ -397,8 +356,6 @@ const App = () => {
           <Route path="/villages/add" element={<AddVillage />} />
           <Route path="/villages/leaderboards" element={<VillageLeaderboards />} />
           <Route path="/villages/:id" element={<VillageProfile />} />
-          <Route path="/chiefs" element={<ChiefsDirectory />} />
-          <Route path="/traditional-leaders" element={<ChiefsDirectory />} />
           <Route path="/search" element={<AdvancedSearchPage />} />
           <Route path="/economics" element={<EconomicsPage />} />
           <Route path="/civic" element={<CivicParticipationPage />} />
@@ -436,7 +393,7 @@ const App = () => {
               <Route path="/admin/claims" element={<ClaimModerationDashboard />} />
               <Route path="/institution/dashboard" element={<InstitutionOwnerDashboard />} />
                <Route path="/government-projects" element={<GovProjectTracker />} />
-               
+               <Route path="/user-management" element={<UserManagement />} />
                <Route path="/civic-participation-hub" element={<CivicParticipationHub />} />
                <Route path="/moderation-center" element={<ModerationCenter />} />
                <Route path="/social-community" element={<SocialCommunity />} />

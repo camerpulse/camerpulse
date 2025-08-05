@@ -21,10 +21,8 @@ export default {
 			fontFamily: {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
 				inter: ['Inter', 'system-ui', 'sans-serif'],
-				serif: ['Playfair Display', 'serif'],
-				playfair: ['Playfair Display', 'serif'],
-				grotesk: ['Space Grotesk', 'sans-serif'],
-				mono: ['JetBrains Mono', 'monospace']
+				serif: ['Inter', 'system-ui', 'sans-serif'], // Unified to Inter for consistency
+				playfair: ['Inter', 'system-ui', 'sans-serif'] // Unified to Inter for consistency
 			},
 			screens: {
 				'xs': '375px',

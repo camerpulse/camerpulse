@@ -54,12 +54,12 @@ export const PollCard: React.FC<PollCardProps> = ({
             <UserAvatar 
               user={poll.creator} 
               size="sm"
-              onClick={() => navigate(`/user/${poll.creator.id}`)}
+              onClick={() => navigate(`/profile/${poll.creator.id}`)}
             />
             <div>
               <p 
                 className="text-sm font-medium text-foreground cursor-pointer hover:text-primary transition-colors"
-                onClick={() => navigate(`/user/${poll.creator.id}`)}
+                onClick={() => navigate(`/profile/${poll.creator.id}`)}
               >
                 {poll.creator.name}
               </p>

@@ -40,7 +40,6 @@ import {
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { Link } from 'react-router-dom';
-import { PollsQuickGuide } from '@/components/Polls/PollsQuickGuide';
 
 interface Poll {
   id: string;
@@ -277,7 +276,7 @@ const PollsLandingPage = () => {
                   </Button>
                 )}
                 <Button asChild variant="outline" size="lg" className="border-primary/20">
-                  <Link to="/poll-templates">
+                  <Link to="#templates">
                     <Play className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
                     Explore Templates
                   </Link>
@@ -288,11 +287,6 @@ const PollsLandingPage = () => {
         </div>
 
         <div className="container mx-auto px-4 py-6 sm:py-8 lg:py-12 max-w-7xl">
-          {/* Quick Guide Section */}
-          <section className="mb-8 sm:mb-12 lg:mb-16">
-            <PollsQuickGuide />
-          </section>
-
           {/* Benefits Section */}
           <section className="mb-8 sm:mb-12 lg:mb-16">
             <div className="text-center mb-6 sm:mb-8">
@@ -397,9 +391,9 @@ const PollsLandingPage = () => {
             )}
             
             <div className="text-center mt-6 sm:mt-8">
-              <Button asChild variant="outline" size="lg" className="mr-4">
-                <Link to="/poll-templates">
-                  View All Advanced Templates
+              <Button asChild variant="outline" size="lg">
+                <Link to="/admin/core">
+                  View All {templates.length} Templates
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </Link>
               </Button>

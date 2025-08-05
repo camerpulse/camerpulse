@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent } from '@/components/ui/card';
@@ -82,7 +81,6 @@ export const SocialStyleProfile: React.FC<SocialStyleProfileProps> = ({
 }) => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const navigate = useNavigate();
   
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [posts, setPosts] = useState<Post[]>([]);
@@ -303,7 +301,7 @@ export const SocialStyleProfile: React.FC<SocialStyleProfileProps> = ({
                 {/* Action Buttons */}
                 <div className="flex items-center gap-2">
                   {user?.id === userId ? (
-                    <Button variant="outline" size="sm" onClick={() => navigate('/settings')}>
+                    <Button variant="outline" size="sm">
                       <Settings className="h-4 w-4 mr-2" />
                       Edit Profile
                     </Button>
