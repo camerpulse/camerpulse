@@ -22,3 +22,12 @@ export function formatCurrency(amount: number, currency: string = 'USD'): string
     maximumFractionDigits: 0,
   }).format(amount);
 }
+
+export function isValidUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return ['http:', 'https:'].includes(parsed.protocol);
+  } catch (err) {
+    return false;   // Invalid URL
+  }
+}
