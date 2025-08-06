@@ -117,43 +117,43 @@ export const PoliticianDetailPage: React.FC = () => {
               <div className="flex-1 text-center md:text-left">
                 <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
                   <div>
-                    <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
-                      <h1 className="text-3xl font-bold">{politician.name}</h1>
-                      {politician.isVerified && (
-                        <CheckCircle className="h-6 w-6 text-blue-500" />
-                      )}
-                    </div>
-                    <p className="text-xl text-muted-foreground mb-3">{politician.position}</p>
+                     <div className="flex items-center gap-2 justify-center md:justify-start mb-2">
+                       <h1 className="text-3xl font-bold">{politicianData.name}</h1>
+                       {politicianData.isVerified && (
+                         <CheckCircle className="h-6 w-6 text-blue-500" />
+                       )}
+                     </div>
+                     <p className="text-xl text-muted-foreground mb-3">{politicianData.position}</p>
                     
-                    <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-4">
-                      <Badge variant="secondary">{politician.party}</Badge>
-                      <Badge variant="outline">
-                        <MapPin className="h-3 w-3 mr-1" />
-                        {politician.region}
-                      </Badge>
-                      <Badge variant="outline">
-                        <Calendar className="h-3 w-3 mr-1" />
-                        {politician.stats.yearsInOffice} years in office
-                      </Badge>
-                    </div>
+                     <div className="flex flex-wrap gap-2 justify-center md:justify-start mb-4">
+                       <Badge variant="secondary">{politicianData.party}</Badge>
+                       <Badge variant="outline">
+                         <MapPin className="h-3 w-3 mr-1" />
+                         {politicianData.region}
+                       </Badge>
+                       <Badge variant="outline">
+                         <Calendar className="h-3 w-3 mr-1" />
+                         {politicianData.stats.yearsInOffice} years in office
+                       </Badge>
+                     </div>
 
                     {/* Rating */}
                     <div className="flex items-center gap-2 justify-center md:justify-start mb-4">
                       <div className="flex items-center">
                         {[1, 2, 3, 4, 5].map((star) => (
-                          <Star
-                            key={star}
-                            className={`h-4 w-4 ${
-                              star <= politician.rating
-                                ? 'fill-yellow-400 text-yellow-400'
-                                : 'text-gray-300'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="font-medium">{politician.rating}</span>
-                      <span className="text-sm text-muted-foreground">
-                        ({politician.totalRatings} ratings)
+                           <Star
+                             key={star}
+                             className={`h-4 w-4 ${
+                               star <= politicianData.rating
+                                 ? 'fill-yellow-400 text-yellow-400'
+                                 : 'text-gray-300'
+                             }`}
+                           />
+                         ))}
+                       </div>
+                       <span className="font-medium">{politicianData.rating}</span>
+                       <span className="text-sm text-muted-foreground">
+                         ({politicianData.totalRatings} ratings)
                       </span>
                     </div>
                   </div>
@@ -186,12 +186,12 @@ export const PoliticianDetailPage: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
-                      <SuggestionButton 
-                        mode="suggest_edit" 
-                        entityType="politician"
-                        entityId={politician.id}
-                        className="h-8"
-                      />
+                       <SuggestionButton 
+                         mode="suggest_edit" 
+                         entityType="politician"
+                         entityId={politicianData.id}
+                         className="h-8"
+                       />
                       <Button 
                         variant="outline" 
                         size="sm"
@@ -201,16 +201,16 @@ export const PoliticianDetailPage: React.FC = () => {
                       </Button>
                     </div>
 
-                    {!politician.isClaimed && (
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setShowClaim(true)}
-                        className="text-blue-600 border-blue-600 hover:bg-blue-50"
-                      >
-                        <Flag className="h-4 w-4 mr-2" />
-                        Claim This Profile
-                      </Button>
-                    )}
+                     {!politicianData.isClaimed && (
+                       <Button 
+                         variant="outline" 
+                         onClick={() => setShowClaim(true)}
+                         className="text-blue-600 border-blue-600 hover:bg-blue-50"
+                       >
+                         <Flag className="h-4 w-4 mr-2" />
+                         Claim This Profile
+                       </Button>
+                     )}
                   </div>
                 </div>
               </div>
@@ -221,29 +221,29 @@ export const PoliticianDetailPage: React.FC = () => {
         {/* Stats Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{politician.stats.yearsInOffice}</div>
-              <div className="text-sm text-muted-foreground">Years in Office</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{politician.stats.billsSponsored}</div>
-              <div className="text-sm text-muted-foreground">Bills Sponsored</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{politician.stats.projectsCompleted}</div>
-              <div className="text-sm text-muted-foreground">Projects Completed</div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <div className="text-2xl font-bold text-primary">{politician.stats.followers.toLocaleString()}</div>
-              <div className="text-sm text-muted-foreground">Followers</div>
-            </CardContent>
-          </Card>
+             <CardContent className="p-4 text-center">
+               <div className="text-2xl font-bold text-primary">{politicianData.stats.yearsInOffice}</div>
+               <div className="text-sm text-muted-foreground">Years in Office</div>
+             </CardContent>
+           </Card>
+           <Card>
+             <CardContent className="p-4 text-center">
+               <div className="text-2xl font-bold text-primary">{politicianData.stats.billsSponsored}</div>
+               <div className="text-sm text-muted-foreground">Bills Sponsored</div>
+             </CardContent>
+           </Card>
+           <Card>
+             <CardContent className="p-4 text-center">
+               <div className="text-2xl font-bold text-primary">{politicianData.stats.projectsCompleted}</div>
+               <div className="text-sm text-muted-foreground">Projects Completed</div>
+             </CardContent>
+           </Card>
+           <Card>
+             <CardContent className="p-4 text-center">
+               <div className="text-2xl font-bold text-primary">{politicianData.stats.followers.toLocaleString()}</div>
+               <div className="text-sm text-muted-foreground">Followers</div>
+             </CardContent>
+           </Card>
         </div>
 
         {/* Main Content Tabs */}
@@ -260,11 +260,11 @@ export const PoliticianDetailPage: React.FC = () => {
               <CardHeader>
                 <CardTitle>Biography</CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground leading-relaxed">
-                  {politician.biography}
-                </p>
-              </CardContent>
+               <CardContent>
+                 <p className="text-muted-foreground leading-relaxed">
+                   {politicianData.biography}
+                 </p>
+               </CardContent>
             </Card>
           </TabsContent>
 
@@ -273,16 +273,16 @@ export const PoliticianDetailPage: React.FC = () => {
               <CardHeader>
                 <CardTitle>Key Achievements</CardTitle>
               </CardHeader>
-              <CardContent>
-                <ul className="space-y-3">
-                  {politician.achievements.map((achievement, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                      <span>{achievement}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
+               <CardContent>
+                 <ul className="space-y-3">
+                   {politicianData.achievements.map((achievement, index) => (
+                     <li key={index} className="flex items-start gap-3">
+                       <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
+                       <span>{achievement}</span>
+                     </li>
+                   ))}
+                 </ul>
+               </CardContent>
             </Card>
           </TabsContent>
 
@@ -291,26 +291,26 @@ export const PoliticianDetailPage: React.FC = () => {
               <CardHeader>
                 <CardTitle>Contact Information</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <Mail className="h-5 w-5 text-muted-foreground" />
-                  <a href={`mailto:${politician.contact.email}`} className="text-blue-600 hover:underline">
-                    {politician.contact.email}
-                  </a>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Phone className="h-5 w-5 text-muted-foreground" />
-                  <a href={`tel:${politician.contact.phone}`} className="text-blue-600 hover:underline">
-                    {politician.contact.phone}
-                  </a>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Globe className="h-5 w-5 text-muted-foreground" />
-                  <a href={politician.contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
-                    Official Website
-                  </a>
-                </div>
-              </CardContent>
+               <CardContent className="space-y-4">
+                 <div className="flex items-center gap-3">
+                   <Mail className="h-5 w-5 text-muted-foreground" />
+                   <a href={`mailto:${politicianData.contact.email}`} className="text-blue-600 hover:underline">
+                     {politicianData.contact.email}
+                   </a>
+                 </div>
+                 <div className="flex items-center gap-3">
+                   <Phone className="h-5 w-5 text-muted-foreground" />
+                   <a href={`tel:${politicianData.contact.phone}`} className="text-blue-600 hover:underline">
+                     {politicianData.contact.phone}
+                   </a>
+                 </div>
+                 <div className="flex items-center gap-3">
+                   <Globe className="h-5 w-5 text-muted-foreground" />
+                   <a href={politicianData.contact.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
+                     Official Website
+                   </a>
+                 </div>
+               </CardContent>
             </Card>
           </TabsContent>
 
@@ -338,37 +338,37 @@ export const PoliticianDetailPage: React.FC = () => {
       </div>
 
       {/* Modals */}
-      <MessagingModal
-        open={showMessaging}
-        onClose={() => setShowMessaging(false)}
-        recipientId={politician.id}
-        recipientName={politician.name}
-        recipientType="politician"
-      />
+       <MessagingModal
+         open={showMessaging}
+         onClose={() => setShowMessaging(false)}
+         recipientId={politicianData.id}
+         recipientName={politicianData.name}
+         recipientType="politician"
+       />
 
-      <RatingModal
-        open={showRating}
-        onClose={() => setShowRating(false)}
-        entityId={politician.id}
-        entityName={politician.name}
-        entityType="politician"
-      />
+       <RatingModal
+         open={showRating}
+         onClose={() => setShowRating(false)}
+         entityId={politicianData.id}
+         entityName={politicianData.name}
+         entityType="politician"
+       />
 
-      <ClaimProfileModal
-        open={showClaim}
-        onClose={() => setShowClaim(false)}
-        profileId={politician.id}
-        profileName={politician.name}
-        profileType="politician"
-      />
+       <ClaimProfileModal
+         open={showClaim}
+         onClose={() => setShowClaim(false)}
+         profileId={politicianData.id}
+         profileName={politicianData.name}
+         profileType="politician"
+       />
 
-      <SuggestEditModal
-        open={showSuggestEdit}
-        onClose={() => setShowSuggestEdit(false)}
-        profileId={politician.id}
-        profileName={politician.name}
-        profileType="politician"
-      />
+       <SuggestEditModal
+         open={showSuggestEdit}
+         onClose={() => setShowSuggestEdit(false)}
+         profileId={politicianData.id}
+         profileName={politicianData.name}
+         profileType="politician"
+       />
     </div>
   );
 };
