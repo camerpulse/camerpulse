@@ -120,7 +120,7 @@ const CivicViewControlPanel: React.FC = () => {
         .from('user_roles')
         .select('role')
         .eq('user_id', user?.id)
-        .single();
+        .maybeSingle();
       
       if (data && data.role === 'admin') {
         setIsAuthorized(true);
