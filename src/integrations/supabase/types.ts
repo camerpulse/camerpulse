@@ -44043,6 +44043,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
+      generate_slug: {
+        Args: { input_text: string; entity_id?: string }
+        Returns: string
+      }
       generate_submission_code: {
         Args: Record<PropertyKey, never>
         Returns: string
