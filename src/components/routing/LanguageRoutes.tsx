@@ -47,6 +47,7 @@ import PetitionDetailPage from '@/pages/PetitionDetailPage';
 import JobDetailPage from '@/pages/JobDetailPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import VendorsPage from '@/pages/VendorsPage';
+import UserMigrationAdminPage from '@/pages/admin/UserMigrationAdminPage';
 
 // Module-specific profile pages
 import MusicProfile from '@/pages/profiles/MusicProfile';
@@ -155,6 +156,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/admin" element={<AdminCoreV2Page />} />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/priority-assessment" element={<PriorityAssessmentDashboard />} />
+        <Route path="/admin/user-migration" element={<UserMigrationAdminPage />} />
       </Routes>
     </>
   );

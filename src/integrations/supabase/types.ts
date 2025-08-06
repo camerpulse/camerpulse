@@ -38917,6 +38917,54 @@ export type Database = {
           },
         ]
       }
+      user_migration_log: {
+        Row: {
+          completed_at: string | null
+          duplicates_found: number | null
+          error_details: Json | null
+          errors_count: number | null
+          id: string
+          migration_step: string
+          notes: string | null
+          records_migrated: number | null
+          records_processed: number | null
+          source_table: string | null
+          started_at: string | null
+          status: string
+          target_table: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          duplicates_found?: number | null
+          error_details?: Json | null
+          errors_count?: number | null
+          id?: string
+          migration_step: string
+          notes?: string | null
+          records_migrated?: number | null
+          records_processed?: number | null
+          source_table?: string | null
+          started_at?: string | null
+          status?: string
+          target_table?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          duplicates_found?: number | null
+          error_details?: Json | null
+          errors_count?: number | null
+          id?: string
+          migration_step?: string
+          notes?: string | null
+          records_migrated?: number | null
+          records_processed?: number | null
+          source_table?: string | null
+          started_at?: string | null
+          status?: string
+          target_table?: string | null
+        }
+        Relationships: []
+      }
       user_notification_settings: {
         Row: {
           created_at: string
@@ -43293,6 +43341,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      clean_and_generate_usernames: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          profile_id: string
+          old_username: string
+          new_username: string
+          slug_generated: boolean
+        }[]
+      }
       cleanup_expired_media: {
         Args: Record<PropertyKey, never>
         Returns: number
@@ -43462,6 +43519,16 @@ export type Database = {
       detect_timeline_slippage: {
         Args: Record<PropertyKey, never>
         Returns: number
+      }
+      detect_user_duplicates: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          primary_profile_id: string
+          duplicate_profile_ids: string[]
+          match_type: string
+          confidence_score: number
+          merge_strategy: Json
+        }[]
       }
       enable_politician_poll_creation: {
         Args: { p_politician_id: string; p_admin_id: string }
@@ -43868,6 +43935,13 @@ export type Database = {
         Args: { p_notification_id: string }
         Returns: boolean
       }
+      merge_duplicate_profiles: {
+        Args: {
+          p_primary_profile_id: string
+          p_duplicate_profile_ids: string[]
+        }
+        Returns: Json
+      }
       notify_artist_fans: {
         Args: {
           p_artist_user_id: string
@@ -43943,6 +44017,10 @@ export type Database = {
           p_device_model?: string
         }
         Returns: string
+      }
+      run_migration_smoke_tests: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
       }
       run_poll_health_checks: {
         Args: Record<PropertyKey, never>
@@ -44166,6 +44244,18 @@ export type Database = {
       update_vendor_presence: {
         Args: { p_vendor_id: string; p_status: string; p_device_info?: Json }
         Returns: undefined
+      }
+      validate_migrated_urls: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          table_name: string
+          record_id: string
+          url_field: string
+          old_url: string
+          new_url: string
+          status: string
+          validation_notes: string
+        }[]
       }
       validate_password_strength: {
         Args: { password: string }
