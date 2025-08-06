@@ -115,7 +115,7 @@ const Index = () => {
                 <span className="text-sm font-medium">
                   Welcome back, {profile?.display_name || profile?.username || 'User'}!
                 </span>
-                <Link to={`/profile/${user.id}`}>
+                <Link to={profile?.username ? `/profile/${profile.username}` : `/u/${user.id}`}>
                   <Button variant="outline" size="sm">View Profile</Button>
                 </Link>
               </div>

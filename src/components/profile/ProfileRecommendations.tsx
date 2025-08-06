@@ -151,7 +151,7 @@ export const ProfileRecommendations: React.FC<ProfileRecommendationsProps> = ({
   };
 
   const handleProfileClick = (profile: RecommendedProfile) => {
-    navigate(`/profile/${profile.user_id}`);
+    navigate(profile.username ? `/profile/${profile.username}` : `/u/${profile.user_id}`);
   };
 
   const handleFollowClick = async (e: React.MouseEvent, profileId: string) => {

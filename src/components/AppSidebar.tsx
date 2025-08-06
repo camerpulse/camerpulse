@@ -309,7 +309,7 @@ export function AppSidebar() {
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
-                    <NavLink to={`/profile/${profile?.username || user.id}`}>
+                    <NavLink to={`/profile/${profile?.username || profile?.user_id || user.id}`}>
                       <User className="mr-2 h-4 w-4" />
                       Profile
                     </NavLink>

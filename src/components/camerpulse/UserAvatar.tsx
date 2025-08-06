@@ -65,8 +65,10 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   const handleClick = () => {
     if (onClick) {
       onClick();
+    } else if (user.username) {
+      navigate(`/profile/${user.username}`);
     } else if (user.id) {
-      navigate(`/profile/${user.id}`);
+      navigate(`/u/${user.id}`);
     }
   };
 
