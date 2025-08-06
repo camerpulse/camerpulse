@@ -94,14 +94,14 @@ export const VillageGallery: React.FC<VillageGalleryProps> = ({ villageId }) => 
       </div>
 
       {/* Category Filter */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
         {categories.map((category) => (
           <Button
             key={category.id}
             variant={selectedCategory === category.id ? "default" : "outline"}
             size="sm"
             onClick={() => setSelectedCategory(category.id)}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 text-sm px-3 py-2"
           >
             {category.name}
             <Badge variant="secondary" className="text-xs">

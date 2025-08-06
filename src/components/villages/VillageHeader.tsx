@@ -104,12 +104,12 @@ export const VillageHeader: React.FC<VillageHeaderProps> = ({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex flex-col gap-3 min-w-0">
+              <div className="flex flex-col gap-3 w-full sm:w-auto sm:min-w-0">
                 {!userMembership ? (
                   <Button 
                     onClick={onJoinVillage}
                     size="lg"
-                    className="bg-white text-primary hover:bg-white/90 font-semibold"
+                    className="bg-white text-primary hover:bg-white/90 font-semibold w-full sm:w-auto"
                   >
                     <UserPlus className="h-5 w-5 mr-2" />
                     Join Village
@@ -118,7 +118,7 @@ export const VillageHeader: React.FC<VillageHeaderProps> = ({
                   <Button 
                     size="lg"
                     variant="secondary"
-                    className="bg-green-600 text-white hover:bg-green-700"
+                    className="bg-green-600 text-white hover:bg-green-700 w-full sm:w-auto"
                     disabled
                   >
                     <CheckCircle className="h-5 w-5 mr-2" />
@@ -126,12 +126,12 @@ export const VillageHeader: React.FC<VillageHeaderProps> = ({
                   </Button>
                 )}
                 
-                <div className="flex gap-2">
+                <div className="flex gap-2 justify-center sm:justify-start">
                   {village.whatsapp_link && (
                     <Button 
                       size="sm" 
                       variant="outline" 
-                      className="text-white border-white/50 hover:bg-white hover:text-primary"
+                      className="text-white border-white/50 hover:bg-white hover:text-primary flex-shrink-0"
                       asChild
                     >
                       <a href={village.whatsapp_link} target="_blank" rel="noopener noreferrer">
@@ -143,7 +143,7 @@ export const VillageHeader: React.FC<VillageHeaderProps> = ({
                     <Button 
                       size="sm" 
                       variant="outline" 
-                      className="text-white border-white/50 hover:bg-white hover:text-primary"
+                      className="text-white border-white/50 hover:bg-white hover:text-primary flex-shrink-0"
                       asChild
                     >
                       <a href={village.facebook_link} target="_blank" rel="noopener noreferrer">
@@ -155,7 +155,7 @@ export const VillageHeader: React.FC<VillageHeaderProps> = ({
                     size="sm" 
                     variant="outline" 
                     onClick={onShare}
-                    className="text-white border-white/50 hover:bg-white hover:text-primary"
+                    className="text-white border-white/50 hover:bg-white hover:text-primary flex-shrink-0"
                   >
                     <Share2 className="h-4 w-4" />
                   </Button>

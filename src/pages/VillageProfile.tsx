@@ -282,36 +282,36 @@ const VillageProfile = () => {
       {/* Main Content Tabs */}
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-8 mb-8">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
+          <TabsList className="flex flex-wrap justify-center gap-1 h-auto p-1 mb-8 bg-muted">
+            <TabsTrigger value="overview" className="flex items-center gap-1 px-3 py-2 text-sm">
               <BookOpen className="h-4 w-4" />
               <span className="hidden sm:inline">Overview</span>
             </TabsTrigger>
-            <TabsTrigger value="gallery" className="flex items-center gap-2">
+            <TabsTrigger value="gallery" className="flex items-center gap-1 px-3 py-2 text-sm">
               <Image className="h-4 w-4" />
               <span className="hidden sm:inline">Gallery</span>
             </TabsTrigger>
-            <TabsTrigger value="members" className="flex items-center gap-2">
+            <TabsTrigger value="members" className="flex items-center gap-1 px-3 py-2 text-sm">
               <UsersIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Members</span>
             </TabsTrigger>
-            <TabsTrigger value="institutions" className="flex items-center gap-2">
+            <TabsTrigger value="institutions" className="flex items-center gap-1 px-3 py-2 text-sm">
               <Building className="h-4 w-4" />
               <span className="hidden sm:inline">Directory</span>
             </TabsTrigger>
-            <TabsTrigger value="projects" className="flex items-center gap-2">
+            <TabsTrigger value="projects" className="flex items-center gap-1 px-3 py-2 text-sm">
               <Briefcase className="h-4 w-4" />
               <span className="hidden sm:inline">Projects</span>
             </TabsTrigger>
-            <TabsTrigger value="events" className="flex items-center gap-2">
+            <TabsTrigger value="events" className="flex items-center gap-1 px-3 py-2 text-sm">
               <CalendarIcon className="h-4 w-4" />
               <span className="hidden sm:inline">Events</span>
             </TabsTrigger>
-            <TabsTrigger value="petitions" className="flex items-center gap-2">
+            <TabsTrigger value="petitions" className="flex items-center gap-1 px-3 py-2 text-sm">
               <FileText className="h-4 w-4" />
               <span className="hidden sm:inline">Petitions</span>
             </TabsTrigger>
-            <TabsTrigger value="contribute" className="flex items-center gap-2">
+            <TabsTrigger value="contribute" className="flex items-center gap-1 px-3 py-2 text-sm">
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">Contribute</span>
             </TabsTrigger>

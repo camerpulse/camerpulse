@@ -143,8 +143,8 @@ export const VillageMembers: React.FC<VillageMembersProps> = ({ villageId }) => 
       </div>
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
+      <div className="flex flex-col gap-4">
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search members..."
@@ -153,28 +153,30 @@ export const VillageMembers: React.FC<VillageMembersProps> = ({ villageId }) => 
             className="pl-10"
           />
         </div>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="verified">Verified</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-          </SelectContent>
-        </Select>
-        <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="chief">Chiefs</SelectItem>
-            <SelectItem value="elder">Elders</SelectItem>
-            <SelectItem value="notable">Notables</SelectItem>
-            <SelectItem value="son_daughter">Sons & Daughters</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex flex-col sm:flex-row gap-2">
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectValue placeholder="Filter by status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="verified">Verified</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={typeFilter} onValueChange={setTypeFilter}>
+            <SelectTrigger className="w-full sm:w-[180px]">
+              <SelectValue placeholder="Filter by type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Types</SelectItem>
+              <SelectItem value="chief">Chiefs</SelectItem>
+              <SelectItem value="elder">Elders</SelectItem>
+              <SelectItem value="notable">Notables</SelectItem>
+              <SelectItem value="son_daughter">Sons & Daughters</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Members Grid */}

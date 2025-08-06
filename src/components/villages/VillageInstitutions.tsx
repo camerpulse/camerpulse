@@ -156,7 +156,7 @@ export const VillageInstitutions: React.FC<VillageInstitutionsProps> = ({ villag
 
       {/* Category Tabs */}
       <Tabs value={activeCategory} onValueChange={setActiveCategory}>
-        <TabsList className="grid w-full grid-cols-4 lg:grid-cols-7">
+        <TabsList className="flex flex-wrap justify-center gap-1 h-auto p-1 bg-muted">
           {institutionTypes.map((type) => {
             const IconComponent = type.icon;
             const count = type.id === 'all' 
@@ -164,7 +164,7 @@ export const VillageInstitutions: React.FC<VillageInstitutionsProps> = ({ villag
               : institutions.filter(inst => inst.type === type.id).length;
             
             return (
-              <TabsTrigger key={type.id} value={type.id} className="flex items-center gap-1">
+              <TabsTrigger key={type.id} value={type.id} className="flex items-center gap-1 px-3 py-2 text-sm">
                 <IconComponent className="h-4 w-4" />
                 <span className="hidden sm:inline">{type.name}</span>
                 <Badge variant="secondary" className="text-xs ml-1">
