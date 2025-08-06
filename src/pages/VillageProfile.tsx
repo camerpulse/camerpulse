@@ -1,35 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useVillageSlug } from '@/hooks/useSlugResolver';
 import { 
   MapPin, Star, Users, Crown, Calendar, Phone, Globe, 
   Facebook, MessageCircle, Plus, ChevronRight, Heart,
   Award, DollarSign, Building, AlertTriangle, Vote,
-  Camera, Edit, Share2, Eye
+  Camera, Edit, Share2, Eye, Languages, UserPlus,
+  ChevronDown, ExternalLink, Mail, CheckCircle,
+  Home, ArrowLeft, Navigation, Map, Clock,
+  UsersIcon, BookOpen, GraduationCap, Hospital,
+  Briefcase, Image, Calendar as CalendarIcon,
+  FileText, UserCheck, Flag, Megaphone, Settings
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { VillageComments } from '@/components/villages/VillageComments';
-import { VillageDiscussions } from '@/components/villages/VillageDiscussions';
-import { VillageEvents } from '@/components/villages/VillageEvents';
-import { VillagePhotoGallery } from '@/components/villages/VillagePhotoGallery';
-import { VillageMembership } from '@/components/villages/VillageMembership';
-import { VillageLeadership } from '@/components/villages/VillageLeadership';
+import { VillageHeader } from '@/components/villages/VillageHeader';
+import { VillageOverview } from '@/components/villages/VillageOverview';
+import { VillageGallery } from '@/components/villages/VillageGallery';
+import { VillageMembers } from '@/components/villages/VillageMembers';
+import { VillageInstitutions } from '@/components/villages/VillageInstitutions';
 import { VillageProjects } from '@/components/villages/VillageProjects';
-import { VillageNotablePeople } from '@/components/villages/VillageNotablePeople';
-import { VillageCivicActivity } from '@/components/villages/VillageCivicActivity';
-import { VillageChat } from '@/components/villages/VillageChat';
-import { VillageAnalytics } from '@/components/villages/VillageAnalytics';
-import { VillageLeaderboards } from '@/components/villages/VillageLeaderboards';
-
+import { VillageEvents } from '@/components/villages/VillageEvents';
+import { VillagePetitions } from '@/components/villages/VillagePetitions';
+import { VillageContributions } from '@/components/villages/VillageContributions';
 
 interface VillageData {
   id: string;
@@ -67,70 +68,35 @@ interface VillageData {
   whatsapp_link?: string;
   facebook_link?: string;
   community_chat_link?: string;
+  village_image?: string;
+  leadership_contact?: string;
+  village_phone?: string;
+  village_email?: string;
 }
 
 const VillageProfile = () => {
   const { entity: village, loading: villageLoading, error, entityId } = useVillageSlug();
   const [villageData, setVillageData] = useState<VillageData | null>(null);
-  const [leaders, setLeaders] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [billionaires, setBillionaires] = useState([]);
-  const [celebrities, setCelebrities] = useState([]);
-  const [petitions, setPetitions] = useState([]);
-  const [conflicts, setConflicts] = useState([]);
-  const [photos, setPhotos] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
   const [userMembership, setUserMembership] = useState(null);
-
-  // Debug logging
-  console.log('Village slug resolver result:', { village, villageLoading, error, entityId });
+  const [activeTab, setActiveTab] = useState('overview');
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (village) {
       setVillageData(village);
-      fetchRelatedData();
       incrementViewCount();
+      checkUserMembership();
     }
   }, [village, entityId]);
 
-  const fetchRelatedData = async () => {
-    if (!entityId) return;
-    
-    try {
-      // Fetch related data
-      const [
-        leadersResponse,
-        projectsResponse,
-        billionairesResponse,
-        celebritiesResponse,
-        petitionsResponse,
-        conflictsResponse,
-        photosResponse
-      ] = await Promise.all([
-        supabase.from('village_leaders').select('*').eq('village_id', entityId),
-        supabase.from('village_projects').select('*').eq('village_id', entityId),
-        supabase.from('village_billionaires').select('*').eq('village_id', entityId),
-        supabase.from('village_celebrities').select('*').eq('village_id', entityId),
-        supabase.from('village_petitions').select('*').eq('village_id', entityId),
-        supabase.from('village_conflicts').select('*').eq('village_id', entityId),
-        supabase.from('village_photos').select('*').eq('village_id', entityId)
-      ]);
-
-      setLeaders(leadersResponse.data || []);
-      setProjects(projectsResponse.data || []);
-      setBillionaires(billionairesResponse.data || []);
-      setCelebrities(celebritiesResponse.data || []);
-      setPetitions(petitionsResponse.data || []);
-      setConflicts(conflictsResponse.data || []);
-      setPhotos(photosResponse.data || []);
-
-    } catch (error) {
-      console.error('Error fetching village data:', error);
-      toast.error('Failed to load village information');
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    const getUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setUser(user);
+    };
+    getUser();
+  }, []);
 
   const incrementViewCount = async () => {
     if (!entityId || !villageData) return;
@@ -145,76 +111,81 @@ const VillageProfile = () => {
     }
   };
 
-  const handleClaimMembership = async () => {
+  const checkUserMembership = async () => {
+    if (!user || !entityId) return;
+    
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data } = await supabase
+        .from('village_memberships')
+        .select('*')
+        .eq('village_id', entityId)
+        .eq('user_id', user.id)
+        .single();
       
-      if (!user) {
-        toast.error('Please log in to claim membership');
-        return;
-      }
+      setUserMembership(data);
+    } catch (error) {
+      // User is not a member, which is fine
+    }
+  };
 
+  const handleJoinVillage = async () => {
+    if (!user) {
+      toast.error('Please log in to join this village');
+      navigate('/auth');
+      return;
+    }
+
+    try {
       const { error } = await supabase
         .from('village_memberships')
         .insert({
           village_id: entityId,
           user_id: user.id,
-          membership_type: 'son_daughter'
+          membership_type: 'son_daughter',
+          status: 'pending'
         });
 
       if (error) throw error;
       
-      toast.success('Successfully claimed as son/daughter of this village!');
-      fetchRelatedData(); // Refresh data
+      toast.success('Membership request submitted for verification!');
+      checkUserMembership();
     } catch (error) {
-      console.error('Error claiming membership:', error);
-      toast.error('Failed to claim membership');
+      console.error('Error joining village:', error);
+      toast.error('Failed to submit membership request');
     }
   };
 
-  const renderStars = (rating: number) => {
-    const stars = [];
-    const fullStars = Math.floor(rating);
-    const hasHalfStar = rating % 1 !== 0;
-
-    for (let i = 0; i < fullStars; i++) {
-      stars.push(<Star key={i} className="h-4 w-4 fill-primary text-primary" />);
-    }
-
-    if (hasHalfStar) {
-      stars.push(<Star key="half" className="h-4 w-4 fill-primary/50 text-primary" />);
-    }
-
-    const emptyStars = 5 - stars.length;
-    for (let i = 0; i < emptyStars; i++) {
-      stars.push(<Star key={`empty-${i}`} className="h-4 w-4 text-muted-foreground" />);
-    }
-
-    return stars;
-  };
-
-  const getProjectStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'success';
-      case 'ongoing': return 'secondary';
-      case 'abandoned': return 'destructive';
-      case 'planned': return 'outline';
-      default: return 'outline';
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${villageData?.village_name} - CamerPulse`,
+          text: `Discover ${villageData?.village_name}, ${villageData?.region} on CamerPulse`,
+          url: window.location.href,
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      // Fallback: Copy to clipboard
+      navigator.clipboard.writeText(window.location.href);
+      toast.success('Link copied to clipboard!');
     }
   };
 
-  if (villageLoading || loading) {
+  if (villageLoading) {
     return (
       <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <div className="animate-pulse space-y-6">
-            <div className="h-8 bg-muted rounded w-1/3"></div>
-            <div className="h-64 bg-muted rounded"></div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="h-32 bg-muted rounded"></div>
+        {/* Loading skeleton */}
+        <div className="animate-pulse">
+          <div className="h-80 bg-gradient-to-r from-primary/20 to-secondary/20"></div>
+          <div className="container mx-auto px-4 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="h-24 bg-muted rounded-lg"></div>
               ))}
             </div>
+            <div className="h-96 bg-muted rounded-lg"></div>
           </div>
         </div>
       </div>
@@ -224,18 +195,22 @@ const VillageProfile = () => {
   if (error || !villageData) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Card className="text-center p-8">
-          <CardContent>
-            <h2 className="text-2xl font-bold mb-4">Village Not Found</h2>
-            <p className="text-muted-foreground mb-4">
+        <Card className="max-w-md text-center p-8">
+          <CardContent className="space-y-4">
+            <AlertTriangle className="h-16 w-16 text-muted-foreground mx-auto" />
+            <h2 className="text-2xl font-bold">Village Not Found</h2>
+            <p className="text-muted-foreground">
               {error || "The village you're looking for doesn't exist or has been removed."}
             </p>
-            <div className="text-xs text-muted-foreground mb-4">
-              Debug info: village={JSON.stringify(village)}, error={error}, entityId={entityId}
+            <div className="flex gap-2 justify-center">
+              <Button variant="outline" onClick={() => navigate(-1)}>
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Go Back
+              </Button>
+              <Link to="/villages">
+                <Button>Browse Villages</Button>
+              </Link>
             </div>
-            <Link to="/villages">
-              <Button>Back to Villages Directory</Button>
-            </Link>
           </CardContent>
         </Card>
       </div>
@@ -244,275 +219,134 @@ const VillageProfile = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-civic text-white">
-        <div className="container mx-auto px-4 py-12">
-          <div className="flex flex-col md:flex-row items-start gap-6">
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-4xl font-bold">{villageData.village_name}</h1>
-                {villageData.is_verified && (
-                  <Badge variant="secondary" className="text-white border-white">
-                    <Crown className="h-4 w-4 mr-1" />
-                    Verified
-                  </Badge>
-                )}
-              </div>
-              
-              <div className="flex items-center text-lg opacity-90 mb-4">
-                <MapPin className="h-5 w-5 mr-2" />
-                {villageData.subdivision}, {villageData.division}, {villageData.region}
-              </div>
-
-              {villageData.village_motto && (
-                <blockquote className="text-lg italic opacity-90 mb-4">
-                  "{villageData.village_motto}"
-                </blockquote>
-              )}
-
-              <div className="flex items-center gap-6 text-sm">
-                <div className="flex items-center">
-                  {renderStars(villageData.overall_rating)}
-                  <span className="ml-2 font-medium">
-                    {villageData.overall_rating.toFixed(1)} ({villageData.total_ratings_count} reviews)
-                  </span>
-                </div>
-                <div className="flex items-center">
-                  <Eye className="h-4 w-4 mr-1" />
-                  {villageData.view_count} views
-                </div>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-3">
-              <Button 
-                onClick={handleClaimMembership}
-                variant="secondary" 
-                className="text-primary hover:text-primary-foreground"
-              >
-                <Heart className="h-4 w-4 mr-2" />
-                I'm From Here
-              </Button>
-              
-              <div className="flex gap-2">
-                {villageData.whatsapp_link && (
-                  <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                    <MessageCircle className="h-4 w-4" />
-                  </Button>
-                )}
-                {villageData.facebook_link && (
-                  <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                    <Facebook className="h-4 w-4" />
-                  </Button>
-                )}
-                <Button size="sm" variant="outline" className="text-white border-white hover:bg-white hover:text-primary">
-                  <Share2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          </div>
+      {/* Breadcrumb Navigation */}
+      <div className="bg-muted/30 border-b">
+        <div className="container mx-auto px-4 py-3">
+          <nav className="flex items-center space-x-2 text-sm">
+            <Link to="/" className="text-muted-foreground hover:text-foreground flex items-center">
+              <Home className="h-4 w-4 mr-1" />
+              Home
+            </Link>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <Link to="/villages" className="text-muted-foreground hover:text-foreground">
+              Villages
+            </Link>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <span className="font-medium">{villageData.village_name}</span>
+          </nav>
         </div>
       </div>
 
-      {/* Stats Overview */}
-      <div className="bg-muted/30 py-8">
+      {/* Hero Header */}
+      <VillageHeader 
+        village={villageData}
+        userMembership={userMembership}
+        onJoinVillage={handleJoinVillage}
+        onShare={handleShare}
+      />
+
+      {/* Quick Stats */}
+      <div className="bg-muted/30 py-6">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-primary">{villageData.sons_daughters_count}</div>
-              <div className="text-sm text-muted-foreground">Sons & Daughters</div>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
+            <Card className="text-center p-4 hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold text-primary">{villageData.sons_daughters_count || 0}</div>
+              <div className="text-sm text-muted-foreground">Members</div>
             </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-secondary">{villageData.infrastructure_score}</div>
+            <Card className="text-center p-4 hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold text-secondary">
+                {villageData.population_estimate ? (villageData.population_estimate / 1000).toFixed(1) + 'K' : 'N/A'}
+              </div>
+              <div className="text-sm text-muted-foreground">Population</div>
+            </Card>
+            <Card className="text-center p-4 hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold text-accent">{villageData.overall_rating.toFixed(1)}</div>
+              <div className="text-sm text-muted-foreground">Rating</div>
+            </Card>
+            <Card className="text-center p-4 hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold text-success">{villageData.infrastructure_score || 0}</div>
               <div className="text-sm text-muted-foreground">Infrastructure</div>
             </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-accent">{villageData.education_score}</div>
+            <Card className="text-center p-4 hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold text-warning">{villageData.education_score || 0}</div>
               <div className="text-sm text-muted-foreground">Education</div>
             </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-success">{villageData.health_score}</div>
-              <div className="text-sm text-muted-foreground">Health</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-warning">{villageData.governance_score}</div>
-              <div className="text-sm text-muted-foreground">Governance</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-info">{villageData.diaspora_engagement_score}</div>
-              <div className="text-sm text-muted-foreground">Diaspora</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-primary">{projects.length}</div>
-              <div className="text-sm text-muted-foreground">Projects</div>
-            </Card>
-            <Card className="text-center p-4">
-              <div className="text-2xl font-bold text-secondary">{billionaires.length}</div>
-              <div className="text-sm text-muted-foreground">Billionaires</div>
+            <Card className="text-center p-4 hover:shadow-md transition-shadow">
+              <div className="text-2xl font-bold text-info">{villageData.view_count || 0}</div>
+              <div className="text-sm text-muted-foreground">Views</div>
             </Card>
           </div>
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content Tabs */}
       <div className="container mx-auto px-4 py-8">
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-13">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="membership">Members</TabsTrigger>
-            <TabsTrigger value="leaders">Leadership</TabsTrigger>
-            <TabsTrigger value="projects">Projects</TabsTrigger>
-            <TabsTrigger value="people">Notable People</TabsTrigger>
-            <TabsTrigger value="civic">Civic Activity</TabsTrigger>
-            <TabsTrigger value="gallery">Gallery</TabsTrigger>
-            <TabsTrigger value="chat">Chat</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="leaderboards">Rankings</TabsTrigger>
-            <TabsTrigger value="discussions">Discussions</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
-            <TabsTrigger value="comments">Comments</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3 lg:grid-cols-8 mb-8">
+            <TabsTrigger value="overview" className="flex items-center gap-2">
+              <BookOpen className="h-4 w-4" />
+              <span className="hidden sm:inline">Overview</span>
+            </TabsTrigger>
+            <TabsTrigger value="gallery" className="flex items-center gap-2">
+              <Image className="h-4 w-4" />
+              <span className="hidden sm:inline">Gallery</span>
+            </TabsTrigger>
+            <TabsTrigger value="members" className="flex items-center gap-2">
+              <UsersIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Members</span>
+            </TabsTrigger>
+            <TabsTrigger value="institutions" className="flex items-center gap-2">
+              <Building className="h-4 w-4" />
+              <span className="hidden sm:inline">Directory</span>
+            </TabsTrigger>
+            <TabsTrigger value="projects" className="flex items-center gap-2">
+              <Briefcase className="h-4 w-4" />
+              <span className="hidden sm:inline">Projects</span>
+            </TabsTrigger>
+            <TabsTrigger value="events" className="flex items-center gap-2">
+              <CalendarIcon className="h-4 w-4" />
+              <span className="hidden sm:inline">Events</span>
+            </TabsTrigger>
+            <TabsTrigger value="petitions" className="flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              <span className="hidden sm:inline">Petitions</span>
+            </TabsTrigger>
+            <TabsTrigger value="contribute" className="flex items-center gap-2">
+              <Plus className="h-4 w-4" />
+              <span className="hidden sm:inline">Contribute</span>
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            {/* Village Identity */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <MapPin className="h-5 w-5 mr-2" />
-                  Village Identity
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {villageData.year_founded && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Founded</label>
-                      <div className="font-semibold">{villageData.year_founded}</div>
-                    </div>
-                  )}
-                  {villageData.population_estimate && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Population</label>
-                      <div className="font-semibold">{villageData.population_estimate.toLocaleString()}</div>
-                    </div>
-                  )}
-                  {villageData.traditional_languages.length > 0 && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Languages</label>
-                      <div className="font-semibold">{villageData.traditional_languages.join(', ')}</div>
-                    </div>
-                  )}
-                  {villageData.ethnic_groups.length > 0 && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Ethnic Groups</label>
-                      <div className="font-semibold">{villageData.ethnic_groups.join(', ')}</div>
-                    </div>
-                  )}
-                  {villageData.totem_symbol && (
-                    <div>
-                      <label className="text-sm font-medium text-muted-foreground">Totem/Symbol</label>
-                      <div className="font-semibold">{villageData.totem_symbol}</div>
-                    </div>
-                  )}
-                </div>
-
-                {villageData.founding_story && (
-                  <div>
-                    <h4 className="font-semibold mb-2">Founding Story</h4>
-                    <p className="text-muted-foreground">{villageData.founding_story}</p>
-                  </div>
-                )}
-
-                {villageData.migration_legend && (
-                  <div>
-                    <h4 className="font-semibold mb-2">Migration Legend</h4>
-                    <p className="text-muted-foreground">{villageData.migration_legend}</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Ratings Breakdown */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Star className="h-5 w-5 mr-2" />
-                  Community Ratings
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { label: 'Infrastructure', score: villageData.infrastructure_score, max: 20, color: 'primary' },
-                    { label: 'Education', score: villageData.education_score, max: 10, color: 'secondary' },
-                    { label: 'Health', score: villageData.health_score, max: 10, color: 'accent' },
-                    { label: 'Peace & Security', score: villageData.peace_security_score, max: 10, color: 'success' },
-                    { label: 'Economic Activity', score: villageData.economic_activity_score, max: 10, color: 'warning' },
-                    { label: 'Governance', score: villageData.governance_score, max: 10, color: 'info' },
-                    { label: 'Social Spirit', score: villageData.social_spirit_score, max: 10, color: 'primary' },
-                    { label: 'Diaspora Engagement', score: villageData.diaspora_engagement_score, max: 10, color: 'secondary' }
-                  ].map((item) => (
-                    <div key={item.label} className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium">{item.label}</span>
-                        <span className="text-sm text-muted-foreground">
-                          {item.score}/{item.max}
-                        </span>
-                      </div>
-                      <Progress value={(item.score / item.max) * 100} className="h-2" />
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <VillageOverview village={villageData} />
           </TabsContent>
 
-          <TabsContent value="membership">
-            <VillageMembership villageId={entityId!} villageName={villageData.village_name} />
+          <TabsContent value="gallery" className="space-y-6">
+            <VillageGallery villageId={entityId} />
           </TabsContent>
 
-          <TabsContent value="leaders">
-            <VillageLeadership villageId={entityId!} villageName={villageData.village_name} />
+          <TabsContent value="members" className="space-y-6">
+            <VillageMembers villageId={entityId} />
           </TabsContent>
 
-          <TabsContent value="projects">
-            <VillageProjects villageId={entityId!} villageName={villageData.village_name} />
+          <TabsContent value="institutions" className="space-y-6">
+            <VillageInstitutions village={villageData} />
           </TabsContent>
 
-          <TabsContent value="people">
-            <VillageNotablePeople villageId={entityId!} villageName={villageData.village_name} />
-          </TabsContent>
-
-          <TabsContent value="civic">
-            <VillageCivicActivity villageId={entityId!} villageName={villageData.village_name} />
-          </TabsContent>
-
-          <TabsContent value="gallery">
-            <VillagePhotoGallery villageId={entityId!} />
-          </TabsContent>
-
-          <TabsContent value="chat">
-            <VillageChat />
-          </TabsContent>
-
-          <TabsContent value="analytics">
-            <VillageAnalytics />
-          </TabsContent>
-
-          <TabsContent value="leaderboards">
-            <VillageLeaderboards />
-          </TabsContent>
-
-          <TabsContent value="discussions" className="space-y-6">
-            <VillageDiscussions villageId={entityId!} />
+          <TabsContent value="projects" className="space-y-6">
+            <VillageProjects villageId={entityId} />
           </TabsContent>
 
           <TabsContent value="events" className="space-y-6">
-            <VillageEvents villageId={entityId!} />
+            <VillageEvents villageId={entityId} />
           </TabsContent>
 
-          <TabsContent value="comments" className="space-y-6">
-            <VillageComments villageId={entityId!} />
+          <TabsContent value="petitions" className="space-y-6">
+            <VillagePetitions villageId={entityId} />
+          </TabsContent>
+
+          <TabsContent value="contribute" className="space-y-6">
+            <VillageContributions villageId={entityId} />
           </TabsContent>
         </Tabs>
       </div>
