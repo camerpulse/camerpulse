@@ -22,7 +22,9 @@ import {
   Briefcase,
   Building,
   Heart,
-  Stethoscope
+  Stethoscope,
+  Grid3X3,
+  ShoppingBag
 } from 'lucide-react';
 
 import { ProfileHeader } from './ProfileHeader';
@@ -155,16 +157,65 @@ export const UnifiedProfile: React.FC<UnifiedProfileProps> = ({
           formatNumber={formatNumber}
         />
 
-        {/* Navigation Tabs */}
-        <ProfileTabs 
-          activeTab={activeTab}
-          onTabChange={setActiveTab}
-          hasMusic={!!musicProfile}
-          hasJob={!!jobProfile}
-          hasMarketplace={!!marketplaceProfile}
-          hasHealthcare={!!healthcareProfile}
-          hasVillage={villageMemberships.length > 0}
-        />
+        {/* Unified Tabs Structure - Fixed */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full mt-6">
+          <TabsList className="grid w-full auto-cols-fr grid-flow-col bg-background border-b rounded-none h-auto p-0">
+            <TabsTrigger 
+              value="overview" 
+              className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+            >
+              <Grid3X3 className="h-4 w-4" />
+              <span className="hidden sm:inline">Overview</span>
+            </TabsTrigger>
+            
+            <TabsTrigger 
+              value="about" 
+              className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+            >
+              <Users className="h-4 w-4" />
+              <span className="hidden sm:inline">About</span>
+            </TabsTrigger>
+
+            {musicProfile && (
+              <TabsTrigger 
+                value="music" 
+                className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+              >
+                <Music className="h-4 w-4" />
+                <span className="hidden sm:inline">Music</span>
+              </TabsTrigger>
+            )}
+
+            {jobProfile && (
+              <TabsTrigger 
+                value="professional" 
+                className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+              >
+                <Briefcase className="h-4 w-4" />
+                <span className="hidden sm:inline">Professional</span>
+              </TabsTrigger>
+            )}
+
+            {marketplaceProfile && (
+              <TabsTrigger 
+                value="marketplace" 
+                className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+              >
+                <ShoppingBag className="h-4 w-4" />
+                <span className="hidden sm:inline">Business</span>
+              </TabsTrigger>
+            )}
+
+            {healthcareProfile && (
+              <TabsTrigger 
+                value="healthcare" 
+                className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
+              >
+                <Heart className="h-4 w-4" />
+                <span className="hidden sm:inline">Healthcare</span>
+              </TabsTrigger>
+            )}
+          </TabsList>
 
         {/* Tab Content */}
         <div className="mt-6 pb-8">
@@ -345,6 +396,7 @@ export const UnifiedProfile: React.FC<UnifiedProfileProps> = ({
             )}
           </TabsContent>
         </div>
+        </Tabs>
       </div>
     </div>
   );
