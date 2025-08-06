@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -280,13 +281,11 @@ export default function SchoolsDirectory() {
                     className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-white/70"
                   />
                 </div>
-                <Button
-                  onClick={() => setShowAddDialog(true)}
+                <SuggestionButton 
+                  mode="suggest_new" 
+                  entityType="school"
                   className="bg-white text-primary hover:bg-white/90"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add School
-                </Button>
+                />
               </div>
 
               {/* Quick Filters */}

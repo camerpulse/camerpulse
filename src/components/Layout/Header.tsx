@@ -89,6 +89,9 @@ export const Header = () => {
             <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
               <Link to="/messages">Messenger</Link>
             </Button>
+            <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 hover:text-primary">
+              <Link to="/civic-contributions">Contributions</Link>
+            </Button>
           </nav>
 
           {/* Right side actions */}
@@ -190,6 +193,9 @@ export const Header = () => {
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/politicians" onClick={() => setMobileMenuOpen(false)}>👥 Politicians</Link>
+              </Button>
+              <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
+                <Link to="/civic-contributions" onClick={() => setMobileMenuOpen(false)}>🤝 Civic Contributions</Link>
               </Button>
               <Button asChild variant="ghost" className="text-foreground hover:bg-primary/10 justify-start">
                 <Link to="/senators" onClick={() => setMobileMenuOpen(false)}>🏛️ Senators</Link>

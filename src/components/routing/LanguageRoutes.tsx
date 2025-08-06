@@ -43,6 +43,10 @@ import VillagesDirectoryPage from '@/pages/VillagesDirectoryPage';
 import CivicEducationHub from '@/pages/CivicEducationHub';
 import { AdvancedSearchPage } from '@/pages/AdvancedSearchPage';
 import PerformanceMonitoringPage from '@/pages/PerformanceMonitoringPage';
+import CivicContributionsPage from '@/pages/CivicContributionsPage';
+import SchoolsDirectory from '@/pages/SchoolsDirectory';
+import HospitalsDirectory from '@/pages/HospitalsDirectory';
+import CompanyProfile from '@/pages/CompanyProfile';
 import PetitionDetailPage from '@/pages/PetitionDetailPage';
 import JobDetailPage from '@/pages/JobDetailPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
@@ -148,6 +152,14 @@ export const AppRouter: React.FC = () => {
         <Route path="/polls/embed/:poll_id" element={<PollEmbedViewerPage />} />
         <Route path="/polls/embed-generator/:poll_id" element={<PollEmbedGeneratorPage />} />
         
+        {/* Civic Contributions */}
+        <Route path="/civic-contributions" element={<CivicContributionsPage />} />
+        
+        {/* Directories */}
+        <Route path="/schools" element={<SchoolsDirectory />} />
+        <Route path="/hospitals" element={<HospitalsDirectory />} />
+        <Route path="/companies/:id" element={<CompanyProfile />} />
+
         {/* Advanced Features */}
         <Route path="/search" element={<AdvancedSearchPage />} />
         <Route path="/performance" element={<PerformanceMonitoringPage />} />

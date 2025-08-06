@@ -7,6 +7,7 @@ import {
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
@@ -240,6 +241,12 @@ export default function CompanyProfile() {
               </div>
 
               <div className="flex gap-2">
+                <SuggestionButton 
+                  mode="suggest_edit" 
+                  entityType="company"
+                  entityId={company.id}
+                  className="h-9"
+                />
                 <Button variant="outline" onClick={shareCompany}>
                   <Share2 className="w-4 h-4 mr-2" />
                   Share

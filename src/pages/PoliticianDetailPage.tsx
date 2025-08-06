@@ -25,6 +25,7 @@ import { MessagingModal } from '@/components/Politics/MessagingModal';
 import { RatingModal } from '@/components/Politics/RatingModal';
 import { ClaimProfileModal } from '@/components/Politics/ClaimProfileModal';
 import { SuggestEditModal } from '@/components/Politics/SuggestEditModal';
+import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 
 export const PoliticianDetailPage: React.FC = () => {
   const { entity: politician, loading, error, entityId } = usePoliticianSlug();
@@ -185,14 +186,12 @@ export const PoliticianDetailPage: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-2 gap-2">
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => setShowSuggestEdit(true)}
-                      >
-                        <Edit className="h-3 w-3 mr-1" />
-                        Suggest Edit
-                      </Button>
+                      <SuggestionButton 
+                        mode="suggest_edit" 
+                        entityType="politician"
+                        entityId={politician.id}
+                        className="h-8"
+                      />
                       <Button 
                         variant="outline" 
                         size="sm"
