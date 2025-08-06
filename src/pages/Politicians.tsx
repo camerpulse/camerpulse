@@ -6,6 +6,7 @@ import { AppLayout } from '@/components/Layout/AppLayout';
 import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
 import { PoliticalNavigation } from '@/components/Navigation/PoliticalNavigation';
 import { EnhancedPoliticalGrid } from '@/components/Politics/EnhancedPoliticalGrid';
+import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 
 interface PoliticalEntity {
   id: string;

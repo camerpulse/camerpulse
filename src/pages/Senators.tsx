@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 
 export default function SenatorsPage() {
   const { data: senators, isLoading } = useSenators();
@@ -142,20 +143,27 @@ export default function SenatorsPage() {
               </p>
             </div>
             
-            {isAdmin && (
-              <Button
-                onClick={() => importSenators.mutate()}
-                disabled={importSenators.isPending}
-                className="bg-primary hover:bg-primary/90"
-              >
-                {importSenators.isPending ? (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                ) : (
-                  <Download className="h-4 w-4 mr-2" />
-                )}
-                Update Senate Data
-              </Button>
-            )}
+            <div className="flex gap-3">
+              <SuggestionButton 
+                mode="suggest_new" 
+                entityType="senator"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
+              />
+              {isAdmin && (
+                <Button
+                  onClick={() => importSenators.mutate()}
+                  disabled={importSenators.isPending}
+                  className="bg-primary hover:bg-primary/90"
+                >
+                  {importSenators.isPending ? (
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  ) : (
+                    <Download className="h-4 w-4 mr-2" />
+                  )}
+                  Update Senate Data
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Stats Cards */}

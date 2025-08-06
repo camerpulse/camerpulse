@@ -8,6 +8,7 @@ import { Search, Filter, Users, MapPin } from 'lucide-react';
 import { useMPs } from '@/hooks/useMPs';
 import { MPCard } from '@/components/MPs/MPCard';
 import { usePlugin } from '@/contexts/PluginContext';
+import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 
 const MPsPage = () => {
   const { isPluginEnabled } = usePlugin();
@@ -90,9 +91,16 @@ const MPsPage = () => {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center gap-3 mb-4">
-            <Users className="h-8 w-8 text-primary" />
-            <h1 className="text-3xl font-bold">Members of Parliament</h1>
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <Users className="h-8 w-8 text-primary" />
+              <h1 className="text-3xl font-bold">Members of Parliament</h1>
+            </div>
+            <SuggestionButton 
+              mode="suggest_new" 
+              entityType="mp"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            />
           </div>
           <p className="text-muted-foreground">
             Directory of Cameroon's 180 Members of Parliament from the 10th Legislative Assembly
