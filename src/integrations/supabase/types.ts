@@ -18493,6 +18493,7 @@ export type Database = {
           photo_gallery: string[] | null
           region: string
           services_offered: string[] | null
+          slug: string | null
           submitted_by: string | null
           total_ratings: number | null
           type: Database["public"]["Enums"]["hospital_type"]
@@ -18524,6 +18525,7 @@ export type Database = {
           photo_gallery?: string[] | null
           region: string
           services_offered?: string[] | null
+          slug?: string | null
           submitted_by?: string | null
           total_ratings?: number | null
           type: Database["public"]["Enums"]["hospital_type"]
@@ -18555,6 +18557,7 @@ export type Database = {
           photo_gallery?: string[] | null
           region?: string
           services_offered?: string[] | null
+          slug?: string | null
           submitted_by?: string | null
           total_ratings?: number | null
           type?: Database["public"]["Enums"]["hospital_type"]
@@ -23913,6 +23916,7 @@ export type Database = {
           profile_picture_url: string | null
           promise_delivery_score: number | null
           region: string | null
+          slug: string | null
           term_end_date: string | null
           term_start_date: string | null
           total_ratings: number | null
@@ -23946,6 +23950,7 @@ export type Database = {
           profile_picture_url?: string | null
           promise_delivery_score?: number | null
           region?: string | null
+          slug?: string | null
           term_end_date?: string | null
           term_start_date?: string | null
           total_ratings?: number | null
@@ -23979,6 +23984,7 @@ export type Database = {
           profile_picture_url?: string | null
           promise_delivery_score?: number | null
           region?: string | null
+          slug?: string | null
           term_end_date?: string | null
           term_start_date?: string | null
           total_ratings?: number | null
@@ -25145,6 +25151,7 @@ export type Database = {
           profile_picture_url: string | null
           promise_delivery_score: number | null
           region: string | null
+          slug: string | null
           term_end_date: string | null
           term_start_date: string | null
           total_ratings: number | null
@@ -25180,6 +25187,7 @@ export type Database = {
           profile_picture_url?: string | null
           promise_delivery_score?: number | null
           region?: string | null
+          slug?: string | null
           term_end_date?: string | null
           term_start_date?: string | null
           total_ratings?: number | null
@@ -25215,6 +25223,7 @@ export type Database = {
           profile_picture_url?: string | null
           promise_delivery_score?: number | null
           region?: string | null
+          slug?: string | null
           term_end_date?: string | null
           term_start_date?: string | null
           total_ratings?: number | null
@@ -29436,6 +29445,7 @@ export type Database = {
           public_promises: Json | null
           secretary_general: string | null
           senators_count: number | null
+          slug: string | null
           total_ratings: number | null
           transparency_rating: number | null
           treasurer: string | null
@@ -29492,6 +29502,7 @@ export type Database = {
           public_promises?: Json | null
           secretary_general?: string | null
           senators_count?: number | null
+          slug?: string | null
           total_ratings?: number | null
           transparency_rating?: number | null
           treasurer?: string | null
@@ -29548,6 +29559,7 @@ export type Database = {
           public_promises?: Json | null
           secretary_general?: string | null
           senators_count?: number | null
+          slug?: string | null
           total_ratings?: number | null
           transparency_rating?: number | null
           treasurer?: string | null
@@ -30233,6 +30245,7 @@ export type Database = {
           promise_tracker: Json | null
           region: string | null
           role_title: string | null
+          slug: string | null
           term_end_date: string | null
           term_start_date: string | null
           term_status: string | null
@@ -30295,6 +30308,7 @@ export type Database = {
           promise_tracker?: Json | null
           region?: string | null
           role_title?: string | null
+          slug?: string | null
           term_end_date?: string | null
           term_start_date?: string | null
           term_status?: string | null
@@ -30357,6 +30371,7 @@ export type Database = {
           promise_tracker?: Json | null
           region?: string | null
           role_title?: string | null
+          slug?: string | null
           term_end_date?: string | null
           term_start_date?: string | null
           term_status?: string | null
@@ -35198,6 +35213,7 @@ export type Database = {
           programs_offered: string | null
           region: string
           school_type: Database["public"]["Enums"]["school_type"]
+          slug: string | null
           student_capacity: number | null
           total_ratings: number | null
           updated_at: string
@@ -35236,6 +35252,7 @@ export type Database = {
           programs_offered?: string | null
           region: string
           school_type: Database["public"]["Enums"]["school_type"]
+          slug?: string | null
           student_capacity?: number | null
           total_ratings?: number | null
           updated_at?: string
@@ -35274,6 +35291,7 @@ export type Database = {
           programs_offered?: string | null
           region?: string
           school_type?: Database["public"]["Enums"]["school_type"]
+          slug?: string | null
           student_capacity?: number | null
           total_ratings?: number | null
           updated_at?: string
@@ -35879,6 +35897,7 @@ export type Database = {
           political_party: string | null
           position: string
           region: string | null
+          slug: string | null
           social_media_links: Json | null
           source_page_url: string | null
           status: string | null
@@ -35927,6 +35946,7 @@ export type Database = {
           political_party?: string | null
           position: string
           region?: string | null
+          slug?: string | null
           social_media_links?: Json | null
           source_page_url?: string | null
           status?: string | null
@@ -35975,6 +35995,7 @@ export type Database = {
           political_party?: string | null
           position?: string
           region?: string | null
+          slug?: string | null
           social_media_links?: Json | null
           source_page_url?: string | null
           status?: string | null
