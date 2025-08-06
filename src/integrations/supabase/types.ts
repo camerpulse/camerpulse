@@ -17924,6 +17924,92 @@ export type Database = {
           },
         ]
       }
+      healthcare_profiles: {
+        Row: {
+          additional_training: string[] | null
+          board_certifications: string[] | null
+          consultation_types: string[] | null
+          created_at: string
+          emergency_availability: boolean | null
+          graduation_year: number | null
+          id: string
+          institution_graduated: string | null
+          institution_verified: boolean | null
+          license_verified: boolean | null
+          medical_degree: string | null
+          medical_license_number: string | null
+          practice_name: string | null
+          practice_type: string | null
+          professional_memberships: string[] | null
+          profile_id: string
+          services_offered: string[] | null
+          specialization: string[] | null
+          updated_at: string
+          user_id: string
+          verified_by_health_board: boolean | null
+          working_hours: Json | null
+          years_of_experience: number | null
+        }
+        Insert: {
+          additional_training?: string[] | null
+          board_certifications?: string[] | null
+          consultation_types?: string[] | null
+          created_at?: string
+          emergency_availability?: boolean | null
+          graduation_year?: number | null
+          id?: string
+          institution_graduated?: string | null
+          institution_verified?: boolean | null
+          license_verified?: boolean | null
+          medical_degree?: string | null
+          medical_license_number?: string | null
+          practice_name?: string | null
+          practice_type?: string | null
+          professional_memberships?: string[] | null
+          profile_id: string
+          services_offered?: string[] | null
+          specialization?: string[] | null
+          updated_at?: string
+          user_id: string
+          verified_by_health_board?: boolean | null
+          working_hours?: Json | null
+          years_of_experience?: number | null
+        }
+        Update: {
+          additional_training?: string[] | null
+          board_certifications?: string[] | null
+          consultation_types?: string[] | null
+          created_at?: string
+          emergency_availability?: boolean | null
+          graduation_year?: number | null
+          id?: string
+          institution_graduated?: string | null
+          institution_verified?: boolean | null
+          license_verified?: boolean | null
+          medical_degree?: string | null
+          medical_license_number?: string | null
+          practice_name?: string | null
+          practice_type?: string | null
+          professional_memberships?: string[] | null
+          profile_id?: string
+          services_offered?: string[] | null
+          specialization?: string[] | null
+          updated_at?: string
+          user_id?: string
+          verified_by_health_board?: boolean | null
+          working_hours?: Json | null
+          years_of_experience?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "healthcare_profiles_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       hiring_campaigns: {
         Row: {
           budget_allocated: number | null
@@ -19987,6 +20073,98 @@ export type Database = {
           },
         ]
       }
+      job_profiles: {
+        Row: {
+          available_for_relocation: boolean | null
+          certifications: string[] | null
+          created_at: string
+          currency: string | null
+          current_company: string | null
+          current_title: string | null
+          education_level: string | null
+          employment_status: string | null
+          experience_years: number | null
+          id: string
+          industry: string | null
+          languages: string[] | null
+          linkedin_url: string | null
+          portfolio_url: string | null
+          preferred_industries: string[] | null
+          preferred_job_types: string[] | null
+          preferred_regions: string[] | null
+          profile_id: string
+          remote_work_preference: string | null
+          resume_url: string | null
+          salary_expectation_max: number | null
+          salary_expectation_min: number | null
+          skills: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          available_for_relocation?: boolean | null
+          certifications?: string[] | null
+          created_at?: string
+          currency?: string | null
+          current_company?: string | null
+          current_title?: string | null
+          education_level?: string | null
+          employment_status?: string | null
+          experience_years?: number | null
+          id?: string
+          industry?: string | null
+          languages?: string[] | null
+          linkedin_url?: string | null
+          portfolio_url?: string | null
+          preferred_industries?: string[] | null
+          preferred_job_types?: string[] | null
+          preferred_regions?: string[] | null
+          profile_id: string
+          remote_work_preference?: string | null
+          resume_url?: string | null
+          salary_expectation_max?: number | null
+          salary_expectation_min?: number | null
+          skills?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          available_for_relocation?: boolean | null
+          certifications?: string[] | null
+          created_at?: string
+          currency?: string | null
+          current_company?: string | null
+          current_title?: string | null
+          education_level?: string | null
+          employment_status?: string | null
+          experience_years?: number | null
+          id?: string
+          industry?: string | null
+          languages?: string[] | null
+          linkedin_url?: string | null
+          portfolio_url?: string | null
+          preferred_industries?: string[] | null
+          preferred_job_types?: string[] | null
+          preferred_regions?: string[] | null
+          profile_id?: string
+          remote_work_preference?: string | null
+          resume_url?: string | null
+          salary_expectation_max?: number | null
+          salary_expectation_min?: number | null
+          skills?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_profiles_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_seeker_badges: {
         Row: {
           badge_description: string | null
@@ -21966,6 +22144,104 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_profiles: {
+        Row: {
+          accepted_payment_methods: string[] | null
+          accepts_custom_orders: boolean | null
+          average_rating: number | null
+          business_address: string | null
+          business_category: string[] | null
+          business_description: string | null
+          business_email: string | null
+          business_name: string | null
+          business_phone: string | null
+          business_registration_number: string | null
+          business_type: string | null
+          created_at: string
+          delivery_areas: string[] | null
+          employee_count: number | null
+          established_date: string | null
+          id: string
+          is_verified_vendor: boolean | null
+          minimum_order_amount: number | null
+          profile_id: string
+          return_policy: string | null
+          shipping_methods: string[] | null
+          tax_id: string | null
+          total_products: number | null
+          total_reviews: number | null
+          total_sales: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accepted_payment_methods?: string[] | null
+          accepts_custom_orders?: boolean | null
+          average_rating?: number | null
+          business_address?: string | null
+          business_category?: string[] | null
+          business_description?: string | null
+          business_email?: string | null
+          business_name?: string | null
+          business_phone?: string | null
+          business_registration_number?: string | null
+          business_type?: string | null
+          created_at?: string
+          delivery_areas?: string[] | null
+          employee_count?: number | null
+          established_date?: string | null
+          id?: string
+          is_verified_vendor?: boolean | null
+          minimum_order_amount?: number | null
+          profile_id: string
+          return_policy?: string | null
+          shipping_methods?: string[] | null
+          tax_id?: string | null
+          total_products?: number | null
+          total_reviews?: number | null
+          total_sales?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accepted_payment_methods?: string[] | null
+          accepts_custom_orders?: boolean | null
+          average_rating?: number | null
+          business_address?: string | null
+          business_category?: string[] | null
+          business_description?: string | null
+          business_email?: string | null
+          business_name?: string | null
+          business_phone?: string | null
+          business_registration_number?: string | null
+          business_type?: string | null
+          created_at?: string
+          delivery_areas?: string[] | null
+          employee_count?: number | null
+          established_date?: string | null
+          id?: string
+          is_verified_vendor?: boolean | null
+          minimum_order_amount?: number | null
+          profile_id?: string
+          return_policy?: string | null
+          shipping_methods?: string[] | null
+          tax_id?: string | null
+          total_products?: number | null
+          total_reviews?: number | null
+          total_sales?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_profiles_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -24630,6 +24906,104 @@ export type Database = {
           village_hometown?: string | null
         }
         Relationships: []
+      }
+      music_profiles: {
+        Row: {
+          accepts_collaborations: boolean | null
+          apple_music_url: string | null
+          artist_name: string | null
+          available_for_booking: boolean | null
+          booking_rate_range: string | null
+          collaborations: string[] | null
+          created_at: string
+          debut_date: string | null
+          genre: string[] | null
+          id: string
+          influences: string[] | null
+          instruments: string[] | null
+          is_verified_artist: boolean | null
+          monthly_listeners: number | null
+          music_style: string | null
+          origin_city: string | null
+          profile_id: string
+          record_label: string | null
+          soundcloud_url: string | null
+          spotify_url: string | null
+          stage_name: string | null
+          total_releases: number | null
+          total_streams: number | null
+          updated_at: string
+          user_id: string
+          years_active: number | null
+          youtube_channel: string | null
+        }
+        Insert: {
+          accepts_collaborations?: boolean | null
+          apple_music_url?: string | null
+          artist_name?: string | null
+          available_for_booking?: boolean | null
+          booking_rate_range?: string | null
+          collaborations?: string[] | null
+          created_at?: string
+          debut_date?: string | null
+          genre?: string[] | null
+          id?: string
+          influences?: string[] | null
+          instruments?: string[] | null
+          is_verified_artist?: boolean | null
+          monthly_listeners?: number | null
+          music_style?: string | null
+          origin_city?: string | null
+          profile_id: string
+          record_label?: string | null
+          soundcloud_url?: string | null
+          spotify_url?: string | null
+          stage_name?: string | null
+          total_releases?: number | null
+          total_streams?: number | null
+          updated_at?: string
+          user_id: string
+          years_active?: number | null
+          youtube_channel?: string | null
+        }
+        Update: {
+          accepts_collaborations?: boolean | null
+          apple_music_url?: string | null
+          artist_name?: string | null
+          available_for_booking?: boolean | null
+          booking_rate_range?: string | null
+          collaborations?: string[] | null
+          created_at?: string
+          debut_date?: string | null
+          genre?: string[] | null
+          id?: string
+          influences?: string[] | null
+          instruments?: string[] | null
+          is_verified_artist?: boolean | null
+          monthly_listeners?: number | null
+          music_style?: string | null
+          origin_city?: string | null
+          profile_id?: string
+          record_label?: string | null
+          soundcloud_url?: string | null
+          spotify_url?: string | null
+          stage_name?: string | null
+          total_releases?: number | null
+          total_streams?: number | null
+          updated_at?: string
+          user_id?: string
+          years_active?: number | null
+          youtube_channel?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "music_profiles_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       music_releases: {
         Row: {
@@ -31506,6 +31880,42 @@ export type Database = {
         }
         Relationships: []
       }
+      profile_follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profile_follows_follower_id_fkey"
+            columns: ["follower_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "profile_follows_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profile_ratings: {
         Row: {
           comment: string | null
@@ -31896,6 +32306,7 @@ export type Database = {
           region: string | null
           rich_bio: Json | null
           skills: string[] | null
+          slug: string | null
           social_links: Json | null
           subdivision: string | null
           updated_at: string | null
@@ -31953,6 +32364,7 @@ export type Database = {
           region?: string | null
           rich_bio?: Json | null
           skills?: string[] | null
+          slug?: string | null
           social_links?: Json | null
           subdivision?: string | null
           updated_at?: string | null
@@ -32010,6 +32422,7 @@ export type Database = {
           region?: string | null
           rich_bio?: Json | null
           skills?: string[] | null
+          slug?: string | null
           social_links?: Json | null
           subdivision?: string | null
           updated_at?: string | null
@@ -39133,6 +39546,36 @@ export type Database = {
           user_id?: string
           verified_at?: string | null
           whatsapp_enabled?: boolean
+        }
+        Relationships: []
+      }
+      users: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          display_name: string | null
+          email: string
+          id: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email: string
+          id?: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          display_name?: string | null
+          email?: string
+          id?: string
+          updated_at?: string
+          username?: string
         }
         Relationships: []
       }
