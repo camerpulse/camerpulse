@@ -82,6 +82,9 @@ const VillageProfile = () => {
   const [loading, setLoading] = useState(true);
   const [userMembership, setUserMembership] = useState(null);
 
+  // Debug logging
+  console.log('Village slug resolver result:', { village, villageLoading, error, entityId });
+
   useEffect(() => {
     if (village) {
       setVillageData(village);
@@ -218,15 +221,18 @@ const VillageProfile = () => {
     );
   }
 
-  if (!villageData) {
+  if (error || !villageData) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Card className="text-center p-8">
           <CardContent>
             <h2 className="text-2xl font-bold mb-4">Village Not Found</h2>
             <p className="text-muted-foreground mb-4">
-              The village you're looking for doesn't exist or has been removed.
+              {error || "The village you're looking for doesn't exist or has been removed."}
             </p>
+            <div className="text-xs text-muted-foreground mb-4">
+              Debug info: village={JSON.stringify(village)}, error={error}, entityId={entityId}
+            </div>
             <Link to="/villages">
               <Button>Back to Villages Directory</Button>
             </Link>
