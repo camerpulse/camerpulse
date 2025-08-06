@@ -150,6 +150,7 @@ import { SenatorDetailPage } from "./pages/SenatorDetailPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminDataImport from "./pages/AdminDataImport";
 import AuditRegistryPage from "./pages/AuditRegistryPage";
+import CivicContributionsPage from "./pages/CivicContributionsPage";
 
 import AddVillage from "./pages/AddVillage";
 import VillageLeaderboards from "./pages/VillageLeaderboards";

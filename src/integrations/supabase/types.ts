@@ -7205,6 +7205,48 @@ export type Database = {
         }
         Relationships: []
       }
+      civic_content_reports: {
+        Row: {
+          action_taken: string | null
+          created_at: string
+          id: string
+          report_details: string | null
+          report_reason: string
+          reported_content_id: string
+          reported_content_type: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+        }
+        Insert: {
+          action_taken?: string | null
+          created_at?: string
+          id?: string
+          report_details?: string | null
+          report_reason: string
+          reported_content_id: string
+          reported_content_type: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Update: {
+          action_taken?: string | null
+          created_at?: string
+          id?: string
+          report_details?: string | null
+          report_reason?: string
+          reported_content_id?: string
+          reported_content_type?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       civic_crawl_data: {
         Row: {
           content_hash: string | null
@@ -7706,6 +7748,69 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      civic_entity_reviews: {
+        Row: {
+          accessibility_rating: number | null
+          created_at: string
+          entity_id: string
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          flagged_reason: string | null
+          helpful_count: number | null
+          id: string
+          is_flagged: boolean | null
+          moderated_at: string | null
+          moderated_by: string | null
+          overall_rating: number
+          responsiveness_rating: number | null
+          review_content: string | null
+          review_title: string | null
+          service_quality_rating: number | null
+          transparency_rating: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accessibility_rating?: number | null
+          created_at?: string
+          entity_id: string
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          flagged_reason?: string | null
+          helpful_count?: number | null
+          id?: string
+          is_flagged?: boolean | null
+          moderated_at?: string | null
+          moderated_by?: string | null
+          overall_rating: number
+          responsiveness_rating?: number | null
+          review_content?: string | null
+          review_title?: string | null
+          service_quality_rating?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accessibility_rating?: number | null
+          created_at?: string
+          entity_id?: string
+          entity_type?: Database["public"]["Enums"]["civic_entity_type"]
+          flagged_reason?: string | null
+          helpful_count?: number | null
+          id?: string
+          is_flagged?: boolean | null
+          moderated_at?: string | null
+          moderated_by?: string | null
+          overall_rating?: number
+          responsiveness_rating?: number | null
+          review_content?: string | null
+          review_title?: string | null
+          service_quality_rating?: number | null
+          transparency_rating?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       civic_entity_verifications: {
         Row: {
@@ -9945,6 +10050,87 @@ export type Database = {
           updated_at?: string
           urgency_level?: string
           volatility_score?: number | null
+        }
+        Relationships: []
+      }
+      civic_suggestions: {
+        Row: {
+          assigned_moderator_id: string | null
+          change_summary: string | null
+          confidence_score: number | null
+          created_at: string
+          description: string | null
+          entity_id: string | null
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          evidence_urls: string[] | null
+          id: string
+          moderator_notes: string | null
+          priority: Database["public"]["Enums"]["suggestion_priority"]
+          rejection_reason: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source_type: string | null
+          status: Database["public"]["Enums"]["suggestion_status"]
+          submission_ip: unknown | null
+          submitter_id: string
+          suggested_data: Json
+          suggestion_type: Database["public"]["Enums"]["suggestion_type"]
+          title: string
+          updated_at: string
+          user_agent: string | null
+          verification_required: boolean | null
+        }
+        Insert: {
+          assigned_moderator_id?: string | null
+          change_summary?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          entity_id?: string | null
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          evidence_urls?: string[] | null
+          id?: string
+          moderator_notes?: string | null
+          priority?: Database["public"]["Enums"]["suggestion_priority"]
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_type?: string | null
+          status?: Database["public"]["Enums"]["suggestion_status"]
+          submission_ip?: unknown | null
+          submitter_id: string
+          suggested_data?: Json
+          suggestion_type: Database["public"]["Enums"]["suggestion_type"]
+          title: string
+          updated_at?: string
+          user_agent?: string | null
+          verification_required?: boolean | null
+        }
+        Update: {
+          assigned_moderator_id?: string | null
+          change_summary?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          entity_id?: string | null
+          entity_type?: Database["public"]["Enums"]["civic_entity_type"]
+          evidence_urls?: string[] | null
+          id?: string
+          moderator_notes?: string | null
+          priority?: Database["public"]["Enums"]["suggestion_priority"]
+          rejection_reason?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_type?: string | null
+          status?: Database["public"]["Enums"]["suggestion_status"]
+          submission_ip?: unknown | null
+          submitter_id?: string
+          suggested_data?: Json
+          suggestion_type?: Database["public"]["Enums"]["suggestion_type"]
+          title?: string
+          updated_at?: string
+          user_agent?: string | null
+          verification_required?: boolean | null
         }
         Relationships: []
       }
@@ -23937,6 +24123,62 @@ export type Database = {
           },
         ]
       }
+      moderation_assignments: {
+        Row: {
+          actual_effort_hours: number | null
+          assigned_at: string
+          assigned_by: string | null
+          completed_at: string | null
+          created_at: string
+          due_date: string | null
+          estimated_effort_hours: number | null
+          id: string
+          moderator_id: string
+          priority: Database["public"]["Enums"]["suggestion_priority"]
+          started_review_at: string | null
+          status: string | null
+          suggestion_id: string
+        }
+        Insert: {
+          actual_effort_hours?: number | null
+          assigned_at?: string
+          assigned_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          due_date?: string | null
+          estimated_effort_hours?: number | null
+          id?: string
+          moderator_id: string
+          priority?: Database["public"]["Enums"]["suggestion_priority"]
+          started_review_at?: string | null
+          status?: string | null
+          suggestion_id: string
+        }
+        Update: {
+          actual_effort_hours?: number | null
+          assigned_at?: string
+          assigned_by?: string | null
+          completed_at?: string | null
+          created_at?: string
+          due_date?: string | null
+          estimated_effort_hours?: number | null
+          id?: string
+          moderator_id?: string
+          priority?: Database["public"]["Enums"]["suggestion_priority"]
+          started_review_at?: string | null
+          status?: string | null
+          suggestion_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "moderation_assignments_suggestion_id_fkey"
+            columns: ["suggestion_id"]
+            isOneToOne: true
+            referencedRelation: "civic_suggestions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       moderation_notifications: {
         Row: {
           created_at: string
@@ -37467,6 +37709,88 @@ export type Database = {
         }
         Relationships: []
       }
+      suggestion_activity_log: {
+        Row: {
+          action_details: Json | null
+          action_type: string
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          suggestion_id: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_details?: Json | null
+          action_type: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          suggestion_id: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_details?: Json | null
+          action_type?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          suggestion_id?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suggestion_activity_log_suggestion_id_fkey"
+            columns: ["suggestion_id"]
+            isOneToOne: false
+            referencedRelation: "civic_suggestions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      suggestion_comments: {
+        Row: {
+          comment_text: string
+          commenter_id: string
+          created_at: string
+          id: string
+          is_moderator_comment: boolean | null
+          is_public: boolean | null
+          suggestion_id: string
+          updated_at: string
+        }
+        Insert: {
+          comment_text: string
+          commenter_id: string
+          created_at?: string
+          id?: string
+          is_moderator_comment?: boolean | null
+          is_public?: boolean | null
+          suggestion_id: string
+          updated_at?: string
+        }
+        Update: {
+          comment_text?: string
+          commenter_id?: string
+          created_at?: string
+          id?: string
+          is_moderator_comment?: boolean | null
+          is_public?: boolean | null
+          suggestion_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "suggestion_comments_suggestion_id_fkey"
+            columns: ["suggestion_id"]
+            isOneToOne: false
+            referencedRelation: "civic_suggestions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       system_feature_flags: {
         Row: {
           created_at: string | null
@@ -38659,6 +38983,60 @@ export type Database = {
           scholarships_received?: number | null
           streak_days?: number | null
           total_civic_score?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_civic_reputation: {
+        Row: {
+          accuracy_rate: number | null
+          achievements: Json | null
+          approved_suggestions: number | null
+          badges: Json | null
+          contribution_level: string | null
+          created_at: string
+          id: string
+          last_suggestion_at: string | null
+          pending_suggestions: number | null
+          rejected_suggestions: number | null
+          reputation_score: number | null
+          suggestions_today: number | null
+          total_suggestions: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          accuracy_rate?: number | null
+          achievements?: Json | null
+          approved_suggestions?: number | null
+          badges?: Json | null
+          contribution_level?: string | null
+          created_at?: string
+          id?: string
+          last_suggestion_at?: string | null
+          pending_suggestions?: number | null
+          rejected_suggestions?: number | null
+          reputation_score?: number | null
+          suggestions_today?: number | null
+          total_suggestions?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          accuracy_rate?: number | null
+          achievements?: Json | null
+          approved_suggestions?: number | null
+          badges?: Json | null
+          contribution_level?: string | null
+          created_at?: string
+          id?: string
+          last_suggestion_at?: string | null
+          pending_suggestions?: number | null
+          rejected_suggestions?: number | null
+          reputation_score?: number | null
+          suggestions_today?: number | null
+          total_suggestions?: number | null
           updated_at?: string
           user_id?: string
         }
@@ -44765,6 +45143,18 @@ export type Database = {
         | "medium_courier"
         | "nationwide_express"
         | "white_label"
+      suggestion_priority: "low" | "medium" | "high" | "urgent"
+      suggestion_status:
+        | "pending"
+        | "under_review"
+        | "approved"
+        | "rejected"
+        | "needs_revision"
+      suggestion_type:
+        | "new_entity"
+        | "edit_existing"
+        | "data_correction"
+        | "additional_info"
       threat_level: "low" | "medium" | "high" | "critical"
       ticket_type:
         | "regular"
@@ -45491,6 +45881,20 @@ export const Constants = {
         "medium_courier",
         "nationwide_express",
         "white_label",
+      ],
+      suggestion_priority: ["low", "medium", "high", "urgent"],
+      suggestion_status: [
+        "pending",
+        "under_review",
+        "approved",
+        "rejected",
+        "needs_revision",
+      ],
+      suggestion_type: [
+        "new_entity",
+        "edit_existing",
+        "data_correction",
+        "additional_info",
       ],
       threat_level: ["low", "medium", "high", "critical"],
       ticket_type: [
