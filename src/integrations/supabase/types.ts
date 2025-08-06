@@ -20073,6 +20073,44 @@ export type Database = {
           },
         ]
       }
+      job_profile: {
+        Row: {
+          created_at: string
+          id: string
+          resume_url: string | null
+          skills: string[] | null
+          updated_at: string
+          user_id: string
+          work_experience: Json | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          resume_url?: string | null
+          skills?: string[] | null
+          updated_at?: string
+          user_id: string
+          work_experience?: Json | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          resume_url?: string | null
+          skills?: string[] | null
+          updated_at?: string
+          user_id?: string
+          work_experience?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_profile_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       job_profiles: {
         Row: {
           available_for_relocation: boolean | null
@@ -22144,6 +22182,44 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "marketplace_vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_profile: {
+        Row: {
+          created_at: string
+          id: string
+          product_categories: string[] | null
+          shop_description: string | null
+          updated_at: string
+          user_id: string
+          vendor_name: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          product_categories?: string[] | null
+          shop_description?: string | null
+          updated_at?: string
+          user_id: string
+          vendor_name?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          product_categories?: string[] | null
+          shop_description?: string | null
+          updated_at?: string
+          user_id?: string
+          vendor_name?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_profile_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
@@ -24906,6 +24982,44 @@ export type Database = {
           village_hometown?: string | null
         }
         Relationships: []
+      }
+      music_profile: {
+        Row: {
+          artist_bio: string | null
+          created_at: string
+          genres: string[] | null
+          id: string
+          social_links: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          artist_bio?: string | null
+          created_at?: string
+          genres?: string[] | null
+          id?: string
+          social_links?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          artist_bio?: string | null
+          created_at?: string
+          genres?: string[] | null
+          id?: string
+          social_links?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "music_profile_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       music_profiles: {
         Row: {
@@ -41251,6 +41365,44 @@ export type Database = {
             columns: ["village_id"]
             isOneToOne: false
             referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      village_membership: {
+        Row: {
+          created_at: string
+          id: string
+          membership_since: string | null
+          role_in_village: string | null
+          updated_at: string
+          user_id: string
+          village_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          membership_since?: string | null
+          role_in_village?: string | null
+          updated_at?: string
+          user_id: string
+          village_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          membership_since?: string | null
+          role_in_village?: string | null
+          updated_at?: string
+          user_id?: string
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "village_membership_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
             referencedColumns: ["id"]
           },
         ]
