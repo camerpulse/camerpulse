@@ -84,31 +84,31 @@ export const AppRouter: React.FC = () => {
         
         {/* Villages */}
         <Route path="/villages" element={<VillagesDirectoryPage />} />
-        <Route path="/villages/:villageSlug" element={<VillageProfile />} />
+        <Route path="/villages/:slug" element={<VillageProfile />} />
         
         {/* Civic Education */}
         <Route path="/civic-education" element={<CivicEducationHub />} />
         
         {/* Politicians */}
         <Route path="/politicians" element={<Politicians />} />
-        <Route path="/politicians/:lastName-:id" element={<PoliticianDetailPage />} />
+        <Route path="/politicians/:slug" element={<PoliticianDetailPage />} />
         
         {/* Senators */}
         <Route path="/senators" element={<SenatorsPage />} />
-        <Route path="/senators/:lastName-:id" element={<SenatorDetailPage />} />
+        <Route path="/senators/:slug" element={<SenatorDetailPage />} />
         
         {/* MPs */}
         <Route path="/mps" element={<MPsPage />} />
-        <Route path="/mps/:lastName-:id" element={<MPDetailPage />} />
+        <Route path="/mps/:slug" element={<MPDetailPage />} />
         
         {/* Ministers */}
         <Route path="/ministers" element={<MinistersPage />} />
-        <Route path="/ministers/:lastName-:id" element={<MinisterDetailPage />} />
+        <Route path="/ministers/:slug" element={<MinisterDetailPage />} />
         
         {/* Political Parties */}
-        <Route path="/parties/:partySlug" element={<PoliticalPartyDetail />} />
+        <Route path="/parties/:slug" element={<PoliticalPartyDetail />} />
         <Route path="/political-parties" element={<PoliticalParties />} />
-        <Route path="/political-parties/:id" element={<PoliticalPartyDetail />} />
+        <Route path="/political-parties/:slug" element={<PoliticalPartyDetail />} />
         
         {/* Petitions */}
         <Route path="/petitions" element={<PetitionsPage />} />

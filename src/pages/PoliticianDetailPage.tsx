@@ -63,7 +63,7 @@ export const PoliticianDetailPage: React.FC = () => {
   // Use real data from politician entity
   const politicianData = {
     id: politician.id,
-    name: politician.name,
+    name: politician.name || politician.full_name,
     position: politician.role_title || politician.position || 'Politician',
     party: politician.party || politician.political_party,
     region: politician.region,

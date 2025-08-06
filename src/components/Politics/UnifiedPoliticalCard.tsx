@@ -73,13 +73,25 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
     return 'text-red-600';
   };
 
-  const getRoutePrefix = () => {
+  const getDetailUrl = () => {
+    // Generate slug from name if not provided
+    const slug = generateSlug(name, id);
+    
     switch (type) {
-      case 'senator': return '/senators';
-      case 'mp': return '/mps';
-      case 'minister': return '/ministers';
-      default: return '/politicians';
+      case 'senator': return `/senators/${slug}`;
+      case 'mp': return `/mps/${slug}`;
+      case 'minister': return `/ministers/${slug}`;
+      default: return `/politicians/${slug}`;
     }
+  };
+
+  const generateSlug = (name: string, id: string) => {
+    return name
+      .toLowerCase()
+      .replace(/[^a-z0-9\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-+|-+$/g, '') + '-' + id;
   };
 
   return (
@@ -89,7 +101,7 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
           "group h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-2 cursor-pointer rounded-xl overflow-hidden",
           className
         )}
-        onClick={() => navigate(`${getRoutePrefix()}/${id}`)}
+        onClick={() => navigate(getDetailUrl())}
       >
         <CardContent className="p-0">
           {/* Image Container */}
@@ -210,7 +222,7 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
                 className="bg-green-600 hover:bg-green-700 text-white"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigate(`${getRoutePrefix()}/${id}`);
+                  navigate(getDetailUrl());
                 }}
               >
                 <Eye className="w-4 h-4 mr-1" />

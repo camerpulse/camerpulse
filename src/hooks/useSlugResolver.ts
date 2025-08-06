@@ -23,7 +23,8 @@ interface SlugResolverResult<T> {
 export function useSlugResolver<T = any>(
   options: UseSlugResolverOptions
 ): SlugResolverResult<T> {
-  const { id: slugOrId } = useParams<{ id: string }>();
+  const { slug: slugParam, id: idParam } = useParams<{ slug?: string; id?: string }>();
+  const slugOrId = slugParam || idParam;
   const [entity, setEntity] = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,7 +58,7 @@ export function useSlugResolver<T = any>(
           query = query.eq(idColumn, parsedId);
           setEntityId(parsedId);
         } else if (slugOrId.includes('-')) {
-          // It's a slug without ID, query by slug
+          // It's a slug, query by slug column
           query = query.eq(slugColumn, slugOrId);
         } else {
           // It's likely a raw ID, query by ID
