@@ -29,19 +29,31 @@ export interface InstitutionEntity extends SluggedEntity {
 }
 
 /**
- * Generates a URL-safe slug from text
+ * Generates a URL-safe slug from text - Enhanced version
  */
 export function generateSlug(text: string, id?: string): string {
   if (!text) return id || 'item';
   
   let slug = text
     .toString()                        // Cast to string
-    .toLowerCase()                    // Lowercase
+    .toLowerCase()                    // Lowercase  
     .trim()                          // Remove whitespace at start/end
     .replace(/[\s\W-]+/g, '-')       // Replace spaces/non-word chars with hyphen
     .replace(/^-+|-+$/g, '');        // Remove leading/trailing hyphens
   
-  // Append ID if provided
+  // Handle special characters more gracefully
+  slug = slug
+    .replace(/[àáâäãåą]/g, 'a')
+    .replace(/[èéêë]/g, 'e')
+    .replace(/[ìíîï]/g, 'i')
+    .replace(/[òóôöõø]/g, 'o')
+    .replace(/[ùúûü]/g, 'u')
+    .replace(/[ñń]/g, 'n')
+    .replace(/[çć]/g, 'c')
+    .replace(/[ß]/g, 'ss')
+    .replace(/[ýÿ]/g, 'y');
+  
+  // Append ID if provided for uniqueness
   if (id) {
     slug = slug ? `${slug}-${id}` : id;
   }
@@ -147,8 +159,26 @@ export class URLBuilder {
   };
 
   static profiles = {
-    user: (userId: string) => `${URLBuilder.getLanguagePrefix()}/profile/${userId}`,
-    slug: (username: string) => `${URLBuilder.getLanguagePrefix()}/@${username}`
+    user: (userId: string) => `/profile/${userId}`,
+    username: (username: string) => `/profile/${username}`,
+    userSlug: (username: string) => `/@${username}`,
+    
+    // Module-specific profile routes
+    music: (artistSlug: string, id: string) => `/music/artists/${artistSlug}-${id}`,
+    job: (username: string, id: string) => `/jobs/profile/${username}-${id}`,
+    village: (username: string) => `/villages/members/${username}`,
+    marketplace: (username: string, id: string) => `/marketplace/vendors/${username}-${id}`
+  };
+
+  static marketplace = {
+    list: () => `/marketplace`,
+    vendors: () => `/marketplace/vendors`,
+    product: (productSlug: string, id: string) => `/marketplace/products/${productSlug}-${id}`
+  };
+
+  static jobs = {
+    list: () => `/jobs`,
+    detail: (jobSlug: string, id: string) => `/jobs/${jobSlug}-${id}`
   };
 
   static admin = {
