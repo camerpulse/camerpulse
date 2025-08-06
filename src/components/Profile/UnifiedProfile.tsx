@@ -32,21 +32,23 @@ import { ProfileAbout } from './ProfileAbout';
 import { ProfileModules } from './ProfileModules';
 
 interface UnifiedProfileProps {
-  userId: string;
+  userId?: string;
   username?: string;
   isModal?: boolean;
   onClose?: () => void;
+  defaultTab?: string;
 }
 
 export const UnifiedProfile: React.FC<UnifiedProfileProps> = ({ 
   userId, 
   username,
   isModal = false,
-  onClose 
+  onClose,
+  defaultTab = 'overview'
 }) => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState('overview');
+  const [activeTab, setActiveTab] = useState(defaultTab);
   
   const {
     profile,

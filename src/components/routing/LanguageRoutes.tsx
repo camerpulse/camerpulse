@@ -48,6 +48,12 @@ import JobDetailPage from '@/pages/JobDetailPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import VendorsPage from '@/pages/VendorsPage';
 
+// Module-specific profile pages
+import MusicProfile from '@/pages/profiles/MusicProfile';
+import JobProfile from '@/pages/profiles/JobProfile';
+import VillageMemberProfile from '@/pages/profiles/VillageMemberProfile';
+import MarketplaceProfile from '@/pages/profiles/MarketplaceProfile';
+
 /**
  * Main application router with clean, focused routing structure
  */
@@ -123,6 +129,12 @@ export const AppRouter: React.FC = () => {
         <Route path="/profile/:username" element={<UnifiedProfilePage />} />
         <Route path="/u/:userId" element={<UnifiedProfilePage />} />
         <Route path="/@:username" element={<UnifiedProfilePage />} />
+        
+        {/* Module-specific profiles */}
+        <Route path="/music/artists/:artistSlug-:id" element={<MusicProfile />} />
+        <Route path="/jobs/profile/:username-:id" element={<JobProfile />} />
+        <Route path="/villages/members/:username" element={<VillageMemberProfile />} />
+        <Route path="/marketplace/vendors/:username-:id" element={<MarketplaceProfile />} />
         
         {/* Legacy Profile Routes */}
         <Route path="/profile/:username/legacy" element={<ProfilePage />} />
