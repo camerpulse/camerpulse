@@ -59,9 +59,42 @@ export function useSlugResolver<T = any>(
           setEntityId(parsedId);
         } else if (slugOrId.includes('-') || /^[a-z-]+$/.test(slugOrId)) {
           // It's a slug without ID, try to match by name
-          // Generate potential name from slug for matching
+          // Convert slug back to potential name variations and try exact matches first
           const nameFromSlug = slugOrId.replace(/-/g, ' ');
-          query = query.ilike('name', `%${nameFromSlug}%`);
+          
+          // Try different name variations (case-insensitive exact match)
+          const nameVariations = [
+            nameFromSlug, // dr elizabeth teke
+            nameFromSlug.replace(/^dr\s+/i, 'Dr. '), // Dr. elizabeth teke
+            nameFromSlug.replace(/^hon\s+/i, 'Hon. '), // Hon. elizabeth teke
+            nameFromSlug.split(' ').map(word => 
+              word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+            ).join(' ') // Dr Elizabeth Teke
+          ];
+          
+          // Try exact matches first, then fallback to ilike
+          let found = false;
+          for (const variation of nameVariations) {
+            const { data: exactMatch } = await supabase
+              .from(table)
+              .select('*')
+              .ilike('name', variation)
+              .maybeSingle();
+            
+            if (exactMatch) {
+              setEntity(exactMatch);
+              setEntityId(exactMatch[idColumn]);
+              found = true;
+              break;
+            }
+          }
+          
+          if (!found) {
+            // Fallback to broader search
+            query = query.ilike('name', `%${nameFromSlug}%`);
+          } else {
+            return; // Exit early if found
+          }
         } else {
           // It's likely a raw ID, query by ID
           query = query.eq(idColumn, slugOrId);
