@@ -74,7 +74,7 @@ export function useSlugResolver<T = any>(
           ];
           
           // Use OR conditions to search for any variation
-          const nameConditions = nameVariations.map(name => `name.ilike.%${name}%`).join(',');
+          const nameConditions = nameVariations.map(name => `${slugColumn}.ilike.%${name}%`).join(',');
           query = query.or(nameConditions);
         } else {
           // It's likely a raw ID, query by ID
@@ -128,7 +128,8 @@ export function useSenatorSlug() {
 
 export function useVillageSlug() {
   return useSlugResolver({
-    table: 'villages'
+    table: 'villages',
+    slugColumn: 'village_name'  // Use village_name instead of name
   });
 }
 
