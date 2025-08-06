@@ -57,9 +57,11 @@ export function useSlugResolver<T = any>(
           // It's a slug with ID at the end, query by ID
           query = query.eq(idColumn, parsedId);
           setEntityId(parsedId);
-        } else if (slugOrId.includes('-')) {
-          // It's a slug, query by slug column
-          query = query.eq(slugColumn, slugOrId);
+        } else if (slugOrId.includes('-') || /^[a-z-]+$/.test(slugOrId)) {
+          // It's a slug without ID, try to match by name
+          // Generate potential name from slug for matching
+          const nameFromSlug = slugOrId.replace(/-/g, ' ');
+          query = query.ilike('name', `%${nameFromSlug}%`);
         } else {
           // It's likely a raw ID, query by ID
           query = query.eq(idColumn, slugOrId);

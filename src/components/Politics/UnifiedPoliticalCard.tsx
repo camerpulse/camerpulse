@@ -91,7 +91,7 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-')
       .replace(/-+/g, '-')
-      .replace(/^-+|-+$/g, '') + '-' + id;
+      .replace(/^-+|-+$/g, '');
   };
 
   return (
