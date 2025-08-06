@@ -242,8 +242,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         password
       });
 
+      // Enhanced success handling
+      if (data?.user && !error) {
+        // Profile will be fetched automatically via onAuthStateChange
+        console.log('User signed in successfully:', data.user.email);
+      }
+
       return { data, error };
     } catch (error) {
+      console.error('SignIn error:', error);
       return { error };
     } finally {
       setLoading(false);
