@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LegacyRedirectHandler } from './LegacyRedirectHandler';
 
 // Import all pages
@@ -19,6 +19,8 @@ import PoliticalParties from '@/pages/PoliticalParties';
 import PoliticalPartyDetail from '@/pages/PoliticalPartyDetail';
 import VillagesDirectory from '@/pages/VillagesDirectory';
 import VillageProfile from '@/pages/VillageProfile';
+import FonsDirectory from '@/pages/FonsDirectory';
+import FonProfile from '@/pages/FonProfile';
 import Marketplace from '@/pages/Marketplace';
 import JobBoard from '@/pages/jobs/JobBoard';
 import MessengerPage from '@/pages/MessengerPage';
@@ -85,6 +87,11 @@ export const AppRouter: React.FC = () => {
         {/* Villages */}
         <Route path="/villages" element={<VillagesDirectoryPage />} />
         <Route path="/villages/:slug" element={<VillageProfile />} />
+        
+        {/* Fons */}
+        <Route path="/fon" element={<Navigate to="/fons" replace />} />
+        <Route path="/fons" element={<FonsDirectory />} />
+        <Route path="/fons/:slug" element={<FonProfile />} />
         
         {/* Civic Education */}
         <Route path="/civic-education" element={<CivicEducationHub />} />
