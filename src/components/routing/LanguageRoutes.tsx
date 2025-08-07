@@ -165,7 +165,20 @@ export const AppRouter: React.FC = () => {
         {/* Directories */}
         <Route path="/schools" element={<SchoolsDirectory />} />
         <Route path="/hospitals" element={<HospitalsDirectory />} />
+        <Route path="/pharmacies" element={<div className="p-8"><h1 className="text-2xl font-bold">Pharmacies Directory</h1><p>Coming soon...</p></div>} />
+        <Route path="/companies" element={<div className="p-8"><h1 className="text-2xl font-bold">Companies Directory</h1><p>Coming soon...</p></div>} />
         <Route path="/companies/:id" element={<CompanyProfile />} />
+        
+        {/* Music Platform */}
+        <Route path="/music" element={<div className="p-8"><h1 className="text-2xl font-bold">Music Platform</h1><p>Coming soon...</p></div>} />
+        
+        {/* Static Pages */}
+        <Route path="/about" element={<div className="p-8"><h1 className="text-2xl font-bold">About CamerPulse</h1><p>Learn more about our platform...</p></div>} />
+        <Route path="/help" element={<div className="p-8"><h1 className="text-2xl font-bold">Help Center</h1><p>Find answers to your questions...</p></div>} />
+        <Route path="/contact" element={<div className="p-8"><h1 className="text-2xl font-bold">Contact Us</h1><p>Get in touch with our team...</p></div>} />
+        <Route path="/privacy" element={<div className="p-8"><h1 className="text-2xl font-bold">Privacy Policy</h1><p>Our privacy policy...</p></div>} />
+        <Route path="/terms" element={<div className="p-8"><h1 className="text-2xl font-bold">Terms of Service</h1><p>Terms and conditions...</p></div>} />
+        <Route path="/cookies" element={<div className="p-8"><h1 className="text-2xl font-bold">Cookie Policy</h1><p>Cookie usage policy...</p></div>} />
 
         {/* Advanced Features */}
         <Route path="/search" element={<AdvancedSearchPage />} />
