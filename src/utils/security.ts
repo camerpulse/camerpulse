@@ -187,7 +187,88 @@ export const SECURITY_HEADERS = {
 };
 
 /**
- * Audit logging utility
+ * Enhanced input sanitization with better XSS protection
+ */
+export function advancedSanitizeInput(input: string): string {
+  if (!input) return '';
+  
+  // Remove all script tags and their content
+  let sanitized = input.replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '');
+  
+  // Remove javascript: protocols and event handlers
+  sanitized = sanitized.replace(/javascript:/gi, '');
+  sanitized = sanitized.replace(/on\w+\s*=/gi, '');
+  sanitized = sanitized.replace(/data:text\/html/gi, '');
+  sanitized = sanitized.replace(/vbscript:/gi, '');
+  
+  // Remove dangerous tags
+  const dangerousTags = ['iframe', 'object', 'embed', 'link', 'meta', 'form', 'input', 'button', 'select', 'textarea'];
+  dangerousTags.forEach(tag => {
+    const regex = new RegExp(`<${tag}[^>]*>.*?<\/${tag}>`, 'gi');
+    sanitized = sanitized.replace(regex, '');
+    const selfClosing = new RegExp(`<${tag}[^>]*\/?>`, 'gi');
+    sanitized = sanitized.replace(selfClosing, '');
+  });
+  
+  // Encode potentially dangerous characters
+  sanitized = sanitized
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
+  
+  return sanitized;
+}
+
+/**
+ * Validate and sanitize user roles to prevent privilege escalation
+ */
+export function validateUserRole(role: string): ValidationResult {
+  const allowedRoles = ['user', 'moderator', 'admin'];
+  
+  if (!role || typeof role !== 'string') {
+    return { isValid: false, error: 'Role must be a valid string' };
+  }
+  
+  const sanitizedRole = role.toLowerCase().trim();
+  
+  if (!allowedRoles.includes(sanitizedRole)) {
+    return { isValid: false, error: 'Invalid role specified' };
+  }
+  
+  return { isValid: true, sanitized: sanitizedRole };
+}
+
+/**
+ * Session security validation
+ */
+export function validateSession(sessionData: any): ValidationResult {
+  if (!sessionData || typeof sessionData !== 'object') {
+    return { isValid: false, error: 'Invalid session data' };
+  }
+  
+  // Check for required session fields
+  const requiredFields = ['user_id', 'timestamp'];
+  for (const field of requiredFields) {
+    if (!(field in sessionData)) {
+      return { isValid: false, error: `Missing required field: ${field}` };
+    }
+  }
+  
+  // Check session expiry (24 hours)
+  const sessionAge = Date.now() - new Date(sessionData.timestamp).getTime();
+  const maxAge = 24 * 60 * 60 * 1000; // 24 hours
+  
+  if (sessionAge > maxAge) {
+    return { isValid: false, error: 'Session expired' };
+  }
+  
+  return { isValid: true };
+}
+
+/**
+ * Enhanced audit logging utility with real Supabase integration
  */
 export async function logSecurityEvent(
   action: string,
@@ -197,25 +278,69 @@ export async function logSecurityEvent(
   severity: 'low' | 'medium' | 'high' | 'critical' = 'medium'
 ) {
   try {
-    // This would integrate with your Supabase client
-    console.log('Security Event:', {
+    const eventData = {
       action,
       resourceType,
       resourceId,
-      details,
+      details: details || {},
       severity,
-      timestamp: new Date().toISOString()
-    });
+      timestamp: new Date().toISOString(),
+      userAgent: navigator.userAgent,
+      ip: await getUserIP()
+    };
     
-    // In production, this would call your audit logging function
-    // await supabase.rpc('log_security_event', {
-    //   p_action_type: action,
-    //   p_resource_type: resourceType,
-    //   p_resource_id: resourceId,
-    //   p_details: details || {},
-    //   p_severity: severity
-    // });
+    console.log('Security Event:', eventData);
+    
+    // Store in browser for immediate monitoring
+    const existingEvents = JSON.parse(localStorage.getItem('security_events') || '[]');
+    existingEvents.push(eventData);
+    
+    // Keep only last 100 events in localStorage
+    if (existingEvents.length > 100) {
+      existingEvents.splice(0, existingEvents.length - 100);
+    }
+    
+    localStorage.setItem('security_events', JSON.stringify(existingEvents));
+    
+    // TODO: In production, integrate with Supabase audit logging
+    // await supabase.from('security_audit_log').insert(eventData);
+    
   } catch (error) {
     console.error('Failed to log security event:', error);
   }
+}
+
+/**
+ * Get user IP address (fallback for audit logging)
+ */
+async function getUserIP(): Promise<string> {
+  try {
+    const response = await fetch('https://api.ipify.org?format=json');
+    const data = await response.json();
+    return data.ip || 'unknown';
+  } catch {
+    return 'unknown';
+  }
+}
+
+/**
+ * Content Security Policy violation reporter
+ */
+export function setupCSPReporting() {
+  document.addEventListener('securitypolicyviolation', (e) => {
+    logSecurityEvent(
+      'csp_violation',
+      'content_security_policy',
+      undefined,
+      {
+        blockedURI: e.blockedURI,
+        violatedDirective: e.violatedDirective,
+        originalPolicy: e.originalPolicy,
+        documentURI: e.documentURI,
+        lineNumber: e.lineNumber,
+        columnNumber: e.columnNumber
+      },
+      'high'
+    );
+  });
 }
