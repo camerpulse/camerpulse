@@ -92,7 +92,27 @@
     --rating-average: 51 100% 50%;       /* 3 stars - yellow */
     --rating-poor: 25 95% 53%;           /* 2 stars - orange */
     --rating-terrible: 0 84% 60%;        /* 1 star - red */
+
+    /* African Heritage Fons Colors */
+    --fons-royal: 25 95% 35%;            /* Royal brown */
+    --fons-gold: 38 85% 55%;             /* Traditional gold */
+    --fons-earth: 25 65% 45%;            /* Earth brown */
+    --fons-cowrie: 44 87% 85%;           /* Cowrie shell cream */
+    --fons-mask: 16 45% 25%;             /* African mask dark brown */
+    --fons-kente: 348 85% 47%;           /* Kente red accent */
+    --fons-heritage: 140 90% 28%;        /* Heritage green */
     
+    /* Fons Gradients */
+    --gradient-african-royal: linear-gradient(135deg, hsl(25 95% 35%) 0%, hsl(38 85% 55%) 50%, hsl(44 87% 85%) 100%);
+    --gradient-heritage-pride: linear-gradient(45deg, hsl(140 90% 28%) 0%, hsl(25 95% 35%) 50%, hsl(38 85% 55%) 100%);
+    --gradient-ancestral: linear-gradient(135deg, hsl(16 45% 25%) 0%, hsl(25 65% 45%) 50%, hsl(44 87% 85%) 100%);
+    --gradient-cowrie-blessing: linear-gradient(180deg, hsl(44 87% 85%) 0%, hsl(38 85% 55%) 100%);
+    
+    /* Fons Shadows */
+    --shadow-royal: 0 20px 40px -10px hsl(25 95% 35% / 0.3);
+    --shadow-heritage: 0 25px 50px -12px hsl(140 90% 28% / 0.25), 0 0 40px hsl(38 85% 55% / 0.2);
+    --shadow-ancestral: 0 15px 30px -8px hsl(16 45% 25% / 0.4);
+
     --radius: 0.75rem;
   }
 
@@ -279,7 +299,67 @@
     -webkit-text-fill-color: transparent;
   }
   
+  .text-gradient-royal {
+    background: var(--gradient-african-royal);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .text-gradient-heritage {
+    background: var(--gradient-heritage-pride);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .bg-gradient-royal {
+    background: var(--gradient-african-royal);
+  }
+  
+  .bg-gradient-heritage {
+    background: var(--gradient-heritage-pride);
+  }
+  
+  .bg-gradient-ancestral {
+    background: var(--gradient-ancestral);
+  }
+  
+  .bg-gradient-cowrie {
+    background: var(--gradient-cowrie-blessing);
+  }
+  
+  .shadow-royal {
+    box-shadow: var(--shadow-royal);
+  }
+  
+  .shadow-heritage {
+    box-shadow: var(--shadow-heritage);
+  }
+  
+  .shadow-ancestral {
+    box-shadow: var(--shadow-ancestral);
+  }
+  
   .directory-card {
     @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .fons-card {
+    @apply transition-all duration-300 hover:shadow-heritage hover:-translate-y-2 hover:scale-105;
+  }
+  
+  .cowrie-decoration {
+    background: radial-gradient(circle, hsl(44 87% 85%) 0%, hsl(38 85% 55%) 100%);
+    @apply rounded-full shadow-sm;
+  }
+  
+  .african-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm10 0c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    background-size: 60px 60px;
+  }
+  
+  .kente-border {
+    border-image: linear-gradient(45deg, hsl(140 90% 28%), hsl(348 85% 47%), hsl(38 85% 55%), hsl(140 90% 28%)) 1;
   }
 }

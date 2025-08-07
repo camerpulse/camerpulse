@@ -242,50 +242,64 @@ const FonsDirectory = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50 to-orange-50">
-      {/* Hero Header with African Patterns */}
-      <div className="relative bg-gradient-to-r from-amber-800 via-orange-700 to-red-800 text-white overflow-hidden">
+      {/* Hero Header with Premium African Heritage Design */}
+      <div className="relative bg-gradient-heritage text-white overflow-hidden">
         {/* African Pattern Overlay */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="h-full w-full" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.4'%3E%3Cpath d='M30 30c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20zm10 0c0-11.046-8.954-20-20-20s-20 8.954-20 20 8.954 20 20 20 20-8.954 20-20z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            backgroundSize: '60px 60px'
-          }} />
-        </div>
+        <div className="absolute inset-0 african-pattern opacity-20" />
         
         {/* Cowrie Shell Decorations */}
-        <div className="absolute top-4 right-4 opacity-20">
-          <div className="flex space-x-2">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="w-6 h-6 bg-amber-200 rounded-full opacity-60" />
+        <div className="absolute top-8 right-8 opacity-40">
+          <div className="grid grid-cols-3 gap-2">
+            {Array.from({ length: 9 }).map((_, i) => (
+              <div key={i} className="cowrie-decoration w-4 h-4" />
             ))}
           </div>
         </div>
         
+        {/* African Mask Silhouettes */}
+        <div className="absolute top-1/2 left-8 -translate-y-1/2 opacity-10">
+          <div className="w-24 h-32 bg-fons-mask rounded-lg" />
+        </div>
+        
+        {/* Kente Pattern Border */}
+        <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-fons-heritage via-fons-kente to-fons-gold" />
+        
         <div className="relative container mx-auto px-4 py-16">
           <div className="text-center">
             <div className="flex items-center justify-center mb-6">
-              <Crown className="h-12 w-12 text-amber-300 mr-4" />
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-amber-200 to-orange-100 bg-clip-text text-transparent">
-                Fons Directory
+              <Crown className="h-12 w-12 text-fons-cowrie mr-4 drop-shadow-lg" />
+              <h1 className="text-5xl font-bold text-gradient-royal">
+                Royal Heritage Directory
               </h1>
-              <Crown className="h-12 w-12 text-amber-300 ml-4" />
+              <Crown className="h-12 w-12 text-fons-cowrie ml-4 drop-shadow-lg" />
             </div>
-            <p className="text-xl text-amber-100 max-w-3xl mx-auto leading-relaxed">
-              Honoring the traditional leadership of Cameroon - Preserving our royal heritage 
-              and celebrating the wisdom of our Fons, Chiefs, Sultans, and Lamidos
+            <div className="flex items-center justify-center mb-4">
+              <div className="flex space-x-2">
+                {Array.from({ length: 7 }).map((_, i) => (
+                  <div key={i} className="cowrie-decoration w-3 h-3" />
+                ))}
+              </div>
+            </div>
+            <p className="text-xl text-fons-cowrie max-w-4xl mx-auto leading-relaxed">
+              🏛️ Honoring the sacred wisdom of Cameroon's traditional leadership 🏛️<br />
+              Celebrating our Fons, Chiefs, Sultans, Lamidos, and custodians of ancestral heritage
             </p>
-            <div className="flex items-center justify-center mt-6 space-x-6 text-amber-200">
-              <div className="flex items-center">
+            <div className="flex flex-wrap items-center justify-center mt-8 gap-6 text-fons-cowrie">
+              <div className="flex items-center bg-fons-mask/20 px-4 py-2 rounded-full border border-fons-gold/30">
                 <Users className="h-5 w-5 mr-2" />
-                <span>{leaders.length} Traditional Leaders</span>
+                <span className="font-semibold">{leaders.length} Traditional Leaders</span>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center bg-fons-mask/20 px-4 py-2 rounded-full border border-fons-gold/30">
                 <Shield className="h-5 w-5 mr-2" />
-                <span>{leaders.filter(l => l.is_verified).length} Verified</span>
+                <span className="font-semibold">{leaders.filter(l => l.is_verified).length} Verified Royal Houses</span>
               </div>
-              <div className="flex items-center">
+              <div className="flex items-center bg-fons-mask/20 px-4 py-2 rounded-full border border-fons-gold/30">
                 <Award className="h-5 w-5 mr-2" />
-                <span>{regions.length} Regions</span>
+                <span className="font-semibold">{regions.length} Regions Represented</span>
+              </div>
+              <div className="flex items-center bg-fons-mask/20 px-4 py-2 rounded-full border border-fons-gold/30">
+                <Sparkles className="h-5 w-5 mr-2" />
+                <span className="font-semibold">Living Heritage</span>
               </div>
             </div>
           </div>
@@ -295,51 +309,65 @@ const FonsDirectory = () => {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Filters Sidebar */}
+          {/* Premium Heritage Filters Sidebar */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-4 shadow-lg border-amber-200 bg-gradient-to-b from-white to-amber-50/30">
-              <CardHeader className="bg-gradient-to-r from-amber-100 to-orange-100 rounded-t-lg">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-bold text-amber-900 flex items-center">
+            <Card className="sticky top-4 shadow-heritage border-fons-gold/30 bg-gradient-cowrie overflow-hidden">
+              {/* Decorative Header */}
+              <div className="relative bg-gradient-royal p-4 rounded-t-lg">
+                {/* Cowrie Shell Pattern */}
+                <div className="absolute inset-0 opacity-20">
+                  <div className="grid grid-cols-6 gap-1 h-full w-full">
+                    {Array.from({ length: 24 }).map((_, i) => (
+                      <div key={i} className="cowrie-decoration w-2 h-2" />
+                    ))}
+                  </div>
+                </div>
+                
+                <div className="relative flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-white flex items-center">
                     <Filter className="h-5 w-5 mr-2" />
-                    Filters
+                    Sacred Filters
                   </h3>
                   <Button 
                     variant="ghost" 
                     size="sm" 
                     onClick={clearFilters}
-                    className="text-amber-700 hover:text-amber-900"
+                    className="text-white hover:bg-white/20"
                   >
                     Clear
                   </Button>
                 </div>
-              </CardHeader>
-              <CardContent className="p-6 space-y-6">
+              </div>
+              <CardContent className="p-6 space-y-6 bg-gradient-to-b from-fons-cowrie/20 to-white">
                 {/* Search */}
                 <div>
-                  <label className="text-sm font-semibold text-amber-900 mb-2 block">Search</label>
+                  <label className="text-sm font-semibold text-fons-mask mb-2 block flex items-center">
+                    👑 Search Royal Heritage
+                  </label>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-amber-600" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-fons-gold" />
                     <Input
                       placeholder="Search by name, village, or region..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 border-amber-200 focus:border-amber-400"
+                      className="pl-10 border-fons-gold/30 focus:border-fons-gold bg-white/80 placeholder:text-fons-earth/60"
                     />
                   </div>
                 </div>
 
-                <Separator className="bg-amber-200" />
+                <Separator className="bg-gradient-to-r from-fons-gold/30 via-fons-kente/30 to-fons-heritage/30" />
 
                 {/* Region Filter */}
                 <div>
-                  <label className="text-sm font-semibold text-amber-900 mb-2 block">Region</label>
+                  <label className="text-sm font-semibold text-fons-mask mb-2 block flex items-center">
+                    🗺️ Sacred Territories
+                  </label>
                   <Select value={selectedRegion} onValueChange={setSelectedRegion}>
-                    <SelectTrigger className="border-amber-200 focus:border-amber-400">
-                      <SelectValue placeholder="All Regions" />
+                    <SelectTrigger className="border-fons-gold/30 focus:border-fons-gold bg-white/80">
+                      <SelectValue placeholder="All Sacred Territories" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Regions</SelectItem>
+                      <SelectItem value="all">All Sacred Territories</SelectItem>
                       {regions.map(region => (
                         <SelectItem key={region} value={region}>{region}</SelectItem>
                       ))}
@@ -349,13 +377,15 @@ const FonsDirectory = () => {
 
                 {/* Title Filter */}
                 <div>
-                  <label className="text-sm font-semibold text-amber-900 mb-2 block">Traditional Title</label>
+                  <label className="text-sm font-semibold text-fons-mask mb-2 block flex items-center">
+                    👑 Royal Titles & Honors
+                  </label>
                   <Select value={selectedTitle} onValueChange={setSelectedTitle}>
-                    <SelectTrigger className="border-amber-200 focus:border-amber-400">
-                      <SelectValue placeholder="All Titles" />
+                    <SelectTrigger className="border-fons-gold/30 focus:border-fons-gold bg-white/80">
+                      <SelectValue placeholder="All Royal Titles" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Titles</SelectItem>
+                      <SelectItem value="all">All Royal Titles</SelectItem>
                       {titles.map(title => (
                         <SelectItem key={title.value} value={title.value}>
                           <span className="flex items-center">
@@ -370,46 +400,51 @@ const FonsDirectory = () => {
 
                 {/* Gender Filter */}
                 <div>
-                  <label className="text-sm font-semibold text-amber-900 mb-2 block">Gender</label>
+                  <label className="text-sm font-semibold text-fons-mask mb-2 block flex items-center">
+                    ⚧️ Royal Lineage
+                  </label>
                   <Select value={selectedGender} onValueChange={setSelectedGender}>
-                    <SelectTrigger className="border-amber-200 focus:border-amber-400">
-                      <SelectValue placeholder="All Genders" />
+                    <SelectTrigger className="border-fons-gold/30 focus:border-fons-gold bg-white/80">
+                      <SelectValue placeholder="All Royal Lineages" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Genders</SelectItem>
-                      <SelectItem value="male">Male</SelectItem>
-                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="all">All Royal Lineages</SelectItem>
+                      <SelectItem value="male">Male Leaders</SelectItem>
+                      <SelectItem value="female">Female Leaders</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 {/* Verified Only */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 bg-fons-cowrie/30 p-3 rounded-lg border border-fons-gold/20">
                   <Checkbox 
                     id="verified" 
                     checked={showVerifiedOnly}
                     onCheckedChange={(checked) => setShowVerifiedOnly(checked as boolean)}
-                    className="border-amber-400 data-[state=checked]:bg-amber-600"
+                    className="border-fons-gold data-[state=checked]:bg-fons-gold"
                   />
-                  <label htmlFor="verified" className="text-sm font-medium text-amber-900">
-                    Verified Leaders Only
+                  <label htmlFor="verified" className="text-sm font-medium text-fons-mask flex items-center">
+                    <Shield className="h-4 w-4 mr-1" />
+                    Verified Royal Houses Only
                   </label>
                 </div>
 
-                <Separator className="bg-amber-200" />
+                <Separator className="bg-gradient-to-r from-fons-gold/30 via-fons-kente/30 to-fons-heritage/30" />
 
                 {/* Sort Options */}
                 <div>
-                  <label className="text-sm font-semibold text-amber-900 mb-2 block">Sort By</label>
+                  <label className="text-sm font-semibold text-fons-mask mb-2 block flex items-center">
+                    📊 Order of Precedence
+                  </label>
                   <Select value={sortBy} onValueChange={setSortBy}>
-                    <SelectTrigger className="border-amber-200 focus:border-amber-400">
+                    <SelectTrigger className="border-fons-gold/30 focus:border-fons-gold bg-white/80">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="rating">Highest Rated</SelectItem>
-                      <SelectItem value="name">Name (A-Z)</SelectItem>
-                      <SelectItem value="region">Region</SelectItem>
-                      <SelectItem value="reviews">Most Reviewed</SelectItem>
+                      <SelectItem value="rating">Highest Honored</SelectItem>
+                      <SelectItem value="name">Royal Name (A-Z)</SelectItem>
+                      <SelectItem value="region">Sacred Territory</SelectItem>
+                      <SelectItem value="reviews">Most Acclaimed</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -419,13 +454,17 @@ const FonsDirectory = () => {
 
           {/* Results Section */}
           <div className="lg:col-span-3">
-            {/* Results Header */}
-            <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold text-amber-900">
-                  {filteredLeaders.length} Traditional Leader{filteredLeaders.length !== 1 ? 's' : ''}
+            {/* Premium Results Header */}
+            <div className="flex items-center justify-between mb-6 p-6 bg-gradient-cowrie rounded-lg border border-fons-gold/30 shadow-heritage">
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-gradient-heritage flex items-center">
+                  <Crown className="h-6 w-6 mr-2" />
+                  {filteredLeaders.length} Royal Leader{filteredLeaders.length !== 1 ? 's' : ''} Found
                 </h2>
-                <p className="text-amber-700">Honoring our cultural heritage and traditional leadership</p>
+                <p className="text-fons-earth flex items-center mt-1">
+                  <Sparkles className="h-4 w-4 mr-1" />
+                  Preserving ancestral wisdom and cultural heritage
+                </p>
               </div>
               
               <div className="flex items-center space-x-2">

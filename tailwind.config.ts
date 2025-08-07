@@ -115,7 +115,15 @@ export default {
 				'rating-good': 'hsl(var(--rating-good))',
 				'rating-average': 'hsl(var(--rating-average))',
 				'rating-poor': 'hsl(var(--rating-poor))',
-				'rating-terrible': 'hsl(var(--rating-terrible))'
+				'rating-terrible': 'hsl(var(--rating-terrible))',
+				// African Heritage Fons Colors
+				'fons-royal': 'hsl(var(--fons-royal))',
+				'fons-gold': 'hsl(var(--fons-gold))',
+				'fons-earth': 'hsl(var(--fons-earth))',
+				'fons-cowrie': 'hsl(var(--fons-cowrie))',
+				'fons-mask': 'hsl(var(--fons-mask))',
+				'fons-kente': 'hsl(var(--fons-kente))',
+				'fons-heritage': 'hsl(var(--fons-heritage))'
 			},
 			backgroundImage: {
 				'gradient-flag': 'var(--gradient-flag)',
