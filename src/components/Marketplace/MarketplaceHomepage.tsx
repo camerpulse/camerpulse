@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useMarketplace } from '@/hooks/useMarketplace';
+import { ShoppingCart } from './ShoppingCart';
 import { 
   Search, 
   ShoppingCart, 
@@ -247,70 +249,30 @@ const HeroBanner = () => {
 
 export const MarketplaceHomepage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [products, setProducts] = useState([]);
-  const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [vendors, setVendors] = useState([]);
+  const [cartOpen, setCartOpen] = useState(false);
+  
+  const {
+    featuredProducts,
+    categories,
+    vendors,
+    cartItemCount,
+    addToCart,
+    isAddingToCart
+  } = useMarketplace();
 
-  // Mock data - replace with real API calls
-  const mockCategories = [
-    { name: 'Electronics', icon: Zap, count: 1234, slug: 'electronics' },
-    { name: 'Fashion', icon: Star, count: 856, slug: 'fashion' },
-    { name: 'Food & Beverages', icon: Package, count: 923, slug: 'food' },
-    { name: 'Arts & Crafts', icon: Award, count: 567, slug: 'arts' },
-    { name: 'Home & Garden', icon: Store, count: 432, slug: 'home' },
-    { name: 'Health & Beauty', icon: Heart, count: 321, slug: 'health' },
-    { name: 'Sports', icon: TrendingUp, count: 234, slug: 'sports' },
-    { name: 'Books', icon: Users, count: 156, slug: 'books' },
-  ];
-
-  const mockFeaturedProducts = [
-    {
-      id: '1',
-      name: 'Traditional Ndole Spice Mix',
-      price: 2500,
-      original_price: 3000,
-      currency: 'XAF',
-      rating: 4.8,
-      images: ['https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=300&h=300&fit=crop'],
-      vendor: { business_name: 'Mama Ngozi', verification_status: 'verified' },
-      in_stock: true,
-      is_featured: true,
-      discount: 17
-    },
-    {
-      id: '2',
-      name: 'Handwoven Basket Set',
-      price: 15000,
-      currency: 'XAF',
-      rating: 4.9,
-      images: ['https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=300&h=300&fit=crop'],
-      vendor: { business_name: 'Artisan Crafts', verification_status: 'verified' },
-      in_stock: true,
-      is_featured: true
-    },
-    {
-      id: '3',
-      name: 'Solar Power Bank',
-      price: 25000,
-      original_price: 30000,
-      currency: 'XAF',
-      rating: 4.6,
-      images: ['https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=300&h=300&fit=crop'],
-      vendor: { business_name: 'TechHub CM', verification_status: 'verified' },
-      in_stock: true,
-      discount: 17
-    },
-    {
-      id: '4',
-      name: 'African Print Dress',
-      price: 18000,
-      currency: 'XAF',
-      rating: 4.7,
-      images: ['https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?w=300&h=300&fit=crop'],
-      vendor: { business_name: 'Fashion House', verification_status: 'verified' },
-      in_stock: true
-    }
+  // Mock categories fallback if categories are loading
+  const displayCategories = categories.length > 0 ? categories.map(cat => ({
+    ...cat,
+    icon: Zap // Default icon
+  })) : [
+    { name: 'Electronics', icon: Zap, product_count: 1234, slug: 'electronics' },
+    { name: 'Fashion', icon: Star, product_count: 856, slug: 'fashion' },
+    { name: 'Food & Beverages', icon: Package, product_count: 923, slug: 'food' },
+    { name: 'Arts & Crafts', icon: Award, product_count: 567, slug: 'arts' },
+    { name: 'Home & Garden', icon: Store, product_count: 432, slug: 'home' },
+    { name: 'Health & Beauty', icon: Heart, product_count: 321, slug: 'health' },
+    { name: 'Sports', icon: TrendingUp, product_count: 234, slug: 'sports' },
+    { name: 'Books', icon: Users, product_count: 156, slug: 'books' },
   ];
 
   const handleSearch = (e: React.FormEvent) => {
@@ -325,23 +287,40 @@ export const MarketplaceHomepage = () => {
         {/* Search Bar Section */}
         <div className="bg-gradient-primary py-8">
           <div className="container mx-auto px-4">
-            <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-              <div className="relative">
-                <Search className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search for products, categories, or vendors..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-12 pr-20 py-3 text-lg bg-white"
-                />
-                <Button 
-                  type="submit"
-                  className="absolute right-1 top-1 bottom-1 px-6"
-                >
-                  Search
-                </Button>
-              </div>
-            </form>
+            <div className="flex items-center justify-between max-w-4xl mx-auto">
+              <form onSubmit={handleSearch} className="flex-1 max-w-2xl">
+                <div className="relative">
+                  <Search className="absolute left-4 top-3.5 h-5 w-5 text-muted-foreground" />
+                  <Input
+                    placeholder="Search for products, categories, or vendors..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-12 pr-20 py-3 text-lg bg-white"
+                  />
+                  <Button 
+                    type="submit"
+                    className="absolute right-1 top-1 bottom-1 px-6"
+                  >
+                    Search
+                  </Button>
+                </div>
+              </form>
+              
+              <Button 
+                variant="secondary" 
+                size="lg" 
+                className="ml-4 relative"
+                onClick={() => setCartOpen(true)}
+              >
+                <ShoppingCart className="w-5 h-5 mr-2" />
+                Cart
+                {cartItemCount > 0 && (
+                  <Badge className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
+                    {cartItemCount}
+                  </Badge>
+                )}
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -393,8 +372,11 @@ export const MarketplaceHomepage = () => {
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-4">
-              {mockCategories.map((category, index) => (
-                <CategoryCard key={index} category={category} />
+              {displayCategories.map((category, index) => (
+                <CategoryCard key={category.id || index} category={{
+                  ...category,
+                  count: category.product_count
+                }} />
               ))}
             </div>
           </section>
@@ -414,8 +396,8 @@ export const MarketplaceHomepage = () => {
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {mockFeaturedProducts.map((product) => (
-                <EnhancedProductCard key={product.id} product={product} />
+              {featuredProducts.map((product) => (
+                <EnhancedProductCard key={product.id} product={product} onAddToCart={addToCart} />
               ))}
             </div>
           </section>
@@ -434,9 +416,9 @@ export const MarketplaceHomepage = () => {
                 </div>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                {mockFeaturedProducts.slice(0, 6).map((product) => (
+                {featuredProducts.slice(0, 6).map((product) => (
                   <div key={product.id} className="bg-white rounded-lg p-3">
-                    <EnhancedProductCard product={{...product, discount: 25}} size="small" />
+                    <EnhancedProductCard product={{...product, discount: 25}} size="small" onAddToCart={addToCart} />
                   </div>
                 ))}
               </div>
@@ -458,8 +440,8 @@ export const MarketplaceHomepage = () => {
               </Link>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {mockFeaturedProducts.map((product) => (
-                <EnhancedProductCard key={`new-${product.id}`} product={product} />
+              {featuredProducts.map((product) => (
+                <EnhancedProductCard key={`new-${product.id}`} product={product} onAddToCart={addToCart} />
               ))}
             </div>
           </section>
@@ -550,6 +532,9 @@ export const MarketplaceHomepage = () => {
             </div>
           </section>
         </div>
+
+        {/* Shopping Cart */}
+        <ShoppingCart isOpen={cartOpen} onClose={() => setCartOpen(false)} />
       </div>
     </AppLayout>
   );
