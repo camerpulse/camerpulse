@@ -22650,7 +22650,7 @@ export type Database = {
           rating: number | null
           total_sales: number | null
           updated_at: string | null
-          user_id: string
+          user_id: string | null
           vendor_id: string
           verification_status: string | null
           website_url: string | null
@@ -22670,7 +22670,7 @@ export type Database = {
           rating?: number | null
           total_sales?: number | null
           updated_at?: string | null
-          user_id: string
+          user_id?: string | null
           vendor_id: string
           verification_status?: string | null
           website_url?: string | null
@@ -22690,7 +22690,7 @@ export type Database = {
           rating?: number | null
           total_sales?: number | null
           updated_at?: string | null
-          user_id?: string
+          user_id?: string | null
           vendor_id?: string
           verification_status?: string | null
           website_url?: string | null
