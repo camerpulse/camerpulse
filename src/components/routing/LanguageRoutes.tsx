@@ -53,6 +53,9 @@ import PetitionDetailPage from '@/pages/PetitionDetailPage';
 import JobDetailPage from '@/pages/JobDetailPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
 import VendorsPage from '@/pages/VendorsPage';
+import MarketplaceProducts from '@/pages/MarketplaceProducts';
+import MarketplaceVendors from '@/pages/MarketplaceVendors';
+import VendorDetailPage from '@/pages/VendorDetailPage';
 import UserMigrationAdminPage from '@/pages/admin/UserMigrationAdminPage';
 
 // Module-specific profile pages
@@ -123,7 +126,9 @@ export const AppRouter: React.FC = () => {
         
         {/* Marketplace */}
         <Route path="/marketplace" element={<Marketplace />} />
-        <Route path="/marketplace/vendors" element={<VendorsPage />} />
+        <Route path="/marketplace/products" element={<MarketplaceProducts />} />
+        <Route path="/marketplace/vendors" element={<MarketplaceVendors />} />
+        <Route path="/marketplace/vendors/:vendorSlug" element={<VendorDetailPage />} />
         <Route path="/marketplace/products/:productSlug-:id" element={<ProductDetailPage />} />
         
         {/* Jobs */}
