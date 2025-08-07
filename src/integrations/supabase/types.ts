@@ -42799,6 +42799,8 @@ export type Database = {
           total_ratings_count: number | null
           totem_symbol: string | null
           traditional_languages: string[] | null
+          traditional_leader_name: string | null
+          traditional_leader_title: string | null
           updated_at: string
           verification_notes: string | null
           view_count: number | null
@@ -42857,6 +42859,8 @@ export type Database = {
           total_ratings_count?: number | null
           totem_symbol?: string | null
           traditional_languages?: string[] | null
+          traditional_leader_name?: string | null
+          traditional_leader_title?: string | null
           updated_at?: string
           verification_notes?: string | null
           view_count?: number | null
@@ -42915,6 +42919,8 @@ export type Database = {
           total_ratings_count?: number | null
           totem_symbol?: string | null
           traditional_languages?: string[] | null
+          traditional_leader_name?: string | null
+          traditional_leader_title?: string | null
           updated_at?: string
           verification_notes?: string | null
           view_count?: number | null

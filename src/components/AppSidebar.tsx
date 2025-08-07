@@ -87,7 +87,7 @@ const governmentItems = [
     ]
   },
   {
-    title: 'Traditional Leaders',
+    title: 'Royal Heritage Directory',
     url: '/fons',
     icon: Crown,
   },
