@@ -73,9 +73,8 @@ interface LeaderRating {
 
 const FonProfile = () => {
   const { slug } = useParams<{ slug: string }>();
-  const [leader, setLeader] = useState<TraditionalLeader | null>(null);
+  const { leader, loading, error } = useTraditionalLeaderBySlug(slug || '');
   const [ratings, setRatings] = useState<LeaderRating[]>([]);
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
   const [userRating, setUserRating] = useState(null);
   const [showRatingForm, setShowRatingForm] = useState(false);
@@ -91,12 +90,6 @@ const FonProfile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (slug) {
-      fetchLeaderData();
-    }
-  }, [slug]);
-
-  useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       setUser(user);
@@ -104,29 +97,23 @@ const FonProfile = () => {
     getUser();
   }, []);
 
-  const fetchLeaderData = async () => {
+  useEffect(() => {
+    if (leader) {
+      fetchRatings();
+    }
+  }, [leader, user]);
+
+  const fetchRatings = async () => {
+    if (!leader) return;
+
     try {
-      // Fetch leader data
-      const { data: leaderData, error: leaderError } = await supabase
-        .from('traditional_leaders')
-        .select(`
-          *,
-          villages:village_id(village_name)
-        `)
-        .eq('slug', slug)
-        .single();
-
-      if (leaderError) throw leaderError;
-      setLeader(leaderData);
-
-      // Fetch ratings
       const { data: ratingsData, error: ratingsError } = await supabase
         .from('traditional_leader_ratings')
         .select(`
           *,
           profiles:user_id(username, display_name, avatar_url)
         `)
-        .eq('leader_id', leaderData.id)
+        .eq('leader_id', leader.id)
         .eq('is_flagged', false)
         .order('created_at', { ascending: false });
 
@@ -138,12 +125,9 @@ const FonProfile = () => {
         const userRatingData = ratingsData?.find(r => r.user_id === user.id);
         setUserRating(userRatingData);
       }
-
     } catch (error) {
-      console.error('Error fetching leader data:', error);
-      toast.error('Failed to load leader profile');
-    } finally {
-      setLoading(false);
+      console.error('Error fetching ratings:', error);
+      toast.error('Failed to load ratings');
     }
   };
 
@@ -166,7 +150,7 @@ const FonProfile = () => {
       
       toast.success('Rating submitted successfully!');
       setShowRatingForm(false);
-      fetchLeaderData(); // Refresh data
+      fetchRatings(); // Refresh ratings
     } catch (error) {
       console.error('Error submitting rating:', error);
       toast.error('Failed to submit rating');
