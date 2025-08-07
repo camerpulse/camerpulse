@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
+import { SafeHtml } from '@/components/Security/SafeHtml';
 import { Clock, Users, BookOpen, Play, CheckCircle, Star } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -161,10 +162,12 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
             <div className="space-y-6">
               {/* Module Content */}
               <div className="prose dark:prose-invert max-w-none">
-                <div 
+                <SafeHtml 
                   className="whitespace-pre-wrap text-gray-700 dark:text-gray-300 leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: getContent(selectedModule) }}
-                />
+                  allowedTags={['p', 'br', 'strong', 'em', 'ul', 'li', 'h1', 'h2', 'h3', 'h4']}
+                >
+                  {getContent(selectedModule)}
+                </SafeHtml>
               </div>
 
               {/* Tags */}

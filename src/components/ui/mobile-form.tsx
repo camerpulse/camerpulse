@@ -1,8 +1,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
+import { SecureInput, SecureTextarea } from "@/components/Security/SecureInput"
 import { Label } from "@/components/ui/label"
 
 interface MobileFormProps extends React.FormHTMLAttributes<HTMLFormElement> {

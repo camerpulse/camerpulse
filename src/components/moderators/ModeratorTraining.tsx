@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { SafeHtml } from '@/components/Security/SafeHtml';
 import { BookOpen, CheckCircle, Clock, Star, Award, Target } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -271,11 +272,11 @@ export function ModeratorTraining() {
                         <AccordionContent className="pt-4">
                           <div className="space-y-4">
                             <div className="prose prose-sm max-w-none">
-                              <div 
-                                dangerouslySetInnerHTML={{ 
-                                  __html: guideline.content.replace(/\n/g, '<br />') 
-                                }} 
-                              />
+                              <SafeHtml 
+                                allowedTags={['p', 'br', 'strong', 'em', 'ul', 'li', 'ol']}
+                              >
+                                {guideline.content.replace(/\n/g, '<br />')}
+                              </SafeHtml>
                             </div>
                             
                             <div className="flex items-center gap-2 pt-4 border-t">

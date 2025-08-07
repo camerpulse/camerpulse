@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
+import { SafeHtml } from '@/components/Security/SafeHtml';
 import { 
   Share2, 
   Heart, 
@@ -143,7 +144,11 @@ const PetitionDetailPage: React.FC = () => {
             </CardHeader>
             <CardContent className="prose max-w-none">
               <p className="text-lg mb-4">{data.description}</p>
-              <div dangerouslySetInnerHTML={{ __html: data.fullContent }} />
+              <SafeHtml 
+                allowedTags={['p', 'br', 'strong', 'em', 'ul', 'li', 'ol', 'h1', 'h2', 'h3', 'blockquote']}
+              >
+                {data.fullContent}
+              </SafeHtml>
             </CardContent>
           </Card>
 
