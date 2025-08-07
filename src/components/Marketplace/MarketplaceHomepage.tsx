@@ -10,7 +10,7 @@ import { useMarketplace } from '@/hooks/useMarketplace';
 import { ShoppingCart } from './ShoppingCart';
 import { 
   Search, 
-  ShoppingCart, 
+  ShoppingCart as ShoppingCartIcon, 
   TrendingUp, 
   Star, 
   Shield, 
@@ -33,7 +33,7 @@ import {
 } from 'lucide-react';
 
 // Enhanced product card for homepage
-const EnhancedProductCard = ({ product, size = 'default' }: { product: any, size?: 'small' | 'default' | 'large' }) => {
+const EnhancedProductCard = ({ product, size = 'default', onAddToCart }: { product: any, size?: 'small' | 'default' | 'large', onAddToCart?: (data: { productId: string; quantity?: number }) => void }) => {
   const cardClass = size === 'small' ? 'h-64' : size === 'large' ? 'h-96' : 'h-80';
   const imageClass = size === 'small' ? 'h-32' : size === 'large' ? 'h-48' : 'h-40';
 
@@ -69,8 +69,13 @@ const EnhancedProductCard = ({ product, size = 'default' }: { product: any, size
           <Button size="icon" variant="secondary" className="h-8 w-8">
             <Heart className="h-4 w-4" />
           </Button>
-          <Button size="icon" variant="secondary" className="h-8 w-8">
-            <ShoppingCart className="h-4 w-4" />
+          <Button 
+            size="icon" 
+            variant="secondary" 
+            className="h-8 w-8"
+            onClick={() => onAddToCart?.({ productId: product.id })}
+          >
+            <ShoppingCartIcon className="h-4 w-4" />
           </Button>
         </div>
 
@@ -137,6 +142,7 @@ const EnhancedProductCard = ({ product, size = 'default' }: { product: any, size
             className="w-full mt-2"
             variant={product.in_stock ? "default" : "secondary"}
             disabled={!product.in_stock}
+            onClick={() => onAddToCart?.({ productId: product.id })}
           >
             {product.in_stock ? "Add to Cart" : "Out of Stock"}
           </Button>
@@ -312,7 +318,7 @@ export const MarketplaceHomepage = () => {
                 className="ml-4 relative"
                 onClick={() => setCartOpen(true)}
               >
-                <ShoppingCart className="w-5 h-5 mr-2" />
+                <ShoppingCartIcon className="w-5 h-5 mr-2" />
                 Cart
                 {cartItemCount > 0 && (
                   <Badge className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full h-5 w-5 flex items-center justify-center text-xs">
