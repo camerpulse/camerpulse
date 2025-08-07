@@ -86,6 +86,11 @@ const governmentItems = [
     ]
   },
   {
+    title: 'Traditional Leaders',
+    url: '/fons',
+    icon: Crown,
+  },
+  {
     title: 'Political Parties',
     url: '/political-parties',
     icon: Shield,
