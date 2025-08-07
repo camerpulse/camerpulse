@@ -38415,6 +38415,193 @@ export type Database = {
         }
         Relationships: []
       }
+      traditional_leader_ratings: {
+        Row: {
+          accessibility_rating: number | null
+          community_development_rating: number | null
+          created_at: string | null
+          cultural_preservation_rating: number | null
+          flagged_reason: string | null
+          helpful_count: number | null
+          id: string
+          is_flagged: boolean | null
+          leader_id: string
+          leadership_rating: number | null
+          moderated_at: string | null
+          moderated_by: string | null
+          overall_rating: number
+          review_content: string | null
+          review_title: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          accessibility_rating?: number | null
+          community_development_rating?: number | null
+          created_at?: string | null
+          cultural_preservation_rating?: number | null
+          flagged_reason?: string | null
+          helpful_count?: number | null
+          id?: string
+          is_flagged?: boolean | null
+          leader_id: string
+          leadership_rating?: number | null
+          moderated_at?: string | null
+          moderated_by?: string | null
+          overall_rating: number
+          review_content?: string | null
+          review_title?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          accessibility_rating?: number | null
+          community_development_rating?: number | null
+          created_at?: string | null
+          cultural_preservation_rating?: number | null
+          flagged_reason?: string | null
+          helpful_count?: number | null
+          id?: string
+          is_flagged?: boolean | null
+          leader_id?: string
+          leadership_rating?: number | null
+          moderated_at?: string | null
+          moderated_by?: string | null
+          overall_rating?: number
+          review_content?: string | null
+          review_title?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "traditional_leader_ratings_leader_id_fkey"
+            columns: ["leader_id"]
+            isOneToOne: false
+            referencedRelation: "traditional_leaders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      traditional_leaders: {
+        Row: {
+          accession_date: string | null
+          achievements: string[] | null
+          biography: string | null
+          birth_date: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string | null
+          created_by: string | null
+          cultural_significance: string | null
+          division: string | null
+          dynasty_name: string | null
+          full_name: string
+          gender: string | null
+          honors: string[] | null
+          id: string
+          is_verified: boolean | null
+          languages_spoken: string[] | null
+          official_residence: string | null
+          overall_rating: number | null
+          portrait_url: string | null
+          predecessor_name: string | null
+          regalia_photos: string[] | null
+          region: string
+          slug: string | null
+          status: string | null
+          subdivision: string | null
+          successor_name: string | null
+          title: Database["public"]["Enums"]["traditional_title"]
+          total_ratings: number | null
+          updated_at: string | null
+          verification_notes: string | null
+          verified_at: string | null
+          verified_by: string | null
+          village_id: string | null
+        }
+        Insert: {
+          accession_date?: string | null
+          achievements?: string[] | null
+          biography?: string | null
+          birth_date?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          cultural_significance?: string | null
+          division?: string | null
+          dynasty_name?: string | null
+          full_name: string
+          gender?: string | null
+          honors?: string[] | null
+          id?: string
+          is_verified?: boolean | null
+          languages_spoken?: string[] | null
+          official_residence?: string | null
+          overall_rating?: number | null
+          portrait_url?: string | null
+          predecessor_name?: string | null
+          regalia_photos?: string[] | null
+          region: string
+          slug?: string | null
+          status?: string | null
+          subdivision?: string | null
+          successor_name?: string | null
+          title: Database["public"]["Enums"]["traditional_title"]
+          total_ratings?: number | null
+          updated_at?: string | null
+          verification_notes?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          village_id?: string | null
+        }
+        Update: {
+          accession_date?: string | null
+          achievements?: string[] | null
+          biography?: string | null
+          birth_date?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          cultural_significance?: string | null
+          division?: string | null
+          dynasty_name?: string | null
+          full_name?: string
+          gender?: string | null
+          honors?: string[] | null
+          id?: string
+          is_verified?: boolean | null
+          languages_spoken?: string[] | null
+          official_residence?: string | null
+          overall_rating?: number | null
+          portrait_url?: string | null
+          predecessor_name?: string | null
+          regalia_photos?: string[] | null
+          region?: string
+          slug?: string | null
+          status?: string | null
+          subdivision?: string | null
+          successor_name?: string | null
+          title?: Database["public"]["Enums"]["traditional_title"]
+          total_ratings?: number | null
+          updated_at?: string | null
+          verification_notes?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          village_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "traditional_leaders_village_id_fkey"
+            columns: ["village_id"]
+            isOneToOne: false
+            referencedRelation: "villages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       traditional_recipes: {
         Row: {
           cooking_time_minutes: number | null
@@ -44023,6 +44210,10 @@ export type Database = {
         Args: { job_title: string; company_name: string }
         Returns: string
       }
+      generate_leader_slug: {
+        Args: { leader_name: string; title_name: string; village_name?: string }
+        Returns: string
+      }
       generate_order_number: {
         Args: Record<PropertyKey, never>
         Returns: string
@@ -45189,6 +45380,16 @@ export type Database = {
         | "student"
         | "early_bird"
       track_type: "single" | "ep" | "album"
+      traditional_title:
+        | "fon"
+        | "chief"
+        | "sultan"
+        | "lamido"
+        | "emir"
+        | "oba"
+        | "sarki"
+        | "etsu"
+        | "mai"
       transaction_type:
         | "topup"
         | "purchase"
@@ -45931,6 +46132,17 @@ export const Constants = {
         "early_bird",
       ],
       track_type: ["single", "ep", "album"],
+      traditional_title: [
+        "fon",
+        "chief",
+        "sultan",
+        "lamido",
+        "emir",
+        "oba",
+        "sarki",
+        "etsu",
+        "mai",
+      ],
       transaction_type: [
         "topup",
         "purchase",

@@ -87,6 +87,8 @@ import EventCalendarPage from "./pages/EventCalendarPage";
 import CertificateVerificationPage from "./pages/CertificateVerificationPage";
 import VillagesDirectory from "./pages/VillagesDirectory";
 import VillageProfile from "./pages/VillageProfile";
+import FonsDirectory from "./pages/FonsDirectory";
+import FonProfile from "./pages/FonProfile";
 import { Analytics } from "./pages/Analytics";
 import AnalyticsDashboard from "./pages/AnalyticsDashboard";
 import SentimentAnalysis from "./pages/SentimentAnalysis";
