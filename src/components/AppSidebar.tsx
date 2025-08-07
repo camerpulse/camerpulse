@@ -18,7 +18,8 @@ import {
   Bell,
   Search,
   ChevronDown,
-  LogOut
+  LogOut,
+  Crown
 } from 'lucide-react';
 
 import {
