@@ -55,19 +55,8 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [showQueue, setShowQueue] = useState(false);
 
-  // Mock track if none provided
-  const defaultTrack: Track = {
-    id: '1',
-    title: 'Cameroon Rising',
-    artist: 'Boy Takunda',
-    album: 'Unity EP',
-    duration: 225, // 3:45 in seconds
-    cover_image_url: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300',
-    audio_url: '/audio/sample.mp3',
-    is_liked: false
-  };
-
-  const activeTrack = currentTrack || defaultTrack;
+  // Removed mock default track; require currentTrack from props
+  const activeTrack = currentTrack as Track | undefined;
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -202,6 +191,17 @@ export const MusicPlayer: React.FC<MusicPlayerProps> = ({
   };
 
   if (!isVisible) return null;
+
+  if (!activeTrack) {
+    return (
+      <div className="fixed inset-0 bg-background z-50 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <p className="text-muted-foreground">No track selected.</p>
+          {onClose && <Button onClick={onClose} variant="outline">Close</Button>}
+        </div>
+      </div>
+    );
+  }
 
   // Minimized Player
   if (isMinimized) {
