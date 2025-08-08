@@ -10235,6 +10235,83 @@ export type Database = {
           },
         ]
       }
+      cleanup_backup__cleanup_reports: {
+        Row: {
+          backed_up: boolean
+          backup_table: string | null
+          deleted_count: number
+          id: string
+          processed_at: string
+          run_id: string
+          sample_ids: string[] | null
+          sample_text: Json | null
+          table_name: string
+        }
+        Insert: {
+          backed_up?: boolean
+          backup_table?: string | null
+          deleted_count?: number
+          id?: string
+          processed_at?: string
+          run_id: string
+          sample_ids?: string[] | null
+          sample_text?: Json | null
+          table_name: string
+        }
+        Update: {
+          backed_up?: boolean
+          backup_table?: string | null
+          deleted_count?: number
+          id?: string
+          processed_at?: string
+          run_id?: string
+          sample_ids?: string[] | null
+          sample_text?: Json | null
+          table_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cleanup_backup__cleanup_reports_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "cleanup_backup__cleanup_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cleanup_backup__cleanup_runs: {
+        Row: {
+          excluded_verified: boolean
+          id: string
+          notes: string | null
+          patterns: string[]
+          run_ended_at: string | null
+          run_started_at: string
+          tables_processed: number
+          total_deleted: number
+        }
+        Insert: {
+          excluded_verified?: boolean
+          id?: string
+          notes?: string | null
+          patterns: string[]
+          run_ended_at?: string | null
+          run_started_at?: string
+          tables_processed?: number
+          total_deleted?: number
+        }
+        Update: {
+          excluded_verified?: boolean
+          id?: string
+          notes?: string | null
+          patterns?: string[]
+          run_ended_at?: string | null
+          run_started_at?: string
+          tables_processed?: number
+          total_deleted?: number
+        }
+        Relationships: []
+      }
       commission_tracking: {
         Row: {
           commission_amount: number
@@ -43949,6 +44026,10 @@ export type Database = {
       cleanup_expired_polls: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      cleanup_mock_data: {
+        Args: { p_patterns?: string[]; p_exclude_verified?: boolean }
+        Returns: Json
       }
       cleanup_old_notifications: {
         Args: Record<PropertyKey, never>
