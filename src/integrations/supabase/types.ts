@@ -15795,6 +15795,71 @@ export type Database = {
         }
         Relationships: []
       }
+      cleanup_keep_ids: {
+        Row: {
+          created_at: string
+          id: string
+          reason: string | null
+          record_id: string
+          table_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          reason?: string | null
+          record_id: string
+          table_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          reason?: string | null
+          record_id?: string
+          table_name?: string
+        }
+        Relationships: []
+      }
+      cleanup_review_items: {
+        Row: {
+          created_at: string
+          id: string
+          matched_column: string | null
+          matched_text: string | null
+          reason: string
+          record_id: string
+          run_id: string
+          table_name: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          matched_column?: string | null
+          matched_text?: string | null
+          reason: string
+          record_id: string
+          run_id: string
+          table_name: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          matched_column?: string | null
+          matched_text?: string | null
+          reason?: string
+          record_id?: string
+          run_id?: string
+          table_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cleanup_review_items_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "cleanup_scan_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       cleanup_scan_reports: {
         Row: {
           duplicates: number
@@ -15872,6 +15937,30 @@ export type Database = {
           total_duplicates?: number
           total_orphans?: number
           total_pattern_matches?: number
+        }
+        Relationships: []
+      }
+      cleanup_whitelist_patterns: {
+        Row: {
+          active: boolean
+          created_at: string
+          description: string | null
+          id: string
+          pattern: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          id?: string
+          pattern: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          description?: string | null
+          id?: string
+          pattern?: string
         }
         Relationships: []
       }
@@ -49605,6 +49694,10 @@ export type Database = {
       cleanup_old_typing_indicators: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      cleanup_prepare_review: {
+        Args: { p_run_id?: string }
+        Returns: Json
       }
       cleanup_residuals: {
         Args: Record<PropertyKey, never>
