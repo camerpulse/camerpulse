@@ -10403,6 +10403,57 @@ export type Database = {
         }
         Relationships: []
       }
+      cleanup_backup__ashen_error_logs: {
+        Row: {
+          component_path: string
+          confidence_score: number | null
+          created_at: string
+          error_message: string
+          error_type: string
+          id: string
+          line_number: number | null
+          metadata: Json | null
+          resolved_at: string | null
+          resolved_by: string | null
+          screenshot_url: string | null
+          severity: string
+          status: string
+          suggested_fix: string | null
+        }
+        Insert: {
+          component_path: string
+          confidence_score?: number | null
+          created_at?: string
+          error_message: string
+          error_type: string
+          id?: string
+          line_number?: number | null
+          metadata?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screenshot_url?: string | null
+          severity?: string
+          status?: string
+          suggested_fix?: string | null
+        }
+        Update: {
+          component_path?: string
+          confidence_score?: number | null
+          created_at?: string
+          error_message?: string
+          error_type?: string
+          id?: string
+          line_number?: number | null
+          metadata?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screenshot_url?: string | null
+          severity?: string
+          status?: string
+          suggested_fix?: string | null
+        }
+        Relationships: []
+      }
       cleanup_backup__ashen_monitoring_config: {
         Row: {
           config_key: string
@@ -10523,6 +10574,45 @@ export type Database = {
           is_enabled?: boolean
           updated_at?: string
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__brand_ambassador_contracts: {
+        Row: {
+          contract_type: Database["public"]["Enums"]["contract_type"]
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          template_content: string
+          template_name: string
+          updated_at: string
+          variables: Json | null
+        }
+        Insert: {
+          contract_type: Database["public"]["Enums"]["contract_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          template_content: string
+          template_name: string
+          updated_at?: string
+          variables?: Json | null
+        }
+        Update: {
+          contract_type?: Database["public"]["Enums"]["contract_type"]
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          template_content?: string
+          template_name?: string
+          updated_at?: string
+          variables?: Json | null
         }
         Relationships: []
       }
@@ -10856,6 +10946,213 @@ export type Database = {
         }
         Relationships: []
       }
+      cleanup_backup__cleanup_backup__debt_knowledge_articles: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          created_by: string | null
+          difficulty_level: string | null
+          featured_image_url: string | null
+          id: string
+          is_published: boolean | null
+          language: string | null
+          reading_time_minutes: number | null
+          slug: string
+          summary: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string
+          created_by?: string | null
+          difficulty_level?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_published?: boolean | null
+          language?: string | null
+          reading_time_minutes?: number | null
+          slug: string
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          difficulty_level?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_published?: boolean | null
+          language?: string | null
+          reading_time_minutes?: number | null
+          slug?: string
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__cleanup_backup__senators: {
+        Row: {
+          about: string | null
+          auto_update_enabled: boolean | null
+          average_rating: number | null
+          badges: Json | null
+          bills_passed: Json | null
+          bills_passed_count: number | null
+          bills_proposed_count: number | null
+          can_receive_messages: boolean | null
+          career_history: Json | null
+          civic_engagement_score: number | null
+          claimed_at: string | null
+          claimed_by: string | null
+          committee_memberships: Json | null
+          constituency: string | null
+          created_at: string | null
+          data_verification_status: string | null
+          date_of_birth: string | null
+          education: Json | null
+          email: string | null
+          engagement_score: number | null
+          follower_count: number | null
+          full_name: string | null
+          id: string
+          is_claimable: boolean | null
+          is_claimed: boolean | null
+          is_verified: boolean | null
+          last_profile_update: string | null
+          message_response_time_hours: number | null
+          misconduct_reports_count: number | null
+          name: string
+          official_senate_url: string | null
+          party_affiliation: string | null
+          performance_score: number | null
+          phone: string | null
+          photo_url: string | null
+          political_party: string | null
+          position: string
+          region: string | null
+          slug: string | null
+          social_media_links: Json | null
+          source_page_url: string | null
+          status: string | null
+          total_ratings: number | null
+          transparency_score: number | null
+          trust_score: number | null
+          updated_at: string | null
+          years_of_service: number | null
+        }
+        Insert: {
+          about?: string | null
+          auto_update_enabled?: boolean | null
+          average_rating?: number | null
+          badges?: Json | null
+          bills_passed?: Json | null
+          bills_passed_count?: number | null
+          bills_proposed_count?: number | null
+          can_receive_messages?: boolean | null
+          career_history?: Json | null
+          civic_engagement_score?: number | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          committee_memberships?: Json | null
+          constituency?: string | null
+          created_at?: string | null
+          data_verification_status?: string | null
+          date_of_birth?: string | null
+          education?: Json | null
+          email?: string | null
+          engagement_score?: number | null
+          follower_count?: number | null
+          full_name?: string | null
+          id?: string
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          last_profile_update?: string | null
+          message_response_time_hours?: number | null
+          misconduct_reports_count?: number | null
+          name: string
+          official_senate_url?: string | null
+          party_affiliation?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          photo_url?: string | null
+          political_party?: string | null
+          position: string
+          region?: string | null
+          slug?: string | null
+          social_media_links?: Json | null
+          source_page_url?: string | null
+          status?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          trust_score?: number | null
+          updated_at?: string | null
+          years_of_service?: number | null
+        }
+        Update: {
+          about?: string | null
+          auto_update_enabled?: boolean | null
+          average_rating?: number | null
+          badges?: Json | null
+          bills_passed?: Json | null
+          bills_passed_count?: number | null
+          bills_proposed_count?: number | null
+          can_receive_messages?: boolean | null
+          career_history?: Json | null
+          civic_engagement_score?: number | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          committee_memberships?: Json | null
+          constituency?: string | null
+          created_at?: string | null
+          data_verification_status?: string | null
+          date_of_birth?: string | null
+          education?: Json | null
+          email?: string | null
+          engagement_score?: number | null
+          follower_count?: number | null
+          full_name?: string | null
+          id?: string
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          last_profile_update?: string | null
+          message_response_time_hours?: number | null
+          misconduct_reports_count?: number | null
+          name?: string
+          official_senate_url?: string | null
+          party_affiliation?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          photo_url?: string | null
+          political_party?: string | null
+          position?: string
+          region?: string | null
+          slug?: string | null
+          social_media_links?: Json | null
+          source_page_url?: string | null
+          status?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          trust_score?: number | null
+          updated_at?: string | null
+          years_of_service?: number | null
+        }
+        Relationships: []
+      }
       cleanup_backup__cleanup_reports: {
         Row: {
           backed_up: boolean
@@ -10969,6 +11266,96 @@ export type Database = {
           id?: string
           is_fundamental_right?: boolean | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__country_civic_config: {
+        Row: {
+          config_key: string
+          config_type: string
+          config_value: Json
+          country_code: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          config_key: string
+          config_type: string
+          config_value: Json
+          country_code: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          config_key?: string
+          config_type?: string
+          config_value?: Json
+          country_code?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__debt_knowledge_articles: {
+        Row: {
+          category: string
+          content: string
+          created_at: string
+          created_by: string | null
+          difficulty_level: string | null
+          featured_image_url: string | null
+          id: string
+          is_published: boolean | null
+          language: string | null
+          reading_time_minutes: number | null
+          slug: string
+          summary: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          view_count: number | null
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string
+          created_by?: string | null
+          difficulty_level?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_published?: boolean | null
+          language?: string | null
+          reading_time_minutes?: number | null
+          slug: string
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          view_count?: number | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          difficulty_level?: string | null
+          featured_image_url?: string | null
+          id?: string
+          is_published?: boolean | null
+          language?: string | null
+          reading_time_minutes?: number | null
+          slug?: string
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          view_count?: number | null
         }
         Relationships: []
       }
@@ -11143,6 +11530,384 @@ export type Database = {
         }
         Relationships: []
       }
+      cleanup_backup__hospitals: {
+        Row: {
+          aggregate_ratings: Json | null
+          claimed_at: string | null
+          claimed_by: string | null
+          created_at: string
+          division: string
+          email: string | null
+          emergency_services: boolean
+          id: string
+          is_claimable: boolean
+          latitude: number | null
+          longitude: number | null
+          name: string
+          overall_rating: number | null
+          ownership: Database["public"]["Enums"]["hospital_ownership"]
+          phone: string | null
+          photo_gallery: string[] | null
+          region: string
+          services_offered: string[] | null
+          slug: string | null
+          submitted_by: string | null
+          total_ratings: number | null
+          type: Database["public"]["Enums"]["hospital_type"]
+          updated_at: string
+          verification_status: string
+          verified_at: string | null
+          verified_by: string | null
+          village_or_city: string
+          website: string | null
+          whatsapp: string | null
+          working_hours: string | null
+        }
+        Insert: {
+          aggregate_ratings?: Json | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          created_at?: string
+          division: string
+          email?: string | null
+          emergency_services?: boolean
+          id?: string
+          is_claimable?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          overall_rating?: number | null
+          ownership: Database["public"]["Enums"]["hospital_ownership"]
+          phone?: string | null
+          photo_gallery?: string[] | null
+          region: string
+          services_offered?: string[] | null
+          slug?: string | null
+          submitted_by?: string | null
+          total_ratings?: number | null
+          type: Database["public"]["Enums"]["hospital_type"]
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          village_or_city: string
+          website?: string | null
+          whatsapp?: string | null
+          working_hours?: string | null
+        }
+        Update: {
+          aggregate_ratings?: Json | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          created_at?: string
+          division?: string
+          email?: string | null
+          emergency_services?: boolean
+          id?: string
+          is_claimable?: boolean
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          overall_rating?: number | null
+          ownership?: Database["public"]["Enums"]["hospital_ownership"]
+          phone?: string | null
+          photo_gallery?: string[] | null
+          region?: string
+          services_offered?: string[] | null
+          slug?: string | null
+          submitted_by?: string | null
+          total_ratings?: number | null
+          type?: Database["public"]["Enums"]["hospital_type"]
+          updated_at?: string
+          verification_status?: string
+          verified_at?: string | null
+          verified_by?: string | null
+          village_or_city?: string
+          website?: string | null
+          whatsapp?: string | null
+          working_hours?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__integrity_alert_log: {
+        Row: {
+          alert_description: string
+          alert_title: string
+          alert_type: string
+          civil_implications: string | null
+          created_at: string
+          evidence_links: string[] | null
+          id: string
+          is_public_visible: boolean
+          requires_review: boolean
+          review_notes: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          risk_score: number
+          severity_level: string
+          source_data: Json
+          status: string
+          suggested_cause: string | null
+          target_entity_id: string | null
+          target_entity_name: string
+          target_entity_type: string
+          updated_at: string
+        }
+        Insert: {
+          alert_description: string
+          alert_title: string
+          alert_type: string
+          civil_implications?: string | null
+          created_at?: string
+          evidence_links?: string[] | null
+          id?: string
+          is_public_visible?: boolean
+          requires_review?: boolean
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_score?: number
+          severity_level?: string
+          source_data?: Json
+          status?: string
+          suggested_cause?: string | null
+          target_entity_id?: string | null
+          target_entity_name: string
+          target_entity_type: string
+          updated_at?: string
+        }
+        Update: {
+          alert_description?: string
+          alert_title?: string
+          alert_type?: string
+          civil_implications?: string | null
+          created_at?: string
+          evidence_links?: string[] | null
+          id?: string
+          is_public_visible?: boolean
+          requires_review?: boolean
+          review_notes?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          risk_score?: number
+          severity_level?: string
+          source_data?: Json
+          status?: string
+          suggested_cause?: string | null
+          target_entity_id?: string | null
+          target_entity_name?: string
+          target_entity_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__job_categories: {
+        Row: {
+          color: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean
+          job_count: number | null
+          name: string
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          job_count?: number | null
+          name: string
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          color?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          job_count?: number | null
+          name?: string
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__jobs: {
+        Row: {
+          application_email: string | null
+          applications_count: number | null
+          benefits: string | null
+          category_id: string | null
+          company_id: string | null
+          company_logo: string | null
+          company_name: string
+          created_at: string
+          created_by: string | null
+          deadline: string | null
+          description: string
+          education_level: string | null
+          experience_level: string
+          expires_at: string | null
+          external_url: string | null
+          how_to_apply: string | null
+          id: string
+          is_featured: boolean
+          is_remote: boolean
+          is_urgent: boolean
+          job_type: string
+          location: string
+          meta_data: Json | null
+          published_at: string | null
+          region: string
+          requirements: string | null
+          salary_currency: string | null
+          salary_max: number | null
+          salary_min: number | null
+          salary_period: string | null
+          slug: string
+          status: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          views_count: number | null
+        }
+        Insert: {
+          application_email?: string | null
+          applications_count?: number | null
+          benefits?: string | null
+          category_id?: string | null
+          company_id?: string | null
+          company_logo?: string | null
+          company_name: string
+          created_at?: string
+          created_by?: string | null
+          deadline?: string | null
+          description: string
+          education_level?: string | null
+          experience_level?: string
+          expires_at?: string | null
+          external_url?: string | null
+          how_to_apply?: string | null
+          id?: string
+          is_featured?: boolean
+          is_remote?: boolean
+          is_urgent?: boolean
+          job_type?: string
+          location: string
+          meta_data?: Json | null
+          published_at?: string | null
+          region: string
+          requirements?: string | null
+          salary_currency?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          salary_period?: string | null
+          slug: string
+          status?: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Update: {
+          application_email?: string | null
+          applications_count?: number | null
+          benefits?: string | null
+          category_id?: string | null
+          company_id?: string | null
+          company_logo?: string | null
+          company_name?: string
+          created_at?: string
+          created_by?: string | null
+          deadline?: string | null
+          description?: string
+          education_level?: string | null
+          experience_level?: string
+          expires_at?: string | null
+          external_url?: string | null
+          how_to_apply?: string | null
+          id?: string
+          is_featured?: boolean
+          is_remote?: boolean
+          is_urgent?: boolean
+          job_type?: string
+          location?: string
+          meta_data?: Json | null
+          published_at?: string | null
+          region?: string
+          requirements?: string | null
+          salary_currency?: string | null
+          salary_max?: number | null
+          salary_min?: number | null
+          salary_period?: string | null
+          slug?: string
+          status?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__label_templates: {
+        Row: {
+          agency_id: string | null
+          branding_config: Json | null
+          created_at: string | null
+          created_by: string | null
+          fields_config: Json | null
+          id: string
+          is_active: boolean | null
+          is_default: boolean | null
+          label_size: string
+          orientation: string | null
+          template_config: Json
+          template_name: string
+          template_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          agency_id?: string | null
+          branding_config?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          fields_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          label_size?: string
+          orientation?: string | null
+          template_config?: Json
+          template_name: string
+          template_type?: string
+          updated_at?: string | null
+        }
+        Update: {
+          agency_id?: string | null
+          branding_config?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          fields_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_default?: boolean | null
+          label_size?: string
+          orientation?: string | null
+          template_config?: Json
+          template_name?: string
+          template_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       cleanup_backup__legislation_registry: {
         Row: {
           affected_sectors: string[] | null
@@ -11236,6 +12001,309 @@ export type Database = {
         }
         Relationships: []
       }
+      cleanup_backup__marketplace_products: {
+        Row: {
+          category: string | null
+          category_id: string | null
+          created_at: string | null
+          currency: string | null
+          description: string | null
+          id: string
+          images: string[] | null
+          in_stock: boolean | null
+          name: string
+          price: number
+          stock_quantity: number | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          category?: string | null
+          category_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          name: string
+          price: number
+          stock_quantity?: number | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          category?: string | null
+          category_id?: string | null
+          created_at?: string | null
+          currency?: string | null
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          in_stock?: boolean | null
+          name?: string
+          price?: number
+          stock_quantity?: number | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__ministers: {
+        Row: {
+          average_rating: number | null
+          can_receive_messages: boolean | null
+          career_timeline: Json | null
+          civic_engagement_score: number | null
+          claimed_by: string | null
+          created_at: string
+          crisis_response_score: number | null
+          date_of_birth: string | null
+          education: string | null
+          email: string | null
+          follower_count: number | null
+          full_name: string
+          id: string
+          is_claimed: boolean | null
+          is_verified: boolean | null
+          ministry: string
+          official_profile_url: string | null
+          performance_score: number | null
+          phone: string | null
+          political_party: string | null
+          position_title: string
+          profile_picture_url: string | null
+          promise_delivery_score: number | null
+          region: string | null
+          slug: string | null
+          term_end_date: string | null
+          term_start_date: string | null
+          total_ratings: number | null
+          transparency_score: number | null
+          updated_at: string
+          view_count: number | null
+          village_hometown: string | null
+        }
+        Insert: {
+          average_rating?: number | null
+          can_receive_messages?: boolean | null
+          career_timeline?: Json | null
+          civic_engagement_score?: number | null
+          claimed_by?: string | null
+          created_at?: string
+          crisis_response_score?: number | null
+          date_of_birth?: string | null
+          education?: string | null
+          email?: string | null
+          follower_count?: number | null
+          full_name: string
+          id?: string
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          ministry: string
+          official_profile_url?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          political_party?: string | null
+          position_title: string
+          profile_picture_url?: string | null
+          promise_delivery_score?: number | null
+          region?: string | null
+          slug?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+          view_count?: number | null
+          village_hometown?: string | null
+        }
+        Update: {
+          average_rating?: number | null
+          can_receive_messages?: boolean | null
+          career_timeline?: Json | null
+          civic_engagement_score?: number | null
+          claimed_by?: string | null
+          created_at?: string
+          crisis_response_score?: number | null
+          date_of_birth?: string | null
+          education?: string | null
+          email?: string | null
+          follower_count?: number | null
+          full_name?: string
+          id?: string
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          ministry?: string
+          official_profile_url?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          political_party?: string | null
+          position_title?: string
+          profile_picture_url?: string | null
+          promise_delivery_score?: number | null
+          region?: string | null
+          slug?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+          view_count?: number | null
+          village_hometown?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__moderator_training_slides: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          media_url: string | null
+          slide_number: number
+          slide_type: string
+          subtitle: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          slide_number: number
+          slide_type?: string
+          subtitle?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          media_url?: string | null
+          slide_number?: number
+          slide_type?: string
+          subtitle?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__mps: {
+        Row: {
+          average_rating: number | null
+          bills_sponsored: number | null
+          can_receive_messages: boolean | null
+          career_timeline: Json | null
+          civic_engagement_score: number | null
+          claimed_by: string | null
+          constituency: string | null
+          created_at: string
+          crisis_response_score: number | null
+          date_of_birth: string | null
+          education: string | null
+          email: string | null
+          follower_count: number | null
+          full_name: string
+          id: string
+          is_claimed: boolean | null
+          is_verified: boolean | null
+          legislative_activity_score: number | null
+          media_appearances: number | null
+          official_profile_url: string | null
+          parliament_attendance: number | null
+          phone: string | null
+          political_party: string | null
+          profile_picture_url: string | null
+          promise_delivery_score: number | null
+          region: string | null
+          slug: string | null
+          term_end_date: string | null
+          term_start_date: string | null
+          total_ratings: number | null
+          transparency_score: number | null
+          updated_at: string
+          view_count: number | null
+          village_hometown: string | null
+        }
+        Insert: {
+          average_rating?: number | null
+          bills_sponsored?: number | null
+          can_receive_messages?: boolean | null
+          career_timeline?: Json | null
+          civic_engagement_score?: number | null
+          claimed_by?: string | null
+          constituency?: string | null
+          created_at?: string
+          crisis_response_score?: number | null
+          date_of_birth?: string | null
+          education?: string | null
+          email?: string | null
+          follower_count?: number | null
+          full_name: string
+          id?: string
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          legislative_activity_score?: number | null
+          media_appearances?: number | null
+          official_profile_url?: string | null
+          parliament_attendance?: number | null
+          phone?: string | null
+          political_party?: string | null
+          profile_picture_url?: string | null
+          promise_delivery_score?: number | null
+          region?: string | null
+          slug?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+          view_count?: number | null
+          village_hometown?: string | null
+        }
+        Update: {
+          average_rating?: number | null
+          bills_sponsored?: number | null
+          can_receive_messages?: boolean | null
+          career_timeline?: Json | null
+          civic_engagement_score?: number | null
+          claimed_by?: string | null
+          constituency?: string | null
+          created_at?: string
+          crisis_response_score?: number | null
+          date_of_birth?: string | null
+          education?: string | null
+          email?: string | null
+          follower_count?: number | null
+          full_name?: string
+          id?: string
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          legislative_activity_score?: number | null
+          media_appearances?: number | null
+          official_profile_url?: string | null
+          parliament_attendance?: number | null
+          phone?: string | null
+          political_party?: string | null
+          profile_picture_url?: string | null
+          promise_delivery_score?: number | null
+          region?: string | null
+          slug?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+          view_count?: number | null
+          village_hometown?: string | null
+        }
+        Relationships: []
+      }
       cleanup_backup__news_articles: {
         Row: {
           content: string | null
@@ -11278,6 +12346,66 @@ export type Database = {
           source_name?: string | null
           source_url?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__pan_africa_countries: {
+        Row: {
+          capital_city: string | null
+          continent: string | null
+          country_code: string
+          country_name: string
+          country_name_local: string | null
+          created_at: string
+          currency_code: string
+          flag_emoji: string
+          flag_url: string | null
+          id: string
+          is_active: boolean | null
+          population: number | null
+          primary_language: string
+          region: string | null
+          supported_languages: string[] | null
+          time_zone: string | null
+          updated_at: string
+        }
+        Insert: {
+          capital_city?: string | null
+          continent?: string | null
+          country_code: string
+          country_name: string
+          country_name_local?: string | null
+          created_at?: string
+          currency_code?: string
+          flag_emoji: string
+          flag_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          population?: number | null
+          primary_language?: string
+          region?: string | null
+          supported_languages?: string[] | null
+          time_zone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          capital_city?: string | null
+          continent?: string | null
+          country_code?: string
+          country_name?: string
+          country_name_local?: string | null
+          created_at?: string
+          currency_code?: string
+          flag_emoji?: string
+          flag_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          population?: number | null
+          primary_language?: string
+          region?: string | null
+          supported_languages?: string[] | null
+          time_zone?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -11446,6 +12574,837 @@ export type Database = {
           status?: string
           target_id?: string
           target_type?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__political_parties: {
+        Row: {
+          acronym: string | null
+          approval_rating: number | null
+          auto_imported: boolean | null
+          claim_documents_url: string[] | null
+          claim_fee_paid: boolean | null
+          claim_payment_reference: string | null
+          claim_status: string | null
+          claimed_at: string | null
+          claimed_by: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string
+          development_rating: number | null
+          founded_by: string[] | null
+          founding_date: string | null
+          headquarters_address: string | null
+          headquarters_city: string | null
+          headquarters_region: string | null
+          historical_promises: string[] | null
+          id: string
+          ideology: string | null
+          is_active: boolean | null
+          is_claimable: boolean | null
+          is_claimed: boolean | null
+          key_milestones: Json | null
+          logo_confidence_score: number | null
+          logo_last_verified: string | null
+          logo_url: string | null
+          logo_verified: boolean | null
+          mayors_count: number | null
+          media_gallery: string[] | null
+          mission: string | null
+          mission_statement: string | null
+          mps_count: number | null
+          name: string
+          official_website: string | null
+          party_history: Json | null
+          party_president: string | null
+          political_leaning: string | null
+          promises_failed: number | null
+          promises_fulfilled: number | null
+          promises_ongoing: number | null
+          public_promises: Json | null
+          secretary_general: string | null
+          senators_count: number | null
+          slug: string | null
+          total_ratings: number | null
+          transparency_rating: number | null
+          treasurer: string | null
+          trust_rating: number | null
+          updated_at: string
+          verification_notes: string | null
+          vice_president: string | null
+          vision: string | null
+          vision_statement: string | null
+        }
+        Insert: {
+          acronym?: string | null
+          approval_rating?: number | null
+          auto_imported?: boolean | null
+          claim_documents_url?: string[] | null
+          claim_fee_paid?: boolean | null
+          claim_payment_reference?: string | null
+          claim_status?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          development_rating?: number | null
+          founded_by?: string[] | null
+          founding_date?: string | null
+          headquarters_address?: string | null
+          headquarters_city?: string | null
+          headquarters_region?: string | null
+          historical_promises?: string[] | null
+          id?: string
+          ideology?: string | null
+          is_active?: boolean | null
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
+          key_milestones?: Json | null
+          logo_confidence_score?: number | null
+          logo_last_verified?: string | null
+          logo_url?: string | null
+          logo_verified?: boolean | null
+          mayors_count?: number | null
+          media_gallery?: string[] | null
+          mission?: string | null
+          mission_statement?: string | null
+          mps_count?: number | null
+          name: string
+          official_website?: string | null
+          party_history?: Json | null
+          party_president?: string | null
+          political_leaning?: string | null
+          promises_failed?: number | null
+          promises_fulfilled?: number | null
+          promises_ongoing?: number | null
+          public_promises?: Json | null
+          secretary_general?: string | null
+          senators_count?: number | null
+          slug?: string | null
+          total_ratings?: number | null
+          transparency_rating?: number | null
+          treasurer?: string | null
+          trust_rating?: number | null
+          updated_at?: string
+          verification_notes?: string | null
+          vice_president?: string | null
+          vision?: string | null
+          vision_statement?: string | null
+        }
+        Update: {
+          acronym?: string | null
+          approval_rating?: number | null
+          auto_imported?: boolean | null
+          claim_documents_url?: string[] | null
+          claim_fee_paid?: boolean | null
+          claim_payment_reference?: string | null
+          claim_status?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string
+          development_rating?: number | null
+          founded_by?: string[] | null
+          founding_date?: string | null
+          headquarters_address?: string | null
+          headquarters_city?: string | null
+          headquarters_region?: string | null
+          historical_promises?: string[] | null
+          id?: string
+          ideology?: string | null
+          is_active?: boolean | null
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
+          key_milestones?: Json | null
+          logo_confidence_score?: number | null
+          logo_last_verified?: string | null
+          logo_url?: string | null
+          logo_verified?: boolean | null
+          mayors_count?: number | null
+          media_gallery?: string[] | null
+          mission?: string | null
+          mission_statement?: string | null
+          mps_count?: number | null
+          name?: string
+          official_website?: string | null
+          party_history?: Json | null
+          party_president?: string | null
+          political_leaning?: string | null
+          promises_failed?: number | null
+          promises_fulfilled?: number | null
+          promises_ongoing?: number | null
+          public_promises?: Json | null
+          secretary_general?: string | null
+          senators_count?: number | null
+          slug?: string | null
+          total_ratings?: number | null
+          transparency_rating?: number | null
+          treasurer?: string | null
+          trust_rating?: number | null
+          updated_at?: string
+          verification_notes?: string | null
+          vice_president?: string | null
+          vision?: string | null
+          vision_statement?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__politician_engagement_scores: {
+        Row: {
+          communication_score: number
+          constituency_outreach_score: number
+          created_at: string
+          engagement_level: string
+          id: string
+          last_activity_date: string | null
+          last_activity_description: string | null
+          overall_score: number
+          participation_score: number
+          policy_advocacy_score: number
+          politician_id: string
+          public_visibility_score: number
+          total_activities: number
+          updated_at: string
+        }
+        Insert: {
+          communication_score?: number
+          constituency_outreach_score?: number
+          created_at?: string
+          engagement_level?: string
+          id?: string
+          last_activity_date?: string | null
+          last_activity_description?: string | null
+          overall_score?: number
+          participation_score?: number
+          policy_advocacy_score?: number
+          politician_id: string
+          public_visibility_score?: number
+          total_activities?: number
+          updated_at?: string
+        }
+        Update: {
+          communication_score?: number
+          constituency_outreach_score?: number
+          created_at?: string
+          engagement_level?: string
+          id?: string
+          last_activity_date?: string | null
+          last_activity_description?: string | null
+          overall_score?: number
+          participation_score?: number
+          policy_advocacy_score?: number
+          politician_id?: string
+          public_visibility_score?: number
+          total_activities?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__politicians: {
+        Row: {
+          auto_imported: boolean | null
+          bio: string | null
+          biography: string | null
+          birth_date: string | null
+          campaign_promises: Json | null
+          can_create_polls: boolean | null
+          career_background: string | null
+          civic_score: number | null
+          claim_documents_url: string[] | null
+          claim_fee_paid: boolean | null
+          claim_payment_reference: string | null
+          claim_status: string | null
+          claimed_at: string | null
+          claimed_by: string | null
+          constituency: string | null
+          contact_details: Json | null
+          contact_office: string | null
+          contact_phone: string | null
+          contact_website: string | null
+          created_at: string | null
+          development_impact_rating: number | null
+          education: string | null
+          follower_count: number | null
+          former_roles: string[] | null
+          gender: string | null
+          id: string
+          image_confidence_score: number | null
+          image_last_verified: string | null
+          image_verification_id: string | null
+          image_verified: boolean | null
+          integrity_rating: number | null
+          is_archived: boolean | null
+          is_claimable: boolean | null
+          is_claimed: boolean | null
+          is_currently_in_office: boolean | null
+          last_poll_created_at: string | null
+          last_term_validation: string | null
+          level_of_office: string | null
+          name: string
+          office_history: Json | null
+          party: string | null
+          performance_score: number | null
+          political_party_id: string | null
+          poll_creation_count: number | null
+          position_end_date: string | null
+          position_start_date: string | null
+          profile_image_url: string | null
+          promise_tracker: Json | null
+          region: string | null
+          role_title: string | null
+          slug: string | null
+          term_end_date: string | null
+          term_start_date: string | null
+          term_status: string | null
+          timeline_events: Json | null
+          timeline_roles: Json | null
+          transparency_rating: number | null
+          updated_at: string | null
+          user_id: string
+          verification_notes: string | null
+          verified: boolean | null
+        }
+        Insert: {
+          auto_imported?: boolean | null
+          bio?: string | null
+          biography?: string | null
+          birth_date?: string | null
+          campaign_promises?: Json | null
+          can_create_polls?: boolean | null
+          career_background?: string | null
+          civic_score?: number | null
+          claim_documents_url?: string[] | null
+          claim_fee_paid?: boolean | null
+          claim_payment_reference?: string | null
+          claim_status?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          constituency?: string | null
+          contact_details?: Json | null
+          contact_office?: string | null
+          contact_phone?: string | null
+          contact_website?: string | null
+          created_at?: string | null
+          development_impact_rating?: number | null
+          education?: string | null
+          follower_count?: number | null
+          former_roles?: string[] | null
+          gender?: string | null
+          id?: string
+          image_confidence_score?: number | null
+          image_last_verified?: string | null
+          image_verification_id?: string | null
+          image_verified?: boolean | null
+          integrity_rating?: number | null
+          is_archived?: boolean | null
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
+          is_currently_in_office?: boolean | null
+          last_poll_created_at?: string | null
+          last_term_validation?: string | null
+          level_of_office?: string | null
+          name: string
+          office_history?: Json | null
+          party?: string | null
+          performance_score?: number | null
+          political_party_id?: string | null
+          poll_creation_count?: number | null
+          position_end_date?: string | null
+          position_start_date?: string | null
+          profile_image_url?: string | null
+          promise_tracker?: Json | null
+          region?: string | null
+          role_title?: string | null
+          slug?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          term_status?: string | null
+          timeline_events?: Json | null
+          timeline_roles?: Json | null
+          transparency_rating?: number | null
+          updated_at?: string | null
+          user_id: string
+          verification_notes?: string | null
+          verified?: boolean | null
+        }
+        Update: {
+          auto_imported?: boolean | null
+          bio?: string | null
+          biography?: string | null
+          birth_date?: string | null
+          campaign_promises?: Json | null
+          can_create_polls?: boolean | null
+          career_background?: string | null
+          civic_score?: number | null
+          claim_documents_url?: string[] | null
+          claim_fee_paid?: boolean | null
+          claim_payment_reference?: string | null
+          claim_status?: string | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          constituency?: string | null
+          contact_details?: Json | null
+          contact_office?: string | null
+          contact_phone?: string | null
+          contact_website?: string | null
+          created_at?: string | null
+          development_impact_rating?: number | null
+          education?: string | null
+          follower_count?: number | null
+          former_roles?: string[] | null
+          gender?: string | null
+          id?: string
+          image_confidence_score?: number | null
+          image_last_verified?: string | null
+          image_verification_id?: string | null
+          image_verified?: boolean | null
+          integrity_rating?: number | null
+          is_archived?: boolean | null
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
+          is_currently_in_office?: boolean | null
+          last_poll_created_at?: string | null
+          last_term_validation?: string | null
+          level_of_office?: string | null
+          name?: string
+          office_history?: Json | null
+          party?: string | null
+          performance_score?: number | null
+          political_party_id?: string | null
+          poll_creation_count?: number | null
+          position_end_date?: string | null
+          position_start_date?: string | null
+          profile_image_url?: string | null
+          promise_tracker?: Json | null
+          region?: string | null
+          role_title?: string | null
+          slug?: string | null
+          term_end_date?: string | null
+          term_start_date?: string | null
+          term_status?: string | null
+          timeline_events?: Json | null
+          timeline_roles?: Json | null
+          transparency_rating?: number | null
+          updated_at?: string | null
+          user_id?: string
+          verification_notes?: string | null
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__poll_bot_patterns: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          pattern_data: Json
+          pattern_name: string
+          pattern_type: string
+          risk_score: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          pattern_data: Json
+          pattern_name: string
+          pattern_type: string
+          risk_score: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          pattern_data?: Json
+          pattern_name?: string
+          pattern_type?: string
+          risk_score?: number
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__poll_templates: {
+        Row: {
+          color_theme: Json
+          created_at: string
+          description: string
+          features: Json
+          icon_set: string
+          id: string
+          is_active: boolean
+          is_premium: boolean
+          layout_type: string
+          preview_image_url: string | null
+          style_class: string
+          style_name: string
+          supported_poll_types: string[]
+          template_name: string
+          updated_at: string
+        }
+        Insert: {
+          color_theme?: Json
+          created_at?: string
+          description: string
+          features?: Json
+          icon_set: string
+          id?: string
+          is_active?: boolean
+          is_premium?: boolean
+          layout_type: string
+          preview_image_url?: string | null
+          style_class: string
+          style_name: string
+          supported_poll_types?: string[]
+          template_name: string
+          updated_at?: string
+        }
+        Update: {
+          color_theme?: Json
+          created_at?: string
+          description?: string
+          features?: Json
+          icon_set?: string
+          id?: string
+          is_active?: boolean
+          is_premium?: boolean
+          layout_type?: string
+          preview_image_url?: string | null
+          style_class?: string
+          style_name?: string
+          supported_poll_types?: string[]
+          template_name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__product_categories: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          parent_category_id: string | null
+          sort_order: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          parent_category_id?: string | null
+          sort_order?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          parent_category_id?: string | null
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__profiles: {
+        Row: {
+          achievements: Json | null
+          allow_messages: boolean | null
+          avatar_url: string | null
+          ban_reason: string | null
+          bio: string | null
+          civic_influence_score: number | null
+          civic_interests: string[] | null
+          civic_tagline: string | null
+          contact_info: Json | null
+          contact_visibility: string | null
+          contribution_level: string | null
+          cover_image_url: string | null
+          cover_photo_url: string | null
+          created_at: string | null
+          display_name: string | null
+          education: Json | null
+          email: string | null
+          enable_notifications: boolean | null
+          events_attended: number | null
+          id: string
+          interests: string[] | null
+          is_banned: boolean | null
+          is_diaspora: boolean | null
+          language_preference: string | null
+          languages: string[] | null
+          last_active_at: string | null
+          location: string | null
+          phone: string | null
+          phone_number: string | null
+          polls_created: number | null
+          portfolio_items: Json | null
+          post_count: number | null
+          privacy_settings: Json | null
+          profession: string | null
+          profile_completion_score: number | null
+          profile_slug: string | null
+          profile_tags: string[] | null
+          profile_type: Database["public"]["Enums"]["profile_type"] | null
+          profile_views: number | null
+          profile_visibility: string | null
+          region: string | null
+          rich_bio: Json | null
+          skills: string[] | null
+          slug: string | null
+          social_links: Json | null
+          subdivision: string | null
+          updated_at: string | null
+          user_id: string
+          username: string
+          verification_status:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified: boolean | null
+          website: string | null
+          website_url: string | null
+          work_experience: Json | null
+        }
+        Insert: {
+          achievements?: Json | null
+          allow_messages?: boolean | null
+          avatar_url?: string | null
+          ban_reason?: string | null
+          bio?: string | null
+          civic_influence_score?: number | null
+          civic_interests?: string[] | null
+          civic_tagline?: string | null
+          contact_info?: Json | null
+          contact_visibility?: string | null
+          contribution_level?: string | null
+          cover_image_url?: string | null
+          cover_photo_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          education?: Json | null
+          email?: string | null
+          enable_notifications?: boolean | null
+          events_attended?: number | null
+          id?: string
+          interests?: string[] | null
+          is_banned?: boolean | null
+          is_diaspora?: boolean | null
+          language_preference?: string | null
+          languages?: string[] | null
+          last_active_at?: string | null
+          location?: string | null
+          phone?: string | null
+          phone_number?: string | null
+          polls_created?: number | null
+          portfolio_items?: Json | null
+          post_count?: number | null
+          privacy_settings?: Json | null
+          profession?: string | null
+          profile_completion_score?: number | null
+          profile_slug?: string | null
+          profile_tags?: string[] | null
+          profile_type?: Database["public"]["Enums"]["profile_type"] | null
+          profile_views?: number | null
+          profile_visibility?: string | null
+          region?: string | null
+          rich_bio?: Json | null
+          skills?: string[] | null
+          slug?: string | null
+          social_links?: Json | null
+          subdivision?: string | null
+          updated_at?: string | null
+          user_id: string
+          username: string
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified?: boolean | null
+          website?: string | null
+          website_url?: string | null
+          work_experience?: Json | null
+        }
+        Update: {
+          achievements?: Json | null
+          allow_messages?: boolean | null
+          avatar_url?: string | null
+          ban_reason?: string | null
+          bio?: string | null
+          civic_influence_score?: number | null
+          civic_interests?: string[] | null
+          civic_tagline?: string | null
+          contact_info?: Json | null
+          contact_visibility?: string | null
+          contribution_level?: string | null
+          cover_image_url?: string | null
+          cover_photo_url?: string | null
+          created_at?: string | null
+          display_name?: string | null
+          education?: Json | null
+          email?: string | null
+          enable_notifications?: boolean | null
+          events_attended?: number | null
+          id?: string
+          interests?: string[] | null
+          is_banned?: boolean | null
+          is_diaspora?: boolean | null
+          language_preference?: string | null
+          languages?: string[] | null
+          last_active_at?: string | null
+          location?: string | null
+          phone?: string | null
+          phone_number?: string | null
+          polls_created?: number | null
+          portfolio_items?: Json | null
+          post_count?: number | null
+          privacy_settings?: Json | null
+          profession?: string | null
+          profile_completion_score?: number | null
+          profile_slug?: string | null
+          profile_tags?: string[] | null
+          profile_type?: Database["public"]["Enums"]["profile_type"] | null
+          profile_views?: number | null
+          profile_visibility?: string | null
+          region?: string | null
+          rich_bio?: Json | null
+          skills?: string[] | null
+          slug?: string | null
+          social_links?: Json | null
+          subdivision?: string | null
+          updated_at?: string | null
+          user_id?: string
+          username?: string
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified?: boolean | null
+          website?: string | null
+          website_url?: string | null
+          work_experience?: Json | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__schools: {
+        Row: {
+          address: string | null
+          average_rating: number | null
+          claim_status: Database["public"]["Enums"]["claim_status"] | null
+          claimed_at: string | null
+          claimed_by: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          contact_website: string | null
+          created_at: string
+          created_by: string | null
+          current_enrollment: number | null
+          description: string | null
+          division: string
+          established_year: number | null
+          fees_range_max: number | null
+          fees_range_min: number | null
+          founder_or_don: string | null
+          id: string
+          languages_taught: string[] | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          ownership: Database["public"]["Enums"]["school_ownership"]
+          photo_gallery: string[] | null
+          programs_offered: string | null
+          region: string
+          school_type: Database["public"]["Enums"]["school_type"]
+          slug: string | null
+          student_capacity: number | null
+          total_ratings: number | null
+          updated_at: string
+          verification_status:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at: string | null
+          verified_by: string | null
+          village_or_city: string
+        }
+        Insert: {
+          address?: string | null
+          average_rating?: number | null
+          claim_status?: Database["public"]["Enums"]["claim_status"] | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          contact_website?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_enrollment?: number | null
+          description?: string | null
+          division: string
+          established_year?: number | null
+          fees_range_max?: number | null
+          fees_range_min?: number | null
+          founder_or_don?: string | null
+          id?: string
+          languages_taught?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          ownership: Database["public"]["Enums"]["school_ownership"]
+          photo_gallery?: string[] | null
+          programs_offered?: string | null
+          region: string
+          school_type: Database["public"]["Enums"]["school_type"]
+          slug?: string | null
+          student_capacity?: number | null
+          total_ratings?: number | null
+          updated_at?: string
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at?: string | null
+          verified_by?: string | null
+          village_or_city: string
+        }
+        Update: {
+          address?: string | null
+          average_rating?: number | null
+          claim_status?: Database["public"]["Enums"]["claim_status"] | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          contact_website?: string | null
+          created_at?: string
+          created_by?: string | null
+          current_enrollment?: number | null
+          description?: string | null
+          division?: string
+          established_year?: number | null
+          fees_range_max?: number | null
+          fees_range_min?: number | null
+          founder_or_don?: string | null
+          id?: string
+          languages_taught?: string[] | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          ownership?: Database["public"]["Enums"]["school_ownership"]
+          photo_gallery?: string[] | null
+          programs_offered?: string | null
+          region?: string
+          school_type?: Database["public"]["Enums"]["school_type"]
+          slug?: string | null
+          student_capacity?: number | null
+          total_ratings?: number | null
+          updated_at?: string
+          verification_status?:
+            | Database["public"]["Enums"]["verification_status"]
+            | null
+          verified_at?: string | null
+          verified_by?: string | null
+          village_or_city?: string
         }
         Relationships: []
       }
@@ -11757,6 +13716,447 @@ export type Database = {
           id?: string
           is_enabled?: boolean
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__system_label_settings: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_system_setting: boolean | null
+          requires_admin_approval: boolean | null
+          setting_description: string | null
+          setting_key: string
+          setting_value: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_system_setting?: boolean | null
+          requires_admin_approval?: boolean | null
+          setting_description?: string | null
+          setting_key: string
+          setting_value: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_system_setting?: boolean | null
+          requires_admin_approval?: boolean | null
+          setting_description?: string | null
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__traditional_leaders: {
+        Row: {
+          accession_date: string | null
+          achievements: string[] | null
+          biography: string | null
+          birth_date: string | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string | null
+          created_by: string | null
+          cultural_significance: string | null
+          division: string | null
+          dynasty_name: string | null
+          full_name: string
+          gender: string | null
+          honors: string[] | null
+          id: string
+          is_verified: boolean | null
+          languages_spoken: string[] | null
+          official_residence: string | null
+          overall_rating: number | null
+          portrait_url: string | null
+          predecessor_name: string | null
+          regalia_photos: string[] | null
+          region: string
+          slug: string | null
+          status: string | null
+          subdivision: string | null
+          successor_name: string | null
+          title: Database["public"]["Enums"]["traditional_title"]
+          total_ratings: number | null
+          updated_at: string | null
+          verification_notes: string | null
+          verified_at: string | null
+          verified_by: string | null
+          village_id: string | null
+        }
+        Insert: {
+          accession_date?: string | null
+          achievements?: string[] | null
+          biography?: string | null
+          birth_date?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          cultural_significance?: string | null
+          division?: string | null
+          dynasty_name?: string | null
+          full_name: string
+          gender?: string | null
+          honors?: string[] | null
+          id?: string
+          is_verified?: boolean | null
+          languages_spoken?: string[] | null
+          official_residence?: string | null
+          overall_rating?: number | null
+          portrait_url?: string | null
+          predecessor_name?: string | null
+          regalia_photos?: string[] | null
+          region: string
+          slug?: string | null
+          status?: string | null
+          subdivision?: string | null
+          successor_name?: string | null
+          title: Database["public"]["Enums"]["traditional_title"]
+          total_ratings?: number | null
+          updated_at?: string | null
+          verification_notes?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          village_id?: string | null
+        }
+        Update: {
+          accession_date?: string | null
+          achievements?: string[] | null
+          biography?: string | null
+          birth_date?: string | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          cultural_significance?: string | null
+          division?: string | null
+          dynasty_name?: string | null
+          full_name?: string
+          gender?: string | null
+          honors?: string[] | null
+          id?: string
+          is_verified?: boolean | null
+          languages_spoken?: string[] | null
+          official_residence?: string | null
+          overall_rating?: number | null
+          portrait_url?: string | null
+          predecessor_name?: string | null
+          regalia_photos?: string[] | null
+          region?: string
+          slug?: string | null
+          status?: string | null
+          subdivision?: string | null
+          successor_name?: string | null
+          title?: Database["public"]["Enums"]["traditional_title"]
+          total_ratings?: number | null
+          updated_at?: string | null
+          verification_notes?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+          village_id?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__ui_bug_logs: {
+        Row: {
+          component_path: string
+          created_at: string
+          element_selector: string | null
+          id: string
+          issue_description: string
+          issue_type: string
+          metadata: Json | null
+          page_name: string
+          resolved_at: string | null
+          resolved_by: string | null
+          screen_size: string
+          screenshot_url: string | null
+          severity: string
+          status: string
+          suggested_fix: string | null
+          updated_at: string
+        }
+        Insert: {
+          component_path: string
+          created_at?: string
+          element_selector?: string | null
+          id?: string
+          issue_description: string
+          issue_type: string
+          metadata?: Json | null
+          page_name: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screen_size: string
+          screenshot_url?: string | null
+          severity?: string
+          status?: string
+          suggested_fix?: string | null
+          updated_at?: string
+        }
+        Update: {
+          component_path?: string
+          created_at?: string
+          element_selector?: string | null
+          id?: string
+          issue_description?: string
+          issue_type?: string
+          metadata?: Json | null
+          page_name?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          screen_size?: string
+          screenshot_url?: string | null
+          severity?: string
+          status?: string
+          suggested_fix?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__village_projects: {
+        Row: {
+          community_feedback: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          funding_amount: number | null
+          funding_source: string | null
+          id: string
+          photos: string[] | null
+          project_name: string
+          project_status: string
+          project_type: string
+          reports_urls: string[] | null
+          updated_at: string
+          village_id: string
+          year_completed: number | null
+          year_started: number | null
+        }
+        Insert: {
+          community_feedback?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          funding_amount?: number | null
+          funding_source?: string | null
+          id?: string
+          photos?: string[] | null
+          project_name: string
+          project_status: string
+          project_type: string
+          reports_urls?: string[] | null
+          updated_at?: string
+          village_id: string
+          year_completed?: number | null
+          year_started?: number | null
+        }
+        Update: {
+          community_feedback?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          funding_amount?: number | null
+          funding_source?: string | null
+          id?: string
+          photos?: string[] | null
+          project_name?: string
+          project_status?: string
+          project_type?: string
+          reports_urls?: string[] | null
+          updated_at?: string
+          village_id?: string
+          year_completed?: number | null
+          year_started?: number | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__villages: {
+        Row: {
+          achievements_score: number | null
+          civic_participation_score: number | null
+          community_chat_link: string | null
+          created_at: string
+          created_by: string | null
+          development_partners: Json | null
+          diaspora_engagement_score: number | null
+          division: string
+          economic_activity_score: number | null
+          education_score: number | null
+          electricity_coverage_percentage: number | null
+          ethnic_groups: string[] | null
+          facebook_link: string | null
+          flag_image_url: string | null
+          founding_story: string | null
+          governance_score: number | null
+          gps_latitude: number | null
+          gps_longitude: number | null
+          health_score: number | null
+          hospitals_count: number | null
+          id: string
+          infrastructure_score: number | null
+          is_verified: boolean | null
+          latitude: number | null
+          logo_image_url: string | null
+          longitude: number | null
+          main_economic_activity: string | null
+          migration_legend: string | null
+          mtn_coverage: boolean | null
+          nexttel_coverage: boolean | null
+          notable_events: string | null
+          oral_traditions: string | null
+          orange_coverage: boolean | null
+          overall_rating: number | null
+          peace_security_score: number | null
+          population_estimate: number | null
+          region: string
+          road_network_km: number | null
+          schools_count: number | null
+          slug: string | null
+          social_spirit_score: number | null
+          sons_daughters_count: number | null
+          subdivision: string
+          total_ratings_count: number | null
+          totem_symbol: string | null
+          traditional_languages: string[] | null
+          traditional_leader_name: string | null
+          traditional_leader_title: string | null
+          updated_at: string
+          verification_notes: string | null
+          view_count: number | null
+          village_anthem_url: string | null
+          village_motto: string | null
+          village_name: string
+          village_scorecard_rating: number | null
+          water_sources_count: number | null
+          whatsapp_link: string | null
+          year_founded: number | null
+        }
+        Insert: {
+          achievements_score?: number | null
+          civic_participation_score?: number | null
+          community_chat_link?: string | null
+          created_at?: string
+          created_by?: string | null
+          development_partners?: Json | null
+          diaspora_engagement_score?: number | null
+          division: string
+          economic_activity_score?: number | null
+          education_score?: number | null
+          electricity_coverage_percentage?: number | null
+          ethnic_groups?: string[] | null
+          facebook_link?: string | null
+          flag_image_url?: string | null
+          founding_story?: string | null
+          governance_score?: number | null
+          gps_latitude?: number | null
+          gps_longitude?: number | null
+          health_score?: number | null
+          hospitals_count?: number | null
+          id?: string
+          infrastructure_score?: number | null
+          is_verified?: boolean | null
+          latitude?: number | null
+          logo_image_url?: string | null
+          longitude?: number | null
+          main_economic_activity?: string | null
+          migration_legend?: string | null
+          mtn_coverage?: boolean | null
+          nexttel_coverage?: boolean | null
+          notable_events?: string | null
+          oral_traditions?: string | null
+          orange_coverage?: boolean | null
+          overall_rating?: number | null
+          peace_security_score?: number | null
+          population_estimate?: number | null
+          region: string
+          road_network_km?: number | null
+          schools_count?: number | null
+          slug?: string | null
+          social_spirit_score?: number | null
+          sons_daughters_count?: number | null
+          subdivision: string
+          total_ratings_count?: number | null
+          totem_symbol?: string | null
+          traditional_languages?: string[] | null
+          traditional_leader_name?: string | null
+          traditional_leader_title?: string | null
+          updated_at?: string
+          verification_notes?: string | null
+          view_count?: number | null
+          village_anthem_url?: string | null
+          village_motto?: string | null
+          village_name: string
+          village_scorecard_rating?: number | null
+          water_sources_count?: number | null
+          whatsapp_link?: string | null
+          year_founded?: number | null
+        }
+        Update: {
+          achievements_score?: number | null
+          civic_participation_score?: number | null
+          community_chat_link?: string | null
+          created_at?: string
+          created_by?: string | null
+          development_partners?: Json | null
+          diaspora_engagement_score?: number | null
+          division?: string
+          economic_activity_score?: number | null
+          education_score?: number | null
+          electricity_coverage_percentage?: number | null
+          ethnic_groups?: string[] | null
+          facebook_link?: string | null
+          flag_image_url?: string | null
+          founding_story?: string | null
+          governance_score?: number | null
+          gps_latitude?: number | null
+          gps_longitude?: number | null
+          health_score?: number | null
+          hospitals_count?: number | null
+          id?: string
+          infrastructure_score?: number | null
+          is_verified?: boolean | null
+          latitude?: number | null
+          logo_image_url?: string | null
+          longitude?: number | null
+          main_economic_activity?: string | null
+          migration_legend?: string | null
+          mtn_coverage?: boolean | null
+          nexttel_coverage?: boolean | null
+          notable_events?: string | null
+          oral_traditions?: string | null
+          orange_coverage?: boolean | null
+          overall_rating?: number | null
+          peace_security_score?: number | null
+          population_estimate?: number | null
+          region?: string
+          road_network_km?: number | null
+          schools_count?: number | null
+          slug?: string | null
+          social_spirit_score?: number | null
+          sons_daughters_count?: number | null
+          subdivision?: string
+          total_ratings_count?: number | null
+          totem_symbol?: string | null
+          traditional_languages?: string[] | null
+          traditional_leader_name?: string | null
+          traditional_leader_title?: string | null
+          updated_at?: string
+          verification_notes?: string | null
+          view_count?: number | null
+          village_anthem_url?: string | null
+          village_motto?: string | null
+          village_name?: string
+          village_scorecard_rating?: number | null
+          water_sources_count?: number | null
+          whatsapp_link?: string | null
+          year_founded?: number | null
         }
         Relationships: []
       }
@@ -45490,6 +47890,10 @@ export type Database = {
       cleanup_old_typing_indicators: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      cleanup_residuals: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
       }
       compare_debt_data_changes: {
         Args: { p_source_id: string; p_current_result_id: string }
