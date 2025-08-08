@@ -10235,6 +10235,627 @@ export type Database = {
           },
         ]
       }
+      cleanup_backup__ab_test_configs: {
+        Row: {
+          created_at: string
+          description: string | null
+          end_date: string | null
+          id: string
+          is_active: boolean
+          start_date: string
+          success_metrics: Json
+          test_name: string
+          traffic_allocation: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          start_date?: string
+          success_metrics?: Json
+          test_name: string
+          traffic_allocation?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          start_date?: string
+          success_metrics?: Json
+          test_name?: string
+          traffic_allocation?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__ai_insights: {
+        Row: {
+          actionable_recommendations: string[] | null
+          affected_entities: Json | null
+          confidence_score: number
+          created_at: string
+          data_sources: Json
+          description: string
+          expires_at: string | null
+          feedback_score: number | null
+          id: string
+          insight_metadata: Json | null
+          insight_type: string
+          is_verified: boolean
+          priority_level: string
+          supporting_data: Json | null
+          title: string
+          updated_at: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          actionable_recommendations?: string[] | null
+          affected_entities?: Json | null
+          confidence_score?: number
+          created_at?: string
+          data_sources?: Json
+          description: string
+          expires_at?: string | null
+          feedback_score?: number | null
+          id?: string
+          insight_metadata?: Json | null
+          insight_type: string
+          is_verified?: boolean
+          priority_level?: string
+          supporting_data?: Json | null
+          title: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          actionable_recommendations?: string[] | null
+          affected_entities?: Json | null
+          confidence_score?: number
+          created_at?: string
+          data_sources?: Json
+          description?: string
+          expires_at?: string | null
+          feedback_score?: number | null
+          id?: string
+          insight_metadata?: Json | null
+          insight_type?: string
+          is_verified?: boolean
+          priority_level?: string
+          supporting_data?: Json | null
+          title?: string
+          updated_at?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__archived_artist_data: {
+        Row: {
+          archive_reason: string | null
+          archived_at: string | null
+          data_snapshot: Json
+          id: string
+          original_table: string
+        }
+        Insert: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          data_snapshot: Json
+          id?: string
+          original_table: string
+        }
+        Update: {
+          archive_reason?: string | null
+          archived_at?: string | null
+          data_snapshot?: Json
+          id?: string
+          original_table?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__ashen_behavior_tests: {
+        Row: {
+          created_at: string
+          device_type: string
+          id: string
+          issues_found: Json | null
+          metadata: Json | null
+          performance_metrics: Json | null
+          route_tested: string
+          screenshot_url: string | null
+          test_name: string
+          test_result: string
+          test_type: string
+        }
+        Insert: {
+          created_at?: string
+          device_type?: string
+          id?: string
+          issues_found?: Json | null
+          metadata?: Json | null
+          performance_metrics?: Json | null
+          route_tested: string
+          screenshot_url?: string | null
+          test_name: string
+          test_result: string
+          test_type: string
+        }
+        Update: {
+          created_at?: string
+          device_type?: string
+          id?: string
+          issues_found?: Json | null
+          metadata?: Json | null
+          performance_metrics?: Json | null
+          route_tested?: string
+          screenshot_url?: string | null
+          test_name?: string
+          test_result?: string
+          test_type?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__ashen_monitoring_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          id: string
+          is_active: boolean | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__ashen_security_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          description: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value: Json
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__ashen_simulation_test_paths: {
+        Row: {
+          created_at: string
+          expected_outcomes: Json | null
+          id: string
+          is_active: boolean | null
+          is_critical: boolean | null
+          path_description: string | null
+          path_name: string
+          steps: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          expected_outcomes?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_critical?: boolean | null
+          path_description?: string | null
+          path_name: string
+          steps?: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          expected_outcomes?: Json | null
+          id?: string
+          is_active?: boolean | null
+          is_critical?: boolean | null
+          path_description?: string | null
+          path_name?: string
+          steps?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__autonomous_poll_config: {
+        Row: {
+          config_key: string
+          config_value: Json
+          created_at: string
+          id: string
+          is_enabled: boolean
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          config_key: string
+          config_value?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          config_key?: string
+          config_value?: Json
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__camerpulse_intelligence_config: {
+        Row: {
+          auto_updated: boolean | null
+          config_key: string
+          config_type: string
+          config_value: Json
+          created_at: string
+          description: string | null
+          id: string
+          last_evolution_update: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_updated?: boolean | null
+          config_key: string
+          config_type: string
+          config_value: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          last_evolution_update?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_updated?: boolean | null
+          config_key?: string
+          config_type?: string
+          config_value?: Json
+          created_at?: string
+          description?: string | null
+          id?: string
+          last_evolution_update?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__civic_campaign_templates: {
+        Row: {
+          content_template: Json
+          created_at: string
+          created_by: string | null
+          customization_options: Json | null
+          engagement_metrics: Json | null
+          id: string
+          is_approved: boolean
+          platform: string | null
+          success_stories: Json | null
+          target_audience: string
+          template_name: string
+          template_type: string
+          updated_at: string
+        }
+        Insert: {
+          content_template: Json
+          created_at?: string
+          created_by?: string | null
+          customization_options?: Json | null
+          engagement_metrics?: Json | null
+          id?: string
+          is_approved?: boolean
+          platform?: string | null
+          success_stories?: Json | null
+          target_audience: string
+          template_name: string
+          template_type: string
+          updated_at?: string
+        }
+        Update: {
+          content_template?: Json
+          created_at?: string
+          created_by?: string | null
+          customization_options?: Json | null
+          engagement_metrics?: Json | null
+          id?: string
+          is_approved?: boolean
+          platform?: string | null
+          success_stories?: Json | null
+          target_audience?: string
+          template_name?: string
+          template_type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__civic_knowledge_entities: {
+        Row: {
+          aliases: string[] | null
+          auto_imported: boolean | null
+          canonical_name: string
+          confidence_score: number | null
+          created_at: string
+          description: string | null
+          dissolution_date: string | null
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          establishment_date: string | null
+          facebook_page: string | null
+          headquarters_address: string | null
+          id: string
+          instagram_handle: string | null
+          last_verified_at: string | null
+          linkedin_profile: string | null
+          metadata: Json | null
+          name: string
+          official_email: string | null
+          official_phone: string | null
+          official_website: string | null
+          primary_source_url: string | null
+          region: string | null
+          registration_number: string | null
+          source_type: Database["public"]["Enums"]["source_type"] | null
+          status: string | null
+          twitter_handle: string | null
+          updated_at: string
+          verification_status: string | null
+          youtube_channel: string | null
+        }
+        Insert: {
+          aliases?: string[] | null
+          auto_imported?: boolean | null
+          canonical_name: string
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          dissolution_date?: string | null
+          entity_type: Database["public"]["Enums"]["civic_entity_type"]
+          establishment_date?: string | null
+          facebook_page?: string | null
+          headquarters_address?: string | null
+          id?: string
+          instagram_handle?: string | null
+          last_verified_at?: string | null
+          linkedin_profile?: string | null
+          metadata?: Json | null
+          name: string
+          official_email?: string | null
+          official_phone?: string | null
+          official_website?: string | null
+          primary_source_url?: string | null
+          region?: string | null
+          registration_number?: string | null
+          source_type?: Database["public"]["Enums"]["source_type"] | null
+          status?: string | null
+          twitter_handle?: string | null
+          updated_at?: string
+          verification_status?: string | null
+          youtube_channel?: string | null
+        }
+        Update: {
+          aliases?: string[] | null
+          auto_imported?: boolean | null
+          canonical_name?: string
+          confidence_score?: number | null
+          created_at?: string
+          description?: string | null
+          dissolution_date?: string | null
+          entity_type?: Database["public"]["Enums"]["civic_entity_type"]
+          establishment_date?: string | null
+          facebook_page?: string | null
+          headquarters_address?: string | null
+          id?: string
+          instagram_handle?: string | null
+          last_verified_at?: string | null
+          linkedin_profile?: string | null
+          metadata?: Json | null
+          name?: string
+          official_email?: string | null
+          official_phone?: string | null
+          official_website?: string | null
+          primary_source_url?: string | null
+          region?: string | null
+          registration_number?: string | null
+          source_type?: Database["public"]["Enums"]["source_type"] | null
+          status?: string | null
+          twitter_handle?: string | null
+          updated_at?: string
+          verification_status?: string | null
+          youtube_channel?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__civic_learning_paths: {
+        Row: {
+          average_rating: number | null
+          certification_requirements: Json | null
+          completion_count: number
+          content_sequence: Json
+          created_at: string
+          created_by: string | null
+          description: string | null
+          difficulty_level: Database["public"]["Enums"]["education_difficulty"]
+          enrollment_count: number
+          estimated_duration_hours: number | null
+          id: string
+          is_active: boolean
+          is_certification_path: boolean
+          learning_outcomes: string[] | null
+          prerequisites: string[] | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          average_rating?: number | null
+          certification_requirements?: Json | null
+          completion_count?: number
+          content_sequence?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: Database["public"]["Enums"]["education_difficulty"]
+          enrollment_count?: number
+          estimated_duration_hours?: number | null
+          id?: string
+          is_active?: boolean
+          is_certification_path?: boolean
+          learning_outcomes?: string[] | null
+          prerequisites?: string[] | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          average_rating?: number | null
+          certification_requirements?: Json | null
+          completion_count?: number
+          content_sequence?: Json
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          difficulty_level?: Database["public"]["Enums"]["education_difficulty"]
+          enrollment_count?: number
+          estimated_duration_hours?: number | null
+          id?: string
+          is_active?: boolean
+          is_certification_path?: boolean
+          learning_outcomes?: string[] | null
+          prerequisites?: string[] | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__civic_rewards: {
+        Row: {
+          badge_color: string | null
+          category: string
+          created_at: string
+          current_recipients: number | null
+          description: string
+          icon_url: string | null
+          id: string
+          is_active: boolean
+          is_public: boolean
+          max_recipients: number | null
+          points_value: number | null
+          reward_name: string
+          reward_type: Database["public"]["Enums"]["reward_type"]
+          unlock_criteria: Json
+          updated_at: string
+        }
+        Insert: {
+          badge_color?: string | null
+          category: string
+          created_at?: string
+          current_recipients?: number | null
+          description: string
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_public?: boolean
+          max_recipients?: number | null
+          points_value?: number | null
+          reward_name: string
+          reward_type: Database["public"]["Enums"]["reward_type"]
+          unlock_criteria?: Json
+          updated_at?: string
+        }
+        Update: {
+          badge_color?: string | null
+          category?: string
+          created_at?: string
+          current_recipients?: number | null
+          description?: string
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean
+          is_public?: boolean
+          max_recipients?: number | null
+          points_value?: number | null
+          reward_name?: string
+          reward_type?: Database["public"]["Enums"]["reward_type"]
+          unlock_criteria?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__cleanup_backup__cleanup_reports: {
+        Row: {
+          backed_up: boolean
+          backup_table: string | null
+          deleted_count: number
+          id: string
+          processed_at: string
+          run_id: string
+          sample_ids: string[] | null
+          sample_text: Json | null
+          table_name: string
+        }
+        Insert: {
+          backed_up?: boolean
+          backup_table?: string | null
+          deleted_count?: number
+          id?: string
+          processed_at?: string
+          run_id: string
+          sample_ids?: string[] | null
+          sample_text?: Json | null
+          table_name: string
+        }
+        Update: {
+          backed_up?: boolean
+          backup_table?: string | null
+          deleted_count?: number
+          id?: string
+          processed_at?: string
+          run_id?: string
+          sample_ids?: string[] | null
+          sample_text?: Json | null
+          table_name?: string
+        }
+        Relationships: []
+      }
       cleanup_backup__cleanup_reports: {
         Row: {
           backed_up: boolean
@@ -10309,6 +10930,833 @@ export type Database = {
           run_started_at?: string
           tables_processed?: number
           total_deleted?: number
+        }
+        Relationships: []
+      }
+      cleanup_backup__constitutional_articles: {
+        Row: {
+          article_number: string
+          article_summary: string | null
+          article_text: string
+          article_title: string | null
+          category: string
+          chapter_title: string | null
+          created_at: string | null
+          id: string
+          is_fundamental_right: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          article_number: string
+          article_summary?: string | null
+          article_text: string
+          article_title?: string | null
+          category: string
+          chapter_title?: string | null
+          created_at?: string | null
+          id?: string
+          is_fundamental_right?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          article_number?: string
+          article_summary?: string | null
+          article_text?: string
+          article_title?: string | null
+          category?: string
+          chapter_title?: string | null
+          created_at?: string | null
+          id?: string
+          is_fundamental_right?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__debt_scraping_results: {
+        Row: {
+          borrowing_purposes: string[] | null
+          changes_detected: boolean | null
+          comparison_with_previous: Json | null
+          created_at: string
+          creditors_found: string[] | null
+          data_quality_score: number | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          parsed_data: Json | null
+          raw_data: Json | null
+          scraping_date: string
+          source_id: string
+          status: string
+          total_debt_detected: number | null
+        }
+        Insert: {
+          borrowing_purposes?: string[] | null
+          changes_detected?: boolean | null
+          comparison_with_previous?: Json | null
+          created_at?: string
+          creditors_found?: string[] | null
+          data_quality_score?: number | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          parsed_data?: Json | null
+          raw_data?: Json | null
+          scraping_date?: string
+          source_id: string
+          status?: string
+          total_debt_detected?: number | null
+        }
+        Update: {
+          borrowing_purposes?: string[] | null
+          changes_detected?: boolean | null
+          comparison_with_previous?: Json | null
+          created_at?: string
+          creditors_found?: string[] | null
+          data_quality_score?: number | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          parsed_data?: Json | null
+          raw_data?: Json | null
+          scraping_date?: string
+          source_id?: string
+          status?: string
+          total_debt_detected?: number | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__digital_badges: {
+        Row: {
+          badge_type: string
+          created_at: string | null
+          description: string | null
+          icon_url: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          points_cost: number | null
+          rarity: string | null
+          unlock_criteria: Json | null
+        }
+        Insert: {
+          badge_type?: string
+          created_at?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          points_cost?: number | null
+          rarity?: string | null
+          unlock_criteria?: Json | null
+        }
+        Update: {
+          badge_type?: string
+          created_at?: string | null
+          description?: string | null
+          icon_url?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          points_cost?: number | null
+          rarity?: string | null
+          unlock_criteria?: Json | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__grant_programs: {
+        Row: {
+          announcement_date: string | null
+          application_deadline: string | null
+          application_form_fields: Json | null
+          contact_information: Json | null
+          created_at: string
+          created_by: string
+          description: string
+          eligibility_criteria: Json
+          evaluation_criteria: Json
+          id: string
+          max_award_amount_fcfa: number | null
+          max_award_amount_usd: number | null
+          min_award_amount_fcfa: number | null
+          min_award_amount_usd: number | null
+          program_category: string
+          program_name: string
+          program_status: Database["public"]["Enums"]["grant_status"]
+          program_type: string
+          required_documents: Json | null
+          terms_and_conditions: string | null
+          total_budget_fcfa: number | null
+          total_budget_usd: number | null
+          updated_at: string
+        }
+        Insert: {
+          announcement_date?: string | null
+          application_deadline?: string | null
+          application_form_fields?: Json | null
+          contact_information?: Json | null
+          created_at?: string
+          created_by: string
+          description: string
+          eligibility_criteria?: Json
+          evaluation_criteria?: Json
+          id?: string
+          max_award_amount_fcfa?: number | null
+          max_award_amount_usd?: number | null
+          min_award_amount_fcfa?: number | null
+          min_award_amount_usd?: number | null
+          program_category: string
+          program_name: string
+          program_status?: Database["public"]["Enums"]["grant_status"]
+          program_type: string
+          required_documents?: Json | null
+          terms_and_conditions?: string | null
+          total_budget_fcfa?: number | null
+          total_budget_usd?: number | null
+          updated_at?: string
+        }
+        Update: {
+          announcement_date?: string | null
+          application_deadline?: string | null
+          application_form_fields?: Json | null
+          contact_information?: Json | null
+          created_at?: string
+          created_by?: string
+          description?: string
+          eligibility_criteria?: Json
+          evaluation_criteria?: Json
+          id?: string
+          max_award_amount_fcfa?: number | null
+          max_award_amount_usd?: number | null
+          min_award_amount_fcfa?: number | null
+          min_award_amount_usd?: number | null
+          program_category?: string
+          program_name?: string
+          program_status?: Database["public"]["Enums"]["grant_status"]
+          program_type?: string
+          required_documents?: Json | null
+          terms_and_conditions?: string | null
+          total_budget_fcfa?: number | null
+          total_budget_usd?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__legislation_registry: {
+        Row: {
+          affected_sectors: string[] | null
+          bill_number: string | null
+          bill_title: string
+          citizen_downvotes: number | null
+          citizen_impact_score: number | null
+          citizen_upvotes: number | null
+          corruption_risk_level: string | null
+          created_at: string
+          date_introduced: string | null
+          date_last_updated: string | null
+          estimated_cost_fcfa: number | null
+          followers_count: number | null
+          full_text_url: string | null
+          id: string
+          impact_assessment: string | null
+          implementation_timeline: string | null
+          law_type: Database["public"]["Enums"]["law_type"]
+          legislative_summary: string | null
+          originator_id: string | null
+          originator_name: string | null
+          originator_type: string | null
+          related_laws: string[] | null
+          status: Database["public"]["Enums"]["law_status"] | null
+          tags: string[] | null
+          total_comments: number | null
+          total_petitions: number | null
+          transparency_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          affected_sectors?: string[] | null
+          bill_number?: string | null
+          bill_title: string
+          citizen_downvotes?: number | null
+          citizen_impact_score?: number | null
+          citizen_upvotes?: number | null
+          corruption_risk_level?: string | null
+          created_at?: string
+          date_introduced?: string | null
+          date_last_updated?: string | null
+          estimated_cost_fcfa?: number | null
+          followers_count?: number | null
+          full_text_url?: string | null
+          id?: string
+          impact_assessment?: string | null
+          implementation_timeline?: string | null
+          law_type: Database["public"]["Enums"]["law_type"]
+          legislative_summary?: string | null
+          originator_id?: string | null
+          originator_name?: string | null
+          originator_type?: string | null
+          related_laws?: string[] | null
+          status?: Database["public"]["Enums"]["law_status"] | null
+          tags?: string[] | null
+          total_comments?: number | null
+          total_petitions?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          affected_sectors?: string[] | null
+          bill_number?: string | null
+          bill_title?: string
+          citizen_downvotes?: number | null
+          citizen_impact_score?: number | null
+          citizen_upvotes?: number | null
+          corruption_risk_level?: string | null
+          created_at?: string
+          date_introduced?: string | null
+          date_last_updated?: string | null
+          estimated_cost_fcfa?: number | null
+          followers_count?: number | null
+          full_text_url?: string | null
+          id?: string
+          impact_assessment?: string | null
+          implementation_timeline?: string | null
+          law_type?: Database["public"]["Enums"]["law_type"]
+          legislative_summary?: string | null
+          originator_id?: string | null
+          originator_name?: string | null
+          originator_type?: string | null
+          related_laws?: string[] | null
+          status?: Database["public"]["Enums"]["law_status"] | null
+          tags?: string[] | null
+          total_comments?: number | null
+          total_petitions?: number | null
+          transparency_score?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__news_articles: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          excerpt: string | null
+          id: string
+          image_url: string | null
+          is_pinned: boolean | null
+          published_at: string | null
+          sentiment_label: string | null
+          sentiment_score: number | null
+          source_name: string | null
+          source_url: string | null
+          title: string
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          is_pinned?: boolean | null
+          published_at?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          source_name?: string | null
+          source_url?: string | null
+          title: string
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          image_url?: string | null
+          is_pinned?: boolean | null
+          published_at?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          source_name?: string | null
+          source_url?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__pan_africa_mesh_config: {
+        Row: {
+          applies_to_countries: string[] | null
+          applies_to_regions: string[] | null
+          config_category: string
+          config_key: string
+          config_value: Json
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          applies_to_countries?: string[] | null
+          applies_to_regions?: string[] | null
+          config_category: string
+          config_key: string
+          config_value: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          applies_to_countries?: string[] | null
+          applies_to_regions?: string[] | null
+          config_category?: string
+          config_key?: string
+          config_value?: Json
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__platform_gaps: {
+        Row: {
+          affected_modules: string[] | null
+          assigned_to: string | null
+          business_justification: string | null
+          calculated_priority_score: number | null
+          category: Database["public"]["Enums"]["gap_category"]
+          created_at: string
+          created_by: string | null
+          description: string | null
+          effort_score: number
+          estimated_effort_hours: number | null
+          feasibility_score: number
+          id: string
+          impact_score: number
+          priority_level: Database["public"]["Enums"]["priority_level"]
+          risk_score: number
+          stakeholders: string[] | null
+          status: Database["public"]["Enums"]["gap_status"]
+          target_completion_date: string | null
+          technical_notes: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          affected_modules?: string[] | null
+          assigned_to?: string | null
+          business_justification?: string | null
+          calculated_priority_score?: number | null
+          category: Database["public"]["Enums"]["gap_category"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          effort_score?: number
+          estimated_effort_hours?: number | null
+          feasibility_score?: number
+          id?: string
+          impact_score?: number
+          priority_level?: Database["public"]["Enums"]["priority_level"]
+          risk_score?: number
+          stakeholders?: string[] | null
+          status?: Database["public"]["Enums"]["gap_status"]
+          target_completion_date?: string | null
+          technical_notes?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          affected_modules?: string[] | null
+          assigned_to?: string | null
+          business_justification?: string | null
+          calculated_priority_score?: number | null
+          category?: Database["public"]["Enums"]["gap_category"]
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          effort_score?: number
+          estimated_effort_hours?: number | null
+          feasibility_score?: number
+          id?: string
+          impact_score?: number
+          priority_level?: Database["public"]["Enums"]["priority_level"]
+          risk_score?: number
+          stakeholders?: string[] | null
+          status?: Database["public"]["Enums"]["gap_status"]
+          target_completion_date?: string | null
+          technical_notes?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__politica_ai_logs: {
+        Row: {
+          action_type: string
+          ai_confidence_score: number | null
+          changes_made: Json | null
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          id: string
+          proof_urls: string[] | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          sources_verified: Json | null
+          status: string
+          target_id: string
+          target_type: string
+        }
+        Insert: {
+          action_type: string
+          ai_confidence_score?: number | null
+          changes_made?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          proof_urls?: string[] | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sources_verified?: Json | null
+          status?: string
+          target_id: string
+          target_type: string
+        }
+        Update: {
+          action_type?: string
+          ai_confidence_score?: number | null
+          changes_made?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          proof_urls?: string[] | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          sources_verified?: Json | null
+          status?: string
+          target_id?: string
+          target_type?: string
+        }
+        Relationships: []
+      }
+      cleanup_backup__senators: {
+        Row: {
+          about: string | null
+          auto_update_enabled: boolean | null
+          average_rating: number | null
+          badges: Json | null
+          bills_passed: Json | null
+          bills_passed_count: number | null
+          bills_proposed_count: number | null
+          can_receive_messages: boolean | null
+          career_history: Json | null
+          civic_engagement_score: number | null
+          claimed_at: string | null
+          claimed_by: string | null
+          committee_memberships: Json | null
+          constituency: string | null
+          created_at: string | null
+          data_verification_status: string | null
+          date_of_birth: string | null
+          education: Json | null
+          email: string | null
+          engagement_score: number | null
+          follower_count: number | null
+          full_name: string | null
+          id: string
+          is_claimable: boolean | null
+          is_claimed: boolean | null
+          is_verified: boolean | null
+          last_profile_update: string | null
+          message_response_time_hours: number | null
+          misconduct_reports_count: number | null
+          name: string
+          official_senate_url: string | null
+          party_affiliation: string | null
+          performance_score: number | null
+          phone: string | null
+          photo_url: string | null
+          political_party: string | null
+          position: string
+          region: string | null
+          slug: string | null
+          social_media_links: Json | null
+          source_page_url: string | null
+          status: string | null
+          total_ratings: number | null
+          transparency_score: number | null
+          trust_score: number | null
+          updated_at: string | null
+          years_of_service: number | null
+        }
+        Insert: {
+          about?: string | null
+          auto_update_enabled?: boolean | null
+          average_rating?: number | null
+          badges?: Json | null
+          bills_passed?: Json | null
+          bills_passed_count?: number | null
+          bills_proposed_count?: number | null
+          can_receive_messages?: boolean | null
+          career_history?: Json | null
+          civic_engagement_score?: number | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          committee_memberships?: Json | null
+          constituency?: string | null
+          created_at?: string | null
+          data_verification_status?: string | null
+          date_of_birth?: string | null
+          education?: Json | null
+          email?: string | null
+          engagement_score?: number | null
+          follower_count?: number | null
+          full_name?: string | null
+          id?: string
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          last_profile_update?: string | null
+          message_response_time_hours?: number | null
+          misconduct_reports_count?: number | null
+          name: string
+          official_senate_url?: string | null
+          party_affiliation?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          photo_url?: string | null
+          political_party?: string | null
+          position: string
+          region?: string | null
+          slug?: string | null
+          social_media_links?: Json | null
+          source_page_url?: string | null
+          status?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          trust_score?: number | null
+          updated_at?: string | null
+          years_of_service?: number | null
+        }
+        Update: {
+          about?: string | null
+          auto_update_enabled?: boolean | null
+          average_rating?: number | null
+          badges?: Json | null
+          bills_passed?: Json | null
+          bills_passed_count?: number | null
+          bills_proposed_count?: number | null
+          can_receive_messages?: boolean | null
+          career_history?: Json | null
+          civic_engagement_score?: number | null
+          claimed_at?: string | null
+          claimed_by?: string | null
+          committee_memberships?: Json | null
+          constituency?: string | null
+          created_at?: string | null
+          data_verification_status?: string | null
+          date_of_birth?: string | null
+          education?: Json | null
+          email?: string | null
+          engagement_score?: number | null
+          follower_count?: number | null
+          full_name?: string | null
+          id?: string
+          is_claimable?: boolean | null
+          is_claimed?: boolean | null
+          is_verified?: boolean | null
+          last_profile_update?: string | null
+          message_response_time_hours?: number | null
+          misconduct_reports_count?: number | null
+          name?: string
+          official_senate_url?: string | null
+          party_affiliation?: string | null
+          performance_score?: number | null
+          phone?: string | null
+          photo_url?: string | null
+          political_party?: string | null
+          position?: string
+          region?: string | null
+          slug?: string | null
+          social_media_links?: Json | null
+          source_page_url?: string | null
+          status?: string | null
+          total_ratings?: number | null
+          transparency_score?: number | null
+          trust_score?: number | null
+          updated_at?: string | null
+          years_of_service?: number | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__shipments: {
+        Row: {
+          actual_delivery_date: string | null
+          created_at: string
+          created_by: string | null
+          declared_value: number | null
+          destination_address: string
+          dimensions: Json | null
+          estimated_delivery_date: string | null
+          id: string
+          insurance_amount: number | null
+          is_fragile: boolean | null
+          is_hazardous: boolean | null
+          order_id: string | null
+          origin_address: string
+          package_details: Json
+          payment_status: string
+          receiver_info: Json
+          requires_signature: boolean | null
+          sender_info: Json
+          service_level: string
+          shipping_company_id: string
+          shipping_cost: number | null
+          shipping_type: string
+          special_instructions: string | null
+          status: Database["public"]["Enums"]["shipment_status"]
+          tracking_number: string
+          updated_at: string
+          weight_kg: number | null
+        }
+        Insert: {
+          actual_delivery_date?: string | null
+          created_at?: string
+          created_by?: string | null
+          declared_value?: number | null
+          destination_address: string
+          dimensions?: Json | null
+          estimated_delivery_date?: string | null
+          id?: string
+          insurance_amount?: number | null
+          is_fragile?: boolean | null
+          is_hazardous?: boolean | null
+          order_id?: string | null
+          origin_address: string
+          package_details?: Json
+          payment_status?: string
+          receiver_info?: Json
+          requires_signature?: boolean | null
+          sender_info?: Json
+          service_level: string
+          shipping_company_id: string
+          shipping_cost?: number | null
+          shipping_type: string
+          special_instructions?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          tracking_number: string
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Update: {
+          actual_delivery_date?: string | null
+          created_at?: string
+          created_by?: string | null
+          declared_value?: number | null
+          destination_address?: string
+          dimensions?: Json | null
+          estimated_delivery_date?: string | null
+          id?: string
+          insurance_amount?: number | null
+          is_fragile?: boolean | null
+          is_hazardous?: boolean | null
+          order_id?: string | null
+          origin_address?: string
+          package_details?: Json
+          payment_status?: string
+          receiver_info?: Json
+          requires_signature?: boolean | null
+          sender_info?: Json
+          service_level?: string
+          shipping_company_id?: string
+          shipping_cost?: number | null
+          shipping_type?: string
+          special_instructions?: string | null
+          status?: Database["public"]["Enums"]["shipment_status"]
+          tracking_number?: string
+          updated_at?: string
+          weight_kg?: number | null
+        }
+        Relationships: []
+      }
+      cleanup_backup__suspects: {
+        Row: {
+          created_at: string
+          details: Json | null
+          id: string
+          pk_sample: string[] | null
+          reason: string
+          run_id: string | null
+          table_name: string
+        }
+        Insert: {
+          created_at?: string
+          details?: Json | null
+          id?: string
+          pk_sample?: string[] | null
+          reason: string
+          run_id?: string | null
+          table_name: string
+        }
+        Update: {
+          created_at?: string
+          details?: Json | null
+          id?: string
+          pk_sample?: string[] | null
+          reason?: string
+          run_id?: string | null
+          table_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cleanup_backup__suspects_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "cleanup_backup__cleanup_runs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cleanup_backup__system_feature_flags: {
+        Row: {
+          created_at: string | null
+          disabled_at: string | null
+          disabled_by: string | null
+          disabled_reason: string | null
+          feature_name: string
+          id: string
+          is_enabled: boolean
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          disabled_at?: string | null
+          disabled_by?: string | null
+          disabled_reason?: string | null
+          feature_name: string
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          disabled_at?: string | null
+          disabled_by?: string | null
+          disabled_reason?: string | null
+          feature_name?: string
+          id?: string
+          is_enabled?: boolean
+          updated_at?: string | null
         }
         Relationships: []
       }
