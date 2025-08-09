@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 interface ReviewItem {
   id: string;
@@ -21,6 +22,7 @@ export const CleanupReviewManager: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [limit] = useState(50);
   const [offset, setOffset] = useState(0);
+  const [total, setTotal] = useState(0);
 
   const [runId, setRunId] = useState("");
   const [tableName, setTableName] = useState("");
@@ -43,13 +45,18 @@ export const CleanupReviewManager: React.FC = () => {
       });
       if (error) throw error;
       setItems(data?.items ?? []);
-    } catch (e) {
+      setTotal(data?.total ?? 0);
+    } catch (e: any) {
       console.error("Failed to load review items", e);
+      toast({
+        title: "Failed to load",
+        description: e?.message || "Could not load review items.",
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
   };
-
   const addWhitelist = async () => {
     if (!pattern.trim()) return;
     setLoading(true);
@@ -60,13 +67,14 @@ export const CleanupReviewManager: React.FC = () => {
       if (error) throw error;
       setPattern("");
       setPatternDesc("");
-    } catch (e) {
+      toast({ title: "Whitelist added", description: "Pattern added successfully." });
+    } catch (e: any) {
       console.error("Failed to add whitelist pattern", e);
+      toast({ title: "Error", description: e?.message || "Failed to add whitelist.", variant: "destructive" });
     } finally {
       setLoading(false);
     }
   };
-
   const keepItem = async (item: ReviewItem) => {
     setLoading(true);
     try {
@@ -75,12 +83,14 @@ export const CleanupReviewManager: React.FC = () => {
       });
       if (error) throw error;
       await resolveItem(item.id, false); // remove from queue after keeping
-    } catch (e) {
+      toast({ title: "Kept ID", description: `Record ${item.record_id} kept and removed from review.` });
+      setLoading(false);
+    } catch (e: any) {
       console.error("Failed to keep id", e);
+      toast({ title: "Error", description: e?.message || "Failed to keep ID.", variant: "destructive" });
       setLoading(false);
     }
   };
-
   const resolveItem = async (id: string, resetLoading = true) => {
     if (resetLoading) setLoading(true);
     try {
@@ -89,13 +99,19 @@ export const CleanupReviewManager: React.FC = () => {
       });
       if (error) throw error;
       setItems((prev) => prev.filter((i) => i.id !== id));
-    } catch (e) {
+      setTotal((prev) => Math.max(0, prev - 1));
+      if (resetLoading) {
+        toast({ title: "Item resolved", description: "Review item removed." });
+      }
+    } catch (e: any) {
       console.error("Failed to resolve item", e);
+      if (resetLoading) {
+        toast({ title: "Error", description: e?.message || "Failed to resolve item.", variant: "destructive" });
+      }
     } finally {
       if (resetLoading) setLoading(false);
     }
   };
-
   useEffect(() => {
     loadItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -117,7 +133,7 @@ export const CleanupReviewManager: React.FC = () => {
           <Input placeholder="Run ID" value={runId} onChange={(e) => setRunId(e.target.value)} />
           <Input placeholder="Table name" value={tableName} onChange={(e) => setTableName(e.target.value)} />
           <Input placeholder="Reason (pattern|orphan|duplicate)" value={reason} onChange={(e) => setReason(e.target.value)} />
-          <Button onClick={loadItems} disabled={loading}>Apply</Button>
+          <Button onClick={() => { setOffset(0); loadItems(); }} disabled={loading}>Apply</Button>
         </CardContent>
       </Card>
 
@@ -137,7 +153,7 @@ export const CleanupReviewManager: React.FC = () => {
         <CardHeader>
           <CardTitle>Review Items</CardTitle>
           <CardDescription>
-            {loading ? "Loading..." : `${items.length} item(s)`}
+            {loading ? "Loading..." : `${items.length} item(s) • total ${total}`}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -166,7 +182,7 @@ export const CleanupReviewManager: React.FC = () => {
           </div>
           <div className="flex justify-between mt-4">
             <Button variant="outline" onClick={() => setOffset(Math.max(0, offset - limit))} disabled={loading || offset === 0}>Previous</Button>
-            <Button variant="outline" onClick={() => setOffset(offset + limit)} disabled={loading || items.length < limit}>Next</Button>
+            <Button variant="outline" onClick={() => setOffset(offset + limit)} disabled={loading || offset + limit >= total}>Next</Button>
           </div>
         </CardContent>
       </Card>

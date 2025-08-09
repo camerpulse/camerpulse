@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LegacyRedirectHandler } from './LegacyRedirectHandler';
+import { ProtectedRoute } from '@/components/routing/ProtectedRoute';
 
 // Import all pages
 import Index from '@/pages/Index';
@@ -191,6 +192,14 @@ export const AppRouter: React.FC = () => {
         
         {/* Admin */}
         <Route path="/admin" element={<AdminCoreV2Page />} />
+        <Route
+          path="/admin/cleanup-review"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminCoreV2Page />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/priority-assessment" element={<PriorityAssessmentDashboard />} />
         <Route path="/admin/user-migration" element={<UserMigrationAdminPage />} />

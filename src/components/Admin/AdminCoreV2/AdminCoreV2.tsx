@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,7 +14,8 @@ import {
   AlertTriangle, CheckCircle, Clock, Menu, X, Search,
   Bell, Database, FileText, UserCheck, Calendar, Zap,
   Shield, Cpu, Layers, Target, Workflow, Brain, Monitor,
-  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette
+  Flag, Newspaper, Store, Vote, Scale, Heart, MapPin, Palette,
+  ListChecks
 } from 'lucide-react';
 
 // Import all feature modules
@@ -47,6 +49,7 @@ import { NotificationCenter } from './core/NotificationCenter';
 import { AdminSidebar } from './layout/AdminSidebar';
 import { AdminHeader } from './layout/AdminHeader';
 import { MobileAdminNav } from './layout/MobileAdminNav';
+import { CleanupReviewManager } from './modules/CleanupReviewManager';
 
 interface AdminStats {
   total_users: number;
@@ -85,7 +88,7 @@ export const AdminCoreV2: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [notifications, setNotifications] = useState<any[]>([]);
-
+  const location = useLocation();
   // Check screen size
   useEffect(() => {
     const checkMobile = () => {
@@ -256,6 +259,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'messenger', label: 'Pulse Messenger', icon: MessageSquare, color: 'text-green-600', permission: 'messenger' },
     { id: 'sentiment-system', label: 'Sentiment System', icon: Brain, color: 'text-indigo-600', permission: 'analytics' },
     { id: 'analytics-logs', label: 'Analytics & Logs', icon: Database, color: 'text-gray-600', permission: 'analytics' },
+    { id: 'cleanup-review', label: 'Cleanup Review', icon: ListChecks, color: 'text-red-600', permission: 'admin_only' },
     { id: 'political-parties', label: 'Political Parties', icon: Flag, color: 'text-blue-600', permission: 'politics' },
     { id: 'news-system', label: 'News System', icon: Newspaper, color: 'text-blue-600', permission: 'content' },
     { id: 'marketplace', label: 'Marketplace', icon: Store, color: 'text-green-600', permission: 'marketplace' },
@@ -272,6 +276,17 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'settings-sync', label: 'Settings & Sync', icon: Settings, color: 'text-gray-500', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
 
+  useEffect(() => {
+    const path = location.pathname || '';
+    if (path.startsWith('/admin/')) {
+      const mod = path.split('/')[2];
+      if (mod) {
+        const exists = adminModules.find(m => m.id === mod);
+        if (exists) setActiveModule(mod);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname, adminModules.length]);
   const renderActiveModule = () => {
     const moduleProps = { hasPermission, logActivity, stats };
     
@@ -296,6 +311,8 @@ export const AdminCoreV2: React.FC = () => {
         return <SentimentSystemManager {...moduleProps} />;
       case 'analytics-logs':
         return <AnalyticsLogsManager {...moduleProps} />;
+      case 'cleanup-review':
+        return <CleanupReviewManager />;
       case 'intelligence':
         return <IntelligencePanel {...moduleProps} />;
       case 'political-parties':
