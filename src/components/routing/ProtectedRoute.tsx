@@ -7,15 +7,19 @@ interface ProtectedRouteProps {
   requireAuth?: boolean;
   redirectTo?: string;
   requiredRole?: string;
+  requireAdmin?: boolean;
+  requiredRoles?: string[];
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
   requireAuth = true,
   redirectTo = '/auth',
-  requiredRole
+  requiredRole,
+  requireAdmin = false,
+  requiredRoles,
 }) => {
-  const { user, loading, hasRole } = useAuth();
+  const { user, loading, hasRole, isAdmin } = useAuth();
   const location = useLocation();
 
   if (loading) {
@@ -31,9 +35,18 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectTo} state={{ from: location }} replace />;
   }
 
-  // Check role requirements
-  if (requiredRole && !hasRole(requiredRole)) {
+  // Check admin requirement
+  if (requireAdmin && !(isAdmin && isAdmin())) {
     return <Navigate to="/" replace />;
+  }
+
+  // Check role requirements (supports single or multiple)
+  const rolesToCheck = requiredRoles ?? (requiredRole ? [requiredRole] : []);
+  if (rolesToCheck.length > 0) {
+    const ok = rolesToCheck.some((r) => hasRole && hasRole(r));
+    if (!ok) {
+      return <Navigate to="/" replace />;
+    }
   }
 
   return <>{children}</>;

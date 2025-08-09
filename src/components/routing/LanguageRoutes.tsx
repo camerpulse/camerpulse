@@ -58,6 +58,9 @@ import MarketplaceProducts from '@/pages/MarketplaceProducts';
 import MarketplaceVendors from '@/pages/MarketplaceVendors';
 import VendorDetailPage from '@/pages/VendorDetailPage';
 import UserMigrationAdminPage from '@/pages/admin/UserMigrationAdminPage';
+import CompanyDashboard from '@/pages/CompanyDashboard';
+import RegionalHiringLeaderboard from '@/pages/jobs/RegionalHiringLeaderboard';
+import NotFound from '@/pages/NotFound';
 
 // Module-specific profile pages
 import MusicProfile from '@/pages/profiles/MusicProfile';
@@ -134,6 +137,9 @@ export const AppRouter: React.FC = () => {
         
         {/* Jobs */}
         <Route path="/jobs" element={<JobBoard />} />
+        <Route path="/jobs/board" element={<JobBoard />} />
+        <Route path="/jobs/company" element={<CompanyDashboard />} />
+        <Route path="/jobs/leaderboard" element={<RegionalHiringLeaderboard />} />
         <Route path="/jobs/:jobSlug-:id" element={<JobDetailPage />} />
         
         {/* Messaging */}
@@ -231,6 +237,7 @@ export const AppRouter: React.FC = () => {
             </ProtectedRoute>
           }
         />
+      <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   );
