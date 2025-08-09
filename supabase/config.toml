@@ -161,3 +161,6 @@ verify_jwt = false
 
 [functions.export-sponsor-data]
 verify_jwt = false
+
+[functions.cleanup-review]
+verify_jwt = true
