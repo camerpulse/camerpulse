@@ -47,6 +47,29 @@ Deno.serve(async (req) => {
 
     console.log("cleanup-review action:", action, "payload:", body);
 
+    // Admin authorization: require authenticated user with 'admin' role
+    const { data: authUser, error: authErr } = await supabase.auth.getUser();
+    if (authErr || !authUser?.user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { data: roleRow, error: roleErr } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", authUser.user.id)
+      .eq("role", "admin")
+      .maybeSingle();
+
+    if (roleErr || !roleRow) {
+      return new Response(
+        JSON.stringify({ error: "Forbidden: admin role required" }),
+        { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     if (action === "list") {
       const { filters = {}, limit = 50, offset = 0 } = body ?? {};
       let query = supabase

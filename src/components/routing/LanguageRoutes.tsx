@@ -191,7 +191,14 @@ export const AppRouter: React.FC = () => {
         <Route path="/performance" element={<PerformanceMonitoringPage />} />
         
         {/* Admin */}
-        <Route path="/admin" element={<AdminCoreV2Page />} />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminCoreV2Page />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/admin/cleanup-review"
           element={
@@ -200,9 +207,30 @@ export const AppRouter: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="/admin/priority-assessment" element={<PriorityAssessmentDashboard />} />
-        <Route path="/admin/user-migration" element={<UserMigrationAdminPage />} />
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/priority-assessment"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <PriorityAssessmentDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/user-migration"
+          element={
+            <ProtectedRoute requiredRole="admin">
+              <UserMigrationAdminPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );
