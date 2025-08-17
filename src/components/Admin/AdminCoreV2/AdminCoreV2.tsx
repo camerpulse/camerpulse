@@ -37,6 +37,7 @@ import { MarketplaceManager } from './modules/MarketplaceManager';
 import { ElectionManager } from './modules/ElectionManager';
 import { LegalDocumentsManager } from './modules/LegalDocumentsManager';
 import { DonationsManager } from './modules/DonationsManager';
+import { NokashConfigPanel } from '../PaymentConfig/NokashConfigPanel';
 import { PromisesManager } from './modules/PromisesManager';
 import { RegionalAnalyticsManager } from './modules/RegionalAnalyticsManager';
 import RoleAccessTestSuite from './tests/RoleAccessTestSuite';
@@ -273,6 +274,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'elections', label: 'Elections', icon: Vote, color: 'text-purple-600', permission: 'elections' },
     { id: 'legal-documents', label: 'Legal Documents', icon: Scale, color: 'text-blue-600', permission: 'legal' },
     { id: 'donations', label: 'Donations', icon: Heart, color: 'text-red-500', permission: 'finance' },
+    { id: 'nokash-payments', label: 'Nokash Payments', icon: CreditCard, color: 'text-green-600', permission: 'finance' },
     { id: 'promises', label: 'Promises Tracker', icon: Target, color: 'text-green-600', permission: 'tracking' },
     { id: 'regional-analytics', label: 'Regional Analytics', icon: MapPin, color: 'text-blue-600', permission: 'analytics' },
     { id: 'role-access-test', label: 'Role Access Test', icon: Shield, color: 'text-orange-600', permission: 'all' },
@@ -339,6 +341,8 @@ export const AdminCoreV2: React.FC = () => {
         return <LegalDocumentsManager {...moduleProps} />;
       case 'donations':
         return <DonationsManager {...moduleProps} />;
+      case 'nokash-payments':
+        return <NokashConfigPanel />;
       case 'promises':
         return <PromisesManager {...moduleProps} />;
       case 'regional-analytics':

@@ -31303,6 +31303,84 @@ export type Database = {
         }
         Relationships: []
       }
+      nokash_payment_config: {
+        Row: {
+          app_space_key: string
+          created_at: string
+          default_network: string
+          id: string
+          is_active: boolean
+          supported_networks: string[]
+          updated_at: string
+        }
+        Insert: {
+          app_space_key: string
+          created_at?: string
+          default_network?: string
+          id?: string
+          is_active?: boolean
+          supported_networks?: string[]
+          updated_at?: string
+        }
+        Update: {
+          app_space_key?: string
+          created_at?: string
+          default_network?: string
+          id?: string
+          is_active?: boolean
+          supported_networks?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      nokash_transactions: {
+        Row: {
+          amount: number
+          callback_data: Json | null
+          completed_at: string | null
+          created_at: string
+          currency: string
+          id: string
+          nokash_response: Json | null
+          order_id: string
+          payment_method: string
+          phone_number: string
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          callback_data?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          nokash_response?: Json | null
+          order_id: string
+          payment_method: string
+          phone_number: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          callback_data?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          currency?: string
+          id?: string
+          nokash_response?: Json | null
+          order_id?: string
+          payment_method?: string
+          phone_number?: string
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       notification_actions: {
         Row: {
           action_data: Json | null
