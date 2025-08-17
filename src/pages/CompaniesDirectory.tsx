@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LoadingSpinner } from '@/components/LoadingSpinner';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -17,7 +17,7 @@ interface Company {
   division: string;
   village_or_city: string;
   industry: string;
-  company_type: 'startup' | 'sme' | 'large' | 'multinational' | 'ngo';
+  company_type: 'sole_proprietor' | 'limited_company' | 'public_company';
   ownership: 'private' | 'public' | 'mixed';
   founded_year?: number;
   employee_count?: number;
@@ -70,11 +70,9 @@ export default function CompaniesDirectory() {
   ];
 
   const companyTypes = [
-    { value: 'startup', label: 'Startup' },
-    { value: 'sme', label: 'Small & Medium Enterprise' },
-    { value: 'large', label: 'Large Corporation' },
-    { value: 'multinational', label: 'Multinational' },
-    { value: 'ngo', label: 'NGO/Non-Profit' }
+    { value: 'sole_proprietor', label: 'Sole Proprietor' },
+    { value: 'limited_company', label: 'Limited Company' },
+    { value: 'public_company', label: 'Public Company' }
   ];
 
   useEffect(() => {

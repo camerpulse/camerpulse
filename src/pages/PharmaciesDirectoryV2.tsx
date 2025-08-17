@@ -15,7 +15,7 @@ interface Pharmacy {
   region: string;
   division: string;
   village_or_city: string;
-  type: 'chain' | 'independent' | 'hospital' | 'herbal';
+  type: 'registered_pharmacy' | 'otc_store' | 'herbal_shop' | 'hospital_linked';
   ownership: 'private' | 'public' | 'ngo';
   phone?: string;
   whatsapp?: string;
@@ -69,10 +69,10 @@ export default function PharmaciesDirectoryV2() {
   ];
 
   const pharmacyTypes = [
-    { value: 'chain', label: 'Chain Pharmacy' },
-    { value: 'independent', label: 'Independent' },
-    { value: 'hospital', label: 'Hospital Pharmacy' },
-    { value: 'herbal', label: 'Herbal Medicine' }
+    { value: 'registered_pharmacy', label: 'Registered Pharmacy' },
+    { value: 'otc_store', label: 'OTC Store' },
+    { value: 'hospital_linked', label: 'Hospital Pharmacy' },
+    { value: 'herbal_shop', label: 'Herbal Shop' }
   ];
 
   useEffect(() => {
@@ -93,7 +93,7 @@ export default function PharmaciesDirectoryV2() {
         setPharmacies(data);
         setFeaturedPharmacies(data.slice(0, 6));
         setTopRatedPharmacies(data.filter(p => p.overall_rating >= 4.0).slice(0, 8));
-        setFeaturedHerbalShops(data.filter(p => p.type === 'herbal').slice(0, 4));
+        setFeaturedHerbalShops(data.filter(p => p.type === 'herbal_shop').slice(0, 4));
       }
     } catch (error) {
       console.error('Error fetching pharmacies:', error);
