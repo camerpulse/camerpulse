@@ -555,7 +555,7 @@ export const ArtistSubmissionSystem: React.FC = () => {
           Your artist application has been submitted for verification. 
           You'll receive a notification once it's reviewed and approved.
         </p>
-        <Button onClick={() => window.location.href = '/'}>
+        <Button onClick={() => navigateTo('/')}>
           Return to Home
         </Button>
       </CardContent>
@@ -565,7 +565,7 @@ export const ArtistSubmissionSystem: React.FC = () => {
   // Redirect if not logged in
   if (!user) {
     React.useEffect(() => {
-      window.location.href = '/auth?returnTo=/camerplay/submit-artist';
+      navigateToAuth('/camerplay/submit-artist');
     }, []);
     return null;
   }

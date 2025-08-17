@@ -19,8 +19,10 @@ import {
 import { useVillages } from '@/hooks/useVillages';
 import { LoadingSpinner, CardSkeleton } from '@/components/LoadingSpinner';
 import { ResponsiveContainer, ResponsiveGrid } from '@/components/layout/ResponsiveComponents';
+import { useNavigation } from '@/hooks/useNavigation';
 
 export const VillageRegistry: React.FC = () => {
+  const { navigateTo } = useNavigation();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('overall_rating');
@@ -267,7 +269,7 @@ export const VillageRegistry: React.FC = () => {
                     <Button 
                       variant="outline" 
                       className="w-full"
-                      onClick={() => window.location.href = `/villages/${village.village_name.toLowerCase().replace(/\s+/g, '-')}`}
+                      onClick={() => navigateTo(`/villages/${village.village_name.toLowerCase().replace(/\s+/g, '-')}`)}
                     >
                       View Details
                     </Button>

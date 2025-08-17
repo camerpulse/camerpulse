@@ -59,7 +59,7 @@ export const DiasporaProfileSetup = () => {
     e.preventDefault();
     createProfile.mutate(formData, {
       onSuccess: () => {
-        window.location.href = '/diaspora/dashboard';
+        navigateTo('/diaspora/dashboard');
       }
     });
   };

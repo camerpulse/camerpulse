@@ -39,6 +39,7 @@ import {
 } from 'lucide-react';
 import { useCivicNotifications } from '@/hooks/useCivicNotifications';
 import { CivicTag } from '@/components/camerpulse';
+import { useNavigation } from '@/hooks/useNavigation';
 
 export interface CivicNotification {
   id: string;
@@ -57,7 +58,8 @@ export interface CivicNotification {
 }
 
 export const CivicNotificationCenter: React.FC = () => {
-  const { 
+  const { navigateTo } = useNavigation();
+  const {
     unreadCount, 
     notifications, 
     markAsRead, 
@@ -231,7 +233,7 @@ export const CivicNotificationCenter: React.FC = () => {
                       markAsRead(notification.id);
                     }
                     if (notification.action_url) {
-                      window.location.href = notification.action_url;
+                      navigateTo(notification.action_url);
                     }
                   }}
                 >

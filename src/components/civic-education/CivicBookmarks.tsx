@@ -8,6 +8,7 @@ import { Bookmark, Search, Filter, Edit, Trash2, ExternalLink } from 'lucide-rea
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigation } from '@/hooks/useNavigation';
 
 interface CivicBookmark {
   id: string;
@@ -24,6 +25,7 @@ export const CivicBookmarks: React.FC = () => {
   const [editingBookmark, setEditingBookmark] = useState<string | null>(null);
   const [editNotes, setEditNotes] = useState('');
   const { toast } = useToast();
+  const { navigateTo } = useNavigation();
 
   // Fetch user bookmarks
   const { data: bookmarks, isLoading, refetch } = useQuery({
@@ -305,7 +307,7 @@ export const CivicBookmarks: React.FC = () => {
                 <p className="mb-4">
                   Save Constitution articles, educational modules, and discussions for easy access
                 </p>
-                <Button onClick={() => window.location.href = '/civic-education'}>
+                <Button onClick={() => navigateTo('/civic-education')}>
                   Start Exploring Content
                 </Button>
               </div>

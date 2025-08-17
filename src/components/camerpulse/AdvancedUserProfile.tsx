@@ -719,7 +719,7 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => window.location.href = `/messenger?startConversation=${userId}`}
+                  onClick={() => navigateToMessage(userId)}
                 >
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Message

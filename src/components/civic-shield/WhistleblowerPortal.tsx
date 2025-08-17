@@ -220,7 +220,7 @@ export const WhistleblowerPortal: React.FC<WhistleblowerPortalProps> = ({ system
             >
               Submit Another Report
             </Button>
-            <Button onClick={() => window.location.href = '/civic-shield?tab=tracker'}>
+            <Button onClick={() => navigateTo('/civic-shield?tab=tracker')}>
               Track This Submission
             </Button>
           </div>

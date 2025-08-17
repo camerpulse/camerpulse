@@ -122,7 +122,7 @@ export const DiasporaMainDashboard = () => {
               <p className="text-muted-foreground mb-6">
                 You need to create a diaspora profile to access the dashboard.
               </p>
-              <Button onClick={() => window.location.href = '/diaspora/profile'}>Create Profile</Button>
+              <Button onClick={() => navigateTo('/diaspora/profile')}>Create Profile</Button>
             </CardContent>
           </Card>
         </div>
