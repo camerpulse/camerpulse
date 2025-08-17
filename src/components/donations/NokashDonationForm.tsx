@@ -76,28 +76,6 @@ export const NokashDonationForm: React.FC = () => {
     }
   };
 
-  const formatPhoneNumber = (phoneNumber: string) => {
-    // Remove any non-digit characters
-    const cleaned = phoneNumber.replace(/\D/g, '');
-    
-    // If it starts with 237, remove it (Cameroon country code)
-    if (cleaned.startsWith('237')) {
-      return cleaned.substring(3);
-    }
-    
-    // If it starts with +237, remove it
-    if (cleaned.startsWith('+237')) {
-      return cleaned.substring(4);
-    }
-    
-    return cleaned;
-  };
-
-  const validatePhoneNumber = (phoneNumber: string) => {
-    const formatted = formatPhoneNumber(phoneNumber);
-    // Cameroon mobile numbers are typically 9 digits starting with 6 or 7
-    return /^[67]\d{8}$/.test(formatted);
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
