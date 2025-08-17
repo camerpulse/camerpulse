@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -27493,189 +27493,6 @@ export type Database = {
         }
         Relationships: []
       }
-      logistics_api_integrations: {
-        Row: {
-          api_endpoint: string | null
-          configuration: Json | null
-          created_at: string
-          id: string
-          integration_name: string
-          integration_type: string
-          is_active: boolean
-          tenant_id: string | null
-          updated_at: string
-          webhook_url: string | null
-        }
-        Insert: {
-          api_endpoint?: string | null
-          configuration?: Json | null
-          created_at?: string
-          id?: string
-          integration_name: string
-          integration_type: string
-          is_active?: boolean
-          tenant_id?: string | null
-          updated_at?: string
-          webhook_url?: string | null
-        }
-        Update: {
-          api_endpoint?: string | null
-          configuration?: Json | null
-          created_at?: string
-          id?: string
-          integration_name?: string
-          integration_type?: string
-          is_active?: boolean
-          tenant_id?: string | null
-          updated_at?: string
-          webhook_url?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "logistics_api_integrations_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "logistics_tenants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      logistics_fleet_vehicles: {
-        Row: {
-          created_at: string
-          driver_name: string | null
-          id: string
-          last_location: Json | null
-          license_plate: string
-          maintenance_due: string | null
-          status: string
-          tenant_id: string | null
-          updated_at: string
-          vehicle_number: string
-          vehicle_type: string
-        }
-        Insert: {
-          created_at?: string
-          driver_name?: string | null
-          id?: string
-          last_location?: Json | null
-          license_plate: string
-          maintenance_due?: string | null
-          status?: string
-          tenant_id?: string | null
-          updated_at?: string
-          vehicle_number: string
-          vehicle_type: string
-        }
-        Update: {
-          created_at?: string
-          driver_name?: string | null
-          id?: string
-          last_location?: Json | null
-          license_plate?: string
-          maintenance_due?: string | null
-          status?: string
-          tenant_id?: string | null
-          updated_at?: string
-          vehicle_number?: string
-          vehicle_type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "logistics_fleet_vehicles_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "logistics_tenants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      logistics_insurance_policies: {
-        Row: {
-          coverage_amount: number | null
-          created_at: string
-          end_date: string | null
-          id: string
-          is_active: boolean
-          policy_number: string
-          policy_type: string
-          premium_amount: number | null
-          provider_name: string
-          start_date: string | null
-          tenant_id: string | null
-          updated_at: string
-        }
-        Insert: {
-          coverage_amount?: number | null
-          created_at?: string
-          end_date?: string | null
-          id?: string
-          is_active?: boolean
-          policy_number: string
-          policy_type: string
-          premium_amount?: number | null
-          provider_name: string
-          start_date?: string | null
-          tenant_id?: string | null
-          updated_at?: string
-        }
-        Update: {
-          coverage_amount?: number | null
-          created_at?: string
-          end_date?: string | null
-          id?: string
-          is_active?: boolean
-          policy_number?: string
-          policy_type?: string
-          premium_amount?: number | null
-          provider_name?: string
-          start_date?: string | null
-          tenant_id?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "logistics_insurance_policies_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "logistics_tenants"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      logistics_tenants: {
-        Row: {
-          contact_email: string
-          created_at: string
-          domain: string
-          id: string
-          is_active: boolean
-          name: string
-          settings: Json | null
-          updated_at: string
-        }
-        Insert: {
-          contact_email: string
-          created_at?: string
-          domain: string
-          id?: string
-          is_active?: boolean
-          name: string
-          settings?: Json | null
-          updated_at?: string
-        }
-        Update: {
-          contact_email?: string
-          created_at?: string
-          domain?: string
-          id?: string
-          is_active?: boolean
-          name?: string
-          settings?: Json | null
-          updated_at?: string
-        }
-        Relationships: []
-      }
       manual_fix_history: {
         Row: {
           action_type: string
@@ -33967,45 +33784,6 @@ export type Database = {
         }
         Relationships: []
       }
-      plugin_activation_history: {
-        Row: {
-          action_type: string
-          admin_id: string | null
-          admin_name: string | null
-          created_at: string
-          id: string
-          metadata: Json | null
-          new_status: string
-          plugin_id: string
-          previous_status: string | null
-          reason: string | null
-        }
-        Insert: {
-          action_type: string
-          admin_id?: string | null
-          admin_name?: string | null
-          created_at?: string
-          id?: string
-          metadata?: Json | null
-          new_status: string
-          plugin_id: string
-          previous_status?: string | null
-          reason?: string | null
-        }
-        Update: {
-          action_type?: string
-          admin_id?: string | null
-          admin_name?: string | null
-          created_at?: string
-          id?: string
-          metadata?: Json | null
-          new_status?: string
-          plugin_id?: string
-          previous_status?: string | null
-          reason?: string | null
-        }
-        Relationships: []
-      }
       plugin_blocklist: {
         Row: {
           affected_regions: string[] | null
@@ -34050,69 +33828,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      plugin_conflicts: {
-        Row: {
-          affected_resources: string[] | null
-          auto_resolvable: boolean | null
-          conflict_description: string
-          conflict_severity: string
-          conflict_type: string
-          created_at: string
-          detected_at: string
-          id: string
-          plugin_a_id: string
-          plugin_b_id: string
-          resolution_notes: string | null
-          resolution_suggestion: string | null
-          resolved_at: string | null
-        }
-        Insert: {
-          affected_resources?: string[] | null
-          auto_resolvable?: boolean | null
-          conflict_description: string
-          conflict_severity?: string
-          conflict_type: string
-          created_at?: string
-          detected_at?: string
-          id?: string
-          plugin_a_id: string
-          plugin_b_id: string
-          resolution_notes?: string | null
-          resolution_suggestion?: string | null
-          resolved_at?: string | null
-        }
-        Update: {
-          affected_resources?: string[] | null
-          auto_resolvable?: boolean | null
-          conflict_description?: string
-          conflict_severity?: string
-          conflict_type?: string
-          created_at?: string
-          detected_at?: string
-          id?: string
-          plugin_a_id?: string
-          plugin_b_id?: string
-          resolution_notes?: string | null
-          resolution_suggestion?: string | null
-          resolved_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "plugin_conflicts_plugin_a_id_fkey"
-            columns: ["plugin_a_id"]
-            isOneToOne: false
-            referencedRelation: "plugin_registry"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "plugin_conflicts_plugin_b_id_fkey"
-            columns: ["plugin_b_id"]
-            isOneToOne: false
-            referencedRelation: "plugin_registry"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       plugin_developers: {
         Row: {
@@ -34265,280 +33980,7 @@ export type Database = {
           rollback_plan?: Json | null
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "plugin_installation_guards_plugin_id_fkey"
-            columns: ["plugin_id"]
-            isOneToOne: false
-            referencedRelation: "plugin_registry"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      plugin_license_keys: {
-        Row: {
-          created_at: string
-          expires_at: string | null
-          id: string
-          license_id: string
-          license_key: string
-          metadata: Json | null
-          status: string
-          updated_at: string
-          usage_count: number | null
-          usage_limit: number | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          license_id: string
-          license_key: string
-          metadata?: Json | null
-          status?: string
-          updated_at?: string
-          usage_count?: number | null
-          usage_limit?: number | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          expires_at?: string | null
-          id?: string
-          license_id?: string
-          license_key?: string
-          metadata?: Json | null
-          status?: string
-          updated_at?: string
-          usage_count?: number | null
-          usage_limit?: number | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "plugin_license_keys_license_id_fkey"
-            columns: ["license_id"]
-            isOneToOne: false
-            referencedRelation: "plugin_licenses"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      plugin_licenses: {
-        Row: {
-          billing_interval: string | null
-          created_at: string
-          currency: string
-          features_included: Json | null
-          id: string
-          is_active: boolean
-          license_type: string
-          plugin_id: string
-          price_amount: number
-          trial_period_days: number | null
-          updated_at: string
-          usage_limits: Json | null
-        }
-        Insert: {
-          billing_interval?: string | null
-          created_at?: string
-          currency?: string
-          features_included?: Json | null
-          id?: string
-          is_active?: boolean
-          license_type: string
-          plugin_id: string
-          price_amount: number
-          trial_period_days?: number | null
-          updated_at?: string
-          usage_limits?: Json | null
-        }
-        Update: {
-          billing_interval?: string | null
-          created_at?: string
-          currency?: string
-          features_included?: Json | null
-          id?: string
-          is_active?: boolean
-          license_type?: string
-          plugin_id?: string
-          price_amount?: number
-          trial_period_days?: number | null
-          updated_at?: string
-          usage_limits?: Json | null
-        }
         Relationships: []
-      }
-      plugin_marketplace: {
-        Row: {
-          author_email: string | null
-          author_id: string | null
-          author_name: string
-          bundle_url: string | null
-          category: string
-          compatibility_version: string | null
-          created_at: string
-          dependencies: Json | null
-          description: string | null
-          detailed_description: string | null
-          digital_signature: string | null
-          display_name: string
-          download_count: number | null
-          github_repo: string | null
-          id: string
-          install_count: number | null
-          is_featured: boolean | null
-          is_official: boolean | null
-          last_updated: string
-          permissions_required: Json | null
-          plugin_id: string
-          plugin_name: string
-          published_at: string | null
-          rating_average: number | null
-          rating_count: number | null
-          security_scan_results: Json | null
-          security_scan_status: string | null
-          source_type: string
-          source_url: string | null
-          status: string
-          supported_platforms: string[] | null
-          tags: string[] | null
-          version: string
-        }
-        Insert: {
-          author_email?: string | null
-          author_id?: string | null
-          author_name: string
-          bundle_url?: string | null
-          category: string
-          compatibility_version?: string | null
-          created_at?: string
-          dependencies?: Json | null
-          description?: string | null
-          detailed_description?: string | null
-          digital_signature?: string | null
-          display_name: string
-          download_count?: number | null
-          github_repo?: string | null
-          id?: string
-          install_count?: number | null
-          is_featured?: boolean | null
-          is_official?: boolean | null
-          last_updated?: string
-          permissions_required?: Json | null
-          plugin_id: string
-          plugin_name: string
-          published_at?: string | null
-          rating_average?: number | null
-          rating_count?: number | null
-          security_scan_results?: Json | null
-          security_scan_status?: string | null
-          source_type: string
-          source_url?: string | null
-          status?: string
-          supported_platforms?: string[] | null
-          tags?: string[] | null
-          version: string
-        }
-        Update: {
-          author_email?: string | null
-          author_id?: string | null
-          author_name?: string
-          bundle_url?: string | null
-          category?: string
-          compatibility_version?: string | null
-          created_at?: string
-          dependencies?: Json | null
-          description?: string | null
-          detailed_description?: string | null
-          digital_signature?: string | null
-          display_name?: string
-          download_count?: number | null
-          github_repo?: string | null
-          id?: string
-          install_count?: number | null
-          is_featured?: boolean | null
-          is_official?: boolean | null
-          last_updated?: string
-          permissions_required?: Json | null
-          plugin_id?: string
-          plugin_name?: string
-          published_at?: string | null
-          rating_average?: number | null
-          rating_count?: number | null
-          security_scan_results?: Json | null
-          security_scan_status?: string | null
-          source_type?: string
-          source_url?: string | null
-          status?: string
-          supported_platforms?: string[] | null
-          tags?: string[] | null
-          version?: string
-        }
-        Relationships: []
-      }
-      plugin_purchases: {
-        Row: {
-          amount: number
-          commission_amount: number
-          created_at: string
-          currency: string
-          developer_payout: number
-          id: string
-          license_id: string
-          payment_data: Json | null
-          payment_gateway: string
-          payment_method: string | null
-          plugin_id: string
-          status: string
-          transaction_id: string | null
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          amount: number
-          commission_amount: number
-          created_at?: string
-          currency?: string
-          developer_payout: number
-          id?: string
-          license_id: string
-          payment_data?: Json | null
-          payment_gateway: string
-          payment_method?: string | null
-          plugin_id: string
-          status?: string
-          transaction_id?: string | null
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          amount?: number
-          commission_amount?: number
-          created_at?: string
-          currency?: string
-          developer_payout?: number
-          id?: string
-          license_id?: string
-          payment_data?: Json | null
-          payment_gateway?: string
-          payment_method?: string | null
-          plugin_id?: string
-          status?: string
-          transaction_id?: string | null
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "plugin_purchases_license_id_fkey"
-            columns: ["license_id"]
-            isOneToOne: false
-            referencedRelation: "plugin_licenses"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       plugin_ratings: {
         Row: {
@@ -34576,286 +34018,6 @@ export type Database = {
         }
         Relationships: []
       }
-      plugin_registry: {
-        Row: {
-          api_endpoints: string[] | null
-          component_overrides: string[] | null
-          created_at: string
-          css_overrides: string[] | null
-          database_migrations: string[] | null
-          dependencies_used: Json | null
-          file_paths: string[]
-          global_variables: string[] | null
-          id: string
-          install_date: string
-          last_updated: string
-          metadata: Json | null
-          plugin_author: string | null
-          plugin_name: string
-          plugin_risk_score: number | null
-          plugin_status: string
-          plugin_type: string
-          plugin_version: string
-          routes_introduced: string[] | null
-        }
-        Insert: {
-          api_endpoints?: string[] | null
-          component_overrides?: string[] | null
-          created_at?: string
-          css_overrides?: string[] | null
-          database_migrations?: string[] | null
-          dependencies_used?: Json | null
-          file_paths?: string[]
-          global_variables?: string[] | null
-          id?: string
-          install_date?: string
-          last_updated?: string
-          metadata?: Json | null
-          plugin_author?: string | null
-          plugin_name: string
-          plugin_risk_score?: number | null
-          plugin_status?: string
-          plugin_type?: string
-          plugin_version: string
-          routes_introduced?: string[] | null
-        }
-        Update: {
-          api_endpoints?: string[] | null
-          component_overrides?: string[] | null
-          created_at?: string
-          css_overrides?: string[] | null
-          database_migrations?: string[] | null
-          dependencies_used?: Json | null
-          file_paths?: string[]
-          global_variables?: string[] | null
-          id?: string
-          install_date?: string
-          last_updated?: string
-          metadata?: Json | null
-          plugin_author?: string | null
-          plugin_name?: string
-          plugin_risk_score?: number | null
-          plugin_status?: string
-          plugin_type?: string
-          plugin_version?: string
-          routes_introduced?: string[] | null
-        }
-        Relationships: []
-      }
-      plugin_risk_assessments: {
-        Row: {
-          assessed_by: string | null
-          assessment_notes: string | null
-          assessment_version: number
-          compatibility_score: number | null
-          created_at: string
-          id: string
-          overall_risk_score: number | null
-          performance_score: number | null
-          plugin_id: string
-          recommendations: Json | null
-          risk_factors: Json | null
-          security_score: number | null
-          stability_score: number | null
-        }
-        Insert: {
-          assessed_by?: string | null
-          assessment_notes?: string | null
-          assessment_version?: number
-          compatibility_score?: number | null
-          created_at?: string
-          id?: string
-          overall_risk_score?: number | null
-          performance_score?: number | null
-          plugin_id: string
-          recommendations?: Json | null
-          risk_factors?: Json | null
-          security_score?: number | null
-          stability_score?: number | null
-        }
-        Update: {
-          assessed_by?: string | null
-          assessment_notes?: string | null
-          assessment_version?: number
-          compatibility_score?: number | null
-          created_at?: string
-          id?: string
-          overall_risk_score?: number | null
-          performance_score?: number | null
-          plugin_id?: string
-          recommendations?: Json | null
-          risk_factors?: Json | null
-          security_score?: number | null
-          stability_score?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "plugin_risk_assessments_plugin_id_fkey"
-            columns: ["plugin_id"]
-            isOneToOne: false
-            referencedRelation: "plugin_registry"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      plugin_security_scans: {
-        Row: {
-          code_quality_score: number | null
-          completed_at: string | null
-          created_at: string
-          dependency_vulnerabilities: Json | null
-          id: string
-          malicious_patterns_found: Json | null
-          manual_review_notes: string | null
-          manual_review_reason: string | null
-          manual_reviewer_id: string | null
-          overall_score: number | null
-          permission_analysis: Json | null
-          plugin_id: string
-          requires_manual_review: boolean | null
-          scan_duration_ms: number | null
-          scan_engine_version: string | null
-          scan_type: string
-          scanned_files: string[] | null
-          status: string
-          submission_id: string | null
-        }
-        Insert: {
-          code_quality_score?: number | null
-          completed_at?: string | null
-          created_at?: string
-          dependency_vulnerabilities?: Json | null
-          id?: string
-          malicious_patterns_found?: Json | null
-          manual_review_notes?: string | null
-          manual_review_reason?: string | null
-          manual_reviewer_id?: string | null
-          overall_score?: number | null
-          permission_analysis?: Json | null
-          plugin_id: string
-          requires_manual_review?: boolean | null
-          scan_duration_ms?: number | null
-          scan_engine_version?: string | null
-          scan_type: string
-          scanned_files?: string[] | null
-          status: string
-          submission_id?: string | null
-        }
-        Update: {
-          code_quality_score?: number | null
-          completed_at?: string | null
-          created_at?: string
-          dependency_vulnerabilities?: Json | null
-          id?: string
-          malicious_patterns_found?: Json | null
-          manual_review_notes?: string | null
-          manual_review_reason?: string | null
-          manual_reviewer_id?: string | null
-          overall_score?: number | null
-          permission_analysis?: Json | null
-          plugin_id?: string
-          requires_manual_review?: boolean | null
-          scan_duration_ms?: number | null
-          scan_engine_version?: string | null
-          scan_type?: string
-          scanned_files?: string[] | null
-          status?: string
-          submission_id?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "plugin_security_scans_submission_id_fkey"
-            columns: ["submission_id"]
-            isOneToOne: false
-            referencedRelation: "plugin_submissions"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      plugin_snapshots: {
-        Row: {
-          created_at: string
-          created_before_update: boolean
-          id: string
-          plugin_id: string
-          snapshot_data: Json
-          version_id: string
-        }
-        Insert: {
-          created_at?: string
-          created_before_update?: boolean
-          id?: string
-          plugin_id: string
-          snapshot_data: Json
-          version_id: string
-        }
-        Update: {
-          created_at?: string
-          created_before_update?: boolean
-          id?: string
-          plugin_id?: string
-          snapshot_data?: Json
-          version_id?: string
-        }
-        Relationships: []
-      }
-      plugin_submissions: {
-        Row: {
-          approved_at: string | null
-          created_at: string
-          id: string
-          manifest_data: Json
-          plugin_data: Json
-          plugin_id: string
-          rejected_at: string | null
-          rejection_reason: string | null
-          reviewer_id: string | null
-          reviewer_notes: string | null
-          source_files_url: string | null
-          status: string
-          submission_type: string
-          submitter_id: string
-          submitter_name: string
-          updated_at: string
-        }
-        Insert: {
-          approved_at?: string | null
-          created_at?: string
-          id?: string
-          manifest_data: Json
-          plugin_data: Json
-          plugin_id: string
-          rejected_at?: string | null
-          rejection_reason?: string | null
-          reviewer_id?: string | null
-          reviewer_notes?: string | null
-          source_files_url?: string | null
-          status?: string
-          submission_type: string
-          submitter_id: string
-          submitter_name: string
-          updated_at?: string
-        }
-        Update: {
-          approved_at?: string | null
-          created_at?: string
-          id?: string
-          manifest_data?: Json
-          plugin_data?: Json
-          plugin_id?: string
-          rejected_at?: string | null
-          rejection_reason?: string | null
-          reviewer_id?: string | null
-          reviewer_notes?: string | null
-          source_files_url?: string | null
-          status?: string
-          submission_type?: string
-          submitter_id?: string
-          submitter_name?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       plugin_usage_logs: {
         Row: {
           created_at: string
@@ -34883,59 +34045,6 @@ export type Database = {
           plugin_id?: string
           usage_type?: string
           user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "plugin_usage_logs_license_key_id_fkey"
-            columns: ["license_key_id"]
-            isOneToOne: false
-            referencedRelation: "plugin_license_keys"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      plugin_versions: {
-        Row: {
-          bundle_url: string | null
-          changelog: string
-          compatibility_info: Json
-          created_at: string
-          download_count: number
-          id: string
-          is_current: boolean
-          manifest_data: Json
-          plugin_id: string
-          released_on: string
-          updated_at: string
-          version: string
-        }
-        Insert: {
-          bundle_url?: string | null
-          changelog: string
-          compatibility_info?: Json
-          created_at?: string
-          download_count?: number
-          id?: string
-          is_current?: boolean
-          manifest_data?: Json
-          plugin_id: string
-          released_on?: string
-          updated_at?: string
-          version: string
-        }
-        Update: {
-          bundle_url?: string | null
-          changelog?: string
-          compatibility_info?: Json
-          created_at?: string
-          download_count?: number
-          id?: string
-          is_current?: boolean
-          manifest_data?: Json
-          plugin_id?: string
-          released_on?: string
-          updated_at?: string
-          version?: string
         }
         Relationships: []
       }
@@ -49377,23 +48486,23 @@ export type Database = {
     Functions: {
       analyze_dev_request: {
         Args: {
-          p_request_id: string
           p_prompt: string
+          p_request_id: string
           p_request_type?: string
         }
         Returns: Json
       }
       analyze_media_content: {
         Args: {
-          p_source_id: string
-          p_content_url: string
-          p_title?: string
           p_content_text?: string
+          p_content_url: string
+          p_source_id: string
+          p_title?: string
         }
         Returns: Json
       }
       analyze_plugin_similarity: {
-        Args: { p_request_text: string; p_plugin_name?: string }
+        Args: { p_plugin_name?: string; p_request_text: string }
         Returns: Json
       }
       analyze_prompt_before_execution: {
@@ -49402,17 +48511,17 @@ export type Database = {
       }
       analyze_strategy_problem: {
         Args: {
-          p_problem_id: string
-          p_problem_description: string
           p_category?: string
+          p_problem_description: string
+          p_problem_id: string
         }
         Returns: Json
       }
       approve_and_publish_poll_suggestion: {
         Args: {
-          p_suggestion_id: string
           p_admin_id: string
           p_publish_immediately?: boolean
+          p_suggestion_id: string
         }
         Returns: string
       }
@@ -49421,7 +48530,7 @@ export type Database = {
         Returns: Json
       }
       auto_assign_moderator: {
-        Args: { p_submission_id: string; p_region: string }
+        Args: { p_region: string; p_submission_id: string }
         Returns: string
       }
       auto_issue_certificates_for_event: {
@@ -49429,13 +48538,13 @@ export type Database = {
         Returns: number
       }
       award_civic_reward: {
-        Args: { p_user_id: string; p_reward_id: string; p_context?: Json }
+        Args: { p_context?: Json; p_reward_id: string; p_user_id: string }
         Returns: boolean
       }
       award_fan_points: {
         Args: {
-          p_fan_id: string
           p_activity_type: Database["public"]["Enums"]["fan_activity_type"]
+          p_fan_id: string
           p_reference_id?: string
           p_reference_name?: string
         }
@@ -49443,18 +48552,18 @@ export type Database = {
       }
       award_moderator_badge: {
         Args: {
-          p_moderator_id: string
           p_badge_type: Database["public"]["Enums"]["badge_type"]
           p_description?: string
+          p_moderator_id: string
         }
         Returns: string
       }
       award_points: {
         Args: {
-          p_user_id: string
-          p_activity_type: string
           p_activity_reference_id?: string
+          p_activity_type: string
           p_description?: string
+          p_user_id: string
         }
         Returns: number
       }
@@ -49473,14 +48582,14 @@ export type Database = {
       calculate_civic_reputation_score: {
         Args:
           | {
-              p_entity_type: Database["public"]["Enums"]["civic_entity_type"]
               p_entity_id: string
+              p_entity_type: Database["public"]["Enums"]["civic_entity_type"]
             }
-          | { p_entity_type: string; p_entity_id: string }
+          | { p_entity_id: string; p_entity_type: string }
         Returns: undefined
       }
       calculate_civic_risk_score: {
-        Args: { p_target_type: string; p_target_id: string }
+        Args: { p_target_id: string; p_target_type: string }
         Returns: number
       }
       calculate_civic_score: {
@@ -49490,19 +48599,19 @@ export type Database = {
       calculate_company_ratings: {
         Args: { company_uuid: string }
         Returns: {
+          avg_customer_service_rating: number
           avg_overall_rating: number
+          avg_packaging_rating: number
+          avg_pricing_rating: number
           avg_reliability_rating: number
           avg_speed_rating: number
-          avg_customer_service_rating: number
-          avg_pricing_rating: number
-          avg_packaging_rating: number
           total_reviews: number
         }[]
       }
       calculate_connection_fee: {
         Args: {
-          p_company_size: Database["public"]["Enums"]["company_size"]
           p_campaign_type: Database["public"]["Enums"]["campaign_type"]
+          p_company_size: Database["public"]["Enums"]["company_size"]
         }
         Returns: number
       }
@@ -49510,8 +48619,8 @@ export type Database = {
         Args: {
           p_content_id: string
           p_content_type: string
-          p_user_region?: string
           p_user_id?: string
+          p_user_region?: string
         }
         Returns: number
       }
@@ -49521,21 +48630,21 @@ export type Database = {
       }
       calculate_corruption_trends: {
         Args: {
+          p_lookback_months?: number
           p_region?: string
           p_time_period?: string
-          p_lookback_months?: number
         }
         Returns: {
-          region: string
-          trend_type: string
+          change_percentage: number
           current_value: number
           previous_value: number
-          change_percentage: number
+          region: string
           trend_direction: string
+          trend_type: string
         }[]
       }
       calculate_engagement_metrics: {
-        Args: { p_start_date?: string; p_end_date?: string }
+        Args: { p_end_date?: string; p_start_date?: string }
         Returns: Json
       }
       calculate_engagement_score: {
@@ -49565,12 +48674,12 @@ export type Database = {
       calculate_poll_performance_metrics: {
         Args: { p_poll_id: string }
         Returns: {
+          average_time_to_vote: unknown
+          engagement_rate: number
+          fraud_risk_score: number
+          geographic_diversity_score: number
           total_votes: number
           unique_voters: number
-          engagement_rate: number
-          average_time_to_vote: unknown
-          geographic_diversity_score: number
-          fraud_risk_score: number
         }[]
       }
       calculate_profile_completion: {
@@ -49599,9 +48708,9 @@ export type Database = {
       }
       calculate_vendor_performance_metrics: {
         Args: {
-          p_vendor_id: string
-          p_period_start: string
           p_period_end: string
+          p_period_start: string
+          p_vendor_id: string
         }
         Returns: undefined
       }
@@ -49616,8 +48725,8 @@ export type Database = {
       check_claim_renewals: {
         Args: Record<PropertyKey, never>
         Returns: {
-          renewals_processed: number
           reminders_sent: number
+          renewals_processed: number
         }[]
       }
       check_constitutional_compliance: {
@@ -49637,27 +48746,27 @@ export type Database = {
       check_performance_milestones: {
         Args: {
           p_artist_id: string
-          p_track_id: string
           p_platform_type: Database["public"]["Enums"]["platform_type"]
           p_stream_count: number
+          p_track_id: string
         }
         Returns: number
       }
       check_rate_limit: {
         Args: {
+          p_action_type: string
           p_identifier_type: string
           p_identifier_value: string
-          p_poll_id: string
-          p_action_type: string
           p_limit_per_hour?: number
+          p_poll_id: string
         }
         Returns: boolean
       }
       check_rate_limit_secure: {
         Args: {
+          p_action_type: string
           p_identifier_type: string
           p_identifier_value: string
-          p_action_type: string
           p_limit_per_hour?: number
         }
         Returns: boolean
@@ -49665,9 +48774,9 @@ export type Database = {
       clean_and_generate_usernames: {
         Args: Record<PropertyKey, never>
         Returns: {
-          profile_id: string
-          old_username: string
           new_username: string
+          old_username: string
+          profile_id: string
           slug_generated: boolean
         }[]
       }
@@ -49680,7 +48789,7 @@ export type Database = {
         Returns: undefined
       }
       cleanup_mock_data: {
-        Args: { p_patterns?: string[]; p_exclude_verified?: boolean }
+        Args: { p_exclude_verified?: boolean; p_patterns?: string[] }
         Returns: Json
       }
       cleanup_old_notifications: {
@@ -49704,11 +48813,11 @@ export type Database = {
         Returns: Json
       }
       cleanup_scan_only: {
-        Args: { p_patterns?: string[]; p_notes?: string }
+        Args: { p_notes?: string; p_patterns?: string[] }
         Returns: Json
       }
       compare_debt_data_changes: {
-        Args: { p_source_id: string; p_current_result_id: string }
+        Args: { p_current_result_id: string; p_source_id: string }
         Returns: Json
       }
       compare_snapshots: {
@@ -49716,47 +48825,47 @@ export type Database = {
         Returns: string
       }
       convert_points_to_credit: {
-        Args: { p_user_id: string; p_points_amount: number }
+        Args: { p_points_amount: number; p_user_id: string }
         Returns: Json
       }
       create_artist_notification: {
         Args: {
           p_artist_id: string
-          p_user_id: string
-          p_notification_type: Database["public"]["Enums"]["notification_type"]
-          p_title: string
-          p_message: string
           p_data?: Json
+          p_message: string
+          p_notification_type: Database["public"]["Enums"]["notification_type"]
           p_priority?: string
+          p_title: string
+          p_user_id: string
         }
         Returns: string
       }
       create_claim_notification: {
         Args: {
           p_claim_id: string
-          p_recipient_id: string
-          p_notification_type: string
-          p_title: string
           p_message: string
+          p_notification_type: string
+          p_recipient_id: string
+          p_title: string
         }
         Returns: string
       }
       create_fan_notification: {
         Args: {
-          p_fan_id: string
-          p_type: string
-          p_title: string
-          p_message: string
           p_action_url?: string
+          p_fan_id: string
+          p_message: string
+          p_title: string
+          p_type: string
         }
         Returns: string
       }
       create_media_alert: {
         Args: {
-          p_analysis_id: string
-          p_alert_type: string
-          p_alert_title: string
           p_alert_description?: string
+          p_alert_title: string
+          p_alert_type: string
+          p_analysis_id: string
           p_severity?: Database["public"]["Enums"]["threat_level"]
         }
         Returns: string
@@ -49767,45 +48876,45 @@ export type Database = {
       }
       create_moderator_notification: {
         Args: {
-          p_moderator_id: string
-          p_type: string
-          p_title: string
-          p_message: string
           p_action_url?: string
+          p_message: string
+          p_moderator_id: string
           p_priority?: string
+          p_title: string
+          p_type: string
         }
         Returns: string
       }
       create_notification: {
         Args: {
-          p_user_id: string
-          p_notification_type: Database["public"]["Enums"]["notification_type"]
-          p_title: string
-          p_message: string
           p_data?: Json
-          p_related_shipment_id?: string
-          p_related_order_id?: string
+          p_message: string
+          p_notification_type: Database["public"]["Enums"]["notification_type"]
           p_priority?: string
+          p_related_order_id?: string
+          p_related_shipment_id?: string
+          p_title: string
+          p_user_id: string
         }
         Returns: string
       }
       create_realtime_notification: {
         Args: {
-          p_user_id: string
-          p_type: string
-          p_title: string
-          p_message: string
-          p_data?: Json
-          p_priority?: string
           p_action_url?: string
+          p_data?: Json
+          p_message: string
+          p_priority?: string
+          p_title: string
+          p_type: string
+          p_user_id: string
         }
         Returns: string
       }
       create_system_snapshot: {
         Args: {
+          p_description?: string
           p_snapshot_name: string
           p_snapshot_type?: string
-          p_description?: string
           p_tags?: string[]
         }
         Returns: string
@@ -49813,29 +48922,29 @@ export type Database = {
       detect_advanced_fraud_patterns: {
         Args: { p_poll_id: string }
         Returns: {
+          confidence_score: number
+          description: string
+          evidence_count: number
           fraud_type: string
           severity: string
-          confidence_score: number
-          evidence_count: number
-          description: string
         }[]
       }
       detect_bot_behavior: {
         Args: {
-          p_user_agent: string
           p_device_fingerprint: string
           p_hashed_ip: string
           p_poll_id: string
           p_session_id: string
+          p_user_agent: string
         }
         Returns: number
       }
       detect_data_trends: {
         Args: { p_category: string; p_time_window?: unknown }
         Returns: {
-          trend_name: string
-          momentum_score: number
           confidence_level: number
+          momentum_score: number
+          trend_name: string
         }[]
       }
       detect_fraud_patterns: {
@@ -49850,7 +48959,7 @@ export type Database = {
         }[]
       }
       detect_sentiment_spikes: {
-        Args: { p_timeline_id: string; p_threshold?: number }
+        Args: { p_threshold?: number; p_timeline_id: string }
         Returns: Json
       }
       detect_timeline_slippage: {
@@ -49860,19 +48969,19 @@ export type Database = {
       detect_user_duplicates: {
         Args: Record<PropertyKey, never>
         Returns: {
-          primary_profile_id: string
+          confidence_score: number
           duplicate_profile_ids: string[]
           match_type: string
-          confidence_score: number
           merge_strategy: Json
+          primary_profile_id: string
         }[]
       }
       enable_politician_poll_creation: {
-        Args: { p_politician_id: string; p_admin_id: string }
+        Args: { p_admin_id: string; p_politician_id: string }
         Returns: boolean
       }
       evaluate_workflow_conditions: {
-        Args: { p_workflow_id: string; p_context_data: Json }
+        Args: { p_context_data: Json; p_workflow_id: string }
         Returns: boolean
       }
       execute_civic_mission: {
@@ -49884,25 +48993,25 @@ export type Database = {
         Returns: Json
       }
       execute_workflow: {
-        Args: { p_workflow_id: string; p_trigger_data?: Json }
+        Args: { p_trigger_data?: Json; p_workflow_id: string }
         Returns: string
       }
       flag_behavioral_inconsistency: {
         Args: {
-          p_entity_type: string
           p_entity_id: string
           p_entity_name: string
-          p_inconsistency_details: string
+          p_entity_type: string
           p_evidence_data?: Json
+          p_inconsistency_details: string
           p_severity?: string
         }
         Returns: string
       }
       forward_message: {
         Args: {
+          p_forward_context?: string
           p_original_message_id: string
           p_target_conversation_id: string
-          p_forward_context?: string
         }
         Returns: string
       }
@@ -49915,15 +49024,15 @@ export type Database = {
         Returns: string
       }
       generate_audio_fingerprint: {
-        Args: { p_track_id: string; p_audio_url: string }
+        Args: { p_audio_url: string; p_track_id: string }
         Returns: string
       }
       generate_automated_alert: {
         Args: {
           p_alert_type: string
-          p_title: string
           p_message: string
           p_severity?: Database["public"]["Enums"]["alert_severity"]
+          p_title: string
         }
         Returns: string
       }
@@ -49953,12 +49062,12 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: {
           forecasts_created: number
-          regions_processed: number
           parties_processed: number
+          regions_processed: number
         }[]
       }
       generate_job_slug: {
-        Args: { job_title: string; company_name: string }
+        Args: { company_name: string; job_title: string }
         Returns: string
       }
       generate_leader_slug: {
@@ -49986,7 +49095,7 @@ export type Database = {
         Returns: string
       }
       generate_slug: {
-        Args: { input_text: string; entity_id?: string }
+        Args: { entity_id?: string; input_text: string }
         Returns: string
       }
       generate_submission_code: {
@@ -50018,7 +49127,7 @@ export type Database = {
         Returns: string
       }
       generate_village_slug: {
-        Args: { village_name: string; region_name: string }
+        Args: { region_name: string; village_name: string }
         Returns: string
       }
       get_agent_suggestions: {
@@ -50026,20 +49135,20 @@ export type Database = {
         Returns: {
           agent_id: string
           agent_name: string
-          suggestion_type: string
-          suggestion_message: string
           priority: number
+          suggestion_message: string
+          suggestion_type: string
         }[]
       }
       get_analytics_summary: {
-        Args: { p_user_id: string; p_start_date?: string; p_end_date?: string }
+        Args: { p_end_date?: string; p_start_date?: string; p_user_id: string }
         Returns: {
-          total_events: number
-          unique_sessions: number
           avg_session_duration: number
-          top_pages: Json
           device_breakdown: Json
           hourly_activity: Json
+          top_pages: Json
+          total_events: number
+          unique_sessions: number
         }[]
       }
       get_audit_statistics: {
@@ -50081,12 +49190,12 @@ export type Database = {
       get_legislation_statistics: {
         Args: Record<PropertyKey, never>
         Returns: {
-          total_bills: number
           active_bills: number
+          avg_citizen_engagement: number
           passed_bills: number
           rejected_bills: number
+          total_bills: number
           total_citizen_votes: number
-          avg_citizen_engagement: number
         }[]
       }
       get_mesh_status_overview: {
@@ -50102,11 +49211,11 @@ export type Database = {
         Returns: Json
       }
       get_module_visibility: {
-        Args: { p_user_role?: string; p_region?: string }
+        Args: { p_region?: string; p_user_role?: string }
         Returns: {
-          module_name: string
-          is_visible: boolean
           custom_settings: Json
+          is_visible: boolean
+          module_name: string
         }[]
       }
       get_pan_africa_config: {
@@ -50114,34 +49223,34 @@ export type Database = {
         Returns: Json
       }
       get_personalized_feed: {
-        Args: { p_user_id: string; p_limit?: number; p_offset?: number }
+        Args: { p_limit?: number; p_offset?: number; p_user_id: string }
         Returns: {
+          action_url: string
+          algorithm_score: number
+          author_avatar: string
+          author_name: string
+          category: string
+          content: string
+          created_at: string
+          engagement_counts: Json
           id: string
           item_type: string
-          title: string
-          content: string
-          author_name: string
-          author_avatar: string
           media_urls: string[]
-          tags: string[]
           priority: string
-          category: string
-          action_url: string
-          engagement_counts: Json
-          algorithm_score: number
-          created_at: string
+          tags: string[]
+          title: string
         }[]
       }
       get_posts_with_like_status: {
         Args: { p_user_id?: string }
         Returns: {
-          id: string
-          user_id: string
           content: string
           created_at: string
-          updated_at: string
-          likes_count: number
+          id: string
           is_liked: boolean
+          likes_count: number
+          updated_at: string
+          user_id: string
         }[]
       }
       get_profile_image_url: {
@@ -50158,20 +49267,20 @@ export type Database = {
       }
       get_sentiment_timeline: {
         Args: {
-          p_subject_type?: string
-          p_subject_name?: string
-          p_start_date?: string
+          p_age_group?: string
           p_end_date?: string
           p_region?: string
-          p_age_group?: string
+          p_start_date?: string
+          p_subject_name?: string
+          p_subject_type?: string
         }
         Returns: Json
       }
       get_similar_users: {
-        Args: { target_user_id: string; limit_users?: number }
+        Args: { limit_users?: number; target_user_id: string }
         Returns: {
-          user_id: string
           similarity_score: number
+          user_id: string
         }[]
       }
       get_sync_guard_status: {
@@ -50185,13 +49294,13 @@ export type Database = {
         }[]
       }
       get_village_analytics_summary: {
-        Args: { p_village_id: string; p_days?: number }
+        Args: { p_days?: number; p_village_id: string }
         Returns: Json
       }
       has_role: {
         Args: {
-          _user_id: string
           _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
         }
         Returns: boolean
       }
@@ -50202,16 +49311,16 @@ export type Database = {
       increment_product_view: {
         Args: {
           p_product_id: string
-          p_user_id?: string
           p_session_id?: string
+          p_user_id?: string
         }
         Returns: undefined
       }
       learn_from_manual_fix: {
         Args: {
           p_file_path: string
-          p_original_code: string
           p_fixed_code: string
+          p_original_code: string
           p_problem_description: string
         }
         Returns: string
@@ -50225,31 +49334,31 @@ export type Database = {
       }
       log_autonomous_operation: {
         Args: {
-          p_operation_type: string
-          p_target_module?: string
-          p_risk_score?: number
-          p_operation_details?: Json
           p_human_approval_required?: boolean
+          p_operation_details?: Json
+          p_operation_type: string
+          p_risk_score?: number
+          p_target_module?: string
         }
         Returns: string
       }
       log_civic_shield_action: {
         Args: {
           p_action_type: string
-          p_target_type: string
-          p_target_id: string
           p_description: string
           p_metadata?: Json
+          p_target_id: string
+          p_target_type: string
         }
         Returns: string
       }
       log_prompt_execution: {
         Args: {
-          p_prompt_content: string
-          p_prompt_title: string
-          p_prompt_phase?: string
           p_modules_affected?: string[]
           p_outcome?: string
+          p_prompt_content: string
+          p_prompt_phase?: string
+          p_prompt_title: string
         }
         Returns: string
       }
@@ -50257,18 +49366,18 @@ export type Database = {
         Args:
           | {
               p_action_type: string
-              p_resource_type: string
-              p_resource_id?: string
               p_details?: Json
+              p_resource_id?: string
+              p_resource_type: string
               p_severity?: string
             }
           | {
-              p_user_id: string
               p_event_type: string
               p_ip_address?: unknown
-              p_user_agent?: string
               p_metadata?: Json
               p_severity?: string
+              p_user_agent?: string
+              p_user_id: string
             }
         Returns: undefined
       }
@@ -50282,18 +49391,18 @@ export type Database = {
       }
       merge_duplicate_profiles: {
         Args: {
-          p_primary_profile_id: string
           p_duplicate_profile_ids: string[]
+          p_primary_profile_id: string
         }
         Returns: Json
       }
       notify_artist_fans: {
         Args: {
           p_artist_user_id: string
-          p_update_type?: string
-          p_new_song_title?: string
-          p_event_name?: string
           p_award_name?: string
+          p_event_name?: string
+          p_new_song_title?: string
+          p_update_type?: string
         }
         Returns: number
       }
@@ -50315,16 +49424,16 @@ export type Database = {
       }
       process_wallet_transaction: {
         Args: {
-          p_fan_id: string
-          p_transaction_type: Database["public"]["Enums"]["transaction_type"]
           p_amount_fcfa: number
           p_description: string
+          p_fan_id: string
           p_reference_id?: string
+          p_transaction_type: Database["public"]["Enums"]["transaction_type"]
         }
         Returns: string
       }
       purchase_badge: {
-        Args: { p_user_id: string; p_badge_id: string }
+        Args: { p_badge_id: string; p_user_id: string }
         Returns: Json
       }
       refresh_poll_statistics: {
@@ -50333,33 +49442,33 @@ export type Database = {
       }
       register_new_feature: {
         Args: {
-          p_feature_name: string
-          p_feature_type: string
-          p_version_tag?: string
-          p_file_paths?: string[]
           p_dependencies?: string[]
           p_description?: string
+          p_feature_name: string
+          p_feature_type: string
+          p_file_paths?: string[]
+          p_version_tag?: string
         }
         Returns: string
       }
       register_user_device: {
         Args: {
-          p_device_name: string
           p_device_fingerprint: string
+          p_device_name: string
           p_ip_address?: unknown
           p_user_agent?: string
         }
         Returns: string
       }
       reject_poll_suggestion: {
-        Args: { p_suggestion_id: string; p_admin_id: string; p_reason?: string }
+        Args: { p_admin_id: string; p_reason?: string; p_suggestion_id: string }
         Returns: boolean
       }
       run_ashen_simulation: {
         Args: {
-          p_test_id?: string
-          p_device_type?: string
           p_device_model?: string
+          p_device_type?: string
+          p_test_id?: string
         }
         Returns: string
       }
@@ -50370,10 +49479,10 @@ export type Database = {
       run_poll_health_checks: {
         Args: Record<PropertyKey, never>
         Returns: {
-          poll_id: string
-          poll_title: string
           health_status: string
           issues_found: string[]
+          poll_id: string
+          poll_title: string
           recommendations: string[]
         }[]
       }
@@ -50387,9 +49496,9 @@ export type Database = {
       }
       scan_for_feature_conflicts: {
         Args: {
+          p_description?: string
           p_feature_name: string
           p_feature_type?: string
-          p_description?: string
         }
         Returns: Json
       }
@@ -50403,76 +49512,76 @@ export type Database = {
       }
       search_artists: {
         Args: {
-          p_stage_name?: string
-          p_social_url?: string
           p_region?: string
+          p_social_url?: string
+          p_stage_name?: string
         }
         Returns: {
-          id: string
-          stage_name: string
-          real_name: string
-          bio_short: string
-          profile_photo_url: string
-          region: string
           application_status: string
+          bio_short: string
+          id: string
+          profile_photo_url: string
+          real_name: string
+          region: string
           similarity_score: number
+          stage_name: string
         }[]
       }
       search_messages: {
         Args: {
-          p_user_id: string
-          p_search_query: string
           p_conversation_id?: string
           p_limit?: number
           p_offset?: number
+          p_search_query: string
+          p_user_id: string
         }
         Returns: {
-          message_id: string
-          conversation_id: string
-          sender_id: string
           content_preview: string
+          conversation_id: string
           created_at: string
+          message_id: string
           rank: number
+          sender_id: string
         }[]
       }
       search_villages: {
         Args: {
+          p_limit?: number
+          p_min_rating?: number
+          p_offset?: number
           p_query: string
           p_region?: string
           p_tags?: string[]
-          p_min_rating?: number
-          p_limit?: number
-          p_offset?: number
         }
         Returns: {
-          id: string
-          village_name: string
-          region: string
+          diaspora_engagement_score: number
           division: string
-          subdivision: string
-          overall_rating: number
-          sons_daughters_count: number
-          view_count: number
-          is_verified: boolean
-          total_ratings_count: number
-          infrastructure_score: number
           education_score: number
           health_score: number
-          diaspora_engagement_score: number
+          id: string
+          infrastructure_score: number
+          is_verified: boolean
+          overall_rating: number
+          region: string
           relevance_score: number
+          sons_daughters_count: number
+          subdivision: string
+          total_ratings_count: number
+          view_count: number
+          village_name: string
         }[]
       }
       send_notification: {
         Args: {
-          p_user_id: string
-          p_type: Database["public"]["Enums"]["notification_type"]
-          p_title: string
+          p_action_url?: string
+          p_data?: Json
+          p_expires_at?: string
+          p_icon?: string
           p_message: string
           p_priority?: Database["public"]["Enums"]["notification_priority"]
-          p_data?: Json
-          p_action_url?: string
-          p_icon?: string
-          p_expires_at?: string
+          p_title: string
+          p_type: Database["public"]["Enums"]["notification_type"]
+          p_user_id: string
         }
         Returns: string
       }
@@ -50497,7 +49606,7 @@ export type Database = {
         Returns: boolean
       }
       track_audit_interaction: {
-        Args: { p_audit_id: string; p_action_type: string; p_metadata?: Json }
+        Args: { p_action_type: string; p_audit_id: string; p_metadata?: Json }
         Returns: undefined
       }
       track_user_poll_creation: {
@@ -50510,50 +49619,50 @@ export type Database = {
       }
       update_claim_status: {
         Args: {
+          p_admin_notes?: string
           p_claim_id: string
           p_new_status: string
-          p_admin_notes?: string
           p_reviewed_by?: string
         }
         Returns: undefined
       }
       update_live_polling_metrics: {
         Args: {
-          p_session_id: string
           p_active_users?: number
           p_new_participant?: boolean
+          p_session_id: string
         }
         Returns: undefined
       }
       update_notification_performance_metrics: {
         Args: {
-          p_notification_type: string
-          p_template_id: string
           p_event_type: string
+          p_notification_type: string
           p_response_time_seconds?: number
+          p_template_id: string
         }
         Returns: undefined
       }
       update_plugin_request_status: {
         Args: {
+          p_error_details?: string
           p_request_id: string
           p_status: string
-          p_error_details?: string
         }
         Returns: boolean
       }
       update_politician_ratings_from_poll: {
         Args: {
-          p_poll_id: string
           p_politician_id: string
+          p_poll_id: string
           p_rating_impact?: number
         }
         Returns: Json
       }
       update_politician_term_status: {
         Args: {
-          p_politician_id: string
           p_new_status: string
+          p_politician_id: string
           p_reason?: string
         }
         Returns: boolean
@@ -50563,7 +49672,7 @@ export type Database = {
         Returns: undefined
       }
       update_profile_slug: {
-        Args: { p_user_id: string; p_new_slug: string }
+        Args: { p_new_slug: string; p_user_id: string }
         Returns: Json
       }
       update_senator_badges: {
@@ -50576,29 +49685,29 @@ export type Database = {
       }
       update_user_engagement_metrics: {
         Args: {
-          p_user_id: string
           p_event_type: string
           p_response_time_seconds?: number
+          p_user_id: string
         }
         Returns: undefined
       }
       update_user_presence: {
-        Args: { p_status: string; p_device_info?: Json }
+        Args: { p_device_info?: Json; p_status: string }
         Returns: undefined
       }
       update_vendor_presence: {
-        Args: { p_vendor_id: string; p_status: string; p_device_info?: Json }
+        Args: { p_device_info?: Json; p_status: string; p_vendor_id: string }
         Returns: undefined
       }
       validate_migrated_urls: {
         Args: Record<PropertyKey, never>
         Returns: {
-          table_name: string
-          record_id: string
-          url_field: string
-          old_url: string
           new_url: string
+          old_url: string
+          record_id: string
           status: string
+          table_name: string
+          url_field: string
           validation_notes: string
         }[]
       }
@@ -50609,11 +49718,11 @@ export type Database = {
       validate_politician_terms: {
         Args: Record<PropertyKey, never>
         Returns: {
-          politician_id: string
-          name: string
           current_status: string
-          needs_update: boolean
           days_since_term_end: number
+          name: string
+          needs_update: boolean
+          politician_id: string
         }[]
       }
       validate_profile_slug: {

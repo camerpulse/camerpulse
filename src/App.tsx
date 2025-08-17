@@ -8,7 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { AuthProvider } from "./contexts/AuthContext";
-import { PluginProvider } from "./contexts/PluginContext";
+
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { AppRouter } from "./components/routing/LanguageRoutes";
 
@@ -41,23 +41,21 @@ const App = () => {
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <PluginProvider>
-            <TooltipProvider>
-              <PanAfricaProvider>
-                <MobileProvider>
-                  <BrowserRouter>
-                    <LanguageProvider>
-                      <Toaster />
-                      <Sonner />
-                      <PWAInstallPrompt />
-                      <OfflineIndicator />
-                      <AppRouter />
-                    </LanguageProvider>
-                  </BrowserRouter>
-                </MobileProvider>
-              </PanAfricaProvider>
-            </TooltipProvider>
-          </PluginProvider>
+          <TooltipProvider>
+            <PanAfricaProvider>
+              <MobileProvider>
+                <BrowserRouter>
+                  <LanguageProvider>
+                    <Toaster />
+                    <Sonner />
+                    <PWAInstallPrompt />
+                    <OfflineIndicator />
+                    <AppRouter />
+                  </LanguageProvider>
+                </BrowserRouter>
+              </MobileProvider>
+            </PanAfricaProvider>
+          </TooltipProvider>
         </AuthProvider>
       </QueryClientProvider>
       </HelmetProvider>

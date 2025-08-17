@@ -3,7 +3,7 @@ import PanAfricaAdminPanel from "@/components/AI/PanAfricaAdminPanel";
 import CivicViewControlPanel from "@/components/AI/CivicViewControlPanel";
 import { PoliticalImportDashboard } from "@/components/Politics/PoliticalImportDashboard";
 import { BulkImportButton } from "@/components/AI/BulkImportButton";
-import { PoliticaAIDashboard } from "@/components/AI/PoliticaAIDashboard";
+import { LazyPoliticaAIDashboard } from "@/components/AI/LazyAIComponents";
 import { CivicAlertBot } from "@/components/AI/CivicAlertBot";
 import { DailyReportGenerator } from "@/components/AI/DailyReportGenerator";
 import { CivicAlertSystem } from "@/components/Security/CivicAlertSystem";
@@ -121,16 +121,16 @@ const Admin = () => {
   const { data: stats } = useQuery({
     queryKey: ["admin_stats"],
     queryFn: async () => {
-      const [users, vendors, polls, posts] = await Promise.all([
+      const [users, products, polls, posts] = await Promise.all([
         supabase.from("profiles").select("id", { count: "exact" }),
-        supabase.from("marketplace_vendors").select("id", { count: "exact" }),
+        supabase.from("marketplace_products").select("id", { count: "exact" }),
         supabase.from("polls").select("id", { count: "exact" }),
         supabase.from("pulse_posts").select("id", { count: "exact" })
       ]);
 
       return {
         users: users.count || 0,
-        vendors: vendors.count || 0,
+        vendors: products.count || 0,
         polls: polls.count || 0,
         posts: posts.count || 0
       };
@@ -760,7 +760,7 @@ const Admin = () => {
             {/* 6. AI CONTROL PANEL */}
             <TabsContent value="ai-control">
               <div className="space-y-6">
-                <PoliticaAIDashboard />
+                <LazyPoliticaAIDashboard />
               </div>
             </TabsContent>
 
