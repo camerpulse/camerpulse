@@ -50,6 +50,9 @@ import { AdminSidebar } from './layout/AdminSidebar';
 import { AdminHeader } from './layout/AdminHeader';
 import { MobileAdminNav } from './layout/MobileAdminNav';
 import { CleanupReviewManager } from './modules/CleanupReviewManager';
+import { SystemHealthManager } from './modules/SystemHealthManager';
+import { SecurityAuditManager } from './modules/SecurityAuditManager';
+import { BackupRecoveryManager } from './modules/BackupRecoveryManager';
 
 interface AdminStats {
   total_users: number;
@@ -274,6 +277,9 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'intelligence', label: 'Intelligence Panel', icon: Bot, color: 'text-purple-500', permission: 'all' },
     { id: 'priority-assessment', label: 'Priority Assessment', icon: TrendingUp, color: 'text-amber-600', permission: 'all' },
     { id: 'settings-sync', label: 'Settings & Sync', icon: Settings, color: 'text-gray-500', permission: 'all' },
+    { id: 'system-health', label: 'System Health', icon: Monitor, color: 'text-blue-600', permission: 'all' },
+    { id: 'security-audit-manager', label: 'Security Manager', icon: Shield, color: 'text-red-600', permission: 'all' },
+    { id: 'backup-recovery', label: 'Backup & Recovery', icon: Database, color: 'text-purple-600', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
 
   useEffect(() => {
@@ -341,6 +347,12 @@ export const AdminCoreV2: React.FC = () => {
         return <PriorityAssessmentDashboard />;
       case 'settings-sync':
         return <SettingsSyncManager {...moduleProps} systemModules={systemModules} onAutoSync={() => autoSyncMutation.mutate()} />;
+      case 'system-health':
+        return <SystemHealthManager {...moduleProps} />;
+      case 'security-audit-manager':
+        return <SecurityAuditManager {...moduleProps} />;
+      case 'backup-recovery':
+        return <BackupRecoveryManager {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} />;
     }
