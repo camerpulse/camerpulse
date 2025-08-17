@@ -267,10 +267,10 @@ const RegionalHiringLeaderboard = () => {
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button size="lg" asChild>
-                  <a href="/jobs/board">Find Jobs</a>
+                  <Link to="/jobs/board">Find Jobs</Link>
                 </Button>
                 <Button size="lg" variant="outline" asChild>
-                  <a href="/jobs/company">Post Jobs</a>
+                  <Link to="/jobs/company">Post Jobs</Link>
                 </Button>
               </div>
             </CardContent>

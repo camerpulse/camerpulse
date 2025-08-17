@@ -213,7 +213,7 @@ export const PresidentialPollCreator = () => {
 
           <div className="flex justify-center">
             <Button 
-              onClick={() => window.location.href = '/polls'} 
+              onClick={() => navigateTo('/polls')} 
               className="bg-cm-green hover:bg-cm-green/90"
             >
               View Polls Dashboard

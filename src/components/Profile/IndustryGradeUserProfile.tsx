@@ -29,6 +29,7 @@ import { ProfileAnalytics } from '@/components/Profile/ProfileAnalytics';
 import { ProfileActivityFeed } from '@/components/Profile/ProfileActivityFeed';
 import { ProfileSocialFeatures } from '@/components/Profile/ProfileSocialFeatures';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigation } from '@/hooks/useNavigation';
 import { 
   MapPin, 
   Calendar, 
@@ -119,6 +120,7 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
 }) => {
   const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
+  const { navigateToMessage } = useNavigation();
   
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [stats, setStats] = useState<ProfileStats>({ 
@@ -312,7 +314,7 @@ export const IndustryGradeUserProfile: React.FC<IndustryGradeProfileProps> = ({
     }
 
     // Navigate to messenger with conversation starter
-    window.location.href = `/messenger?startConversation=${userId}`;
+    navigateToMessage(userId);
   };
 
   const handleShare = async () => {

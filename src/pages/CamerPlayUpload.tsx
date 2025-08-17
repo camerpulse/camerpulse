@@ -320,7 +320,7 @@ const CamerPlayUpload = () => {
               You need to be a verified CamerPulse artist to upload music.
             </p>
             <Button asChild>
-              <a href="/artist-register">Apply for Artist Membership</a>
+              <Link to="/artist-register">Apply for Artist Membership</Link>
             </Button>
           </CardContent>
         </Card>

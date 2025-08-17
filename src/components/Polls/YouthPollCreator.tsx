@@ -169,7 +169,7 @@ export const YouthPollCreator = () => {
 
           <div className="flex justify-center">
             <Button 
-              onClick={() => window.location.href = '/polls'} 
+              onClick={() => navigateTo('/polls')} 
               className="bg-primary hover:bg-primary/90"
             >
               View All Polls

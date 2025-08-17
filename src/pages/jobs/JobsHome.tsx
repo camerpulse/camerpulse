@@ -87,7 +87,7 @@ const JobsHome = () => {
             </CardHeader>
             <CardContent>
               <Button className="w-full" asChild>
-                <a href="/jobs">Browse Jobs</a>
+                <Link to="/jobs">Browse Jobs</Link>
               </Button>
             </CardContent>
           </Card>
@@ -104,7 +104,7 @@ const JobsHome = () => {
             </CardHeader>
             <CardContent>
               <Button variant="outline" className="w-full" asChild>
-                <a href="/jobs/company">Post a Job</a>
+                <Link to="/jobs/company">Post a Job</Link>
               </Button>
             </CardContent>
           </Card>
@@ -121,7 +121,7 @@ const JobsHome = () => {
             </CardHeader>
             <CardContent>
               <Button variant="secondary" className="w-full" asChild>
-                <a href="/jobs/analytics">View Analytics</a>
+                <Link to="/jobs/analytics">View Analytics</Link>
               </Button>
             </CardContent>
           </Card>
@@ -152,7 +152,7 @@ const JobsHome = () => {
                 </div>
               </div>
               <Button asChild>
-                <a href="/jobs/campaigns">View Campaign</a>
+                <Link to="/jobs/campaigns">View Campaign</Link>
               </Button>
             </div>
           </CardContent>
@@ -171,7 +171,7 @@ const JobsHome = () => {
               <TrendingUp className="h-8 w-8 mx-auto mb-3 text-primary" />
               <p className="mb-4 text-muted-foreground">Real-time hiring activity across Cameroon's regions</p>
               <Button asChild>
-                <a href="/jobs/leaderboard">View Live Leaderboard</a>
+                <Link to="/jobs/leaderboard">View Live Leaderboard</Link>
               </Button>
             </div>
           </CardContent>
@@ -187,7 +187,7 @@ const JobsHome = () => {
             <div className="space-y-4">
               <div className="text-center py-4">
                 <Button asChild>
-                  <a href="/jobs">View All Jobs</a>
+                  <Link to="/jobs">View All Jobs</Link>
                 </Button>
               </div>
             </div>

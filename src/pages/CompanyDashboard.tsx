@@ -131,7 +131,7 @@ const CompanyDashboard = () => {
             </CardHeader>
             <CardContent className="text-center">
               <Button asChild>
-                <a href="/companies/register">Register Your Company</a>
+                <Link to="/companies/register">Register Your Company</Link>
               </Button>
             </CardContent>
           </Card>

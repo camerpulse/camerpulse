@@ -107,10 +107,10 @@ const JobsSetupTest = () => {
               </p>
               <div className="flex gap-4">
                 <Button asChild>
-                  <a href="/jobs">Test Jobs Page</a>
+                  <Link to="/jobs">Test Jobs Page</Link>
                 </Button>
                 <Button variant="outline" asChild>
-                  <a href="/">Return to Homepage</a>
+                  <Link to="/">Return to Homepage</Link>
                 </Button>
               </div>
             </div>
