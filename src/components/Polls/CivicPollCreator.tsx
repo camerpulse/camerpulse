@@ -97,7 +97,7 @@ export const CivicPollCreator = () => {
             <li>• Enabled with geo-analytics and comment system</li>
           </ul>
           <Button 
-            onClick={() => window.location.href = '/polls'} 
+            onClick={() => window.location.pathname = '/polls'} 
             className="bg-cm-green hover:bg-cm-green/90"
           >
             View All Polls

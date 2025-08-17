@@ -166,7 +166,7 @@ export const SuggestionButton: React.FC<SuggestionButtonProps> = ({
         className={className}
         onClick={() => {
           // Redirect to auth or show login dialog
-          window.location.href = '/auth';
+          window.location.pathname = '/auth';
         }}
       >
         {mode === 'suggest_new' ? (

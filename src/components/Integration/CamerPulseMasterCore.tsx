@@ -229,7 +229,7 @@ export const CamerPulseMasterCore: React.FC = () => {
         <p className="text-muted-foreground mb-4">
           Please sign in to access the CamerPulse platform.
         </p>
-        <Button onClick={() => window.location.href = '/auth'}>
+        <Button onClick={() => window.location.pathname = '/auth'}>
           Sign In
         </Button>
       </div>

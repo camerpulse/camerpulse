@@ -120,7 +120,7 @@ export const EntityReviewForm: React.FC<EntityReviewFormProps> = ({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={() => window.location.href = '/auth'}>
+          <Button onClick={() => window.location.pathname = '/auth'}>
             Log In to Review
           </Button>
         </CardContent>
