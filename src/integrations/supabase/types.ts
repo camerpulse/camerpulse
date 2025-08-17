@@ -48702,18 +48702,6 @@ export type Database = {
         Args: { p_senator_id: string }
         Returns: number
       }
-      calculate_user_similarities: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
-      }
-      calculate_vendor_performance_metrics: {
-        Args: {
-          p_period_end: string
-          p_period_start: string
-          p_vendor_id: string
-        }
-        Returns: undefined
-      }
       calculate_village_reputation_index: {
         Args: { p_village_id: string }
         Returns: undefined
@@ -48738,10 +48726,6 @@ export type Database = {
         Returns: {
           alerts_created: number
         }[]
-      }
-      check_inventory_levels: {
-        Args: Record<PropertyKey, never>
-        Returns: undefined
       }
       check_performance_milestones: {
         Args: {
@@ -49054,10 +49038,6 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: string
       }
-      generate_dispute_number: {
-        Args: Record<PropertyKey, never>
-        Returns: string
-      }
       generate_election_forecast: {
         Args: Record<PropertyKey, never>
         Returns: {
@@ -49072,10 +49052,6 @@ export type Database = {
       }
       generate_leader_slug: {
         Args: { leader_name: string; title_name: string; village_name?: string }
-        Returns: string
-      }
-      generate_order_number: {
-        Args: Record<PropertyKey, never>
         Returns: string
       }
       generate_poll_api_key: {
@@ -49306,14 +49282,6 @@ export type Database = {
       }
       increment_poll_view_count: {
         Args: { p_poll_id: string; p_user_id?: string }
-        Returns: undefined
-      }
-      increment_product_view: {
-        Args: {
-          p_product_id: string
-          p_session_id?: string
-          p_user_id?: string
-        }
         Returns: undefined
       }
       learn_from_manual_fix: {
@@ -49693,10 +49661,6 @@ export type Database = {
       }
       update_user_presence: {
         Args: { p_device_info?: Json; p_status: string }
-        Returns: undefined
-      }
-      update_vendor_presence: {
-        Args: { p_device_info?: Json; p_status: string; p_vendor_id: string }
         Returns: undefined
       }
       validate_migrated_urls: {
