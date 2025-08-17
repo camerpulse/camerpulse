@@ -33261,6 +33261,44 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_notifications: {
+        Row: {
+          created_at: string
+          email_status: string
+          id: string
+          notification_type: string
+          recipient_email: string
+          sent_at: string | null
+          transaction_id: string
+        }
+        Insert: {
+          created_at?: string
+          email_status?: string
+          id?: string
+          notification_type: string
+          recipient_email: string
+          sent_at?: string | null
+          transaction_id: string
+        }
+        Update: {
+          created_at?: string
+          email_status?: string
+          id?: string
+          notification_type?: string
+          recipient_email?: string
+          sent_at?: string | null
+          transaction_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_notifications_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "nokash_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_rate_limits: {
         Row: {
           blocked_until: string | null
@@ -48715,6 +48753,36 @@ export type Database = {
         }
         Relationships: []
       }
+      webhook_logs: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string | null
+          processed_at: string
+          status: string | null
+          webhook_data: Json | null
+          webhook_type: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          processed_at?: string
+          status?: string | null
+          webhook_data?: Json | null
+          webhook_type: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          processed_at?: string
+          status?: string | null
+          webhook_data?: Json | null
+          webhook_type?: string
+        }
+        Relationships: []
+      }
       whatsapp_templates: {
         Row: {
           approval_status: string | null
@@ -49975,6 +50043,10 @@ export type Database = {
           p_result_data?: Json
         }
         Returns: string
+      }
+      process_nokash_webhook: {
+        Args: { webhook_data: Json }
+        Returns: Json
       }
       process_scheduled_notifications: {
         Args: Record<PropertyKey, never>

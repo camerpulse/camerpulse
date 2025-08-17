@@ -7,6 +7,7 @@ import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { PaymentDashboard } from '../PaymentDashboard/PaymentDashboard';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Settings, CreditCard, Eye, CheckCircle, XCircle, Clock } from 'lucide-react';
@@ -145,7 +146,7 @@ export const NokashConfigPanel: React.FC = () => {
       </div>
 
       <Tabs defaultValue="config" className="space-y-4">
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="config">
             <Settings className="h-4 w-4 mr-2" />
             Configuration
@@ -153,6 +154,10 @@ export const NokashConfigPanel: React.FC = () => {
           <TabsTrigger value="transactions">
             <Eye className="h-4 w-4 mr-2" />
             Transactions
+          </TabsTrigger>
+          <TabsTrigger value="dashboard">
+            <CreditCard className="h-4 w-4 mr-2" />
+            Dashboard
           </TabsTrigger>
         </TabsList>
 
@@ -278,6 +283,10 @@ export const NokashConfigPanel: React.FC = () => {
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="dashboard">
+          <PaymentDashboard />
         </TabsContent>
       </Tabs>
     </div>
