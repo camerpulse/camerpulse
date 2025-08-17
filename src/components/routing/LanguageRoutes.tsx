@@ -19,7 +19,7 @@ import MinistersPage from '@/pages/MinistersPage';
 import { MinisterDetailPage } from '@/pages/MinisterDetailPage';
 import PoliticalParties from '@/pages/PoliticalParties';
 import PoliticalPartyDetail from '@/pages/PoliticalPartyDetail';
-import { PoliticalPartyPage } from '@/pages/PoliticalPartyPage';
+import PoliticalPartyPage from '@/pages/PoliticalPartyPage';
 import PoliticalPartiesPage from '@/pages/PoliticalPartiesPage';
 import UnifiedPoliticalDirectoryPage from '@/pages/UnifiedPoliticalDirectoryPage';
 import VillagesDirectoryPage from '@/pages/VillagesDirectoryPage';
