@@ -214,11 +214,13 @@ export const AIVerificationModal = ({
 
           {/* Actions */}
           <div className="flex gap-2">
-            <Button variant="outline" asChild className="flex-1">
-              <a href="/politica-ai" target="_blank">
-                <ExternalLink className="w-4 h-4 mr-2" />
-                View AI Dashboard
-              </a>
+            <Button 
+              variant="outline" 
+              className="flex-1"
+              onClick={() => window.open('/politica-ai', '_blank')}
+            >
+              <ExternalLink className="w-4 h-4 mr-2" />
+              View AI Dashboard
             </Button>
           </div>
         </div>

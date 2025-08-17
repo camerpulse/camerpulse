@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
@@ -19,6 +20,7 @@ export interface RealtimeNotification {
 
 export const useRealtimeNotifications = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState<RealtimeNotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
@@ -119,8 +121,8 @@ export const useRealtimeNotifications = () => {
           if (notification.action_url?.startsWith('http') || notification.action_url?.startsWith('mailto:')) {
             window.location.href = notification.action_url;
           } else {
-            // For internal URLs, this should use React Router navigation
-            window.location.href = notification.action_url!;
+            // For internal URLs, navigate to the path
+            navigate(notification.action_url!);
           }
         }
       } : undefined,

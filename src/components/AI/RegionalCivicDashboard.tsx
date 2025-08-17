@@ -283,10 +283,11 @@ export const RegionalCivicDashboard: React.FC<RegionalCivicDashboardProps> = ({ 
                 </p>
               </div>
             </div>
-            <Button asChild className="bg-blue-600 hover:bg-blue-700">
-              <a href="/regional-analytics" target="_blank" rel="noopener noreferrer">
-                View Full Analytics
-              </a>
+            <Button 
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={() => window.open('/regional-analytics', '_blank')}
+            >
+              View Full Analytics
             </Button>
           </div>
         </CardContent>
