@@ -6,7 +6,7 @@ import { UserSuggestionsDashboard } from '@/components/CivicSuggestions/UserSugg
 import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 import { ModerationDashboard } from '@/components/CivicSuggestions/ModerationDashboard';
 import { useAuth } from '@/contexts/AuthContext';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ProtectedRoute } from '@/components/routing/ProtectedRoute';
 import { 
   Users, 
   FileText, 
