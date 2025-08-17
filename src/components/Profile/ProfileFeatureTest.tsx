@@ -282,7 +282,7 @@ export const ProfileFeatureTest: React.FC = () => {
             <p className="text-muted-foreground mb-4">
               You must be logged in to test profile features. Please authenticate first.
             </p>
-            <Button variant="outline" onClick={() => window.location.href = '/auth'}>
+            <Button variant="outline" onClick={() => navigateToAuth()}>
               Go to Login
             </Button>
           </CardContent>

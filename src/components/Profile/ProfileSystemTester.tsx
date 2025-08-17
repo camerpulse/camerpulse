@@ -233,7 +233,7 @@ export const ProfileSystemTester: React.FC = () => {
       updateTest('Live Message Test', { 
         status: 'pass', 
         message: `✅ Message button ready - would navigate to: ${messageUrl}`,
-        action: () => window.location.href = messageUrl
+        action: () => navigateToMessage(user?.id)
       });
 
     } catch (error) {
@@ -326,7 +326,7 @@ export const ProfileSystemTester: React.FC = () => {
             <div className="p-4 border border-destructive rounded-lg">
               <p className="text-destructive font-medium">Authentication Required</p>
               <p className="text-sm text-muted-foreground mt-1">Please log in to test profile features.</p>
-              <Button variant="outline" size="sm" className="mt-2" onClick={() => window.location.href = '/auth'}>
+              <Button variant="outline" size="sm" className="mt-2" onClick={() => navigateToAuth()}>
                 Go to Login
               </Button>
             </div>

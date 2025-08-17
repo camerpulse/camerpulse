@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Bot, Loader2, Zap } from "lucide-react";
+import { useQueryClient } from '@tanstack/react-query';
 
 export const BulkImportButton = () => {
   const [isRunning, setIsRunning] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const runAutonomousAI = async () => {
     setIsRunning(true);
@@ -27,8 +29,10 @@ export const BulkImportButton = () => {
         duration: 5000,
       });
 
-      // Refresh the page to show new data
-      setTimeout(() => window.location.reload(), 1000);
+      // Invalidate queries to refresh data
+      queryClient.invalidateQueries({ queryKey: ['villages'] });
+      queryClient.invalidateQueries({ queryKey: ['politicians'] });
+      queryClient.invalidateQueries({ queryKey: ['profiles'] });
     } catch (error) {
       console.error('Autonomous AI error:', error);
       toast({

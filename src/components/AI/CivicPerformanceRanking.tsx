@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -37,6 +37,7 @@ interface RankingStats {
 }
 
 export const CivicPerformanceRanking: React.FC = () => {
+  const queryClient = useQueryClient();
   const [filters, setFilters] = useState<RankingFilters>({
     timeframe: 'month',
     region: 'all',
@@ -184,7 +185,9 @@ export const CivicPerformanceRanking: React.FC = () => {
   };
 
   const refreshData = () => {
-    window.location.reload();
+    queryClient.invalidateQueries({ queryKey: ['civic-performance'] });
+    queryClient.invalidateQueries({ queryKey: ['ranking_stats'] });
+    queryClient.invalidateQueries({ queryKey: ['category_winners'] });
   };
 
   return (

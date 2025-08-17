@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useQueryClient } from '@tanstack/react-query';
 import { 
   User, 
   Plus, 
@@ -25,6 +26,7 @@ interface ExpertDashboardProps {
 
 export const ExpertDashboard: React.FC<ExpertDashboardProps> = ({ expertProfile, onCreateProfile }) => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [showEditForm, setShowEditForm] = useState(false);
   const [proposals, setProposals] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -95,7 +97,8 @@ export const ExpertDashboard: React.FC<ExpertDashboardProps> = ({ expertProfile,
           existingProfile={expertProfile}
           onSuccess={() => {
             setShowEditForm(false);
-            window.location.reload(); // Refresh to show updated data
+            queryClient.invalidateQueries({ queryKey: ['expert-profile'] });
+            // The profile will be refreshed automatically via React Query
           }}
         />
       </div>

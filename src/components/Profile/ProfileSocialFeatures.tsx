@@ -62,7 +62,7 @@ export const ProfileSocialFeatures: React.FC<ProfileSocialFeaturesProps> = ({
 
   const handleStartConversation = () => {
     const conversationUrl = `/messenger?startConversation=${userId}`;
-    window.location.href = conversationUrl;
+    navigateToMessage(userId);
   };
 
   const handleShareProfile = () => {
