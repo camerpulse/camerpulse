@@ -55,6 +55,8 @@ import { SecurityAuditManager } from './modules/SecurityAuditManager';
 import { BackupRecoveryManager } from './modules/BackupRecoveryManager';
 import { ErrorMonitoringManager } from './modules/ErrorMonitoringManager';
 import { PerformanceAnalyticsManager } from './modules/PerformanceAnalyticsManager';
+import { ApiRateLimitManager } from './modules/ApiRateLimitManager';
+import { UserActivityAuditManager } from './modules/UserActivityAuditManager';
 
 interface AdminStats {
   total_users: number;
