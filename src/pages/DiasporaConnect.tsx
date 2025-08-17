@@ -41,8 +41,8 @@ const DiasporaConnect: React.FC = () => {
               <p className="text-muted-foreground mb-4">
                 Discover verified development projects across all regions of Cameroon.
               </p>
-              <Button variant="outline" className="w-full" onClick={() => window.location.href = '/diaspora/projects'}>
-                View Projects
+              <Button variant="outline" className="w-full" asChild>
+                <Link to="/diaspora/projects">View Projects</Link>
               </Button>
             </CardContent>
           </Card>

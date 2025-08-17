@@ -221,7 +221,6 @@ export function JobBoard() {
                   className="mt-4"
                   onClick={() => {
                     queryClient.invalidateQueries({ queryKey: ['jobs'] });
-                    window.location.reload();
                   }}
                 >
                   Retry

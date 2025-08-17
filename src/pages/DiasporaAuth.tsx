@@ -43,7 +43,7 @@ export const DiasporaAuth = () => {
           description: "You have successfully signed in."
         });
         // Check if user has diaspora profile, redirect accordingly
-        window.location.href = '/diaspora/dashboard';
+        navigate('/diaspora/dashboard');
       }
     } catch (error) {
       console.error('Sign in error:', error);

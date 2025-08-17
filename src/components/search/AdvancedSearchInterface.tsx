@@ -314,7 +314,7 @@ export const AdvancedSearchInterface: React.FC = () => {
                     <Button 
                       variant="outline" 
                       className="w-full"
-                      onClick={() => window.location.href = result.url}
+                      onClick={() => navigateTo(result.url)}
                     >
                       View Details
                       <ChevronRight className="h-4 w-4 ml-2" />
