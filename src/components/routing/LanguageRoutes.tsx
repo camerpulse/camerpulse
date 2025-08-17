@@ -43,7 +43,7 @@ import VillageMemberProfile from '@/pages/profiles/VillageMemberProfile';
 
 import SchoolsDirectory from '@/pages/SchoolsDirectory';
 import HospitalsDirectory from '@/pages/HospitalsDirectory';
-import PharmaciesDirectory from '@/pages/PharmaciesDirectory';
+import PharmaciesDirectoryV2 from '@/pages/PharmaciesDirectoryV2';
 import CompaniesDirectory from '@/pages/CompaniesDirectory';
 import CompanyProfile from '@/pages/CompanyProfile';
 import MessengerPage from '@/pages/MessengerPage';
@@ -179,7 +179,7 @@ export const AppRouter: React.FC = () => {
         {/* Directories */}
         <Route path="/schools" element={<SchoolsDirectory />} />
         <Route path="/hospitals" element={<HospitalsDirectory />} />
-        <Route path="/pharmacies" element={<PharmaciesDirectory />} />
+        <Route path="/pharmacies" element={<PharmaciesDirectoryV2 />} />
         <Route path="/companies" element={<CompaniesDirectory />} />
         <Route path="/companies/:id" element={<CompanyProfile />} />
         
