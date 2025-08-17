@@ -32,11 +32,6 @@ export const LazyHospitalsDirectory = lazy(() => import('@/pages/HospitalsDirect
 export const LazyCompanyProfile = lazy(() => import('@/pages/CompanyProfile'));
 
 // Community & Services
-export const LazyMarketplace = lazy(() => import('@/pages/Marketplace'));
-export const LazyMarketplaceProducts = lazy(() => import('@/pages/MarketplaceProducts'));
-export const LazyMarketplaceVendors = lazy(() => import('@/pages/MarketplaceVendors'));
-export const LazyVendorDetailPage = lazy(() => import('@/pages/VendorDetailPage'));
-export const LazyProductDetailPage = lazy(() => import('@/pages/ProductDetailPage'));
 
 // Jobs
 export const LazyJobBoard = lazy(() => import('@/pages/jobs/JobBoard'));
@@ -60,7 +55,7 @@ export const LazyUnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfileP
 export const LazyMusicProfile = lazy(() => import('@/pages/profiles/MusicProfile'));
 export const LazyJobProfile = lazy(() => import('@/pages/profiles/JobProfile'));
 export const LazyVillageMemberProfile = lazy(() => import('@/pages/profiles/VillageMemberProfile'));
-export const LazyMarketplaceProfile = lazy(() => import('@/pages/profiles/MarketplaceProfile'));
+
 
 // Communication
 export const LazyMessengerPage = lazy(() => import('@/pages/MessengerPage'));

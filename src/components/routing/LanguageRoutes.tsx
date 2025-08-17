@@ -23,11 +23,6 @@ import VillagesDirectoryPage from '@/pages/VillagesDirectoryPage';
 import VillageProfile from '@/pages/VillageProfile';
 import FonsDirectory from '@/pages/FonsDirectory';
 import FonProfile from '@/pages/FonProfile';
-import Marketplace from '@/pages/Marketplace';
-import MarketplaceProducts from '@/pages/MarketplaceProducts';
-import MarketplaceVendors from '@/pages/MarketplaceVendors';
-import VendorDetailPage from '@/pages/VendorDetailPage';
-import ProductDetailPage from '@/pages/ProductDetailPage';
 import JobBoard from '@/pages/jobs/JobBoard';
 import JobDetailPage from '@/pages/JobDetailPage';
 import CompanyDashboard from '@/pages/CompanyDashboard';
@@ -45,7 +40,7 @@ import UnifiedProfilePage from '@/pages/UnifiedProfilePage';
 import MusicProfile from '@/pages/profiles/MusicProfile';
 import JobProfile from '@/pages/profiles/JobProfile';
 import VillageMemberProfile from '@/pages/profiles/VillageMemberProfile';
-import MarketplaceProfile from '@/pages/profiles/MarketplaceProfile';
+
 import SchoolsDirectory from '@/pages/SchoolsDirectory';
 import HospitalsDirectory from '@/pages/HospitalsDirectory';
 import CompanyProfile from '@/pages/CompanyProfile';
@@ -122,12 +117,6 @@ export const AppRouter: React.FC = () => {
         <Route path="/petitions" element={<PetitionsPage />} />
         <Route path="/petitions/:petitionSlug-:id" element={<PetitionDetailPage />} />
         
-        {/* Marketplace */}
-        <Route path="/marketplace" element={<Marketplace />} />
-        <Route path="/marketplace/products" element={<MarketplaceProducts />} />
-        <Route path="/marketplace/vendors" element={<MarketplaceVendors />} />
-        <Route path="/marketplace/vendors/:vendorSlug" element={<VendorDetailPage />} />
-        <Route path="/marketplace/products/:productSlug-:id" element={<ProductDetailPage />} />
         
         {/* Jobs */}
         <Route path="/jobs" element={<JobBoard />} />
@@ -152,7 +141,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/music/artists/:artistSlug-:id" element={<MusicProfile />} />
         <Route path="/jobs/profile/:username-:id" element={<JobProfile />} />
         <Route path="/villages/members/:username" element={<VillageMemberProfile />} />
-        <Route path="/marketplace/vendors/:username-:id" element={<MarketplaceProfile />} />
+        
         
         {/* Legacy Profile Routes */}
         <Route path="/profile/:username/legacy" element={<ProfilePage />} />

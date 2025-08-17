@@ -33,12 +33,6 @@ export const LazyVillageProfile = lazy(() => import('@/pages/VillageProfile'));
 export const LazyFonsDirectory = lazy(() => import('@/pages/FonsDirectory'));
 export const LazyFonProfile = lazy(() => import('@/pages/FonProfile'));
 
-// Marketplace pages
-export const LazyMarketplace = lazy(() => import('@/pages/Marketplace'));
-export const LazyMarketplaceProducts = lazy(() => import('@/pages/MarketplaceProducts'));
-export const LazyMarketplaceVendors = lazy(() => import('@/pages/MarketplaceVendors'));
-export const LazyVendorDetailPage = lazy(() => import('@/pages/VendorDetailPage'));
-export const LazyProductDetailPage = lazy(() => import('@/pages/ProductDetailPage'));
 
 // Job pages
 export const LazyJobBoard = lazy(() => import('@/pages/jobs/JobBoard'));
@@ -64,7 +58,7 @@ export const LazyUnifiedProfilePage = lazy(() => import('@/pages/UnifiedProfileP
 export const LazyMusicProfile = lazy(() => import('@/pages/profiles/MusicProfile'));
 export const LazyJobProfile = lazy(() => import('@/pages/profiles/JobProfile'));
 export const LazyVillageMemberProfile = lazy(() => import('@/pages/profiles/VillageMemberProfile'));
-export const LazyMarketplaceProfile = lazy(() => import('@/pages/profiles/MarketplaceProfile'));
+
 
 // Directory pages
 export const LazySchoolsDirectory = lazy(() => import('@/pages/SchoolsDirectory'));
