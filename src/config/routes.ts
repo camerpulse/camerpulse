@@ -17,6 +17,14 @@ export const ROUTES = {
     EDUCATION: '/civic-education',
   },
   
+  // Transparency & Accountability
+  TRANSPARENCY: {
+    CORRUPTION_INDEX: '/corruption-index',
+    DEBT_TRACKER: '/debt-tracker',
+    MEDIA_TRUST: '/media-trust',
+    BILLIONAIRE_TRACKER: '/billionaire-tracker',
+  },
+  
   // Political System
   POLITICAL: {
     POLITICIANS: '/politicians',

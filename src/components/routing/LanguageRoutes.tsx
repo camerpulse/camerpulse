@@ -56,6 +56,8 @@ import NotFound from '@/pages/NotFound';
 import CivicDashboard from '@/pages/CivicDashboard';
 import CivicEducationHub from '@/pages/CivicEducationHub';
 import CivicContributionsPage from '@/pages/CivicContributionsPage';
+import CorruptionIndex from '@/pages/CorruptionIndex';
+import DebtTracker from '@/pages/DebtTracker';
 
 /**
  * Main application router with clean, focused routing structure
@@ -91,6 +93,10 @@ export const AppRouter: React.FC = () => {
         
         {/* Civic Education */}
         <Route path="/civic-education" element={<CivicEducationHub />} />
+        
+        {/* Transparency & Accountability */}
+        <Route path="/corruption-index" element={<CorruptionIndex />} />
+        <Route path="/debt-tracker" element={<DebtTracker />} />
         
         {/* Politicians */}
         <Route path="/politicians" element={<Politicians />} />
