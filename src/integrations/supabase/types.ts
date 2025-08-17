@@ -43159,6 +43159,30 @@ export type Database = {
           },
         ]
       }
+      system_api_configs: {
+        Row: {
+          api_key_name: string
+          created_at: string
+          id: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          api_key_name: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          api_key_name?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       system_feature_flags: {
         Row: {
           created_at: string | null

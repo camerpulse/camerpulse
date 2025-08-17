@@ -58,6 +58,7 @@ import { ErrorMonitoringManager } from './modules/ErrorMonitoringManager';
 import { PerformanceAnalyticsManager } from './modules/PerformanceAnalyticsManager';
 import { ApiRateLimitManager } from './modules/ApiRateLimitManager';
 import { UserActivityAuditManager } from './modules/UserActivityAuditManager';
+import { ApiConfigPanel } from '../ApiConfiguration/ApiConfigPanel';
 
 interface AdminStats {
   total_users: number;
@@ -288,6 +289,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'backup-recovery', label: 'Backup & Recovery', icon: Database, color: 'text-purple-600', permission: 'all' },
     { id: 'error-monitoring', label: 'Error Monitoring', icon: AlertTriangle, color: 'text-red-600', permission: 'all' },
     { id: 'performance-analytics', label: 'Performance Analytics', icon: BarChart3, color: 'text-blue-600', permission: 'all' },
+    { id: 'api-configuration', label: 'API Configuration', icon: Key, color: 'text-green-600', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
 
   useEffect(() => {
@@ -367,6 +369,8 @@ export const AdminCoreV2: React.FC = () => {
         return <ErrorMonitoringManager {...moduleProps} />;
       case 'performance-analytics':
         return <PerformanceAnalyticsManager {...moduleProps} />;
+      case 'api-configuration':
+        return <ApiConfigPanel />;
       default:
         return <AdminDashboard {...moduleProps} />;
     }
