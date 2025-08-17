@@ -17,7 +17,7 @@ import {
   Award
 } from 'lucide-react';
 import { usePoliticalPartyWithMembers } from '@/hooks/usePoliticalEntityRelations';
-import { AppLayout } from '@/components/layout/AppLayout';
+import { AppLayout } from '@/components/Layout/AppLayout';
 import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
 
 export default function PoliticalPartyPage() {

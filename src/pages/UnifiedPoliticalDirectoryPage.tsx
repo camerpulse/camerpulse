@@ -16,7 +16,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { usePoliticalEntitiesWithParties } from '@/hooks/usePoliticalEntityRelations';
-import { AppLayout } from '@/components/layout/AppLayout';
+import { AppLayout } from '@/components/Layout/AppLayout';
 import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
 import { PoliticalNavigationMenu } from '@/components/Politicians/PoliticalNavigationMenu';
 import { Link } from 'react-router-dom';
