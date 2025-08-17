@@ -284,7 +284,7 @@ export const MarketplaceHomepage = () => {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     // Navigate to search results
-    window.location.href = `/marketplace/search?q=${encodeURIComponent(searchTerm)}`;
+    navigateTo(`/marketplace/search?q=${encodeURIComponent(searchTerm)}`);
   };
 
   return (

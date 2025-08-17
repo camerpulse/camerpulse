@@ -231,7 +231,7 @@ export const UnifiedNotificationCenter: React.FC = () => {
     }
 
     if (notification.action_url) {
-      window.location.href = notification.action_url;
+      navigateTo(notification.action_url);
     }
   };
 

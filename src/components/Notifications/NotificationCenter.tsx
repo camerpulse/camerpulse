@@ -27,10 +27,12 @@ import {
   ShieldCheck,
   Settings,
   Filter
-} from 'lucide-react';
+ } from 'lucide-react';
 import { useNotifications, type PulseNotification } from '@/hooks/useNotifications';
+import { useNavigation } from '@/hooks/useNavigation';
 
 export const NotificationCenter: React.FC = () => {
+  const { navigateTo } = useNavigation();
   const { 
     unreadCount, 
     notifications, 
@@ -106,7 +108,7 @@ export const NotificationCenter: React.FC = () => {
     }
     
     if (notification.action_url) {
-      window.location.href = notification.action_url;
+      navigateTo(notification.action_url);
     }
   };
 

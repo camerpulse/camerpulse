@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Search, TrendingUp, Clock, Users, Building, Vote, Heart, Leaf, Cpu, Palette } from 'lucide-react';
+import { useNavigation } from '@/hooks/useNavigation';
 
 interface PollCategory {
   id: string;
@@ -32,6 +33,7 @@ interface Poll {
 }
 
 const PollCategoryManager: React.FC = () => {
+  const { navigateTo } = useNavigation();
   const [categories, setCategories] = useState<PollCategory[]>([]);
   const [polls, setPolls] = useState<Poll[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -290,7 +292,7 @@ const PollCategoryManager: React.FC = () => {
                 <Button 
                   className="w-full" 
                   size="sm"
-                  onClick={() => window.location.href = `/polls/${poll.id}`}
+                  onClick={() => navigateTo(`/polls/${poll.id}`)}
                 >
                   {isExpired(poll.ends_at) ? 'View Results' : 'Vote Now'}
                 </Button>
