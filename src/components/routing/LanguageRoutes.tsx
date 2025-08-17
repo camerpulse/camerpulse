@@ -58,6 +58,9 @@ import CivicEducationHub from '@/pages/CivicEducationHub';
 import CivicContributionsPage from '@/pages/CivicContributionsPage';
 import CorruptionIndex from '@/pages/CorruptionIndex';
 import DebtTracker from '@/pages/DebtTracker';
+import BillionaireTracker from '@/pages/BillionaireTracker';
+import ArtistEcosystem from '@/pages/ArtistEcosystem';
+import MediaTrustRatings from '@/pages/MediaTrustRatings';
 
 /**
  * Main application router with clean, focused routing structure
@@ -97,6 +100,12 @@ export const AppRouter: React.FC = () => {
         {/* Transparency & Accountability */}
         <Route path="/corruption-index" element={<CorruptionIndex />} />
         <Route path="/debt-tracker" element={<DebtTracker />} />
+        <Route path="/billionaire-tracker" element={<BillionaireTracker />} />
+        <Route path="/media-trust" element={<MediaTrustRatings />} />
+        
+        {/* Entertainment & Arts */}
+        <Route path="/artist-ecosystem" element={<ArtistEcosystem />} />
+        <Route path="/music" element={<ArtistEcosystem />} />
         
         {/* Politicians */}
         <Route path="/politicians" element={<Politicians />} />

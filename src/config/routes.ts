@@ -25,6 +25,12 @@ export const ROUTES = {
     BILLIONAIRE_TRACKER: '/billionaire-tracker',
   },
   
+  // Entertainment & Arts
+  ENTERTAINMENT: {
+    ARTIST_ECOSYSTEM: '/artist-ecosystem',
+    MUSIC: '/music',
+  },
+  
   // Political System
   POLITICAL: {
     POLITICIANS: '/politicians',
