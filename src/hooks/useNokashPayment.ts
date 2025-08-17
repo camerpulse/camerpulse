@@ -53,8 +53,9 @@ export const useNokashPayment = () => {
       // Generate idempotency key if not provided
       const idempotencyKey = paymentData.idempotency_key || generateIdempotencyKey();
       
-      const { data, error } = await supabase.functions.invoke('nokash-payment/pay', {
+      const { data, error } = await supabase.functions.invoke('nokash-payment', {
         body: {
+          action: 'pay',
           ...paymentData,
           idempotency_key: idempotencyKey
         }
@@ -119,14 +120,8 @@ export const useNokashPayment = () => {
     setStatusChecking(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('nokash-payment/status', {
-        method: 'GET',
-        body: {},
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }, {
-        query: { order_id: orderId }
+      const { data, error } = await supabase.functions.invoke('nokash-payment', {
+        body: { action: 'status', order_id: orderId }
       });
 
       if (error) {
@@ -155,8 +150,8 @@ export const useNokashPayment = () => {
     setRetrying(true);
     
     try {
-      const { data, error } = await supabase.functions.invoke('nokash-payment/retry', {
-        body: { order_id: orderId }
+      const { data, error } = await supabase.functions.invoke('nokash-payment', {
+        body: { action: 'retry', order_id: orderId }
       });
 
       if (error) {

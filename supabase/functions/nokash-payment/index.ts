@@ -41,14 +41,44 @@ serve(async (req) => {
     const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     const userAgent = req.headers.get('user-agent') || 'unknown';
 
-    if (req.method === 'POST' && path === 'pay') {
-      return await handlePaymentRequest(req, supabaseClient, clientIP, userAgent);
-    } else if (req.method === 'POST' && path === 'callback') {
-      return await handleCallback(req, supabaseClient);
+    // Allow both subpath routing and body-based routing
+    if (req.method === 'POST') {
+      if (path === 'pay') {
+        return await handlePaymentRequest(req, supabaseClient, clientIP, userAgent);
+      }
+      if (path === 'retry') {
+        return await handleRetryPayment(req, supabaseClient, clientIP, userAgent);
+      }
+      if (path === 'nokash-payment') {
+        // Body-based action routing (SDK invoke('nokash-payment'))
+        let action = 'pay';
+        let body: any = {};
+        try {
+          body = await req.clone().json();
+          action = body?.action || 'pay';
+        } catch (_) {}
+
+        if (action === 'pay') {
+          return await handlePaymentRequest(req, supabaseClient, clientIP, userAgent);
+        }
+        if (action === 'retry') {
+          return await handleRetryPayment(req, supabaseClient, clientIP, userAgent);
+        }
+        if (action === 'status') {
+          const orderId = body?.order_id;
+          if (!orderId) {
+            return new Response(JSON.stringify({ error: 'order_id required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+          }
+          const statusUrl = new URL(req.url);
+          statusUrl.searchParams.set('order_id', orderId);
+          const statusReq = new Request(statusUrl.toString(), { method: 'GET', headers: req.headers });
+          return await handleStatusCheck(statusReq, supabaseClient);
+        }
+      }
     } else if (req.method === 'GET' && path === 'status') {
       return await handleStatusCheck(req, supabaseClient);
-    } else if (req.method === 'POST' && path === 'retry') {
-      return await handleRetryPayment(req, supabaseClient, clientIP, userAgent);
+    } else if (req.method === 'POST' && path === 'callback') {
+      return await handleCallback(req, supabaseClient);
     }
 
     return new Response(
