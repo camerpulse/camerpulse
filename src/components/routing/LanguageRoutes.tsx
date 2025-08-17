@@ -64,6 +64,7 @@ import BillionaireTracker from '@/pages/BillionaireTracker';
 import ArtistEcosystem from '@/pages/ArtistEcosystem';
 import MediaTrustRatings from '@/pages/MediaTrustRatings';
 import SentimentAnalysisDashboard from '@/pages/SentimentAnalysisDashboard';
+import DonatePage from '@/pages/DonatePage';
 
 /**
  * Main application router with clean, focused routing structure
@@ -175,6 +176,9 @@ export const AppRouter: React.FC = () => {
         
         {/* Civic Contributions */}
         <Route path="/civic-contributions" element={<CivicContributionsPage />} />
+        
+        {/* Donations */}
+        <Route path="/donate" element={<DonatePage />} />
         
         {/* Directories */}
         <Route path="/schools" element={<SchoolsDirectory />} />
