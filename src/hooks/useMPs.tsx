@@ -7,6 +7,15 @@ export interface MP {
   full_name: string;
   constituency?: string;
   political_party?: string;
+  political_party_id?: string;
+  political_parties?: {
+    id: string;
+    name: string;
+    acronym?: string;
+    logo_url?: string;
+    party_president?: string;
+    official_website?: string;
+  };
   region?: string;
   date_of_birth?: string;
   education?: string;
@@ -61,7 +70,12 @@ export function useMPs() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('mps')
-        .select('*')
+        .select(`
+          *, 
+          political_parties!political_party_id (
+            id, name, acronym, logo_url, party_president, official_website
+          )
+        `)
         .order('average_rating', { ascending: false });
 
       if (error) throw error;
@@ -77,7 +91,12 @@ export function useMP(id: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('mps')
-        .select('*')
+        .select(`
+          *, 
+          political_parties!political_party_id (
+            id, name, acronym, logo_url, party_president, official_website
+          )
+        `)
         .eq('id', id)
         .single();
 

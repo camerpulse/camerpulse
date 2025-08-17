@@ -8,6 +8,15 @@ export interface Minister {
   position_title: string;
   ministry: string;
   political_party?: string;
+  political_party_id?: string;
+  political_parties?: {
+    id: string;
+    name: string;
+    acronym?: string;
+    logo_url?: string;
+    party_president?: string;
+    official_website?: string;
+  };
   region?: string;
   date_of_birth?: string;
   education?: string;
@@ -59,7 +68,12 @@ export function useMinisters() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('ministers')
-        .select('*')
+        .select(`
+          *, 
+          political_parties!political_party_id (
+            id, name, acronym, logo_url, party_president, official_website
+          )
+        `)
         .order('average_rating', { ascending: false });
 
       if (error) throw error;
@@ -75,7 +89,12 @@ export function useMinister(id: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('ministers')
-        .select('*')
+        .select(`
+          *, 
+          political_parties!political_party_id (
+            id, name, acronym, logo_url, party_president, official_website
+          )
+        `)
         .eq('id', id)
         .single();
 

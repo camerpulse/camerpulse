@@ -64,9 +64,16 @@ export function MPCard({ mp }: MPCardProps) {
 
       <CardContent className="space-y-4">
         <div className="flex flex-wrap gap-2">
-          {mp.political_party && (
-            <Badge variant="outline" className="text-xs">
-              {mp.political_party}
+          {(mp.political_parties?.name || mp.political_party) && (
+            <Badge variant="outline" className="text-xs flex items-center gap-1">
+              {mp.political_parties?.logo_url && (
+                <img 
+                  src={mp.political_parties.logo_url} 
+                  alt={mp.political_parties.name}
+                  className="w-3 h-3"
+                />
+              )}
+              {mp.political_parties?.acronym || mp.political_parties?.name || mp.political_party}
             </Badge>
           )}
           {mp.region && (

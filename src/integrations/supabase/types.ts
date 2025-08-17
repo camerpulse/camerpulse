@@ -29637,6 +29637,7 @@ export type Database = {
           performance_score: number | null
           phone: string | null
           political_party: string | null
+          political_party_id: string | null
           position_title: string
           profile_picture_url: string | null
           promise_delivery_score: number | null
@@ -29671,6 +29672,7 @@ export type Database = {
           performance_score?: number | null
           phone?: string | null
           political_party?: string | null
+          political_party_id?: string | null
           position_title: string
           profile_picture_url?: string | null
           promise_delivery_score?: number | null
@@ -29705,6 +29707,7 @@ export type Database = {
           performance_score?: number | null
           phone?: string | null
           political_party?: string | null
+          political_party_id?: string | null
           position_title?: string
           profile_picture_url?: string | null
           promise_delivery_score?: number | null
@@ -29718,7 +29721,15 @@ export type Database = {
           view_count?: number | null
           village_hometown?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ministers_political_party_id_fkey"
+            columns: ["political_party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       moderation_actions: {
         Row: {
@@ -30873,6 +30884,7 @@ export type Database = {
           parliament_attendance: number | null
           phone: string | null
           political_party: string | null
+          political_party_id: string | null
           profile_picture_url: string | null
           promise_delivery_score: number | null
           region: string | null
@@ -30909,6 +30921,7 @@ export type Database = {
           parliament_attendance?: number | null
           phone?: string | null
           political_party?: string | null
+          political_party_id?: string | null
           profile_picture_url?: string | null
           promise_delivery_score?: number | null
           region?: string | null
@@ -30945,6 +30958,7 @@ export type Database = {
           parliament_attendance?: number | null
           phone?: string | null
           political_party?: string | null
+          political_party_id?: string | null
           profile_picture_url?: string | null
           promise_delivery_score?: number | null
           region?: string | null
@@ -30957,7 +30971,15 @@ export type Database = {
           view_count?: number | null
           village_hometown?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "mps_political_party_id_fkey"
+            columns: ["political_party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       music_profile: {
         Row: {
@@ -41229,6 +41251,7 @@ export type Database = {
           phone: string | null
           photo_url: string | null
           political_party: string | null
+          political_party_id: string | null
           position: string
           region: string | null
           slug: string | null
@@ -41278,6 +41301,7 @@ export type Database = {
           phone?: string | null
           photo_url?: string | null
           political_party?: string | null
+          political_party_id?: string | null
           position: string
           region?: string | null
           slug?: string | null
@@ -41327,6 +41351,7 @@ export type Database = {
           phone?: string | null
           photo_url?: string | null
           political_party?: string | null
+          political_party_id?: string | null
           position?: string
           region?: string | null
           slug?: string | null
@@ -41339,7 +41364,15 @@ export type Database = {
           updated_at?: string | null
           years_of_service?: number | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "senators_political_party_id_fkey"
+            columns: ["political_party_id"]
+            isOneToOne: false
+            referencedRelation: "political_parties"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sentiment_analysis: {
         Row: {
