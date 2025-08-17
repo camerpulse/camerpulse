@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -106,10 +107,10 @@ export function LegislationPanel({ senator }: LegislationPanelProps) {
         {/* Link to Bill Tracker */}
         <div className="pt-4 border-t">
           <Button variant="outline" className="w-full" asChild>
-            <a href="#" className="flex items-center justify-center gap-2">
+            <Link to="/legislation" className="flex items-center justify-center gap-2">
               View Full Legislative History
               <ExternalLink className="h-4 w-4" />
-            </a>
+            </Link>
           </Button>
         </div>
       </CardContent>

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LegacyRedirectHandler } from './LegacyRedirectHandler';
 import { ProtectedRoute } from '@/components/routing/ProtectedRoute';
+import { ROUTES } from '@/config/routes';
 
 // Import all pages
 import Index from '@/pages/Index';
@@ -196,11 +197,11 @@ export const AppRouter: React.FC = () => {
         <Route path="/search" element={<AdvancedSearchPage />} />
         <Route path="/performance" element={<PerformanceMonitoringPage />} />
         
-        {/* Admin */}
+        {/* Admin Routes - All protected */}
         <Route
-          path="/admin"
+          path={ROUTES.ADMIN.DASHBOARD}
           element={
-            <ProtectedRoute requiredRole="admin">
+            <ProtectedRoute requireAdmin={true}>
               <AdminCoreV2Page />
             </ProtectedRoute>
           }

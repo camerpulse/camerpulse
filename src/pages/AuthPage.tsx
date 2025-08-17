@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -310,9 +310,9 @@ export const AuthPage: React.FC = () => {
         <div className="text-center text-sm text-muted-foreground">
           <p>
             By continuing, you agree to our{' '}
-            <a href="#" className="text-primary hover:underline">Terms of Service</a>{' '}
+            <Link to="/terms" className="text-primary hover:underline">Terms of Service</Link>{' '}
             and{' '}
-            <a href="#" className="text-primary hover:underline">Privacy Policy</a>
+            <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>
           </p>
         </div>
       </div>

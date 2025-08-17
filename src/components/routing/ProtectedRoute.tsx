@@ -1,6 +1,9 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { LoadingSpinner } from '@/components/LoadingSpinner';
+import UnauthorizedPage from '@/pages/UnauthorizedPage';
+import { ROUTES } from '@/config/routes';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -9,15 +12,17 @@ interface ProtectedRouteProps {
   requiredRole?: string;
   requireAdmin?: boolean;
   requiredRoles?: string[];
+  fallbackPath?: string;
 }
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ 
   children, 
   requireAuth = true,
-  redirectTo = '/auth',
+  redirectTo = ROUTES.AUTH,
   requiredRole,
   requireAdmin = false,
   requiredRoles,
+  fallbackPath,
 }) => {
   const { user, loading, hasRole, isAdmin } = useAuth();
   const location = useLocation();
@@ -25,7 +30,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <LoadingSpinner size="lg" text="Checking authentication..." />
       </div>
     );
   }
@@ -37,15 +42,21 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   // Check admin requirement
   if (requireAdmin && !(isAdmin && isAdmin())) {
-    return <Navigate to="/" replace />;
+    if (fallbackPath) {
+      return <Navigate to={fallbackPath} replace />;
+    }
+    return <UnauthorizedPage requiredAccess="administrator privileges" />;
   }
 
   // Check role requirements (supports single or multiple)
   const rolesToCheck = requiredRoles ?? (requiredRole ? [requiredRole] : []);
   if (rolesToCheck.length > 0) {
-    const ok = rolesToCheck.some((r) => hasRole && hasRole(r));
-    if (!ok) {
-      return <Navigate to="/" replace />;
+    const hasRequiredRole = rolesToCheck.some((r) => hasRole && hasRole(r));
+    if (!hasRequiredRole) {
+      if (fallbackPath) {
+        return <Navigate to={fallbackPath} replace />;
+      }
+      return <UnauthorizedPage requiredAccess={rolesToCheck.join(' or ')} />;
     }
   }
 
