@@ -8,10 +8,12 @@ import { createCivicPoll } from '@/utils/createCivicPoll';
 import { usePollOnboarding } from '@/hooks/usePollOnboarding';
 import { PollOnboardingFlow, OnboardingTooltip, OnboardingProgressBadge } from './PollOnboardingFlow';
 import { Vote, Eye, CheckCircle, Shield, Share2, BarChart3 } from 'lucide-react';
+import { useNavigation } from '@/hooks/useNavigation';
 
 export const CivicPollCreator = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { navigateTo } = useNavigation();
   const [loading, setLoading] = useState(false);
   const [pollCreated, setPollCreated] = useState(false);
   
@@ -97,7 +99,7 @@ export const CivicPollCreator = () => {
             <li>• Enabled with geo-analytics and comment system</li>
           </ul>
           <Button 
-            onClick={() => window.location.pathname = '/polls'} 
+            onClick={() => navigateTo('/polls')} 
             className="bg-cm-green hover:bg-cm-green/90"
           >
             View All Polls

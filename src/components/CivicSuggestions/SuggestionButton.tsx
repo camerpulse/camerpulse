@@ -7,6 +7,7 @@ import { Plus, Edit, AlertCircle, Star } from 'lucide-react';
 import { CivicEntityType, SuggestionType } from '@/hooks/useCivicSuggestions';
 import { SuggestionForm } from './SuggestionForm';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const entityTypeLabels: Record<CivicEntityType, string> = {
   politician: 'Politician',
@@ -38,6 +39,7 @@ export const SuggestionButton: React.FC<SuggestionButtonProps> = ({
   className,
 }) => {
   const { user } = useAuth();
+  const { navigateToAuth } = useNavigation();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedEntityType, setSelectedEntityType] = useState<CivicEntityType | undefined>(entityType);
   const [selectedSuggestionType, setSelectedSuggestionType] = useState<SuggestionType | undefined>();
@@ -166,7 +168,7 @@ export const SuggestionButton: React.FC<SuggestionButtonProps> = ({
         className={className}
         onClick={() => {
           // Redirect to auth or show login dialog
-          window.location.pathname = '/auth';
+          navigateToAuth();
         }}
       >
         {mode === 'suggest_new' ? (

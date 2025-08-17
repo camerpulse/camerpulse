@@ -29,6 +29,7 @@ import { FanWallet } from '@/components/Fan/FanWallet';
 import { FanVoting } from '@/components/Fan/FanVoting';
 import { FanLeaderboard } from '@/components/Fan/FanLeaderboard';
 import ArtistManagement from '@/components/Admin/ArtistManagement';
+import { useNavigation } from '@/hooks/useNavigation';
 
 interface UserStats {
   total_artists: number;
@@ -47,6 +48,7 @@ interface NotificationCenter {
 
 export const CamerPulseMasterCore: React.FC = () => {
   const { user } = useAuth();
+  const { navigateToAuth } = useNavigation();
   const [userRole, setUserRole] = useState<string>('citizen');
   const [activeModule, setActiveModule] = useState('dashboard');
   const [notificationCenter, setNotificationCenter] = useState<NotificationCenter>({
@@ -229,7 +231,7 @@ export const CamerPulseMasterCore: React.FC = () => {
         <p className="text-muted-foreground mb-4">
           Please sign in to access the CamerPulse platform.
         </p>
-        <Button onClick={() => window.location.pathname = '/auth'}>
+        <Button onClick={() => navigateToAuth()}>
           Sign In
         </Button>
       </div>

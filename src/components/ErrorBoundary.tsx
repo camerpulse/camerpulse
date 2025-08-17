@@ -54,7 +54,7 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   handleGoHome = () => {
-    window.location.pathname = '/';
+    window.location.href = '/';
   };
 
   render() {

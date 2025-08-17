@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { LoadingSpinner } from '@/components/LoadingSpinner';
 import { Card, CardContent } from '@/components/ui/card';
@@ -59,14 +59,14 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
                 </p>
                 <div className="space-y-3">
                   <Button asChild className="w-full">
-                    <a href={`${ROUTES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`}>
+                    <Link to={`${ROUTES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`}>
                       Sign In
-                    </a>
+                    </Link>
                   </Button>
                   <Button variant="outline" asChild className="w-full">
-                    <a href="/">
+                    <Link to="/">
                       Return Home
-                    </a>
+                    </Link>
                   </Button>
                 </div>
               </div>
@@ -95,14 +95,14 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
               </p>
               <div className="space-y-3">
                 <Button variant="outline" asChild className="w-full">
-                  <a href="/civic-dashboard">
+                  <Link to="/civic-dashboard">
                     Go to Dashboard
-                  </a>
+                  </Link>
                 </Button>
                 <Button variant="outline" asChild className="w-full">
-                  <a href="/">
+                  <Link to="/">
                     Return Home
-                  </a>
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -131,14 +131,14 @@ export const RouteGuard: React.FC<RouteGuardProps> = ({
                 </p>
                 <div className="space-y-3">
                   <Button variant="outline" asChild className="w-full">
-                    <a href="/civic-dashboard">
+                    <Link to="/civic-dashboard">
                       Go to Dashboard
-                    </a>
+                    </Link>
                   </Button>
                   <Button variant="outline" asChild className="w-full">
-                    <a href="/">
+                    <Link to="/">
                       Return Home
-                    </a>
+                    </Link>
                   </Button>
                 </div>
               </div>

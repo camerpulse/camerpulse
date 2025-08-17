@@ -11,6 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { Star, Send } from 'lucide-react';
 import { useEntityReviews, CivicEntityType } from '@/hooks/useCivicSuggestions';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigation } from '@/hooks/useNavigation';
 
 const reviewSchema = z.object({
   overall_rating: z.number().min(1).max(5),
@@ -78,6 +79,7 @@ export const EntityReviewForm: React.FC<EntityReviewFormProps> = ({
   entityName,
 }) => {
   const { user } = useAuth();
+  const { navigateToAuth } = useNavigation();
   const { reviews, submitReview, isSubmitting } = useEntityReviews(entityType, entityId);
   
   const form = useForm({
@@ -120,7 +122,7 @@ export const EntityReviewForm: React.FC<EntityReviewFormProps> = ({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={() => window.location.pathname = '/auth'}>
+          <Button onClick={() => navigateToAuth()}>
             Log In to Review
           </Button>
         </CardContent>
