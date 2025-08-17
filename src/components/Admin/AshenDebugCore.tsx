@@ -11,7 +11,7 @@ import { UIBugLogs } from "./UIBugLogs";
 import { LearningEngine } from "./LearningEngine";
 import HumanSimulationEngine from "./HumanSimulationEngine";
 import BrowserEmulationLayer from "./BrowserEmulationLayer";
-import PluginWatchdog from "./PluginWatchdog";
+
 import SelfLearningEngine from "./SelfLearningEngine";
 import { AshenSecurityPanel } from "./AshenSecurityPanel";
 import BatchFixManager from "./BatchFixManager";
@@ -24,7 +24,7 @@ import { AshenAlertSystem } from "./AshenAlertSystem";
 import { useAshenDebugCore } from "@/hooks/useAshenDebugCore";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CodeDiffVisualizer } from './CodeDiffVisualizer';
-import { NaturalLanguagePluginBuilder } from './NaturalLanguagePluginBuilder';
+
 import { EmergencyRevertSystem } from './EmergencyRevertSystem';
 import ZeroInputMode from './ZeroInputMode';
 import AshenDevTerminal from './AshenDevTerminal';
@@ -540,9 +540,6 @@ export default function AshenDebugCore() {
           <CamerPulseWatchdogPanel />
         </TabsContent>
 
-        <TabsContent value="plugin-watchdog" className="space-y-4">
-          <PluginWatchdog />
-        </TabsContent>
         
         <TabsContent value="ui-inspector" className="space-y-4">
           <UIBugLogs />
@@ -556,9 +553,6 @@ export default function AshenDebugCore() {
           <CodeDiffVisualizer />
         </TabsContent>
         
-        <TabsContent value="plugin-builder" className="space-y-4">
-          <NaturalLanguagePluginBuilder />
-        </TabsContent>
 
         <TabsContent value="emergency-revert" className="space-y-4">
           <EmergencyRevertSystem />

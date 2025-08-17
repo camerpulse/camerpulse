@@ -67,7 +67,7 @@ interface RetentionConfig {
   auto_snapshot_enabled: boolean;
   auto_snapshot_frequency: string;
   pre_patch_snapshots: boolean;
-  pre_plugin_snapshots: boolean;
+  system_snapshots: boolean;
   emergency_restore_enabled: boolean;
   auto_rollback_on_critical_error: boolean;
 }
@@ -714,11 +714,11 @@ export const EmergencyRevertSystem: React.FC = () => {
                   </div>
                   
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="pre-plugin">Pre-Plugin Snapshots</Label>
+                    <Label htmlFor="system-snapshots">System Snapshots</Label>
                     <Switch
-                      id="pre-plugin"
-                      checked={retentionConfig.pre_plugin_snapshots}
-                      onCheckedChange={(checked) => updateRetentionConfig({ pre_plugin_snapshots: checked })}
+                      id="system-snapshots"
+                      checked={retentionConfig.system_snapshots}
+                      onCheckedChange={(checked) => updateRetentionConfig({ system_snapshots: checked })}
                     />
                   </div>
                 </CardContent>

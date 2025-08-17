@@ -7,33 +7,17 @@ import { Badge } from '@/components/ui/badge';
 import { Search, Filter, Users, MapPin } from 'lucide-react';
 import { useMPs } from '@/hooks/useMPs';
 import { MPCard } from '@/components/MPs/MPCard';
-import { usePlugin } from '@/contexts/PluginContext';
+
 import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
 
 const MPsPage = () => {
-  const { isPluginEnabled } = usePlugin();
+  
   const { data: mps, isLoading, error } = useMPs();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [selectedParty, setSelectedParty] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('rating');
 
-  if (!isPluginEnabled) {
-    return (
-      <AppLayout>
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-muted-foreground">
-              MPs Directory is not available
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              This plugin is currently disabled.
-            </p>
-          </div>
-        </div>
-      </AppLayout>
-    );
-  }
 
   if (isLoading) {
     return (

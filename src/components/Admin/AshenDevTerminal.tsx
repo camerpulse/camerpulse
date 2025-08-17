@@ -72,7 +72,7 @@ interface GeneratedArtifact {
 
 const AshenDevTerminal: React.FC = () => {
   const [prompt, setPrompt] = useState('');
-  const [requestType, setRequestType] = useState('plugin');
+  const [requestType, setRequestType] = useState('feature');
   const [targetUsers, setTargetUsers] = useState(['admin']);
   const [buildMode, setBuildMode] = useState('think_first');
   const [useCivicMemory, setUseCivicMemory] = useState(true);
@@ -342,7 +342,7 @@ const AshenDevTerminal: React.FC = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="plugin">Plugin</SelectItem>
+                      <SelectItem value="feature">Feature</SelectItem>
                       <SelectItem value="feature">Feature</SelectItem>
                       <SelectItem value="page">Page</SelectItem>
                       <SelectItem value="dashboard">Dashboard</SelectItem>
@@ -389,7 +389,7 @@ const AshenDevTerminal: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <Textarea
-                placeholder="e.g., 'Build a regional corruption complaint form for public use' or 'Create a fund usage audit plugin for ministers'"
+                placeholder="e.g., 'Build a regional corruption complaint form for public use' or 'Create a fund usage audit feature for ministers'"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
                 rows={4}

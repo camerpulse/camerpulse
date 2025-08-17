@@ -7,32 +7,16 @@ import { Badge } from '@/components/ui/badge';
 import { Search, Filter, Building, MapPin } from 'lucide-react';
 import { useMinisters } from '@/hooks/useMinisters';
 import { MinisterCard } from '@/components/Ministers/MinisterCard';
-import { usePlugin } from '@/contexts/PluginContext';
+
 
 const MinistersPage = () => {
-  const { isPluginEnabled } = usePlugin();
+  
   const { data: ministers, isLoading, error } = useMinisters();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMinistry, setSelectedMinistry] = useState<string>('all');
   const [selectedRegion, setSelectedRegion] = useState<string>('all');
   const [sortBy, setSortBy] = useState<string>('rating');
 
-  if (!isPluginEnabled) {
-    return (
-      <AppLayout>
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold text-muted-foreground">
-              Ministers Directory is not available
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              This plugin is currently disabled.
-            </p>
-          </div>
-        </div>
-      </AppLayout>
-    );
-  }
 
   if (isLoading) {
     return (
