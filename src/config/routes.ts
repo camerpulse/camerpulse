@@ -23,6 +23,7 @@ export const ROUTES = {
     DEBT_TRACKER: '/debt-tracker',
     MEDIA_TRUST: '/media-trust',
     BILLIONAIRE_TRACKER: '/billionaire-tracker',
+    SENTIMENT_ANALYSIS: '/sentiment-analysis',
   },
   
   // Entertainment & Arts

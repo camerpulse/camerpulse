@@ -1479,6 +1479,72 @@ export type Database = {
           },
         ]
       }
+      artist_profiles: {
+        Row: {
+          banner_image_url: string | null
+          bio: string | null
+          city: string | null
+          country: string | null
+          created_at: string | null
+          genre: string[] | null
+          id: string
+          is_featured: boolean | null
+          monthly_listeners: number | null
+          profile_image_url: string | null
+          real_name: string | null
+          slug: string | null
+          social_links: Json | null
+          stage_name: string
+          total_downloads: number | null
+          total_streams: number | null
+          updated_at: string | null
+          user_id: string
+          verification_status: string | null
+        }
+        Insert: {
+          banner_image_url?: string | null
+          bio?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          genre?: string[] | null
+          id?: string
+          is_featured?: boolean | null
+          monthly_listeners?: number | null
+          profile_image_url?: string | null
+          real_name?: string | null
+          slug?: string | null
+          social_links?: Json | null
+          stage_name: string
+          total_downloads?: number | null
+          total_streams?: number | null
+          updated_at?: string | null
+          user_id: string
+          verification_status?: string | null
+        }
+        Update: {
+          banner_image_url?: string | null
+          bio?: string | null
+          city?: string | null
+          country?: string | null
+          created_at?: string | null
+          genre?: string[] | null
+          id?: string
+          is_featured?: boolean | null
+          monthly_listeners?: number | null
+          profile_image_url?: string | null
+          real_name?: string | null
+          slug?: string | null
+          social_links?: Json | null
+          stage_name?: string
+          total_downloads?: number | null
+          total_streams?: number | null
+          updated_at?: string | null
+          user_id?: string
+          verification_status?: string | null
+        }
+        Relationships: []
+      }
       artist_submission_drafts: {
         Row: {
           created_at: string
@@ -5269,28 +5335,78 @@ export type Database = {
           },
         ]
       }
+      billionaire_wealth_history: {
+        Row: {
+          billionaire_id: string
+          data_source: string | null
+          id: string
+          net_worth_fcfa: number
+          net_worth_usd: number
+          notes: string | null
+          recorded_at: string | null
+        }
+        Insert: {
+          billionaire_id: string
+          data_source?: string | null
+          id?: string
+          net_worth_fcfa: number
+          net_worth_usd: number
+          notes?: string | null
+          recorded_at?: string | null
+        }
+        Update: {
+          billionaire_id?: string
+          data_source?: string | null
+          id?: string
+          net_worth_fcfa?: number
+          net_worth_usd?: number
+          notes?: string | null
+          recorded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "billionaire_wealth_history_billionaire_id_fkey"
+            columns: ["billionaire_id"]
+            isOneToOne: false
+            referencedRelation: "billionaires"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       billionaires: {
         Row: {
+          age: number | null
+          bio: string | null
           biography: string | null
           business_investments: string[] | null
+          citizenship: string | null
           company_affiliation: string | null
+          company_name: string | null
           contact_info: string | null
           created_at: string | null
           created_by: string | null
           current_rank: number | null
+          data_source: string | null
           display_alias: string | null
           full_name: string
           id: string
           is_anonymous: boolean | null
           is_verified: boolean | null
+          last_updated: string | null
           media_profiles: Json | null
+          net_worth_fcfa: number | null
           net_worth_usd: number | null
           previous_rank: number | null
+          primary_industry: string | null
+          profile_image_url: string | null
           profile_picture_url: string | null
           profile_views: number | null
           region: string
+          residence_location: string | null
+          slug: string | null
           social_media_handles: Json | null
           updated_at: string | null
+          verification_status: string | null
           verified_at: string | null
           verified_by: string | null
           verified_net_worth_fcfa: number
@@ -5298,26 +5414,38 @@ export type Database = {
           year_on_year_change: number | null
         }
         Insert: {
+          age?: number | null
+          bio?: string | null
           biography?: string | null
           business_investments?: string[] | null
+          citizenship?: string | null
           company_affiliation?: string | null
+          company_name?: string | null
           contact_info?: string | null
           created_at?: string | null
           created_by?: string | null
           current_rank?: number | null
+          data_source?: string | null
           display_alias?: string | null
           full_name: string
           id?: string
           is_anonymous?: boolean | null
           is_verified?: boolean | null
+          last_updated?: string | null
           media_profiles?: Json | null
+          net_worth_fcfa?: number | null
           net_worth_usd?: number | null
           previous_rank?: number | null
+          primary_industry?: string | null
+          profile_image_url?: string | null
           profile_picture_url?: string | null
           profile_views?: number | null
           region: string
+          residence_location?: string | null
+          slug?: string | null
           social_media_handles?: Json | null
           updated_at?: string | null
+          verification_status?: string | null
           verified_at?: string | null
           verified_by?: string | null
           verified_net_worth_fcfa: number
@@ -5325,26 +5453,38 @@ export type Database = {
           year_on_year_change?: number | null
         }
         Update: {
+          age?: number | null
+          bio?: string | null
           biography?: string | null
           business_investments?: string[] | null
+          citizenship?: string | null
           company_affiliation?: string | null
+          company_name?: string | null
           contact_info?: string | null
           created_at?: string | null
           created_by?: string | null
           current_rank?: number | null
+          data_source?: string | null
           display_alias?: string | null
           full_name?: string
           id?: string
           is_anonymous?: boolean | null
           is_verified?: boolean | null
+          last_updated?: string | null
           media_profiles?: Json | null
+          net_worth_fcfa?: number | null
           net_worth_usd?: number | null
           previous_rank?: number | null
+          primary_industry?: string | null
+          profile_image_url?: string | null
           profile_picture_url?: string | null
           profile_views?: number | null
           region?: string
+          residence_location?: string | null
+          slug?: string | null
           social_media_handles?: Json | null
           updated_at?: string | null
+          verification_status?: string | null
           verified_at?: string | null
           verified_by?: string | null
           verified_net_worth_fcfa?: number
@@ -28512,61 +28652,100 @@ export type Database = {
       }
       media_sources: {
         Row: {
+          bias_score: number | null
           bias_threshold: number | null
           created_at: string | null
           created_by: string | null
+          description: string | null
+          fact_check_score: number | null
           focus_keywords: string[] | null
+          founded_year: number | null
+          headquarters: string | null
           id: string
           is_active: boolean
+          is_verified: boolean | null
           last_monitored_at: string | null
           metadata: Json | null
           monitor_frequency: string
           monitor_times: string[] | null
+          name: string | null
+          ownership_type: string | null
           public_display: boolean | null
+          reliability_score: number | null
+          slug: string | null
           source_name: string
           source_type: Database["public"]["Enums"]["media_source_type"]
           source_url: string
           threat_threshold: Database["public"]["Enums"]["threat_level"] | null
+          transparency_score: number | null
+          trust_score: number | null
           trust_threshold: number | null
           updated_at: string | null
+          website_url: string | null
         }
         Insert: {
+          bias_score?: number | null
           bias_threshold?: number | null
           created_at?: string | null
           created_by?: string | null
+          description?: string | null
+          fact_check_score?: number | null
           focus_keywords?: string[] | null
+          founded_year?: number | null
+          headquarters?: string | null
           id?: string
           is_active?: boolean
+          is_verified?: boolean | null
           last_monitored_at?: string | null
           metadata?: Json | null
           monitor_frequency?: string
           monitor_times?: string[] | null
+          name?: string | null
+          ownership_type?: string | null
           public_display?: boolean | null
+          reliability_score?: number | null
+          slug?: string | null
           source_name: string
           source_type: Database["public"]["Enums"]["media_source_type"]
           source_url: string
           threat_threshold?: Database["public"]["Enums"]["threat_level"] | null
+          transparency_score?: number | null
+          trust_score?: number | null
           trust_threshold?: number | null
           updated_at?: string | null
+          website_url?: string | null
         }
         Update: {
+          bias_score?: number | null
           bias_threshold?: number | null
           created_at?: string | null
           created_by?: string | null
+          description?: string | null
+          fact_check_score?: number | null
           focus_keywords?: string[] | null
+          founded_year?: number | null
+          headquarters?: string | null
           id?: string
           is_active?: boolean
+          is_verified?: boolean | null
           last_monitored_at?: string | null
           metadata?: Json | null
           monitor_frequency?: string
           monitor_times?: string[] | null
+          name?: string | null
+          ownership_type?: string | null
           public_display?: boolean | null
+          reliability_score?: number | null
+          slug?: string | null
           source_name?: string
           source_type?: Database["public"]["Enums"]["media_source_type"]
           source_url?: string
           threat_threshold?: Database["public"]["Enums"]["threat_level"] | null
+          transparency_score?: number | null
+          trust_score?: number | null
           trust_threshold?: number | null
           updated_at?: string | null
+          website_url?: string | null
         }
         Relationships: []
       }
@@ -30922,16 +31101,19 @@ export type Database = {
           artist_id: string | null
           cover_art_url: string | null
           created_at: string | null
+          description: string | null
           external_links: Json | null
           featured_by_admin: boolean | null
           genre: string
           id: string
+          is_explicit: boolean | null
           language: string | null
           mood_tags: string[] | null
           price_per_track: number | null
           pricing_type: Database["public"]["Enums"]["pricing_type"] | null
           release_date: string | null
           release_type: Database["public"]["Enums"]["track_type"]
+          slug: string | null
           status: Database["public"]["Enums"]["release_status"] | null
           streaming_enabled: boolean | null
           title: string
@@ -30946,16 +31128,19 @@ export type Database = {
           artist_id?: string | null
           cover_art_url?: string | null
           created_at?: string | null
+          description?: string | null
           external_links?: Json | null
           featured_by_admin?: boolean | null
           genre: string
           id?: string
+          is_explicit?: boolean | null
           language?: string | null
           mood_tags?: string[] | null
           price_per_track?: number | null
           pricing_type?: Database["public"]["Enums"]["pricing_type"] | null
           release_date?: string | null
           release_type: Database["public"]["Enums"]["track_type"]
+          slug?: string | null
           status?: Database["public"]["Enums"]["release_status"] | null
           streaming_enabled?: boolean | null
           title: string
@@ -30970,16 +31155,19 @@ export type Database = {
           artist_id?: string | null
           cover_art_url?: string | null
           created_at?: string | null
+          description?: string | null
           external_links?: Json | null
           featured_by_admin?: boolean | null
           genre?: string
           id?: string
+          is_explicit?: boolean | null
           language?: string | null
           mood_tags?: string[] | null
           price_per_track?: number | null
           pricing_type?: Database["public"]["Enums"]["pricing_type"] | null
           release_date?: string | null
           release_type?: Database["public"]["Enums"]["track_type"]
+          slug?: string | null
           status?: Database["public"]["Enums"]["release_status"] | null
           streaming_enabled?: boolean | null
           title?: string
@@ -40845,6 +41033,57 @@ export type Database = {
         }
         Relationships: []
       }
+      sentiment_analysis: {
+        Row: {
+          analyzed_at: string | null
+          confidence_score: number
+          content_id: string | null
+          content_source: string
+          content_text: string
+          created_at: string | null
+          emotion_scores: Json | null
+          id: string
+          keywords: Json | null
+          language: string | null
+          region: string | null
+          sentiment_label: string
+          sentiment_score: number
+          topics: Json | null
+        }
+        Insert: {
+          analyzed_at?: string | null
+          confidence_score?: number
+          content_id?: string | null
+          content_source: string
+          content_text: string
+          created_at?: string | null
+          emotion_scores?: Json | null
+          id?: string
+          keywords?: Json | null
+          language?: string | null
+          region?: string | null
+          sentiment_label: string
+          sentiment_score?: number
+          topics?: Json | null
+        }
+        Update: {
+          analyzed_at?: string | null
+          confidence_score?: number
+          content_id?: string | null
+          content_source?: string
+          content_text?: string
+          created_at?: string | null
+          emotion_scores?: Json | null
+          id?: string
+          keywords?: Json | null
+          language?: string | null
+          region?: string | null
+          sentiment_label?: string
+          sentiment_score?: number
+          topics?: Json | null
+        }
+        Relationships: []
+      }
       sentiment_annotations: {
         Row: {
           annotated_by: string
@@ -49020,6 +49259,10 @@ export type Database = {
         }
         Returns: string
       }
+      generate_billionaire_slug: {
+        Args: { name: string }
+        Returns: string
+      }
       generate_civic_predictions: {
         Args: Record<PropertyKey, never>
         Returns: number
@@ -49052,6 +49295,10 @@ export type Database = {
       }
       generate_leader_slug: {
         Args: { leader_name: string; title_name: string; village_name?: string }
+        Returns: string
+      }
+      generate_media_source_slug: {
+        Args: { source_name: string }
         Returns: string
       }
       generate_poll_api_key: {

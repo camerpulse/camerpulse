@@ -61,6 +61,7 @@ import DebtTracker from '@/pages/DebtTracker';
 import BillionaireTracker from '@/pages/BillionaireTracker';
 import ArtistEcosystem from '@/pages/ArtistEcosystem';
 import MediaTrustRatings from '@/pages/MediaTrustRatings';
+import SentimentAnalysisDashboard from '@/pages/SentimentAnalysisDashboard';
 
 /**
  * Main application router with clean, focused routing structure
@@ -102,6 +103,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/debt-tracker" element={<DebtTracker />} />
         <Route path="/billionaire-tracker" element={<BillionaireTracker />} />
         <Route path="/media-trust" element={<MediaTrustRatings />} />
+        <Route path="/sentiment-analysis" element={<SentimentAnalysisDashboard />} />
         
         {/* Entertainment & Arts */}
         <Route path="/artist-ecosystem" element={<ArtistEcosystem />} />
