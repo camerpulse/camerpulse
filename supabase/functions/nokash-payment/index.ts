@@ -37,13 +37,13 @@ serve(async (req) => {
     );
 
     const url = new URL(req.url);
-    const path = url.pathname.split('/').slice(-1)[0];
+    const path = url.pathname.split('/').pop() || 'nokash-payment';
 
     // Get client information for rate limiting and security
     const clientIP = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || 'unknown';
     const userAgent = req.headers.get('user-agent') || 'unknown';
 
-    // Allow both subpath routing and body-based routing
+    // Handle POST requests (both subpath and SDK calls)
     if (req.method === 'POST') {
       if (path === 'pay') {
         return await handlePaymentRequest(req, supabaseClient, clientIP, userAgent);
@@ -51,36 +51,39 @@ serve(async (req) => {
       if (path === 'retry') {
         return await handleRetryPayment(req, supabaseClient, clientIP, userAgent);
       }
-      if (path === 'nokash-payment') {
-        // Body-based action routing (SDK invoke('nokash-payment'))
-        let action = 'pay';
-        let body: any = {};
-        try {
-          body = await req.clone().json();
-          action = body?.action || 'pay';
-        } catch (_) {}
+      if (path === 'callback') {
+        return await handleCallback(req, supabaseClient);
+      }
+      
+      // Default POST handling (SDK invoke calls come here)
+      // Body-based action routing for SDK calls
+      let action = 'pay';
+      let body: any = {};
+      try {
+        body = await req.clone().json();
+        action = body?.action || 'pay';
+      } catch (_) {
+        // If no body, default to pay action
+      }
 
-        if (action === 'pay') {
-          return await handlePaymentRequest(req, supabaseClient, clientIP, userAgent);
+      if (action === 'pay') {
+        return await handlePaymentRequest(req, supabaseClient, clientIP, userAgent);
+      }
+      if (action === 'retry') {
+        return await handleRetryPayment(req, supabaseClient, clientIP, userAgent);
+      }
+      if (action === 'status') {
+        const orderId = body?.order_id;
+        if (!orderId) {
+          return new Response(JSON.stringify({ error: 'order_id required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
         }
-        if (action === 'retry') {
-          return await handleRetryPayment(req, supabaseClient, clientIP, userAgent);
-        }
-        if (action === 'status') {
-          const orderId = body?.order_id;
-          if (!orderId) {
-            return new Response(JSON.stringify({ error: 'order_id required' }), { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
-          }
-          const statusUrl = new URL(req.url);
-          statusUrl.searchParams.set('order_id', orderId);
-          const statusReq = new Request(statusUrl.toString(), { method: 'GET', headers: req.headers });
-          return await handleStatusCheck(statusReq, supabaseClient);
-        }
+        const statusUrl = new URL(req.url);
+        statusUrl.searchParams.set('order_id', orderId);
+        const statusReq = new Request(statusUrl.toString(), { method: 'GET', headers: req.headers });
+        return await handleStatusCheck(statusReq, supabaseClient);
       }
     } else if (req.method === 'GET' && path === 'status') {
       return await handleStatusCheck(req, supabaseClient);
-    } else if (req.method === 'POST' && path === 'callback') {
-      return await handleCallback(req, supabaseClient);
     }
 
     return new Response(
