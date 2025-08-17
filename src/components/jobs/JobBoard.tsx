@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +15,7 @@ import { Search, Filter, Grid, List, ChevronLeft, ChevronRight } from "lucide-re
 import { toast } from "sonner";
 
 export function JobBoard() {
+  const queryClient = useQueryClient();
   const [filters, setFilters] = useState<JobFiltersType>({});
   const [selectedJob, setSelectedJob] = useState<Job | null>(null);
   const [showApplication, setShowApplication] = useState(false);
@@ -217,7 +219,10 @@ export function JobBoard() {
                 <Button 
                   variant="outline" 
                   className="mt-4"
-                  onClick={() => window.location.reload()}
+                  onClick={() => {
+                    queryClient.invalidateQueries({ queryKey: ['jobs'] });
+                    window.location.reload();
+                  }}
                 >
                   Retry
                 </Button>

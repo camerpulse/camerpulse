@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useEffect } from 'react';
@@ -17,6 +17,7 @@ import { MPVotingHeatmap } from '@/components/legislation/MPVotingHeatmap';
 import { LegislativeTimeline } from '@/components/legislation/LegislativeTimeline';
 
 export const LegislationTracker = () => {
+  const queryClient = useQueryClient();
   console.log('LegislationTracker component rendering...');
   
   // Early return for debugging
@@ -97,10 +98,9 @@ export const LegislationTracker = () => {
 
       toast.success(`Your ${position} vote has been recorded successfully!`);
       
-      // Trigger a refetch of the data to show updated vote counts
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      // Invalidate queries to refresh data
+      queryClient.invalidateQueries({ queryKey: ['legislation'] });
+      queryClient.invalidateQueries({ queryKey: ['citizen-engagement'] });
     } catch (error: any) {
       console.error('Vote error:', error);
       if (error.message?.includes('duplicate')) {
@@ -154,10 +154,9 @@ export const LegislationTracker = () => {
         (payload) => {
           console.log('Legislation change detected:', payload);
           toast.info('Legislation data updated');
-          // Trigger a refetch instead of full reload for better UX
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
+          // Invalidate queries instead of full reload for better UX
+          queryClient.invalidateQueries({ queryKey: ['legislation'] });
+          queryClient.invalidateQueries({ queryKey: ['citizen-engagement'] });
         }
       )
       .on(
