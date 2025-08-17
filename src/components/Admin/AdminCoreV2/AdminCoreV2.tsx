@@ -53,6 +53,8 @@ import { CleanupReviewManager } from './modules/CleanupReviewManager';
 import { SystemHealthManager } from './modules/SystemHealthManager';
 import { SecurityAuditManager } from './modules/SecurityAuditManager';
 import { BackupRecoveryManager } from './modules/BackupRecoveryManager';
+import { ErrorMonitoringManager } from './modules/ErrorMonitoringManager';
+import { PerformanceAnalyticsManager } from './modules/PerformanceAnalyticsManager';
 
 interface AdminStats {
   total_users: number;
@@ -280,6 +282,8 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'system-health', label: 'System Health', icon: Monitor, color: 'text-blue-600', permission: 'all' },
     { id: 'security-audit-manager', label: 'Security Manager', icon: Shield, color: 'text-red-600', permission: 'all' },
     { id: 'backup-recovery', label: 'Backup & Recovery', icon: Database, color: 'text-purple-600', permission: 'all' },
+    { id: 'error-monitoring', label: 'Error Monitoring', icon: AlertTriangle, color: 'text-red-600', permission: 'all' },
+    { id: 'performance-analytics', label: 'Performance Analytics', icon: BarChart3, color: 'text-blue-600', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
 
   useEffect(() => {
@@ -353,6 +357,10 @@ export const AdminCoreV2: React.FC = () => {
         return <SecurityAuditManager {...moduleProps} />;
       case 'backup-recovery':
         return <BackupRecoveryManager {...moduleProps} />;
+      case 'error-monitoring':
+        return <ErrorMonitoringManager {...moduleProps} />;
+      case 'performance-analytics':
+        return <PerformanceAnalyticsManager {...moduleProps} />;
       default:
         return <AdminDashboard {...moduleProps} />;
     }
