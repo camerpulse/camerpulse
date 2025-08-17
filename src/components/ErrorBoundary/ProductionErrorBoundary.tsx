@@ -73,6 +73,7 @@ export class ProductionErrorBoundary extends Component<Props, State> {
   };
 
   handleGoHome = () => {
+    // Use proper navigation for home - this is acceptable for error recovery
     window.location.href = '/';
   };
 

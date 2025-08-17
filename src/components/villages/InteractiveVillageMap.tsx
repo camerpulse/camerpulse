@@ -291,7 +291,7 @@ export const InteractiveVillageMap: React.FC<InteractiveVillageMapProps> = ({
                 ${village.is_verified ? '<span class="text-yellow-500">👑</span>' : ''}
               </div>
               <p class="text-sm mb-3">👥 ${village.sons_daughters_count} members</p>
-              <a href="/villages/${village.id}" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors">
+              <a href="/villages/${village.id}" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors" onclick="window.location.href='/villages/${village.id}'; return false;">
                 View Profile
               </a>
             </div>

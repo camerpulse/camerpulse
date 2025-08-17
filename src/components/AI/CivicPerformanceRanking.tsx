@@ -181,7 +181,7 @@ export const CivicPerformanceRanking: React.FC = () => {
 
   const handleExportRankings = () => {
     // TODO: Implement CSV export functionality
-    console.log('Exporting rankings...');
+    // Export functionality will be implemented when backend is ready
   };
 
   const refreshData = () => {
