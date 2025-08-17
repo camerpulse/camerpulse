@@ -119,10 +119,19 @@ export const EnhancedSenatorCard = ({ senator }: EnhancedSenatorCardProps) => {
                   </div>
                 )}
                 
-                {(senator.political_party || senator.party_affiliation) && (
+                {(senator.political_parties?.name || senator.political_party || senator.party_affiliation) && (
                   <div className="flex items-center justify-center text-muted-foreground text-xs">
                     <Users className="h-3 w-3 mr-1" />
-                    {senator.political_party || senator.party_affiliation}
+                    <Badge variant="outline" className="text-xs flex items-center gap-1">
+                      {senator.political_parties?.logo_url && (
+                        <img 
+                          src={senator.political_parties.logo_url} 
+                          alt={senator.political_parties.name}
+                          className="w-3 h-3"
+                        />
+                      )}
+                      {senator.political_parties?.acronym || senator.political_parties?.name || senator.political_party || senator.party_affiliation}
+                    </Badge>
                   </div>
                 )}
               </div>

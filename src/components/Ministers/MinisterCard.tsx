@@ -62,9 +62,16 @@ export function MinisterCard({ minister }: MinisterCardProps) {
 
       <CardContent className="space-y-4">
         <div className="flex flex-wrap gap-2">
-          {minister.political_party && (
-            <Badge variant="outline" className="text-xs">
-              {minister.political_party}
+          {(minister.political_parties?.name || minister.political_party) && (
+            <Badge variant="outline" className="text-xs flex items-center gap-1">
+              {minister.political_parties?.logo_url && (
+                <img 
+                  src={minister.political_parties.logo_url} 
+                  alt={minister.political_parties.name}
+                  className="w-3 h-3"
+                />
+              )}
+              {minister.political_parties?.acronym || minister.political_parties?.name || minister.political_party}
             </Badge>
           )}
           {minister.region && (
