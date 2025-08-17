@@ -11,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { FollowButton } from '@/components/Social/FollowButton';
 import { UserProfile } from '@/components/Social/UserProfile';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigation } from '@/hooks/useNavigation';
 import { 
   Users, 
   Search, 
@@ -40,6 +41,7 @@ interface Profile {
 const Social = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { navigateToAuth } = useNavigation();
   const [followers, setFollowers] = useState<Profile[]>([]);
   const [following, setFollowing] = useState<Profile[]>([]);
   const [suggested, setSuggested] = useState<Profile[]>([]);
@@ -291,7 +293,7 @@ const Social = () => {
               <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h2 className="text-xl font-bold mb-4">Connexion requise</h2>
               <p className="text-gray-600 mb-4">Connectez-vous pour découvrir et suivre d'autres utilisateurs</p>
-              <Button onClick={() => window.location.href = '/auth'}>Se connecter</Button>
+              <Button onClick={() => navigateToAuth()}>Se connecter</Button>
             </CardContent>
           </Card>
         </div>

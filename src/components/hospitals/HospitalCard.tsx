@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { URLBuilder } from '@/utils/slugUtils';
+import { useNavigation } from '@/hooks/useNavigation';
 
 interface Hospital {
   id: string;
@@ -29,6 +30,7 @@ interface HospitalCardProps {
 }
 
 export function HospitalCard({ hospital, onViewDetails, onRate }: HospitalCardProps) {
+  const { navigateTo } = useNavigation();
   const getTypeLabel = (type: string) => {
     return type.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   };
@@ -134,7 +136,7 @@ export function HospitalCard({ hospital, onViewDetails, onRate }: HospitalCardPr
             size="sm" 
             onClick={() => {
               const url = URLBuilder.institutions.hospitals.detail(hospital);
-              window.location.href = url;
+              navigateTo(url);
             }}
             className="flex-1"
           >

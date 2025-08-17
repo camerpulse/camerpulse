@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { URLBuilder } from '@/utils/slugUtils';
+import { useNavigation } from '@/hooks/useNavigation';
 import { 
   MapPin, 
   Star, 
@@ -62,6 +63,7 @@ export function SchoolCard({ school, onUpdate }: SchoolCardProps) {
   const [showDetails, setShowDetails] = useState(false);
   const [showRatingDialog, setShowRatingDialog] = useState(false);
   const [showRating, setShowRating] = useState(false);
+  const { navigateTo } = useNavigation();
 
   const getVerificationBadge = (status: string) => {
     const badges = {
@@ -252,7 +254,7 @@ export function SchoolCard({ school, onUpdate }: SchoolCardProps) {
               className="flex-1"
               onClick={() => {
                 const url = URLBuilder.institutions.schools.detail(school);
-                window.location.href = url;
+                navigateTo(url);
               }}
             >
               <Eye className="h-3 w-3 mr-1" />

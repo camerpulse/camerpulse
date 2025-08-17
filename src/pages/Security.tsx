@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigation } from '@/hooks/useNavigation';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { 
   Shield, 
@@ -63,6 +64,7 @@ interface SecurityLog {
 const Security = () => {
   const { user, profile } = useAuth();
   const { toast } = useToast();
+  const { navigateToAuth } = useNavigation();
   const [twoFA, setTwoFA] = useState<Security2FA | null>(null);
   const [devices, setDevices] = useState<SecurityDevice[]>([]);
   const [securityLogs, setSecurityLogs] = useState<SecurityLog[]>([]);
@@ -496,7 +498,7 @@ const Security = () => {
           <Card className="w-full max-w-md text-center">
             <CardContent className="pt-6">
               <h2 className="text-xl font-bold mb-4">Login Required</h2>
-              <Button onClick={() => window.location.href = '/auth'}>Sign In</Button>
+              <Button onClick={() => navigateToAuth()}>Sign In</Button>
             </CardContent>
           </Card>
         </div>

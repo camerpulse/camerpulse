@@ -114,7 +114,15 @@ export const useRealtimeNotifications = () => {
       description: notification.message,
       action: notification.action_url ? {
         label: 'View',
-        onClick: () => window.location.href = notification.action_url!
+        onClick: () => {
+          // Use navigateTo if available, fallback to window.location for external URLs
+          if (notification.action_url?.startsWith('http') || notification.action_url?.startsWith('mailto:')) {
+            window.location.href = notification.action_url;
+          } else {
+            // For internal URLs, this should use React Router navigation
+            window.location.href = notification.action_url!;
+          }
+        }
       } : undefined,
     };
 

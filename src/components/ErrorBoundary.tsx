@@ -54,6 +54,7 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   handleGoHome = () => {
+    // Use window.location for error boundary to ensure it works even if router is broken
     window.location.href = '/';
   };
 

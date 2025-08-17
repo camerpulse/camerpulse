@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigation } from '@/hooks/useNavigation';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface Institution {
@@ -48,6 +49,7 @@ export default function ServicesMap() {
   const [selectedInstitution, setSelectedInstitution] = useState<Institution | null>(null);
   const [mapboxToken, setMapboxToken] = useState<string>('');
   const { toast } = useToast();
+  const { navigateTo } = useNavigation();
 
   const cameroonRegions = [
     'Adamawa', 'Centre', 'East', 'Far North', 'Littoral', 
@@ -436,7 +438,7 @@ export default function ServicesMap() {
                         hospital: '/hospitals', 
                         pharmacy: '/pharmacies'
                       };
-                      window.location.href = routes[selectedInstitution.category as keyof typeof routes];
+                      navigateTo(routes[selectedInstitution.category as keyof typeof routes]);
                     }}
                   >
                     View Details

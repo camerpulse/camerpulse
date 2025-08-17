@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigation } from '@/hooks/useNavigation';
 import { 
   CheckCircle, 
   XCircle, 
@@ -41,6 +42,7 @@ interface TestProfile {
 export const ProfileValidationTest: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
+  const { navigateToMessage } = useNavigation();
   const [results, setResults] = useState<ValidationResult[]>([]);
   const [testing, setTesting] = useState(false);
   const [testProfiles, setTestProfiles] = useState<TestProfile[]>([]);
@@ -133,7 +135,7 @@ export const ProfileValidationTest: React.FC = () => {
       // Test actual message button click simulation
       try {
         const testButton = document.createElement('button');
-        testButton.onclick = () => window.location.href = `/messenger?startConversation=${user?.id}`;
+        testButton.onclick = () => navigateToMessage(user?.id);
         
         // Verify URL parameter handling in messenger
         const urlParams = new URLSearchParams('?startConversation=test-user-123');

@@ -12,6 +12,7 @@ import { PollFraudProtectionEngine } from '@/components/Polls/PollFraudProtectio
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigation } from '@/hooks/useNavigation';
 import { useFraudProtection } from '@/hooks/useFraudProtection';
 import { 
   BarChart3, 
@@ -55,6 +56,7 @@ interface Poll {
 const Polls = () => {
   const { user, profile } = useAuth();
   const { toast } = useToast();
+  const { navigateTo } = useNavigation();
   const { validateVote, logVote } = useFraudProtection();
   const [polls, setPolls] = useState<Poll[]>([]);
   const [loading, setLoading] = useState(true);
@@ -274,7 +276,7 @@ const Polls = () => {
             
             <div className="flex flex-col sm:flex-row gap-2">
               <Button 
-                onClick={() => window.location.href = '/polls/discover'}
+                onClick={() => navigateTo('/polls/discover')}
                 variant="outline"
                 className="w-full sm:w-auto"
               >
