@@ -18,6 +18,7 @@ import {
 import { usePoliticalEntitiesWithParties } from '@/hooks/usePoliticalEntityRelations';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
+import { PoliticalNavigationMenu } from '@/components/Politicians/PoliticalNavigationMenu';
 import { Link } from 'react-router-dom';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
@@ -183,6 +184,8 @@ export default function UnifiedPoliticalDirectoryPage() {
       />
       
       <div className="container mx-auto px-4 py-8">
+        <PoliticalNavigationMenu />
+        
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-4">Unified Political Directory</h1>

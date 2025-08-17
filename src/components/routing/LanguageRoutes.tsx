@@ -19,6 +19,9 @@ import MinistersPage from '@/pages/MinistersPage';
 import { MinisterDetailPage } from '@/pages/MinisterDetailPage';
 import PoliticalParties from '@/pages/PoliticalParties';
 import PoliticalPartyDetail from '@/pages/PoliticalPartyDetail';
+import { PoliticalPartyPage } from '@/pages/PoliticalPartyPage';
+import { PoliticalPartiesPage } from '@/pages/PoliticalPartiesPage';
+import { UnifiedPoliticalDirectoryPage } from '@/pages/UnifiedPoliticalDirectoryPage';
 import VillagesDirectoryPage from '@/pages/VillagesDirectoryPage';
 import VillageProfile from '@/pages/VillageProfile';
 import FonsDirectory from '@/pages/FonsDirectory';
@@ -129,9 +132,11 @@ export const AppRouter: React.FC = () => {
         <Route path="/ministers/:slug" element={<MinisterDetailPage />} />
         
         {/* Political Parties */}
-        <Route path="/parties/:slug" element={<PoliticalPartyDetail />} />
-        <Route path="/political-parties" element={<PoliticalParties />} />
-        <Route path="/political-parties/:slug" element={<PoliticalPartyDetail />} />
+        <Route path="/parties" element={<PoliticalPartiesPage />} />
+        <Route path="/parties/:slug" element={<PoliticalPartyPage />} />
+        <Route path="/political-parties" element={<PoliticalPartiesPage />} />
+        <Route path="/political-parties/:slug" element={<PoliticalPartyPage />} />
+        <Route path="/political-directory" element={<UnifiedPoliticalDirectoryPage />} />
         
         {/* Petitions */}
         <Route path="/petitions" element={<PetitionsPage />} />

@@ -7,6 +7,7 @@ import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcru
 import { PoliticalNavigation } from '@/components/Navigation/PoliticalNavigation';
 import { EnhancedPoliticalGrid } from '@/components/Politics/EnhancedPoliticalGrid';
 import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton';
+import { PoliticalNavigationMenu } from '@/components/Politicians/PoliticalNavigationMenu';
 
 interface PoliticalEntity {
   id: string;
@@ -107,6 +108,7 @@ const Politicians = () => {
     <AppLayout>
       <div className="container mx-auto px-4 py-8">
         <NavigationBreadcrumb />
+        <PoliticalNavigationMenu />
         <PoliticalNavigation />
         <EnhancedPoliticalGrid
           entities={politicians}

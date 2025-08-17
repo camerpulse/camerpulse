@@ -39,6 +39,8 @@ export const ROUTES = {
     MPS: '/mps',
     MINISTERS: '/ministers',
     PARTIES: '/political-parties',
+    PARTY_DETAIL: '/political-parties/:slug',
+    DIRECTORY: '/political-directory',
   },
   
   // Directories & Institutions

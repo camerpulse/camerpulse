@@ -20,6 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
+import { PoliticalNavigationMenu } from '@/components/Politicians/PoliticalNavigationMenu';
 
 interface PoliticalParty {
   id: string;
@@ -154,6 +155,8 @@ export default function PoliticalPartiesPage() {
       />
       
       <div className="container mx-auto px-4 py-8">
+        <PoliticalNavigationMenu />
+        
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-4">Political Parties Directory</h1>
