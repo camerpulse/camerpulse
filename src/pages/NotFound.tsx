@@ -5,10 +5,12 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { useNavigation } from '@/hooks/useNavigation';
 import { Home, Search, FileText, Users, Building, MapPin, ArrowRight } from "lucide-react";
 
 const NotFound = () => {
   const location = useLocation();
+  const { navigateToSearch } = useNavigation();
 
   useEffect(() => {
     console.error(
@@ -29,7 +31,7 @@ const NotFound = () => {
     const formData = new FormData(e.currentTarget);
     const query = formData.get('search') as string;
     if (query.trim()) {
-      window.location.href = `/search?q=${encodeURIComponent(query.trim())}`;
+      navigateToSearch(query.trim());
     }
   };
 

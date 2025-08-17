@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigation } from '@/hooks/useNavigation';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -53,6 +54,7 @@ interface PulsePost {
 
 const PulseFeed = () => {
   const { user, profile } = useAuth();
+  const { navigateTo, navigateToAuth } = useNavigation();
   const { toast } = useToast();
   const [posts, setPosts] = useState<PulsePost[]>([]);
   const [trendingPolls, setTrendingPolls] = useState<any[]>([]);
@@ -288,7 +290,7 @@ const PulseFeed = () => {
             <CardContent className="pt-6">
               <h2 className="text-xl font-bold mb-4">Connexion requise</h2>
               <p className="text-gray-600 mb-4">Vous devez être connecté pour accéder au Pulse Feed</p>
-              <Button onClick={() => window.location.href = '/auth'}>Se connecter</Button>
+              <Button onClick={() => navigateToAuth()}>Se connecter</Button>
             </CardContent>
           </Card>
         </div>
@@ -367,7 +369,7 @@ const PulseFeed = () => {
                   <Button 
                     variant="outline" 
                     size="sm"
-                    onClick={() => window.location.href = '/polls/discover'}
+                    onClick={() => navigateTo('/polls/discover')}
                   >
                     Voir tous
                   </Button>
@@ -416,7 +418,7 @@ const PulseFeed = () => {
                           variant="ghost" 
                           size="sm" 
                           className="h-6 px-2 text-xs"
-                          onClick={() => window.location.href = '/polls'}
+                          onClick={() => navigateTo('/polls')}
                         >
                           Participer
                         </Button>

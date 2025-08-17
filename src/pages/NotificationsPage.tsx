@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
+import { useNavigation } from '@/hooks/useNavigation';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -30,6 +31,7 @@ import { formatDistanceToNow } from 'date-fns';
 
 const NotificationsPage: React.FC = () => {
   const { user, loading } = useAuth();
+  const { navigateTo } = useNavigation();
   const { 
     notifications, 
     unreadCount, 
@@ -108,7 +110,7 @@ const NotificationsPage: React.FC = () => {
     }
     
     if (notification.action_url) {
-      window.location.href = notification.action_url;
+      navigateTo(notification.action_url);
     }
   };
 
