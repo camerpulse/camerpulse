@@ -7,6 +7,7 @@ import { SuggestionButton } from '@/components/CivicSuggestions/SuggestionButton
 import { ModerationDashboard } from '@/components/CivicSuggestions/ModerationDashboard';
 import { useAuth } from '@/contexts/AuthContext';
 import { ProtectedRoute } from '@/components/routing/ProtectedRoute';
+import { useNavigation } from '@/hooks/useNavigation';
 import { 
   Users, 
   FileText, 
@@ -20,6 +21,7 @@ import {
 
 const CivicContributionsPage: React.FC = () => {
   const { user, hasRole } = useAuth();
+  const { navigateToAuth } = useNavigation();
   const isModeratorOrAdmin = hasRole('admin') || hasRole('moderator');
 
   if (!user) {
@@ -71,7 +73,7 @@ const CivicContributionsPage: React.FC = () => {
             </div>
 
             <div className="space-y-4">
-              <Button size="lg" onClick={() => window.location.href = '/auth'}>
+              <Button size="lg" onClick={() => navigateToAuth()}>
                 Get Started - Sign Up Free
               </Button>
               <p className="text-sm text-gray-500">

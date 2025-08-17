@@ -12,6 +12,7 @@ import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import { useNavigation } from '@/hooks/useNavigation';
 
 interface ModeratorProfile {
   id: string;
@@ -62,6 +63,7 @@ const roleColors = {
 };
 
 export const ModeratorDashboard: React.FC = () => {
+  const { navigateTo } = useNavigation();
   const [moderatorProfile, setModeratorProfile] = useState<ModeratorProfile | null>(null);
   const [badges, setBadges] = useState<ModeratorBadge[]>([]);
   const [pendingQueue, setPendingQueue] = useState<PendingSubmission[]>([]);
@@ -210,7 +212,7 @@ export const ModeratorDashboard: React.FC = () => {
             <p className="text-muted-foreground mb-4">
               You need to be an approved civic moderator to access this dashboard.
             </p>
-            <Button onClick={() => window.location.href = '/moderators/apply'}>
+            <Button onClick={() => navigateTo('/moderators/apply')}>
               Apply to Become a Moderator
             </Button>
           </CardContent>

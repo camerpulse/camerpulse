@@ -8,6 +8,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { formatDistanceToNow } from 'date-fns';
+import { useNavigation } from '@/hooks/useNavigation';
 
 interface Notification {
   id: string;
@@ -33,6 +34,7 @@ export function ModeratorNotifications() {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
+  const { navigateTo } = useNavigation();
 
   useEffect(() => {
     if (!user) return;
@@ -218,7 +220,7 @@ export function ModeratorNotifications() {
                             <Button 
                               variant="outline" 
                               size="sm"
-                              onClick={() => window.location.href = notification.action_url!}
+                              onClick={() => navigateTo(notification.action_url!)}
                             >
                               View Details
                             </Button>

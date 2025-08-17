@@ -4,6 +4,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useNavigation } from '@/hooks/useNavigation';
 
 interface Job {
   id: string;
@@ -24,6 +25,7 @@ interface CompanyJobsProps {
 }
 
 export default function CompanyJobs({ companyId }: CompanyJobsProps) {
+  const { navigateTo } = useNavigation();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -175,7 +177,8 @@ export default function CompanyJobs({ companyId }: CompanyJobsProps) {
                       variant="outline"
                       onClick={() => {
                         incrementJobViews(job.id);
-                        window.location.href = `mailto:${job.application_email}?subject=Application for ${job.job_title}`;
+                        const mailtoUrl = `mailto:${job.application_email}?subject=Application for ${job.job_title}`;
+                        navigateTo(mailtoUrl, { external: true });
                       }}
                       disabled={isExpired(job.expires_at)}
                     >
