@@ -31340,13 +31340,22 @@ export type Database = {
           completed_at: string | null
           created_at: string
           currency: string
+          expires_at: string | null
+          failed_reason: string | null
           id: string
+          ip_address: unknown | null
+          last_retry_at: string | null
           nokash_response: Json | null
+          notification_sent: boolean | null
           order_id: string
           payment_method: string
           phone_number: string
+          refund_processed_at: string | null
+          refund_requested: boolean | null
+          retry_count: number | null
           status: string
           updated_at: string
+          user_agent: string | null
           user_id: string | null
         }
         Insert: {
@@ -31355,13 +31364,22 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           currency?: string
+          expires_at?: string | null
+          failed_reason?: string | null
           id?: string
+          ip_address?: unknown | null
+          last_retry_at?: string | null
           nokash_response?: Json | null
+          notification_sent?: boolean | null
           order_id: string
           payment_method: string
           phone_number: string
+          refund_processed_at?: string | null
+          refund_requested?: boolean | null
+          retry_count?: number | null
           status?: string
           updated_at?: string
+          user_agent?: string | null
           user_id?: string | null
         }
         Update: {
@@ -31370,13 +31388,22 @@ export type Database = {
           completed_at?: string | null
           created_at?: string
           currency?: string
+          expires_at?: string | null
+          failed_reason?: string | null
           id?: string
+          ip_address?: unknown | null
+          last_retry_at?: string | null
           nokash_response?: Json | null
+          notification_sent?: boolean | null
           order_id?: string
           payment_method?: string
           phone_number?: string
+          refund_processed_at?: string | null
+          refund_requested?: boolean | null
+          retry_count?: number | null
           status?: string
           updated_at?: string
+          user_agent?: string | null
           user_id?: string | null
         }
         Relationships: []
@@ -32931,6 +32958,99 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          description: string
+          id: string
+          metadata: Json | null
+          resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          description: string
+          id?: string
+          metadata?: Json | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          description?: string
+          id?: string
+          metadata?: Json | null
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      payment_analytics: {
+        Row: {
+          average_amount: number | null
+          created_at: string | null
+          date: string | null
+          failed_transactions: number | null
+          id: string
+          mtn_transactions: number | null
+          orange_transactions: number | null
+          pending_transactions: number | null
+          successful_amount: number | null
+          successful_transactions: number | null
+          total_amount: number | null
+          total_transactions: number | null
+          unique_users: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          average_amount?: number | null
+          created_at?: string | null
+          date?: string | null
+          failed_transactions?: number | null
+          id?: string
+          mtn_transactions?: number | null
+          orange_transactions?: number | null
+          pending_transactions?: number | null
+          successful_amount?: number | null
+          successful_transactions?: number | null
+          total_amount?: number | null
+          total_transactions?: number | null
+          unique_users?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          average_amount?: number | null
+          created_at?: string | null
+          date?: string | null
+          failed_transactions?: number | null
+          id?: string
+          mtn_transactions?: number | null
+          orange_transactions?: number | null
+          pending_transactions?: number | null
+          successful_amount?: number | null
+          successful_transactions?: number | null
+          total_amount?: number | null
+          total_transactions?: number | null
+          unique_users?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       payment_config: {
         Row: {
           commission_percentage: number | null
@@ -33102,6 +33222,78 @@ export type Database = {
           supported_currencies?: string[] | null
           test_mode?: boolean
           updated_at?: string
+        }
+        Relationships: []
+      }
+      payment_idempotency: {
+        Row: {
+          amount: number
+          expires_at: string | null
+          id: string
+          idempotency_key: string
+          order_id: string | null
+          payment_method: string
+          phone_number: string
+          processed_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          expires_at?: string | null
+          id?: string
+          idempotency_key: string
+          order_id?: string | null
+          payment_method: string
+          phone_number: string
+          processed_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          expires_at?: string | null
+          id?: string
+          idempotency_key?: string
+          order_id?: string | null
+          payment_method?: string
+          phone_number?: string
+          processed_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      payment_rate_limits: {
+        Row: {
+          blocked_until: string | null
+          created_at: string | null
+          id: string
+          ip_address: unknown
+          phone_number: string | null
+          request_count: number | null
+          updated_at: string | null
+          user_id: string | null
+          window_start: string | null
+        }
+        Insert: {
+          blocked_until?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address: unknown
+          phone_number?: string | null
+          request_count?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          window_start?: string | null
+        }
+        Update: {
+          blocked_until?: string | null
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown
+          phone_number?: string | null
+          request_count?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          window_start?: string | null
         }
         Relationships: []
       }
@@ -43844,6 +44036,47 @@ export type Database = {
         }
         Relationships: []
       }
+      transaction_status_history: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          id: string
+          metadata: Json | null
+          new_status: string
+          old_status: string | null
+          reason: string | null
+          transaction_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          new_status: string
+          old_status?: string | null
+          reason?: string | null
+          transaction_id: string
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          new_status?: string
+          old_status?: string | null
+          reason?: string | null
+          transaction_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transaction_status_history_transaction_id_fkey"
+            columns: ["transaction_id"]
+            isOneToOne: false
+            referencedRelation: "nokash_transactions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trending_searches: {
         Row: {
           created_at: string
@@ -49044,6 +49277,10 @@ export type Database = {
           alerts_created: number
         }[]
       }
+      check_payment_alerts: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       check_performance_milestones: {
         Args: {
           p_artist_id: string
@@ -49084,6 +49321,10 @@ export type Database = {
       cleanup_expired_media: {
         Args: Record<PropertyKey, never>
         Returns: number
+      }
+      cleanup_expired_payment_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       cleanup_expired_polls: {
         Args: Record<PropertyKey, never>

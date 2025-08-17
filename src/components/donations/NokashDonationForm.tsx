@@ -8,7 +8,10 @@ import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, Smartphone, CreditCard, CheckCircle } from 'lucide-react';
+import { useNokashPayment } from '@/hooks/useNokashPayment';
+import { PaymentStatusModal } from './PaymentStatusModal';
+import { TransactionHistory } from './TransactionHistory';
+import { Loader2, Smartphone, CreditCard, CheckCircle, Eye, History } from 'lucide-react';
 
 interface NokashConfig {
   supported_networks: string[];
@@ -23,14 +26,25 @@ export const NokashDonationForm: React.FC = () => {
   const [amount, setAmount] = useState('');
   const [customAmount, setCustomAmount] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'MTN' | 'ORANGE'>('MTN');
-  const [loading, setLoading] = useState(false);
   const [config, setConfig] = useState<NokashConfig | null>(null);
   const [configLoading, setConfigLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
+  const [currentOrderId, setCurrentOrderId] = useState<string | null>(null);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
   
   const { toast } = useToast();
   const { user } = useAuth();
+  const { 
+    initiateMobileMoneyPayment, 
+    generateOrderId,
+    validatePhoneNumber,
+    validateAmount,
+    formatPhoneNumber,
+    loading,
+    pollTransactionStatus
+  } = useNokashPayment();
 
   useEffect(() => {
     loadConfig();
@@ -118,72 +132,53 @@ export const NokashDonationForm: React.FC = () => {
     }
 
     const amountNum = parseFloat(finalAmount);
-    if (amountNum < 100) {
+    if (!validateAmount(amountNum)) {
       toast({
-        title: "Minimum Amount",
-        description: "Minimum donation amount is 100 XAF",
+        title: "Invalid Amount",
+        description: "Amount must be between 100 and 1,000,000 XAF",
         variant: "destructive",
       });
       return;
     }
 
-    setLoading(true);
     setMessage('');
     setSuccess(false);
 
     try {
-      const orderId = `DON-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      const orderId = generateOrderId();
       const formattedPhone = formatPhoneNumber(phone);
 
-      const { data, error } = await supabase.functions.invoke('nokash-payment/pay', {
-        body: {
-          order_id: orderId,
-          amount: amountNum,
-          phone: formattedPhone,
-          payment_method: paymentMethod,
-          user_id: user?.id
-        }
+      const result = await initiateMobileMoneyPayment({
+        order_id: orderId,
+        amount: amountNum,
+        phone: formattedPhone,
+        payment_method: paymentMethod,
+        user_id: user?.id
       });
 
-      if (error) {
-        console.error('Payment error:', error);
-        toast({
-          title: "Payment Failed",
-          description: error.message || "Failed to initiate payment",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      if (data?.success) {
+      if (result.success) {
+        setCurrentOrderId(result.order_id!);
         setSuccess(true);
-        setMessage("Payment initiated successfully! Please check your phone for the mobile money prompt and confirm the transaction.");
+        setMessage(result.message);
         
         // Reset form
         setPhone('');
         setAmount('');
         setCustomAmount('');
         
-        toast({
-          title: "Payment Initiated",
-          description: "Please confirm the payment on your phone",
-        });
-      } else {
-        toast({
-          title: "Payment Failed",
-          description: data?.error || "Failed to initiate payment",
-          variant: "destructive",
+        // Start polling for status updates
+        pollTransactionStatus(result.order_id!, (status) => {
+          if (status.status === 'SUCCESS') {
+            toast({
+              title: "Payment Successful!",
+              description: "Thank you for your donation",
+              variant: "default",
+            });
+          }
         });
       }
     } catch (error) {
       console.error('Payment submission error:', error);
-      toast({
-        title: "Error",
-        description: "An unexpected error occurred",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
     }
   };
 
