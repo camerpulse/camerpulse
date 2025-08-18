@@ -350,4 +350,5 @@ const PoliticianDetailPage = () => {
   );
 };
 
+export { PoliticianDetailPage };
 export default PoliticianDetailPage;
