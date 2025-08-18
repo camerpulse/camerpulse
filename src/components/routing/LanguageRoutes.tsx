@@ -118,7 +118,8 @@ export const AppRouter: React.FC = () => {
         
         {/* Politicians */}
         <Route path="/politicians" element={<EnhancedPoliticians />} />
-        <Route path="/politicians/:slug" element={<PoliticianDetailPage />} />
+        <Route path="/politicians/:slug" element={<EnhancedPoliticalProfile />} />
+        <Route path="/politicians/:slug-:id" element={<EnhancedPoliticalProfile />} />
         
         {/* Senators */}
         <Route path="/senators" element={<EnhancedSenators />} />

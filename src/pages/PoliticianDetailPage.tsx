@@ -23,14 +23,13 @@ import {
   MessageCircle,
   Share2
 } from 'lucide-react';
-import { usePoliticianBySlug } from '@/hooks/usePoliticalData';
+import { usePoliticianSlug } from '@/hooks/useSlugResolver';
 import { PoliticianRating } from '@/components/Politicians/PoliticianRating';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
 
 const PoliticianDetailPage = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const { data: politician, isLoading, error } = usePoliticianBySlug(slug!);
+  const { entity: politician, loading: isLoading, error } = usePoliticianSlug();
 
   if (isLoading) {
     return (
@@ -70,9 +69,68 @@ const PoliticianDetailPage = () => {
   return (
     <>
       <Helmet>
-        <title>{politician.name} - Political Profile | CamerPulse</title>
-        <meta name="description" content={`${politician.name} political profile, ratings, and performance information. ${politician.bio || ''}`} />
-        <meta name="keywords" content={`${politician.name}, Cameroon politician, ${politician.region}, ${politician.party}`} />
+        <title>{politician.name} - {politician.role_title || 'Politician'} | CamerPulse</title>
+        <meta 
+          name="description" 
+          content={`Complete profile of ${politician.name}, ${politician.role_title || 'politician'} representing ${politician.region || politician.constituency || 'Cameroon'}. View transparency ratings, performance metrics, contact information, and civic achievements.`}
+        />
+        <meta 
+          name="keywords" 
+          content={`${politician.name}, ${politician.region}, ${politician.party}, Cameroon politician, government official, transparency rating, civic performance, political profile`}
+        />
+        <link rel="canonical" href={`https://camerpulse.com/politicians/${politician.slug || politician.id}`} />
+        
+        {/* Open Graph Tags */}
+        <meta property="og:title" content={`${politician.name} - ${politician.role_title || 'Politician'} | CamerPulse`} />
+        <meta 
+          property="og:description" 
+          content={`Complete profile of ${politician.name} with transparency ratings, performance metrics, and contact information.`}
+        />
+        <meta property="og:type" content="profile" />
+        <meta property="og:url" content={`https://camerpulse.com/politicians/${politician.slug || politician.id}`} />
+        {politician.profile_image_url && (
+          <meta property="og:image" content={politician.profile_image_url} />
+        )}
+        <meta property="og:site_name" content="CamerPulse" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`${politician.name} - ${politician.role_title || 'Politician'}`} />
+        <meta name="twitter:description" content={`View ${politician.name}'s complete political profile and transparency ratings on CamerPulse.`} />
+        {politician.profile_image_url && (
+          <meta name="twitter:image" content={politician.profile_image_url} />
+        )}
+        
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            "name": politician.name,
+            "jobTitle": politician.role_title || "Politician",
+            "description": politician.biography || `Political representative for ${politician.region || politician.constituency || 'Cameroon'}`,
+            "worksFor": {
+              "@type": "Organization",
+              "name": politician.party || "Government of Cameroon"
+            },
+            "address": {
+              "@type": "PostalAddress",
+              "addressRegion": politician.region,
+              "addressCountry": "CM"
+            },
+            "url": `https://camerpulse.com/politicians/${politician.slug || politician.id}`,
+            ...(politician.profile_image_url && { "image": politician.profile_image_url }),
+            ...(politician.contact_phone && { "telephone": politician.contact_phone }),
+            ...(politician.contact_website && { "url": politician.contact_website }),
+            "additionalType": "http://schema.org/PublicOfficial",
+            "knowsAbout": [
+              "Politics",
+              "Government",
+              politician.region && `${politician.region} Development`,
+              "Public Service"
+            ].filter(Boolean)
+          })}
+        </script>
       </Helmet>
       
       <AppLayout>
