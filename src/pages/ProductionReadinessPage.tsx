@@ -1,6 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { AppLayout } from '@/components/layout/AppLayout';
+import { AppLayout } from '@/components/Layout/AppLayout';
 import { ProductionChecklist } from '@/components/ui/production-checklist';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
