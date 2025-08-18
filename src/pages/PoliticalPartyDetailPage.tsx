@@ -1,38 +1,25 @@
 import React from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import { AppLayout } from '@/components/Layout/AppLayout';
+import { usePoliticalParty, usePoliticalPartyMembers } from '@/hooks/usePoliticalParties';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Helmet } from 'react-helmet-async';
-import { 
-  Users, 
-  Globe, 
-  Calendar, 
-  MapPin, 
-  Star, 
-  ExternalLink,
-  Building2,
-  TrendingUp,
-  Award,
-  Mail,
-  Phone
-} from 'lucide-react';
-import { usePoliticalPartyBySlug, usePoliticalPartyMembers } from '@/hooks/usePoliticalData';
-import { PoliticianCard } from '@/components/Politicians/PoliticianCard';
-import { AppLayout } from '@/components/Layout/AppLayout';
-import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
+import { Users, Calendar, MapPin, Globe, Crown, Gavel, Building, Star } from 'lucide-react';
+import { EnhancedPoliticalCard } from '@/components/Political/EnhancedPoliticalCard';
 
-const PoliticalPartyDetailPage = () => {
+const PoliticalPartyDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { data: party, isLoading, error } = usePoliticalPartyBySlug(slug!);
-  const { data: members } = usePoliticalPartyMembers(party?.id || '');
+  
+  const { data: party, isLoading, error } = usePoliticalParty(slug || '');
+  const { data: members, isLoading: membersLoading } = usePoliticalPartyMembers(party?.id || '');
 
   if (isLoading) {
     return (
       <AppLayout>
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">Loading political party...</div>
+        <div className="flex items-center justify-center min-h-96">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
         </div>
       </AppLayout>
     );
@@ -41,358 +28,302 @@ const PoliticalPartyDetailPage = () => {
   if (error || !party) {
     return (
       <AppLayout>
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center">
-            <h1 className="text-2xl font-bold mb-4">Political Party Not Found</h1>
-            <p className="text-muted-foreground mb-4">
-              The political party you're looking for could not be found.
-            </p>
-            <Link to="/political-parties">
-              <Button>Browse Political Parties</Button>
-            </Link>
-          </div>
+        <div className="text-center py-12">
+          <h1 className="text-2xl font-bold text-destructive">Party Not Found</h1>
+          <p className="text-muted-foreground mt-2">The requested political party could not be found.</p>
         </div>
       </AppLayout>
     );
   }
 
-  const totalMembers = party.mps_count + party.senators_count + party.mayors_count;
-
   return (
     <>
       <Helmet>
-        <title>{party.name} - Political Party Profile | CamerPulse</title>
-        <meta name="description" content={`${party.name} political party profile, leadership, platform, and member information. ${party.mission || ''}`} />
-        <meta name="keywords" content={`${party.name}, ${party.acronym}, Cameroon political party, party platform, political organization`} />
+        <title>{party.name} ({party.acronym}) - Political Party | CamerPulse</title>
+        <meta 
+          name="description" 
+          content={`Learn about ${party.name} (${party.acronym}), ${party.description || 'a political party in Cameroon'}. View their members, ideology, and political activities on CamerPulse.`}
+        />
+        <meta 
+          name="keywords" 
+          content={`${party.name}, ${party.acronym}, Cameroon political party, ${party.ideology || 'politics'}, political members, CamerPulse`}
+        />
+        <link rel="canonical" href={`https://camerpulse.com/parties/${slug}`} />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content={`${party.name} (${party.acronym}) - Political Party | CamerPulse`} />
+        <meta property="og:description" content={`Learn about ${party.name} (${party.acronym}), ${party.description || 'a political party in Cameroon'}.`} />
+        <meta property="og:type" content="organization" />
+        <meta property="og:url" content={`https://camerpulse.com/parties/${slug}`} />
+        {party.logo_url && <meta property="og:image" content={party.logo_url} />}
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={`${party.name} (${party.acronym}) | CamerPulse`} />
+        <meta name="twitter:description" content={`Learn about ${party.name} (${party.acronym}), ${party.description || 'a political party in Cameroon'}.`} />
+        {party.logo_url && <meta name="twitter:image" content={party.logo_url} />}
+        
+        {/* Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "PoliticalParty",
+            "name": party.name,
+            "alternateName": party.acronym,
+            "description": party.description,
+            "foundingDate": party.founded_year?.toString(),
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": party.headquarters,
+              "addressCountry": "Cameroon"
+            },
+            "logo": party.logo_url,
+            "url": party.website_url,
+            "sameAs": party.website_url ? [party.website_url] : undefined,
+            "memberOf": {
+              "@type": "Country",
+              "name": "Cameroon"
+            }
+          })}
+        </script>
       </Helmet>
       
       <AppLayout>
-        <div className="container mx-auto px-4 py-8">
-          <NavigationBreadcrumb 
-            items={[
-              { label: 'Politics', href: '/politics' },
-              { label: 'Political Parties', href: '/political-parties' },
-              { label: party.name, href: '#' }
-            ]} 
-          />
-
-          {/* Hero Section */}
-          <Card className="mb-8">
-            <CardContent className="p-8">
-              <div className="flex flex-col lg:flex-row gap-8">
-                {party.logo_url && (
-                  <div className="flex-shrink-0">
-                    <img 
-                      src={party.logo_url} 
-                      alt={`${party.name} logo`}
-                      className="w-32 h-32 object-contain rounded-lg border-4 border-border"
-                    />
-                  </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Party Header */}
+          <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-8 mb-8">
+            <div className="flex items-start space-x-6">
+              {party.logo_url && (
+                <img 
+                  src={party.logo_url} 
+                  alt={`${party.name} logo`}
+                  className="w-24 h-24 object-contain rounded-lg bg-white p-2"
+                />
+              )}
+              <div className="flex-1">
+                <div className="flex items-center space-x-4 mb-4">
+                  <h1 className="text-4xl font-bold text-foreground">{party.name}</h1>
+                  <Badge variant="secondary" className="text-lg px-3 py-1">
+                    {party.acronym}
+                  </Badge>
+                  {party.is_ruling_party && (
+                    <Badge className="bg-yellow-500 text-yellow-50">
+                      <Crown className="w-4 h-4 mr-1" />
+                      Ruling Party
+                    </Badge>
+                  )}
+                </div>
+                
+                {party.description && (
+                  <p className="text-lg text-muted-foreground mb-6 max-w-3xl">{party.description}</p>
                 )}
-
-                <div className="flex-1">
-                  <div className="flex flex-col lg:flex-row justify-between items-start mb-4">
-                    <div>
-                      <h1 className="text-3xl font-bold mb-2">{party.name}</h1>
-                      {party.acronym && (
-                        <p className="text-xl text-muted-foreground mb-3">
-                          {party.acronym}
-                        </p>
-                      )}
-                      
-                      <div className="flex items-center gap-4 flex-wrap mb-4">
-                        <Badge 
-                          variant={party.is_active ? 'default' : 'destructive'}
-                          className="text-sm"
-                        >
-                          {party.is_active ? 'Active' : 'Inactive'}
-                        </Badge>
-                        
-                        {party.ideology && (
-                          <Badge variant="outline" className="text-sm">
-                            {party.ideology}
-                          </Badge>
-                        )}
-                        
-                        {party.political_leaning && (
-                          <Badge variant="secondary" className="text-sm">
-                            {party.political_leaning}
-                          </Badge>
-                        )}
-                      </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {party.founded_year && (
+                    <div className="flex items-center space-x-2">
+                      <Calendar className="w-5 h-5 text-primary" />
+                      <span className="text-sm">Founded {party.founded_year}</span>
                     </div>
-
-                    <div className="flex items-center gap-2">
-                      {party.official_website && (
-                        <Button variant="outline" size="sm" asChild>
-                          <a 
-                            href={party.official_website} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                          >
-                            <Globe className="h-4 w-4 mr-1" />
-                            Website
-                            <ExternalLink className="h-3 w-3 ml-1" />
-                          </a>
-                        </Button>
-                      )}
+                  )}
+                  {party.headquarters && (
+                    <div className="flex items-center space-x-2">
+                      <MapPin className="w-5 h-5 text-primary" />
+                      <span className="text-sm">{party.headquarters}</span>
                     </div>
-                  </div>
-
-                  {/* Key Info */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    {party.headquarters_region && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          {party.headquarters_city}, {party.headquarters_region}
-                        </span>
-                      </div>
-                    )}
-                    
-                    {party.founding_date && (
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm">
-                          Founded {new Date(party.founding_date).getFullYear()}
-                        </span>
-                      </div>
-                    )}
-                    
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{totalMembers} Representatives</span>
+                  )}
+                  {party.member_count && (
+                    <div className="flex items-center space-x-2">
+                      <Users className="w-5 h-5 text-primary" />
+                      <span className="text-sm">{party.member_count.toLocaleString()} members</span>
                     </div>
-                  </div>
-
-                  {/* Membership Stats */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="text-center p-3 bg-muted rounded-lg">
-                      <div className="text-2xl font-bold text-primary">{party.mps_count}</div>
-                      <div className="text-sm text-muted-foreground">MPs</div>
+                  )}
+                  {party.website_url && (
+                    <div className="flex items-center space-x-2">
+                      <Globe className="w-5 h-5 text-primary" />
+                      <a 
+                        href={party.website_url} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-sm text-primary hover:underline"
+                      >
+                        Official Website
+                      </a>
                     </div>
-                    <div className="text-center p-3 bg-muted rounded-lg">
-                      <div className="text-2xl font-bold text-primary">{party.senators_count}</div>
-                      <div className="text-sm text-muted-foreground">Senators</div>
-                    </div>
-                    <div className="text-center p-3 bg-muted rounded-lg">
-                      <div className="text-2xl font-bold text-primary">{party.mayors_count}</div>
-                      <div className="text-sm text-muted-foreground">Mayors</div>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          {/* Main Content */}
-          <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="leadership">Leadership</TabsTrigger>
-              <TabsTrigger value="members">Members</TabsTrigger>
-              <TabsTrigger value="contact">Contact</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="overview" className="space-y-6">
-              {/* Mission & Vision */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {party.mission && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Mission</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {party.mission}
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {party.vision && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Vision</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-muted-foreground leading-relaxed">
-                        {party.vision}
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-
-              {/* Performance Metrics */}
-              {party.total_ratings > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Public Ratings</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                      <div className="text-center">
-                        <div className="flex items-center justify-center mb-2">
-                          <Star className="h-5 w-5 fill-yellow-400 text-yellow-400 mr-1" />
-                          <span className="text-lg font-bold">{party.approval_rating.toFixed(1)}</span>
-                        </div>
-                        <p className="text-sm text-muted-foreground">Overall Rating</p>
-                        <p className="text-xs text-muted-foreground">({party.total_ratings} ratings)</p>
-                      </div>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-primary mb-2">
-                          {party.trust_rating.toFixed(1)}/5
-                        </div>
-                        <p className="text-sm text-muted-foreground">Trust</p>
-                      </div>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-primary mb-2">
-                          {party.transparency_rating.toFixed(1)}/5
-                        </div>
-                        <p className="text-sm text-muted-foreground">Transparency</p>
-                      </div>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold text-primary mb-2">
-                          {party.development_rating.toFixed(1)}/5
-                        </div>
-                        <p className="text-sm text-muted-foreground">Development</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
-
-            <TabsContent value="leadership" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-3 space-y-8">
+              {/* Political Representation */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Party Leadership</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {party.party_president && (
-                    <div className="flex items-center justify-between py-3 border-b">
-                      <div>
-                        <h3 className="font-semibold">Party President</h3>
-                        <p className="text-muted-foreground">{party.party_president}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {party.vice_president && (
-                    <div className="flex items-center justify-between py-3 border-b">
-                      <div>
-                        <h3 className="font-semibold">Vice President</h3>
-                        <p className="text-muted-foreground">{party.vice_president}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {party.secretary_general && (
-                    <div className="flex items-center justify-between py-3 border-b">
-                      <div>
-                        <h3 className="font-semibold">Secretary General</h3>
-                        <p className="text-muted-foreground">{party.secretary_general}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {party.treasurer && (
-                    <div className="flex items-center justify-between py-3 border-b">
-                      <div>
-                        <h3 className="font-semibold">Treasurer</h3>
-                        <p className="text-muted-foreground">{party.treasurer}</p>
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="members" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Party Members</CardTitle>
+                  <CardTitle className="flex items-center">
+                    <Gavel className="w-5 h-5 mr-2" />
+                    Political Representation
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  {members && members.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {members.map((member) => (
-                        <PoliticianCard
-                          key={member.id}
-                          politician={member}
-                          showFullDetails={false}
-                          showRating={true}
-                          showFollow={false}
-                        />
-                      ))}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-primary">{party.seats_national_assembly || 0}</div>
+                      <div className="text-sm text-muted-foreground">National Assembly Seats</div>
                     </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                      <h3 className="text-lg font-semibold mb-2">No Members Listed</h3>
-                      <p className="text-muted-foreground">
-                        Member information is not yet available for this party.
-                      </p>
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-primary">{party.seats_senate || 0}</div>
+                      <div className="text-sm text-muted-foreground">Senate Seats</div>
                     </div>
-                  )}
+                    <div className="text-center">
+                      <div className="text-3xl font-bold text-primary">{members?.totalMembers || 0}</div>
+                      <div className="text-sm text-muted-foreground">Total Officials</div>
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
-            </TabsContent>
 
-            <TabsContent value="contact" className="space-y-6">
+              {/* Party Members */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Contact Information</CardTitle>
+                  <CardTitle className="flex items-center">
+                    <Users className="w-5 h-5 mr-2" />
+                    Party Members
+                  </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  {party.contact_email && (
-                    <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-muted-foreground" />
-                      <a 
-                        href={`mailto:${party.contact_email}`}
-                        className="text-primary hover:underline"
-                      >
-                        {party.contact_email}
-                      </a>
-                    </div>
-                  )}
+                <CardContent>
+                  {membersLoading ? (
+                    <div className="text-center py-8">Loading members...</div>
+                  ) : (
+                    <div className="space-y-8">
+                      {/* Ministers */}
+                      {members?.ministers && members.ministers.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-semibold mb-4">Ministers ({members.ministers.length})</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {members.ministers.map((minister) => (
+                              <EnhancedPoliticalCard
+                                key={minister.id}
+                                entity={minister}
+                                type="minister"
+                                variant="compact"
+                                showActions={false}
+                                showContact={false}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
-                  {party.contact_phone && (
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-muted-foreground" />
-                      <span>{party.contact_phone}</span>
-                    </div>
-                  )}
+                      {/* MPs */}
+                      {members?.mps && members.mps.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-semibold mb-4">Members of Parliament ({members.mps.length})</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {members.mps.map((mp) => (
+                              <EnhancedPoliticalCard
+                                key={mp.id}
+                                entity={mp}
+                                type="mp"
+                                variant="compact"
+                                showActions={false}
+                                showContact={false}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
-                  {party.headquarters_address && (
-                    <div className="flex items-center gap-3">
-                      <Building2 className="h-5 w-5 text-muted-foreground" />
-                      <span>{party.headquarters_address}</span>
-                    </div>
-                  )}
+                      {/* Senators */}
+                      {members?.senators && members.senators.length > 0 && (
+                        <div>
+                          <h3 className="text-lg font-semibold mb-4">Senators ({members.senators.length})</h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {members.senators.map((senator) => (
+                              <EnhancedPoliticalCard
+                                key={senator.id}
+                                entity={senator}
+                                type="senator"
+                                variant="compact"
+                                showActions={false}
+                                showContact={false}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      )}
 
-                  {party.official_website && (
-                    <div className="flex items-center gap-3">
-                      <Globe className="h-5 w-5 text-muted-foreground" />
-                      <a 
-                        href={party.official_website}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-primary hover:underline"
-                      >
-                        {party.official_website}
-                        <ExternalLink className="h-4 w-4 ml-1 inline" />
-                      </a>
+                      {(!members || members.totalMembers === 0) && (
+                        <div className="text-center py-8 text-muted-foreground">
+                          No party members found in our database yet.
+                        </div>
+                      )}
                     </div>
                   )}
                 </CardContent>
               </Card>
-            </TabsContent>
-          </Tabs>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Party Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Building className="w-5 h-5 mr-2" />
+                    Party Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {party.ideology && (
+                    <div>
+                      <label className="text-sm font-medium text-muted-foreground">Ideology</label>
+                      <p className="mt-1">{party.ideology}</p>
+                    </div>
+                  )}
+                  
+                  {party.president_name && (
+                    <div>
+                      <label className="text-sm font-medium text-muted-foreground">Party President</label>
+                      <p className="mt-1">{party.president_name}</p>
+                    </div>
+                  )}
+
+                  <div>
+                    <label className="text-sm font-medium text-muted-foreground">Status</label>
+                    <p className="mt-1">
+                      <Badge variant={party.is_active ? "default" : "secondary"}>
+                        {party.is_active ? "Active" : "Inactive"}
+                      </Badge>
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Actions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Actions</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {party.website_url && (
+                    <Button asChild variant="outline" className="w-full">
+                      <a href={party.website_url} target="_blank" rel="noopener noreferrer">
+                        <Globe className="w-4 h-4 mr-2" />
+                        Visit Website
+                      </a>
+                    </Button>
+                  )}
+                  
+                  <Button variant="outline" className="w-full">
+                    <Star className="w-4 h-4 mr-2" />
+                    Follow Party
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
         </div>
       </AppLayout>
     </>

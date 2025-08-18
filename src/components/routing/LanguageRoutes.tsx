@@ -124,20 +124,23 @@ export const AppRouter: React.FC = () => {
         {/* Senators */}
         <Route path="/senators" element={<EnhancedSenators />} />
         <Route path="/senators/:slug" element={<SenatorDetailPage />} />
+        <Route path="/senators/:slug-:id" element={<SenatorDetailPage />} />
         
         {/* MPs */}
         <Route path="/mps" element={<EnhancedMPs />} />
         <Route path="/mps/:slug" element={<MPDetailPage />} />
+        <Route path="/mps/:slug-:id" element={<MPDetailPage />} />
         
         {/* Ministers */}
         <Route path="/ministers" element={<EnhancedMinisters />} />
         <Route path="/ministers/:slug" element={<EnhancedMinisterDetail />} />
+        <Route path="/ministers/:slug-:id" element={<EnhancedMinisterDetail />} />
         
         {/* Political Parties */}
         <Route path="/parties" element={<PoliticalPartiesPage />} />
-        <Route path="/parties/:slug" element={<PoliticalPartyPage />} />
+        <Route path="/parties/:slug" element={<PoliticalPartyDetailPage />} />
         <Route path="/political-parties" element={<PoliticalPartiesPage />} />
-        <Route path="/political-parties/:slug" element={<PoliticalPartyPage />} />
+        <Route path="/political-parties/:slug" element={<PoliticalPartyDetailPage />} />
         <Route path="/political-directory" element={<UnifiedPoliticalDirectoryPage />} />
         
         {/* Petitions */}
