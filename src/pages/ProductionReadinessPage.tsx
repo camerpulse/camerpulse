@@ -141,7 +141,7 @@ const ProductionReadinessPage: React.FC = () => {
 
           {/* Production Validation */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold">Production Validation</h2>
+            <h2 className="text-2xl font-bold">Enhanced Political Directories Status</h2>
             <ProductionChecklist />
           </div>
 

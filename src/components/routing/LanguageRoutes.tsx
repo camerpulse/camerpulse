@@ -15,8 +15,8 @@ import EnhancedSenators from '@/pages/EnhancedSenators';
 import { SenatorDetailPage } from '@/pages/SenatorDetailPage';
 import EnhancedMPs from '@/pages/EnhancedMPs';
 import { MPDetailPage } from '@/pages/MPDetailPage';
-import MinistersPage from '@/pages/MinistersPage';
-import { MinisterDetailPage } from '@/pages/MinisterDetailPage';
+import EnhancedMinisters from '@/pages/EnhancedMinisters';
+import EnhancedMinisterDetail from '@/pages/EnhancedMinisterDetail';
 import PoliticalParties from '@/pages/PoliticalParties';
 import PoliticalPartyDetail from '@/pages/PoliticalPartyDetail';
 import PoliticalPartyPage from '@/pages/PoliticalPartyPage';
@@ -117,20 +117,20 @@ export const AppRouter: React.FC = () => {
         <Route path="/music" element={<ArtistEcosystem />} />
         
         {/* Politicians */}
-        <Route path="/politicians" element={<Politicians />} />
+        <Route path="/politicians" element={<EnhancedPoliticians />} />
         <Route path="/politicians/:slug" element={<PoliticianDetailPage />} />
         
         {/* Senators */}
-        <Route path="/senators" element={<SenatorsPage />} />
+        <Route path="/senators" element={<EnhancedSenators />} />
         <Route path="/senators/:slug" element={<SenatorDetailPage />} />
         
         {/* MPs */}
-        <Route path="/mps" element={<MPsPage />} />
+        <Route path="/mps" element={<EnhancedMPs />} />
         <Route path="/mps/:slug" element={<MPDetailPage />} />
         
         {/* Ministers */}
-        <Route path="/ministers" element={<MinistersPage />} />
-        <Route path="/ministers/:slug" element={<MinisterDetailPage />} />
+        <Route path="/ministers" element={<EnhancedMinisters />} />
+        <Route path="/ministers/:slug" element={<EnhancedMinisterDetail />} />
         
         {/* Political Parties */}
         <Route path="/parties" element={<PoliticalPartiesPage />} />
