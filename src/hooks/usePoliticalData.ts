@@ -141,7 +141,7 @@ export const usePolitician = (id: string) => {
           )
         `)
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -169,7 +169,7 @@ export const usePoliticianBySlug = (slug: string) => {
           )
         `)
         .eq('name', slug.replace(/-/g, ' '))
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -236,7 +236,7 @@ export const usePoliticalParty = (id: string) => {
         .from('political_parties')
         .select('*')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
@@ -253,7 +253,7 @@ export const usePoliticalPartyBySlug = (slug: string) => {
         .from('political_parties')
         .select('*')
         .eq('slug', slug)
-        .single();
+        .maybeSingle();
 
       if (error) throw error;
       return data;
