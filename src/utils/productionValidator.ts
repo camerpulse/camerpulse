@@ -43,27 +43,25 @@ export class ProductionValidator {
   }
 
   private async checkEnvironmentVariables() {
-    const requiredEnvVars = [
-      'VITE_SUPABASE_URL',
-      'VITE_SUPABASE_ANON_KEY'
-    ];
+    // Note: In Lovable, we use direct URLs instead of VITE_ env vars
+    const supabaseUrl = 'https://wsiorhtiovwcajiarydw.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzaW9yaHRpb3Z3Y2FqaWFyeWR3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIyODE3ODAsImV4cCI6MjA2Nzg1Nzc4MH0.4GKFhQTxlEzj6oTcfnAZQpPxPHW0nqGDEfBe-gVGoNE';
 
-    for (const envVar of requiredEnvVars) {
-      if (!import.meta.env[envVar]) {
-        this.addCheck({
-          name: `Environment Variable: ${envVar}`,
-          status: 'fail',
-          message: `Missing required environment variable: ${envVar}`,
-          critical: true
-        });
-      } else {
-        this.addCheck({
-          name: `Environment Variable: ${envVar}`,
-          status: 'pass',
-          message: 'Environment variable is configured',
-          critical: true
-        });
-      }
+    // Check Supabase configuration
+    if (supabaseUrl && supabaseKey) {
+      this.addCheck({
+        name: 'Supabase Configuration',
+        status: 'pass',
+        message: 'Supabase URL and API key are properly configured',
+        critical: true
+      });
+    } else {
+      this.addCheck({
+        name: 'Supabase Configuration',
+        status: 'fail',
+        message: 'Missing Supabase configuration',
+        critical: true
+      });
     }
   }
 

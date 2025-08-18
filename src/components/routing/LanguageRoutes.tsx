@@ -59,6 +59,7 @@ import PriorityAssessmentDashboard from '@/pages/admin/PriorityAssessmentDashboa
 import UserMigrationAdminPage from '@/pages/admin/UserMigrationAdminPage';
 import NotFound from '@/pages/NotFound';
 import CivicDashboard from '@/pages/CivicDashboard';
+import ProductionReadinessPage from '@/pages/ProductionReadinessPage';
 import CivicEducationHub from '@/pages/CivicEducationHub';
 import CivicContributionsPage from '@/pages/CivicContributionsPage';
 import CorruptionIndex from '@/pages/CorruptionIndex';
@@ -197,6 +198,11 @@ export const AppRouter: React.FC = () => {
         <Route path="/performance" element={
           <ProtectedRoute requireAdmin={true}>
             <PerformanceMonitoringPage />
+          </ProtectedRoute>
+        } />
+        <Route path="/production-readiness" element={
+          <ProtectedRoute requireAdmin={true}>
+            <ProductionReadinessPage />
           </ProtectedRoute>
         } />
         
