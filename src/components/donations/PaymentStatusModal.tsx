@@ -135,7 +135,7 @@ export const PaymentStatusModal: React.FC<PaymentStatusModalProps> = ({
   };
 
   const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat('fr-CM', {
+    return new Intl.NumberFormat('en-CM', {
       style: 'currency',
       currency: 'XAF',
       minimumFractionDigits: 0

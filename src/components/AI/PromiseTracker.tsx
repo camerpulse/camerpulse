@@ -303,7 +303,7 @@ export const PromiseTracker: React.FC = () => {
       case 'disputed':
         return <Badge className="bg-yellow-100 text-yellow-800">? Contesté</Badge>;
       default:
-        return <Badge className="bg-gray-100 text-gray-800">Non vérifié</Badge>;
+        return <Badge className="bg-gray-100 text-gray-800">Unverified</Badge>;
     }
   };
 

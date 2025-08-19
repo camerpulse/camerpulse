@@ -7,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatCurrency(amount: number, currency: string = 'USD'): string {
   if (currency === 'FCFA') {
-    return new Intl.NumberFormat('fr-CM', {
+    return new Intl.NumberFormat('en-CM', {
       style: 'currency',
       currency: 'XAF',
       minimumFractionDigits: 0,

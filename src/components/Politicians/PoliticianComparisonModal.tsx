@@ -278,7 +278,7 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                         
                         <div className="flex items-center gap-2">
                           <XCircle className="w-4 h-4 text-red-500" />
-                          <span className="text-sm">Non tenues: {politician.promises_summary.unfulfilled}</span>
+                          <span className="text-sm">Unfulfilled: {politician.promises_summary.unfulfilled}</span>
                           <div className="ml-auto text-sm text-gray-500">
                             {politician.promises_summary.total > 0 
                               ? ((politician.promises_summary.unfulfilled / politician.promises_summary.total) * 100).toFixed(1)

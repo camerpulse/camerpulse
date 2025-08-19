@@ -69,7 +69,7 @@ export const TransactionHistory: React.FC = () => {
   };
 
   const formatAmount = (amount: number) => {
-    return new Intl.NumberFormat('fr-CM', {
+    return new Intl.NumberFormat('en-CM', {
       style: 'currency',
       currency: 'XAF',
       minimumFractionDigits: 0

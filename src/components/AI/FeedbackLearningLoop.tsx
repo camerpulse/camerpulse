@@ -40,7 +40,7 @@ interface LearningEntry {
 interface NewPattern {
   term: string;
   type: 'slang' | 'political_term' | 'emotion' | 'sarcasm';
-  language: 'en' | 'fr' | 'pidgin';
+  language: 'en' | 'pidgin';
   sentiment: 'positive' | 'negative' | 'neutral';
   confidence: number;
   context: string;

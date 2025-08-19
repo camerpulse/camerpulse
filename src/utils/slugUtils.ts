@@ -257,7 +257,7 @@ export function getLegacyRedirect(pathname: string): string | null {
 
   for (const [pattern, generator] of Object.entries(LEGACY_REDIRECTS)) {
     let regexPattern = pattern
-      .replace(':lang', '(en|fr)')
+      .replace(':lang', '(en)')
       .replace(':id', '([^/]+)');
     
     const regex = new RegExp(`^${regexPattern}$`);

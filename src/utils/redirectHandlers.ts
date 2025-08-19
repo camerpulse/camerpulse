@@ -3,7 +3,7 @@
  */
 export function handleLegacyRedirects(pathname: string): string | null {
   // Handle old language-prefixed paths
-  const languageMatch = pathname.match(/^\/(?:en|fr)(\/.*)$/);
+  const languageMatch = pathname.match(/^\/(?:en)(\/.*)$/);
   if (languageMatch) {
     return languageMatch[1] || '/'; // Return path without language prefix
   }

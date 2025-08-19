@@ -217,7 +217,7 @@ export const DebtDataScraper: React.FC = () => {
 
   const formatCurrency = (amount: number | null) => {
     if (!amount) return 'N/A';
-    return new Intl.NumberFormat('fr-CM', {
+    return new Intl.NumberFormat('en-CM', {
       style: 'decimal',
       notation: 'compact',
       maximumFractionDigits: 1

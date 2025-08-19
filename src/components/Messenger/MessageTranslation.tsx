@@ -126,7 +126,7 @@ export const MessageTranslation: React.FC<MessageTranslationProps> = ({
     const translations: Record<string, Record<string, string>> = {
       'Hello': {
         'es': 'Hola',
-        'fr': 'Bonjour',
+        // French content removed - English only platform
         'de': 'Hallo',
         'it': 'Ciao',
         'pt': 'Olá',
@@ -139,7 +139,7 @@ export const MessageTranslation: React.FC<MessageTranslationProps> = ({
       },
       'Thank you': {
         'es': 'Gracias',
-        'fr': 'Merci',
+        // French content removed - English only platform
         'de': 'Danke',
         'it': 'Grazie',
         'pt': 'Obrigado',

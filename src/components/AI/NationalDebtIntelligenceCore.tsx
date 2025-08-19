@@ -301,7 +301,7 @@ export const NationalDebtIntelligenceCore: React.FC = () => {
         maximumFractionDigits: 1
       }).format(amount);
     }
-    return new Intl.NumberFormat('fr-CM', {
+    return new Intl.NumberFormat('en-CM', {
       style: 'decimal',
       notation: 'compact',
       maximumFractionDigits: 1
