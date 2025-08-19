@@ -92,6 +92,7 @@ const VillageMemberProfile = lazy(() => import('@/pages/profiles/VillageMemberPr
 
 // Settings & Preferences
 const NotificationSettingsPage = lazy(() => import('@/pages/NotificationSettingsPage'));
+const SettingsPage = lazy(() => import('@/pages/SettingsPage'));
 const AdvancedSearchPage = lazy(() => import('@/pages/AdvancedSearchPage'));
 
 // Admin Pages
