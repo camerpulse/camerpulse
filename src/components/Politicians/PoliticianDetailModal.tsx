@@ -139,8 +139,8 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
     } catch (error) {
       console.error('Error fetching politician details:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger les détails du politicien",
+        title: "Error",
+        description: "Unable to load politician details",
         variant: "destructive"
       });
     } finally {
@@ -189,7 +189,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Profil du politicien</DialogTitle>
+          <DialogTitle>Politician Profile</DialogTitle>
         </DialogHeader>
 
         {loading ? (
@@ -246,25 +246,25 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                   <div className="text-2xl font-bold text-cameroon-primary">
                     {politician.civic_score}
                   </div>
-                  <div className="text-sm text-gray-600">Score Civique</div>
+                  <div className="text-sm text-gray-600">Civic Score</div>
                 </div>
                 <div className="text-center p-3 bg-gray-50 rounded-lg">
                   <div className="text-2xl font-bold text-cameroon-primary">
                     {politician.average_rating?.toFixed(1) || '0'}
                   </div>
-                  <div className="text-sm text-gray-600">Note Moyenne</div>
+                  <div className="text-sm text-gray-600">Average Rating</div>
                 </div>
                 <div className="text-center p-3 bg-gray-50 rounded-lg">
                   <div className="text-2xl font-bold text-cameroon-primary">
                     {politician.follower_count || 0}
                   </div>
-                  <div className="text-sm text-gray-600">Suiveurs</div>
+                  <div className="text-sm text-gray-600">Followers</div>
                 </div>
                 <div className="text-center p-3 bg-gray-50 rounded-lg">
                   <div className="text-2xl font-bold text-cameroon-primary">
                     {promises.length}
                   </div>
-                  <div className="text-sm text-gray-600">Promesses</div>
+                  <div className="text-sm text-gray-600">Promises</div>
                 </div>
               </div>
             </div>
@@ -272,10 +272,10 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
             {/* Tabs */}
             <Tabs value={activeTab} onValueChange={setActiveTab}>
               <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="overview">Aperçu</TabsTrigger>
-                <TabsTrigger value="promises">Promesses</TabsTrigger>
-                <TabsTrigger value="ratings">Évaluations</TabsTrigger>
-                <TabsTrigger value="info">Informations</TabsTrigger>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="promises">Promises</TabsTrigger>
+                <TabsTrigger value="ratings">Ratings</TabsTrigger>
+                <TabsTrigger value="info">Information</TabsTrigger>
               </TabsList>
 
               <TabsContent value="overview" className="space-y-4">
@@ -401,7 +401,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                                   className="text-sm text-blue-600 hover:underline flex items-center gap-1"
                                 >
                                   <ExternalLink className="w-3 h-3" />
-                                  Voir les preuves
+                                  View Evidence
                                 </a>
                               )}
                             </div>

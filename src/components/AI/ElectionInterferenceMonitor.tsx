@@ -225,8 +225,8 @@ export const ElectionInterferenceMonitor: React.FC = () => {
     } catch (error) {
       console.error('Error fetching election data:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger les données électorales",
+        title: "Error",
+        description: "Unable to load election data",
         variant: "destructive"
       });
     } finally {

@@ -206,7 +206,7 @@ export const PollTemplateRenderer: React.FC<PollTemplateRendererProps> = ({
     >
       <CardHeader className="text-center border-b-2 border-gray-200">
         <CardTitle className="text-2xl font-serif" style={{ color: colorTheme.primary }}>
-          BULLETIN DE VOTE ÉLECTRONIQUE
+          ELECTRONIC BALLOT
         </CardTitle>
         <p className="text-sm text-gray-600 font-serif">
           {poll.title}

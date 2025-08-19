@@ -115,7 +115,7 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Comparaison des politiciens</DialogTitle>
+          <DialogTitle>Politician Comparison</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -136,7 +136,7 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                     {politician.verified && (
                       <Badge className="bg-blue-500 text-white">
                         <UserCheck className="w-3 h-3 mr-1" />
-                        Vérifié
+                        Verified
                       </Badge>
                     )}
                   </div>
@@ -170,12 +170,12 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
           {/* Metrics Comparison */}
           <Card>
             <CardHeader>
-              <CardTitle>Comparaison des performances</CardTitle>
+              <CardTitle>Performance Comparison</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-1">
                 <ComparisonRow
-                  label="Score Civique"
+                  label="Civic Score"
                   value1={politician1.civic_score}
                   value2={politician2.civic_score}
                   format="number"
@@ -183,7 +183,7 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                 />
                 
                 <ComparisonRow
-                  label="Note Moyenne"
+                  label="Average Rating"
                   value1={politician1.average_rating || 0}
                   value2={politician2.average_rating || 0}
                   format="rating"
@@ -191,7 +191,7 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                 />
                 
                 <ComparisonRow
-                  label="Intégrité"
+                  label="Integrity"
                   value1={politician1.integrity_rating || 0}
                   value2={politician2.integrity_rating || 0}
                   format="rating"
@@ -199,7 +199,7 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                 />
                 
                 <ComparisonRow
-                  label="Impact Développement"
+                  label="Development Impact"
                   value1={politician1.development_impact_rating || 0}
                   value2={politician2.development_impact_rating || 0}
                   format="rating"
@@ -207,7 +207,7 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                 />
                 
                 <ComparisonRow
-                  label="Transparence"
+                  label="Transparency"
                   value1={politician1.transparency_rating || 0}
                   value2={politician2.transparency_rating || 0}
                   format="rating"
@@ -215,21 +215,21 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                 />
                 
                 <ComparisonRow
-                  label="Suiveurs"
+                  label="Followers"
                   value1={politician1.follower_count || 0}
                   value2={politician2.follower_count || 0}
                   format="number"
                 />
                 
                 <ComparisonRow
-                  label="Évaluations"
+                  label="Ratings"
                   value1={politician1.total_ratings || 0}
                   value2={politician2.total_ratings || 0}
                   format="number"
                 />
                 
                 <ComparisonRow
-                  label="Promesses tenues (%)"
+                  label="Promises Kept (%)"
                   value1={getPromisePercentage(politician1)}
                   value2={getPromisePercentage(politician2)}
                   format="percentage"
@@ -243,20 +243,20 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
             {[politician1, politician2].map((politician) => (
               <Card key={`promises-${politician.id}`}>
                 <CardHeader>
-                  <CardTitle className="text-lg">{politician.name} - Promesses</CardTitle>
+                  <CardTitle className="text-lg">{politician.name} - Promises</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {politician.promises_summary && politician.promises_summary.total > 0 ? (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between">
-                        <span className="text-sm">Total des promesses</span>
+                        <span className="text-sm">Total Promises</span>
                         <span className="font-bold">{politician.promises_summary.total}</span>
                       </div>
                       
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-green-500" />
-                          <span className="text-sm">Tenues: {politician.promises_summary.fulfilled}</span>
+                          <span className="text-sm">Fulfilled: {politician.promises_summary.fulfilled}</span>
                           <div className="ml-auto text-sm text-gray-500">
                             {politician.promises_summary.total > 0 
                               ? ((politician.promises_summary.fulfilled / politician.promises_summary.total) * 100).toFixed(1)
@@ -267,7 +267,7 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                         
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-yellow-500" />
-                          <span className="text-sm">En cours: {politician.promises_summary.in_progress}</span>
+                          <span className="text-sm">In Progress: {politician.promises_summary.in_progress}</span>
                           <div className="ml-auto text-sm text-gray-500">
                             {politician.promises_summary.total > 0 
                               ? ((politician.promises_summary.in_progress / politician.promises_summary.total) * 100).toFixed(1)
@@ -290,14 +290,14 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
                       
                       <div className="pt-2">
                         <div className="flex justify-between text-xs mb-1">
-                          <span>Taux de réalisation</span>
+                          <span>Fulfillment Rate</span>
                           <span>{getPromisePercentage(politician).toFixed(1)}%</span>
                         </div>
                         <Progress value={getPromisePercentage(politician)} className="h-2" />
                       </div>
                     </div>
                   ) : (
-                    <p className="text-center text-gray-500 py-4">Aucune promesse enregistrée</p>
+                    <p className="text-center text-gray-500 py-4">No promises recorded</p>
                   )}
                 </CardContent>
               </Card>
@@ -309,13 +309,13 @@ export const PoliticianComparisonModal: React.FC<PoliticianComparisonModalProps>
             {[politician1, politician2].map((politician) => (
               <Card key={`bio-${politician.id}`}>
                 <CardHeader>
-                  <CardTitle className="text-lg">{politician.name} - Biographie</CardTitle>
+                  <CardTitle className="text-lg">{politician.name} - Biography</CardTitle>
                 </CardHeader>
                 <CardContent>
                   {politician.bio ? (
                     <p className="text-sm text-gray-700">{politician.bio}</p>
                   ) : (
-                    <p className="text-center text-gray-500 py-4">Aucune biographie disponible</p>
+                    <p className="text-center text-gray-500 py-4">No biography available</p>
                   )}
                 </CardContent>
               </Card>
