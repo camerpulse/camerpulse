@@ -20,10 +20,12 @@ import {
   LogOut, 
   Menu, 
   MessageSquare,
+  Search,
   Settings, 
   User,
   X
 } from "lucide-react";
+import { PoliticalSearch } from "@/components/Political/PoliticalSearch";
 
 // Memoized navigation items for performance
 const NAVIGATION_ITEMS = [
@@ -126,6 +128,11 @@ export const OptimizedHeader: React.FC = React.memo(() => {
           {/* Right Side Actions */}
           <div className="flex items-center space-x-2">
             <LanguageSwitcher />
+            
+            {/* Political Search */}
+            <div className="hidden md:block">
+              <PoliticalSearch />
+            </div>
             
             {/* Notifications */}
             <Button 

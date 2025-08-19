@@ -32,6 +32,7 @@ import { AnalyticsLogsManager } from './modules/AnalyticsLogsManager';
 import { SettingsSyncManager } from './modules/SettingsSyncManager';
 import { IntelligencePanel } from './modules/IntelligencePanel';
 import { PoliticalPartiesManager } from './modules/PoliticalPartiesManager';
+import { PoliticalManagement } from '../PoliticalManagement';
 import { NewsSystemManager } from './modules/NewsSystemManager';
 import { MarketplaceManager } from './modules/MarketplaceManager';
 import { ElectionManager } from './modules/ElectionManager';
@@ -270,6 +271,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'analytics-logs', label: 'Analytics & Logs', icon: Database, color: 'text-gray-600', permission: 'analytics' },
     { id: 'cleanup-review', label: 'Cleanup Review', icon: ListChecks, color: 'text-red-600', permission: 'admin_only' },
     { id: 'political-parties', label: 'Political Parties', icon: Flag, color: 'text-blue-600', permission: 'politics' },
+    { id: 'political-management', label: 'Political Management', icon: Users, color: 'text-purple-600', permission: 'politics' },
     { id: 'news-system', label: 'News System', icon: Newspaper, color: 'text-blue-600', permission: 'content' },
     { id: 'marketplace', label: 'Marketplace', icon: Store, color: 'text-green-600', permission: 'marketplace' },
     { id: 'elections', label: 'Elections', icon: Vote, color: 'text-purple-600', permission: 'elections' },
@@ -333,6 +335,8 @@ export const AdminCoreV2: React.FC = () => {
         return <IntelligencePanel {...moduleProps} />;
       case 'political-parties':
         return <PoliticalPartiesManager {...moduleProps} />;
+      case 'political-management':
+        return <PoliticalManagement />;
       case 'news-system':
         return <NewsSystemManager {...moduleProps} />;
       case 'marketplace':
