@@ -132,7 +132,7 @@ export const PollTemplateRenderer: React.FC<PollTemplateRendererProps> = ({
         <div className="absolute top-4 right-4">
           <Badge className="flex items-center gap-1" style={{ backgroundColor: colorTheme.accent }}>
             <Flag className="h-3 w-3" />
-            Cameroun
+            Cameroon
           </Badge>
         </div>
       )}

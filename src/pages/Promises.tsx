@@ -19,8 +19,8 @@ const Promises: React.FC = () => {
             Index National des Promesses
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Suivez et analysez les promesses politiques au Cameroun. 
-            Une plateforme de transparence et de responsabilité civique pour tous les citoyens.
+            Track and analyze political promises in Cameroon. 
+            A platform for transparency and civic accountability for all citizens.
           </p>
           <div className="flex justify-center gap-4">
             <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-2">
@@ -89,7 +89,7 @@ const Promises: React.FC = () => {
         {/* Main Promise Tracker */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">Toutes les promesses</CardTitle>
+            <CardTitle className="text-2xl">All Promises</CardTitle>
           </CardHeader>
           <CardContent>
             <PromiseTracker />

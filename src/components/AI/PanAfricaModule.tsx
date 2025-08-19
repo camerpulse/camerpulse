@@ -85,7 +85,7 @@ const PanAfricaModule = () => {
           {
             country_code: 'CM',
             country_name: 'Cameroon',
-            country_name_local: 'Cameroun',
+            country_name_local: 'Cameroon',
             flag_emoji: '🇨🇲',
             primary_language: 'fr',
             supported_languages: ['fr', 'en'],

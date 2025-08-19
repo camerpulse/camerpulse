@@ -326,7 +326,7 @@ export const CivicFeed: React.FC = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Filter className="h-5 w-5" />
-            Filtres et Contrôles
+            Filters and Controls
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -334,7 +334,7 @@ export const CivicFeed: React.FC = () => {
           <div className="relative">
             <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Rechercher dans les discussions..."
+              placeholder="Search discussions..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -438,7 +438,7 @@ export const CivicFeed: React.FC = () => {
         <Alert className="border-red-200 bg-red-50">
           <Radio className="h-4 w-4 text-red-600 /* animate-pulse - disabled */" />
           <AlertDescription className="text-red-800">
-            Mode direct activé - Actualisation automatique toutes les 10 secondes
+            Direct mode enabled - Auto-refresh every 10 seconds
           </AlertDescription>
         </Alert>
       )}

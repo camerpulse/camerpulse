@@ -230,7 +230,7 @@ const PollsDiscovery = () => {
               <h1 className="text-3xl font-bold">Découverte des Sondages</h1>
             </div>
             <p className="text-muted-foreground">
-              Explorez les sondages publics et participez au débat civique camerounais
+              Explore public polls and participate in Cameroonian civic debate
             </p>
           </div>
 
@@ -267,7 +267,7 @@ const PollsDiscovery = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Filter className="w-5 h-5" />
-                Filtres et Recherche
+                Filters and Search
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -275,7 +275,7 @@ const PollsDiscovery = () => {
                 <div className="relative">
                   <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
                   <Input
-                    placeholder="Rechercher des sondages..."
+                    placeholder="Search polls..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10"
@@ -301,10 +301,10 @@ const PollsDiscovery = () => {
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Tous les types</SelectItem>
+                    <SelectItem value="all">All Types</SelectItem>
                     {POLL_TYPES.map(type => (
                       <SelectItem key={type} value={type}>
-                        {type === 'political' ? 'Politique' :
+                        {type === 'political' ? 'Political' :
                          type === 'governance' ? 'Gouvernance' :
                          type === 'policy' ? 'Politique publique' :
                          type === 'public_opinion' ? 'Opinion publique' :
@@ -371,7 +371,7 @@ const PollsDiscovery = () => {
                 <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
                 <h3 className="text-lg font-medium mb-2">Aucun sondage trouvé</h3>
                 <p className="text-muted-foreground">
-                  Essayez de modifier vos filtres ou créez un nouveau sondage
+                  Try modifying your filters or create a new poll
                 </p>
               </CardContent>
             </Card>

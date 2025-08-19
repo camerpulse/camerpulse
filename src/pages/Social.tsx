@@ -307,7 +307,7 @@ const Social = () => {
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-primary mb-2">Réseau Social</h1>
-            <p className="text-muted-foreground">Connectez-vous avec la communauté camerounaise</p>
+            <p className="text-muted-foreground">Connect with the Cameroonian community</p>
           </div>
 
           {/* Search */}

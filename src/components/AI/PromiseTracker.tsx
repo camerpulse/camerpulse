@@ -414,7 +414,7 @@ export const PromiseTracker: React.FC = () => {
             <div className="relative">
               <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
               <Input
-                placeholder="Rechercher..."
+                placeholder="Search..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -439,9 +439,9 @@ export const PromiseTracker: React.FC = () => {
                 <SelectValue placeholder="Category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Toutes les catégories</SelectItem>
-                <SelectItem value="education">Éducation</SelectItem>
-                <SelectItem value="health">Santé</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="education">Education</SelectItem>
+                <SelectItem value="health">Health</SelectItem>
                 <SelectItem value="infrastructure">Infrastructure</SelectItem>
                 <SelectItem value="economy">Économie</SelectItem>
                 <SelectItem value="security">Sécurité</SelectItem>

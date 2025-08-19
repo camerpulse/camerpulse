@@ -208,14 +208,14 @@ const PulseFeed = () => {
       setNewPost('');
       fetchPosts();
       toast({
-        title: "Pulse publié!",
-        description: "Votre message a été partagé avec la communauté"
+        title: "Pulse published!",
+        description: "Your message has been shared with the community"
       });
     } catch (error) {
       console.error('Error creating post:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de publier votre pulse",
+        title: "Error",
+        description: "Unable to publish your pulse",
         variant: "destructive"
       });
     } finally {
@@ -311,7 +311,7 @@ const PulseFeed = () => {
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-cameroon-primary mb-2">Pulse Feed</h1>
-            <p className="text-gray-600">Partagez vos pensées avec la communauté camerounaise</p>
+            <p className="text-gray-600">Share your thoughts with the Cameroonian community</p>
           </div>
 
           {/* Create Post */}
@@ -337,7 +337,7 @@ const PulseFeed = () => {
             </CardHeader>
             <CardContent>
               <Textarea
-                placeholder="Que se passe-t-il au Cameroun? Partagez vos pensées... #CamerPulse"
+                placeholder="What's happening in Cameroon? Share your thoughts... #CamerPulse"
                 value={newPost}
                 onChange={(e) => setNewPost(e.target.value)}
                 className="mb-4 min-h-[120px] border-cameroon-primary/20 focus:border-cameroon-primary"
@@ -351,7 +351,7 @@ const PulseFeed = () => {
                   className="bg-primary text-primary-foreground hover:bg-primary/90"
                 >
                   <Send className="w-4 h-4 mr-2" />
-                  {posting ? 'Publication...' : 'Publier'}
+                  {posting ? 'Publishing...' : 'Publish'}
                 </Button>
               </div>
             </CardContent>

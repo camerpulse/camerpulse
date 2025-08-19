@@ -124,15 +124,15 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
         toast({
           title: "Abonné",
           description: targetUsername 
-            ? `Vous suivez maintenant @${targetUsername}` 
-            : "Vous suivez maintenant cet utilisateur"
+            ? `You are now following @${targetUsername}` 
+            : "You are now following this user"
         });
       }
     } catch (error) {
       console.error('Error toggling follow:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de modifier le statut de suivi",
+        title: "Error",
+        description: "Unable to modify follow status",
         variant: "destructive"
       });
     } finally {

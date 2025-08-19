@@ -178,7 +178,7 @@ const CivicExplainerAssistant = () => {
       },
       mp_explanation: {
         en: `Members of Parliament (MPs) are elected to represent your constituency in the National Assembly. Here's how it works:\n\n• Every 5 years, you vote for an MP candidate\n• They represent your area's interests in parliament\n• They debate and vote on national laws\n• They can question ministers about government policies\n\nIn ${getRegionName()}, you have ${getConstituencyCount()} constituencies. Your MP should hold regular meetings with constituents to hear your concerns.`,
-        fr: `Les Députés sont élus pour représenter votre circonscription à l'Assemblée Nationale:\n\n• Tous les 5 ans, vous votez pour un candidat député\n• Ils représentent les intérêts de votre région au parlement\n• Ils débattent et votent sur les lois nationales\n• Ils peuvent questionner les ministres\n\nDans la région ${getRegionName()}, il y a ${getConstituencyCount()} circonscriptions.`,
+        // French content removed - English only platform
         pidgin: `MP dem dey represent your area for National Assembly:\n\n• Every 5 years, you go vote for MP candidate\n• E go represent your area interest for parliament\n• E dey debate and vote for national laws\n• E fit question ministers about government policy\n\nFor ${getRegionName()}, we get ${getConstituencyCount()} constituencies. Your MP suppose hold regular meetings with people.`
       },
       elecam_explanation: {
@@ -193,12 +193,12 @@ const CivicExplainerAssistant = () => {
       },
       parties_explanation: {
         en: `Cameroon has multiple political parties with different ideologies:\n\n• **CPDM (Cameroon People's Democratic Movement)** - Ruling party since 1985, focuses on unity and development\n• **SDF (Social Democratic Front)** - Main opposition, advocates for federalism and change\n• **UNDP, MDR, UPC** - Other opposition parties with various platforms\n\nIn ${getRegionName()}, different parties have varying levels of support. You can join any party, attend their rallies, and support their candidates. Each party has a manifesto explaining their policies and promises.`,
-        fr: `Le Cameroun a plusieurs partis politiques avec différentes idéologies:\n\n• **RDPC** - Parti au pouvoir depuis 1985, se concentre sur l'unité et le développement\n• **SDF** - Principal opposition, prône le fédéralisme et le changement\n• **UNDP, MDR, UPC** - Autres partis d'opposition\n\nDans la région ${getRegionName()}, différents partis ont différents niveaux de soutien.`,
+        // French content removed - English only platform
         pidgin: `Cameroon get plenty political parties with different ideologies:\n\n• **CPDM** - Ruling party since 1985, dem dey focus on unity and development\n• **SDF** - Main opposition, dem dey advocate for federalism and change\n• **UNDP, MDR, UPC** - Other opposition parties\n\nFor ${getRegionName()}, different parties get different levels of support. You fit join any party and support their candidates.`
       },
       candidacy_explanation: {
         en: `Yes, you can run for office in Cameroon! Here are the basic requirements:\n\n**For Municipal Councillor:**\n• Be at least 23 years old\n• Be a registered voter in the municipality\n• Have clean criminal record\n\n**For MP:**\n• Be at least 25 years old\n• Be a Cameroonian citizen\n• Have clean criminal record\n\n**For President:**\n• Be at least 35 years old\n• Be born Cameroonian\n• Have university degree\n\nIn ${getRegionName()}, you can start by joining a political party or running as an independent. Contact ELECAM for detailed requirements and registration procedures.`,
-        fr: `Oui, vous pouvez vous présenter aux élections au Cameroun! Voici les exigences de base:\n\n**Pour Conseiller Municipal:**\n• Avoir au moins 23 ans\n• Être électeur inscrit dans la municipalité\n• Avoir un casier judiciaire vierge\n\n**Pour Député:**\n• Avoir au moins 25 ans\n• Être citoyen camerounais\n• Avoir un casier judiciaire vierge\n\nDans la région ${getRegionName()}, vous pouvez commencer par rejoindre un parti politique.`,
+        // French content removed - English only platform
         pidgin: `Yes, you fit run for office for Cameroon! Na dis requirements:\n\n**For Municipal Councillor:**\n• Be at least 23 years old\n• Be registered voter for the municipality\n• Get clean criminal record\n\n**For MP:**\n• Be at least 25 years old\n• Be Cameroonian citizen\n• Get clean criminal record\n\nFor ${getRegionName()}, you fit start by joining political party or run as independent. Contact ELECAM for detailed requirements.`
       },
       general_help: {

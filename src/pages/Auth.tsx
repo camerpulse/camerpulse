@@ -124,7 +124,7 @@ const Auth = () => {
             <Star className="h-8 w-8 text-cameroon-yellow mr-2" />
             <h1 className="text-3xl font-bold text-white">CamerPulse</h1>
           </div>
-          <p className="text-cameroon-yellow">Le pouls du Cameroun 🇨🇲</p>
+          <p className="text-cameroon-yellow">The pulse of Cameroon 🇨🇲</p>
         </div>
 
         <Card className="border-cameroon-yellow/20 backdrop-blur-sm bg-white/95">
@@ -255,7 +255,7 @@ const Auth = () => {
                       }
                     />
                     <Label htmlFor="diaspora" className="text-sm">
-                      Je suis membre de la diaspora camerounaise 🌍
+                      I am a member of the Cameroonian diaspora 🌍
                     </Label>
                   </div>
 
@@ -264,7 +264,7 @@ const Auth = () => {
                     className="w-full bg-cameroon-red hover:bg-cameroon-red/90"
                     disabled={isLoading}
                   >
-                    {isLoading ? 'Inscription...' : "Créer mon compte"}
+                    {isLoading ? 'Creating...' : "Create my account"}
                   </Button>
                 </form>
               </TabsContent>
