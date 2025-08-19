@@ -201,7 +201,7 @@ export const CreatePetitionForm: React.FC<CreatePetitionFormProps> = ({
             </Label>
             <Input
               id="location"
-              placeholder="e.g., Yaoundé, Southwest Region, Nationwide..."
+              placeholder="e.g., Yaounde, Southwest Region, Nationwide..."
               value={formData.location}
               onChange={(e) => updateFormData('location', e.target.value)}
               className="petition-input"

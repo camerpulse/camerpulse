@@ -306,7 +306,7 @@ export const UserProfileForm: React.FC<UserProfileFormProps> = ({
                   id="location"
                   value={formData.location}
                   onChange={(e) => handleInputChange('location', e.target.value)}
-                  placeholder="Yaoundé, Douala, etc."
+                  placeholder="Yaounde, Douala, etc."
                 />
               </div>
               <div>

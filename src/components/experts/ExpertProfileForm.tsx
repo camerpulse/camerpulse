@@ -246,7 +246,7 @@ export const ExpertProfileForm: React.FC<ExpertProfileFormProps> = ({ onSuccess,
                   <MobileInput
                     value={formData.location}
                     onChange={(e) => updateFormData('location', e.target.value)}
-                    placeholder="e.g. Douala, Yaoundé"
+                    placeholder="e.g. Douala, Yaounde"
                   />
                 </MobileFormField>
 

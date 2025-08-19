@@ -135,7 +135,7 @@ export const DiasporaProfileSetup = () => {
                     id="home_village_town_city"
                     value={formData.home_village_town_city}
                     onChange={(e) => setFormData(prev => ({ ...prev, home_village_town_city: e.target.value }))}
-                    placeholder="e.g., Douala, Yaoundé, Bamenda, Bafoussam"
+                    placeholder="e.g., Douala, Yaounde, Bamenda, Bafoussam"
                     required
                   />
                 </div>

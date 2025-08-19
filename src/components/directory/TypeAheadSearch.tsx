@@ -118,7 +118,7 @@ export const TypeAheadSearch = ({
         // Add location suggestions
         if (query.length >= 3) {
           const commonLocations = [
-            'Yaoundé', 'Douala', 'Bamenda', 'Bafoussam', 'Garoua', 'Maroua', 'Ngaoundéré', 'Bertoua', 'Ebolowa', 'Kumba', 'Limbe', 'Buea'
+            'Yaounde', 'Douala', 'Bamenda', 'Bafoussam', 'Garoua', 'Maroua', 'Ngaoundere', 'Bertoua', 'Ebolowa', 'Kumba', 'Limbe', 'Buea'
           ];
 
           commonLocations

@@ -50,8 +50,8 @@ const CampaignCreationForm: React.FC<CampaignFormProps> = ({ onSuccess, onCancel
   ];
 
   const availableRegions = [
-    'Douala', 'Yaoundé', 'Buea', 'Bamenda', 'Garoua', 'Maroua', 
-    'Ngaoundéré', 'Ebolowa', 'Bertoua', 'Bafoussam'
+    'Douala', 'Yaounde', 'Buea', 'Bamenda', 'Garoua', 'Maroua', 
+    'Ngaoundere', 'Ebolowa', 'Bertoua', 'Bafoussam'
   ];
 
   const addSector = (sector: string) => {

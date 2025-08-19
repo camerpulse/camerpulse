@@ -150,7 +150,7 @@ export function AddHospitalDialog({ open, onOpenChange, onHospitalAdded }: AddHo
                 id="name"
                 value={formData.name}
                 onChange={(e) => updateFormData('name', e.target.value)}
-                placeholder="Central Hospital Yaoundé"
+                placeholder="Central Hospital Yaounde"
                 required
               />
             </div>
@@ -223,7 +223,7 @@ export function AddHospitalDialog({ open, onOpenChange, onHospitalAdded }: AddHo
                 id="village_or_city"
                 value={formData.village_or_city}
                 onChange={(e) => updateFormData('village_or_city', e.target.value)}
-                placeholder="Yaoundé"
+                placeholder="Yaounde"
                 required
               />
             </div>

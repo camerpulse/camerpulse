@@ -126,7 +126,7 @@ export const VillageNotablePeople: React.FC<VillageNotablePeopleProps> = ({ vill
       description: 'Seasoned diplomat and politician who has dedicated his career to rural development and international relations.',
       photo_url: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80',
       birth_year: 1960,
-      current_location: 'Yaoundé, Cameroon',
+      current_location: 'Yaounde, Cameroon',
       connection_to_village: 'Son of former village chief, sponsors annual development projects',
       verification_status: 'verified',
       awards: ['Order of Merit', 'Diplomatic Excellence Award'],

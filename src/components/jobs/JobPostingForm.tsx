@@ -243,7 +243,7 @@ export const JobPostingForm: React.FC<JobPostingFormProps> = ({ companyId, onSuc
                   <MobileInput
                     value={formData.location}
                     onChange={(e) => updateFormData('location', e.target.value)}
-                    placeholder="e.g. Douala, Yaoundé"
+                    placeholder="e.g. Douala, Yaounde"
                     required
                   />
                 </MobileFormField>
