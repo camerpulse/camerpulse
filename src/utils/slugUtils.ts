@@ -103,6 +103,14 @@ export class URLBuilder {
     }
   };
 
+  static parties = {
+    list: () => `${URLBuilder.getLanguagePrefix()}/parties`,
+    detail: (entity: SluggedEntity & { name: string }) => {
+      const slug = entity.slug || generateSlug(entity.name, entity.id);
+      return `${URLBuilder.getLanguagePrefix()}/parties/${slug}`;
+    }
+  };
+
   static villages = {
     list: () => `${URLBuilder.getLanguagePrefix()}/villages`,
     detail: (entity: VillageEntity) => {
@@ -200,6 +208,24 @@ export function parseSlugForId(slug: string): string | null {
   }
   
   return null;
+}
+
+/**
+ * Function to resolve slug with redirect handling
+ */
+export async function resolveSlug(entityType: string, inputSlug: string) {
+  const { supabase } = await import('@/integrations/supabase/client');
+  
+  const { data, error } = await supabase.rpc('get_entity_by_slug', {
+    entity_type: entityType,
+    input_slug: inputSlug
+  });
+  
+  if (error || !data || data.length === 0) {
+    return null;
+  }
+  
+  return data[0];
 }
 
 /**

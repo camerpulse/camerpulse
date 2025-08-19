@@ -50306,6 +50306,15 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      get_entity_by_slug: {
+        Args: { entity_type: string; input_slug: string }
+        Returns: {
+          id: string
+          is_redirect: boolean
+          redirect_from: string
+          slug: string
+        }[]
+      }
       get_integrity_monitor_stats: {
         Args: Record<PropertyKey, never>
         Returns: Json
@@ -50591,6 +50600,14 @@ export type Database = {
       reject_poll_suggestion: {
         Args: { p_admin_id: string; p_reason?: string; p_suggestion_id: string }
         Returns: boolean
+      }
+      resolve_slug: {
+        Args: { entity_type: string; input_slug: string }
+        Returns: {
+          entity_id: string
+          is_redirect: boolean
+          resolved_slug: string
+        }[]
       }
       run_ashen_simulation: {
         Args: {

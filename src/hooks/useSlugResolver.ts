@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { parseSlugForId } from '@/utils/slugUtils';
 
@@ -14,105 +15,210 @@ interface SlugResolverResult<T> {
   loading: boolean;
   error: string | null;
   entityId: string | null;
+  canonicalSlug?: string;
+  isRedirect?: boolean;
+}
+
+interface SlugResolution {
+  id: string;
+  slug: string;
+  is_redirect: boolean;
+  redirect_from?: string;
 }
 
 /**
- * Hook to resolve slug URLs to actual entity data
- * Supports both slug-based and ID-based URLs for backward compatibility
+ * Modern hook to resolve slug URLs with redirect handling
  */
 export function useSlugResolver<T = any>(
   options: UseSlugResolverOptions
 ): SlugResolverResult<T> {
   const { slug: slugParam, id: idParam } = useParams<{ slug?: string; id?: string }>();
+  const navigate = useNavigate();
   const slugOrId = slugParam || idParam;
-  const [entity, setEntity] = useState<T | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [entityId, setEntityId] = useState<string | null>(null);
+  const { table } = options;
 
-  const {
-    table,
-    idColumn = 'id',
-    slugColumn = 'slug'
-  } = options;
+  // First resolve the slug to get entity ID and handle redirects
+  const { data: resolution, isLoading: isResolving, error: resolveError } = useQuery({
+    queryKey: ['resolve-slug', table, slugOrId],
+    queryFn: async () => {
+      if (!slugOrId) return null;
+      
+      const { data, error } = await supabase.rpc('get_entity_by_slug', {
+        entity_type: table,
+        input_slug: slugOrId
+      });
+      
+      if (error) {
+        console.error('Slug resolution error:', error);
+        throw error;
+      }
+      
+      return data && data.length > 0 ? data[0] as SlugResolution : null;
+    },
+    enabled: !!slugOrId
+  });
 
+  // Handle redirects
   useEffect(() => {
-    const resolveEntity = async () => {
-      if (!slugOrId) {
-        setError('No identifier provided');
-        setLoading(false);
-        return;
-      }
+    if (resolution?.is_redirect && resolution.slug !== slugOrId) {
+      // Redirect to the canonical URL
+      const newPath = window.location.pathname.replace(slugOrId!, resolution.slug);
+      navigate(newPath, { replace: true });
+    }
+  }, [resolution, slugOrId, navigate]);
 
-      try {
-        setLoading(true);
-        setError(null);
+  // Fetch the actual entity data
+  const { data: entity, isLoading: isEntityLoading, error: entityError } = useQuery({
+    queryKey: [table, 'by-id', resolution?.id],
+    queryFn: async () => {
+      if (!resolution?.id) return null;
+      
+      const { data, error } = await supabase
+        .from(table)
+        .select('*')
+        .eq('id', resolution.id)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!resolution?.id
+  });
 
-        let query = supabase.from(table).select('*');
-
-        // Try to parse as slug first (contains hyphens or is a UUID)
-        const parsedId = parseSlugForId(slugOrId);
-        
-        if (parsedId) {
-          // It's a slug with ID at the end, query by ID
-          query = query.eq(idColumn, parsedId);
-          setEntityId(parsedId);
-        } else if (slugOrId.includes('-') || /^[a-z-]+$/.test(slugOrId)) {
-          // It's a slug without ID, try to match by name
-          // Convert slug back to potential name variations
-          const nameFromSlug = slugOrId.replace(/-/g, ' ');
-          
-          // Try different name variations for better matching
-          const nameVariations = [
-            nameFromSlug,
-            nameFromSlug.replace(/^dr\s+/i, 'Dr. '),
-            nameFromSlug.replace(/^hon\s+/i, 'Hon. '),
-            // Capitalize each word
-            nameFromSlug.split(' ').map(word => 
-              word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
-            ).join(' ')
-          ];
-          
-          // Use OR conditions to search for any variation
-          const nameConditions = nameVariations.map(name => `${slugColumn}.ilike.%${name}%`).join(',');
-          query = query.or(nameConditions);
-        } else {
-          // It's likely a raw ID, query by ID
-          query = query.eq(idColumn, slugOrId);
-          setEntityId(slugOrId);
-        }
-
-        const { data, error: queryError } = await query.maybeSingle();
-
-        if (queryError) {
-          console.error(`Error fetching ${table}:`, queryError);
-          setError(`Failed to load ${table.slice(0, -1)}`);
-          return;
-        }
-
-        if (!data) {
-          setError(`${table.slice(0, -1).charAt(0).toUpperCase() + table.slice(1, -1)} not found`);
-          return;
-        }
-
-        setEntity(data);
-        setEntityId(data[idColumn]);
-      } catch (err) {
-        console.error('Error resolving slug:', err);
-        setError('Failed to load data');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    resolveEntity();
-  }, [slugOrId, table, idColumn, slugColumn]);
-
-  return { entity, loading, error, entityId };
+  return {
+    entity,
+    loading: isResolving || isEntityLoading,
+    error: resolveError?.message || entityError?.message || null,
+    entityId: resolution?.id || null,
+    canonicalSlug: resolution?.slug,
+    isRedirect: resolution?.is_redirect || false
+  };
 }
 
 /**
- * Specific hooks for different entity types
+ * Enhanced politician slug resolver with party data
+ */
+export function usePoliticianBySlug(entityType: 'politicians' | 'mps' | 'senators' | 'ministers', slug: string) {
+  const navigate = useNavigate();
+  
+  // Resolve slug and handle redirects
+  const { data: resolution, isLoading: isResolving, error: resolveError } = useQuery({
+    queryKey: ['resolve-slug', entityType, slug],
+    queryFn: async () => {
+      if (!slug) return null;
+      
+      const { data, error } = await supabase.rpc('get_entity_by_slug', {
+        entity_type: entityType,
+        input_slug: slug
+      });
+      
+      if (error) throw error;
+      return data && data.length > 0 ? data[0] as SlugResolution : null;
+    },
+    enabled: !!slug
+  });
+
+  // Handle redirects
+  useEffect(() => {
+    if (resolution?.is_redirect && resolution.slug !== slug) {
+      const newPath = window.location.pathname.replace(slug, resolution.slug);
+      navigate(newPath, { replace: true });
+    }
+  }, [resolution, slug, navigate]);
+
+  // Fetch politician with party data
+  const { data: politician, isLoading: isPoliticianLoading, error: politicianError } = useQuery({
+    queryKey: [entityType, 'by-id', resolution?.id],
+    queryFn: async () => {
+      if (!resolution?.id) return null;
+      
+      const { data, error } = await supabase
+        .from(entityType)
+        .select(`
+          *,
+          political_parties (
+            id,
+            name,
+            acronym,
+            logo_url,
+            slug
+          )
+        `)
+        .eq('id', resolution.id)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!resolution?.id
+  });
+
+  return {
+    data: politician,
+    canonicalSlug: resolution?.slug,
+    isRedirect: resolution?.is_redirect || false,
+    isLoading: isResolving || isPoliticianLoading,
+    error: resolveError || politicianError
+  };
+}
+
+/**
+ * Political party slug resolver
+ */
+export function usePoliticalPartyBySlug(slug: string) {
+  const navigate = useNavigate();
+  
+  const { data: resolution, isLoading: isResolving, error: resolveError } = useQuery({
+    queryKey: ['resolve-slug', 'political_parties', slug],
+    queryFn: async () => {
+      if (!slug) return null;
+      
+      const { data, error } = await supabase.rpc('get_entity_by_slug', {
+        entity_type: 'political_parties',
+        input_slug: slug
+      });
+      
+      if (error) throw error;
+      return data && data.length > 0 ? data[0] as SlugResolution : null;
+    },
+    enabled: !!slug
+  });
+
+  useEffect(() => {
+    if (resolution?.is_redirect && resolution.slug !== slug) {
+      const newPath = window.location.pathname.replace(slug, resolution.slug);
+      navigate(newPath, { replace: true });
+    }
+  }, [resolution, slug, navigate]);
+
+  const { data: party, isLoading: isPartyLoading, error: partyError } = useQuery({
+    queryKey: ['political_parties', 'by-id', resolution?.id],
+    queryFn: async () => {
+      if (!resolution?.id) return null;
+      
+      const { data, error } = await supabase
+        .from('political_parties')
+        .select('*')
+        .eq('id', resolution.id)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!resolution?.id
+  });
+
+  return {
+    data: party,
+    canonicalSlug: resolution?.slug,
+    isRedirect: resolution?.is_redirect || false,
+    isLoading: isResolving || isPartyLoading,
+    error: resolveError || partyError
+  };
+}
+
+/**
+ * Legacy specific hooks for backward compatibility
  */
 export function usePoliticianSlug() {
   return useSlugResolver({
@@ -128,8 +234,7 @@ export function useSenatorSlug() {
 
 export function useVillageSlug() {
   return useSlugResolver({
-    table: 'villages',
-    slugColumn: 'village_name'  // Use village_name instead of name
+    table: 'villages'
   });
 }
 
