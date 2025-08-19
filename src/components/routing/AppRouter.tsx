@@ -53,10 +53,15 @@ const RegionalHiringLeaderboard = lazy(() => import('@/pages/jobs/RegionalHiring
 
 // Directories
 const SchoolsDirectory = lazy(() => import('@/pages/SchoolsDirectory'));
+const SchoolDetailPage = lazy(() => import('@/pages/SchoolDetailPage'));
 const HospitalsDirectory = lazy(() => import('@/pages/HospitalsDirectory'));
+const HospitalDetailPage = lazy(() => import('@/pages/HospitalDetailPage'));
 const PharmaciesDirectoryV2 = lazy(() => import('@/pages/PharmaciesDirectoryV2'));
 const CompaniesDirectory = lazy(() => import('@/pages/CompaniesDirectory'));
 const CompanyProfile = lazy(() => import('@/pages/CompanyProfile'));
+
+// Events
+const EventDetailPage = lazy(() => import('@/pages/EventDetailPage'));
 
 // Feeds & Social
 const Feed = lazy(() => import('@/pages/Feed'));
@@ -392,8 +397,16 @@ export const AppRouter: React.FC = () => {
           element={<WrappedRoute element={SchoolsDirectory} routeName="Schools Directory" />} 
         />
         <Route 
+          path="/schools/:slug" 
+          element={<WrappedRoute element={SchoolDetailPage} routeName="School Details" />} 
+        />
+        <Route 
           path="/hospitals" 
           element={<WrappedRoute element={HospitalsDirectory} routeName="Hospitals Directory" />} 
+        />
+        <Route 
+          path="/hospitals/:slug" 
+          element={<WrappedRoute element={HospitalDetailPage} routeName="Hospital Details" />} 
         />
         <Route 
           path="/pharmacies" 
@@ -406,6 +419,12 @@ export const AppRouter: React.FC = () => {
         <Route 
           path="/companies/:id" 
           element={<WrappedRoute element={CompanyProfile} routeName="Company Profile" />} 
+        />
+        
+        {/* === EVENTS === */}
+        <Route 
+          path="/events/:slug" 
+          element={<WrappedRoute element={EventDetailPage} routeName="Event Details" />} 
         />
         
         {/* === MESSAGING === */}
@@ -462,7 +481,7 @@ export const AppRouter: React.FC = () => {
           element={<WrappedRoute element={PetitionsPage} routeName="Petitions" />} 
         />
         <Route 
-          path="/petitions/:petitionSlug-:id" 
+          path="/petitions/:slug" 
           element={<WrappedRoute element={PetitionDetailPage} routeName="Petition" />} 
         />
         
