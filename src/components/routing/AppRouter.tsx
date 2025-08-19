@@ -14,6 +14,7 @@ import { ROUTES } from '@/config/routes';
 // === LAZY LOADED PAGES ===
 // Core Pages
 const Index = lazy(() => import('@/pages/Index'));
+const AboutUs = lazy(() => import('@/pages/AboutUs'));
 const AuthPage = lazy(() => import('@/pages/AuthPage'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
@@ -183,6 +184,16 @@ export const AppRouter: React.FC = () => {
         <Route 
           path="/" 
           element={<WrappedRoute element={Index} routeName="Homepage" />} 
+        />
+        
+        {/* === ABOUT US === */}
+        <Route 
+          path="/about" 
+          element={<WrappedRoute element={AboutUs} routeName="About Us" />} 
+        />
+        <Route 
+          path="/about-us" 
+          element={<WrappedRoute element={AboutUs} routeName="About Us" />} 
         />
         
         {/* === AUTHENTICATION === */}

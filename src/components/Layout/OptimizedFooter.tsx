@@ -34,7 +34,8 @@ import {
   BarChart3,
   Search,
   MessageCircle,
-  Bell
+  Bell,
+  Info
 } from "lucide-react";
 
 // Memoized footer sections configuration
@@ -45,6 +46,7 @@ const FOOTER_SECTIONS = [
     icon: Home,
     links: [
       { path: '/', label: 'Homepage', icon: Home },
+      { path: '/about', label: 'About Us', icon: Info },
       { path: '/civic-dashboard', label: 'Civic Dashboard', icon: BarChart3 },
       { path: '/feed', label: 'Community Feed', icon: Users },
       { path: '/search', label: 'Advanced Search', icon: Search },
