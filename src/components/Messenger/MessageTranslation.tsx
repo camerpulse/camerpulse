@@ -38,7 +38,6 @@ export const MessageTranslation: React.FC<MessageTranslationProps> = ({
     // Simple language detection (in production, use proper detection)
     const patterns = {
       'es': /[ñáéíóúü]/i,
-      'fr': /[àâäéèêëîïôöùûüÿç]/i,
       'de': /[äöüß]/i,
       'it': /[àèéìíîòóù]/i,
       'pt': /[ãõçáéíóúâêôàè]/i,

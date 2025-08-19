@@ -46,8 +46,8 @@ export const EnhancedSenatorCard = ({ senator }: EnhancedSenatorCardProps) => {
     return 'text-red-500';
   };
 
-  const isLeadership = senator.position?.includes('Président') || senator.position?.includes('Vice-président');
-  const isSecretary = senator.position?.includes('Secrétaire') || senator.position?.includes('Questeur');
+  const isLeadership = senator.position?.includes('President') || senator.position?.includes('Vice-President');
+  const isSecretary = senator.position?.includes('Secretary') || senator.position?.includes('Questor');
 
   const badges = senator.badges ? (Array.isArray(senator.badges) ? senator.badges : JSON.parse(senator.badges)) : [];
 

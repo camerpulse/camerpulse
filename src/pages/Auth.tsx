@@ -130,7 +130,7 @@ const Auth = () => {
         <Card className="border-cameroon-yellow/20 backdrop-blur-sm bg-white/95">
           <CardHeader>
             <CardTitle className="text-center text-cameroon-primary">
-              Rejoignez la Communauté
+              Join the Community
             </CardTitle>
             <CardDescription className="text-center">
               Votre voix. Votre pouvoir. Votre marché.

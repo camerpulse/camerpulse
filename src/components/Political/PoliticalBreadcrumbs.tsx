@@ -23,7 +23,7 @@ export function PoliticalBreadcrumbs({ items, showHome = true }: PoliticalBreadc
     const breadcrumbs: BreadcrumbItem[] = [];
     
     // Skip language prefix if present
-    const startIndex = ['en', 'fr'].includes(pathSegments[0]) ? 1 : 0;
+    const startIndex = ['en'].includes(pathSegments[0]) ? 1 : 0;
     
     for (let i = startIndex; i < pathSegments.length; i++) {
       const segment = pathSegments[i];

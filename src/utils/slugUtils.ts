@@ -251,7 +251,7 @@ export function getLegacyRedirect(pathname: string): string | null {
   const segments = pathname.split('/').filter(Boolean);
   let detectedLang = 'en';
   
-  if (segments[0] === 'en' || segments[0] === 'fr') {
+  if (segments[0] === 'en') {
     detectedLang = segments[0];
   }
 

@@ -49,9 +49,9 @@ export const UserAvatar: React.FC<UserAvatarProps> = ({
   const navigate = useNavigate();
   const civicUser = user as CivicUser;
   const isOfficial = civicUser.role && 
-    (civicUser.role.toLowerCase().includes('ministre') || 
-     civicUser.role.toLowerCase().includes('député') ||
-     civicUser.role.toLowerCase().includes('président'));
+    (civicUser.role.toLowerCase().includes('minister') || 
+     civicUser.role.toLowerCase().includes('deputy') ||
+     civicUser.role.toLowerCase().includes('president'));
 
   const getInitials = () => {
     return user.name

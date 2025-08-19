@@ -52,7 +52,7 @@ const CIVIC_TOPICS = {
   },
   corruption: {
     name: 'Corruption & Governance',
-    keywords: ['corruption', 'government', 'minister', 'scandal', 'embezzlement', 'gouvernement', 'ministre', 'scandale'],
+    keywords: ['corruption', 'government', 'minister', 'scandal', 'embezzlement'],
     icon: '⚖️',
     color: '#7c2d12'
   },

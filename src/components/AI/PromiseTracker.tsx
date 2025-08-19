@@ -452,7 +452,7 @@ export const PromiseTracker: React.FC = () => {
 
             <Select value={regionFilter} onValueChange={setRegionFilter}>
               <SelectTrigger>
-                <SelectValue placeholder="Région" />
+                <SelectValue placeholder="Region" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Regions</SelectItem>

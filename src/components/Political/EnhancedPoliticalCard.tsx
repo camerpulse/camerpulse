@@ -53,10 +53,10 @@ export const EnhancedPoliticalCard: React.FC<EnhancedPoliticalCardProps> = ({
 
   const getPositionBadgeColor = (position?: string) => {
     if (!position) return 'secondary';
-    if (position.includes('President') || position.includes('Président')) return 'default';
+    if (position.includes('President')) return 'default';
     if (position.includes('Vice') || position.includes('Deputy')) return 'outline';
-    if (position.includes('Minister') || position.includes('Ministre')) return 'destructive';
-    if (position.includes('Secretary') || position.includes('Secrétaire')) return 'secondary';
+    if (position.includes('Minister')) return 'destructive';
+    if (position.includes('Secretary')) return 'secondary';
     return 'outline';
   };
 
