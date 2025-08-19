@@ -560,7 +560,7 @@ export const AdvancedPollModeration: React.FC = () => {
                     <div>
                       <Label>Auto-suspend high fraud polls</Label>
                       <p className="text-xs text-muted-foreground">
-                        Automatically suspend polls with fraud score > 80%
+                        Automatically suspend polls with fraud score {'>'}80%
                       </p>
                     </div>
                     <Switch defaultChecked />
