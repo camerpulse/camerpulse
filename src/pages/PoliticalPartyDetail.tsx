@@ -1,7 +1,9 @@
 import { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { usePoliticalPartyBySlug } from "@/hooks/useSlugResolver";
+import { EntitySEO } from '@/components/SEO/EntitySEO';
 import { Header } from "@/components/Layout/Header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -20,6 +22,7 @@ import {
   Filter, Search, Grid3x3, List
 } from "lucide-react";
 import { PartyEmbed } from "@/components/AI/OfficialEmbedEngine";
+import { URLBuilder } from "@/utils/slugUtils";
 
 interface PoliticalParty {
   id: string;
@@ -68,8 +71,8 @@ interface PartyRating {
 }
 
 const PoliticalPartyDetail = () => {
-  const { slug, id } = useParams<{ slug?: string } & { id?: string }>();
-  const partyId = id || slug;
+  const { slug } = useParams<{ slug: string }>();
+  const { data: party, isLoading, canonicalSlug } = usePoliticalPartyBySlug(slug || "");
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
@@ -94,26 +97,11 @@ const PoliticalPartyDetail = () => {
   });
   const [showRatingForm, setShowRatingForm] = useState(false);
 
-  const { data: party, isLoading } = useQuery({
-    queryKey: ["political-party", partyId],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("political_parties")
-        .select("*")
-        .eq("id", partyId)
-        .single();
-
-      if (error) throw error;
-      return data as PoliticalParty;
-    },
-    enabled: !!partyId
-  });
-
   // Fetch party members with filters
-  const { data: members = [], isLoading: membersLoading } = usePartyMembers(partyId, memberFilters);
+  const { data: members = [], isLoading: membersLoading } = usePartyMembers(party?.id, memberFilters);
 
   const { data: existingRating } = useQuery({
-    queryKey: ["party-rating", partyId],
+    queryKey: ["party-rating", party?.id],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
@@ -121,14 +109,14 @@ const PoliticalPartyDetail = () => {
       const { data, error } = await supabase
         .from("party_ratings")
         .select("*")
-        .eq("party_id", partyId)
+        .eq("party_id", party?.id)
         .eq("user_id", user.id)
         .maybeSingle();
 
       if (error) throw error;
       return data as PartyRating | null;
     },
-    enabled: !!partyId
+    enabled: !!party?.id
   });
 
   const ratingMutation = useMutation({
@@ -139,7 +127,7 @@ const PoliticalPartyDetail = () => {
       const { error } = await supabase
         .from("party_ratings")
         .upsert({
-          party_id: partyId!,
+          party_id: party?.id!,
           user_id: user.id,
           ...rating
         });
@@ -149,8 +137,8 @@ const PoliticalPartyDetail = () => {
     onSuccess: () => {
       toast({ title: "Rating submitted successfully!" });
       setShowRatingForm(false);
-      queryClient.invalidateQueries({ queryKey: ["political-party", partyId] });
-      queryClient.invalidateQueries({ queryKey: ["party-rating", partyId] });
+      queryClient.invalidateQueries({ queryKey: ["political-party", party?.id] });
+      queryClient.invalidateQueries({ queryKey: ["party-rating", party?.id] });
     },
     onError: () => {
       toast({ title: "Failed to submit rating", variant: "destructive" });
@@ -199,6 +187,11 @@ const PoliticalPartyDetail = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <EntitySEO 
+        entity={party}
+        entityType="political_party"
+        isLoading={isLoading}
+      />
       <Header />
       
       <div className="container mx-auto px-4 py-8">
