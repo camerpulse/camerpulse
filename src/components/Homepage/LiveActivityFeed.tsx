@@ -179,6 +179,7 @@ const LiveActivityItem: React.FC<{ activity: ActivityItem; index: number }> = ({
 };
 
 export const LiveActivityFeed: React.FC = () => {
+  console.log('LiveActivityFeed rendering...');
   const [activities, setActivities] = useState(mockActivities);
   const [isLive, setIsLive] = useState(true);
 

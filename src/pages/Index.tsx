@@ -56,7 +56,9 @@ import {
 } from "lucide-react";
 
 const Index = () => {
+  console.log('Index component rendering...');
   const { user, profile, signOut, loading } = useAuth();
+  console.log('Auth state:', { user: !!user, profile: !!profile, loading });
 
   const handleSignOut = async () => {
     await signOut();

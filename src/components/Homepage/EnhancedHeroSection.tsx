@@ -71,6 +71,7 @@ const FloatingCard: React.FC<{
 };
 
 export const EnhancedHeroSection: React.FC = () => {
+  console.log('EnhancedHeroSection rendering...');
   const { user } = useAuth();
   const [currentFeature, setCurrentFeature] = useState(0);
 
