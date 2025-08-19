@@ -74,7 +74,7 @@ export const PollCard: React.FC<PollCardProps> = ({
             {isExpired && (
               <Badge variant="secondary" className="text-xs">
                 <Clock className="w-3 h-3 mr-1" />
-                Terminé
+                Ended
               </Badge>
             )}
           </div>
@@ -140,7 +140,7 @@ export const PollCard: React.FC<PollCardProps> = ({
             {poll.endDate && !isExpired && (
               <div className="flex items-center gap-1">
                 <Clock className="w-4 h-4" />
-                <span>Se termine le {new Date(poll.endDate).toLocaleDateString()}</span>
+                <span>Ends on {new Date(poll.endDate).toLocaleDateString()}</span>
               </div>
             )}
           </div>
@@ -148,13 +148,13 @@ export const PollCard: React.FC<PollCardProps> = ({
           <div className="flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={handleShare}>
               <Share2 className="w-4 h-4 mr-2" />
-              Partager
+              Share
             </Button>
             
             {!hasVoted && !isExpired && (
               <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30">
                 <Vote className="w-3 h-3 mr-1" />
-                Votez!
+                Vote!
               </Badge>
             )}
           </div>

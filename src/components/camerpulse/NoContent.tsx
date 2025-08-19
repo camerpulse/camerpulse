@@ -11,7 +11,7 @@ interface NoContentProps {
 }
 
 export const NoContent: React.FC<NoContentProps> = ({
-  title = 'Aucun contenu', description = 'Il n\'y a rien ici pour le moment.',
+  title = 'No content', description = 'There is nothing here for now.',
   actionLabel, onAction, icon
 }) => (
   <Card>

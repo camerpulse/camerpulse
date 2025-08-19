@@ -80,7 +80,7 @@ const Social = () => {
     } catch (error) {
       console.error('Error fetching social data:', error);
       toast({
-        title: "Erreur",
+        title: "Error",
         description: "Unable to load social data",
         variant: "destructive"
       });
@@ -324,7 +324,7 @@ const Social = () => {
             
             {searchResults.length > 0 && (
               <div className="mt-4 space-y-2">
-                <h3 className="font-medium text-sm text-muted-foreground">Résultats de recherche</h3>
+                <h3 className="font-medium text-sm text-muted-foreground">Search Results</h3>
                 {searchResults.map((profile) => (
                   <UserCard key={profile.id} profile={profile} />
                 ))}
@@ -335,15 +335,15 @@ const Social = () => {
           <Tabs defaultValue="suggested" className="w-full">
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="suggested">Suggestions</TabsTrigger>
-              <TabsTrigger value="followers">Abonnés ({followers.length})</TabsTrigger>
-              <TabsTrigger value="following">Abonnements ({following.length})</TabsTrigger>
+              <TabsTrigger value="followers">Followers ({followers.length})</TabsTrigger>
+              <TabsTrigger value="following">Following ({following.length})</TabsTrigger>
             </TabsList>
 
             <TabsContent value="suggested" className="mt-6">
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-4">
                   <UserPlus className="w-5 h-5 text-primary" />
-                  <h2 className="text-lg font-semibold">Utilisateurs suggérés</h2>
+                  <h2 className="text-lg font-semibold">Suggested Users</h2>
                 </div>
                 
                 {loading ? (
@@ -367,7 +367,7 @@ const Social = () => {
                     <CardContent>
                       <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                       <h3 className="text-lg font-medium mb-2">No suggestions</h3>
-                      <p className="text-muted-foreground">Revenez plus tard pour découvrir de nouveaux utilisateurs</p>
+                      <p className="text-muted-foreground">Come back later to discover new users</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -386,8 +386,8 @@ const Social = () => {
                   <Card className="text-center py-12">
                     <CardContent>
                       <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium mb-2">Aucun abonné</h3>
-                      <p className="text-muted-foreground">Vos abonnés apparaîtront ici</p>
+                      <h3 className="text-lg font-medium mb-2">No followers</h3>
+                      <p className="text-muted-foreground">Your followers will appear here</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -404,8 +404,8 @@ const Social = () => {
                   <Card className="text-center py-12">
                     <CardContent>
                       <UserPlus className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium mb-2">Aucun abonnement</h3>
-                      <p className="text-muted-foreground">Suivez d'autres utilisateurs pour voir leurs publications</p>
+                      <h3 className="text-lg font-medium mb-2">No following</h3>
+                      <p className="text-muted-foreground">Follow other users to see their posts</p>
                     </CardContent>
                   </Card>
                 ) : (

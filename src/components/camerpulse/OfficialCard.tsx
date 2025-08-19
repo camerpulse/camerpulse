@@ -74,7 +74,7 @@ export const OfficialCard: React.FC<OfficialCardProps> = ({
               <h3 className="text-lg font-bold text-foreground">{official.name}</h3>
               <CivicTag 
                 type={official.isCurrentlyInOffice ? "official" : "custom"} 
-                label={official.isCurrentlyInOffice ? "En fonction" : "Ancien"} 
+                label={official.isCurrentlyInOffice ? "In Office" : "Former"} 
                 size="sm" 
               />
             </div>
@@ -108,7 +108,7 @@ export const OfficialCard: React.FC<OfficialCardProps> = ({
               </span>
               {getTrendIcon()}
             </div>
-            <p className="text-xs text-muted-foreground">Approbation</p>
+            <p className="text-xs text-muted-foreground">Approval</p>
           </div>
         </div>
 
@@ -117,7 +117,7 @@ export const OfficialCard: React.FC<OfficialCardProps> = ({
           {/* Approval Rating */}
           <div>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-foreground">Approbation publique</span>
+              <span className="text-sm font-medium text-foreground">Public Approval</span>
               <span className="text-sm text-muted-foreground">{official.approvalRating}%</span>
             </div>
             <Progress value={official.approvalRating} className="h-2" />
@@ -149,7 +149,7 @@ export const OfficialCard: React.FC<OfficialCardProps> = ({
         {/* Rating Section */}
         <div className="mb-4 p-3 bg-muted/50 rounded-lg">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-foreground">Votre évaluation</span>
+            <span className="text-sm font-medium text-foreground">Your rating</span>
             <RatingStars 
               rating={0} 
               size="sm" 
@@ -162,17 +162,17 @@ export const OfficialCard: React.FC<OfficialCardProps> = ({
         <div className="mb-4 p-3 bg-muted/30 rounded-lg">
           <div className="flex items-center gap-2 text-sm">
             <Building className="w-4 h-4 text-primary" />
-            <span className="font-medium">Statut:</span>
+            <span className="font-medium">Status:</span>
             <CivicTag 
               type={official.termStatus === 'active' ? 'success' : 'pending'} 
               label={
                 official.termStatus === 'active' && official.isCurrentlyInOffice 
-                  ? 'En fonction' 
+                  ? 'In Office' 
                   : official.termStatus === 'expired' 
-                    ? 'Mandat terminé'
+                    ? 'Term ended'
                     : official.termStatus === 'deceased'
-                      ? 'Décédé'
-                      : 'Statut inconnu'
+                      ? 'Deceased'
+                      : 'Unknown Status'
               } 
               size="sm" 
             />
@@ -199,7 +199,7 @@ export const OfficialCard: React.FC<OfficialCardProps> = ({
               onClick={() => onViewProfile?.(official.id)}
             >
               <ExternalLink className="w-4 h-4 mr-2" />
-              Profil
+              Profile
             </Button>
             
             <FollowButton 

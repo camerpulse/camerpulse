@@ -256,7 +256,7 @@ export const PollTemplateRenderer: React.FC<PollTemplateRendererProps> = ({
 
         <div className="text-center mt-6 pt-4 border-t">
           <p className="text-xs text-gray-500 font-serif">
-            Vote électronique sécurisé • CamerPulse
+            Secure Electronic Voting • CamerPulse
           </p>
         </div>
       </CardContent>

@@ -179,8 +179,8 @@ const PollsDiscovery = () => {
     } catch (error) {
       console.error('Error fetching polls:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger les sondages",
+        title: "Error",
+        description: "Unable to load polls",
         variant: "destructive"
       });
     } finally {
@@ -369,7 +369,7 @@ const PollsDiscovery = () => {
             <Card className="text-center py-12">
               <CardContent>
                 <BarChart3 className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Aucun sondage trouvé</h3>
+                <h3 className="text-lg font-medium mb-2">No polls found</h3>
                 <p className="text-muted-foreground">
                   Try modifying your filters or create a new poll
                 </p>

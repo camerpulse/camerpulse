@@ -155,8 +155,8 @@ const PulseFeed = () => {
     } catch (error) {
       console.error('Error fetching posts:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger les posts",
+        title: "Error",
+        description: "Unable to load posts",
         variant: "destructive"
       });
     } finally {
@@ -170,8 +170,8 @@ const PulseFeed = () => {
     setPosting(true);
     try {
       // Simple sentiment analysis based on keywords
-      const positiveWords = ['bien', 'bon', 'excellent', 'merci', 'bravo', 'félicitations', 'super', 'génial'];
-      const negativeWords = ['mal', 'mauvais', 'terrible', 'nul', 'déçu', 'problème', 'erreur', 'échec'];
+      const positiveWords = ['good', 'great', 'excellent', 'thanks', 'bravo', 'congratulations', 'super', 'awesome'];
+      const negativeWords = ['bad', 'terrible', 'awful', 'disappointed', 'problem', 'error', 'failure'];
       
       const words = newPost.toLowerCase().split(' ');
       const positiveCount = words.filter(word => positiveWords.some(pw => word.includes(pw))).length;
@@ -264,9 +264,9 @@ const PulseFeed = () => {
 
   const getSentimentBadge = (sentiment?: string) => {
     switch (sentiment) {
-      case 'positive': return <Badge variant="outline" className="border-green-500 text-green-600">Positif</Badge>;
-      case 'negative': return <Badge variant="outline" className="border-red-500 text-red-600">Négatif</Badge>;
-      default: return <Badge variant="outline" className="border-gray-400 text-gray-600">Neutre</Badge>;
+      case 'positive': return <Badge variant="outline" className="border-green-500 text-green-600">Positive</Badge>;
+      case 'negative': return <Badge variant="outline" className="border-red-500 text-red-600">Negative</Badge>;
+      default: return <Badge variant="outline" className="border-gray-400 text-gray-600">Neutral</Badge>;
     }
   };
 
@@ -288,9 +288,9 @@ const PulseFeed = () => {
         <div className="min-h-screen bg-gradient-civic flex items-center justify-center p-4">
           <Card className="w-full max-w-md text-center">
             <CardContent className="pt-6">
-              <h2 className="text-xl font-bold mb-4">Connexion requise</h2>
-              <p className="text-gray-600 mb-4">Vous devez être connecté pour accéder au Pulse Feed</p>
-              <Button onClick={() => navigateToAuth()}>Se connecter</Button>
+              <h2 className="text-xl font-bold mb-4">Login Required</h2>
+              <p className="text-gray-600 mb-4">You must be logged in to access the Pulse Feed</p>
+              <Button onClick={() => navigateToAuth()}>Sign In</Button>
             </CardContent>
           </Card>
         </div>
@@ -364,14 +364,14 @@ const PulseFeed = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <BarChart3 className="w-5 h-5 text-primary" />
-                    <h3 className="font-semibold">Sondages Tendance</h3>
+                    <h3 className="font-semibold">Trending Polls</h3>
                   </div>
                   <Button 
                     variant="outline" 
                     size="sm"
                     onClick={() => navigateTo('/polls/discover')}
                   >
-                    Voir tous
+                    View all
                   </Button>
                 </div>
               </CardHeader>
@@ -420,7 +420,7 @@ const PulseFeed = () => {
                           className="h-6 px-2 text-xs"
                           onClick={() => navigateTo('/polls')}
                         >
-                          Participer
+                          Participate
                         </Button>
                       </div>
                     </div>
@@ -455,8 +455,8 @@ const PulseFeed = () => {
             <Card className="text-center py-12">
               <CardContent>
                 <MessageCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Aucun pulse pour le moment</h3>
-                <p className="text-gray-600">Soyez le premier à partager vos pensées!</p>
+                <h3 className="text-lg font-medium mb-2">No pulse for now</h3>
+                <p className="text-gray-600">Be the first to share your thoughts!</p>
               </CardContent>
             </Card>
           ) : (
@@ -477,11 +477,11 @@ const PulseFeed = () => {
                             className="font-medium cursor-pointer hover:underline"
                             onClick={() => setSelectedUserId(post.user_id)}
                           >
-                            {post.user_profile?.display_name || post.user_profile?.username || 'Utilisateur'}
+                            {post.user_profile?.display_name || post.user_profile?.username || 'User'}
                           </span>
                           <span className="text-gray-500">@{post.user_profile?.username || 'anonymous'}</span>
                           {post.user_profile?.verified && (
-                            <Badge variant="outline" className="border-blue-500 text-blue-600">Vérifié</Badge>
+                            <Badge variant="outline" className="border-blue-500 text-blue-600">Verified</Badge>
                           )}
                           {post.user_profile?.is_diaspora && (
                             <Badge variant="outline" className="border-cameroon-yellow text-cameroon-yellow">

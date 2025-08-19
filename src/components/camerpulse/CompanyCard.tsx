@@ -50,7 +50,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
   };
 
   const formatEmployeeCount = (count?: number) => {
-    if (!count) return 'Non spécifié';
+    if (!count) return 'Not specified';
     if (count < 10) return '1-10';
     if (count < 50) return '11-50';
     if (count < 200) return '51-200';
@@ -89,7 +89,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
               <RatingStars rating={company.rating} size="sm" disabled showLabel />
             </div>
             <p className="text-xs text-muted-foreground">
-              {company.totalReviews} avis
+              {company.totalReviews} reviews
             </p>
           </div>
         </div>
@@ -102,7 +102,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
               <div className="text-sm font-medium text-foreground">
                 {formatEmployeeCount(company.employees)}
               </div>
-              <div className="text-xs text-muted-foreground">Employés</div>
+              <div className="text-xs text-muted-foreground">Employees</div>
             </div>
           )}
           
@@ -110,7 +110,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
             <div className="text-center p-3 bg-muted/50 rounded-lg">
               <DollarSign className="w-5 h-5 text-cm-green mx-auto mb-1" />
               <div className="text-sm font-medium text-foreground">{company.revenue}</div>
-              <div className="text-xs text-muted-foreground">Chiffre d'affaires</div>
+              <div className="text-xs text-muted-foreground">Revenue</div>
             </div>
           )}
           
@@ -118,7 +118,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
             <div className="text-center p-3 bg-muted/50 rounded-lg">
               <Calendar className="w-5 h-5 text-accent mx-auto mb-1" />
               <div className="text-sm font-medium text-foreground">{company.founded}</div>
-              <div className="text-xs text-muted-foreground">Fondée</div>
+              <div className="text-xs text-muted-foreground">Founded</div>
             </div>
           )}
           
@@ -132,7 +132,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
         {/* Rating Section */}
         <div className="mb-4 p-3 bg-muted/30 rounded-lg">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-foreground">Évaluer cette entreprise</span>
+            <span className="text-sm font-medium text-foreground">Rate this company</span>
             <RatingStars 
               rating={0} 
               size="sm" 
@@ -176,7 +176,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
               onClick={() => onViewProfile?.(company.id)}
             >
               <ExternalLink className="w-4 h-4 mr-2" />
-              Voir profil
+              View Profile
             </Button>
           </div>
         )}

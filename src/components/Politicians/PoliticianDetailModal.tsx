@@ -213,7 +213,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                     {politician.verified && (
                       <Badge className="bg-blue-500 text-white">
                         <UserCheck className="w-3 h-3 mr-1" />
-                        Vérifié
+                        Verified
                       </Badge>
                     )}
                   </div>
@@ -297,7 +297,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                     <CardContent className="space-y-4">
                       <div>
                         <div className="flex justify-between mb-2">
-                          <span className="text-sm font-medium">Intégrité</span>
+                          <span className="text-sm font-medium">Integrity</span>
                           <span className="text-sm text-gray-600">
                             {politician.integrity_rating?.toFixed(1) || '0'}/5
                           </span>
@@ -416,7 +416,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
               <TabsContent value="ratings" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Évaluations détaillées</CardTitle>
+                    <CardTitle>Detailed Ratings</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8 text-gray-500">
