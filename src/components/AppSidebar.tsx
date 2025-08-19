@@ -10,10 +10,6 @@ import {
   Shield,
   Users,
   Vote,
-  Building2,
-  Briefcase,
-  ShoppingCart,
-  BarChart3,
   User,
   Bell,
   Search,
@@ -103,41 +99,17 @@ const governmentItems = [
   },
 ];
 
-// Services & Economy
-const servicesItems = [
-  {
-    title: 'Marketplace',
-    url: '/marketplace',
-    icon: ShoppingCart,
-  },
-  {
-    title: 'Jobs',
-    url: '/jobs',
-    icon: Briefcase,
-  },
-  {
-    title: 'Companies',
-    url: '/companies',
-    icon: Building2,
-  },
-];
+// Services & Economy - REMOVED: These services don't exist yet
+// - Marketplace (/marketplace) - No marketplace implementation found
+// - Jobs (/jobs) - Job board exists but basic functionality
+// - Companies (/companies) - Companies directory exists but limited
 
-// Tools & Analytics
+// Tools & Analytics - Keep only implemented features
 const toolsItems = [
   {
     title: 'Search',
     url: '/search',
     icon: Search,
-  },
-  {
-    title: 'Analytics',
-    url: '/analytics',
-    icon: BarChart3,
-  },
-  {
-    title: 'Performance',
-    url: '/performance',
-    icon: BarChart3,
   },
   {
     title: 'Notifications',
@@ -246,26 +218,7 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Services & Economy */}
-        <SidebarGroup>
-          <SidebarGroupLabel>Services</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {servicesItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild className={getNavClassName(isActive(item.url))}>
-                    <NavLink to={item.url}>
-                      <item.icon className="h-4 w-4" />
-                      {!collapsed && <span>{item.title}</span>}
-                    </NavLink>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
-        {/* Tools & Analytics */}
+        {/* Tools */}
         <SidebarGroup>
           <SidebarGroupLabel>Tools</SidebarGroupLabel>
           <SidebarGroupContent>
