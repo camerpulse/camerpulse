@@ -63,7 +63,8 @@ interface PartyRating {
 }
 
 const PoliticalPartyDetail = () => {
-  const { id } = useParams<{ id: string }>();
+  const { slug, id } = useParams<{ slug?: string } & { id?: string }>();
+  const partyId = id || slug;
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
