@@ -108,7 +108,7 @@ const AshenCivicCoreSyncLayer: React.FC = () => {
         description: "Core sync layer status refreshed successfully",
       });
     } catch (error) {
-      console.error('Error loading sync layer status:', error);
+      logger.error('Error loading sync layer status', { error: error.message });
       toast({
         title: "Status Load Failed",
         description: "Could not load Sync Layer status",
@@ -130,7 +130,7 @@ const AshenCivicCoreSyncLayer: React.FC = () => {
       if (error) throw error;
       setBuildJournal(data || []);
     } catch (error) {
-      console.error('Error loading build journal:', error);
+      logger.error('Error loading build journal', { error: error.message });
     }
   };
 
@@ -145,7 +145,7 @@ const AshenCivicCoreSyncLayer: React.FC = () => {
       if (error) throw error;
       setLearningPatterns(data || []);
     } catch (error) {
-      console.error('Error loading learning patterns:', error);
+      logger.error('Error loading learning patterns', { error: error.message });
     }
   };
 
@@ -180,7 +180,7 @@ const AshenCivicCoreSyncLayer: React.FC = () => {
         variant: data.recommendation === 'PROCEED' ? "default" : "destructive",
       });
     } catch (error) {
-      console.error('Error checking for duplicates:', error);
+      logger.error('Error checking for duplicates', { error: error.message });
       toast({
         title: "Check Failed",
         description: "Could not complete duplicate detection",
@@ -208,7 +208,7 @@ const AshenCivicCoreSyncLayer: React.FC = () => {
       loadSyncLayerStatus();
       loadBuildJournal();
     } catch (error) {
-      console.error('Error running full scan:', error);
+      logger.error('Error running full scan', { error: error.message });
       toast({
         title: "Scan Failed",
         description: "Could not complete full system scan",

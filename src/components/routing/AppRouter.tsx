@@ -497,6 +497,10 @@ export const AppRouter: React.FC = () => {
           element={<WrappedRoute element={NotificationSettingsPage} routeName="Notification Settings" requiresAuth />} 
         />
         <Route 
+          path="/settings" 
+          element={<WrappedRoute element={SettingsPage} routeName="Settings" requiresAuth />} 
+        />
+        <Route 
           path="/search" 
           element={<WrappedRoute element={AdvancedSearchPage} routeName="Advanced Search" />} 
         />

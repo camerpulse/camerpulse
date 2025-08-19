@@ -138,7 +138,7 @@ export const CivicAIChatbot: React.FC = () => {
       });
 
     } catch (error) {
-      console.error('Error initializing model:', error);
+      logger.error('Error initializing model', { error: error.message });
       setModelStatus('error');
       setIsModelDownloading(false);
       
@@ -219,7 +219,7 @@ export const CivicAIChatbot: React.FC = () => {
 
       return response;
     } catch (error) {
-      console.error('Error generating AI response:', error);
+      logger.error('Error generating AI response', { error: error.message });
       return findRelevantResponse(userMessage);
     }
   };
@@ -263,7 +263,7 @@ export const CivicAIChatbot: React.FC = () => {
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error('Error processing message:', error);
+      logger.error('Error processing message', { error: error.message });
       setMessages(prev => prev.filter(msg => msg.id !== 'typing'));
       
       const errorMessage: ChatMessage = {
