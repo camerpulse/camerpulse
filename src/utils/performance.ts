@@ -155,6 +155,71 @@ export function monitorMemoryUsage() {
 }
 
 /**
+ * Performance Monitor - Global performance tracking
+ */
+export const performanceMonitor = {
+  /**
+   * Initialize performance monitoring
+   */
+  init() {
+    performanceLogger.info('Performance monitoring initialized', 'PerformanceMonitor');
+    
+    // Monitor memory usage periodically
+    setInterval(() => {
+      monitorMemoryUsage();
+    }, 300000); // Every 5 minutes
+    
+    // Monitor Core Web Vitals if available
+    if ('PerformanceObserver' in window) {
+      try {
+        const observer = new PerformanceObserver((list) => {
+          list.getEntries().forEach((entry) => {
+            performanceLogger.info(`Performance metric: ${entry.name}`, 'PerformanceMonitor', {
+              value: entry.value || entry.duration,
+              entryType: entry.entryType
+            });
+          });
+        });
+        
+        observer.observe({ entryTypes: ['measure', 'navigation', 'paint'] });
+      } catch (error) {
+        performanceLogger.warn('Failed to initialize PerformanceObserver', 'PerformanceMonitor', {
+          error: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
+    }
+  },
+  
+  /**
+   * Track custom performance metrics
+   */
+  track(name: string, value: number) {
+    performanceLogger.info(`Custom metric: ${name}`, 'PerformanceMonitor', {
+      value,
+      timestamp: Date.now()
+    });
+  },
+  
+  /**
+   * Get current performance status
+   */
+  getStatus() {
+    if ('memory' in performance) {
+      const memInfo = (performance as any).memory;
+      return {
+        memoryUsage: {
+          used: Math.round(memInfo.usedJSHeapSize / 1024 / 1024),
+          total: Math.round(memInfo.totalJSHeapSize / 1024 / 1024),
+          limit: Math.round(memInfo.jsHeapSizeLimit / 1024 / 1024)
+        },
+        timestamp: Date.now()
+      };
+    }
+    return { timestamp: Date.now() };
+  }
+};
+
+/**
  * Virtual scrolling helper for large lists
  */
 export function useVirtualScroll(
