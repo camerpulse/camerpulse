@@ -22,10 +22,16 @@ import { PWAInstallPrompt } from "./components/Layout/PWAInstallPrompt";
 import { queryClient } from "./services/api";
 import { setupGlobalErrorHandling } from "./utils/errorHandling";
 import { setupLogging } from "./utils/logger";
+import { performanceMonitor } from "./utils/performance";
 
 // Initialize global services
 setupGlobalErrorHandling();
 setupLogging();
+
+// Initialize performance monitoring
+if (typeof window !== 'undefined') {
+  performanceMonitor.init();
+}
 
 /**
  * Root App Component
