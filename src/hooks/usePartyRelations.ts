@@ -43,12 +43,24 @@ async function fetchPartyMembersRaw(partyId: string, status: "current" | "all" =
 
   const { data: politiciansData, error: polErr } = await supabase
     .from("politicians")
-    .select("id, full_name, role, position_title, region, gender, profile_picture_url, slug, average_rating, total_ratings")
+    .select(
+      "id, name, role_title, level_of_office, region, gender, profile_image_url, slug, performance_score, transparency_rating"
+    )
     .in("id", ids);
 
   if (polErr) throw polErr;
 
   const byId = new Map(politiciansData?.map((p) => [p.id, p]) || []);
+
+  const normalizeRole = (roleTitle?: string | null, level?: string | null): string | undefined => {
+    const src = (roleTitle || level || '').toLowerCase();
+    if (src.includes('senator')) return 'senator';
+    if (src.includes('minister')) return 'minister';
+    if (src.includes('mayor')) return 'mayor';
+    if (src.includes('governor')) return 'governor';
+    if (src.includes('mp') || src.includes('member of parliament')) return 'mp';
+    return src ? 'politician' : undefined;
+  };
 
   const members: PartyMember[] = filtered
     .map((a) => {
@@ -56,15 +68,15 @@ async function fetchPartyMembersRaw(partyId: string, status: "current" | "all" =
       if (!p) return null;
       return {
         id: p.id,
-        full_name: p.full_name,
-        role: p.role,
-        position_title: p.position_title,
+        full_name: p.name,
+        role: normalizeRole(p.role_title, p.level_of_office),
+        position_title: p.role_title,
         region: p.region,
         gender: p.gender,
-        profile_picture_url: p.profile_picture_url,
+        profile_picture_url: p.profile_image_url,
         slug: p.slug,
-        average_rating: p.average_rating,
-        total_ratings: p.total_ratings,
+        average_rating: (p.performance_score ?? p.transparency_rating) ?? null,
+        total_ratings: null,
         is_current: a.is_current,
         start_date: a.start_date,
         end_date: a.end_date,
