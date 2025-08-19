@@ -50781,6 +50781,10 @@ export type Database = {
         Args: { p_device_info?: Json; p_status: string }
         Returns: undefined
       }
+      validate_english_only: {
+        Args: { input_text: string }
+        Returns: boolean
+      }
       validate_migrated_urls: {
         Args: Record<PropertyKey, never>
         Returns: {
