@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { advancedSanitizeInput, logSecurityEvent } from "@/utils/security";
 
 export interface SearchResult {
   id: string;
@@ -22,12 +23,41 @@ export function usePoliticalSearch(query: string, limit: number = 20) {
       const trimmed = query?.trim() ?? "";
       if (trimmed.length < 2) return [] as SearchResult[];
 
+      // Security: Sanitize search input to prevent XSS and SQL injection
+      const sanitizedQuery = advancedSanitizeInput(trimmed);
+      
+      // Security: Log search attempts for monitoring
+      if (trimmed !== sanitizedQuery) {
+        await logSecurityEvent(
+          'suspicious_search_attempt',
+          'search',
+          undefined,
+          { originalQuery: trimmed, sanitizedQuery },
+          'medium'
+        );
+      }
+
+      // Security: Validate query length to prevent DoS
+      if (sanitizedQuery.length > 100) {
+        throw new Error('Search query too long');
+      }
+
       const { data, error } = await supabase.rpc("secure_political_search", {
-        search_query: trimmed,
-        search_limit: limit,
+        p_query: sanitizedQuery,
+        p_limit: Math.min(limit, 50), // Cap limit to prevent resource abuse
+        p_offset: 0
       });
 
-      if (error) throw error;
+      if (error) {
+        await logSecurityEvent(
+          'search_error',
+          'search',
+          undefined,
+          { error: error.message, query: sanitizedQuery },
+          'low'
+        );
+        throw error;
+      }
 
       const results: SearchResult[] = (data || []).map((row: any) => ({
         id: row.id,

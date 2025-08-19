@@ -7,6 +7,7 @@ interface SafeHtmlProps {
   allowedAttributes?: Record<string, string[]>;
   className?: string;
   as?: keyof JSX.IntrinsicElements;
+  sanitizeConfig?: DOMPurify.Config;
 }
 
 /**
@@ -29,7 +30,7 @@ export const SafeHtml: React.FC<SafeHtmlProps> = ({
       ALLOWED_TAGS: allowedTags,
       ALLOWED_ATTR: Object.values(allowedAttributes).flat(),
       FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'link', 'meta'],
-      FORBID_ATTR: ['style', 'onerror', 'onclick', 'onload', 'onmouseover', 'onfocus', 'srcset'],
+      FORBID_ATTR: ['style', 'onerror', 'onclick', 'onload', 'onmouseover', 'onfocus', 'srcset', 'onblur', 'onchange', 'ondblclick', 'onkeydown', 'onkeypress', 'onkeyup', 'onmousedown', 'onmouseout', 'onmousemove', 'onmouseup', 'onreset', 'onselect', 'onsubmit'],
       KEEP_CONTENT: true,
       ALLOW_UNKNOWN_PROTOCOLS: false,
       ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data:image\/)|\/)/i,

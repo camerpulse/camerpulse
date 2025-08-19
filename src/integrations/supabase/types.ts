@@ -49634,6 +49634,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      cleanup_expired_roles: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       cleanup_mock_data: {
         Args: { p_exclude_verified?: boolean; p_patterns?: string[] }
         Returns: Json
@@ -50651,7 +50655,9 @@ export type Database = {
         }[]
       }
       secure_political_search: {
-        Args: { search_limit?: number; search_query: string }
+        Args:
+          | { p_limit?: number; p_offset?: number; p_query: string }
+          | { search_limit?: number; search_query: string }
         Returns: {
           description: string
           entity_type: string

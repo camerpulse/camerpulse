@@ -8,7 +8,9 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, Users, Shield, Globe } from 'lucide-react';
+import { Eye, EyeOff, Users, Shield, Globe, AlertTriangle } from 'lucide-react';
+import { validatePasswordStrength } from '@/utils/authSecurity';
+import { advancedSanitizeInput } from '@/utils/security';
 
 export const AuthPage: React.FC = () => {
   const navigate = useNavigate();
@@ -26,6 +28,7 @@ export const AuthPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [passwordStrength, setPasswordStrength] = useState<{isValid: boolean; errors: string[]}>({isValid: false, errors: []});
 
   // Redirect if already logged in
   useEffect(() => {
@@ -36,8 +39,17 @@ export const AuthPage: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Sanitize input to prevent XSS
+    const sanitizedValue = advancedSanitizeInput(value);
+    setFormData(prev => ({ ...prev, [name]: sanitizedValue }));
     setError(null);
+    
+    // Validate password strength in real-time for signup
+    if (name === 'password' && activeTab === 'signup') {
+      const strength = validatePasswordStrength(value);
+      setPasswordStrength(strength);
+    }
   };
 
   const validateForm = () => {
@@ -46,17 +58,35 @@ export const AuthPage: React.FC = () => {
       return false;
     }
 
+    // Enhanced email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+
     if (activeTab === 'signup') {
       if (formData.password !== formData.confirmPassword) {
         setError('Passwords do not match');
         return false;
       }
-      if (formData.password.length < 6) {
-        setError('Password must be at least 6 characters');
+      
+      // Use enhanced password validation
+      const passwordValidation = validatePasswordStrength(formData.password);
+      if (!passwordValidation.isValid) {
+        setError(`Password requirements not met: ${passwordValidation.errors.join(', ')}`);
         return false;
       }
-      if (!formData.username) {
-        setError('Username is required');
+      
+      if (!formData.username || formData.username.length < 3) {
+        setError('Username must be at least 3 characters');
+        return false;
+      }
+      
+      // Validate username format (alphanumeric and underscores only)
+      const usernameRegex = /^[a-zA-Z0-9_]+$/;
+      if (!usernameRegex.test(formData.username)) {
+        setError('Username can only contain letters, numbers, and underscores');
         return false;
       }
     }
@@ -94,6 +124,10 @@ export const AuthPage: React.FC = () => {
         const { error } = await signIn(formData.email, formData.password);
 
         if (error) {
+          // Dispatch security event for failed login
+          const event = new CustomEvent('auth-error', { detail: { error: error.message } });
+          window.dispatchEvent(event);
+          
           if (error.message.includes('Invalid login credentials')) {
             setError('Invalid email or password. Please try again.');
           } else {
@@ -278,6 +312,32 @@ export const AuthPage: React.FC = () => {
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
+                    
+                    {/* Password Strength Indicator */}
+                    {activeTab === 'signup' && formData.password && (
+                      <div className="mt-2">
+                        <div className="flex items-center space-x-2 text-xs">
+                          {passwordStrength.isValid ? (
+                            <Shield className="w-3 h-3 text-green-500" />
+                          ) : (
+                            <AlertTriangle className="w-3 h-3 text-yellow-500" />
+                          )}
+                          <span className={passwordStrength.isValid ? 'text-green-600' : 'text-yellow-600'}>
+                            {passwordStrength.isValid ? 'Strong password' : 'Password requirements'}
+                          </span>
+                        </div>
+                        {!passwordStrength.isValid && passwordStrength.errors.length > 0 && (
+                          <ul className="mt-1 text-xs text-muted-foreground space-y-1">
+                            {passwordStrength.errors.map((error, index) => (
+                              <li key={index} className="flex items-center space-x-1">
+                                <span className="w-1 h-1 bg-muted-foreground rounded-full"></span>
+                                <span>{error}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-2">
