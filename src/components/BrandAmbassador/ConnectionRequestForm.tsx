@@ -135,7 +135,7 @@ export const ConnectionRequestForm: React.FC<ConnectionRequestFormProps> = ({
   };
 
   const formatPrice = (price: number) => {
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat('en-CM', {
       style: 'currency',
       currency: 'XAF',
       minimumFractionDigits: 0

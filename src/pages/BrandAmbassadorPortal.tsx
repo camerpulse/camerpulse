@@ -171,7 +171,7 @@ export const BrandAmbassadorPortal: React.FC = () => {
 
   const formatPrice = (price: number | undefined) => {
     if (!price) return 'Negotiable';
-    return new Intl.NumberFormat('fr-FR', {
+    return new Intl.NumberFormat('en-CM', {
       style: 'currency',
       currency: 'XAF',
       minimumFractionDigits: 0

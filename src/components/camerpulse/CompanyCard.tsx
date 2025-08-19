@@ -146,7 +146,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
           {company.verified && (
             <Badge className="bg-cm-green text-white">
               <Building className="w-3 h-3 mr-1" />
-              Entreprise vérifiée
+              Verified Business
             </Badge>
           )}
           

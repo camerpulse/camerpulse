@@ -159,7 +159,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
 
   const getPromiseStatusText = (status: string) => {
     switch (status) {
-      case 'fulfilled': return 'Tenue';
+      case 'fulfilled': return 'Fulfilled';
       case 'unfulfilled': return 'Unfulfilled';
       case 'in_progress': return 'En cours';
       default: return 'Inconnue';

@@ -188,7 +188,7 @@ const CivicExplainerAssistant = () => {
       },
       voting_explanation: {
         en: `Your vote is your voice in democracy! Here's why it matters:\n\n• It's how you choose leaders who represent your interests\n• It gives you a say in policies that affect your daily life\n• It's your constitutional right and civic duty\n• It helps hold politicians accountable\n\nIn ${getRegionName()}, your vote helps decide who becomes your MP, mayor, and councillors. Every vote counts - elections have been won by small margins! To vote, you need to be 20+ years old and registered with ELECAM.`,
-        fr: `Votre vote est votre voix dans la démocratie! Voici pourquoi c'est important:\n\n• C'est comment vous choisissez les dirigeants qui représentent vos intérêts\n• Cela vous donne une voix dans les politiques qui affectent votre vie quotidienne\n• C'est votre droit constitutionnel et devoir civique\n• Cela aide à tenir les politiciens responsables\n\nDans la région ${getRegionName()}, votre vote aide à décider qui devient votre député, maire et conseillers.`,
+        // French content removed - English only platform
         pidgin: `Your vote na your voice for democracy! Na why e dey important:\n\n• Na how you go choose leaders wey go represent your interest\n• E dey give you say for policies wey dey affect your daily life\n• Na your constitutional right and civic duty\n• E dey help hold politicians accountable\n\nFor ${getRegionName()}, your vote dey help decide who go become your MP, mayor, and councillors. Every vote dey count!`
       },
       parties_explanation: {
