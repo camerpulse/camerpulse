@@ -138,9 +138,9 @@ export const AppRouter: React.FC = () => {
         
         {/* Political Parties */}
         <Route path="/parties" element={<PoliticalPartiesPage />} />
-        <Route path="/parties/:slug" element={<PoliticalPartyDetailPage />} />
+        <Route path="/parties/:slug" element={<PoliticalPartyDetail />} />
         <Route path="/political-parties" element={<PoliticalPartiesPage />} />
-        <Route path="/political-parties/:slug" element={<PoliticalPartyDetailPage />} />
+        <Route path="/political-parties/:slug" element={<PoliticalPartyDetail />} />
         <Route path="/political-directory" element={<UnifiedPoliticalDirectoryPage />} />
         
         {/* Petitions */}
