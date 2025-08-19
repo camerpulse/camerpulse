@@ -230,7 +230,7 @@ export const EnhancedHeroSection: React.FC = () => {
                 <CardContent className="p-8">
                   <div className="flex items-center justify-center mb-4">
                     <div className={`w-16 h-16 bg-gradient-to-r ${features[currentFeature].color} rounded-2xl flex items-center justify-center shadow-lg`}>
-                      <features[currentFeature].icon className="w-8 h-8 text-white" />
+                       {React.createElement(features[currentFeature].icon, { className: "w-8 h-8 text-white" })}
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-foreground mb-3">

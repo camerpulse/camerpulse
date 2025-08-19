@@ -681,6 +681,7 @@ const Index = () => {
         </div>
       </section>
     </AppLayout>
+    </>
   );
 };
 
