@@ -8,6 +8,7 @@ import { Senator } from '@/hooks/useSenators';
 import { toast } from 'sonner';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { advancedSanitizeInput } from '@/utils/security';
 
 interface SenatorExportModalProps {
   senator: Senator;
@@ -166,13 +167,16 @@ export const SenatorExportModal: React.FC<SenatorExportModalProps> = ({
       tempDiv.style.width = '800px';
       tempDiv.style.background = 'white';
       tempDiv.style.padding = '40px';
-      tempDiv.style.fontFamily = 'Arial, sans-serif';
+      
+      const safeName = advancedSanitizeInput(String(senator.name ?? ''));
+      const safePosition = advancedSanitizeInput(String(senator.position ?? ''));
+      const safeRegion = advancedSanitizeInput(String(senator.region ?? ''));
       
       tempDiv.innerHTML = `
         <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="font-size: 28px; margin-bottom: 10px; color: #1a1a1a;">${senator.name}</h1>
-          <p style="font-size: 18px; color: #666; margin-bottom: 5px;">${senator.position}</p>
-          ${senator.region ? `<p style="font-size: 16px; color: #888;">${senator.region}</p>` : ''}
+          <h1 style="font-size: 28px; margin-bottom: 10px; color: #1a1a1a;">${safeName}</h1>
+          <p style="font-size: 18px; color: #666; margin-bottom: 5px;">${safePosition}</p>
+          ${senator.region ? `<p style="font-size: 16px; color: #888;">${safeRegion}</p>` : ''}
         </div>
         
         ${exportOptions.includePerformance ? `
