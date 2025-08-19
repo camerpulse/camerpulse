@@ -48,8 +48,16 @@ export function createSecureMarker(options: MarkerOptions): HTMLElement {
   iconContainer.style.height = '18px';
   iconContainer.style.color = 'white';
   
-  // Safely set SVG content
-  iconContainer.innerHTML = iconSvg; // This is safe as iconSvg comes from predefined constants
+  // Safely set SVG content using secure DOM creation
+  if (iconSvg && iconSvg.trim().startsWith('<svg')) {
+    // Parse and create SVG element securely
+    const parser = new DOMParser();
+    const svgDoc = parser.parseFromString(iconSvg, 'image/svg+xml');
+    const svgElement = svgDoc.documentElement;
+    if (svgElement && !svgDoc.querySelector('parsererror')) {
+      iconContainer.appendChild(svgElement);
+    }
+  }
   
   markerEl.appendChild(iconContainer);
   
@@ -126,19 +134,28 @@ export function createSecureExportContent(
     const metrics = data.performanceMetrics;
     if (metrics.performanceScore) {
       const p = document.createElement('p');
-      p.innerHTML = `Performance Score: <strong>${metrics.performanceScore}%</strong>`;
+      p.textContent = 'Performance Score: ';
+      const strong = document.createElement('strong');
+      strong.textContent = `${metrics.performanceScore}%`;
+      p.appendChild(strong);
       perfDiv.appendChild(p);
     }
 
     if (metrics.transparencyScore) {
       const p = document.createElement('p');
-      p.innerHTML = `Transparency Score: <strong>${metrics.transparencyScore}%</strong>`;
+      p.textContent = 'Transparency Score: ';
+      const strong = document.createElement('strong');
+      strong.textContent = `${metrics.transparencyScore}%`;
+      p.appendChild(strong);
       perfDiv.appendChild(p);
     }
 
     if (metrics.civicEngagementScore) {
       const p = document.createElement('p');
-      p.innerHTML = `Civic Engagement Score: <strong>${metrics.civicEngagementScore}%</strong>`;
+      p.textContent = 'Civic Engagement Score: ';
+      const strong = document.createElement('strong');
+      strong.textContent = `${metrics.civicEngagementScore}%`;
+      p.appendChild(strong);
       perfDiv.appendChild(p);
     }
 
@@ -158,13 +175,19 @@ export function createSecureExportContent(
     const activity = data.legislativeActivity;
     if (activity.billsProposed) {
       const p = document.createElement('p');
-      p.innerHTML = `Bills Proposed: <strong>${activity.billsProposed}</strong>`;
+      p.textContent = 'Bills Proposed: ';
+      const strong = document.createElement('strong');
+      strong.textContent = String(activity.billsProposed);
+      p.appendChild(strong);
       legDiv.appendChild(p);
     }
 
     if (activity.billsPassed) {
       const p = document.createElement('p');
-      p.innerHTML = `Bills Passed: <strong>${activity.billsPassed}</strong>`;
+      p.textContent = 'Bills Passed: ';
+      const strong = document.createElement('strong');
+      strong.textContent = String(activity.billsPassed);
+      p.appendChild(strong);
       legDiv.appendChild(p);
     }
 
