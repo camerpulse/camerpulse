@@ -29,7 +29,7 @@ export default function PetitionMobile() {
   const [pwaEnabled, setPwaEnabled] = React.useState(true);
   const [offlineMode, setOfflineMode] = React.useState(true);
   const [pushNotifications, setPushNotifications] = React.useState(false);
-  const [darkMode, setDarkMode] = React.useState('auto');
+  // Dark mode removed - light mode only
 
   const mobileStats = {
     mobileUsers: 68,
@@ -276,19 +276,7 @@ export default function PetitionMobile() {
                     <Switch checked={pushNotifications} onCheckedChange={setPushNotifications} />
                   </div>
 
-                  <div className="space-y-2">
-                    <h4 className="font-medium">Theme Preference</h4>
-                    <Select value={darkMode} onValueChange={setDarkMode}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="light">Light Mode</SelectItem>
-                        <SelectItem value="dark">Dark Mode</SelectItem>
-                        <SelectItem value="auto">Auto (System)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                  {/* Theme preference removed - light mode only */}
                 </CardContent>
               </Card>
 
@@ -298,7 +286,7 @@ export default function PetitionMobile() {
                   <CardDescription>Native features available in the web app</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex items-center gap-3 p-3 bg-green-50 dark:bg-green-950 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
                     <Bell className="h-5 w-5 text-green-600" />
                     <div>
                       <h4 className="font-medium">Push Notifications</h4>
@@ -306,7 +294,7 @@ export default function PetitionMobile() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
                     <Download className="h-5 w-5 text-blue-600" />
                     <div>
                       <h4 className="font-medium">Background Sync</h4>
@@ -314,7 +302,7 @@ export default function PetitionMobile() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 bg-purple-50 dark:bg-purple-950 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
                     <Wifi className="h-5 w-5 text-purple-600" />
                     <div>
                       <h4 className="font-medium">Offline Mode</h4>
@@ -322,7 +310,7 @@ export default function PetitionMobile() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-950 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
                     <Globe className="h-5 w-5 text-yellow-600" />
                     <div>
                       <h4 className="font-medium">Share Integration</h4>

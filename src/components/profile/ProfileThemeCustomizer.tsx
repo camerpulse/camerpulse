@@ -333,19 +333,7 @@ export const ProfileThemeCustomizer: React.FC<ProfileThemeCustomizerProps> = ({
             </div>
           </div>
 
-          {/* Dark Mode Override */}
-          <div className="flex items-center justify-between">
-            <div>
-              <Label className="text-base font-medium">Force Dark Mode</Label>
-              <p className="text-sm text-muted-foreground">
-                Override system theme preference
-              </p>
-            </div>
-            <Switch
-              checked={currentTheme?.dark_mode_override || false}
-              onCheckedChange={(checked) => updateTheme({ dark_mode_override: checked })}
-            />
-          </div>
+          {/* Dark Mode removed - light mode only */}
         </CardContent>
       </Card>
 

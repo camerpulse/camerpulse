@@ -343,13 +343,7 @@ export const useAuth = () => {
   };
 };
 
-export const useTheme = () => {
-  const { state, setTheme } = useAppState();
-  return {
-    theme: state.theme,
-    setTheme,
-  };
-};
+// Theme functionality removed - light mode only
 
 export const useNotifications = () => {
   const { state, addNotification, markNotificationAsRead } = useAppState();

@@ -49,7 +49,7 @@ const ProductionReadinessPage: React.FC = () => {
       icon: <Globe className="h-5 w-5" />,
       items: [
         "Responsive design for all screen sizes",
-        "Dark/light mode support",
+        "Responsive design for all screen sizes",
         "Toast notifications for user feedback",
         "Loading states and skeleton UI",
         "Offline capability with service workers",

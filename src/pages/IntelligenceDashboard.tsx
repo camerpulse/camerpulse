@@ -61,7 +61,7 @@ const IntelligenceSidebar = () => {
 
   const quickToggles = [
     { label: 'Auto Refresh', key: 'autoRefresh', defaultValue: true },
-    { label: 'Dark Mode', key: 'darkMode', defaultValue: false },
+    { label: 'Sound Alerts', key: 'soundAlerts', defaultValue: true },
     { label: 'Sound Alerts', key: 'soundAlerts', defaultValue: true },
     { label: 'Mobile View', key: 'mobileView', defaultValue: false }
   ];

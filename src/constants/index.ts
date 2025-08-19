@@ -304,7 +304,7 @@ export const VALIDATION_RULES = {
 
 // === FEATURE FLAGS ===
 export const FEATURE_FLAGS = {
-  ENABLE_DARK_MODE: true,
+  ENABLE_DARK_MODE: false,
   ENABLE_NOTIFICATIONS: true,
   ENABLE_ANALYTICS: true,
   ENABLE_PWA: true,
