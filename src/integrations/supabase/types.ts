@@ -8765,12 +8765,10 @@ export type Database = {
           downvotes: number | null
           examples: string[] | null
           expert_reviewed: boolean | null
-          french_explanation: string | null
           id: string
           key_points: string[] | null
           legal_document_id: string | null
           metadata: Json | null
-          pidgin_explanation: string | null
           question_asked: string
           related_laws: string[] | null
           simple_explanation: string
@@ -8785,12 +8783,10 @@ export type Database = {
           downvotes?: number | null
           examples?: string[] | null
           expert_reviewed?: boolean | null
-          french_explanation?: string | null
           id?: string
           key_points?: string[] | null
           legal_document_id?: string | null
           metadata?: Json | null
-          pidgin_explanation?: string | null
           question_asked: string
           related_laws?: string[] | null
           simple_explanation: string
@@ -8805,12 +8801,10 @@ export type Database = {
           downvotes?: number | null
           examples?: string[] | null
           expert_reviewed?: boolean | null
-          french_explanation?: string | null
           id?: string
           key_points?: string[] | null
           legal_document_id?: string | null
           metadata?: Json | null
-          pidgin_explanation?: string | null
           question_asked?: string
           related_laws?: string[] | null
           simple_explanation?: string
@@ -26897,53 +26891,6 @@ export type Database = {
           },
         ]
       }
-      language_learning_progress: {
-        Row: {
-          created_at: string
-          entry_id: string
-          id: string
-          language_name: string
-          last_practiced_at: string | null
-          mastery_level: string | null
-          practice_count: number | null
-          updated_at: string
-          user_id: string
-          village_id: string
-        }
-        Insert: {
-          created_at?: string
-          entry_id: string
-          id?: string
-          language_name: string
-          last_practiced_at?: string | null
-          mastery_level?: string | null
-          practice_count?: number | null
-          updated_at?: string
-          user_id: string
-          village_id: string
-        }
-        Update: {
-          created_at?: string
-          entry_id?: string
-          id?: string
-          language_name?: string
-          last_practiced_at?: string | null
-          mastery_level?: string | null
-          practice_count?: number | null
-          updated_at?: string
-          user_id?: string
-          village_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "language_learning_progress_entry_id_fkey"
-            columns: ["entry_id"]
-            isOneToOne: false
-            referencedRelation: "language_preservation"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       language_preservation: {
         Row: {
           audio_pronunciation: string | null
@@ -26958,7 +26905,6 @@ export type Database = {
           entry_type: string
           etymology: string | null
           example_sentences: Json | null
-          french_translation: string | null
           grammatical_notes: string | null
           id: string
           is_endangered: boolean | null
@@ -26990,7 +26936,6 @@ export type Database = {
           entry_type: string
           etymology?: string | null
           example_sentences?: Json | null
-          french_translation?: string | null
           grammatical_notes?: string | null
           id?: string
           is_endangered?: boolean | null
@@ -27022,7 +26967,6 @@ export type Database = {
           entry_type?: string
           etymology?: string | null
           example_sentences?: Json | null
-          french_translation?: string | null
           grammatical_notes?: string | null
           id?: string
           is_endangered?: boolean | null
@@ -29257,47 +29201,6 @@ export type Database = {
           {
             foreignKeyName: "message_threads_parent_message_id_fkey"
             columns: ["parent_message_id"]
-            isOneToOne: false
-            referencedRelation: "messages"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      message_translations: {
-        Row: {
-          confidence_score: number | null
-          created_at: string
-          from_language: string
-          id: string
-          message_id: string
-          to_language: string
-          translated_content: string
-          user_id: string
-        }
-        Insert: {
-          confidence_score?: number | null
-          created_at?: string
-          from_language: string
-          id?: string
-          message_id: string
-          to_language: string
-          translated_content: string
-          user_id: string
-        }
-        Update: {
-          confidence_score?: number | null
-          created_at?: string
-          from_language?: string
-          id?: string
-          message_id?: string
-          to_language?: string
-          translated_content?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "message_translations_message_id_fkey"
-            columns: ["message_id"]
             isOneToOne: false
             referencedRelation: "messages"
             referencedColumns: ["id"]

@@ -45,14 +45,14 @@ const Auth = () => {
 
     if (error) {
       toast({
-        title: "Erreur de connexion",
+        title: "Login error",
         description: error.message,
         variant: "destructive"
       });
     } else {
       toast({
-        title: "Connexion réussie",
-        description: "Bienvenue sur CamerPulse!"
+        title: "Login successful",
+        description: "Welcome to CamerPulse!"
       });
     }
     setIsLoading(false);

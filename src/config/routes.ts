@@ -114,13 +114,9 @@ export const ROUTES = {
 } as const;
 
 /**
- * Language-aware route builder
- * Supports optional language prefixes like /en/ or /fr/
+ * Route builder (English-only)
  */
-export const buildRoute = (route: string, lang?: string): string => {
-  if (lang && lang !== 'en') {
-    return `/${lang}${route}`;
-  }
+export const buildRoute = (route: string): string => {
   return route;
 };
 
