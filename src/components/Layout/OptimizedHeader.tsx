@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
-import { useApp } from "@/contexts/AppContext";
+import { useAppState } from "@/contexts/AppContext";
 import { 
   Bell, 
   ChevronDown, 
@@ -49,7 +49,7 @@ const NAVIGATION_ITEMS = [
  */
 export const OptimizedHeader: React.FC = React.memo(() => {
   const { user, signOut } = useAuth();
-  const { isLoading } = useApp();
+  const { state: { isLoading } } = useAppState();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
 
