@@ -78,7 +78,7 @@ export const useCivicNotifications = () => {
         id: '3',
         type: 'intelligence',
         title: 'Political Sentiment Shift Detected',
-        content: 'Significant positive sentiment increase detected in Yaoundé region regarding education policy.',
+        content: 'Significant positive sentiment increase detected in Yaounde region regarding education policy.',
         priority: 'warning',
         region: 'Centre',
         created_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),

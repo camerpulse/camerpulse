@@ -91,7 +91,7 @@ const PanAfricaModule = () => {
             supported_languages: ['en'],
             currency_code: 'XAF',
             region: 'Central Africa',
-            capital_city: 'Yaoundé',
+            capital_city: 'Yaounde',
             is_active: true
           },
           {

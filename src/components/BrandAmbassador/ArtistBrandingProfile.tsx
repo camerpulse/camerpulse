@@ -40,7 +40,7 @@ const INDUSTRY_INTERESTS = [
   'Education', 'Finance', 'NGOs', 'Events', 'Technology', 'Automotive', 'Real Estate'
 ];
 
-const REGIONS = ['National', 'Local (Douala)', 'Local (Yaoundé)', 'International', 'CEMAC Region'];
+const REGIONS = ['National', 'Local (Douala)', 'Local (Yaounde)', 'International', 'CEMAC Region'];
 
 const DELIVERABLES = [
   'Social Media Posts', 'Product Photoshoots', 'Event Appearances', 

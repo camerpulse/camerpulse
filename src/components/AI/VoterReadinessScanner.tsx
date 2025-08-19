@@ -76,7 +76,7 @@ const VoterReadinessScanner = () => {
     },
     'Centre': {
       office: 'ELECAM Centre Regional Office',
-      address: 'Yaoundé, Centre Region',
+      address: 'Yaounde, Centre Region',
       phone: '+237 699 234 567',
       hours: 'Mon-Fri: 8:00-16:00'
     },

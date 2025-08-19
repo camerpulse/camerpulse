@@ -99,7 +99,7 @@ const defaultUpcomingEvents: UpcomingEvent[] = [
     id: '1', 
     title: 'National Assembly Session', 
     date: 'Tomorrow, 10:00 AM',
-    location: 'Yaoundé',
+    location: 'Yaounde',
     type: 'assembly' 
   },
   { 

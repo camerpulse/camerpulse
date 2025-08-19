@@ -72,7 +72,7 @@ export function ContactInfoBlock({ senator, hasProAccess }: ContactInfoBlockProp
             <p className="text-sm text-muted-foreground">Office Address</p>
             <p className="font-medium">
               Senate Building, Unity Palace<br />
-              Yaoundé, Centre Region
+              Yaounde, Centre Region
             </p>
           </div>
         </div>

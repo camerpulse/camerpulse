@@ -22,7 +22,7 @@ export const CivicLeaderboards: React.FC = () => {
     villages: [
       { name: "Bamenda Central", score: 2850, members: 45 },
       { name: "Douala Maritime", score: 2720, members: 38 },
-      { name: "Yaoundé Centre", score: 2650, members: 42 }
+      { name: "Yaounde Centre", score: 2650, members: 42 }
     ],
     monthly: topPerformers?.slice(0, 5) || []
   };

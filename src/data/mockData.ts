@@ -5,19 +5,19 @@ export const mockPulses = [
     id: '1',
     user: {
       name: 'Amina Mbarga',
-      username: 'amina_yaoundé',
+      username: 'amina_yaounde',
       avatar: '',
       verified: false,
       isDiaspora: false,
-      location: 'Yaoundé, Centre'
+      location: 'Yaounde, Centre'
     },
-    content: 'The new infrastructure projects in Yaoundé are finally showing results! Road construction on Avenue Kennedy is making our daily commute much easier. 🇨🇲 #YaoundéDevelopment #Infrastructure',
+    content: 'The new infrastructure projects in Yaounde are finally showing results! Road construction on Avenue Kennedy is making our daily commute much easier. 🇨🇲 #YaoundeDevelopment #Infrastructure',
     timestamp: '2h ago',
     likes: 45,
     comments: 12,
     shares: 8,
     sentiment: 'positive' as const,
-    hashtags: ['YaoundéDevelopment', 'Infrastructure'],
+    hashtags: ['YaoundeDevelopment', 'Infrastructure'],
     isLiked: false
   },
   {
@@ -333,7 +333,7 @@ export const mockNews = [
     id: '2',
     title: 'Infrastructure Development Continues in Northern Regions',
     excerpt: 'Major road construction projects are underway to improve connectivity between the northern regions and the rest of the country.',
-    source: 'Journal du Cameroun',
+    source: 'Cameroon Tribune',
     timestamp: '1 day ago',
     sentiment: 'positive' as const,
     url: '#'
@@ -382,7 +382,7 @@ export const mockDiasporaProfiles = [
     full_name: 'Marie-Claire Nkomo',
     country_of_residence: 'Canada',
     city_of_residence: 'Toronto',
-    home_village_town_city: 'Yaoundé',
+    home_village_town_city: 'Yaounde',
     skills_expertise: ['Healthcare', 'Public Health'],
     years_in_diaspora: 12,
     willing_to_mentor: true,
