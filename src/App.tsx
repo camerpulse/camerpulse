@@ -17,6 +17,7 @@ import { PanAfricaProvider } from "./contexts/PanAfricaContext";
 import { AppRouter } from "./components/routing/AppRouter";
 import { ErrorBoundary } from "./components/common/ErrorBoundary";
 import { PWAInstallPrompt } from "./components/Layout/PWAInstallPrompt";
+import { SecurityMonitor } from "./components/Security/SecurityMonitor";
 
 // Services & Utilities
 import { queryClient } from "./services/api";
@@ -55,6 +56,7 @@ const App: React.FC = () => {
                         <Toaster />
                         <Sonner />
                         <PWAInstallPrompt />
+                        <SecurityMonitor />
                         
                         {/* Main Application Router */}
                         <AppRouter />
