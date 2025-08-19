@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AppLayout } from "@/components/Layout/AppLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import { HeroSection } from "@/components/Homepage/HeroSection";
+import { EnhancedHeroSection } from "@/components/Homepage/EnhancedHeroSection";
+import { LiveActivityFeed } from "@/components/Homepage/LiveActivityFeed";
+import { TrendingTopics } from "@/components/Homepage/TrendingTopics";
+import { Helmet } from 'react-helmet-async';
 import { 
   Users, 
   Calendar, 
@@ -46,7 +49,10 @@ import {
   Users2,
   TrendingDown,
   AlertTriangle,
-  CheckCircle2
+  CheckCircle2,
+  Rocket,
+  Lightbulb,
+  Coffee
 } from "lucide-react";
 
 const Index = () => {
@@ -120,186 +126,237 @@ const Index = () => {
     { category: "Business", items: ["Companies", "SMEs", "Startups"], count: "28K+" }
   ];
 
+  // Performance optimization: Preload critical resources
+  useEffect(() => {
+    // Preload key routes that users are likely to visit
+    const criticalRoutes = ['/civic-feed', '/polls', '/politicians', '/transparency'];
+    criticalRoutes.forEach(route => {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.href = route;
+      document.head.appendChild(link);
+    });
+  }, []);
+
   return (
-    <AppLayout>
-      {/* User Info Bar */}
-      {user && (
-        <div className="bg-muted/30 border-b">
-          <div className="container mx-auto px-4 py-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <User className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium">
-                  Welcome back, {profile?.display_name || profile?.username || 'User'}!
-                </span>
-                <Link to={profile?.username ? `/profile/${profile.username}` : `/u/${user.id}`}>
-                  <Button variant="outline" size="sm">View Profile</Button>
-                </Link>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Link to="/notifications">
-                  <Button variant="ghost" size="sm">
-                    <Bell className="h-4 w-4" />
+    <>
+      {/* SEO Optimization */}
+      <Helmet>
+        <title>CamerPulse - The Future of Civic Engagement in Cameroon</title>
+        <meta 
+          name="description" 
+          content="Join 2.5M+ citizens on Africa's most advanced civic engagement platform. Track politicians, participate in polls, monitor transparency, and shape Cameroon's democratic future." 
+        />
+        <meta name="keywords" content="Cameroon democracy, civic engagement, political transparency, voting platform, government accountability, African politics" />
+        <meta property="og:title" content="CamerPulse - Democratic Transparency Platform" />
+        <meta property="og:description" content="Real-time civic intelligence, verified commerce, and transparent leadership tracking for Cameroon" />
+        <meta property="og:image" content="/og-image.jpg" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="CamerPulse - The Future of Civic Engagement" />
+        <meta name="twitter:description" content="Join the democratic revolution transforming civic engagement in Cameroon" />
+        <link rel="canonical" href="https://camerpulse.com" />
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "CamerPulse",
+            "description": "Africa's leading civic engagement and transparency platform",
+            "url": "https://camerpulse.com",
+            "logo": "https://camerpulse.com/logo.png",
+            "sameAs": [
+              "https://twitter.com/camerpulse",
+              "https://facebook.com/camerpulse"
+            ]
+          })}
+        </script>
+      </Helmet>
+
+      <AppLayout>
+        {/* Enhanced User Welcome Bar */}
+        {user && (
+          <div className="bg-gradient-to-r from-primary/5 to-secondary/5 border-b border-primary/10">
+            <div className="container mx-auto px-4 py-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center">
+                      <User className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                      <span className="text-sm font-semibold text-foreground">
+                        Welcome back, {profile?.display_name || profile?.username || 'Citizen'}! 🇨🇲
+                      </span>
+                      <p className="text-xs text-muted-foreground">
+                        Ready to make your voice heard today?
+                      </p>
+                    </div>
+                  </div>
+                  <Link to={profile?.username ? `/profile/${profile.username}` : `/u/${user.id}`}>
+                    <Button variant="outline" size="sm" className="border-primary/30 hover:border-primary">
+                      <Eye className="h-4 w-4 mr-2" />
+                      View Profile
+                    </Button>
+                  </Link>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Link to="/notifications">
+                    <Button variant="ghost" size="sm" className="relative">
+                      <Bell className="h-4 w-4" />
+                      <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full text-xs"></span>
+                    </Button>
+                  </Link>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handleSignOut} 
+                    className="text-muted-foreground hover:text-foreground"
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sign Out
                   </Button>
-                </Link>
-                <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground hover:text-foreground">
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
-                </Button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Enhanced Hero Section */}
-      <HeroSection />
+        {/* Enhanced Hero Section */}
+        <EnhancedHeroSection />
 
-      {/* Real-time Activity Feed Preview */}
-      <section className="py-12 bg-muted/20">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-2xl font-bold flex items-center">
-                <Activity className="h-6 w-6 mr-2 text-primary" />
-                Live Activity
+        {/* Live Activity Feed */}
+        <LiveActivityFeed />
+
+        {/* Trending Topics */}
+        <TrendingTopics />
+
+        {/* Interactive Quick Actions */}
+        <section className="py-20 bg-gradient-to-br from-background to-muted/30">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl lg:text-5xl font-bold mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+                Take Action Today
               </h2>
-              <p className="text-muted-foreground">What's happening across Cameroon right now</p>
+              <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+                Every action you take strengthens our democracy and builds a better Cameroon
+              </p>
             </div>
-            <Link to="/civic-feed">
-              <Button variant="outline">
-                View All <ChevronRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                type: "petition",
-                title: "Support Youth Employment Initiative",
-                activity: "1,247 signatures",
-                icon: Megaphone,
-                time: "2 hours ago",
-                color: "text-accent"
-              },
-              {
-                type: "poll", 
-                title: "Should Cameroon invest more in renewable energy?",
-                activity: "3,421 votes",
-                icon: Vote,
-                time: "4 hours ago",
-                color: "text-primary"
-              },
-              {
-                type: "transparency",
-                title: "Ministry of Health budget transparency update",
-                activity: "92% transparency score",
-                icon: Shield,
-                time: "6 hours ago",
-                color: "text-secondary"
-              }
-            ].map((item, index) => (
-              <Card key={index} className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
-                <CardContent className="p-4">
-                  <div className="flex items-start space-x-3">
-                    <div className={`p-2 rounded-full bg-muted ${item.color}`}>
-                      <item.icon className="h-4 w-4" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-medium text-sm mb-1 line-clamp-2">{item.title}</h3>
-                      <p className="text-xs text-muted-foreground mb-2">{item.activity}</p>
-                      <p className="text-xs text-muted-foreground">{item.time}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Quick Actions Dashboard */}
-      <section className="py-16 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl lg:text-4xl font-bold mb-4">Take Action Today</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Make your voice heard and engage with your community
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            {[
-              {
-                title: "Start a Petition",
-                description: "Launch a campaign for change in your community",
-                icon: Megaphone,
-                href: "/petitions",
-                gradient: "from-accent to-red-600",
-                stats: "2,340 active petitions"
-              },
-              {
-                title: "Create a Poll",
-                description: "Get instant feedback on important issues",
-                icon: Vote,
-                href: "/polls",
-                gradient: "from-primary to-primary-glow",
-                stats: "15,670 polls created"
-              },
-              {
-                title: "Track Politicians",
-                description: "Monitor your representatives' performance",
-                icon: Users,
-                href: "/politicians",
-                gradient: "from-secondary to-amber-600",
-                stats: "1,200+ politicians tracked"
-              },
-              {
-                title: "Explore Villages",
-                description: "Connect with your heritage and community",
-                icon: Crown,
-                href: "/villages",
-                gradient: "from-fons-royal to-fons-gold",
-                stats: "2,800+ villages registered"
-              },
-              {
-                title: "Find Your MP",
-                description: "Connect with your Member of Parliament",
-                icon: FileText,
-                href: "/mps",
-                gradient: "from-primary to-secondary",
-                stats: "180 MPs in directory"
-              },
-              {
-                title: "Join Discussions",
-                description: "Participate in civic conversations",
-                icon: MessageCircle,
-                href: "/civic-feed",
-                gradient: "from-accent to-secondary",
-                stats: "5,230 daily discussions"
-              }
-            ].map((action, index) => (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0">
-                <CardContent className="p-6">
-                  <div className={`w-14 h-14 rounded-xl bg-gradient-to-r ${action.gradient} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
-                    <action.icon className="h-7 w-7 text-white" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+              {[
+                {
+                  title: "Start a Petition",
+                  description: "Launch a campaign for change in your community",
+                  icon: Megaphone,
+                  href: "/petitions",
+                  gradient: "from-accent via-red-500 to-red-600",
+                  stats: "2,340 active petitions",
+                  highlight: "Most Impact",
+                  features: ["Free to start", "Legal support", "Media coverage"]
+                },
+                {
+                  title: "Create a Poll",
+                  description: "Get instant feedback on important issues",
+                  icon: Vote,
+                  href: "/polls",
+                  gradient: "from-primary via-green-500 to-primary-glow",
+                  stats: "15,670 polls created",
+                  highlight: "Quick Results",
+                  features: ["Real-time results", "Anonymous voting", "Data insights"]
+                },
+                {
+                  title: "Track Politicians",
+                  description: "Monitor your representatives' performance",
+                  icon: Users,
+                  href: "/politicians",
+                  gradient: "from-secondary via-yellow-500 to-amber-600",
+                  stats: "1,200+ politicians tracked",
+                  highlight: "Full Transparency",
+                  features: ["Promise tracking", "Performance scores", "Contact info"]
+                },
+                {
+                  title: "Explore Villages",
+                  description: "Connect with your heritage and community",
+                  icon: Crown,
+                  href: "/villages",
+                  gradient: "from-fons-royal via-fons-gold to-fons-heritage",
+                  stats: "2,800+ villages registered",
+                  highlight: "Cultural Heritage",
+                  features: ["Family trees", "Cultural events", "Local projects"]
+                },
+                {
+                  title: "Find Your MP",
+                  description: "Connect with your Member of Parliament",
+                  icon: FileText,
+                  href: "/mps",
+                  gradient: "from-primary via-blue-500 to-secondary",
+                  stats: "180 MPs in directory",
+                  highlight: "Direct Access",
+                  features: ["Contact details", "Voting records", "Office hours"]
+                },
+                {
+                  title: "Join Discussions",
+                  description: "Participate in civic conversations",
+                  icon: MessageCircle,
+                  href: "/civic-feed",
+                  gradient: "from-accent via-purple-500 to-secondary",
+                  stats: "5,230 daily discussions",
+                  highlight: "Community Voice",
+                  features: ["Expert moderation", "Fact-checked info", "Regional focus"]
+                }
+              ].map((action, index) => (
+                <Card key={index} className="group hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-0 bg-gradient-to-br from-card to-muted/30 backdrop-blur-sm overflow-hidden relative">
+                  {/* Highlight Badge */}
+                  <div className="absolute top-4 right-4 z-10">
+                    <Badge className="bg-gradient-to-r from-white to-white/90 text-primary text-xs font-bold shadow-lg">
+                      {action.highlight}
+                    </Badge>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">{action.title}</h3>
-                  <p className="text-muted-foreground mb-4">{action.description}</p>
-                  <Badge variant="secondary" className="mb-4 text-xs">{action.stats}</Badge>
-                  <Button asChild className="w-full group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <Link to={action.href}>
-                      Get Started
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Link>
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+
+                  <CardContent className="p-8 relative">
+                    {/* Gradient Background Effect */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-500`}></div>
+                    
+                    <div className="relative z-10">
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-r ${action.gradient} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500 shadow-lg`}>
+                        <action.icon className="h-8 w-8 text-white" />
+                      </div>
+                      
+                      <h3 className="text-2xl font-bold mb-3 group-hover:text-primary transition-colors">
+                        {action.title}
+                      </h3>
+                      
+                      <p className="text-muted-foreground mb-4 text-base leading-relaxed">
+                        {action.description}
+                      </p>
+
+                      {/* Features List */}
+                      <div className="space-y-2 mb-6">
+                        {action.features.map((feature, idx) => (
+                          <div key={idx} className="flex items-center text-sm text-muted-foreground">
+                            <CheckCircle2 className="h-4 w-4 text-primary mr-2 flex-shrink-0" />
+                            {feature}
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <Badge variant="secondary" className="mb-6 text-sm font-semibold">
+                        📊 {action.stats}
+                      </Badge>
+                      
+                      <Button asChild className={`w-full bg-gradient-to-r ${action.gradient} hover:shadow-lg group-hover:shadow-xl text-white border-0 font-semibold py-3 transition-all duration-300`}>
+                        <Link to={action.href}>
+                          Get Started
+                          <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
 
       {/* Core Features */}
       <section className="py-16 lg:py-24 bg-muted/30">
