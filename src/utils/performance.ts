@@ -5,7 +5,7 @@
  * Includes Web Vitals, user interactions, and custom metrics.
  */
 
-import { getCLS, getFID, getFCP, getLCP, getTTFB } from 'web-vitals';
+import { getCLS, getFID, getFCP, getLCP, getTTFB, type Metric } from 'web-vitals';
 
 export interface PerformanceMetric {
   name: string;
