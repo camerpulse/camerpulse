@@ -28,7 +28,12 @@ export const SafeHtml: React.FC<SafeHtmlProps> = ({
     return DOMPurify.sanitize(children, {
       ALLOWED_TAGS: allowedTags,
       ALLOWED_ATTR: Object.values(allowedAttributes).flat(),
+      FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'link', 'meta'],
+      FORBID_ATTR: ['style', 'onerror', 'onclick', 'onload', 'onmouseover', 'onfocus', 'srcset'],
       KEEP_CONTENT: true,
+      ALLOW_UNKNOWN_PROTOCOLS: false,
+      ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data:image\/)|\/)/i,
+      USE_PROFILES: { html: true },
       RETURN_DOM: false,
       RETURN_DOM_FRAGMENT: false,
       RETURN_DOM_IMPORT: false

@@ -19,65 +19,38 @@ export function usePoliticalSearch(query: string, limit: number = 20) {
   return useQuery({
     queryKey: ["political-search", query, limit],
     queryFn: async () => {
-      if (!query || query.trim().length < 2) return [] as SearchResult[];
+      const trimmed = query?.trim() ?? "";
+      if (trimmed.length < 2) return [] as SearchResult[];
 
-      const searchTerm = query.trim().toLowerCase();
-      const results: SearchResult[] = [];
-
-      // Search politicians
-      const { data: politicians, error: politiciansError } = await supabase
-        .from("politicians")
-        .select("id, name, slug, role_title, region, performance_score, profile_image_url")
-        .or(`name.ilike.%${searchTerm}%,role_title.ilike.%${searchTerm}%,region.ilike.%${searchTerm}%`)
-        .limit(limit);
-
-      if (politiciansError) throw politiciansError;
-
-      // Search political parties
-      const { data: parties, error: partiesError } = await supabase
-        .from("political_parties")
-        .select("id, name, slug, description, logo_url, acronym")
-        .or(`name.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,acronym.ilike.%${searchTerm}%`)
-        .eq("is_active", true)
-        .limit(limit);
-
-      if (partiesError) throw partiesError;
-
-      // Transform politicians
-      politicians?.forEach(politician => {
-        results.push({
-          id: politician.id,
-          type: "politician",
-          name: politician.name,
-          slug: politician.slug,
-          role: politician.role_title,
-          region: politician.region,
-          profile_image_url: politician.profile_image_url,
-          performance_score: politician.performance_score,
-        });
+      const { data, error } = await supabase.rpc("secure_political_search", {
+        search_query: trimmed,
+        search_limit: limit,
       });
 
-      // Transform parties
-      parties?.forEach(party => {
-        results.push({
-          id: party.id,
-          type: "party",
-          name: party.name,
-          slug: party.slug,
-          description: party.description,
-          logo_url: party.logo_url,
-        });
-      });
+      if (error) throw error;
 
-      // Sort by relevance (exact matches first, then partial matches)
+      const results: SearchResult[] = (data || []).map((row: any) => ({
+        id: row.id,
+        type: (row.entity_type as "politician" | "party") ?? "politician",
+        name: row.name,
+        slug: row.slug ?? undefined,
+        role: row.role_title ?? undefined,
+        region: row.region ?? undefined,
+        description: row.description ?? undefined,
+        logo_url: row.logo_url ?? undefined,
+        profile_image_url: row.profile_image_url ?? undefined,
+        performance_score: row.performance_score ?? undefined,
+      }));
+
+      const searchTerm = trimmed.toLowerCase();
       return results.sort((a, b) => {
-        const aExact = a.name.toLowerCase().includes(searchTerm);
-        const bExact = b.name.toLowerCase().includes(searchTerm);
+        const aExact = a.name?.toLowerCase().includes(searchTerm);
+        const bExact = b.name?.toLowerCase().includes(searchTerm);
         if (aExact && !bExact) return -1;
         if (!aExact && bExact) return 1;
-        return a.name.localeCompare(b.name);
+        return (a.name || '').localeCompare(b.name || '');
       });
     },
-    enabled: query.trim().length >= 2,
+    enabled: (query?.trim()?.length ?? 0) >= 2,
   });
 }

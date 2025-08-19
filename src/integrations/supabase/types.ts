@@ -50650,6 +50650,21 @@ export type Database = {
           village_name: string
         }[]
       }
+      secure_political_search: {
+        Args: { search_limit?: number; search_query: string }
+        Returns: {
+          description: string
+          entity_type: string
+          id: string
+          logo_url: string
+          name: string
+          performance_score: number
+          profile_image_url: string
+          region: string
+          role_title: string
+          slug: string
+        }[]
+      }
       send_notification: {
         Args: {
           p_action_url?: string
