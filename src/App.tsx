@@ -1,63 +1,65 @@
 import React from "react";
 import { HelmetProvider } from 'react-helmet-async';
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+
+// Context Providers
+import { AppProvider } from "./contexts/AppContext";
+import { AuthProvider } from "./contexts/AuthContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
-import { AuthProvider } from "./contexts/AuthContext";
 
-import { LanguageProvider } from "./contexts/LanguageContext";
-import { AppRouter } from "./components/routing/LanguageRoutes";
+// Core Components
+import { AppRouter } from "./components/routing/AppRouter";
+import { ErrorBoundary } from "./components/common/ErrorBoundary";
+import { PWAInstallPrompt } from "./components/Layout/PWAInstallPrompt";
 
-import { PWAInstallPrompt } from "./components/pwa/PWAInstallPrompt";
-import { OfflineIndicator } from "./components/pwa/OfflineIndicator";
-import { ErrorBoundary } from "./components/ErrorBoundary";
-import { setupGlobalErrorHandling } from "./hooks/useErrorHandler";
+// Services & Utilities
+import { queryClient } from "./services/api";
+import { setupGlobalErrorHandling } from "./utils/errorHandling";
 import { setupLogging } from "./utils/logger";
-import { queryClient, backgroundSync, cleanupQueries } from "./lib/queryClient";
-import { productionMonitor } from "./utils/productionMonitor";
 
-// Setup production-ready monitoring and error handling
+// Initialize global services
 setupGlobalErrorHandling();
 setupLogging();
 
-// Initialize production monitoring
-if (typeof window !== 'undefined') {
-  productionMonitor.measureCoreWebVitals();
-}
-
-// Start background synchronization
-backgroundSync.start();
-
-// Cleanup queries every hour
-setInterval(cleanupQueries, 60 * 60 * 1000);
-
-const App = () => {
+/**
+ * Root App Component
+ * 
+ * Sets up all providers and global services for CamerPulse platform.
+ * Uses hierarchical provider structure for optimal performance.
+ */
+const App: React.FC = () => {
   return (
     <ErrorBoundary>
       <HelmetProvider>
         <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <TooltipProvider>
-            <PanAfricaProvider>
-              <MobileProvider>
-                <BrowserRouter>
-                  <LanguageProvider>
-                    <Toaster />
-                    <Sonner />
-                    <PWAInstallPrompt />
-                    <OfflineIndicator />
-                    <AppRouter />
-                  </LanguageProvider>
-                </BrowserRouter>
-              </MobileProvider>
-            </PanAfricaProvider>
-          </TooltipProvider>
-        </AuthProvider>
-      </QueryClientProvider>
+          <BrowserRouter>
+            <TooltipProvider>
+              <AppProvider>
+                <AuthProvider>
+                  <PanAfricaProvider>
+                    <MobileProvider>
+                      <LanguageProvider>
+                        {/* UI Components */}
+                        <Toaster />
+                        <Sonner />
+                        <PWAInstallPrompt />
+                        
+                        {/* Main Application Router */}
+                        <AppRouter />
+                      </LanguageProvider>
+                    </MobileProvider>
+                  </PanAfricaProvider>
+                </AuthProvider>
+              </AppProvider>
+            </TooltipProvider>
+          </BrowserRouter>
+        </QueryClientProvider>
       </HelmetProvider>
     </ErrorBoundary>
   );
