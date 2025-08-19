@@ -303,7 +303,7 @@ const Security = () => {
     try {
       const primaryKey = pgpKeys.find(key => key.is_primary);
       if (!primaryKey) {
-        throw new Error("Aucune clé principale trouvée");
+        throw new Error("No master key found");
       }
 
       const privateKey = await PGPService.decryptPrivateKeyFromStorage(
@@ -705,7 +705,7 @@ const Security = () => {
                 </CardHeader>
                 <CardContent>
                   {securityLogs.length === 0 ? (
-                    <p className="text-gray-500 text-center py-8">Aucune activité récente</p>
+                    <p className="text-gray-500 text-center py-8">No recent activity</p>
                   ) : (
                     <div className="space-y-3">
                       {securityLogs.map((log) => (

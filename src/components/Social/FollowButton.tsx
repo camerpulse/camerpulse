@@ -60,7 +60,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
     if (!user) {
       toast({
         title: "Connexion requise",
-        description: "Vous devez être connecté pour suivre d'autres utilisateurs",
+        description: "You must be logged in to follow other users",
         variant: "destructive"
       });
       return;
@@ -139,7 +139,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
       ) : (
         <UserPlus className="w-4 h-4 mr-2" />
       )}
-      {isFollowing ? 'Suivi' : 'Suivre'}
+      {isFollowing ? 'Following' : 'Follow'}
     </Button>
   );
 };

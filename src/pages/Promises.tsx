@@ -16,7 +16,7 @@ const Promises: React.FC = () => {
         {/* Hero Section */}
         <div className="text-center space-y-4">
           <h1 className="text-4xl font-bold text-foreground">
-            Index National des Promesses
+            National Promise Index
           </h1>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Track and analyze political promises in Cameroon. 
@@ -25,15 +25,15 @@ const Promises: React.FC = () => {
           <div className="flex justify-center gap-4">
             <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-2">
               <Target className="w-4 h-4 mr-2" />
-              Transparence
+              Transparency
             </Badge>
             <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-2">
               <Users className="w-4 h-4 mr-2" />
-              Participation citoyenne
+              Citizen Participation
             </Badge>
             <Badge className="bg-primary/10 text-primary border-primary/20 px-4 py-2">
               <CheckCircle className="w-4 h-4 mr-2" />
-              Responsabilité
+              Accountability
             </Badge>
           </div>
         </div>
@@ -45,12 +45,12 @@ const Promises: React.FC = () => {
               <div className="mx-auto w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mb-4">
                 <CheckCircle className="w-6 h-6 text-green-600" />
               </div>
-              <CardTitle className="text-lg">Suivi des promesses</CardTitle>
+              <CardTitle className="text-lg">Promise Tracking</CardTitle>
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-muted-foreground">
-                Suivez en temps réel l'état d'avancement des promesses politiques 
-                et leur réalisation effective.
+                Track in real-time the progress of political promises 
+                and their effective implementation.
               </p>
             </CardContent>
           </Card>
@@ -60,12 +60,12 @@ const Promises: React.FC = () => {
               <div className="mx-auto w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                 <Users className="w-6 h-6 text-blue-600" />
               </div>
-              <CardTitle className="text-lg">Votes citoyens</CardTitle>
+              <CardTitle className="text-lg">Citizen Votes</CardTitle>
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-muted-foreground">
-                Participez à l'évaluation des promesses grâce aux votes citoyens 
-                et partagez votre opinion.
+                Participate in promise evaluation through citizen votes 
+                and share your opinion.
               </p>
             </CardContent>
           </Card>
@@ -75,12 +75,12 @@ const Promises: React.FC = () => {
               <div className="mx-auto w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mb-4">
                 <TrendingUp className="w-6 h-6 text-purple-600" />
               </div>
-              <CardTitle className="text-lg">Analyse émotionnelle</CardTitle>
+              <CardTitle className="text-lg">Emotional Analysis</CardTitle>
             </CardHeader>
             <CardContent className="text-center">
               <p className="text-muted-foreground">
-                Découvrez l'impact émotionnel des promesses sur la population 
-                grâce aux données de sentiment.
+                Discover the emotional impact of promises on the population 
+                through sentiment data.
               </p>
             </CardContent>
           </Card>

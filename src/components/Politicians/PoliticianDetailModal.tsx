@@ -306,7 +306,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                       </div>
                       <div>
                         <div className="flex justify-between mb-2">
-                          <span className="text-sm font-medium">Impact Développement</span>
+                          <span className="text-sm font-medium">Development Impact</span>
                           <span className="text-sm text-gray-600">
                             {politician.development_impact_rating?.toFixed(1) || '0'}/5
                           </span>
@@ -315,7 +315,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                       </div>
                       <div>
                         <div className="flex justify-between mb-2">
-                          <span className="text-sm font-medium">Transparence</span>
+                          <span className="text-sm font-medium">Transparency</span>
                           <span className="text-sm text-gray-600">
                             {politician.transparency_rating?.toFixed(1) || '0'}/5
                           </span>
@@ -364,7 +364,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                 {promises.length === 0 ? (
                   <Card>
                     <CardContent className="text-center py-8">
-                      <p className="text-gray-500">Aucune promesse enregistrée</p>
+                      <p className="text-gray-500">No promises recorded</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -420,7 +420,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-8 text-gray-500">
-                      <p>Fonctionnalité d'évaluations détaillées à venir</p>
+                      <p>Detailed ratings feature coming soon</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -430,7 +430,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Informations personnelles</CardTitle>
+                      <CardTitle className="text-lg">Personal Information</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
                       {politician.birth_date && (
@@ -439,7 +439,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                           <span className="text-sm">
                             {formatDate(politician.birth_date)}
                             {calculateAge(politician.birth_date) && 
-                              ` (${calculateAge(politician.birth_date)} ans)`
+                              ` (${calculateAge(politician.birth_date)} years old)`
                             }
                           </span>
                         </div>
@@ -462,7 +462,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                   {politician.political_party && (
                     <Card>
                       <CardHeader>
-                        <CardTitle className="text-lg">Parti politique</CardTitle>
+                        <CardTitle className="text-lg">Political Party</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="flex items-center gap-3">
@@ -485,7 +485,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                                 rel="noopener noreferrer"
                                 className="text-sm text-blue-600 hover:underline"
                               >
-                                Site officiel
+                                Official Website
                               </a>
                             )}
                           </div>
@@ -507,22 +507,22 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                 {politician.is_following ? (
                   <>
                     <Users className="w-4 h-4 mr-2" />
-                    Ne plus suivre
+                    Unfollow
                   </>
                 ) : (
                   <>
                     <Users className="w-4 h-4 mr-2" />
-                    Suivre
+                    Follow
                   </>
                 )}
               </Button>
               <Button variant="outline" className="flex-1">
                 <MessageCircle className="w-4 h-4 mr-2" />
-                Contacter
+                Contact
               </Button>
               <Button variant="outline" className="flex-1">
                 <Heart className="w-4 h-4 mr-2" />
-                Soutenir
+                Support
               </Button>
             </div>
           </div>

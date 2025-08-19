@@ -292,7 +292,7 @@ const Social = () => {
             <CardContent className="pt-6">
               <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h2 className="text-xl font-bold mb-4">Connexion requise</h2>
-              <p className="text-gray-600 mb-4">Connectez-vous pour découvrir et suivre d'autres utilisateurs</p>
+              <p className="text-gray-600 mb-4">Sign in to discover and follow other users</p>
               <Button onClick={() => navigateToAuth()}>Se connecter</Button>
             </CardContent>
           </Card>
@@ -366,7 +366,7 @@ const Social = () => {
                   <Card className="text-center py-12">
                     <CardContent>
                       <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium mb-2">Aucune suggestion</h3>
+                      <h3 className="text-lg font-medium mb-2">No suggestions</h3>
                       <p className="text-muted-foreground">Revenez plus tard pour découvrir de nouveaux utilisateurs</p>
                     </CardContent>
                   </Card>

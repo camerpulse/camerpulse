@@ -126,7 +126,7 @@ export const OfficialCard: React.FC<OfficialCardProps> = ({
           {/* Civic Score */}
           <div>
             <div className="flex justify-between items-center mb-2">
-              <span className="text-sm font-medium text-foreground">Score civique</span>
+              <span className="text-sm font-medium text-foreground">Civic Score</span>
               <span className="text-sm text-muted-foreground">{official.civicScore}/100</span>
             </div>
             <Progress value={official.civicScore} className="h-2" />
@@ -136,7 +136,7 @@ export const OfficialCard: React.FC<OfficialCardProps> = ({
           {official.totalPromises && (
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-foreground">Promesses tenues</span>
+                <span className="text-sm font-medium text-foreground">Promises Kept</span>
                 <span className="text-sm text-muted-foreground">
                   {official.promisesKept}/{official.totalPromises}
                 </span>

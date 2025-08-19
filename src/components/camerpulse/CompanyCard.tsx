@@ -125,7 +125,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
           <div className="text-center p-3 bg-muted/50 rounded-lg">
             <Building className="w-5 h-5 text-secondary mx-auto mb-1" />
             <div className="text-sm font-medium text-foreground">{company.rating}</div>
-            <div className="text-xs text-muted-foreground">Note moyenne</div>
+            <div className="text-xs text-muted-foreground">Average Rating</div>
           </div>
         </div>
 
@@ -166,7 +166,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({
               onClick={() => onContact?.(company.id)}
             >
               <Mail className="w-4 h-4 mr-2" />
-              Contacter
+              Contact
             </Button>
             
             <Button 
