@@ -81,7 +81,7 @@ const Social = () => {
       console.error('Error fetching social data:', error);
       toast({
         title: "Erreur",
-        description: "Impossible de charger les données sociales",
+        description: "Unable to load social data",
         variant: "destructive"
       });
     } finally {
@@ -268,7 +268,7 @@ const Social = () => {
             
             {showStats && (
               <div className="flex items-center gap-4 text-xs text-muted-foreground mt-2">
-                <span>{profile.followers_count} abonnés</span>
+                <span>{profile.followers_count} followers</span>
                 <span>{profile.posts_count} posts</span>
               </div>
             )}
@@ -291,9 +291,9 @@ const Social = () => {
           <Card className="w-full max-w-md text-center">
             <CardContent className="pt-6">
               <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-bold mb-4">Connexion requise</h2>
+              <h2 className="text-xl font-bold mb-4">Login Required</h2>
               <p className="text-gray-600 mb-4">Sign in to discover and follow other users</p>
-              <Button onClick={() => navigateToAuth()}>Se connecter</Button>
+              <Button onClick={() => navigateToAuth()}>Sign In</Button>
             </CardContent>
           </Card>
         </div>
@@ -306,7 +306,7 @@ const Social = () => {
       <div className="min-h-screen bg-gradient-subtle">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-primary mb-2">Réseau Social</h1>
+            <h1 className="text-3xl font-bold text-primary mb-2">Social Network</h1>
             <p className="text-muted-foreground">Connect with the Cameroonian community</p>
           </div>
 
@@ -315,7 +315,7 @@ const Social = () => {
             <div className="relative">
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Rechercher des utilisateurs..."
+                placeholder="Search users..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-9"

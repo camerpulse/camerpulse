@@ -248,8 +248,8 @@ const Security = () => {
       await fetchPGPKeys();
       
       toast({
-        title: "Clé principale définie",
-        description: "Cette clé est maintenant votre clé principale"
+        title: "Master key set",
+        description: "This key is now your master key"
       });
     } catch (error) {
       console.error('Error setting primary key:', error);
@@ -277,8 +277,8 @@ const Security = () => {
       
       setEncryptedResult(encrypted);
       toast({
-        title: "Message chiffré",
-        description: "Votre message a été chiffré avec succès"
+        title: "Message encrypted",
+        description: "Your message has been encrypted successfully"
       });
     } catch (error) {
       console.error('Error encrypting message:', error);
@@ -320,8 +320,8 @@ const Security = () => {
       setDecryptedResult(result.data);
       
       toast({
-        title: result.verified ? "Message déchiffré et vérifié" : "Message déchiffré",
-        description: result.verified ? "La signature est valide" : "Message déchiffré avec succès"
+        title: result.verified ? "Message decrypted and verified" : "Message decrypted",
+        description: result.verified ? "The signature is valid" : "Message decrypted successfully"
       });
     } catch (error) {
       console.error('Error decrypting message:', error);
@@ -354,7 +354,7 @@ const Security = () => {
     if (!totpCode || totpCode.length !== 6) {
       toast({
         title: "Code invalide",
-        description: "Veuillez entrer un code à 6 chiffres",
+        description: "Please enter a 6-digit code",
         variant: "destructive"
       });
       return;
@@ -385,8 +385,8 @@ const Security = () => {
       setShowBackupCodes(true);
       
       toast({
-        title: "2FA activé",
-        description: "Authentification à deux facteurs activée avec succès"
+        title: "2FA enabled",
+        description: "Two-factor authentication successfully enabled"
       });
     } catch (error) {
       console.error('Error enabling 2FA:', error);
@@ -424,8 +424,8 @@ const Security = () => {
       setBackupCodes([]);
       
       toast({
-        title: "2FA désactivé",
-        description: "Authentification à deux facteurs désactivée"
+        title: "2FA disabled",
+        description: "Two-factor authentication disabled"
       });
     } catch (error) {
       console.error('Error disabling 2FA:', error);
@@ -450,8 +450,8 @@ const Security = () => {
       setDevices(devices.filter(d => d.id !== deviceId));
       
       toast({
-        title: "Appareil supprimé",
-        description: "L'appareil a été retiré de vos appareils de confiance"
+        title: "Device removed",
+        description: "The device has been removed from your trusted devices"
       });
     } catch (error) {
       console.error('Error removing device:', error);
@@ -461,8 +461,8 @@ const Security = () => {
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     toast({
-      title: "Copié",
-      description: "Texte copié dans le presse-papiers"
+      title: "Copied",
+      description: "Text copied to clipboard"
     });
   };
 
@@ -578,7 +578,7 @@ const Security = () => {
                           </div>
 
                           <div className="space-y-2">
-                            <label className="text-sm font-medium">Code de vérification:</label>
+                            <label className="text-sm font-medium">Verification code:</label>
                             <Input
                               value={totpCode}
                               onChange={(e) => setTotpCode(e.target.value)}
@@ -753,11 +753,11 @@ const Security = () => {
                       
                       <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <label className="text-sm font-medium">Nom de la clé:</label>
+                          <label className="text-sm font-medium">Key name:</label>
                           <Input
                             value={pgpKeyName}
                             onChange={(e) => setPgpKeyName(e.target.value)}
-                            placeholder="Ma clé personnelle"
+                            placeholder="My personal key"
                           />
                         </div>
                         <div className="space-y-2">
@@ -766,7 +766,7 @@ const Security = () => {
                             type="password"
                             value={pgpPassphrase}
                             onChange={(e) => setPgpPassphrase(e.target.value)}
-                            placeholder="Phrase de passe sécurisée"
+                            placeholder="Secure passphrase"
                           />
                         </div>
                       </div>
@@ -838,23 +838,23 @@ const Security = () => {
                       </h3>
                       
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Message à chiffrer:</label>
+                        <label className="text-sm font-medium">Message to encrypt:</label>
                         <Textarea
                           value={encryptMessage}
                           onChange={(e) => setEncryptMessage(e.target.value)}
-                          placeholder="Tapez votre message secret ici..."
+                          placeholder="Type your secret message here..."
                           rows={3}
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Clé du destinataire:</label>
+                        <label className="text-sm font-medium">Recipient key:</label>
                         <select
                           value={selectedRecipientKey}
                           onChange={(e) => setSelectedRecipientKey(e.target.value)}
                           className="w-full p-2 border border-gray-300 rounded-md"
                         >
-                          <option value="">Sélectionner une clé</option>
+                          <option value="">Select a key</option>
                           {pgpKeys.map((key) => (
                             <option key={key.id} value={key.id}>
                               {key.key_name} ({key.key_fingerprint.slice(0, 8)}...)
@@ -865,12 +865,12 @@ const Security = () => {
 
                       <Button onClick={encryptMessageWithPGP} className="bg-cameroon-primary">
                         <Send className="w-4 h-4 mr-2" />
-                        Chiffrer
+                        Encrypt
                       </Button>
 
                       {encryptedResult && (
                         <div className="space-y-2">
-                          <label className="text-sm font-medium">Résultat chiffré:</label>
+                          <label className="text-sm font-medium">Encrypted result:</label>
                           <Textarea
                             value={encryptedResult}
                             readOnly
@@ -883,7 +883,7 @@ const Security = () => {
                             onClick={() => copyToClipboard(encryptedResult)}
                           >
                             <Copy className="w-4 h-4 mr-2" />
-                            Copier
+                            Copy
                           </Button>
                         </div>
                       )}
@@ -897,11 +897,11 @@ const Security = () => {
                       </h3>
                       
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Message chiffré:</label>
+                        <label className="text-sm font-medium">Encrypted message:</label>
                         <Textarea
                           value={decryptMessage}
                           onChange={(e) => setDecryptMessage(e.target.value)}
-                          placeholder="Collez le message chiffré ici..."
+                          placeholder="Paste the encrypted message here..."
                           rows={4}
                           className="font-mono text-xs"
                         />
@@ -924,7 +924,7 @@ const Security = () => {
 
                       {decryptedResult && (
                         <div className="space-y-2">
-                          <label className="text-sm font-medium">Message déchiffré:</label>
+                          <label className="text-sm font-medium">Decrypted message:</label>
                           <Textarea
                             value={decryptedResult}
                             readOnly

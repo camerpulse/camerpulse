@@ -100,7 +100,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
         }
         
         toast({
-          title: "Désabonné",
+          title: "Unfollowed",
           description: targetUsername 
             ? `Vous ne suivez plus @${targetUsername}` 
             : "Vous ne suivez plus cet utilisateur"
@@ -122,7 +122,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
         }
         
         toast({
-          title: "Abonné",
+          title: "Followed",
           description: targetUsername 
             ? `You are now following @${targetUsername}` 
             : "You are now following this user"

@@ -292,7 +292,7 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-lg">Évaluations</CardTitle>
+                      <CardTitle className="text-lg">Ratings</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div>

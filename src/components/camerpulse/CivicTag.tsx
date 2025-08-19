@@ -142,7 +142,7 @@ export const OfficialTag = ({ label, ...props }: Omit<CivicTagProps, 'type'>) =>
   <CivicTag type="official" label={label} {...props} />
 );
 
-export const VerifiedTag = ({ label = 'Vérifié', ...props }: Omit<CivicTagProps, 'type' | 'label'> & { label?: string }) => (
+export const VerifiedTag = ({ label = 'Verified', ...props }: Omit<CivicTagProps, 'type' | 'label'> & { label?: string }) => (
   <CivicTag type="verified" label={label} {...props} />
 );
 

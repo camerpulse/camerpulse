@@ -56,7 +56,7 @@ export const PulseCard: React.FC<PulseCardProps> = ({
         return {
           color: 'bg-cm-red text-white',
           icon: <TrendingDown className="w-3 h-3" />,
-          label: 'Négatif'
+          label: 'Negative'
         };
       default:
         return {

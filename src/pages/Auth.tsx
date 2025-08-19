@@ -73,7 +73,7 @@ const Auth = () => {
     if (signupData.password.length < 6) {
       toast({
         title: "Erreur",
-        description: "Le mot de passe doit contenir au moins 6 caractères",
+        description: "Password must contain at least 6 characters",
         variant: "destructive"
       });
       return;
@@ -100,8 +100,8 @@ const Auth = () => {
       });
     } else {
       toast({
-        title: "Inscription réussie",
-        description: "Vérifiez votre email pour confirmer votre compte"
+        title: "Registration successful",
+        description: "Check your email to confirm your account"
       });
     }
     setIsLoading(false);
