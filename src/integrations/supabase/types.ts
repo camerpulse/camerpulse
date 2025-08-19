@@ -39133,6 +39133,33 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limit_log: {
+        Row: {
+          action_type: string
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       rating_criteria: {
         Row: {
           created_at: string
@@ -49974,6 +50001,10 @@ export type Database = {
       increment_poll_view_count: {
         Args: { p_poll_id: string; p_user_id?: string }
         Returns: undefined
+      }
+      is_admin: {
+        Args: { p_user_id: string }
+        Returns: boolean
       }
       learn_from_manual_fix: {
         Args: {
