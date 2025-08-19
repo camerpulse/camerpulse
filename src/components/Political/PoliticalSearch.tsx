@@ -6,7 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { usePoliticalSearch, SearchResult } from "@/hooks/usePoliticalSearch";
 import { useNavigate } from "react-router-dom";
-import { URLBuilder } from "@/utils/urlBuilder";
+import { URLBuilder } from "@/utils/slugUtils";
 
 export function PoliticalSearch() {
   const [query, setQuery] = useState("");
@@ -15,9 +15,14 @@ export function PoliticalSearch() {
 
   const handleResultClick = (result: SearchResult) => {
     if (result.type === "politician") {
-      navigate(URLBuilder.politicianProfile(result.slug || result.id));
+      navigate(URLBuilder.politicians.detail({ 
+        name: result.name, 
+        id: result.id, 
+        slug: result.slug 
+      }));
     } else if (result.type === "party") {
-      navigate(URLBuilder.politicalPartyProfile(result.slug || result.id));
+      // For now, navigate to politicians list until we have party routes
+      navigate(`/political-parties/${result.slug || result.id}`);
     }
     setQuery("");
   };
