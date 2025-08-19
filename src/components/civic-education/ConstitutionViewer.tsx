@@ -9,7 +9,6 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
 interface ConstitutionViewerProps {
-  selectedLanguage: string;
   searchTerm: string;
 }
 
@@ -17,10 +16,7 @@ interface ConstitutionArticle {
   id: string;
   article_number: string;
   title: string;
-  content_french: string;
   content_english: string;
-  content_pidgin?: string;
-  content_fulfulde?: string;
   section_name: string;
   chapter_name?: string;
   summary?: string;
@@ -29,7 +25,6 @@ interface ConstitutionArticle {
 }
 
 export const ConstitutionViewer: React.FC<ConstitutionViewerProps> = ({
-  selectedLanguage,
   searchTerm
 }) => {
   const [selectedArticle, setSelectedArticle] = useState<ConstitutionArticle | null>(null);
@@ -78,16 +73,7 @@ export const ConstitutionViewer: React.FC<ConstitutionViewerProps> = ({
   };
 
   const getContent = (article: ConstitutionArticle) => {
-    switch (selectedLanguage) {
-      case 'french':
-        return article.content_french;
-      case 'pidgin':
-        return article.content_pidgin || article.content_english;
-      case 'fulfulde':
-        return article.content_fulfulde || article.content_english;
-      default:
-        return article.content_english;
-    }
+    return article.content_english;
   };
 
   const handleBookmark = async (article: ConstitutionArticle) => {

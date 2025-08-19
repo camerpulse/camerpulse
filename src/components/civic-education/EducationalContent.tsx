@@ -10,7 +10,6 @@ import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
 interface EducationalContentProps {
-  selectedLanguage: string;
   searchTerm: string;
 }
 
@@ -35,7 +34,6 @@ const contentTypes = [
 ];
 
 export const EducationalContent: React.FC<EducationalContentProps> = ({
-  selectedLanguage,
   searchTerm
 }) => {
   const [selectedType, setSelectedType] = useState<string>('');
@@ -67,10 +65,10 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
 
   const getContent = (module: EducationalModule) => {
     const content = module.content;
-    if (typeof content === 'object' && content[selectedLanguage]) {
-      return content[selectedLanguage];
+    if (typeof content === 'object' && content.english) {
+      return content.english;
     }
-    return content.english || content.description || 'Content not available in selected language';
+    return content.description || 'Content not available';
   };
 
   const getDifficultyColor = (level: string) => {

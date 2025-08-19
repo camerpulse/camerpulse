@@ -23,7 +23,7 @@ import { performanceMonitor } from "./utils/performance";
 
 import "./App.css";
 import "mapbox-gl/dist/mapbox-gl.css";
-import "@/styles/globals.css";
+
 
 // Initialize global services
 setupGlobalErrorHandling();
