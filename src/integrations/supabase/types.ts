@@ -50156,8 +50156,20 @@ export type Database = {
         Args: { party_name: string }
         Returns: string
       }
+      generate_political_party_slug: {
+        Args: { party_id?: string; party_name: string }
+        Returns: string
+      }
       generate_politician_slug: {
-        Args: { politician_name: string; position_title: string }
+        Args:
+          | {
+              politician_id?: string
+              politician_name: string
+              position_title?: string
+              region_name?: string
+              table_name?: string
+            }
+          | { politician_name: string; position_title: string }
         Returns: string
       }
       generate_poll_api_key: {
@@ -50174,6 +50186,10 @@ export type Database = {
       }
       generate_qr_data: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_seo_slug: {
+        Args: { entity_id?: string; entity_table: string; input_text: string }
         Returns: string
       }
       generate_slug: {
@@ -50209,7 +50225,9 @@ export type Database = {
         Returns: string
       }
       generate_village_slug: {
-        Args: { region_name: string; village_name: string }
+        Args:
+          | { region_name: string; village_id?: string; village_name: string }
+          | { region_name: string; village_name: string }
         Returns: string
       }
       get_agent_suggestions: {
