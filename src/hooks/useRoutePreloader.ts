@@ -31,7 +31,7 @@ function getPreloadRoutes(currentPath: string): string[] {
   const routes: string[] = [];
 
   // Homepage - preload main sections
-  if (currentPath === '/' || currentPath === '/en' || currentPath === '/fr') {
+  if (currentPath === '/' || currentPath === '/en') {
     routes.push('/civic-dashboard', '/politicians', '/villages', '/marketplace');
   }
 
