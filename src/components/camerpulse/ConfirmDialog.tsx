@@ -11,7 +11,7 @@ interface ConfirmDialogProps {
 }
 
 export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
-  open, onClose, onConfirm, title, description, confirmLabel = 'Confirmer'
+  open, onClose, onConfirm, title, description, confirmLabel = 'Confirm'
 }) => (
   <AlertDialog open={open} onOpenChange={onClose}>
     <AlertDialogContent>
@@ -20,7 +20,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <AlertDialogDescription>{description}</AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
-        <AlertDialogCancel>Annuler</AlertDialogCancel>
+        <AlertDialogCancel>Cancel</AlertDialogCancel>
         <AlertDialogAction onClick={onConfirm}>{confirmLabel}</AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
