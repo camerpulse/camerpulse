@@ -20,7 +20,7 @@ const mockSchools = [
     current_enrollment: 450,
     description: "A well-established primary school in the heart of Yaoundé",
     features: ["library", "computer_lab", "sports_field"],
-    languages_of_instruction: ["French", "English"]
+    languages_of_instruction: ["English"]
   },
   {
     id: "2", 
@@ -34,7 +34,7 @@ const mockSchools = [
     current_enrollment: 800,
     description: "Premier secondary education institution in Bamenda",
     features: ["science_lab", "library", "sports_complex"],
-    languages_of_instruction: ["English", "French"]
+    languages_of_instruction: ["English"]
   },
   {
     id: "3",

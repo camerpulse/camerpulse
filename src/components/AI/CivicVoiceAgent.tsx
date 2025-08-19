@@ -25,7 +25,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 
 interface VoiceConfig {
-  language: 'en' | 'fr' | 'pidgin';
+  language: 'en' | 'pidgin';
   voice: string;
   rate: number;
   pitch: number;
@@ -382,7 +382,7 @@ export const CivicVoiceAgent = () => {
               <label className="text-sm font-medium">Language</label>
               <Select 
                 value={voiceConfig.language} 
-                onValueChange={(value: 'en' | 'fr' | 'pidgin') => 
+                onValueChange={(value: 'en' | 'pidgin') => 
                   setVoiceConfig(prev => ({ ...prev, language: value }))
                 }
               >

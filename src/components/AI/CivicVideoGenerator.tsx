@@ -64,7 +64,6 @@ const CivicVideoGenerator = () => {
 
   const languages = [
     { id: 'english', name: 'English', flag: '🇬🇧' },
-    { id: 'french', name: 'French', flag: '🇫🇷' },
     { id: 'pidgin', name: 'Pidgin English', flag: '🗣️' }
   ];
 
@@ -105,7 +104,7 @@ const CivicVideoGenerator = () => {
       id: 2,
       title: 'Understanding Your Rights',
       topic: 'Rights',
-      language: 'French',
+      language: 'English',
       format: 'WhatsApp',
       views: 8930,
       shares: 445,

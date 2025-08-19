@@ -56,7 +56,6 @@ const CivicEducationCampaignManager = () => {
 
   const languages = [
     { id: 'english', name: 'English', flag: '🇬🇧' },
-    { id: 'french', name: 'French', flag: '🇫🇷' },
     { id: 'pidgin', name: 'Pidgin English', flag: '🗣️' }
   ];
 
@@ -93,10 +92,10 @@ const CivicEducationCampaignManager = () => {
     },
     {
       id: 2,
-      title: 'Droits du Citoyen',
+      title: 'Know Your Rights',
       topic: 'Rights',
       regions: ['Centre', 'Littoral'],
-      language: 'French',
+      language: 'English',
       status: 'scheduled',
       views: 23100,
       shares: 890,

@@ -175,7 +175,7 @@ export const PollCreatorFormV2 = () => {
     captchaEnabled: false,
     loginRequired: false,
     targetRegions: [] as string[],
-    language: 'english' as 'english' | 'french' | 'pidgin',
+    language: 'english' as 'english' | 'pidgin',
     
     // Step 5: Duration
     startTime: new Date(),
@@ -784,7 +784,7 @@ export const PollCreatorFormV2 = () => {
                     </Label>
                     <Select
                       value={formData.language}
-                      onValueChange={(value: 'english' | 'french' | 'pidgin') => 
+                      onValueChange={(value: 'english' | 'pidgin') => 
                         handleInputChange('language', value)
                       }
                     >

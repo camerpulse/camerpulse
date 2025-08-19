@@ -120,7 +120,7 @@ export const OneAndIndivisibleSection: React.FC = () => {
         <Section title="The Colonial Agenda: Dividing the Indivisible" icon="⚔️">
           <p className="mb-4">
             Colonial powers arrived, bringing a narrative of division intended to weaken and dominate us. They imposed 
-            artificial languages—French and English—labels of "Anglophone" and "Francophone," designed not for our 
+            artificial divisions and foreign languages, designed not for our 
             identity but for their convenience and control.
           </p>
           <p className="mb-4">

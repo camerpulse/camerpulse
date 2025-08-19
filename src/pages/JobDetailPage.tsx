@@ -54,7 +54,7 @@ const JobDetailPage: React.FC = () => {
       'Experience with cloud platforms (AWS/Azure)',
       'Strong problem-solving skills',
       'Bachelor\'s degree in Computer Science or related field',
-      'Fluency in English and French'
+      'Fluency in English'
     ],
     responsibilities: [
       'Design and develop scalable web applications',

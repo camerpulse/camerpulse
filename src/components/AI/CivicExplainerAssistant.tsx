@@ -114,7 +114,8 @@ const CivicExplainerAssistant = () => {
   ];
 
   const languages = [
-    { id: 'en', name: 'English', flag: '🇬🇧' }
+    { id: 'en', name: 'English', flag: '🇬🇧' },
+    { id: 'pidgin', name: 'Pidgin', flag: '🗣️' }
   ];
 
   const ageGroups = [
@@ -202,7 +203,7 @@ const CivicExplainerAssistant = () => {
       },
       general_help: {
         en: `I'm here to help you understand politics and governance in simple terms! I can explain:\n\n• How elections work in Cameroon\n• What different government officials do\n• Political parties and their ideologies\n• Your rights as a citizen\n• How to participate in democracy\n\nFeel free to ask specific questions like "What does the President do?" or "How do I register to vote?" I'll explain everything in simple language suitable for ${getRegionName()}.`,
-        fr: `Je suis là pour vous aider à comprendre la politique et la gouvernance en termes simples! Je peux expliquer:\n\n• Comment fonctionnent les élections au Cameroun\n• Ce que font les différents responsables gouvernementaux\n• Les partis politiques et leurs idéologies\n• Vos droits en tant que citoyen\n• Comment participer à la démocratie\n\nN'hésitez pas à poser des questions spécifiques adaptées à la région ${getRegionName()}.`,
+        
         pidgin: `I dey here to help you understand politics and governance for simple terms! I fit explain:\n\n• How elections dey work for Cameroon\n• Wetin different government officials dey do\n• Political parties and their ideologies\n• Your rights as citizen\n• How to participate for democracy\n\nFeel free to ask specific questions suitable for ${getRegionName()}.`
       }
     };
@@ -271,7 +272,7 @@ const CivicExplainerAssistant = () => {
             <Badge variant="secondary">24/7 Available</Badge>
           </CardTitle>
           <CardDescription>
-            Understanding politics, elections, and governance made simple. Ask questions in English, French, or Pidgin.
+            Understanding politics, elections, and governance made simple. Ask questions in English or Pidgin.
           </CardDescription>
         </CardHeader>
       </Card>

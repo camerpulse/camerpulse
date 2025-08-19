@@ -75,7 +75,7 @@ const civicKnowledgeBase: CivicKnowledge[] = [
     topic: "education",
     keywords: ["school", "education", "university", "fees", "scholarship", "student"],
     responses: [
-      "Education in Cameroon is provided in both English and French. Primary education is officially free and compulsory, though some fees may apply.",
+      "Education in Cameroon is provided in English. Primary education is officially free and compulsory, though some fees may apply.",
       "For higher education, there are state universities with lower fees and private institutions. Scholarships are available for excellent students.",
       "You have the right to education regardless of your background. If denied education due to inability to pay, contact education authorities or NGOs."
     ]

@@ -42,7 +42,7 @@ export const ExpertProfileForm: React.FC<ExpertProfileFormProps> = ({ onSuccess,
     work_preference: existingProfile?.work_preference || ['remote'],
     expertise_areas: existingProfile?.expertise_areas || [],
     skills: existingProfile?.skills || [],
-    languages: existingProfile?.languages || ['English', 'French'],
+    languages: existingProfile?.languages || ['English'],
     years_experience: existingProfile?.years_experience || '',
     location: existingProfile?.location || '',
     region: existingProfile?.region || '',
@@ -316,7 +316,7 @@ export const ExpertProfileForm: React.FC<ExpertProfileFormProps> = ({ onSuccess,
                 <MobileInput
                   value={formData.languages.join(', ')}
                   onChange={(e) => updateFormData('languages', e.target.value.split(',').map(s => s.trim()).filter(s => s))}
-                  placeholder="English, French, German"
+                  placeholder="English, Pidgin, Local languages"
                 />
               </MobileFormField>
             </div>

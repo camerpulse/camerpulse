@@ -239,7 +239,7 @@ const PollsLandingPage = () => {
 
   const regions = ['All Regions', 'Adamawa', 'Centre', 'East', 'Far North', 'Littoral', 'North', 'Northwest', 'South', 'Southwest', 'West'];
   const issues = ['All Issues', 'Health', 'Education', 'Politics', 'Economy', 'Infrastructure', 'Environment', 'Social'];
-  const languages = ['All Languages', 'English', 'French', 'Pidgin'];
+  const languages = ['All Languages', 'English', 'Pidgin'];
 
   return (
     <AppLayout>

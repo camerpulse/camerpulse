@@ -406,20 +406,20 @@ const CivicWhatsAppBridge = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="border-l-4 border-blue-400">
+                <Card className="border-l-4 border-yellow-400">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg">French (Disabled)</CardTitle>
+                    <CardTitle className="text-lg">Pidgin English</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-2">
                       <div className="flex justify-between">
                         <span className="text-sm">Reports:</span>
                         <span className="font-semibold">
-                          {whatsappReports.filter(r => r.language_detected === 'fr').length}
+                          {whatsappReports.filter(r => r.language_detected === 'pidgin').length}
                         </span>
                       </div>
-                      <Progress value={35} className="mt-2" />
-                      <p className="text-xs text-muted-foreground">Strong in francophone regions</p>
+                      <Progress value={25} className="mt-2" />
+                      <p className="text-xs text-muted-foreground">Popular in NW/SW regions</p>
                     </div>
                   </CardContent>
                 </Card>

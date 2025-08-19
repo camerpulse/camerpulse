@@ -52,7 +52,7 @@ const CAMEROON_REGIONS = [
 
 const OWNERSHIP_TYPES = ['government', 'private', 'community', 'religious', 'mission', 'ngo'];
 
-const LANGUAGES = ['English', 'French', 'Both'];
+const LANGUAGES = ['English', 'Pidgin', 'Both'];
 
 const SORT_OPTIONS = [
   { value: 'rating_desc', label: 'Highest Rated' },

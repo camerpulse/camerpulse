@@ -127,7 +127,7 @@ export const ROUTE_PATTERNS = {
   ENTITY_DETAIL: /^\/[a-z-]+\/[a-z0-9-]+-[a-z0-9-]+$/i,
   PROFILE: /^\/profile\/[a-z0-9-]+$/i,
   ADMIN: /^\/admin/i,
-  LANGUAGE_PREFIX: /^\/(?:en|fr)\//i,
+  LANGUAGE_PREFIX: /^\/(?:en)\//i,
 } as const;
 
 /**

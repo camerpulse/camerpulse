@@ -76,7 +76,7 @@ const CamerPlayUpload = () => {
     'Jazz', 'Blues', 'Reggae', 'Pop', 'Rock', 'Electronic', 'Classical', 'Folk'
   ];
 
-  const languages = ['English', 'French', 'Pidgin English', 'Douala', 'Bamoun', 'Fulfude', 'Ewondo'];
+  const languages = ['English', 'Pidgin English', 'Douala', 'Bamoun', 'Fulfude', 'Ewondo'];
 
   // Check if user is a verified artist
   useEffect(() => {
