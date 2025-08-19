@@ -22115,6 +22115,7 @@ export type Database = {
           language: string | null
           max_attendees: number | null
           organizer_id: string
+          slug: string | null
           status: Database["public"]["Enums"]["event_status"] | null
           ticket_sale_deadline: string | null
           title: string
@@ -22141,6 +22142,7 @@ export type Database = {
           language?: string | null
           max_attendees?: number | null
           organizer_id: string
+          slug?: string | null
           status?: Database["public"]["Enums"]["event_status"] | null
           ticket_sale_deadline?: string | null
           title: string
@@ -22167,6 +22169,7 @@ export type Database = {
           language?: string | null
           max_attendees?: number | null
           organizer_id?: string
+          slug?: string | null
           status?: Database["public"]["Enums"]["event_status"] | null
           ticket_sale_deadline?: string | null
           title?: string
@@ -33842,6 +33845,7 @@ export type Database = {
           goal_signatures: number
           id: string
           location: string | null
+          slug: string | null
           status: string
           target_institution: string
           title: string
@@ -33857,6 +33861,7 @@ export type Database = {
           goal_signatures?: number
           id?: string
           location?: string | null
+          slug?: string | null
           status?: string
           target_institution: string
           title: string
@@ -33872,6 +33877,7 @@ export type Database = {
           goal_signatures?: number
           id?: string
           location?: string | null
+          slug?: string | null
           status?: string
           target_institution?: string
           title?: string
@@ -50167,6 +50173,14 @@ export type Database = {
           regions_processed: number
         }[]
       }
+      generate_event_slug: {
+        Args: { event_title: string }
+        Returns: string
+      }
+      generate_hospital_slug: {
+        Args: { hospital_name: string; location: string }
+        Returns: string
+      }
       generate_job_slug: {
         Args: { company_name: string; job_title: string }
         Returns: string
@@ -50181,6 +50195,10 @@ export type Database = {
       }
       generate_party_slug: {
         Args: { party_name: string }
+        Returns: string
+      }
+      generate_petition_slug: {
+        Args: { petition_title: string }
         Returns: string
       }
       generate_political_party_slug: {
@@ -50213,6 +50231,10 @@ export type Database = {
       }
       generate_qr_data: {
         Args: Record<PropertyKey, never>
+        Returns: string
+      }
+      generate_school_slug: {
+        Args: { location: string; school_name: string }
         Returns: string
       }
       generate_seo_slug: {
