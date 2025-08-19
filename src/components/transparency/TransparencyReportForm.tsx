@@ -217,9 +217,9 @@ export const TransparencyReportForm: React.FC<TransparencyReportFormProps> = ({
           </div>
 
           {/* Info Alert */}
-          <div className="flex items-start space-x-2 p-4 rounded-lg bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800">
+          <div className="flex items-start space-x-2 p-4 rounded-lg bg-blue-50 border border-blue-200">
             <AlertCircle className="h-5 w-5 text-blue-600 mt-0.5" />
-            <div className="text-sm text-blue-800 dark:text-blue-200">
+            <div className="text-sm text-blue-800">
               <p className="font-medium mb-1">Report Guidelines:</p>
               <ul className="list-disc list-inside space-y-1 text-xs">
                 <li>Provide accurate and verifiable information</li>

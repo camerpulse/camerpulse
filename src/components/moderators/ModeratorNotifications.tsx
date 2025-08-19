@@ -187,7 +187,7 @@ export function ModeratorNotifications() {
                     key={notification.id}
                     className={`p-4 rounded-lg border transition-colors ${
                       isUnread 
-                        ? 'bg-blue-50 border-blue-200 dark:bg-blue-950/20 dark:border-blue-800' 
+                        ? 'bg-blue-50 border-blue-200' 
                         : 'bg-background'
                     }`}
                   >

@@ -194,7 +194,7 @@ export const ConstitutionViewer: React.FC<ConstitutionViewerProps> = ({
                     <div key={section} className="border rounded-lg">
                       <button
                         onClick={() => toggleSection(section)}
-                        className="w-full p-3 text-left flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800"
+                        className="w-full p-3 text-left flex items-center justify-between hover:bg-gray-50"
                       >
                         <span className="font-medium">{section}</span>
                         {isExpanded ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
@@ -206,12 +206,12 @@ export const ConstitutionViewer: React.FC<ConstitutionViewerProps> = ({
                             <button
                               key={article.id}
                               onClick={() => setSelectedArticle(article)}
-                              className={`w-full p-3 text-left text-sm hover:bg-gray-50 dark:hover:bg-gray-800 border-b last:border-b-0 ${
-                                selectedArticle?.id === article.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                              className={`w-full p-3 text-left text-sm hover:bg-gray-50 border-b last:border-b-0 ${
+                                selectedArticle?.id === article.id ? 'bg-blue-50' : ''
                               }`}
                             >
                               <div className="font-medium">Article {article.article_number}</div>
-                              <div className="text-gray-600 dark:text-gray-300 truncate">{article.title}</div>
+                              <div className="text-gray-600 truncate">{article.title}</div>
                             </button>
                           ))}
                         </div>
@@ -271,15 +271,15 @@ export const ConstitutionViewer: React.FC<ConstitutionViewerProps> = ({
               <div className="space-y-6">
                 {/* Summary */}
                 {selectedArticle.summary && (
-                  <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg">
-                    <h4 className="font-semibold mb-2 text-blue-900 dark:text-blue-100">Summary</h4>
-                    <p className="text-blue-800 dark:text-blue-200">{selectedArticle.summary}</p>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <h4 className="font-semibold mb-2 text-blue-900">Summary</h4>
+                    <p className="text-blue-800">{selectedArticle.summary}</p>
                   </div>
                 )}
 
                 {/* Article Content */}
-                <div className="prose dark:prose-invert max-w-none">
-                  <div className="whitespace-pre-wrap text-gray-700 dark:text-gray-300 leading-relaxed">
+                <div className="prose max-w-none">
+                  <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
                     {getContent(selectedArticle)}
                   </div>
                 </div>
@@ -300,7 +300,7 @@ export const ConstitutionViewer: React.FC<ConstitutionViewerProps> = ({
                 {selectedArticle.related_articles.length > 0 && (
                   <div>
                     <h4 className="font-semibold mb-2">Related Articles</h4>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">
+                    <div className="text-sm text-gray-600">
                       See also: {selectedArticle.related_articles.join(', ')}
                     </div>
                   </div>
@@ -311,7 +311,7 @@ export const ConstitutionViewer: React.FC<ConstitutionViewerProps> = ({
         ) : (
           <Card>
             <CardContent className="flex items-center justify-center h-96">
-              <div className="text-center text-gray-500 dark:text-gray-400">
+              <div className="text-center text-gray-500">
                 <BookOpen className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                 <h3 className="text-xl font-semibold mb-2">Select an Article</h3>
                 <p>Choose an article from the navigator to view its content</p>

@@ -72,13 +72,13 @@ export const VillageRecommendations: React.FC = () => {
   const getRecommendationColor = (type: string) => {
     switch (type) {
       case 'similar_interests':
-        return 'bg-blue-500/10 text-blue-700 dark:text-blue-300';
+        return 'bg-blue-500/10 text-blue-700';
       case 'popular_in_region':
-        return 'bg-green-500/10 text-green-700 dark:text-green-300';
+        return 'bg-green-500/10 text-green-700';
       case 'trending':
-        return 'bg-purple-500/10 text-purple-700 dark:text-purple-300';
+        return 'bg-purple-500/10 text-purple-700';
       default:
-        return 'bg-orange-500/10 text-orange-700 dark:text-orange-300';
+        return 'bg-orange-500/10 text-orange-700';
     }
   };
 

@@ -347,23 +347,23 @@ export function PetitionAnalytics({ petitionId, timeRange = '30d' }: PetitionAna
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
-                    <h4 className="font-medium text-blue-900 dark:text-blue-100">Peak Activity</h4>
-                    <p className="text-sm text-blue-700 dark:text-blue-200">
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <h4 className="font-medium text-blue-900">Peak Activity</h4>
+                    <p className="text-sm text-blue-700">
                       Most signatures collected between 6-9 PM on weekdays
                     </p>
                   </div>
                   
-                  <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg">
-                    <h4 className="font-medium text-green-900 dark:text-green-100">Best Categories</h4>
-                    <p className="text-sm text-green-700 dark:text-green-200">
+                  <div className="p-4 bg-green-50 rounded-lg">
+                    <h4 className="font-medium text-green-900">Best Categories</h4>
+                    <p className="text-sm text-green-700">
                       Infrastructure and healthcare petitions perform 40% better
                     </p>
                   </div>
                   
-                  <div className="p-4 bg-orange-50 dark:bg-orange-950 rounded-lg">
-                    <h4 className="font-medium text-orange-900 dark:text-orange-100">Optimization</h4>
-                    <p className="text-sm text-orange-700 dark:text-orange-200">
+                  <div className="p-4 bg-orange-50 rounded-lg">
+                    <h4 className="font-medium text-orange-900">Optimization</h4>
+                    <p className="text-sm text-orange-700">
                       Adding images increases signature rate by 65%
                     </p>
                   </div>

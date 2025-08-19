@@ -59,7 +59,7 @@ const CivicEducationHub: React.FC = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-blue-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-16">
         <div className="container mx-auto px-4">
@@ -109,16 +109,16 @@ const CivicEducationHub: React.FC = () => {
       </div>
 
       {/* Stats Section */}
-      <div className="py-8 bg-white/50 dark:bg-gray-800/50">
+      <div className="py-8 bg-white/50">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full mb-3">
-                  <stat.icon className="w-6 h-6 text-blue-600 dark:text-blue-300" />
+                <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-3">
+                  <stat.icon className="w-6 h-6 text-blue-600" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900 dark:text-white">{stat.value}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-300">{stat.label}</div>
+                <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -129,10 +129,10 @@ const CivicEducationHub: React.FC = () => {
       <div className="py-12">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
               Learn & Engage
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto">
               Discover comprehensive civic education resources designed to make Cameroon's legal framework accessible to all citizens
             </p>
           </div>

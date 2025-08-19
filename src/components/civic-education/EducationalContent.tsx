@@ -75,10 +75,10 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
-      case 'beginner': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'advanced': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+      case 'beginner': return 'bg-green-100 text-green-800';
+      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+      case 'advanced': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -141,7 +141,7 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
                   <Badge className={getDifficultyColor(selectedModule.difficulty_level)}>
                     {selectedModule.difficulty_level}
                   </Badge>
-                  <div className="flex items-center gap-1 text-gray-600 dark:text-gray-300">
+                  <div className="flex items-center gap-1 text-gray-600">
                     <Clock className="w-4 h-4" />
                     <span className="text-sm">{selectedModule.estimated_read_time} min read</span>
                   </div>
@@ -161,9 +161,9 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
           <CardContent>
             <div className="space-y-6">
               {/* Module Content */}
-              <div className="prose dark:prose-invert max-w-none">
+              <div className="prose max-w-none">
                 <SafeHtml 
-                  className="whitespace-pre-wrap text-gray-700 dark:text-gray-300 leading-relaxed"
+                  className="whitespace-pre-wrap text-gray-700 leading-relaxed"
                   allowedTags={['p', 'br', 'strong', 'em', 'ul', 'li', 'h1', 'h2', 'h3', 'h4']}
                 >
                   {getContent(selectedModule)}
@@ -194,7 +194,7 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
                       Bookmark
                     </Button>
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">
+                  <div className="text-sm text-gray-600">
                     Progress: 0%
                   </div>
                 </div>
@@ -231,7 +231,7 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
                     <Badge className={getDifficultyColor(module.difficulty_level)}>
                       {module.difficulty_level}
                     </Badge>
-                    <div className="flex items-center gap-1 text-gray-600 dark:text-gray-300">
+                    <div className="flex items-center gap-1 text-gray-600">
                       <Clock className="w-3 h-3" />
                       <span className="text-xs">{module.estimated_read_time} min</span>
                     </div>
@@ -265,8 +265,8 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
                     {/* Progress */}
                     <div className="space-y-2">
                       <div className="flex justify-between text-sm">
-                        <span className="text-gray-600 dark:text-gray-300">Progress</span>
-                        <span className="text-gray-600 dark:text-gray-300">0%</span>
+                        <span className="text-gray-600">Progress</span>
+                        <span className="text-gray-600">0%</span>
                       </div>
                       <Progress value={0} className="h-2" />
                     </div>
@@ -290,7 +290,7 @@ export const EducationalContent: React.FC<EducationalContentProps> = ({
       {!isLoading && (!modules || modules.length === 0) && (
         <Card>
           <CardContent className="flex items-center justify-center h-96">
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500">
               <BookOpen className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <h3 className="text-xl font-semibold mb-2">No Educational Content Found</h3>
               <p>Try adjusting your filters or search terms</p>
