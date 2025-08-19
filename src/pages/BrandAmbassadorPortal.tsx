@@ -32,7 +32,7 @@ interface ArtistProfile {
 }
 
 const FILTER_OPTIONS = {
-  regions: ['National', 'Local (Douala)', 'Local (Yaoundé)', 'International', 'CEMAC Region'],
+  regions: ['National', 'Local (Douala)', 'Local (Yaounde)', 'International', 'CEMAC Region'],
   industries: ['Fashion', 'Telecom', 'Skincare & Hair', 'Food & Beverage', 'Agriculture', 'Education', 'Finance', 'NGOs', 'Events', 'Technology'],
   audiences: ['Youth (18-35)', 'Women', 'Men', 'Musicians', 'Diaspora', 'Christians', 'Students', 'Professionals'],
   status: ['available', 'negotiable']

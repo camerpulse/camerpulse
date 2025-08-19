@@ -37,7 +37,7 @@ const CamerPlayRankings = () => {
     ],
     events: [
       { id: 1, name: 'Douala Music Festival', tickets: 2500, date: '2024-02-15', location: 'Douala' },
-      { id: 2, name: 'Yaoundé Concert Night', tickets: 1800, date: '2024-02-20', location: 'Yaoundé' },
+      { id: 2, name: 'Yaounde Concert Night', tickets: 1800, date: '2024-02-20', location: 'Yaounde' },
       { id: 3, name: 'Bamenda Live Show', tickets: 1200, date: '2024-02-25', location: 'Bamenda' },
     ],
     regions: [

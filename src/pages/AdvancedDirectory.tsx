@@ -118,7 +118,7 @@ const mockMinistries = [
 const mockCouncils = [
   {
     id: 'council-1',
-    name: 'Yaoundé City Council',
+    name: 'Yaounde City Council',
     region: 'Centre',
     division: 'Mfoundi',
     mayor: 'Luc Messi Atangana',

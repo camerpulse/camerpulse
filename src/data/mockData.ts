@@ -118,7 +118,7 @@ export const mockPoliticians = [
   {
     id: '2',
     name: 'Hon. Beatrice Mendomo',
-    role: 'Mayor of Yaoundé',
+    role: 'Mayor of Yaounde',
     party: 'RDPC',
     region: 'Centre',
     avatar: '',
@@ -129,7 +129,7 @@ export const mockPoliticians = [
     totalPromises: 15,
     isVerified: true,
     lastActive: '1 week ago',
-    bio: 'Committed to urban development and improving the quality of life for Yaoundé residents. Focus on infrastructure and waste management.'
+    bio: 'Committed to urban development and improving the quality of life for Yaounde residents. Focus on infrastructure and waste management.'
   },
   {
     id: '3',

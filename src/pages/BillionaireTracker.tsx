@@ -268,7 +268,7 @@ const BillionaireTracker = () => {
                     <SelectItem value="all">All Regions</SelectItem>
                     <SelectItem value="Centre">Centre</SelectItem>
                     <SelectItem value="Douala">Douala</SelectItem>
-                    <SelectItem value="Yaoundé">Yaoundé</SelectItem>
+                    <SelectItem value="Yaounde">Yaounde</SelectItem>
                     <SelectItem value="West">West</SelectItem>
                     <SelectItem value="Northwest">Northwest</SelectItem>
                     <SelectItem value="Southwest">Southwest</SelectItem>

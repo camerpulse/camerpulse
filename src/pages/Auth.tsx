@@ -240,7 +240,7 @@ const Auth = () => {
                     <Label htmlFor="signup-location">Location (optional)</Label>
                     <Input
                       id="signup-location"
-                      placeholder="Yaoundé, Douala, Paris..."
+                      placeholder="Yaounde, Douala, Paris..."
                       value={signupData.location}
                       onChange={(e) => setSignupData({...signupData, location: e.target.value})}
                     />

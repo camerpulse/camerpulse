@@ -34,12 +34,12 @@ const CivicReputationDemo: React.FC = () => {
       id: '2',
       type: 'politician' as const,
       name: 'Hon. Jean Mballa',
-      description: 'Member of Parliament representing Yaoundé 4th constituency'
+      description: 'Member of Parliament representing Yaounde 4th constituency'
     },
     {
       id: '3',
       type: 'government_agency' as const,
-      name: 'Yaoundé Central Hospital',
+      name: 'Yaounde Central Hospital',
       description: 'Major public hospital serving the capital region'
     }
   ];

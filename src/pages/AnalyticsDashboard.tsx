@@ -412,7 +412,7 @@ const AnalyticsDashboard = () => {
                   <div className="space-y-4">
                     {[
                       { action: 'New poll response', user: 'Anonymous', location: 'Douala', time: '2 min ago' },
-                      { action: 'Course completed', user: 'Jean M.', location: 'Yaoundé', time: '5 min ago' },
+                      { action: 'Course completed', user: 'Jean M.', location: 'Yaounde', time: '5 min ago' },
                       { action: 'Performance rating', user: 'Marie K.', location: 'Bamenda', time: '8 min ago' },
                       { action: 'Comment added', user: 'Paul N.', location: 'Bafoussam', time: '12 min ago' },
                       { action: 'Quiz completed', user: 'Sarah T.', location: 'Garoua', time: '15 min ago' }
