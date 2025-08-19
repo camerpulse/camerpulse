@@ -5,7 +5,7 @@
  * Includes Web Vitals, user interactions, and custom metrics.
  */
 
-import { onCLS, onFID, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
+import { onCLS, onINP, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
 
 export interface PerformanceMetric {
   name: string;
@@ -67,13 +67,13 @@ class PerformanceMonitor {
     });
 
     // First Input Delay
-    onFID((metric) => {
+    onINP((metric) => {
       this.recordMetric({
-        name: 'FID',
+        name: 'INP',
         value: metric.value,
         timestamp: Date.now(),
         id: metric.id,
-        metadata: { rating: this.getRating('FID', metric.value) }
+        metadata: { rating: this.getRating('INP', metric.value) }
       });
     });
 
@@ -285,7 +285,7 @@ class PerformanceMonitor {
   private getRating(metric: string, value: number): 'good' | 'needs-improvement' | 'poor' {
     const thresholds = {
       LCP: { good: 2500, poor: 4000 },
-      FID: { good: 100, poor: 300 },
+      INP: { good: 200, poor: 500 },
       CLS: { good: 0.1, poor: 0.25 },
       FCP: { good: 1800, poor: 3000 },
       TTFB: { good: 800, poor: 1800 }
@@ -348,7 +348,7 @@ class PerformanceMonitor {
     memoryUsage: number;
     totalInteractions: number;
   } {
-    const webVitals = ['LCP', 'FID', 'CLS', 'FCP', 'TTFB'].reduce((acc, metric) => {
+    const webVitals = ['LCP', 'INP', 'CLS', 'FCP', 'TTFB'].reduce((acc, metric) => {
       const latest = this.metrics.filter(m => m.name === metric).pop();
       if (latest) {
         acc[metric] = {
