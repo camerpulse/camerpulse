@@ -521,9 +521,9 @@ const Security = () => {
           <Tabs defaultValue="2fa" className="space-y-6">
             <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="2fa">2FA</TabsTrigger>
-              <TabsTrigger value="devices">Appareils</TabsTrigger>
-              <TabsTrigger value="logs">Activité</TabsTrigger>
-              <TabsTrigger value="encryption">Chiffrement</TabsTrigger>
+              <TabsTrigger value="devices">Devices</TabsTrigger>
+              <TabsTrigger value="logs">Activity</TabsTrigger>
+              <TabsTrigger value="encryption">Encryption</TabsTrigger>
               <TabsTrigger value="roles">Roles</TabsTrigger>
             </TabsList>
 
@@ -653,7 +653,7 @@ const Security = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Monitor className="w-5 h-5" />
-                    Appareils de Confiance
+                    Trusted Devices
                   </CardTitle>
                 </CardHeader>
                 <CardContent>

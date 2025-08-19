@@ -75,7 +75,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
   const handleFollow = async () => {
     if (!user) {
       toast({
-        title: "Connexion requise",
+        title: "Login Required",
         description: "You must be logged in to follow other users",
         variant: "destructive"
       });
@@ -102,8 +102,8 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
         toast({
           title: "Unfollowed",
           description: targetUsername 
-            ? `Vous ne suivez plus @${targetUsername}` 
-            : "Vous ne suivez plus cet utilisateur"
+            ? `You are no longer following @${targetUsername}` 
+            : "You are no longer following this user"
         });
       } else {
         // Follow

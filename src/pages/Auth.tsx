@@ -63,8 +63,8 @@ const Auth = () => {
 
     if (signupData.password !== signupData.confirmPassword) {
       toast({
-        title: "Erreur",
-        description: "Les mots de passe ne correspondent pas",
+        title: "Error",
+        description: "Passwords do not match",
         variant: "destructive"
       });
       return;
@@ -72,7 +72,7 @@ const Auth = () => {
 
     if (signupData.password.length < 6) {
       toast({
-        title: "Erreur",
+        title: "Error",
         description: "Password must contain at least 6 characters",
         variant: "destructive"
       });
@@ -94,7 +94,7 @@ const Auth = () => {
 
     if (error) {
       toast({
-        title: "Erreur d'inscription",
+        title: "Registration Error",
         description: error.message,
         variant: "destructive"
       });
@@ -133,14 +133,14 @@ const Auth = () => {
               Join the Community
             </CardTitle>
             <CardDescription className="text-center">
-              Votre voix. Votre pouvoir. Votre marché.
+              Your voice. Your power. Your market.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="login" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="login">Connexion</TabsTrigger>
-                <TabsTrigger value="signup">Inscription</TabsTrigger>
+                <TabsTrigger value="login">Login</TabsTrigger>
+                <TabsTrigger value="signup">Sign Up</TabsTrigger>
               </TabsList>
               
               <TabsContent value="login">
@@ -150,14 +150,14 @@ const Auth = () => {
                     <Input
                       id="login-email"
                       type="email"
-                      placeholder="votre@email.com"
+                      placeholder="your@email.com"
                       value={loginData.email}
                       onChange={(e) => setLoginData({...loginData, email: e.target.value})}
                       required
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="login-password">Mot de passe</Label>
+                    <Label htmlFor="login-password">Password</Label>
                     <Input
                       id="login-password"
                       type="password"
@@ -171,7 +171,7 @@ const Auth = () => {
                     className="w-full bg-cameroon-primary hover:bg-cameroon-primary/90"
                     disabled={isLoading}
                   >
-                    {isLoading ? 'Connexion...' : 'Se connecter'}
+                    {isLoading ? 'Signing in...' : 'Sign In'}
                   </Button>
                 </form>
               </TabsContent>
@@ -180,7 +180,7 @@ const Auth = () => {
                 <form onSubmit={handleSignup} className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signup-username">Nom d'utilisateur</Label>
+                      <Label htmlFor="signup-username">Username</Label>
                       <Input
                         id="signup-username"
                         placeholder="@username"
@@ -190,10 +190,10 @@ const Auth = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signup-displayName">Nom complet</Label>
+                      <Label htmlFor="signup-displayName">Full Name</Label>
                       <Input
                         id="signup-displayName"
-                        placeholder="Votre nom"
+                        placeholder="Your name"
                         value={signupData.displayName}
                         onChange={(e) => setSignupData({...signupData, displayName: e.target.value})}
                         required
@@ -206,7 +206,7 @@ const Auth = () => {
                     <Input
                       id="signup-email"
                       type="email"
-                      placeholder="votre@email.com"
+                      placeholder="your@email.com"
                       value={signupData.email}
                       onChange={(e) => setSignupData({...signupData, email: e.target.value})}
                       required
@@ -215,7 +215,7 @@ const Auth = () => {
                   
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signup-password">Mot de passe</Label>
+                      <Label htmlFor="signup-password">Password</Label>
                       <Input
                         id="signup-password"
                         type="password"
@@ -225,7 +225,7 @@ const Auth = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signup-confirm">Confirmer</Label>
+                      <Label htmlFor="signup-confirm">Confirm</Label>
                       <Input
                         id="signup-confirm"
                         type="password"
@@ -237,7 +237,7 @@ const Auth = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="signup-location">Localisation (optionnel)</Label>
+                    <Label htmlFor="signup-location">Location (optional)</Label>
                     <Input
                       id="signup-location"
                       placeholder="Yaoundé, Douala, Paris..."
