@@ -8,7 +8,7 @@ import { Senator } from '@/hooks/useSenators';
 import { toast } from 'sonner';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import { advancedSanitizeInput } from '@/utils/security';
+import { createSecureExportContent } from '@/utils/secureDOM';
 
 interface SenatorExportModalProps {
   senator: Senator;
@@ -160,46 +160,30 @@ export const SenatorExportModal: React.FC<SenatorExportModalProps> = ({
     setIsExporting(true);
     
     try {
-      // Create a temporary card element for the senator
-      const tempDiv = document.createElement('div');
+      // Create secure content container
+      const exportData = {
+        name: senator.name || 'Unknown Senator',
+        position: senator.position || 'Senator',
+        region: senator.region,
+        performanceMetrics: exportOptions.includePerformance ? {
+          performanceScore: senator.performance_score,
+          transparencyScore: senator.transparency_score,
+          civicEngagementScore: senator.civic_engagement_score
+        } : undefined,
+        legislativeActivity: exportOptions.includeLegislation ? {
+          billsProposed: senator.bills_proposed_count,
+          billsPassed: senator.bills_passed_count
+        } : undefined
+      };
+
+      const tempDiv = createSecureExportContent(exportData, {
+        includePerformance: exportOptions.includePerformance,
+        includeLegislation: exportOptions.includeLegislation
+      });
+
+      // Position for rendering
       tempDiv.style.position = 'absolute';
       tempDiv.style.left = '-9999px';
-      tempDiv.style.width = '800px';
-      tempDiv.style.background = 'white';
-      tempDiv.style.padding = '40px';
-      
-      const safeName = advancedSanitizeInput(String(senator.name ?? ''));
-      const safePosition = advancedSanitizeInput(String(senator.position ?? ''));
-      const safeRegion = advancedSanitizeInput(String(senator.region ?? ''));
-      
-      tempDiv.innerHTML = `
-        <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="font-size: 28px; margin-bottom: 10px; color: #1a1a1a;">${safeName}</h1>
-          <p style="font-size: 18px; color: #666; margin-bottom: 5px;">${safePosition}</p>
-          ${senator.region ? `<p style="font-size: 16px; color: #888;">${safeRegion}</p>` : ''}
-        </div>
-        
-        ${exportOptions.includePerformance ? `
-          <div style="margin-bottom: 30px;">
-            <h3 style="font-size: 20px; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px;">Performance Metrics</h3>
-            ${senator.performance_score ? `<p>Performance Score: <strong>${senator.performance_score}%</strong></p>` : ''}
-            ${senator.transparency_score ? `<p>Transparency Score: <strong>${senator.transparency_score}%</strong></p>` : ''}
-            ${senator.civic_engagement_score ? `<p>Civic Engagement Score: <strong>${senator.civic_engagement_score}%</strong></p>` : ''}
-          </div>
-        ` : ''}
-        
-        ${exportOptions.includeLegislation ? `
-          <div style="margin-bottom: 30px;">
-            <h3 style="font-size: 20px; margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 5px;">Legislative Activity</h3>
-            ${senator.bills_proposed_count ? `<p>Bills Proposed: <strong>${senator.bills_proposed_count}</strong></p>` : ''}
-            ${senator.bills_passed_count ? `<p>Bills Passed: <strong>${senator.bills_passed_count}</strong></p>` : ''}
-          </div>
-        ` : ''}
-        
-        <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid #eee; font-size: 12px; color: #888;">
-          Generated from CamerPulse Senate Directory - ${new Date().toLocaleDateString()}
-        </div>
-      `;
       
       document.body.appendChild(tempDiv);
       

@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useNavigation } from '@/hooks/useNavigation';
+import { createSecureMarker } from '@/utils/secureDOM';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 interface Institution {
@@ -221,25 +222,11 @@ export default function ServicesMap() {
       const markerColor = getInstitutionColor(institution);
       const iconSvg = getInstitutionIconSvg(institution.category);
 
-      // Create marker element
-      const markerEl = document.createElement('div');
-      markerEl.className = 'custom-marker';
-      markerEl.innerHTML = `
-        <div style="
-          width: 30px; 
-          height: 30px; 
-          background-color: ${markerColor};
-          border: 2px solid white;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        ">
-          ${iconSvg}
-        </div>
-      `;
+      // Create marker element securely
+      const markerEl = createSecureMarker({
+        backgroundColor: markerColor,
+        iconSvg
+      });
 
       // Add click event
       markerEl.addEventListener('click', () => {
