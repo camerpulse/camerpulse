@@ -69,9 +69,9 @@ export const NotificationCenter: React.FC = () => {
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
-      case 'critical': return 'border-l-red-500 bg-red-50/50 dark:bg-red-950/20';
-      case 'moderate': return 'border-l-yellow-500 bg-yellow-50/50 dark:bg-yellow-950/20';
-      case 'low': return 'border-l-blue-500 bg-blue-50/50 dark:bg-blue-950/20';
+      case 'critical': return 'border-l-red-500 bg-red-50/50';
+      case 'moderate': return 'border-l-yellow-500 bg-yellow-50/50';
+      case 'low': return 'border-l-blue-500 bg-blue-50/50';
       default: return 'border-l-muted';
     }
   };

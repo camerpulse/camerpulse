@@ -150,10 +150,10 @@ export const CivicQuestions: React.FC = () => {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'answered': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'pending': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'approved': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+      case 'answered': return 'bg-green-100 text-green-800';
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'approved': return 'bg-blue-100 text-blue-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -189,7 +189,7 @@ export const CivicQuestions: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-3xl font-bold">Civic Q&A Forum</h2>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-gray-600">
             Ask questions about laws, rights, and civic processes
           </p>
         </div>
@@ -264,7 +264,7 @@ export const CivicQuestions: React.FC = () => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-md bg-background"
+            className="pl-10 pr-4 py-2 border border-gray-200 rounded-md bg-background"
           >
             <option value="">All Types</option>
             {questionTypes.map((type) => (
@@ -299,13 +299,13 @@ export const CivicQuestions: React.FC = () => {
             
             {question.answer_text && (
               <CardContent>
-                <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-lg">
-                  <h4 className="font-semibold mb-2 text-green-900 dark:text-green-100">Answer</h4>
-                  <p className="text-green-800 dark:text-green-200 whitespace-pre-wrap">
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <h4 className="font-semibold mb-2 text-green-900">Answer</h4>
+                  <p className="text-green-800 whitespace-pre-wrap">
                     {question.answer_text}
                   </p>
                   {question.answered_at && (
-                    <p className="text-sm text-green-600 dark:text-green-300 mt-2">
+                    <p className="text-sm text-green-600 mt-2">
                       Answered on {new Date(question.answered_at).toLocaleDateString()}
                     </p>
                   )}
@@ -349,7 +349,7 @@ export const CivicQuestions: React.FC = () => {
       {!isLoading && (!questions || questions.length === 0) && (
         <Card>
           <CardContent className="flex items-center justify-center h-96">
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500">
               <MessageSquare className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <h3 className="text-xl font-semibold mb-2">No Questions Found</h3>
               <p>Be the first to ask a question about civic law and rights</p>

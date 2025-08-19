@@ -159,7 +159,7 @@ export const CivicBookmarks: React.FC = () => {
       {/* Header */}
       <div>
         <h2 className="text-3xl font-bold mb-2">Your Bookmarks</h2>
-        <p className="text-gray-600 dark:text-gray-300">
+        <p className="text-gray-600">
           Save and organize important Constitution articles, educational content, and discussions
         </p>
       </div>
@@ -180,7 +180,7 @@ export const CivicBookmarks: React.FC = () => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-700 rounded-md bg-background"
+            className="pl-10 pr-4 py-2 border border-gray-200 rounded-md bg-background"
           >
             <option value="">All Types</option>
             {contentTypes.map((type) => (
@@ -248,11 +248,11 @@ export const CivicBookmarks: React.FC = () => {
                       ) : (
                         <div>
                           {bookmark.notes ? (
-                            <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                            <p className="text-gray-700 whitespace-pre-wrap">
                               {bookmark.notes}
                             </p>
                           ) : (
-                            <p className="text-gray-500 dark:text-gray-400 italic">
+                            <p className="text-gray-500 italic">
                               No notes added yet
                             </p>
                           )}
@@ -288,7 +288,7 @@ export const CivicBookmarks: React.FC = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => deleteBookmark(bookmark.id)}
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -301,7 +301,7 @@ export const CivicBookmarks: React.FC = () => {
         ) : (
           <Card>
             <CardContent className="flex items-center justify-center h-96">
-              <div className="text-center text-gray-500 dark:text-gray-400">
+              <div className="text-center text-gray-500">
                 <Bookmark className="w-16 h-16 mx-auto mb-4 text-gray-300" />
                 <h3 className="text-xl font-semibold mb-2">No Bookmarks Yet</h3>
                 <p className="mb-4">
@@ -330,7 +330,7 @@ export const CivicBookmarks: React.FC = () => {
                   <div key={type.id} className="text-center">
                     <div className="text-2xl mb-1">{type.icon}</div>
                     <div className="font-semibold">{count}</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">{type.name}</div>
+                    <div className="text-sm text-gray-600">{type.name}</div>
                   </div>
                 );
               })}

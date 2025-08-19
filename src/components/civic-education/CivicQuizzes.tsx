@@ -74,10 +74,10 @@ export const CivicQuizzes: React.FC = () => {
 
   const getDifficultyColor = (level: string) => {
     switch (level) {
-      case 'beginner': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      case 'advanced': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+      case 'beginner': return 'bg-green-100 text-green-800';
+      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
+      case 'advanced': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
@@ -216,12 +216,12 @@ export const CivicQuizzes: React.FC = () => {
           <CardContent className="text-center py-12">
             <div className="space-y-6">
               <div className={`w-20 h-20 mx-auto rounded-full flex items-center justify-center ${
-                score >= selectedQuiz.passing_score ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'
+                score >= selectedQuiz.passing_score ? 'bg-green-100' : 'bg-red-100'
               }`}>
                 {score >= selectedQuiz.passing_score ? (
-                  <Trophy className="w-10 h-10 text-green-600 dark:text-green-400" />
+                  <Trophy className="w-10 h-10 text-green-600" />
                 ) : (
-                  <Target className="w-10 h-10 text-red-600 dark:text-red-400" />
+                  <Target className="w-10 h-10 text-red-600" />
                 )}
               </div>
               
@@ -229,7 +229,7 @@ export const CivicQuizzes: React.FC = () => {
                 <h2 className="text-2xl font-bold mb-2">
                   {score >= selectedQuiz.passing_score ? 'Congratulations!' : 'Quiz Complete'}
                 </h2>
-                <p className="text-gray-600 dark:text-gray-300">
+                <p className="text-gray-600">
                   You scored {score}% on "{selectedQuiz.title}"
                 </p>
               </div>
@@ -237,7 +237,7 @@ export const CivicQuizzes: React.FC = () => {
               <div className="grid grid-cols-3 gap-4 max-w-md mx-auto">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-blue-600">{score}%</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">Score</div>
+                  <div className="text-sm text-gray-600">Score</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-green-600">
@@ -245,11 +245,11 @@ export const CivicQuizzes: React.FC = () => {
                       answer === selectedQuiz.questions[index]?.correct_answer
                     ).length}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">Correct</div>
+                  <div className="text-sm text-gray-600">Correct</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-purple-600">{selectedQuiz.questions.length}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-300">Total</div>
+                  <div className="text-sm text-gray-600">Total</div>
                 </div>
               </div>
 
@@ -287,7 +287,7 @@ export const CivicQuizzes: React.FC = () => {
                 Question {currentQuestion + 1} of {selectedQuiz.questions.length}
               </CardDescription>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <Clock className="w-4 h-4" />
               {Math.floor(timeRemaining / 60)}:{String(timeRemaining % 60).padStart(2, '0')}
             </div>
@@ -305,8 +305,8 @@ export const CivicQuizzes: React.FC = () => {
                     onClick={() => handleAnswerSelect(currentQuestion, index)}
                     className={`w-full p-4 text-left border rounded-lg transition-colors ${
                       selectedAnswers[currentQuestion] === index
-                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
-                        : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:bg-gray-50'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -356,7 +356,7 @@ export const CivicQuizzes: React.FC = () => {
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-4">Civic Knowledge Quizzes</h2>
-        <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        <p className="text-gray-600 max-w-2xl mx-auto">
           Test your understanding of Cameroon's Constitution, civic rights, and legal frameworks
         </p>
       </div>
@@ -431,7 +431,7 @@ export const CivicQuizzes: React.FC = () => {
       {!isLoading && (!quizzes || quizzes.length === 0) && (
         <Card>
           <CardContent className="flex items-center justify-center h-96">
-            <div className="text-center text-gray-500 dark:text-gray-400">
+            <div className="text-center text-gray-500">
               <Award className="w-16 h-16 mx-auto mb-4 text-gray-300" />
               <h3 className="text-xl font-semibold mb-2">No Quizzes Available</h3>
               <p>Check back later for new civic knowledge quizzes</p>
