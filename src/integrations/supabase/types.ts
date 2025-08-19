@@ -50174,7 +50174,9 @@ export type Database = {
         }[]
       }
       generate_event_slug: {
-        Args: { event_title: string }
+        Args:
+          | { event_title: string }
+          | { event_title: string; venue_name: string }
         Returns: string
       }
       generate_hospital_slug: {
@@ -50329,12 +50331,18 @@ export type Database = {
         Returns: Json
       }
       get_entity_by_slug: {
-        Args: { entity_type: string; input_slug: string }
+        Args:
+          | { entity_type: string; input_slug: string }
+          | {
+              p_id_column?: string
+              p_slug: string
+              p_slug_column?: string
+              p_table_name: string
+            }
         Returns: {
-          id: string
-          is_redirect: boolean
-          redirect_from: string
-          slug: string
+          canonical_slug: string
+          entity_data: Json
+          entity_id: string
         }[]
       }
       get_integrity_monitor_stats: {
