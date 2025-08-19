@@ -8,11 +8,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
+import { usePartyMembers, type PartyMemberFilter } from "@/hooks/usePartyRelations";
 import { 
   ArrowLeft, MapPin, Calendar, Users, Globe, Mail, Phone, 
   Star, TrendingUp, Award, Target, Eye, FileText, 
-  MessageSquare, ThumbsUp, Building2, CheckCircle, XCircle, Clock
+  MessageSquare, ThumbsUp, Building2, CheckCircle, XCircle, Clock,
+  Filter, Search, Grid3x3, List
 } from "lucide-react";
 import { PartyEmbed } from "@/components/AI/OfficialEmbedEngine";
 
@@ -68,6 +73,18 @@ const PoliticalPartyDetail = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   
+  // Member filters
+  const [memberFilters, setMemberFilters] = useState<PartyMemberFilter>({
+    role: "all",
+    region: "all", 
+    gender: "all",
+    status: "current",
+    search: "",
+    sortBy: "rating",
+    sortOrder: "desc"
+  });
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
   const [userRating, setUserRating] = useState({
     approval_rating: 5,
     transparency_rating: 5,
@@ -78,22 +95,25 @@ const PoliticalPartyDetail = () => {
   const [showRatingForm, setShowRatingForm] = useState(false);
 
   const { data: party, isLoading } = useQuery({
-    queryKey: ["political-party", id],
+    queryKey: ["political-party", partyId],
     queryFn: async () => {
       const { data, error } = await supabase
         .from("political_parties")
         .select("*")
-        .eq("id", id)
+        .eq("id", partyId)
         .single();
 
       if (error) throw error;
       return data as PoliticalParty;
     },
-    enabled: !!id
+    enabled: !!partyId
   });
 
+  // Fetch party members with filters
+  const { data: members = [], isLoading: membersLoading } = usePartyMembers(partyId, memberFilters);
+
   const { data: existingRating } = useQuery({
-    queryKey: ["party-rating", id],
+    queryKey: ["party-rating", partyId],
     queryFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return null;
@@ -101,14 +121,14 @@ const PoliticalPartyDetail = () => {
       const { data, error } = await supabase
         .from("party_ratings")
         .select("*")
-        .eq("party_id", id)
+        .eq("party_id", partyId)
         .eq("user_id", user.id)
         .maybeSingle();
 
       if (error) throw error;
       return data as PartyRating | null;
     },
-    enabled: !!id
+    enabled: !!partyId
   });
 
   const ratingMutation = useMutation({
@@ -119,7 +139,7 @@ const PoliticalPartyDetail = () => {
       const { error } = await supabase
         .from("party_ratings")
         .upsert({
-          party_id: id!,
+          party_id: partyId!,
           user_id: user.id,
           ...rating
         });
@@ -129,8 +149,8 @@ const PoliticalPartyDetail = () => {
     onSuccess: () => {
       toast({ title: "Rating submitted successfully!" });
       setShowRatingForm(false);
-      queryClient.invalidateQueries({ queryKey: ["political-party", id] });
-      queryClient.invalidateQueries({ queryKey: ["party-rating", id] });
+      queryClient.invalidateQueries({ queryKey: ["political-party", partyId] });
+      queryClient.invalidateQueries({ queryKey: ["party-rating", partyId] });
     },
     onError: () => {
       toast({ title: "Failed to submit rating", variant: "destructive" });
@@ -351,12 +371,165 @@ const PoliticalPartyDetail = () => {
               </CardContent>
             </Card>
 
-            {/* Party Officials */}
+            {/* Party Members Section */}
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5" />
+                    Party Members ({members.length})
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant={viewMode === 'grid' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('grid')}
+                    >
+                      <Grid3x3 className="h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant={viewMode === 'list' ? 'default' : 'outline'}
+                      size="sm"
+                      onClick={() => setViewMode('list')}
+                    >
+                      <List className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                
+                {/* Filters */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-4">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      placeholder="Search members..."
+                      value={memberFilters.search || ''}
+                      onChange={(e) => setMemberFilters(prev => ({ ...prev, search: e.target.value }))}
+                      className="pl-10"
+                    />
+                  </div>
+                  
+                  <Select 
+                    value={memberFilters.role || 'all'} 
+                    onValueChange={(value) => setMemberFilters(prev => ({ ...prev, role: value as any }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="All Roles" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Roles</SelectItem>
+                      <SelectItem value="mp">MPs</SelectItem>
+                      <SelectItem value="senator">Senators</SelectItem>
+                      <SelectItem value="minister">Ministers</SelectItem>
+                      <SelectItem value="mayor">Mayors</SelectItem>
+                      <SelectItem value="governor">Governors</SelectItem>
+                      <SelectItem value="politician">Other Politicians</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select 
+                    value={memberFilters.status || 'current'} 
+                    onValueChange={(value) => setMemberFilters(prev => ({ ...prev, status: value as any }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="current">Current Members</SelectItem>
+                      <SelectItem value="all">All (Including Former)</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select 
+                    value={memberFilters.sortBy || 'rating'} 
+                    onValueChange={(value) => setMemberFilters(prev => ({ ...prev, sortBy: value as any }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Sort By" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="rating">Rating</SelectItem>
+                      <SelectItem value="name">Name</SelectItem>
+                      <SelectItem value="role">Role</SelectItem>
+                      <SelectItem value="region">Region</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </CardHeader>
+              <CardContent>
+                {membersLoading ? (
+                  <div className="text-center py-8">Loading party members...</div>
+                ) : members.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    <Users className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                    <p>No members found matching your filters.</p>
+                  </div>
+                ) : (
+                  <div className={`grid gap-4 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}>
+                    {members.map((member) => (
+                      <Link
+                        key={member.id}
+                        to={`/politicians/${member.slug || member.id}`}
+                        className="block"
+                      >
+                        <Card className="hover:shadow-md transition-all duration-200 hover:scale-[1.02] cursor-pointer">
+                          <CardContent className="p-4">
+                            <div className="flex items-center space-x-3">
+                              <Avatar className="h-12 w-12">
+                                <AvatarImage src={member.profile_picture_url || ''} alt={member.full_name} />
+                                <AvatarFallback>
+                                  {member.full_name.split(' ').map(n => n[0]).join('')}
+                                </AvatarFallback>
+                              </Avatar>
+                              
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <h4 className="font-medium text-sm truncate">{member.full_name}</h4>
+                                  {!member.is_current && (
+                                    <Badge variant="secondary" className="text-xs">Former</Badge>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                  <span className="capitalize">{member.role || 'Politician'}</span>
+                                  {member.position_title && (
+                                    <>
+                                      <span>•</span>
+                                      <span className="truncate">{member.position_title}</span>
+                                    </>
+                                  )}
+                                  {member.region && (
+                                    <>
+                                      <span>•</span>
+                                      <span>{member.region}</span>
+                                    </>
+                                  )}
+                                </div>
+                                {member.average_rating && member.average_rating > 0 && (
+                                  <div className="flex items-center text-xs mt-1">
+                                    <Star className="h-3 w-3 fill-yellow-400 text-yellow-400 mr-1" />
+                                    <span>{member.average_rating.toFixed(1)}</span>
+                                    {member.total_ratings && (
+                                      <span className="text-muted-foreground ml-1">({member.total_ratings})</span>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Party Officials - keeping existing PartyEmbed */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5" />
-                  Party Officials
+                  Additional Party Information
                 </CardTitle>
               </CardHeader>
               <CardContent>

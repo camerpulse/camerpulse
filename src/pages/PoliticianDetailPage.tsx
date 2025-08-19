@@ -24,12 +24,14 @@ import {
   Share2
 } from 'lucide-react';
 import { usePoliticianSlug } from '@/hooks/useSlugResolver';
+import { usePoliticianAffiliations } from '@/hooks/usePartyRelations';
 import { PoliticianRating } from '@/components/Politicians/PoliticianRating';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { NavigationBreadcrumb } from '@/components/Navigation/NavigationBreadcrumb';
 
 const PoliticianDetailPage = () => {
-  const { entity: politician, loading: isLoading, error } = usePoliticianSlug();
+  const { entity: politician, loading: isLoading, error, entityId } = usePoliticianSlug();
+  const { data: affiliations = [], isLoading: affiliationsLoading } = usePoliticianAffiliations(entityId || undefined);
 
   if (isLoading) {
     return (
@@ -65,6 +67,9 @@ const PoliticianDetailPage = () => {
     if (rating >= 40) return 'text-orange-600';
     return 'text-red-600';
   };
+
+  const currentAffiliation = affiliations.find(a => a.is_current);
+  const historicalAffiliations = affiliations.filter(a => !a.is_current);
 
   return (
     <>
@@ -169,7 +174,15 @@ const PoliticianDetailPage = () => {
                       </p>
                       
                       <div className="flex items-center gap-4 flex-wrap mb-4">
-                        {politician.party && (
+                        {currentAffiliation?.party && (
+                          <Link to={`/political-parties/${currentAffiliation.party.slug || currentAffiliation.party.id}`}>
+                            <Badge variant="outline" className="text-sm hover:bg-muted transition-colors cursor-pointer">
+                              {currentAffiliation.party.acronym || currentAffiliation.party.name}
+                            </Badge>
+                          </Link>
+                        )}
+                        
+                        {politician.party && !currentAffiliation && (
                           <Badge variant="outline" className="text-sm">
                             {politician.party}
                           </Badge>
@@ -303,6 +316,86 @@ const PoliticianDetailPage = () => {
                   </CardContent>
                 </Card>
               )}
+
+              {/* Political Affiliations */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Political Affiliations</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {currentAffiliation && (
+                    <div>
+                      <h4 className="font-semibold mb-2 text-green-600">Current Party</h4>
+                      <Link to={`/political-parties/${currentAffiliation.party?.slug || currentAffiliation.party?.id}`}>
+                        <div className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted transition-colors cursor-pointer">
+                          {currentAffiliation.party?.logo_url && (
+                            <img 
+                              src={currentAffiliation.party.logo_url} 
+                              alt={currentAffiliation.party.name}
+                              className="w-8 h-8 object-contain"
+                            />
+                          )}
+                          <div>
+                            <p className="font-medium">{currentAffiliation.party?.name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              Since {new Date(currentAffiliation.start_date || '').toLocaleDateString()}
+                            </p>
+                          </div>
+                          <ExternalLink className="h-4 w-4 ml-auto text-muted-foreground" />
+                        </div>
+                      </Link>
+                    </div>
+                  )}
+
+                  {historicalAffiliations.length > 0 && (
+                    <div>
+                      <h4 className="font-semibold mb-2 text-muted-foreground">Previous Affiliations</h4>
+                      <div className="space-y-2">
+                        {historicalAffiliations.map((affiliation) => (
+                          <Link 
+                            key={affiliation.id}
+                            to={`/political-parties/${affiliation.party?.slug || affiliation.party?.id}`}
+                          >
+                            <div className="flex items-center gap-3 p-3 border rounded-lg hover:bg-muted transition-colors cursor-pointer opacity-75">
+                              {affiliation.party?.logo_url && (
+                                <img 
+                                  src={affiliation.party.logo_url} 
+                                  alt={affiliation.party.name}
+                                  className="w-6 h-6 object-contain"
+                                />
+                              )}
+                              <div>
+                                <p className="font-medium text-sm">{affiliation.party?.name}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  {new Date(affiliation.start_date || '').toLocaleDateString()} - {
+                                    affiliation.end_date 
+                                      ? new Date(affiliation.end_date).toLocaleDateString()
+                                      : 'Unknown'
+                                  }
+                                </p>
+                              </div>
+                              <ExternalLink className="h-3 w-3 ml-auto text-muted-foreground" />
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {affiliations.length === 0 && !affiliationsLoading && (
+                    <div className="text-center py-6 text-muted-foreground">
+                      <Building2 className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                      <p>No party affiliations recorded</p>
+                    </div>
+                  )}
+
+                  {affiliationsLoading && (
+                    <div className="text-center py-6 text-muted-foreground">
+                      Loading affiliations...
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
             </TabsContent>
 
             <TabsContent value="performance" className="space-y-6">
