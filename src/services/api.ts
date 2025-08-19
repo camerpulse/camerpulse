@@ -3,6 +3,7 @@
  * Centralized API communication layer with error handling and type safety
  */
 
+import { QueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import type { 
   PoliticalEntity, 
@@ -14,6 +15,20 @@ import type {
   PaginatedResponse,
   SearchFilters 
 } from '@/types';
+
+// === QUERY CLIENT CONFIGURATION ===
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 2,
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      retry: 1,
+    },
+  },
+});
 
 // === API CLIENT CONFIGURATION ===
 class ApiClient {
