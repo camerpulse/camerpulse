@@ -281,7 +281,7 @@ const Polls = () => {
                 className="w-full sm:w-auto"
               >
                 <BarChart3 className="w-4 h-4 mr-2" />
-                Découvrir
+                Discover
               </Button>
               {user && (
                 <Button 

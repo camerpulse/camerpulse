@@ -139,9 +139,9 @@ export const OneAndIndivisibleSection: React.FC = () => {
         <Section title="Resistance and Sacrifice: Cameroon's Martyrs and Heroes" icon="🔥">
           <p className="mb-4">Our forefathers and foremothers resisted fiercely:</p>
           <ul className="list-disc list-inside space-y-2 mb-4">
-            <li><strong>Ruben Um Nyobé</strong>, assassinated for advocating unity and freedom.</li>
-            <li><strong>Félix-Roland Moumié</strong>, poisoned abroad for refusing to surrender Cameroon's sovereignty.</li>
-            <li><strong>Ernest Ouandié</strong>, executed publicly, yet his spirit demanded unity until his last breath.</li>
+            <li><strong>Ruben Um Nyobe</strong>, assassinated for advocating unity and freedom.</li>
+            <li><strong>Felix-Roland Moumie</strong>, poisoned abroad for refusing to surrender Cameroon's sovereignty.</li>
+            <li><strong>Ernest Ouandie</strong>, executed publicly, yet his spirit demanded unity until his last breath.</li>
             <li><strong>Martin-Paul Samba</strong>, killed for fighting colonial injustice.</li>
             <li><strong>Ndeh Ntumazah</strong>, <strong>Albert Mukong</strong>, <strong>Osende Afana</strong>, and countless others suffered imprisonment, exile, torture, and death, all insisting Cameroon remain one, united, and indivisible.</li>
           </ul>

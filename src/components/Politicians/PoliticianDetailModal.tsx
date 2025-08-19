@@ -161,8 +161,8 @@ export const PoliticianDetailModal: React.FC<PoliticianDetailModalProps> = ({
     switch (status) {
       case 'fulfilled': return 'Fulfilled';
       case 'unfulfilled': return 'Unfulfilled';
-      case 'in_progress': return 'En cours';
-      default: return 'Inconnue';
+      case 'in_progress': return 'In Progress';
+      default: return 'Unknown';
     }
   };
 
