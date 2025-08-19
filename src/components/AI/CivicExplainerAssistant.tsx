@@ -173,7 +173,7 @@ const CivicExplainerAssistant = () => {
     const responses = {
       mayor_explanation: {
         en: `A Mayor is the head of your local council (municipality). They are responsible for:\n\n• Managing local services like markets, street cleaning, and waste collection\n• Overseeing local development projects\n• Issuing birth certificates and other civil documents\n• Maintaining local roads and public facilities\n\nIn ${getRegionName()}, your mayor works closely with traditional rulers and coordinates with the regional government. They serve for 5 years and are elected by municipal councillors.`,
-        fr: `Un Maire est le chef de votre conseil local (municipalité). Il est responsable de:\n\n• Gérer les services locaux comme les marchés, le nettoyage des rues et la collecte des déchets\n• Superviser les projets de développement local\n• Délivrer les actes de naissance et autres documents civils\n• Entretenir les routes locales et les installations publiques\n\nDans la région ${getRegionName()}, votre maire travaille en étroite collaboration avec les dirigeants traditionnels.`,
+        // French content removed - English only platform
         pidgin: `Mayor na di head for your local council. E dey handle:\n\n• Market business, street cleaning, and rubbish collection\n• Local development projects\n• Birth certificate and other papers\n• Road and public places maintenance\n\nFor ${getRegionName()}, your mayor dey work with traditional rulers and regional government. E go serve for 5 years.`
       },
       mp_explanation: {
@@ -183,7 +183,7 @@ const CivicExplainerAssistant = () => {
       },
       elecam_explanation: {
         en: `ELECAM (Elections Cameroon) is the independent body that organizes all elections in Cameroon:\n\n• They register voters and issue voter cards\n• They supervise presidential, parliamentary, and local elections\n• They train election officials and monitors\n• They announce official election results\n\nELECAM has offices in all regions including ${getRegionName()}. They ensure elections are free, fair, and transparent. You can contact your local ELECAM office to register to vote or report election irregularities.`,
-        fr: `ELECAM (Elections Cameroon) est l'organe indépendant qui organise toutes les élections au Cameroun:\n\n• Ils enregistrent les électeurs et délivrent les cartes d'électeur\n• Ils supervisent les élections présidentielles, parlementaires et locales\n• Ils forment les agents électoraux\n• Ils annoncent les résultats officiels\n\nELECAM a des bureaux dans toutes les régions y compris ${getRegionName()}.`,
+        // French content removed - English only platform
         pidgin: `ELECAM na di independent body wey dey organize all elections for Cameroon:\n\n• Dem dey register voters and give voter cards\n• Dem dey supervise presidential, parliamentary, and local elections\n• Dem dey train election officials\n• Dem dey announce official results\n\nELECAM get offices for all regions including ${getRegionName()}. You fit contact dem to register for vote.`
       },
       voting_explanation: {

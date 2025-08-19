@@ -137,7 +137,7 @@ export const GovProjectTracker = () => {
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
             <span className="text-sm">
-              {new Date(project.expected_completion_date).toLocaleDateString('fr-FR')}
+              {new Date(project.expected_completion_date).toLocaleDateString('en-US')}
             </span>
           </div>
 
@@ -239,11 +239,11 @@ export const GovProjectTracker = () => {
             </div>
             <div>
               <span className="font-medium">Start Date:</span>
-              <span className="ml-2">{new Date(project.start_date).toLocaleDateString('fr-FR')}</span>
+              <span className="ml-2">{new Date(project.start_date).toLocaleDateString('en-US')}</span>
             </div>
             <div>
               <span className="font-medium">Expected Completion:</span>
-              <span className="ml-2">{new Date(project.expected_completion_date).toLocaleDateString('fr-FR')}</span>
+              <span className="ml-2">{new Date(project.expected_completion_date).toLocaleDateString('en-US')}</span>
             </div>
             <div>
               <span className="font-medium">Status:</span>

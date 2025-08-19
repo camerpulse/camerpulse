@@ -257,7 +257,7 @@ const PollsDiscovery = () => {
             <Card>
               <CardContent className="p-4 text-center">
                 <div className="text-2xl font-bold text-purple-600">{trendingStats.topRegion}</div>
-                <div className="text-sm text-muted-foreground">Région Top</div>
+                <div className="text-sm text-muted-foreground">Top Region</div>
               </CardContent>
             </Card>
           </div>
@@ -285,10 +285,10 @@ const PollsDiscovery = () => {
                 <Select value={filters.region || 'all'} onValueChange={(v) => updateFilter('region', v)}>
                   <SelectTrigger>
                     <MapPin className="w-4 h-4 mr-2" />
-                    <SelectValue placeholder="Région" />
+                    <SelectValue placeholder="Region" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">Toutes les régions</SelectItem>
+                    <SelectItem value="all">All Regions</SelectItem>
                     {CAMEROON_REGIONS.map(region => (
                       <SelectItem key={region} value={region}>{region}</SelectItem>
                     ))}

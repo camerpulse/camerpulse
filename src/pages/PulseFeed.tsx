@@ -24,7 +24,7 @@ import {
   Vote
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { fr } from 'date-fns/locale';
+// French locale removed - English only
 import { usePullToRefresh } from '@/hooks/usePullToRefresh';
 import { PullToRefreshIndicator } from '@/components/ui/pull-to-refresh';
 
@@ -493,7 +493,7 @@ const PulseFeed = () => {
                           <Clock className="w-3 h-3" />
                           {formatDistanceToNow(new Date(post.created_at), { 
                             addSuffix: true, 
-                            locale: fr 
+                            // locale: fr // Removed - English only 
                           })}
                           {getSentimentBadge(post.sentiment_label)}
                         </div>

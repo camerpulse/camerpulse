@@ -299,7 +299,7 @@ export const PromiseTracker: React.FC = () => {
       case 'verified':
         return <Badge className="bg-green-100 text-green-800">✓ Vérifié</Badge>;
       case 'flagged':
-        return <Badge className="bg-red-100 text-red-800">⚠ Signalé</Badge>;
+        return <Badge className="bg-red-100 text-red-800">⚠ Flagged</Badge>;
       case 'disputed':
         return <Badge className="bg-yellow-100 text-yellow-800">? Contesté</Badge>;
       default:
@@ -455,7 +455,7 @@ export const PromiseTracker: React.FC = () => {
                 <SelectValue placeholder="Région" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Toutes les régions</SelectItem>
+                <SelectItem value="all">All Regions</SelectItem>
                 <SelectItem value="Centre">Centre</SelectItem>
                 <SelectItem value="Littoral">Littoral</SelectItem>
                 <SelectItem value="Ouest">Ouest</SelectItem>
@@ -529,7 +529,7 @@ export const PromiseTracker: React.FC = () => {
                           )}
                           {promise.priority_level === 'high' && (
                             <Badge className="bg-orange-100 text-orange-800">
-                              Priorité élevée
+                              High Priority
                             </Badge>
                           )}
                         </div>

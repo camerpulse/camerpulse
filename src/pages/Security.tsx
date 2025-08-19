@@ -714,7 +714,7 @@ const Security = () => {
                           <div className="flex-1">
                             <p className="font-medium">{getEventTypeLabel(log.event_type)}</p>
                             <p className="text-sm text-gray-500">
-                              {new Date(log.created_at).toLocaleString('fr-FR')}
+                              {new Date(log.created_at).toLocaleString('en-US')}
                               {log.ip_address && ` • IP: ${log.ip_address}`}
                             </p>
                           </div>

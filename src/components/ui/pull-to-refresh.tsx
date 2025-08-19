@@ -45,8 +45,8 @@ export const PullToRefreshIndicator: React.FC<PullToRefreshProps> = ({
             {isRefreshing 
               ? "Actualisation..." 
               : canTrigger 
-                ? "Relâchez pour actualiser" 
-                : "Tirez pour actualiser"
+                ? "Release to refresh" 
+                : "Pull to refresh"
             }
           </span>
         </div>

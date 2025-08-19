@@ -253,9 +253,7 @@ export const CivicLearningHub: React.FC = () => {
       const voices = speechSynthesis.getVoices();
       let selectedVoice = null;
       
-      if (language === 'fr') {
-        selectedVoice = voices.find(voice => voice.lang.startsWith('fr')) || null;
-      } else if (language === 'en') {
+      if (language === 'en') {
         selectedVoice = voices.find(voice => voice.lang.startsWith('en')) || null;
       }
       

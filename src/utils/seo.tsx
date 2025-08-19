@@ -331,7 +331,7 @@ export const SEOHead: React.FC<SEOHeadProps> = ({
     publishedTime,
     modifiedTime,
     locale = 'en_US',
-    alternateLocales = ['fr_FR'],
+    // alternateLocales removed - English only
   } = data;
 
   const canonicalUrl = url || generateCanonicalUrl('');

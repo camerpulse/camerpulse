@@ -36,7 +36,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { formatDistanceToNow } from 'date-fns';
-// import { fr } from 'date-fns/locale'; // Disabled - English only
+// French locale removed - English only
 
 interface CivicPost {
   id: string;
@@ -78,15 +78,15 @@ const platformIcons = {
 };
 
 const threatLevelConfig = {
-  none: { color: 'text-green-600', bg: 'bg-green-50', emoji: '✅', label: 'Sûr' },
-  low: { color: 'text-yellow-600', bg: 'bg-yellow-50', emoji: '⚠️', label: 'Attention' },
-  medium: { color: 'text-orange-600', bg: 'bg-orange-50', emoji: '🔸', label: 'Modéré' },
-  high: { color: 'text-red-600', bg: 'bg-red-50', emoji: '🚨', label: 'Élevé' },
-  critical: { color: 'text-red-800', bg: 'bg-red-100', emoji: '🔴', label: 'Critique' }
+  none: { color: 'text-green-600', bg: 'bg-green-50', emoji: '✅', label: 'Safe' },
+  low: { color: 'text-yellow-600', bg: 'bg-yellow-50', emoji: '⚠️', label: 'Caution' },
+  medium: { color: 'text-orange-600', bg: 'bg-orange-50', emoji: '🔸', label: 'Moderate' },
+  high: { color: 'text-red-600', bg: 'bg-red-50', emoji: '🚨', label: 'High' },
+  critical: { color: 'text-red-800', bg: 'bg-red-100', emoji: '🔴', label: 'Critical' }
 };
 
 const regions = [
-  'Toutes les régions',
+  'All Regions',
   'Centre',
   'Littoral',
   'Ouest',
@@ -101,7 +101,7 @@ const regions = [
   'Diaspora - France',
   'Diaspora - UK',
   'Diaspora - Canada',
-  'Diaspora - Allemagne'
+  'Diaspora - Germany'
 ];
 
  const topics = [
@@ -123,8 +123,8 @@ export const CivicFeed: React.FC = () => {
   const [posts, setPosts] = useState<CivicPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [isLive, setIsLive] = useState(false);
-  const [selectedRegion, setSelectedRegion] = useState('Toutes les régions');
-  const [selectedTopic, setSelectedTopic] = useState('Tous les sujets');
+  const [selectedRegion, setSelectedRegion] = useState('All Regions');
+  const [selectedTopic, setSelectedTopic] = useState('All Topics');
   const [timeFilter, setTimeFilter] = useState('24h');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>(['twitter', 'facebook', 'tiktok', 'pulse']);
@@ -172,7 +172,7 @@ export const CivicFeed: React.FC = () => {
       }
 
       // Apply region filter
-      if (selectedRegion !== 'Toutes les régions') {
+      if (selectedRegion !== 'All Regions') {
         if (selectedRegion.startsWith('Diaspora')) {
           const country = selectedRegion.split(' - ')[1];
           query = query.ilike('region_detected', `%${country}%`);
@@ -316,7 +316,7 @@ export const CivicFeed: React.FC = () => {
             className="flex items-center gap-2"
           >
             <RefreshCw className={`h-4 w-4 ${loading ? '/* animate-spin - disabled */' : ''}`} />
-            Actualiser
+            Refresh
           </Button>
         </div>
       </div>
@@ -345,7 +345,7 @@ export const CivicFeed: React.FC = () => {
             {/* Region Filter */}
             <Select value={selectedRegion} onValueChange={setSelectedRegion}>
               <SelectTrigger>
-                <SelectValue placeholder="Région" />
+                <SelectValue placeholder="Region" />
               </SelectTrigger>
               <SelectContent>
                 {regions.map(region => (
@@ -362,7 +362,7 @@ export const CivicFeed: React.FC = () => {
             {/* Topic Filter */}
             <Select value={selectedTopic} onValueChange={setSelectedTopic}>
               <SelectTrigger>
-                <SelectValue placeholder="Sujet" />
+                <SelectValue placeholder="Topic" />
               </SelectTrigger>
               <SelectContent>
                 {topics.map(topic => (
@@ -379,37 +379,37 @@ export const CivicFeed: React.FC = () => {
             {/* Time Filter */}
             <Select value={timeFilter} onValueChange={setTimeFilter}>
               <SelectTrigger>
-                <SelectValue placeholder="Période" />
+                <SelectValue placeholder="Period" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="1h">
                   <span className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    Dernière heure
+                    Last Hour
                   </span>
                 </SelectItem>
                 <SelectItem value="6h">
                   <span className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    6 dernières heures
+                    Last 6 Hours
                   </span>
                 </SelectItem>
                 <SelectItem value="24h">
                   <span className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    24 dernières heures
+                    Last 24 Hours
                   </span>
                 </SelectItem>
                 <SelectItem value="7d">
                   <span className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    7 derniers jours
+                    Last 7 Days
                   </span>
                 </SelectItem>
                 <SelectItem value="30d">
                   <span className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    30 derniers jours
+                    Last 30 Days
                   </span>
                 </SelectItem>
               </SelectContent>
@@ -503,7 +503,7 @@ export const CivicFeed: React.FC = () => {
                               <Clock className="h-3 w-3" />
                               {formatDistanceToNow(new Date(post.created_at), { 
                                 addSuffix: true, 
-                                // locale: fr // Disabled - English only 
+                                // locale: fr // Removed - English only 
                               })}
                             </div>
                             
@@ -512,7 +512,7 @@ export const CivicFeed: React.FC = () => {
                               {post.flagged_for_review && (
                                 <Badge variant="destructive" className="text-xs">
                                   <AlertTriangle className="h-3 w-3 mr-1" />
-                                  Signalé
+                                  Flagged
                                 </Badge>
                               )}
                             </div>
