@@ -5,7 +5,7 @@
  * Includes Web Vitals, user interactions, and custom metrics.
  */
 
-import { getCLS, getFID, getFCP, getLCP, getTTFB, type Metric } from 'web-vitals';
+import { onCLS, onFID, onFCP, onLCP, onTTFB, type Metric } from 'web-vitals';
 
 export interface PerformanceMetric {
   name: string;
@@ -56,7 +56,7 @@ class PerformanceMonitor {
    */
   private setupWebVitals(): void {
     // Largest Contentful Paint
-    getLCP((metric) => {
+    onLCP((metric) => {
       this.recordMetric({
         name: 'LCP',
         value: metric.value,
@@ -67,7 +67,7 @@ class PerformanceMonitor {
     });
 
     // First Input Delay
-    getFID((metric) => {
+    onFID((metric) => {
       this.recordMetric({
         name: 'FID',
         value: metric.value,
@@ -78,7 +78,7 @@ class PerformanceMonitor {
     });
 
     // Cumulative Layout Shift
-    getCLS((metric) => {
+    onCLS((metric) => {
       this.recordMetric({
         name: 'CLS',
         value: metric.value,
@@ -89,7 +89,7 @@ class PerformanceMonitor {
     });
 
     // First Contentful Paint
-    getFCP((metric) => {
+    onFCP((metric) => {
       this.recordMetric({
         name: 'FCP',
         value: metric.value,
@@ -100,7 +100,7 @@ class PerformanceMonitor {
     });
 
     // Time to First Byte
-    getTTFB((metric) => {
+    onTTFB((metric) => {
       this.recordMetric({
         name: 'TTFB',
         value: metric.value,
