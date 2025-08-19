@@ -202,8 +202,8 @@ export const PromiseTracker: React.FC = () => {
     } catch (error) {
       console.error('Error fetching promises:', error);
       toast({
-        title: "Erreur",
-        description: "Impossible de charger les promesses",
+        title: "Error",
+        description: "Unable to load promises",
         variant: "destructive"
       });
     }
@@ -297,11 +297,11 @@ export const PromiseTracker: React.FC = () => {
   const getVerificationBadge = (status?: string) => {
     switch (status) {
       case 'verified':
-        return <Badge className="bg-green-100 text-green-800">✓ Vérifié</Badge>;
+        return <Badge className="bg-green-100 text-green-800">✓ Verified</Badge>;
       case 'flagged':
         return <Badge className="bg-red-100 text-red-800">⚠ Flagged</Badge>;
       case 'disputed':
-        return <Badge className="bg-yellow-100 text-yellow-800">? Contesté</Badge>;
+        return <Badge className="bg-yellow-100 text-yellow-800">? Disputed</Badge>;
       default:
         return <Badge className="bg-gray-100 text-gray-800">Unverified</Badge>;
     }
@@ -343,7 +343,7 @@ export const PromiseTracker: React.FC = () => {
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-green-600">{stats.fulfilled}</div>
-              <div className="text-sm text-muted-foreground">Tenues</div>
+              <div className="text-sm text-muted-foreground">Fulfilled</div>
             </CardContent>
           </Card>
           <Card>
@@ -367,13 +367,13 @@ export const PromiseTracker: React.FC = () => {
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-yellow-600">{stats.overdue}</div>
-              <div className="text-sm text-muted-foreground">En retard</div>
+              <div className="text-sm text-muted-foreground">Overdue</div>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="p-4 text-center">
               <div className="text-2xl font-bold text-purple-600">{stats.high_interest}</div>
-              <div className="text-sm text-muted-foreground">Populaires</div>
+              <div className="text-sm text-muted-foreground">Popular</div>
             </CardContent>
           </Card>
         </div>
@@ -385,7 +385,7 @@ export const PromiseTracker: React.FC = () => {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <BarChart className="w-5 h-5" />
-              Taux de réalisation des promesses
+              Promise Fulfillment Rate
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -395,7 +395,7 @@ export const PromiseTracker: React.FC = () => {
                   {((stats.fulfilled / stats.total) * 100).toFixed(1)}%
                 </div>
                 <div className="text-sm text-muted-foreground">
-                  Promesses tenues sur {stats.total} promesses
+                  Promises fulfilled out of {stats.total} promises
                 </div>
               </div>
               <Progress 
@@ -443,10 +443,10 @@ export const PromiseTracker: React.FC = () => {
                 <SelectItem value="education">Education</SelectItem>
                 <SelectItem value="health">Health</SelectItem>
                 <SelectItem value="infrastructure">Infrastructure</SelectItem>
-                <SelectItem value="economy">Économie</SelectItem>
-                <SelectItem value="security">Sécurité</SelectItem>
-                <SelectItem value="governance">Gouvernance</SelectItem>
-                <SelectItem value="corruption">Anti-corruption</SelectItem>
+                 <SelectItem value="economy">Economy</SelectItem>
+                 <SelectItem value="security">Security</SelectItem>
+                 <SelectItem value="governance">Governance</SelectItem>
+                 <SelectItem value="corruption">Anti-corruption</SelectItem>
               </SelectContent>
             </Select>
 
@@ -464,19 +464,19 @@ export const PromiseTracker: React.FC = () => {
                 <SelectItem value="Adamaoua">Adamaoua</SelectItem>
                 <SelectItem value="Est">Est</SelectItem>
                 <SelectItem value="Nord">Nord</SelectItem>
-                <SelectItem value="Extrême-Nord">Extrême-Nord</SelectItem>
+                <SelectItem value="Far North">Far North</SelectItem>
                 <SelectItem value="Sud">Sud</SelectItem>
               </SelectContent>
             </Select>
 
             <Select value={sortBy} onValueChange={setSortBy}>
               <SelectTrigger>
-                <SelectValue placeholder="Trier par" />
+                <SelectValue placeholder="Sort by" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="interest">Intérêt public</SelectItem>
-                <SelectItem value="recent">Plus récentes</SelectItem>
-                <SelectItem value="overdue">En retard</SelectItem>
+                 <SelectItem value="interest">Public Interest</SelectItem>
+                 <SelectItem value="recent">Most Recent</SelectItem>
+                 <SelectItem value="overdue">Overdue</SelectItem>
               </SelectContent>
             </Select>
 
@@ -491,7 +491,7 @@ export const PromiseTracker: React.FC = () => {
               }}
             >
               <Filter className="w-4 h-4 mr-2" />
-              Réinitialiser
+              Reset
             </Button>
           </div>
         </CardContent>
@@ -502,7 +502,7 @@ export const PromiseTracker: React.FC = () => {
         {promises.length === 0 ? (
           <Card>
             <CardContent className="text-center py-8">
-              <p className="text-muted-foreground">Aucune promesse trouvée</p>
+              <p className="text-muted-foreground">No promises found</p>
             </CardContent>
           </Card>
         ) : (
@@ -524,7 +524,7 @@ export const PromiseTracker: React.FC = () => {
                           {isOverdue(promise.expected_delivery_date) && (
                             <Badge className="bg-red-100 text-red-800">
                               <Clock className="w-3 h-3 mr-1" />
-                              En retard
+                              Overdue
                             </Badge>
                           )}
                           {promise.priority_level === 'high' && (
@@ -570,7 +570,7 @@ export const PromiseTracker: React.FC = () => {
                     {promise.public_interest_score !== undefined && (
                       <div>
                         <div className="flex justify-between items-center mb-1">
-                          <span className="text-sm font-medium">Intérêt public</span>
+                          <span className="text-sm font-medium">Public Interest</span>
                           <span className="text-sm text-muted-foreground">
                             {promise.public_interest_score}/100
                           </span>
@@ -583,7 +583,7 @@ export const PromiseTracker: React.FC = () => {
                     {promise.public_votes && promise.public_votes.total > 0 && (
                       <div>
                         <div className="text-sm font-medium mb-2">
-                          Votes citoyens ({promise.public_votes.total})
+                          Citizen Votes ({promise.public_votes.total})
                         </div>
                         <div className="grid grid-cols-2 gap-2 text-xs">
                           <div className="flex items-center gap-1">
@@ -612,13 +612,13 @@ export const PromiseTracker: React.FC = () => {
                         <Button variant="outline" size="sm" asChild>
                           <a href={promise.evidence_url} target="_blank" rel="noopener noreferrer">
                             <ExternalLink className="w-3 h-3 mr-1" />
-                            Preuves
+                            Evidence
                           </a>
                         </Button>
                       )}
                       <Button variant="outline" size="sm">
                         <Eye className="w-3 h-3 mr-1" />
-                        Détails
+                        Details
                       </Button>
                     </div>
                   </div>

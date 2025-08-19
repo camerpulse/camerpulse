@@ -95,7 +95,7 @@ const regions = [
   'Est',
   'Adamaoua',
   'Nord',
-  'Extrême-Nord',
+  'Far North',
   'Sud',
   'Diaspora - USA',
   'Diaspora - France',
@@ -293,10 +293,10 @@ export const CivicFeed: React.FC = () => {
         <div>
           <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <Radio className="h-6 w-6" />
-            Civic Feed - Flux en Temps Réel
+            Civic Feed - Real-time Stream
           </h2>
           <p className="text-muted-foreground">
-            Surveillance des discussions civiques multi-plateformes
+            Monitoring civic discussions across platforms
           </p>
         </div>
         
@@ -307,7 +307,7 @@ export const CivicFeed: React.FC = () => {
             className="flex items-center gap-2"
           >
             {isLive ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-            {isLive ? 'Pause' : 'Direct'}
+            {isLive ? 'Pause' : 'Live'}
           </Button>
           <Button
             variant="outline"
@@ -438,7 +438,7 @@ export const CivicFeed: React.FC = () => {
         <Alert className="border-red-200 bg-red-50">
           <Radio className="h-4 w-4 text-red-600 /* animate-pulse - disabled */" />
           <AlertDescription className="text-red-800">
-            Direct mode enabled - Auto-refresh every 10 seconds
+            Live mode enabled - Auto-refresh every 10 seconds
           </AlertDescription>
         </Alert>
       )}
@@ -447,7 +447,7 @@ export const CivicFeed: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>Flux Civique ({posts.length} discussions)</span>
+            <span>Civic Stream ({posts.length} discussions)</span>
             {loading && <RefreshCw className="h-4 w-4 /* animate-spin - disabled */" />}
           </CardTitle>
         </CardHeader>
@@ -473,9 +473,9 @@ export const CivicFeed: React.FC = () => {
             ) : posts.length === 0 ? (
               <div className="text-center py-12">
                 <MessageCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">Aucune discussion trouvée</h3>
+                <h3 className="text-lg font-medium mb-2">No discussions found</h3>
                 <p className="text-muted-foreground">
-                  Aucune discussion ne correspond à vos critères de filtrage.
+                  No discussions match your filter criteria.
                 </p>
               </div>
             ) : (
