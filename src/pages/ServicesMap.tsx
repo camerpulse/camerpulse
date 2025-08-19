@@ -27,13 +27,13 @@ interface Institution {
 
 // Mock coordinates for Cameroon cities (in a real app, you'd geocode addresses)
 const cityCoordinates: Record<string, [number, number]> = {
-  'Yaoundé': [11.5174, 3.8480],
+  'Yaounde': [11.5174, 3.8480],
   'Douala': [9.7043, 4.0483],
   'Bamenda': [10.1593, 5.9631],
   'Bafoussam': [10.4179, 5.4736],
   'Garoua': [13.3978, 9.3265],
   'Maroua': [14.3178, 10.5906],
-  'Ngaoundéré': [13.5844, 7.3167],
+  'Ngaoundere': [13.5844, 7.3167],
   'Bertoua': [13.6848, 4.5775],
   'Ebolowa': [11.1543, 2.9059],
   'Kribi': [9.9073, 2.9373]

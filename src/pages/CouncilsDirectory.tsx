@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 const mockCouncils = [
   {
     id: 'council-1',
-    name: 'Yaoundé City Council',
+    name: 'Yaounde City Council',
     region: 'Centre',
     division: 'Mfoundi',
     mayor: 'Luc Messi Atangana',
@@ -92,7 +92,7 @@ const mockCouncils = [
     id: 'council-4',
     name: 'Garoua City Council',
     region: 'North',
-    division: 'Bénoué',
+    division: 'Benoue',
     mayor: 'Mohamadou Abba Kaka',
     population: 1500000,
     rating: 3.7,

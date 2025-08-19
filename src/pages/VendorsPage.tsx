@@ -44,7 +44,7 @@ const VendorsPage: React.FC = () => {
       description: 'Handmade traditional crafts, wood carvings, and authentic Cameroonian art pieces.',
       avatar: '',
       coverImage: '/placeholder.svg',
-      location: 'Yaoundé, Cameroon',
+      location: 'Yaounde, Cameroon',
       rating: 4.7,
       reviewCount: 89,
       productsCount: 32,
@@ -192,7 +192,7 @@ const VendorsPage: React.FC = () => {
                 <SelectContent>
                   <SelectItem value="all">All Regions</SelectItem>
                   <SelectItem value="douala">Douala</SelectItem>
-                  <SelectItem value="yaounde">Yaoundé</SelectItem>
+                  <SelectItem value="yaounde">Yaounde</SelectItem>
                   <SelectItem value="bamenda">Bamenda</SelectItem>
                   <SelectItem value="bafoussam">Bafoussam</SelectItem>
                 </SelectContent>

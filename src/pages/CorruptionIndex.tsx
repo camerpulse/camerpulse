@@ -84,7 +84,7 @@ const CorruptionIndex: React.FC = () => {
             {
               id: '1',
               title: 'Road Construction Tender Irregularities',
-              description: 'Inflated contracts for road construction projects in Yaoundé',
+              description: 'Inflated contracts for road construction projects in Yaounde',
               amount: 2500000000,
               date_reported: '2024-12-01',
               status: 'investigating',

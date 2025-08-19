@@ -143,7 +143,7 @@ const SocialCommunity: React.FC = () => {
           title: "Community Health Fair", 
           description: "Free health screenings and consultations",
           event_type: "health",
-          location: "Yaoundé Central Hospital",
+          location: "Yaounde Central Hospital",
           is_virtual: false,
           start_time: "2024-02-15T09:00:00Z",
           current_attendees: 234,

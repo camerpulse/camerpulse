@@ -227,7 +227,7 @@ const PollsDiscovery = () => {
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-4">
               <BarChart3 className="w-8 h-8 text-primary" />
-              <h1 className="text-3xl font-bold">Découverte des Sondages</h1>
+              <h1 className="text-3xl font-bold">Polls Discovery</h1>
             </div>
             <p className="text-muted-foreground">
               Explore public polls and participate in Cameroonian civic debate
@@ -308,7 +308,7 @@ const PollsDiscovery = () => {
                          type === 'governance' ? 'Gouvernance' :
                          type === 'policy' ? 'Politique publique' :
                          type === 'public_opinion' ? 'Opinion publique' :
-                         'Développement'}
+                         'Development'}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -330,7 +330,7 @@ const PollsDiscovery = () => {
                   onClick={() => updateFilter('sortBy', 'popularity')}
                 >
                   <Users className="w-4 h-4 mr-2" />
-                  Popularité
+                  Popularity
                 </Button>
                 <Button
                   variant={filters.sortBy === 'recent' ? 'default' : 'outline'}
@@ -338,7 +338,7 @@ const PollsDiscovery = () => {
                   onClick={() => updateFilter('sortBy', 'recent')}
                 >
                   <Calendar className="w-4 h-4 mr-2" />
-                  Récent
+                  Recent
                 </Button>
                 <Button
                   variant={filters.sortBy === 'ending_soon' ? 'default' : 'outline'}

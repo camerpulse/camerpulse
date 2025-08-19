@@ -72,7 +72,7 @@ const PetitionDetailPage: React.FC = () => {
       }
     ],
     recentSignatures: [
-      { name: 'Jean Paul K.', location: 'Yaoundé', time: '2 hours ago' },
+      { name: 'Jean Paul K.', location: 'Yaounde', time: '2 hours ago' },
       { name: 'Fatima M.', location: 'Douala', time: '4 hours ago' },
       { name: 'Samuel T.', location: 'Bamenda', time: '6 hours ago' },
     ]

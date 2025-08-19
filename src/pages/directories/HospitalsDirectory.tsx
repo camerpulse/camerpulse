@@ -10,10 +10,10 @@ import { MapPin, Phone, Heart, Users, Star, Plus, AlertTriangle, Clock, Shield, 
 const mockHospitals = [
   {
     id: "1",
-    name: "Yaoundé General Hospital",
+    name: "Yaounde General Hospital",
     hospital_type: "general",
     region: "Centre",
-    city: "Yaoundé",
+    city: "Yaounde",
     is_verified: true,
     is_24_hours: true,
     average_rating: 4.3,

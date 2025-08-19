@@ -86,7 +86,7 @@ const DebtTracker: React.FC = () => {
           ],
           projects: [
             { name: 'Kribi Port Expansion', amount: 1200000000000, sector: 'Infrastructure', completion_status: 85, creditor: 'China (EXIM Bank)' },
-            { name: 'Yaoundé-Douala Highway', amount: 800000000000, sector: 'Transport', completion_status: 92, creditor: 'World Bank' },
+            { name: 'Yaounde-Douala Highway', amount: 800000000000, sector: 'Transport', completion_status: 92, creditor: 'World Bank' },
             { name: 'Memve\'ele Hydroelectric', amount: 400000000000, sector: 'Energy', completion_status: 100, creditor: 'China (EXIM Bank)' }
           ]
         },

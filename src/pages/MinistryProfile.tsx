@@ -27,7 +27,7 @@ const MinistryProfile: React.FC = () => {
     },
     permanentSecretary: 'Dr. Marie Solange Doualla',
     headquarters: {
-      address: 'Yaoundé, Centre Region',
+      address: 'Yaounde, Centre Region',
       phone: '+237 222 23 40 18',
       email: 'info@minsante.cm',
       website: 'www.minsante.cm'

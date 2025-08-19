@@ -311,7 +311,7 @@ const JobDetailPage: React.FC = () => {
             <CardContent className="space-y-3">
               <div className="space-y-2">
                 <p className="font-medium text-sm">Frontend Developer</p>
-                <p className="text-xs text-muted-foreground">DevCorp • Yaoundé</p>
+                <p className="text-xs text-muted-foreground">DevCorp • Yaounde</p>
               </div>
               <Separator />
               <div className="space-y-2">

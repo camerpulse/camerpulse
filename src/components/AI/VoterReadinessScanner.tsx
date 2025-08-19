@@ -70,7 +70,7 @@ const VoterReadinessScanner = () => {
   const elecamOffices = {
     'Adamawa': {
       office: 'ELECAM Adamawa Regional Office',
-      address: 'Ngaoundéré, Adamawa Region',
+      address: 'Ngaoundere, Adamawa Region',
       phone: '+237 699 123 456',
       hours: 'Mon-Fri: 8:00-16:00'
     },

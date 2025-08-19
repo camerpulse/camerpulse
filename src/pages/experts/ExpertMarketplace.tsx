@@ -26,7 +26,7 @@ const SKILL_OPTIONS = [
 ];
 
 const LOCATION_OPTIONS = [
-  'Douala', 'Yaoundé', 'Bamenda', 'Bafoussam', 'Garoua', 'Maroua', 'Ngaoundéré', 'Bertoua', 'Buea', 'Limbe'
+  'Douala', 'Yaounde', 'Bamenda', 'Bafoussam', 'Garoua', 'Maroua', 'Ngaoundere', 'Bertoua', 'Buea', 'Limbe'
 ];
 
 export const ExpertMarketplace: React.FC = () => {

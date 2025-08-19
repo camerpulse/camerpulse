@@ -10,15 +10,15 @@ import { MapPin, Phone, GraduationCap, Users, Star, Plus, BookOpen, Globe, Check
 const mockSchools = [
   {
     id: "1",
-    name: "École Primaire de Yaoundé",
+    name: "Yaounde Primary School",
     school_type: "primary",
     region: "Centre",
-    village_or_city: "Yaoundé",
+    village_or_city: "Yaounde",
     verification_status: "verified" as const,
     average_rating: 4.5,
     total_ratings: 25,
     current_enrollment: 450,
-    description: "A well-established primary school in the heart of Yaoundé",
+    description: "A well-established primary school in the heart of Yaounde",
     features: ["library", "computer_lab", "sports_field"],
     languages_of_instruction: ["English"]
   },

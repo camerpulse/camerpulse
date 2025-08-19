@@ -17,10 +17,10 @@ const CouncilProfile: React.FC = () => {
   // Mock council data - would come from API in real implementation
   const council = {
     id: 'council-1',
-    name: 'Yaoundé City Council',
+    name: 'Yaounde City Council',
     region: 'Centre',
     division: 'Mfoundi',
-    subdivision: 'Yaoundé I-VII',
+    subdivision: 'Yaounde I-VII',
     mayor: {
       name: 'Luc Messi Atangana',
       bio: 'Experienced municipal leader with a background in urban planning and development.',
@@ -34,7 +34,7 @@ const CouncilProfile: React.FC = () => {
       { name: 'Pierre Nkomo', position: 'Councilor', department: 'Infrastructure' }
     ],
     contact: {
-      address: 'Avenue Kennedy, Yaoundé',
+      address: 'Avenue Kennedy, Yaounde',
       phone: '+237 222 23 40 58',
       email: 'info@yaounde-city.cm',
       website: 'www.yaounde-city.cm'

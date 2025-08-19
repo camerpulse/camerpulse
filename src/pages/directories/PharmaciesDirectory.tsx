@@ -13,7 +13,7 @@ const mockPharmacies = [
     name: "Pharmacie du Centre",
     pharmacy_type: "modern",
     region: "Centre",
-    city: "Yaoundé",
+    city: "Yaounde",
     is_verified: true,
     is_24_hours: true,
     average_rating: 4.4,

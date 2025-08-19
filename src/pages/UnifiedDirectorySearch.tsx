@@ -50,7 +50,7 @@ const UnifiedDirectorySearch = () => {
   const trendingSearches = [
     "International schools in Douala",
     "24/7 pharmacies near me",
-    "Best hospitals in Yaoundé",
+    "Best hospitals in Yaounde",
     "Villages in Northwest Region",
     "Private schools Limbe",
     "Emergency clinics Bamenda"

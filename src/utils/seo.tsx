@@ -185,7 +185,7 @@ export function generateOrganizationSchema(): StructuredData {
       '@type': 'PostalAddress',
       addressCountry: 'CM',
       addressRegion: 'Centre',
-      addressLocality: 'Yaoundé',
+      addressLocality: 'Yaounde',
     },
   };
 }
