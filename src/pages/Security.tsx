@@ -353,7 +353,7 @@ const Security = () => {
   const enable2FA = async () => {
     if (!totpCode || totpCode.length !== 6) {
       toast({
-        title: "Code invalide",
+        title: "Invalid Code",
         description: "Please enter a 6-digit code",
         variant: "destructive"
       });
@@ -474,11 +474,11 @@ const Security = () => {
       'password_change': 'Password Change',
       '2fa_enabled': '2FA Enabled',
       '2fa_disabled': '2FA Disabled',
-      '2fa_success': '2FA réussi',
-      '2fa_failed': '2FA échoué',
-      'device_registered': 'Nouvel appareil',
-      'device_removed': 'Appareil supprimé',
-      'suspicious_activity': 'Activité suspecte'
+      '2fa_success': '2FA Successful',
+      '2fa_failed': '2FA Failed',
+      'device_registered': 'New Device',
+      'device_removed': 'Device Removed',
+      'suspicious_activity': 'Suspicious Activity'
     };
     return labels[eventType] || eventType;
   };
@@ -533,7 +533,7 @@ const Security = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Key className="w-5 h-5" />
-                    Authentification à Deux Facteurs (2FA)
+                    Two-Factor Authentication (2FA)
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -543,21 +543,21 @@ const Security = () => {
                         <div className="flex items-center gap-3">
                           <AlertTriangle className="w-5 h-5 text-yellow-600" />
                           <div>
-                            <p className="font-medium text-yellow-800">2FA non activé</p>
-                            <p className="text-sm text-yellow-600">Votre compte n'est pas protégé par la 2FA</p>
+                            <p className="font-medium text-yellow-800">2FA Not Enabled</p>
+                            <p className="text-sm text-yellow-600">Your account is not protected by 2FA</p>
                           </div>
                         </div>
                         <Button onClick={generateTOTPSecret} className="bg-cameroon-primary">
-                          Activer 2FA
+                          Enable 2FA
                         </Button>
                       </div>
 
                       {totpSecret && (
                         <div className="space-y-4 p-4 border border-cameroon-yellow/20 rounded-lg">
-                          <h3 className="font-medium">Configuration de la 2FA</h3>
+                          <h3 className="font-medium">2FA Configuration</h3>
                           
                           <div className="space-y-2">
-                            <label className="text-sm font-medium">Secret TOTP:</label>
+                            <label className="text-sm font-medium">TOTP Secret:</label>
                             <div className="flex gap-2">
                               <Input 
                                 value={totpSecret} 
@@ -573,7 +573,7 @@ const Security = () => {
                               </Button>
                             </div>
                             <p className="text-xs text-gray-500">
-                              Scannez ce code QR ou entrez manuellement dans votre app d'authentification
+                              Scan this QR code or enter manually in your authenticator app
                             </p>
                           </div>
 
@@ -593,16 +593,16 @@ const Security = () => {
                             disabled={enabling2FA || !totpCode}
                             className="w-full bg-cameroon-primary"
                           >
-                            {enabling2FA ? 'Activation...' : 'Confirmer et activer'}
+                            {enabling2FA ? 'Activating...' : 'Confirm and activate'}
                           </Button>
                         </div>
                       )}
 
                       {showBackupCodes && backupCodes.length > 0 && (
                         <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-                          <h3 className="font-medium text-green-800 mb-2">Codes de récupération</h3>
+                          <h3 className="font-medium text-green-800 mb-2">Recovery codes</h3>
                           <p className="text-sm text-green-600 mb-3">
-                            Sauvegardez ces codes de récupération dans un endroit sûr
+                            Save these recovery codes in a safe place
                           </p>
                           <div className="grid grid-cols-2 gap-2 font-mono text-xs">
                             {backupCodes.map((code, i) => (
@@ -622,7 +622,7 @@ const Security = () => {
                             onClick={() => copyToClipboard(backupCodes.join('\n'))}
                           >
                             <Download className="w-4 h-4 mr-2" />
-                            Télécharger tous les codes
+                            Download all codes
                           </Button>
                         </div>
                       )}
@@ -633,12 +633,12 @@ const Security = () => {
                         <div className="flex items-center gap-3">
                           <CheckCircle className="w-5 h-5 text-green-600" />
                           <div>
-                            <p className="font-medium text-green-800">2FA activé</p>
-                            <p className="text-sm text-green-600">Votre compte est protégé</p>
+                            <p className="font-medium text-green-800">2FA enabled</p>
+                            <p className="text-sm text-green-600">Your account is protected</p>
                           </div>
                         </div>
                         <Button variant="destructive" onClick={disable2FA}>
-                          Désactiver 2FA
+                          Disable 2FA
                         </Button>
                       </div>
                     </div>
@@ -658,7 +658,7 @@ const Security = () => {
                 </CardHeader>
                 <CardContent>
                   {devices.length === 0 ? (
-                    <p className="text-gray-500 text-center py-8">Aucun appareil enregistré</p>
+                    <p className="text-gray-500 text-center py-8">No devices registered</p>
                   ) : (
                     <div className="space-y-4">
                       {devices.map((device) => (
@@ -739,7 +739,7 @@ const Security = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Lock className="w-5 h-5" />
-                    Chiffrement PGP
+                    PGP Encryption
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
@@ -748,7 +748,7 @@ const Security = () => {
                     <div className="space-y-4 p-4 border border-cameroon-yellow/20 rounded-lg">
                       <h3 className="font-medium flex items-center gap-2">
                         <Plus className="w-4 h-4" />
-                        Générer une nouvelle paire de clés PGP
+                        Generate new PGP key pair
                       </h3>
                       
                       <div className="grid grid-cols-2 gap-4">
@@ -761,7 +761,7 @@ const Security = () => {
                           />
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-medium">Phrase de passe:</label>
+                          <label className="text-sm font-medium">Passphrase:</label>
                           <Input
                             type="password"
                             value={pgpPassphrase}
@@ -777,14 +777,14 @@ const Security = () => {
                         className="bg-cameroon-primary"
                       >
                         <FileKey className="w-4 h-4 mr-2" />
-                        {generatingPGP ? 'Génération...' : 'Générer la paire de clés'}
+                        {generatingPGP ? 'Generating...' : 'Generate key pair'}
                       </Button>
                     </div>
 
                     {/* Existing Keys */}
                     {pgpKeys.length > 0 && (
                       <div className="space-y-4">
-                        <h3 className="font-medium">Mes clés PGP</h3>
+                        <h3 className="font-medium">My PGP keys</h3>
                         <div className="space-y-3">
                           {pgpKeys.map((key) => (
                             <div key={key.id} className="p-4 border border-gray-200 rounded-lg">
@@ -794,7 +794,7 @@ const Security = () => {
                                   <span className="font-medium">{key.key_name}</span>
                                   {key.is_primary && (
                                     <Badge className="bg-cameroon-yellow text-cameroon-primary">
-                                      Principale
+                                      Primary
                                     </Badge>
                                   )}
                                 </div>
@@ -805,7 +805,7 @@ const Security = () => {
                                       size="sm"
                                       onClick={() => setPrimaryPGPKey(key.id)}
                                     >
-                                      Définir comme principale
+                                      Set as primary
                                     </Button>
                                   )}
                                   <Button
@@ -834,7 +834,7 @@ const Security = () => {
                     <div className="space-y-4 p-4 border border-cameroon-yellow/20 rounded-lg">
                       <h3 className="font-medium flex items-center gap-2">
                         <Lock className="w-4 h-4" />
-                        Chiffrer un message
+                        Encrypt a message
                       </h3>
                       
                       <div className="space-y-2">
@@ -893,7 +893,7 @@ const Security = () => {
                     <div className="space-y-4 p-4 border border-cameroon-yellow/20 rounded-lg">
                       <h3 className="font-medium flex items-center gap-2">
                         <Unlock className="w-4 h-4" />
-                        Déchiffrer un message
+                        Decrypt a message
                       </h3>
                       
                       <div className="space-y-2">
@@ -908,18 +908,18 @@ const Security = () => {
                       </div>
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium">Phrase de passe:</label>
+                        <label className="text-sm font-medium">Passphrase:</label>
                         <Input
                           type="password"
                           value={pgpPassphrase}
                           onChange={(e) => setPgpPassphrase(e.target.value)}
-                          placeholder="Votre phrase de passe"
+                          placeholder="Your passphrase"
                         />
                       </div>
 
                       <Button onClick={decryptMessageWithPGP} className="bg-cameroon-red">
                         <Unlock className="w-4 h-4 mr-2" />
-                        Déchiffrer
+                        Decrypt
                       </Button>
 
                       {decryptedResult && (
