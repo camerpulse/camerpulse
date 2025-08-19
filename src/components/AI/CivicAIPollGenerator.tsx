@@ -78,9 +78,11 @@ export const CivicAIPollGenerator = () => {
       setIsEnabled(config.system_enabled?.enabled || false);
       setFrequency(config.generation_schedule?.frequency || 'daily');
       setSocialMonitoring(config.social_monitoring?.enabled || false);
-    } catch (error) {
-      console.error('Failed to fetch configuration:', error);
-    }
+      } catch (error) {
+        pollLogger.error('Failed to fetch configuration', 'CivicAIPollGenerator', {
+          error: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
   };
 
   const fetchGenerationLogs = async () => {
@@ -109,9 +111,11 @@ export const CivicAIPollGenerator = () => {
         }));
         setGenerationLogs(logs);
       }
-    } catch (error) {
-      console.error('Failed to fetch generation logs:', error);
-    }
+      } catch (error) {
+        pollLogger.error('Failed to fetch generation logs', 'CivicAIPollGenerator', {
+          error: error instanceof Error ? error.message : 'Unknown error'
+        });
+      }
   };
 
   const fetchSocialTrends = async () => {

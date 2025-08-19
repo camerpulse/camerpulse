@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { createComponentLogger } from '@/utils/logger';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -13,6 +14,8 @@ interface APIKeyStatus {
   description: string;
   setupUrl?: string;
 }
+
+const intelligenceLogger = createComponentLogger('CamerPulseIntelligenceSetup');
 
 const CamerPulseIntelligenceSetup = () => {
   const [apiKeys, setApiKeys] = useState<APIKeyStatus[]>([
@@ -77,7 +80,9 @@ const CamerPulseIntelligenceSetup = () => {
           );
         }
       } catch (error) {
-        console.error('Error checking API status:', error);
+        intelligenceLogger.error('Error checking API status', 'CamerPulseIntelligenceSetup', {
+          error: error instanceof Error ? error.message : 'Unknown error'
+        });
       }
     };
 
