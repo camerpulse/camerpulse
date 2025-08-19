@@ -71,8 +71,7 @@ const GENRES = [
 ];
 
 const LANGUAGES = [
-  'French', 'English', 'Ewondo', 'Duala', 'Fulfulde',
-  'Bamileke', 'Bassa', 'Mafa', 'Mundang', 'Ngumba'
+  'English'
 ];
 
 export const ArtistSubmissionSystem: React.FC = () => {

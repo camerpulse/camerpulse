@@ -22,8 +22,7 @@ const regions = [
 ];
 
 const languages = [
-  "French", "English", "Ewondo", "Duala", "Fulfulde", "Bamoun", 
-  "Bassa", "Pidgin", "Arabic", "Other"
+  "English"
 ];
 
 const ArtistRegister = () => {

@@ -439,7 +439,6 @@ const UserManagement: React.FC = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="en">English</SelectItem>
-                            <SelectItem value="fr">Français</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>

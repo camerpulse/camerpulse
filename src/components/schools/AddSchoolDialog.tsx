@@ -68,8 +68,7 @@ export function AddSchoolDialog({ open, onOpenChange, onSuccess }: AddSchoolDial
   ];
 
   const availableLanguages = [
-    'English', 'French', 'German', 'Spanish', 'Arabic', 'Chinese',
-    'Pidgin', 'Fulfulde', 'Ewondo', 'Duala', 'Bassa', 'Other'
+    'English'
   ];
 
   const resetForm = () => {

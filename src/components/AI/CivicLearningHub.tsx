@@ -366,8 +366,6 @@ export const CivicLearningHub: React.FC = () => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="en">English</SelectItem>
-              <SelectItem value="fr">Français</SelectItem>
-              <SelectItem value="pidgin">Pidgin</SelectItem>
             </SelectContent>
           </Select>
           

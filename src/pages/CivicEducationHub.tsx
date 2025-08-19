@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { BookOpen, Users, Award, MessageSquare, Search, Globe, Languages, Download } from 'lucide-react';
+import { BookOpen, Users, Award, MessageSquare, Search, Download } from 'lucide-react';
 import { ConstitutionViewer } from '@/components/civic-education/ConstitutionViewer';
 import { EducationalContent } from '@/components/civic-education/EducationalContent';
 import { CivicQuizzes } from '@/components/civic-education/CivicQuizzes';
@@ -15,14 +15,6 @@ import { CivicBookmarks } from '@/components/civic-education/CivicBookmarks';
 const CivicEducationHub: React.FC = () => {
   const [activeTab, setActiveTab] = useState('constitution');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('english');
-
-  const languages = [
-    { code: 'english', name: 'English', flag: '🇬🇧' },
-    { code: 'french', name: 'Français', flag: '🇫🇷' },
-    { code: 'pidgin', name: 'Pidgin', flag: '🇨🇲' },
-    { code: 'fulfulde', name: 'Fulfulde', flag: '🌍' }
-  ];
 
   const stats = [
     { label: 'Constitution Articles', value: '120+', icon: BookOpen },
@@ -34,7 +26,7 @@ const CivicEducationHub: React.FC = () => {
   const features = [
     {
       title: 'Interactive Constitution',
-      description: 'Browse Cameroon\'s constitution with multilingual support and searchable articles',
+      description: 'Browse Cameroon\'s constitution with searchable articles and clear explanations',
       icon: BookOpen,
       color: 'bg-blue-500'
     },
@@ -68,26 +60,8 @@ const CivicEducationHub: React.FC = () => {
               Civic Education Hub
             </h1>
             <p className="text-xl mb-8 text-blue-100">
-              Empowering Cameroonian citizens with knowledge of their Constitution, rights, and civic duties through interactive learning in multiple languages
+              Empowering Cameroonian citizens with knowledge of their Constitution, rights, and civic duties through interactive learning
             </p>
-            
-            {/* Language Selector */}
-            <div className="flex justify-center items-center gap-4 mb-8">
-              <Globe className="w-5 h-5" />
-              <div className="flex gap-2">
-                {languages.map((lang) => (
-                  <Button
-                    key={lang.code}
-                    variant={selectedLanguage === lang.code ? "secondary" : "outline"}
-                    size="sm"
-                    onClick={() => setSelectedLanguage(lang.code)}
-                    className="text-white border-white/20 hover:bg-white/10"
-                  >
-                    {lang.flag} {lang.name}
-                  </Button>
-                ))}
-              </div>
-            </div>
 
             {/* Search Bar */}
             <div className="flex max-w-md mx-auto">
@@ -186,11 +160,11 @@ const CivicEducationHub: React.FC = () => {
           </TabsList>
 
           <TabsContent value="constitution" className="space-y-6">
-            <ConstitutionViewer selectedLanguage={selectedLanguage} searchTerm={searchTerm} />
+            <ConstitutionViewer searchTerm={searchTerm} />
           </TabsContent>
 
           <TabsContent value="education" className="space-y-6">
-            <EducationalContent selectedLanguage={selectedLanguage} searchTerm={searchTerm} />
+            <EducationalContent searchTerm={searchTerm} />
           </TabsContent>
 
           <TabsContent value="quizzes" className="space-y-6">

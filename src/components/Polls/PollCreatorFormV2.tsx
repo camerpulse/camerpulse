@@ -793,8 +793,6 @@ export const PollCreatorFormV2 = () => {
                       </SelectTrigger>
                       <SelectContent>
                         <SelectItem value="english">English</SelectItem>
-                        <SelectItem value="french">Français</SelectItem>
-                        <SelectItem value="pidgin">Pidgin</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

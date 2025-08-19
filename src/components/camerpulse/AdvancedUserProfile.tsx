@@ -685,7 +685,6 @@ export const AdvancedUserProfile: React.FC<AdvancedProfileProps> = ({
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="en">English</SelectItem>
-                              <SelectItem value="fr">Français</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>

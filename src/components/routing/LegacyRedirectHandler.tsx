@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getLegacyRedirect } from '@/utils/slugUtils';
+import { handleLegacyRedirects } from '@/utils/redirectHandlers';
 
 /**
  * Handles legacy URL redirects to maintain SEO and user bookmarks
@@ -10,7 +10,7 @@ export const LegacyRedirectHandler: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const newPath = getLegacyRedirect(location.pathname);
+    const newPath = handleLegacyRedirects(location.pathname);
     
     if (newPath) {
       // Perform 301 redirect

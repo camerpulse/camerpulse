@@ -33,10 +33,7 @@ export type CameroonRegion = typeof CAMEROON_REGIONS[number];
 
 // === LANGUAGES ===
 export const SUPPORTED_LANGUAGES = [
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'bm', name: 'Bamoun', flag: '🏛️' },
-  { code: 'ff', name: 'Fulfulde', flag: '🌾' },
+  { code: 'en', name: 'English', flag: '🇬🇧' }
 ] as const;
 
 // === POLITICAL ROLES ===

@@ -114,9 +114,7 @@ const CivicExplainerAssistant = () => {
   ];
 
   const languages = [
-    { id: 'en', name: 'English', flag: '🇬🇧' },
-    { id: 'fr', name: 'Français', flag: '🇫🇷' },
-    { id: 'pidgin', name: 'Pidgin', flag: '💬' }
+    { id: 'en', name: 'English', flag: '🇬🇧' }
   ];
 
   const ageGroups = [
