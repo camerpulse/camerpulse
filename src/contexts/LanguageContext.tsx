@@ -1,88 +1,35 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { createContext, useContext, useEffect } from 'react';
 
-export type Language = 'en' | 'fr';
+export type Language = 'en';
 
 interface LanguageContextType {
   language: Language;
-  setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  setLanguage: (lang: Language) => void; // no-op, kept for compatibility
+  t: (key: string) => string; // identity translator
   getLocalizedPath: (path: string) => string;
   extractLanguageFromPath: (path: string) => { language: Language; cleanPath: string };
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Basic translations - expand as needed
-const translations = {
-  en: {
-    'nav.politicians': 'Politicians',
-    'nav.senators': 'Senators',
-    'nav.villages': 'Villages',
-    'nav.hospitals': 'Hospitals',
-    'nav.schools': 'Schools',
-    'nav.events': 'Events',
-    'nav.petitions': 'Petitions',
-    'nav.home': 'Home',
-    'nav.about': 'About',
-    'nav.contact': 'Contact'
-  },
-  fr: {
-    'nav.politicians': 'Politiciens',
-    'nav.senators': 'Sénateurs', 
-    'nav.villages': 'Villages',
-    'nav.hospitals': 'Hôpitaux',
-    'nav.schools': 'Écoles',
-    'nav.events': 'Événements',
-    'nav.petitions': 'Pétitions',
-    'nav.home': 'Accueil',
-    'nav.about': 'À Propos',
-    'nav.contact': 'Contact'
-  }
-};
-
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Language>('en');
-
-  // Simplified language handling without path extraction
-  const extractLanguageFromPath = (path: string): { language: Language; cleanPath: string } => {
-    // Always return current language and the clean path
-    return {
-      language,
-      cleanPath: path
-    };
-  };
-
-  const setLanguage = (newLanguage: Language) => {
-    setLanguageState(newLanguage);
-    // Store in localStorage for persistence
-    localStorage.setItem('camerpulse_language', newLanguage);
-  };
-
-  // Load saved language preference on mount
+  // Ensure document language is English globally
   useEffect(() => {
-    const savedLanguage = localStorage.getItem('camerpulse_language') as Language;
-    if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'fr')) {
-      setLanguageState(savedLanguage);
-    }
+    document.documentElement.lang = 'en';
   }, []);
 
-  const t = (key: string): string => {
-    return translations[language][key as keyof typeof translations['en']] || key;
-  };
-
-  const getLocalizedPath = (path: string): string => {
-    // Return the path as-is since we're not using language prefixes in URLs
-    return path;
-  };
+  const t = (key: string) => key;
+  const getLocalizedPath = (path: string) => path;
+  const extractLanguageFromPath = (path: string) => ({ language: 'en', cleanPath: path });
+  const setLanguage = () => { /* English-only mode: no-op */ };
 
   return (
     <LanguageContext.Provider value={{
-      language,
+      language: 'en',
       setLanguage,
       t,
       getLocalizedPath,
-      extractLanguageFromPath
+      extractLanguageFromPath,
     }}>
       {children}
     </LanguageContext.Provider>

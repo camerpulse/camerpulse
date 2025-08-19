@@ -16754,7 +16754,6 @@ export type Database = {
           article_number: string
           chapter_name: string | null
           content_english: string
-          content_french: string
           content_fulfulde: string | null
           content_other: Json | null
           content_pidgin: string | null
@@ -16772,7 +16771,6 @@ export type Database = {
           article_number: string
           chapter_name?: string | null
           content_english: string
-          content_french: string
           content_fulfulde?: string | null
           content_other?: Json | null
           content_pidgin?: string | null
@@ -16790,7 +16788,6 @@ export type Database = {
           article_number?: string
           chapter_name?: string | null
           content_english?: string
-          content_french?: string
           content_fulfulde?: string | null
           content_other?: Json | null
           content_pidgin?: string | null

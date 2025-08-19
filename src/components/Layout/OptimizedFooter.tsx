@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
-import { useLanguage } from '@/contexts/LanguageContext';
+
 import { 
   Heart, 
   Github, 
@@ -120,25 +120,23 @@ const LEGAL_LINKS = [
  * - Optimized for mobile and desktop
  */
 export const OptimizedFooter: React.FC = React.memo(() => {
-  const { getLocalizedPath } = useLanguage();
-
-  // Memoized footer sections with localized paths
+  // Memoized footer sections with plain paths
   const footerSections = useMemo(() => 
     FOOTER_SECTIONS.map(section => ({
       ...section,
       links: section.links.map(link => ({
         ...link,
-        localizedPath: getLocalizedPath(link.path)
+        localizedPath: link.path
       }))
-    })), [getLocalizedPath]
+    })), []
   );
 
-  // Memoized legal links with localized paths
+  // Memoized legal links with plain paths
   const legalLinks = useMemo(() => 
     LEGAL_LINKS.map(link => ({
       ...link,
-      localizedPath: getLocalizedPath(link.path)
-    })), [getLocalizedPath]
+      localizedPath: link.path
+    })), []
   );
 
   return (

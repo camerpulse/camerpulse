@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { LanguageSwitcher } from '@/components/Language/LanguageSwitcher';
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -127,9 +127,6 @@ export const OptimizedHeader: React.FC = React.memo(() => {
 
           {/* Right Side Actions */}
           <div className="flex items-center space-x-2">
-            <LanguageSwitcher />
-            
-            {/* Political Search */}
             <div className="hidden md:block">
               <PoliticalSearch />
             </div>
