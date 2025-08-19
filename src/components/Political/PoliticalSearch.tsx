@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Search, User, Users } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -7,13 +7,23 @@ import { Badge } from "@/components/ui/badge";
 import { usePoliticalSearch, SearchResult } from "@/hooks/usePoliticalSearch";
 import { useNavigate } from "react-router-dom";
 import { URLBuilder } from "@/utils/slugUtils";
+import { PoliticalErrorBoundary } from "./ErrorBoundary";
+import { SearchResultsSkeleton } from "./LoadingStates";
+import { sanitizeSearchQuery } from "./PoliticalValidation";
 
 export function PoliticalSearch() {
   const [query, setQuery] = useState("");
-  const { data: results = [], isLoading } = usePoliticalSearch(query);
+  const [isOpen, setIsOpen] = useState(false);
+  const { data: results = [], isLoading, error } = usePoliticalSearch(query);
   const navigate = useNavigate();
 
-  const handleResultClick = (result: SearchResult) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitizedQuery = sanitizeSearchQuery(e.target.value);
+    setQuery(sanitizedQuery);
+    setIsOpen(sanitizedQuery.length >= 2);
+  }, []);
+
+  const handleResultClick = useCallback((result: SearchResult) => {
     if (result.type === "politician") {
       navigate(URLBuilder.politicians.detail({ 
         name: result.name, 
@@ -25,44 +35,65 @@ export function PoliticalSearch() {
       navigate(`/political-parties/${result.slug || result.id}`);
     }
     setQuery("");
-  };
+    setIsOpen(false);
+  }, [navigate]);
 
-  const getResultIcon = (type: string) => {
+  const getResultIcon = useCallback((type: string) => {
     return type === "politician" ? User : Users;
-  };
+  }, []);
 
-  const getPerformanceColor = (score?: number) => {
+  const getPerformanceColor = useCallback((score?: number) => {
     if (!score) return "bg-muted";
     if (score >= 8) return "bg-success";
     if (score >= 6) return "bg-warning";
     return "bg-destructive";
-  };
+  }, []);
 
-  return (
-    <div className="relative w-full max-w-md">
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+  const debouncedResults = useMemo(() => {
+    if (!query.trim() || query.length < 2) return [];
+    return results;
+  }, [query, results]);
+
+  if (error) {
+    return (
+      <div className="w-full max-w-md">
         <Input
           placeholder="Search politicians, parties..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          disabled
           className="pl-10"
         />
+        <p className="text-xs text-destructive mt-1">Search unavailable</p>
       </div>
+    );
+  }
 
-      {query.trim().length >= 2 && (
-        <Card className="absolute top-full mt-1 w-full max-h-96 overflow-y-auto z-50 bg-background border shadow-lg">
-          {isLoading ? (
-            <div className="p-4 text-center text-muted-foreground">
-              Searching...
-            </div>
-          ) : results.length === 0 ? (
-            <div className="p-4 text-center text-muted-foreground">
-              No results found
-            </div>
-          ) : (
-            <div className="p-2">
-              {results.map((result) => {
+  return (
+    <PoliticalErrorBoundary>
+      <div className="relative w-full max-w-md">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+          <Input
+            placeholder="Search politicians, parties..."
+            value={query}
+            onChange={handleInputChange}
+            onFocus={() => setIsOpen(query.length >= 2)}
+            onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+            className="pl-10"
+            maxLength={100}
+          />
+        </div>
+
+        {isOpen && (
+          <Card className="absolute top-full mt-1 w-full max-h-96 overflow-y-auto z-50 bg-background border shadow-lg">
+            {isLoading ? (
+              <SearchResultsSkeleton />
+            ) : debouncedResults.length === 0 ? (
+              <div className="p-4 text-center text-muted-foreground">
+                {query.length < 2 ? 'Type at least 2 characters' : 'No results found'}
+              </div>
+            ) : (
+              <div className="p-2">
+                {debouncedResults.slice(0, 10).map((result) => {
                 const Icon = getResultIcon(result.type);
                 return (
                   <div
@@ -111,11 +142,12 @@ export function PoliticalSearch() {
                     </div>
                   </div>
                 );
-              })}
-            </div>
-          )}
-        </Card>
-      )}
-    </div>
+                })}
+              </div>
+            )}
+          </Card>
+        )}
+      </div>
+    </PoliticalErrorBoundary>
   );
 }
