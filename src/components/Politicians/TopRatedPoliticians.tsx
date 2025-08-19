@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { useTopRatedPoliticians } from '@/hooks/usePoliticalData';
 import { Star, TrendingUp, Award, Users } from 'lucide-react';
+import { URLBuilder } from '@/utils/slugUtils';
 
 interface TopRatedPoliticiansProps {
   limit?: number;
@@ -80,10 +81,11 @@ export const TopRatedPoliticians: React.FC<TopRatedPoliticiansProps> = ({
       <CardContent>
         <div className="space-y-4">
           {politicians.map((politician, index) => {
-            const politicianSlug = politician.name.toLowerCase().replace(/\s+/g, '-');
-            
             return (
-              <Link key={politician.id} to={`/politicians/${politicianSlug}`}>
+              <Link key={politician.id} to={URLBuilder.politicians.detail({
+                id: politician.id,
+                name: politician.name
+              })}>
                 <div className="flex items-center space-x-4 p-3 rounded-lg hover:bg-muted transition-colors group cursor-pointer">
                   <div className="flex-shrink-0 flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold">
                     {index + 1}

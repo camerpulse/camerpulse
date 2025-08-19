@@ -256,7 +256,10 @@ export default function PoliticalDashboard() {
                               />
                               <div className="flex-1">
                                 <Link 
-                                  to={`/politicians/${politician.slug || politician.id}`}
+                                  to={URLBuilder.politicians.detail({
+                                    id: politician.id,
+                                    name: politician.name
+                                  })}
                                   className="text-lg font-semibold hover:text-primary transition-colors"
                                 >
                                   {politician.name}

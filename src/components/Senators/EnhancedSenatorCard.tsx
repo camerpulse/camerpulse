@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { Senator } from '@/hooks/useSenators';
 import { Link } from 'react-router-dom';
+import { URLBuilder } from '@/utils/slugUtils';
 
 interface EnhancedSenatorCardProps {
   senator: Senator;
@@ -51,7 +52,10 @@ export const EnhancedSenatorCard = ({ senator }: EnhancedSenatorCardProps) => {
   const badges = senator.badges ? (Array.isArray(senator.badges) ? senator.badges : JSON.parse(senator.badges)) : [];
 
   return (
-    <Link to={`/senators/${senator.id}`}>
+    <Link to={URLBuilder.senators.detail({
+      id: senator.id,
+      name: senator.name
+    })}>
       <Card className="group h-full transition-all duration-300 hover:shadow-xl hover:shadow-primary/20 hover:-translate-y-1 cursor-pointer relative overflow-hidden">
         {/* Performance indicator strip */}
         <div 

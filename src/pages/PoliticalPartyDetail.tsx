@@ -469,7 +469,10 @@ const PoliticalPartyDetail = () => {
                     {members.map((member) => (
                       <Link
                         key={member.id}
-                        to={`/politicians/${member.slug || member.id}`}
+                        to={URLBuilder.politicians.detail({
+                          id: member.id,
+                          name: member.full_name
+                        })}
                         className="block"
                       >
                         <Card className="hover:shadow-md transition-all duration-200 hover:scale-[1.02] cursor-pointer">

@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Building, Users, Star, Eye, MessageSquare } from 'lucide-react';
 import { Minister } from '@/hooks/useMinisters';
 import { useNavigate } from 'react-router-dom';
+import { URLBuilder } from '@/utils/slugUtils';
 
 interface MinisterCardProps {
   minister: Minister;
@@ -118,7 +119,10 @@ export function MinisterCard({ minister }: MinisterCardProps) {
             variant="outline" 
             size="sm" 
             className="flex-1"
-            onClick={() => navigate(`/minister/${minister.id}`)}
+            onClick={() => navigate(URLBuilder.ministers.detail({
+              id: minister.id,
+              name: minister.full_name
+            }))}
           >
             <Eye className="h-4 w-4 mr-1" />
             View Profile
@@ -127,7 +131,10 @@ export function MinisterCard({ minister }: MinisterCardProps) {
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => navigate(`/minister/${minister.id}?action=message`)}
+              onClick={() => navigate(`${URLBuilder.ministers.detail({
+                id: minister.id,
+                name: minister.full_name
+              })}?action=message`)}
             >
               <MessageSquare className="h-4 w-4" />
             </Button>

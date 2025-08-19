@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MapPin, Users, Star, Eye, MessageSquare } from 'lucide-react';
 import { MP } from '@/hooks/useMPs';
 import { useNavigate } from 'react-router-dom';
+import { URLBuilder } from '@/utils/slugUtils';
 
 interface MPCardProps {
   mp: MP;
@@ -120,7 +121,10 @@ export function MPCard({ mp }: MPCardProps) {
             variant="outline" 
             size="sm" 
             className="flex-1"
-            onClick={() => navigate(`/mp/${mp.id}`)}
+            onClick={() => navigate(URLBuilder.mps.detail({
+              id: mp.id,
+              name: mp.full_name
+            }))}
           >
             <Eye className="h-4 w-4 mr-1" />
             View Profile
@@ -129,7 +133,10 @@ export function MPCard({ mp }: MPCardProps) {
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => navigate(`/mp/${mp.id}?action=message`)}
+              onClick={() => navigate(`${URLBuilder.mps.detail({
+                id: mp.id,
+                name: mp.full_name
+              })}?action=message`)}
             >
               <MessageSquare className="h-4 w-4" />
             </Button>

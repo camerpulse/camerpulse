@@ -66,15 +66,9 @@ export function generateSlug(text: string, id?: string): string {
  */
 export class URLBuilder {
   private static getLanguagePrefix(): string {
-    // Get current language from URL or default to 'en'
-    const path = typeof window !== 'undefined' ? window.location.pathname : '';
-    const segments = path.split('/').filter(Boolean);
-    
-    if (segments[0] === 'en' || segments[0] === 'fr') {
-      return `/${segments[0]}`;
-    }
-    
-    return '/en'; // Default to English
+    // For now, return empty string to match current router configuration
+    // TODO: Add language prefix support when multi-language routing is implemented
+    return '';
   }
 
   static politicians = {

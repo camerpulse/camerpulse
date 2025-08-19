@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { MessagingModal } from './MessagingModal';
 import { RatingModal } from './RatingModal';
 import { cn } from '@/lib/utils';
+import { URLBuilder } from '@/utils/slugUtils';
 
 interface UnifiedPoliticalCardProps {
   id: string;
@@ -74,14 +75,13 @@ export const UnifiedPoliticalCard: React.FC<UnifiedPoliticalCardProps> = ({
   };
 
   const getDetailUrl = () => {
-    // Generate slug from name if not provided
-    const slug = generateSlug(name, id);
+    const entity = { id, name };
     
     switch (type) {
-      case 'senator': return `/senators/${slug}`;
-      case 'mp': return `/mps/${slug}`;
-      case 'minister': return `/ministers/${slug}`;
-      default: return `/politicians/${slug}`;
+      case 'senator': return URLBuilder.senators.detail(entity);
+      case 'mp': return URLBuilder.mps.detail(entity);
+      case 'minister': return URLBuilder.ministers.detail(entity);
+      default: return URLBuilder.politicians.detail(entity);
     }
   };
 

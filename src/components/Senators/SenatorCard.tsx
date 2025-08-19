@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star, MapPin } from 'lucide-react';
 import { Senator } from '@/hooks/useSenators';
 import { Link } from 'react-router-dom';
+import { URLBuilder } from '@/utils/slugUtils';
 
 interface SenatorCardProps {
   senator: Senator;
@@ -27,7 +28,10 @@ export const SenatorCard = ({ senator }: SenatorCardProps) => {
   };
 
   return (
-    <Link to={`/senators/${senator.id}`}>
+    <Link to={URLBuilder.senators.detail({
+      id: senator.id,
+      name: senator.name
+    })}>
       <Card className="group h-full transition-all duration-200 hover:shadow-lg hover:shadow-primary/20 cursor-pointer">
         <CardContent className="p-6">
           <div className="flex flex-col items-center text-center space-y-4">
