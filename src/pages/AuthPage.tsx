@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff, Users, Shield, Globe, AlertTriangle } from 'lucide-react';
 import { validatePasswordStrength } from '@/utils/authSecurity';
 import { advancedSanitizeInput } from '@/utils/security';
+import { supabase } from '@/integrations/supabase/client';
 
 export const AuthPage: React.FC = () => {
   const navigate = useNavigate();

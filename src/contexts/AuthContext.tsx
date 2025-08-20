@@ -188,6 +188,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       async (event, session) => {
         if (!mounted) return;
 
+        // Auth state change debug
+        try { console.log('[Auth] onAuthStateChange:', event, { hasSession: !!session, userId: session?.user?.id }); } catch {}
+
         setSession(session);
         setUser(session?.user ?? null);
         
@@ -217,6 +220,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const { data: { session } } = await supabase.auth.getSession();
         
         if (!mounted) return;
+
+        try { console.log('[Auth] initial session:', { hasSession: !!session, userId: session?.user?.id }); } catch {}
 
         setSession(session);
         setUser(session?.user ?? null);
