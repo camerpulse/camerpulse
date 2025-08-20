@@ -283,6 +283,8 @@ export const ProductionFeedCard: React.FC<ProductionFeedCardProps> = ({
             onLike={handleLike}
             onComment={handleItemClick}
             onShare={handleShare}
+            postAuthor={item.author.display_name || item.author.username}
+            postPreview={item.content}
           />
         )}
 

@@ -25,6 +25,8 @@ export interface ProductionFeedItem {
     shares: number;
     user_has_liked: boolean;
     user_has_shared: boolean;
+    user_has_bookmarked?: boolean;
+    user_has_pulsed?: boolean;
   };
   metadata?: {
     location?: string;
@@ -97,35 +99,74 @@ export const useProductionFeed = () => {
         }
 
         // Get interaction data for posts if we have any
-        let interactionData: any = { likes: [], userLikes: [] };
+        let interactionData: any = { 
+          likes: [], 
+          userLikes: [], 
+          userBookmarks: [], 
+          userReposts: [],
+          comments: []
+        };
+        
         if (posts && posts.length > 0) {
           const postIds = posts.map(p => p.id);
           
-          const [likes, userLikes] = await Promise.all([
+          const [likes, userLikes, userBookmarks, userReposts, comments] = await Promise.all([
+            // All likes
             supabase
               .from('pulse_post_likes')
               .select('post_id')
               .in('post_id', postIds),
+            // User's likes
             user ? supabase
               .from('pulse_post_likes')
               .select('post_id')
               .in('post_id', postIds)
-              .eq('user_id', user.id) : Promise.resolve({ data: [] })
+              .eq('user_id', user.id) : Promise.resolve({ data: [] }),
+            // User's bookmarks
+            user ? supabase
+              .from('pulse_post_bookmarks')
+              .select('post_id')
+              .in('post_id', postIds)
+              .eq('user_id', user.id) : Promise.resolve({ data: [] }),
+            // User's reposts
+            user ? supabase
+              .from('pulse_post_reposts')
+              .select('original_post_id')
+              .in('original_post_id', postIds)
+              .eq('user_id', user.id) : Promise.resolve({ data: [] }),
+            // Comments count (if table exists)
+            supabase
+              .from('pulse_post_comments')
+              .select('post_id')
+              .in('post_id', postIds)
+              .then(result => result)
+              .catch(() => ({ data: [] })) // Fallback if table doesn't exist
           ]);
           
           interactionData = { 
             likes: likes.data || [], 
-            userLikes: userLikes.data || [] 
+            userLikes: userLikes.data || [],
+            userBookmarks: userBookmarks.data || [],
+            userReposts: userReposts.data || [],
+            comments: comments.data || []
           };
         }
 
-        // Process like counts
+        // Process interaction counts
         const likeCounts: Record<string, number> = {};
+        const commentCounts: Record<string, number> = {};
+        
         interactionData.likes.forEach((like: any) => {
           likeCounts[like.post_id] = (likeCounts[like.post_id] || 0) + 1;
         });
+        
+        interactionData.comments.forEach((comment: any) => {
+          commentCounts[comment.post_id] = (commentCounts[comment.post_id] || 0) + 1;
+        });
 
         const userLikes = new Set(interactionData.userLikes.map((like: any) => like.post_id));
+        const userBookmarks = new Set(interactionData.userBookmarks.map((bookmark: any) => bookmark.post_id));
+        const userReposts = new Set(interactionData.userReposts.map((repost: any) => repost.original_post_id));
 
         // Process posts
         if (posts) {
@@ -146,10 +187,12 @@ export const useProductionFeed = () => {
               updated_at: post.updated_at,
               engagement: {
                 likes: likeCounts[post.id] || 0,
-                comments: post.comments_count || 0,
+                comments: commentCounts[post.id] || 0,
                 shares: 0,
                 user_has_liked: userLikes.has(post.id),
                 user_has_shared: false,
+                user_has_bookmarked: userBookmarks.has(post.id),
+                user_has_pulsed: userReposts.has(post.id),
               },
               metadata: {
                 hashtags: post.hashtags || [],

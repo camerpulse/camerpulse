@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { QuickCommentModal } from './QuickCommentModal';
 import { 
   Heart, 
   MessageCircle, 
@@ -45,6 +46,8 @@ interface EnhancedInteractionBarProps {
   onLike: () => void;
   onComment?: () => void;
   onShare: () => void;
+  postAuthor?: string;
+  postPreview?: string;
   className?: string;
 }
 
@@ -55,11 +58,14 @@ export const EnhancedInteractionBar: React.FC<EnhancedInteractionBarProps> = ({
   onLike,
   onComment,
   onShare,
+  postAuthor,
+  postPreview,
   className = '',
 }) => {
   const [reportReason, setReportReason] = useState('');
   const [reportDescription, setReportDescription] = useState('');
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [commentModalOpen, setCommentModalOpen] = useState(false);
   
   const bookmarkMutation = useBookmarkPost();
   const pulseMutation = usePulsePost();
@@ -142,7 +148,13 @@ export const EnhancedInteractionBar: React.FC<EnhancedInteractionBarProps> = ({
         <Button
           variant="ghost"
           size="sm"
-          onClick={onComment}
+          onClick={() => {
+            if (onComment) {
+              onComment();
+            } else {
+              setCommentModalOpen(true);
+            }
+          }}
           className="flex items-center gap-1 sm:gap-2 text-muted-foreground hover:text-blue-500 hover:scale-105 transition-all px-2 sm:px-3"
         >
           <MessageCircle className="h-4 w-4" />
@@ -289,6 +301,15 @@ export const EnhancedInteractionBar: React.FC<EnhancedInteractionBarProps> = ({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
+      
+      {/* Quick Comment Modal */}
+      <QuickCommentModal
+        open={commentModalOpen}
+        onOpenChange={setCommentModalOpen}
+        postId={originalId}
+        postAuthor={postAuthor}
+        postPreview={postPreview}
+      />
     </div>
   );
 };

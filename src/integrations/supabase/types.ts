@@ -37044,6 +37044,53 @@ export type Database = {
           },
         ]
       }
+      post_reports: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          post_id: string
+          reason: string
+          reporter_id: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          post_id: string
+          reason: string
+          reporter_id: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          post_id?: string
+          reason?: string
+          reporter_id?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_reports_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "pulse_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       posts: {
         Row: {
           content: string
@@ -39199,6 +39246,35 @@ export type Database = {
           },
         ]
       }
+      pulse_post_bookmarks: {
+        Row: {
+          created_at: string
+          id: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pulse_post_bookmarks_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "pulse_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pulse_post_likes: {
         Row: {
           created_at: string
@@ -39219,6 +39295,35 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      pulse_post_reposts: {
+        Row: {
+          created_at: string
+          id: string
+          original_post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          original_post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          original_post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pulse_post_reposts_original_post_id_fkey"
+            columns: ["original_post_id"]
+            isOneToOne: false
+            referencedRelation: "pulse_posts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       pulse_posts: {
         Row: {
@@ -45244,6 +45349,27 @@ export type Database = {
           relevance_weight?: number | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      user_follows: {
+        Row: {
+          created_at: string
+          follower_id: string
+          following_id: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          follower_id: string
+          following_id: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          follower_id?: string
+          following_id?: string
+          id?: string
         }
         Relationships: []
       }
