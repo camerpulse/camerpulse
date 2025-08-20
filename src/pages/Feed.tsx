@@ -8,7 +8,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PostComposer } from '@/components/feed/PostComposer';
 import { InfinitePostFeed } from '@/components/feed/InfinitePostFeed';
-import { usePosts } from '@/hooks/usePosts';
+import { useTrendingTopics } from '@/hooks/useTrendingTopics';
+import { useSuggestedFollows } from '@/hooks/useSuggestedFollows';
 import {
   Search,
   TrendingUp,
@@ -30,22 +31,6 @@ import {
   RefreshCw,
 } from 'lucide-react';
 
-// Real trending topics - you can fetch these from a dedicated table later
-const trendingTopics = [
-  { name: 'CameroonElections', count: 2847, change: '+12%' },
-  { name: 'Infrastructure', count: 1573, change: '+8%' },
-  { name: 'Education', count: 1247, change: '+15%' },
-  { name: 'Healthcare', count: 892, change: '+5%' },
-  { name: 'Economy', count: 634, change: '-2%' },
-];
-
-// Suggested follows - you can fetch these from profiles table later
-const suggestedFollows = [
-  { id: '1', name: 'Ministry of Health', username: 'minsante_cm', type: 'government', verified: true },
-  { id: '2', name: 'University of Yaoundé I', username: 'uy1_official', type: 'education', verified: true },
-  { id: '3', name: 'Transparency CM', username: 'transparency_cm', type: 'ngo', verified: true },
-  { id: '4', name: 'Douala Port Authority', username: 'douala_port', type: 'infrastructure', verified: true },
-];
 
 export default function Feed() {
   const { user, isAdmin } = useAuth();
@@ -54,12 +39,10 @@ export default function Feed() {
   const [activeTab, setActiveTab] = useState('home');
   const [showPostComposer, setShowPostComposer] = useState(false);
 
-  // Get post data for stats
-  const { data: recentPosts, refetch: refetchPosts, isFetching } = usePosts(5, 0);
+  // Get real data
+  const { data: trendingTopics, isLoading: loadingTrending } = useTrendingTopics();
+  const { data: suggestedFollows, isLoading: loadingSuggestions } = useSuggestedFollows();
 
-  const handleRefresh = () => {
-    refetchPosts();
-  };
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,10 +82,9 @@ export default function Feed() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  onClick={handleRefresh}
-                  disabled={isFetching}
+                  onClick={() => window.location.reload()}
                 >
-                  <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+                  <RefreshCw className="h-4 w-4" />
                 </Button>
                 
                 <Button variant="ghost" size="icon">
@@ -188,7 +170,17 @@ export default function Feed() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {trendingTopics.map((topic, index) => (
+                    {loadingTrending ? (
+                      <div className="space-y-3">
+                        {[1, 2, 3].map((i) => (
+                          <div key={i} className="animate-pulse p-2">
+                            <div className="h-4 w-3/4 bg-muted rounded mb-1" />
+                            <div className="h-3 w-1/2 bg-muted rounded" />
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      trendingTopics?.map((topic, index) => (
                       <div key={topic.name} className="cursor-pointer hover:bg-muted/50 p-2 rounded">
                         <div className="flex items-center justify-between">
                           <div>
@@ -207,7 +199,8 @@ export default function Feed() {
                           </div>
                         </div>
                       </div>
-                    ))}
+                      )) || []
+                    )}
                   </CardContent>
                 </Card>
               </div>
@@ -233,7 +226,7 @@ export default function Feed() {
               )}
 
               {/* Posts Feed */}
-              <InfinitePostFeed limit={20} />
+              <InfinitePostFeed />
             </div>
 
             {/* Right Sidebar */}
@@ -248,7 +241,20 @@ export default function Feed() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    {suggestedFollows.map((suggestion) => (
+                    {loadingSuggestions ? (
+                      <div className="space-y-3">
+                        {[1, 2, 3].map((i) => (
+                          <div key={i} className="flex items-center gap-3 animate-pulse">
+                            <div className="h-10 w-10 bg-muted rounded-full" />
+                            <div className="space-y-1">
+                              <div className="h-4 w-24 bg-muted rounded" />
+                              <div className="h-3 w-16 bg-muted rounded" />
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      suggestedFollows?.map((suggestion) => (
                       <div key={suggestion.id} className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="h-10 w-10 bg-muted rounded-full flex items-center justify-center">
@@ -271,7 +277,8 @@ export default function Feed() {
                           Follow
                         </Button>
                       </div>
-                    ))}
+                      )) || []
+                    )}
                   </CardContent>
                 </Card>
 
@@ -302,33 +309,41 @@ export default function Feed() {
                   </CardContent>
                 </Card>
 
-                {/* Recent Activity */}
-                {recentPosts && recentPosts.length > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg flex items-center gap-2">
-                        <Hash className="h-4 w-4" />
-                        Recent Activity
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-3">
-                      {recentPosts.slice(0, 3).map((post) => (
-                        <div 
-                          key={post.id} 
-                          className="cursor-pointer hover:bg-muted/50 p-2 rounded"
-                          onClick={() => navigate(`/post/${post.id}`)}
-                        >
-                          <p className="text-sm line-clamp-2 mb-1">{post.content}</p>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span>{post.like_count || 0} likes</span>
-                            <span>•</span>
-                            <span>{post.comment_count || 0} comments</span>
-                          </div>
-                        </div>
-                      ))}
-                    </CardContent>
-                  </Card>
-                )}
+                {/* Quick Stats */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Hash className="h-4 w-4" />
+                      Quick Actions
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => navigate('/events')}
+                    >
+                      <Calendar className="h-4 w-4 mr-2" />
+                      Browse Events
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => navigate('/villages')}
+                    >
+                      <Globe className="h-4 w-4 mr-2" />
+                      Explore Villages
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className="w-full justify-start"
+                      onClick={() => navigate('/polls')}
+                    >
+                      <Vote className="h-4 w-4 mr-2" />
+                      Active Polls
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
