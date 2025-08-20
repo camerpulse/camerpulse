@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useSubmitEditSuggestion } from '@/hooks/useEditSuggestions';
-import { AuthGuard } from './AuthGuard';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface EditSuggestionModalProps {
   open: boolean;
@@ -76,6 +76,7 @@ export const EditSuggestionModal = ({
   const [justification, setJustification] = useState('');
 
   const submitSuggestion = useSubmitEditSuggestion();
+  const { user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -116,15 +117,16 @@ export const EditSuggestionModal = ({
           </DialogDescription>
         </DialogHeader>
 
-        <AuthGuard
-          fallback={
-            <div className="text-center py-6">
-              <p className="text-muted-foreground mb-4">
-                Please sign in to suggest profile edits
-              </p>
-            </div>
-          }
-        >
+        {!user ? (
+          <div className="text-center py-6">
+            <p className="text-muted-foreground mb-4">
+              Please sign in to suggest profile edits
+            </p>
+            <Button onClick={() => (window.location.href = '/auth')} className="w-full">
+              Go to Sign In / Sign Up
+            </Button>
+          </div>
+        ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label htmlFor="field">Field to Edit</Label>
@@ -201,7 +203,8 @@ export const EditSuggestionModal = ({
               </Button>
             </div>
           </form>
-        </AuthGuard>
+        )}
+
       </DialogContent>
     </Dialog>
   );
