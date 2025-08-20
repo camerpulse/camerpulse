@@ -6235,6 +6235,60 @@ export type Database = {
         }
         Relationships: []
       }
+      camerpulse_intelligence_learning_logs: {
+        Row: {
+          context_relevance: number | null
+          created_at: string
+          feedback_score: number | null
+          id: string
+          improvement_suggestions: string | null
+          interaction_data: Json | null
+          learning_type: string
+          metadata: Json | null
+          model_version: string | null
+          processing_time_ms: number | null
+          response_quality: string | null
+          session_id: string | null
+          updated_at: string
+          user_id: string | null
+          user_satisfaction: number | null
+        }
+        Insert: {
+          context_relevance?: number | null
+          created_at?: string
+          feedback_score?: number | null
+          id?: string
+          improvement_suggestions?: string | null
+          interaction_data?: Json | null
+          learning_type: string
+          metadata?: Json | null
+          model_version?: string | null
+          processing_time_ms?: number | null
+          response_quality?: string | null
+          session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          user_satisfaction?: number | null
+        }
+        Update: {
+          context_relevance?: number | null
+          created_at?: string
+          feedback_score?: number | null
+          id?: string
+          improvement_suggestions?: string | null
+          interaction_data?: Json | null
+          learning_type?: string
+          metadata?: Json | null
+          model_version?: string | null
+          processing_time_ms?: number | null
+          response_quality?: string | null
+          session_id?: string | null
+          updated_at?: string
+          user_id?: string | null
+          user_satisfaction?: number | null
+        }
+        Relationships: []
+      }
       camerpulse_intelligence_local_sentiment: {
         Row: {
           city_town: string
