@@ -16098,6 +16098,54 @@ export type Database = {
         }
         Relationships: []
       }
+      comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_edited: boolean | null
+          parent_comment_id: string | null
+          post_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_edited?: boolean | null
+          parent_comment_id?: string | null
+          post_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_edited?: boolean | null
+          parent_comment_id?: string | null
+          post_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       commission_tracking: {
         Row: {
           commission_amount: number
@@ -36936,6 +36984,86 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      post_interactions: {
+        Row: {
+          created_at: string
+          id: string
+          interaction_type: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          interaction_type: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          interaction_type?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "post_interactions_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      posts: {
+        Row: {
+          content: string
+          created_at: string
+          engagement_score: number | null
+          hashtags: string[] | null
+          id: string
+          is_pinned: boolean | null
+          is_trending: boolean | null
+          location: string | null
+          media_urls: string[] | null
+          sentiment: string | null
+          type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          engagement_score?: number | null
+          hashtags?: string[] | null
+          id?: string
+          is_pinned?: boolean | null
+          is_trending?: boolean | null
+          location?: string | null
+          media_urls?: string[] | null
+          sentiment?: string | null
+          type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          engagement_score?: number | null
+          hashtags?: string[] | null
+          id?: string
+          is_pinned?: boolean | null
+          is_trending?: boolean | null
+          location?: string | null
+          media_urls?: string[] | null
+          sentiment?: string | null
+          type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       prediction_results: {
         Row: {
