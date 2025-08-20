@@ -1,47 +1,47 @@
 /**
- * URL Slug Utilities for CamerPulse
- * Handles SEO-friendly URL generation, slug management, and URL redirection
+ * Unified Slug Generation System for CamerPulse
+ * Consolidates all slug utilities into a single, maintainable module
  */
 
-export interface SluggedEntity {
+export interface SlugEntity {
   id: string;
   slug?: string;
   name?: string;
   title?: string;
 }
 
-export interface PoliticianEntity extends SluggedEntity {
+export interface PoliticianEntity extends SlugEntity {
   name: string;
   position?: string;
   region?: string;
 }
 
-export interface VillageEntity extends SluggedEntity {
+export interface VillageEntity extends SlugEntity {
   name: string;
   region: string;
   division?: string;
 }
 
-export interface InstitutionEntity extends SluggedEntity {
+export interface InstitutionEntity extends SlugEntity {
   name: string;
   type: 'hospital' | 'school' | 'pharmacy';
   region: string;
 }
 
 /**
- * Generates a URL-safe slug from text - Enhanced version
+ * Core slug generation function with enhanced character handling
  */
 export function generateSlug(text: string, id?: string): string {
   if (!text) return id || 'item';
   
   let slug = text
-    .toString()                        // Cast to string
-    .toLowerCase()                    // Lowercase  
-    .trim()                          // Remove whitespace at start/end
-    .replace(/[\s\W-]+/g, '-')       // Replace spaces/non-word chars with hyphen
-    .replace(/^-+|-+$/g, '');        // Remove leading/trailing hyphens
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/[\s\W-]+/g, '-')
+    .replace(/^-+|-+$/g, '');
   
-  // Handle special characters more gracefully
+  // Enhanced character normalization
   slug = slug
     .replace(/[àáâäãåą]/g, 'a')
     .replace(/[èéêë]/g, 'e')
@@ -53,7 +53,6 @@ export function generateSlug(text: string, id?: string): string {
     .replace(/[ß]/g, 'ss')
     .replace(/[ýÿ]/g, 'y');
   
-  // Append ID if provided for uniqueness
   if (id) {
     slug = slug ? `${slug}-${id}` : id;
   }
@@ -62,12 +61,39 @@ export function generateSlug(text: string, id?: string): string {
 }
 
 /**
- * Creates SEO-friendly URLs for different entity types with language support
+ * Extract ID from slug
+ */
+export function parseSlugForId(slug: string): string | null {
+  if (!slug) return null;
+  
+  const parts = slug.split('-');
+  const lastPart = parts[parts.length - 1];
+  
+  // Check if it's a UUID or numeric ID
+  if (lastPart.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i) || 
+      lastPart.match(/^\d+$/)) {
+    return lastPart;
+  }
+  
+  return null;
+}
+
+/**
+ * Validate slug format
+ */
+export function isValidSlug(slug: string): boolean {
+  if (!slug) return false;
+  return /^[a-z0-9-]+$/.test(slug) && 
+         !slug.startsWith('-') && 
+         !slug.endsWith('-') &&
+         !slug.includes('--');
+}
+
+/**
+ * Unified URL builder with type safety
  */
 export class URLBuilder {
   private static getLanguagePrefix(): string {
-    // For now, return empty string to match current router configuration
-    // TODO: Add language prefix support when multi-language routing is implemented
     return '';
   }
 
@@ -105,7 +131,7 @@ export class URLBuilder {
 
   static parties = {
     list: () => `${URLBuilder.getLanguagePrefix()}/parties`,
-    detail: (entity: SluggedEntity & { name: string }) => {
+    detail: (entity: SlugEntity & { name: string }) => {
       const slug = entity.slug || generateSlug(entity.name, entity.id);
       return `${URLBuilder.getLanguagePrefix()}/parties/${slug}`;
     }
@@ -145,7 +171,7 @@ export class URLBuilder {
 
   static petitions = {
     list: () => `${URLBuilder.getLanguagePrefix()}/petitions`,
-    detail: (entity: SluggedEntity & { title: string }) => {
+    detail: (entity: SlugEntity & { title: string }) => {
       const slug = entity.slug || generateSlug(entity.title, entity.id);
       return `${URLBuilder.getLanguagePrefix()}/petitions/${slug}`;
     },
@@ -154,7 +180,7 @@ export class URLBuilder {
 
   static events = {
     list: () => `${URLBuilder.getLanguagePrefix()}/events`,
-    detail: (entity: SluggedEntity & { title: string }) => {
+    detail: (entity: SlugEntity & { title: string }) => {
       const slug = entity.slug || generateSlug(entity.title, entity.id);
       return `${URLBuilder.getLanguagePrefix()}/events/${slug}`;
     }
@@ -164,8 +190,6 @@ export class URLBuilder {
     user: (userId: string) => `/profile/${userId}`,
     username: (username: string) => `/profile/${username}`,
     userSlug: (username: string) => `/@${username}`,
-    
-    // Module-specific profile routes
     music: (artistSlug: string, id: string) => `/music/artists/${artistSlug}-${id}`,
     job: (username: string, id: string) => `/jobs/profile/${username}-${id}`,
     village: (username: string) => `/villages/members/${username}`,
@@ -192,102 +216,102 @@ export class URLBuilder {
 }
 
 /**
- * Parses slug to extract entity ID
+ * Content-specific slug generators
  */
-export function parseSlugForId(slug: string): string | null {
-  if (!slug) return null;
-  
-  // Extract ID from the end of the slug (after the last hyphen)
-  const parts = slug.split('-');
-  const lastPart = parts[parts.length - 1];
-  
-  // Check if it's a UUID or numeric ID
-  if (lastPart.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i) || 
-      lastPart.match(/^\d+$/)) {
-    return lastPart;
+export class ContentSlugGenerator {
+  static politician(name: string, position?: string, region?: string): string {
+    let slugText = name;
+    if (position) slugText += ` ${position}`;
+    if (region) slugText += ` ${region}`;
+    return generateSlug(slugText);
   }
-  
-  return null;
+
+  static village(name: string, region: string, division?: string): string {
+    let slugText = `${name} ${region}`;
+    if (division) slugText += ` ${division}`;
+    return generateSlug(slugText);
+  }
+
+  static content(title: string, category?: string): string {
+    let slugText = title;
+    if (category) slugText += ` ${category}`;
+    return generateSlug(slugText);
+  }
+
+  static username(username: string, suffix?: string): string {
+    let slugText = username;
+    if (suffix) slugText += ` ${suffix}`;
+    return generateSlug(slugText);
+  }
 }
 
 /**
- * Function to resolve slug with redirect handling
+ * Profile-specific utilities
  */
-export async function resolveSlug(entityType: string, inputSlug: string) {
-  const { supabase } = await import('@/integrations/supabase/client');
-  
-  const { data, error } = await supabase.rpc('get_entity_by_slug', {
-    entity_type: entityType,
-    input_slug: inputSlug
-  });
-  
-  if (error || !data || data.length === 0) {
-    return null;
-  }
-  
-  return data[0];
-}
-
-/**
- * Legacy URL redirect mappings
- */
-export const LEGACY_REDIRECTS: Record<string, (id: string, lang?: string) => string> = {
-  '/politician/:id': (id: string, lang = 'en') => `/${lang}/politicians/${id}`,
-  '/village-info/:id': (id: string, lang = 'en') => `/${lang}/villages/${id}`,
-  '/user-profile/:id': (id: string, lang = 'en') => `/${lang}/profile/${id}`,
-  '/ministry/:id': (id: string, lang = 'en') => `/${lang}/ministries/${id}`,
-  '/council/:id': (id: string, lang = 'en') => `/${lang}/councils/${id}`,
-  // Legacy patterns without language prefixes
-  '/:lang/politician/:id': (id: string, lang = 'en') => `/${lang}/politicians/${id}`,
-  '/:lang/village-info/:id': (id: string, lang = 'en') => `/${lang}/villages/${id}`,
-  '/:lang/user-profile/:id': (id: string, lang = 'en') => `/${lang}/profile/${id}`,
-};
-
-/**
- * Checks if a URL is a legacy format and returns the new URL
- */
-export function getLegacyRedirect(pathname: string): string | null {
-  // Extract language from path if present
-  const segments = pathname.split('/').filter(Boolean);
-  let detectedLang = 'en';
-  
-  if (segments[0] === 'en') {
-    detectedLang = segments[0];
+export class ProfileSlugHelper {
+  static createMusicSlug(artistName: string, id: string): string {
+    const slug = generateSlug(artistName, id);
+    return URLBuilder.profiles.music(slug.replace(`-${id}`, ''), id);
   }
 
-  for (const [pattern, generator] of Object.entries(LEGACY_REDIRECTS)) {
-    let regexPattern = pattern
-      .replace(':lang', '(en)')
-      .replace(':id', '([^/]+)');
+  static createJobSlug(username: string, id: string): string {
+    const slug = generateSlug(username);
+    return URLBuilder.profiles.job(slug, id);
+  }
+
+  static createVillageSlug(username: string): string {
+    const slug = generateSlug(username);
+    return URLBuilder.profiles.village(slug);
+  }
+
+  static createMarketplaceSlug(username: string, id: string): string {
+    const slug = generateSlug(username);
+    return URLBuilder.profiles.marketplace(slug, id);
+  }
+
+  static parseProfileUrl(url: string): {
+    type: 'user' | 'music' | 'job' | 'village' | 'marketplace' | null;
+    username?: string;
+    id?: string;
+    slug?: string;
+  } {
+    const path = url.replace(window.location.origin, '');
     
-    const regex = new RegExp(`^${regexPattern}$`);
-    const match = pathname.match(regex);
-    
-    if (match) {
-      const id = match[match.length - 1]; // Last captured group is always the ID
-      const lang = match[1] || detectedLang; // First group might be language
-      return generator(id, lang);
+    const patterns = {
+      music: /^\/music\/artists\/(.+)-([^-]+)$/,
+      job: /^\/jobs\/profile\/(.+)-([^-]+)$/,
+      village: /^\/villages\/members\/(.+)$/,
+      marketplace: /^\/marketplace\/vendors\/(.+)-([^-]+)$/,
+      user: /^\/profile\/(.+)$/,
+      userSlug: /^\/@(.+)$/
+    };
+
+    for (const [type, pattern] of Object.entries(patterns)) {
+      const match = path.match(pattern);
+      if (match) {
+        if (type === 'village' || type === 'user' || type === 'userSlug') {
+          return {
+            type: type === 'userSlug' ? 'user' : type as any,
+            username: match[1],
+            slug: match[1]
+          };
+        } else {
+          return {
+            type: type as any,
+            username: match[1],
+            id: match[2],
+            slug: match[1]
+          };
+        }
+      }
     }
+
+    return { type: null };
   }
-  
-  return null;
 }
 
 /**
- * Validates slug format
- */
-export function isValidSlug(slug: string): boolean {
-  if (!slug) return false;
-  
-  // Must be lowercase, contain only letters, numbers, and hyphens
-  return /^[a-z0-9-]+$/.test(slug) && 
-         !slug.startsWith('-') && 
-         !slug.endsWith('-') &&
-         !slug.includes('--');
-}
-
-/**
- * Creates canonical URLs for SEO
+ * Canonical URL generation for SEO
  */
 export function getCanonicalURL(path: string): string {
   const baseURL = typeof window !== 'undefined' 
@@ -350,7 +374,7 @@ export class SEOHelper {
 }
 
 /**
- * Navigation helpers
+ * Breadcrumb navigation helpers
  */
 export function createBreadcrumbs(path: string): Array<{ label: string; href: string }> {
   const segments = path.split('/').filter(Boolean);
@@ -360,7 +384,6 @@ export function createBreadcrumbs(path: string): Array<{ label: string; href: st
   for (const segment of segments) {
     currentPath += `/${segment}`;
     
-    // Convert slug back to readable format
     const label = segment
       .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
@@ -372,6 +395,65 @@ export function createBreadcrumbs(path: string): Array<{ label: string; href: st
   return breadcrumbs;
 }
 
+/**
+ * Legacy redirect handling
+ */
+export const LEGACY_REDIRECTS: Record<string, (id: string, lang?: string) => string> = {
+  '/politician/:id': (id: string, lang = 'en') => `/${lang}/politicians/${id}`,
+  '/village-info/:id': (id: string, lang = 'en') => `/${lang}/villages/${id}`,
+  '/user-profile/:id': (id: string, lang = 'en') => `/${lang}/profile/${id}`,
+  '/ministry/:id': (id: string, lang = 'en') => `/${lang}/ministries/${id}`,
+  '/council/:id': (id: string, lang = 'en') => `/${lang}/councils/${id}`,
+  '/:lang/politician/:id': (id: string, lang = 'en') => `/${lang}/politicians/${id}`,
+  '/:lang/village-info/:id': (id: string, lang = 'en') => `/${lang}/villages/${id}`,
+  '/:lang/user-profile/:id': (id: string, lang = 'en') => `/${lang}/profile/${id}`,
+};
+
+export function getLegacyRedirect(pathname: string): string | null {
+  const segments = pathname.split('/').filter(Boolean);
+  let detectedLang = 'en';
+  
+  if (segments[0] === 'en') {
+    detectedLang = segments[0];
+  }
+
+  for (const [pattern, generator] of Object.entries(LEGACY_REDIRECTS)) {
+    let regexPattern = pattern
+      .replace(':lang', '(en)')
+      .replace(':id', '([^/]+)');
+    
+    const regex = new RegExp(`^${regexPattern}$`);
+    const match = pathname.match(regex);
+    
+    if (match) {
+      const id = match[match.length - 1];
+      const lang = match[1] || detectedLang;
+      return generator(id, lang);
+    }
+  }
+  
+  return null;
+}
+
+/**
+ * Async slug resolution with redirect handling
+ */
+export async function resolveSlug(entityType: string, inputSlug: string) {
+  const { supabase } = await import('@/integrations/supabase/client');
+  
+  const { data, error } = await supabase.rpc('get_entity_by_slug', {
+    entity_type: entityType,
+    input_slug: inputSlug
+  });
+  
+  if (error || !data || data.length === 0) {
+    return null;
+  }
+  
+  return data[0];
+}
+
+// Default export for backward compatibility
 export default {
   generateSlug,
   URLBuilder,
@@ -380,5 +462,7 @@ export default {
   isValidSlug,
   getCanonicalURL,
   SEOHelper,
-  createBreadcrumbs
+  createBreadcrumbs,
+  ContentSlugGenerator,
+  ProfileSlugHelper
 };

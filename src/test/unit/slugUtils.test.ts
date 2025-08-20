@@ -4,9 +4,10 @@ import {
   parseSlugForId, 
   isValidSlug, 
   getCanonicalURL,
-  URLBuilder 
-} from '@/utils/slugUtils';
-import { ProfileSlugHelper, ContentSlugGenerator } from '@/utils/profileSlugUtils';
+  URLBuilder,
+  ProfileSlugHelper, 
+  ContentSlugGenerator 
+} from '@/utils/slug';
 
 describe('Slug Generation Utilities', () => {
   describe('generateSlug', () => {
