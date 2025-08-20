@@ -50372,6 +50372,18 @@ export type Database = {
         Args: { p_user_id: string }
         Returns: boolean
       }
+      is_agency_member: {
+        Args: { agency_id_param: string }
+        Returns: boolean
+      }
+      is_company_admin_for_team_member: {
+        Args: { company_id_param: string }
+        Returns: boolean
+      }
+      is_shipping_company_staff: {
+        Args: { company_id_param: string }
+        Returns: boolean
+      }
       learn_from_manual_fix: {
         Args: {
           p_file_path: string
@@ -50462,6 +50474,10 @@ export type Database = {
           p_update_type?: string
         }
         Returns: number
+      }
+      owns_marketplace_order: {
+        Args: { order_id_param: string }
+        Returns: boolean
       }
       process_escalations: {
         Args: Record<PropertyKey, never>
