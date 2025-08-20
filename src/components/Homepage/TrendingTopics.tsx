@@ -299,7 +299,7 @@ export const TrendingTopics: React.FC = () => {
 
         {/* View More */}
         <div className="text-center mt-12">
-          <Link to="/civic-feed">
+          <Link to="/feed">
             <Button 
               size="lg" 
               variant="outline"

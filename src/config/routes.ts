@@ -11,7 +11,7 @@ export const ROUTES = {
   // Civic & Democracy
   CIVIC: {
     DASHBOARD: '/civic-dashboard',
-    FEED: '/civic-feed',
+    FEED: '/feed',
     PETITIONS: '/petitions',
     POLLS: '/polls',
     EDUCATION: '/civic-education',

@@ -13,7 +13,6 @@ const routeLabels: Record<string, string> = {
   '/admin/dashboard': 'Admin Dashboard',
   '/auth': 'Authentication',
   '/feed': 'Feed',
-  '/civic-feed': 'Civic Feed',
   '/polls': 'Polls',
   '/marketplace': 'Marketplace',
   '/news': 'News',

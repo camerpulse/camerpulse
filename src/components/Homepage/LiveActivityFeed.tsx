@@ -231,7 +231,7 @@ export const LiveActivityFeed: React.FC = () => {
             >
               {isLive ? 'Pause' : 'Resume'} Live Feed
             </Button>
-            <Link to="/civic-feed">
+            <Link to="/feed">
               <Button variant="outline" className="group">
                 View All
                 <ChevronRight className="h-4 w-4 ml-2 group-hover:translate-x-1 transition-transform" />

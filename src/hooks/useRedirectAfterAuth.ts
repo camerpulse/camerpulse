@@ -14,9 +14,8 @@ export const useRedirectAfterAuth = () => {
       
       // Smart redirect logic
       if (from === '/auth' || from === '/login' || from === '/register') {
-        // If coming from auth pages, redirect to profile or home
-        const redirectPath = profile.username ? `/profile/${profile.username}` : '/';
-        navigate(redirectPath, { replace: true });
+        // If coming from auth pages, redirect to feed
+        navigate('/feed', { replace: true });
       } else {
         // Redirect to the originally intended page
         navigate(from, { replace: true });

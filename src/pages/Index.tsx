@@ -202,7 +202,7 @@ const QuickActionCards = memo(() => {
       title: "Join Discussions",
       description: "Participate in civic conversations",
       icon: MessageCircle,
-      href: "/civic-feed",
+      href: "/feed",
       gradient: "from-accent via-purple-500 to-secondary",
       stats: "5,230 daily discussions",
       highlight: "Community Voice",
@@ -416,7 +416,7 @@ const Index = () => {
     const startTime = performance.now();
     
     // Preload key routes that users are likely to visit
-    const criticalRoutes = ['/civic-feed', '/polls', '/politicians', '/transparency'];
+    const criticalRoutes = ['/feed', '/polls', '/politicians', '/transparency'];
     criticalRoutes.forEach(route => {
       const link = document.createElement('link');
       link.rel = 'prefetch';

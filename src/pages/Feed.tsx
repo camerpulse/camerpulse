@@ -1,6 +1,6 @@
 /**
- * CamerPulse Feed Page - Complete Redesign
- * Mobile-first social media feed with civic enhancements
+ * CamerPulse Unified Feed - Civic & Social Engagement Hub
+ * Mobile-first feed combining civic engagement and social interaction
  */
 
 import React, { useState, useEffect } from 'react';

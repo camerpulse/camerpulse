@@ -35,7 +35,6 @@ const UnifiedPoliticalDirectoryPage = lazy(() => import('@/pages/UnifiedPolitica
 
 // Civic Pages
 const CivicDashboard = lazy(() => import('@/pages/CivicDashboard'));
-const CivicFeed = lazy(() => import('@/pages/CivicFeed'));
 const CivicEducationHub = lazy(() => import('@/pages/CivicEducationHub'));
 const CivicContributionsPage = lazy(() => import('@/pages/CivicContributionsPage'));
 
@@ -225,11 +224,12 @@ export const AppRouter: React.FC = () => {
         {/* === FEEDS === */}
         <Route 
           path="/feed" 
-          element={<WrappedRoute element={Feed} routeName="Social Feed" />} 
+          element={<WrappedRoute element={Feed} routeName="CamerPulse Feed" />} 
         />
+        {/* Redirect old civic-feed to unified feed */}
         <Route 
           path="/civic-feed" 
-          element={<WrappedRoute element={CivicFeed} routeName="Civic Feed" />} 
+          element={<Navigate to="/feed" replace />} 
         />
         
         {/* === POLITICAL ENTITIES === */}

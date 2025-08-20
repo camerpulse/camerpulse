@@ -53,8 +53,8 @@ const mainNavItems = [
     icon: Home,
   },
   {
-    title: 'Civic Feed',
-    url: '/civic-feed',
+    title: 'Feed',
+    url: '/feed',
     icon: MessageSquare,
   },
   {
