@@ -158,7 +158,7 @@ export const EnhancedInteractionBar: React.FC<EnhancedInteractionBarProps> = ({
           className="flex items-center gap-1 sm:gap-2 text-muted-foreground hover:text-blue-500 hover:scale-105 transition-all px-2 sm:px-3"
         >
           <MessageCircle className="h-4 w-4" />
-          <span className="font-medium text-xs sm:text-sm">{engagement.comments}</span>
+          <span className="font-medium text-xs sm:text-sm">{engagement.comments || 0}</span>
         </Button>
 
         {/* Pulse Button */}
