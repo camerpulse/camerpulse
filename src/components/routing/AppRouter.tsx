@@ -16,6 +16,7 @@ import { ROUTES } from '@/config/routes';
 const Index = lazy(() => import('@/pages/Index'));
 const AboutUs = lazy(() => import('@/pages/AboutUs'));
 const AuthPage = lazy(() => import('@/pages/AuthPage'));
+const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 // Political Pages
@@ -215,6 +216,10 @@ export const AppRouter: React.FC = () => {
         <Route 
           path="/auth" 
           element={<WrappedRoute element={AuthPage} routeName="Authentication" />} 
+        />
+        <Route 
+          path="/auth/reset-password" 
+          element={<WrappedRoute element={ResetPasswordPage} routeName="Reset Password" />} 
         />
         
         {/* === CIVIC DASHBOARD === */}

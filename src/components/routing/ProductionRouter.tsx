@@ -11,6 +11,7 @@ import { LoadingSpinner } from '@/components/LoadingSpinner';
 import {
   LazyIndex,
   LazyAuthPage,
+  LazyResetPasswordPage,
   LazyCivicDashboard,
   LazyCivicFeed,
   LazyCivicEducationHub,
@@ -124,6 +125,14 @@ export const ProductionRouter: React.FC = () => {
           element={
             <Suspense fallback={<ProductionLoadingFallback message="Loading authentication..." />}>
               <LazyAuthPage />
+            </Suspense>
+          } 
+        />
+        <Route 
+          path="/auth/reset-password" 
+          element={
+            <Suspense fallback={<ProductionLoadingFallback message="Loading reset password..." />}>
+              <LazyResetPasswordPage />
             </Suspense>
           } 
         />

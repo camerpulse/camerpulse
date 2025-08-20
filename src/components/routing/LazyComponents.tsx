@@ -3,6 +3,7 @@ import { lazy } from 'react';
 // Core Pages
 export const LazyIndex = lazy(() => import('@/pages/Index'));
 export const LazyAuthPage = lazy(() => import('@/pages/AuthPage').then(module => ({ default: module.AuthPage })));
+export const LazyResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
 
 // Civic & Democracy
 export const LazyCivicDashboard = lazy(() => import('@/pages/CivicDashboard'));

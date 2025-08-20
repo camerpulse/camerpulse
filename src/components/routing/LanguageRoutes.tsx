@@ -7,6 +7,7 @@ import { ROUTES } from '@/config/routes';
 // Import pages directly for stable production build
 import Index from '@/pages/Index';
 import { AuthPage } from '@/pages/AuthPage';
+import ResetPasswordPage from '@/pages/ResetPasswordPage';
 import Feed from '@/pages/Feed';
 import CivicFeed from '@/pages/CivicFeed';
 import EnhancedPoliticians from '@/pages/EnhancedPoliticians';
@@ -85,6 +86,7 @@ export const AppRouter: React.FC = () => {
         <Route path="/login" element={<AuthPage />} />
         <Route path="/register" element={<AuthPage />} />
         <Route path="/auth" element={<AuthPage />} />
+        <Route path="/auth/reset-password" element={<ResetPasswordPage />} />
         
         {/* Civic Dashboard */}
         <Route path="/civic-dashboard" element={<CivicDashboard />} />

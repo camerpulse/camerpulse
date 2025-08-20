@@ -7,6 +7,7 @@ export const ROUTES = {
   // Core Platform
   HOME: '/',
   AUTH: '/auth',
+  AUTH_RESET: '/auth/reset-password',
   
   // Civic & Democracy
   CIVIC: {
@@ -137,6 +138,7 @@ export const ROUTE_PROTECTION = {
   PUBLIC: [
     ROUTES.HOME,
     ROUTES.AUTH,
+    ROUTES.AUTH_RESET,
     ROUTES.CIVIC.FEED,
     ROUTES.POLITICAL.POLITICIANS,
     ROUTES.DIRECTORIES.VILLAGES,

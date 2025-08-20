@@ -11,6 +11,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff, Users, Shield, Globe, AlertTriangle } from 'lucide-react';
 import { validatePasswordStrength } from '@/utils/authSecurity';
 import { advancedSanitizeInput } from '@/utils/security';
+import { ROUTES } from '@/config/routes';
 
 const AuthPage: React.FC = () => {
   const navigate = useNavigate();
@@ -240,6 +241,11 @@ const AuthPage: React.FC = () => {
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </Button>
                     </div>
+                  </div>
+                  <div className="flex justify-end">
+                    <Link to={ROUTES.AUTH_RESET} className="text-sm text-primary hover:underline">
+                      Forgot password?
+                    </Link>
                   </div>
 
                   <Button 
