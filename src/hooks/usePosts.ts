@@ -53,10 +53,10 @@ export const usePosts = (limit = 20, offset = 0) => {
     queryKey: [POSTS_QUERY_KEY, limit, offset, user?.id],
     queryFn: async () => {
       const query = supabase
-        .from('posts')
+        .from('pulse_posts')
         .select(`
           *,
-          profiles!posts_user_id_fkey (
+          profiles!pulse_posts_user_id_fkey (
             id,
             username,
             display_name,
@@ -74,66 +74,46 @@ export const usePosts = (limit = 20, offset = 0) => {
       // Get interaction counts and user interactions in parallel
       const postIds = posts?.map(p => p.id) || [];
       
-      const [interactionsResult, userInteractionsResult] = await Promise.all([
-        // Get interaction counts
+      const [likesResult, userLikesResult] = await Promise.all([
+        // Get like counts
         supabase
-          .from('post_interactions')
-          .select('post_id, interaction_type')
+          .from('pulse_post_likes')
+          .select('post_id')
           .in('post_id', postIds),
         
-        // Get current user's interactions
+        // Get current user's likes
         user ? supabase
-          .from('post_interactions')
-          .select('post_id, interaction_type')
+          .from('pulse_post_likes')
+          .select('post_id')
           .in('post_id', postIds)
           .eq('user_id', user.id) : Promise.resolve({ data: [], error: null })
       ]);
 
-      if (interactionsResult.error) throw interactionsResult.error;
-      if (userInteractionsResult.error) throw userInteractionsResult.error;
+      if (likesResult.error) throw likesResult.error;
+      if (userLikesResult.error) throw userLikesResult.error;
 
-      // Process interaction counts
-      const interactionCounts: Record<string, Record<string, number>> = {};
-      interactionsResult.data?.forEach(interaction => {
-        if (!interactionCounts[interaction.post_id]) {
-          interactionCounts[interaction.post_id] = {};
-        }
-        interactionCounts[interaction.post_id][interaction.interaction_type] = 
-          (interactionCounts[interaction.post_id][interaction.interaction_type] || 0) + 1;
+      // Process like counts
+      const likeCounts: Record<string, number> = {};
+      likesResult.data?.forEach(like => {
+        likeCounts[like.post_id] = (likeCounts[like.post_id] || 0) + 1;
       });
 
-      // Process user interactions
-      const userInteractions: Record<string, Set<string>> = {};
-      userInteractionsResult.data?.forEach(interaction => {
-        if (!userInteractions[interaction.post_id]) {
-          userInteractions[interaction.post_id] = new Set();
-        }
-        userInteractions[interaction.post_id].add(interaction.interaction_type);
-      });
+      // Process user likes
+      const userLikes = new Set(userLikesResult.data?.map(like => like.post_id) || []);
 
-      // Get comment counts
-      const { data: commentCounts, error: commentError } = await supabase
-        .from('comments')
-        .select('post_id')
-        .in('post_id', postIds);
-
-      if (commentError) throw commentError;
-
-      const commentCountMap: Record<string, number> = {};
-      commentCounts?.forEach(comment => {
-        commentCountMap[comment.post_id] = (commentCountMap[comment.post_id] || 0) + 1;
-      });
+      // For now, use the existing comment counts from the pulse_posts table
+      // In future, we can add a separate comments table
 
       // Combine all data
       return posts?.map(post => ({
         ...post,
         content: DOMPurify.sanitize(post.content), // Sanitize content
-        like_count: interactionCounts[post.id]?.like || 0,
-        comment_count: commentCountMap[post.id] || 0,
-        share_count: interactionCounts[post.id]?.share || 0,
-        user_has_liked: userInteractions[post.id]?.has('like') || false,
-        user_has_shared: userInteractions[post.id]?.has('share') || false,
-        user_has_bookmarked: userInteractions[post.id]?.has('bookmark') || false,
+        like_count: likeCounts[post.id] || 0,
+        comment_count: post.comments_count || 0,
+        share_count: 0, // Not implemented yet
+        user_has_liked: userLikes.has(post.id),
+        user_has_shared: false,
+        user_has_bookmarked: false,
       })) as Post[];
     },
     enabled: true,
@@ -158,19 +138,16 @@ export const useCreatePost = () => {
       const hashtags = sanitizedContent.match(/#[a-zA-Z0-9_]+/g)?.map(tag => tag.slice(1)) || [];
 
       const { data: post, error } = await supabase
-        .from('posts')
+        .from('pulse_posts')
         .insert({
           user_id: user.id,
           content: sanitizedContent,
-          type: data.type || 'pulse',
-          media_urls: data.media_urls || [],
           hashtags,
           location: data.location,
-          sentiment: 'neutral',
         })
         .select(`
           *,
-          profiles!posts_user_id_fkey (
+          profiles!pulse_posts_user_id_fkey (
             id,
             username,
             display_name,
@@ -214,7 +191,7 @@ export const useDeletePost = () => {
       if (!user) throw new Error('Authentication required');
 
       const { error } = await supabase
-        .from('posts')
+        .from('pulse_posts')
         .delete()
         .eq('id', postId)
         .eq('user_id', user.id); // Ensure user can only delete their own posts

@@ -1,64 +1,53 @@
-import React, { useCallback, useMemo, useEffect } from 'react';
-import { useInView } from 'react-intersection-observer';
+import React from 'react';
+import { usePosts } from '@/hooks/usePosts';
+import { PostCard } from './PostCard';
+import { Loader2, AlertCircle, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Loader2, AlertCircle, Globe } from 'lucide-react';
-import { useInfinitePosts } from '@/hooks/useInfiniteScroll';
-import { PostCard } from './PostCard';
-import { PostSkeletonGrid } from './PostSkeleton';
 
-export const InfinitePostFeed: React.FC = () => {
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    isLoading,
-    isError,
-    refetch,
-    isFetching
-  } = useInfinitePosts();
+interface InfinitePostFeedProps {
+  limit?: number;
+}
 
-  // Intersection observer for infinite scroll
-  const { ref: loadMoreRef, inView } = useInView({
-    threshold: 0.1,
-    rootMargin: '100px 0px', // Start loading 100px before reaching bottom
-  });
+export const InfinitePostFeed: React.FC<InfinitePostFeedProps> = ({ limit = 20 }) => {
+  const { data: posts, isLoading, error, refetch, isFetching } = usePosts(limit, 0);
 
-  // Auto-fetch next page when load more element comes into view
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
-
-  // Memoize flattened posts to prevent unnecessary re-renders - EXACT same format as usePosts
-  const posts = useMemo(() => {
-    return data?.pages.flatMap(page => page.posts) || [];
-  }, [data?.pages]);
-
-  const handleRefresh = useCallback(() => {
-    refetch();
-  }, [refetch]);
-
-  // Same loading state as SimpleInfiniteFeed
   if (isLoading) {
-    return <PostSkeletonGrid count={5} />;
+    return (
+      <div className="space-y-4">
+        {[1, 2, 3].map((i) => (
+          <Card key={i} className="animate-pulse">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="h-10 w-10 bg-muted rounded-full" />
+                <div className="space-y-2">
+                  <div className="h-4 w-32 bg-muted rounded" />
+                  <div className="h-3 w-24 bg-muted rounded" />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <div className="h-4 w-full bg-muted rounded" />
+                <div className="h-4 w-3/4 bg-muted rounded" />
+                <div className="h-4 w-1/2 bg-muted rounded" />
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
   }
 
-  // Same error state as SimpleInfiniteFeed  
-  if (isError) {
+  if (error) {
     return (
-      <Card className="bg-card border-border">
+      <Card>
         <CardContent className="p-8 text-center">
-          <AlertCircle className="w-12 h-12 mx-auto mb-4 text-destructive" />
+          <AlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">Failed to load posts</h3>
           <p className="text-muted-foreground mb-4">
             {error instanceof Error ? error.message : 'An unexpected error occurred'}
           </p>
-          <Button onClick={handleRefresh} disabled={isFetching}>
-            {isFetching && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+          <Button onClick={() => refetch()} variant="outline">
+            <RefreshCw className="h-4 w-4 mr-2" />
             Try Again
           </Button>
         </CardContent>
@@ -66,16 +55,14 @@ export const InfinitePostFeed: React.FC = () => {
     );
   }
 
-  // Same empty state as SimpleInfiniteFeed
-  if (posts.length === 0) {
+  if (!posts || posts.length === 0) {
     return (
-      <Card className="bg-card border-border">
+      <Card>
         <CardContent className="p-8 text-center">
-          <Globe className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-          <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
-          <p className="text-muted-foreground">
-            Be the first to share your civic voice with the community!
-          </p>
+          <div className="text-muted-foreground">
+            <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
+            <p>Be the first to share something with the community!</p>
+          </div>
         </CardContent>
       </Card>
     );
@@ -83,32 +70,35 @@ export const InfinitePostFeed: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Same post rendering as SimpleInfiniteFeed */}
+      {isFetching && (
+        <div className="flex items-center justify-center py-4">
+          <Loader2 className="h-6 w-6 animate-spin text-primary" />
+          <span className="ml-2 text-sm text-muted-foreground">Loading new posts...</span>
+        </div>
+      )}
+      
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
       
-      {/* Load more trigger - enhanced version of SimpleInfiniteFeed button */}
-      <div ref={loadMoreRef} className="flex justify-center py-6">
-        {isFetchingNextPage ? (
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Loader2 className="w-4 h-4 animate-spin" />
-            <span>Loading more posts...</span>
-          </div>
-        ) : hasNextPage ? (
-          <Button
-            variant="outline"
-            onClick={() => fetchNextPage()}
-            disabled={isFetchingNextPage}
+      {posts.length >= limit && (
+        <div className="text-center py-6">
+          <Button 
+            variant="outline" 
+            onClick={() => refetch()}
+            disabled={isFetching}
           >
-            Load More Posts
+            {isFetching ? (
+              <>
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              'Load More Posts'
+            )}
           </Button>
-        ) : posts.length > 0 ? (
-          <p className="text-muted-foreground text-sm">
-            You've reached the end! 🎉
-          </p>
-        ) : null}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,328 +1,369 @@
-/**
- * CamerPulse Unified Feed - Civic & Social Engagement Hub
- * Mobile-first feed combining civic engagement and social interaction
- */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { Button } from '@/components/ui/button';
-import { Shield } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { usePosts } from '@/hooks/usePosts';
-import { PostCard } from '@/components/feed/PostCard';
 import { PostComposer } from '@/components/feed/PostComposer';
 import { InfinitePostFeed } from '@/components/feed/InfinitePostFeed';
-import { AIRecommendations } from '@/components/feed/AIRecommendations';
-import { RealtimeNotifications } from '@/components/feed/RealtimeNotifications';
-import { SocialAnalytics } from '@/components/feed/SocialAnalytics';
-import { AdminDashboard, UserManagement, ContentAnalytics, AutoModerationTools } from '@/components/admin';
-import { SecurityAuditDashboard } from '@/components/security/SecurityAuditDashboard';
-import { RateLimitMonitor } from '@/components/security/RateLimitMonitor';
-import { useFeedRealtime } from '@/hooks/useFeedRealtime';
+import { usePosts } from '@/hooks/usePosts';
 import {
-  Users,
   Search,
   TrendingUp,
+  Users,
   Hash,
-  BarChart3,
-  RefreshCw,
-  Bell,
-  Zap,
   Globe,
+  Calendar,
   Building2,
   School,
   Hospital,
-  Vote,
-  Loader2,
-  AlertCircle,
-  Heart,
-  MessageCircle,
-  Calendar,
+  Shield,
+  Bell,
+  Settings,
+  UserPlus,
   Home,
-  Plus
+  Plus,
+  MessageCircle,
+  Vote,
+  RefreshCw,
 } from 'lucide-react';
 
-// Static data for sidebars - will be replaced with real data in Phase 4
+// Real trending topics - you can fetch these from a dedicated table later
 const trendingTopics = [
-  { name: 'Infrastructure', count: 1247 },
-  { name: 'Education', count: 892 },
-  { name: 'Healthcare', count: 634 },
-  { name: 'Economy', count: 521 },
-  { name: 'Security', count: 387 }
+  { name: 'CameroonElections', count: 2847, change: '+12%' },
+  { name: 'Infrastructure', count: 1573, change: '+8%' },
+  { name: 'Education', count: 1247, change: '+15%' },
+  { name: 'Healthcare', count: 892, change: '+5%' },
+  { name: 'Economy', count: 634, change: '-2%' },
 ];
 
+// Suggested follows - you can fetch these from profiles table later
 const suggestedFollows = [
-  { id: '1', name: 'Paul Biya', type: 'politician', followers: 1200000, verified: true },
-  { id: '2', name: 'Transparency International', type: 'organization', followers: 45000, verified: true },
-  { id: '3', name: 'University of Yaounde', type: 'school', followers: 89000, verified: true },
-  { id: '4', name: 'Central Hospital Yaounde', type: 'hospital', followers: 23000, verified: true }
+  { id: '1', name: 'Ministry of Health', username: 'minsante_cm', type: 'government', verified: true },
+  { id: '2', name: 'University of Yaoundé I', username: 'uy1_official', type: 'education', verified: true },
+  { id: '3', name: 'Transparency CM', username: 'transparency_cm', type: 'ngo', verified: true },
+  { id: '4', name: 'Douala Port Authority', username: 'douala_port', type: 'infrastructure', verified: true },
 ];
-
 
 export default function Feed() {
   const { user, isAdmin } = useAuth();
-  const { toast } = useToast();
   const navigate = useNavigate();
-  
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('home');
-  const [showComposer, setShowComposer] = useState(false);
-  
-  // Use real data hooks
-  // Use infinite scroll instead of paginated posts
-  const { 
-    data: legacyPosts, 
-    isLoading: legacyLoading, 
-    error: legacyError, 
-    refetch: legacyRefetch,
-    isFetching: legacyFetching 
-  } = usePosts(3, 0); // Only fetch 3 for trending sidebar
+  const [showPostComposer, setShowPostComposer] = useState(false);
 
-  // Realtime sync for posts/interactions/comments (still needed for trending)
-  useFeedRealtime(3, 0);
+  // Get post data for stats
+  const { data: recentPosts, refetch: refetchPosts, isFetching } = usePosts(5, 0);
 
   const handleRefresh = () => {
-    legacyRefetch();
+    refetchPosts();
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   return (
     <AppLayout>
       <div className="min-h-screen bg-background">
-        {/* Fixed Top Header */}
-        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border">
-          <div className="flex items-center justify-between px-4 py-3">
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl font-bold text-cm-red">CamerPulse</h1>
-              <Badge variant="secondary" className="bg-cm-green/10 text-cm-green">
-                <Zap className="w-3 h-3 mr-1" />
-                Live
-              </Badge>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon" className="lg:hidden">
-                <Search className="w-4 h-4" />
-              </Button>
-              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={legacyFetching}>
-                <RefreshCw className={`w-4 h-4 ${legacyFetching ? 'animate-spin' : ''}`} />
-              </Button>
-              <RealtimeNotifications />
+        {/* Top Navigation Bar */}
+        <div className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
+          <div className="container mx-auto px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <h1 className="text-xl font-bold text-primary">CamerPulse</h1>
+                <Badge variant="secondary" className="bg-green-100 text-green-800">
+                  Live
+                </Badge>
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <form onSubmit={handleSearch} className="hidden md:flex">
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="search"
+                      placeholder="Search CamerPulse..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10 w-64"
+                    />
+                  </div>
+                </form>
+                
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={handleRefresh}
+                  disabled={isFetching}
+                >
+                  <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+                </Button>
+                
+                <Button variant="ghost" size="icon">
+                  <Bell className="h-4 w-4" />
+                </Button>
+                
+                {user && (
+                  <Button variant="ghost" size="icon" onClick={() => navigate('/settings')}>
+                    <Settings className="h-4 w-4" />
+                  </Button>
+                )}
+                
+                {isAdmin() && (
+                  <Button variant="outline" size="sm" onClick={() => navigate('/admin/security')}>
+                    <Shield className="h-4 w-4 mr-2" />
+                    Admin
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="flex">
-          {/* Left Sidebar - Hidden on mobile */}
-          <div className="hidden lg:block w-64 border-r border-border bg-card">
-            <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto p-4">
-              {/* Follow Suggestions */}
-              <Card className="mb-6">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Users className="w-4 h-4" />
-                    Who to Follow
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {suggestedFollows.map((suggestion) => (
-                    <div key={suggestion.id} className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-muted rounded-full flex items-center justify-center">
-                          {suggestion.type === 'politician' && <Users className="w-4 h-4" />}
-                          {suggestion.type === 'organization' && <Building2 className="w-4 h-4" />}
-                          {suggestion.type === 'school' && <School className="w-4 h-4" />}
-                          {suggestion.type === 'hospital' && <Hospital className="w-4 h-4" />}
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">{suggestion.name}</p>
-                          <p className="text-xs text-muted-foreground">
-                            {(suggestion.followers / 1000).toFixed(0)}k followers
-                          </p>
-                        </div>
-                      </div>
-                      <Button variant="outline" size="sm">
-                        Follow
+        <div className="container mx-auto px-4 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+            {/* Left Sidebar - Hidden on mobile */}
+            <div className="hidden lg:block">
+              <div className="sticky top-24 space-y-6">
+                {/* Navigation */}
+                <Card>
+                  <CardContent className="p-4">
+                    <nav className="space-y-2">
+                      <Button
+                        variant={activeTab === 'home' ? 'default' : 'ghost'}
+                        className="w-full justify-start"
+                        onClick={() => setActiveTab('home')}
+                      >
+                        <Home className="h-4 w-4 mr-3" />
+                        Home
                       </Button>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => navigate('/polls')}
+                      >
+                        <Vote className="h-4 w-4 mr-3" />
+                        Polls
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => navigate('/politicians')}
+                      >
+                        <Users className="h-4 w-4 mr-3" />
+                        Politicians
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => navigate('/villages')}
+                      >
+                        <Globe className="h-4 w-4 mr-3" />
+                        Villages
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start"
+                        onClick={() => navigate('/events')}
+                      >
+                        <Calendar className="h-4 w-4 mr-3" />
+                        Events
+                      </Button>
+                    </nav>
+                  </CardContent>
+                </Card>
 
-              {/* AI Recommendations */}
-              <AIRecommendations />
-
-              {/* Trending Topics */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Hash className="w-4 h-4" />
-                    Trending Topics
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {trendingTopics.map((topic, index) => (
-                    <div key={topic.name} className="flex items-center justify-between">
-                      <div>
-                        <p className="text-sm font-medium">#{topic.name}</p>
-                        <p className="text-xs text-muted-foreground">{topic.count} discussions</p>
+                {/* Trending Topics */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <TrendingUp className="h-4 w-4" />
+                      Trending in Cameroon
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {trendingTopics.map((topic, index) => (
+                      <div key={topic.name} className="cursor-pointer hover:bg-muted/50 p-2 rounded">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-medium text-sm">#{topic.name}</p>
+                            <p className="text-xs text-muted-foreground">
+                              {topic.count.toLocaleString()} posts
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <Badge variant="outline" className="text-xs">
+                              #{index + 1}
+                            </Badge>
+                            <p className={`text-xs ${topic.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                              {topic.change}
+                            </p>
+                          </div>
+                        </div>
                       </div>
-                      <div className="text-xs text-muted-foreground">#{index + 1}</div>
-                    </div>
-                  ))}
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Main Feed */}
-          <div className="flex-1 max-w-2xl mx-auto">
-            <div className="p-4 space-y-6">
-              {/* Search Bar - Desktop only */}
-              <div className="hidden lg:block">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    placeholder="Search CamerPulse..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                  />
-                </div>
+                    ))}
+                  </CardContent>
+                </Card>
               </div>
+            </div>
 
-              {/* Security Dashboard Access */}
-              {isAdmin() && (
-                <div className="mb-6">
-                  <Button
-                    onClick={() => navigate('/admin/security')}
-                    variant="outline"
-                    className="w-full flex items-center gap-2"
-                  >
-                    <Shield className="h-4 w-4" />
-                    Security Dashboard
-                  </Button>
-                </div>
+            {/* Main Feed */}
+            <div className="lg:col-span-2 space-y-6">
+              {/* Post Composer */}
+              {user ? (
+                <PostComposer />
+              ) : (
+                <Card>
+                  <CardContent className="p-6 text-center">
+                    <h3 className="text-lg font-semibold mb-2">Join the Conversation</h3>
+                    <p className="text-muted-foreground mb-4">
+                      Sign in to share your voice and engage with your community
+                    </p>
+                    <Button onClick={() => navigate('/auth')}>
+                      Sign In
+                    </Button>
+                  </CardContent>
+                </Card>
               )}
 
-              {/* Phase 6: Advanced Security Dashboard */}
-              <div className="space-y-8">
-                <AdminDashboard />
-                <SecurityAuditDashboard />
-                <RateLimitMonitor />
-              </div>
+              {/* Posts Feed */}
+              <InfinitePostFeed limit={20} />
             </div>
-          </div>
 
-          {/* Right Sidebar */}
-          <div className="hidden xl:block w-80 border-l border-border bg-card">
-            <div className="sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto p-4">
-              {/* Civic Stats */}
-              <Card className="mb-6">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Globe className="w-4 h-4" />
-                    Civic Pulse Stats
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="text-center p-3 bg-muted/50 rounded-lg">
-                    <p className="text-2xl font-bold text-cm-green">72%</p>
-                    <p className="text-xs text-muted-foreground">of youth believe in democracy</p>
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 text-center">
-                    <div className="p-2 bg-muted/30 rounded">
-                      <p className="text-sm font-semibold">1.2M</p>
-                      <p className="text-xs text-muted-foreground">Active Voters</p>
-                    </div>
-                    <div className="p-2 bg-muted/30 rounded">
-                      <p className="text-sm font-semibold">345</p>
-                      <p className="text-xs text-muted-foreground">Live Polls</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            {/* Right Sidebar */}
+            <div className="hidden lg:block">
+              <div className="sticky top-24 space-y-6">
+                {/* Who to Follow */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <UserPlus className="h-4 w-4" />
+                      Who to Follow
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    {suggestedFollows.map((suggestion) => (
+                      <div key={suggestion.id} className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 bg-muted rounded-full flex items-center justify-center">
+                            {suggestion.type === 'government' && <Building2 className="h-4 w-4" />}
+                            {suggestion.type === 'education' && <School className="h-4 w-4" />}
+                            {suggestion.type === 'ngo' && <Users className="h-4 w-4" />}
+                            {suggestion.type === 'infrastructure' && <Hospital className="h-4 w-4" />}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-1">
+                              <p className="text-sm font-medium">{suggestion.name}</p>
+                              {suggestion.verified && (
+                                <Badge variant="secondary" className="text-xs px-1">✓</Badge>
+                              )}
+                            </div>
+                            <p className="text-xs text-muted-foreground">@{suggestion.username}</p>
+                          </div>
+                        </div>
+                        <Button variant="outline" size="sm">
+                          Follow
+                        </Button>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
 
-              {/* Trending Posts */}
-              <Card className="mb-6">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4" />
-                    Trending Now
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {legacyPosts?.slice(0, 3).map((post) => (
-                    <div key={post.id} className="p-2 hover:bg-muted/50 rounded cursor-pointer">
-                      <p className="text-xs line-clamp-2 mb-1">{post.content}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Heart className="w-3 h-3" />
-                        <span>{post.like_count || 0}</span>
-                        <MessageCircle className="w-3 h-3" />
-                        <span>{post.comment_count || 0}</span>
+                {/* Civic Stats */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      <Globe className="h-4 w-4" />
+                      Civic Pulse
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="text-center p-4 bg-primary/10 rounded-lg">
+                      <p className="text-2xl font-bold text-primary">76%</p>
+                      <p className="text-sm text-muted-foreground">Civic Engagement</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="text-center p-3 bg-muted/50 rounded">
+                        <p className="text-lg font-semibold">1.2M</p>
+                        <p className="text-xs text-muted-foreground">Active Citizens</p>
+                      </div>
+                      <div className="text-center p-3 bg-muted/50 rounded">
+                        <p className="text-lg font-semibold">345</p>
+                        <p className="text-xs text-muted-foreground">Live Polls</p>
                       </div>
                     </div>
-                  )) || []}
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
 
-              {/* Social Analytics */}
-              <SocialAnalytics />
-
-              {/* Events */}
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm flex items-center gap-2">
-                    <Calendar className="w-4 h-4" />
-                    Upcoming Events
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="p-2 border rounded">
-                    <p className="text-sm font-medium">National Assembly Session</p>
-                    <p className="text-xs text-muted-foreground">Tomorrow, 10:00 AM</p>
-                  </div>
-                  <div className="p-2 border rounded">
-                    <p className="text-sm font-medium">Municipal Elections</p>
-                    <p className="text-xs text-muted-foreground">Next month</p>
-                  </div>
-                </CardContent>
-              </Card>
+                {/* Recent Activity */}
+                {recentPosts && recentPosts.length > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-lg flex items-center gap-2">
+                        <Hash className="h-4 w-4" />
+                        Recent Activity
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-3">
+                      {recentPosts.slice(0, 3).map((post) => (
+                        <div 
+                          key={post.id} 
+                          className="cursor-pointer hover:bg-muted/50 p-2 rounded"
+                          onClick={() => navigate(`/post/${post.id}`)}
+                        >
+                          <p className="text-sm line-clamp-2 mb-1">{post.content}</p>
+                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span>{post.like_count || 0} likes</span>
+                            <span>•</span>
+                            <span>{post.comment_count || 0} comments</span>
+                          </div>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Fixed Bottom Navigation - Mobile Only */}
+        {/* Mobile Bottom Navigation */}
         <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-background border-t border-border z-50">
           <div className="flex justify-around py-2">
             {[
-              { icon: Home, label: 'Home', key: 'home' },
-              { icon: Vote, label: 'Polls', key: 'polls' },
-              { icon: MessageCircle, label: 'Messages', key: 'messages' },
-              { icon: Users, label: 'Following', key: 'following' },
-              { icon: Plus, label: 'Create', key: 'create' }
+              { icon: Home, label: 'Home', key: 'home', action: () => setActiveTab('home') },
+              { icon: Search, label: 'Search', key: 'search', action: () => navigate('/search') },
+              { icon: Plus, label: 'Post', key: 'post', action: () => setShowPostComposer(true) },
+              { icon: Vote, label: 'Polls', key: 'polls', action: () => navigate('/polls') },
+              { icon: Users, label: 'Profile', key: 'profile', action: () => navigate('/profile') },
             ].map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => {
-                  setActiveTab(tab.key);
-                  if (tab.key === 'create') setShowComposer(true);
-                }}
+                onClick={tab.action}
                 className={`flex flex-col items-center py-2 px-3 ${
-                  activeTab === tab.key 
-                    ? 'text-cm-red' 
-                    : 'text-muted-foreground'
+                  activeTab === tab.key ? 'text-primary' : 'text-muted-foreground'
                 }`}
               >
-                <tab.icon className="w-5 h-5 mb-1" />
+                <tab.icon className="h-5 w-5 mb-1" />
                 <span className="text-xs">{tab.label}</span>
               </button>
             ))}
           </div>
         </div>
+
+        {/* Mobile Post Composer Modal */}
+        {showPostComposer && (
+          <div className="lg:hidden fixed inset-0 bg-background z-50 p-4">
+            <PostComposer onClose={() => setShowPostComposer(false)} />
+          </div>
+        )}
       </div>
     </AppLayout>
   );
