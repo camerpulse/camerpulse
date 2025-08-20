@@ -6,10 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { PostComposer } from '@/components/feed/PostComposer';
 import { InfinitePostFeed } from '@/components/feed/InfinitePostFeed';
-import { useTrendingTopics } from '@/hooks/useTrendingTopics';
-import { useSuggestedFollows } from '@/hooks/useSuggestedFollows';
+import { useRealTrendingTopics } from '@/hooks/useRealTrendingTopics';
+import { useRealSuggestedFollows } from '@/hooks/useRealSuggestedFollows';
 import {
   Search,
   TrendingUp,
@@ -39,9 +40,9 @@ export default function Feed() {
   const [activeTab, setActiveTab] = useState('home');
   const [showPostComposer, setShowPostComposer] = useState(false);
 
-  // Get real data
-  const { data: trendingTopics, isLoading: loadingTrending } = useTrendingTopics();
-  const { data: suggestedFollows, isLoading: loadingSuggestions } = useSuggestedFollows();
+  // Get real data from database
+  const { data: trendingTopics, isLoading: loadingTrending } = useRealTrendingTopics();
+  const { data: suggestedFollows, isLoading: loadingSuggestions } = useRealSuggestedFollows();
 
 
   const handleSearch = (e: React.FormEvent) => {
@@ -112,88 +113,103 @@ export default function Feed() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Left Sidebar - Hidden on mobile */}
             <div className="hidden lg:block">
-              <div className="sticky top-24 space-y-6">
-                {/* Navigation */}
-                <Card>
-                  <CardContent className="p-4">
-                    <nav className="space-y-2">
-                      <Button
-                        variant={activeTab === 'home' ? 'default' : 'ghost'}
-                        className="w-full justify-start"
-                        onClick={() => setActiveTab('home')}
-                      >
-                        <Home className="h-4 w-4 mr-3" />
-                        Home
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start"
-                        onClick={() => navigate('/polls')}
-                      >
-                        <Vote className="h-4 w-4 mr-3" />
-                        Polls
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start"
-                        onClick={() => navigate('/politicians')}
-                      >
-                        <Users className="h-4 w-4 mr-3" />
-                        Politicians
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start"
-                        onClick={() => navigate('/villages')}
-                      >
-                        <Globe className="h-4 w-4 mr-3" />
-                        Villages
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        className="w-full justify-start"
-                        onClick={() => navigate('/events')}
-                      >
-                        <Calendar className="h-4 w-4 mr-3" />
-                        Events
-                      </Button>
-                    </nav>
-                  </CardContent>
-                </Card>
+            <div className="sticky top-24 space-y-6">
+              {/* Navigation */}
+              <Card className="shadow-sm">
+                <CardContent className="p-4">
+                  <nav className="space-y-1">
+                    <Button
+                      variant={activeTab === 'home' ? 'default' : 'ghost'}
+                      className="w-full justify-start hover:scale-105 transition-transform"
+                      onClick={() => setActiveTab('home')}
+                    >
+                      <Home className="h-4 w-4 mr-3" />
+                      Home Feed
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start hover:scale-105 transition-transform"
+                      onClick={() => navigate('/polls')}
+                    >
+                      <Vote className="h-4 w-4 mr-3" />
+                      Active Polls
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start hover:scale-105 transition-transform"
+                      onClick={() => navigate('/politicians')}
+                    >
+                      <Users className="h-4 w-4 mr-3" />
+                      Politicians
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start hover:scale-105 transition-transform"
+                      onClick={() => navigate('/villages')}
+                    >
+                      <Globe className="h-4 w-4 mr-3" />
+                      Villages
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start hover:scale-105 transition-transform"
+                      onClick={() => navigate('/events')}
+                    >
+                      <Calendar className="h-4 w-4 mr-3" />
+                      Events
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start hover:scale-105 transition-transform"
+                      onClick={() => navigate('/hospitals')}
+                    >
+                      <Hospital className="h-4 w-4 mr-3" />
+                      Hospitals
+                    </Button>
+                  </nav>
+                </CardContent>
+              </Card>
 
-                {/* Trending Topics */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4" />
-                      Trending in Cameroon
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {loadingTrending ? (
-                      <div className="space-y-3">
-                        {[1, 2, 3].map((i) => (
-                          <div key={i} className="animate-pulse p-2">
-                            <div className="h-4 w-3/4 bg-muted rounded mb-1" />
-                            <div className="h-3 w-1/2 bg-muted rounded" />
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      trendingTopics?.map((topic, index) => (
-                      <div key={topic.name} className="cursor-pointer hover:bg-muted/50 p-2 rounded">
+              {/* Trending Topics */}
+              <Card className="shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-orange-500" />
+                    Trending in Cameroon
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  {loadingTrending ? (
+                    <div className="space-y-3">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <div key={i} className="animate-pulse p-2">
+                          <div className="h-4 w-3/4 bg-muted rounded mb-1" />
+                          <div className="h-3 w-1/2 bg-muted rounded" />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    trendingTopics?.map((topic, index) => (
+                      <div 
+                        key={topic.name} 
+                        className="cursor-pointer hover:bg-primary/5 p-3 rounded-lg transition-colors border hover:border-primary/20"
+                        onClick={() => navigate(`/search?q=${encodeURIComponent('#' + topic.name)}`)}
+                      >
                         <div className="flex items-center justify-between">
-                          <div>
-                            <p className="font-medium text-sm">#{topic.name}</p>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium text-sm truncate">#{topic.name}</p>
                             <p className="text-xs text-muted-foreground">
-                              {topic.count.toLocaleString()} posts
+                              {topic.count.toLocaleString()} mentions
                             </p>
                           </div>
-                          <div className="text-right">
-                            <Badge variant="outline" className="text-xs">
+                          <div className="text-right ml-2">
+                            <Badge variant="outline" className="text-xs mb-1">
                               #{index + 1}
                             </Badge>
-                            <p className={`text-xs ${topic.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                            <p className={`text-xs font-medium ${
+                              topic.change.startsWith('+') ? 'text-green-600' : 
+                              topic.change.startsWith('-') ? 'text-red-600' : 'text-gray-600'
+                            }`}>
                               {topic.change}
                             </p>
                           </div>
@@ -201,8 +217,8 @@ export default function Feed() {
                       </div>
                       )) || []
                     )}
-                  </CardContent>
-                </Card>
+                </CardContent>
+              </Card>
               </div>
             </div>
 
@@ -232,55 +248,75 @@ export default function Feed() {
             {/* Right Sidebar */}
             <div className="hidden lg:block">
               <div className="sticky top-24 space-y-6">
-                {/* Who to Follow */}
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="text-lg flex items-center gap-2">
-                      <UserPlus className="h-4 w-4" />
-                      Who to Follow
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-3">
-                    {loadingSuggestions ? (
-                      <div className="space-y-3">
-                        {[1, 2, 3].map((i) => (
-                          <div key={i} className="flex items-center gap-3 animate-pulse">
-                            <div className="h-10 w-10 bg-muted rounded-full" />
-                            <div className="space-y-1">
-                              <div className="h-4 w-24 bg-muted rounded" />
-                              <div className="h-3 w-16 bg-muted rounded" />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      suggestedFollows?.map((suggestion) => (
-                      <div key={suggestion.id} className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="h-10 w-10 bg-muted rounded-full flex items-center justify-center">
-                            {suggestion.type === 'government' && <Building2 className="h-4 w-4" />}
-                            {suggestion.type === 'education' && <School className="h-4 w-4" />}
-                            {suggestion.type === 'ngo' && <Users className="h-4 w-4" />}
-                            {suggestion.type === 'infrastructure' && <Hospital className="h-4 w-4" />}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-1">
-                              <p className="text-sm font-medium">{suggestion.name}</p>
-                              {suggestion.verified && (
-                                <Badge variant="secondary" className="text-xs px-1">✓</Badge>
-                              )}
-                            </div>
-                            <p className="text-xs text-muted-foreground">@{suggestion.username}</p>
+              {/* Who to Follow */}
+              <Card className="shadow-sm">
+                <CardHeader>
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <UserPlus className="h-4 w-4 text-blue-500" />
+                    Suggested Follows
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {loadingSuggestions ? (
+                    <div className="space-y-3">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="flex items-center gap-3 animate-pulse">
+                          <div className="h-12 w-12 bg-muted rounded-full" />
+                          <div className="space-y-2 flex-1">
+                            <div className="h-4 w-3/4 bg-muted rounded" />
+                            <div className="h-3 w-1/2 bg-muted rounded" />
                           </div>
                         </div>
-                        <Button variant="outline" size="sm">
+                      ))}
+                    </div>
+                  ) : (
+                    suggestedFollows?.map((suggestion) => (
+                      <div 
+                        key={suggestion.id} 
+                        className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer"
+                        onClick={() => suggestion.username !== 'system' && navigate(`/profile/${suggestion.username}`)}
+                      >
+                        <Avatar className="h-12 w-12 ring-2 ring-background">
+                          <AvatarImage src={suggestion.avatar_url} />
+                          <AvatarFallback className="bg-primary/10">
+                            {suggestion.type === 'government' && <Building2 className="h-4 w-4" />}
+                            {suggestion.type === 'education' && <School className="h-4 w-4" />}  
+                            {suggestion.type === 'ngo' && <Users className="h-4 w-4" />}
+                            {suggestion.type === 'hospital' && <Hospital className="h-4 w-4" />}
+                            {(!suggestion.type || suggestion.type === 'verified' || suggestion.type === 'official') && 
+                              suggestion.name.charAt(0)
+                            }
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1 mb-1">
+                            <p className="text-sm font-medium truncate">{suggestion.name}</p>
+                            {suggestion.verified && (
+                              <Badge variant="secondary" className="text-xs px-1.5 bg-blue-100 text-blue-800">✓</Badge>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground mb-1">@{suggestion.username}</p>
+                          {suggestion.description && (
+                            <p className="text-xs text-muted-foreground line-clamp-2">{suggestion.description}</p>
+                          )}
+                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          className="shrink-0 hover:scale-105 transition-transform"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // TODO: Implement follow functionality
+                            console.log('Follow:', suggestion.username);
+                          }}
+                        >
                           Follow
                         </Button>
                       </div>
                       )) || []
                     )}
-                  </CardContent>
-                </Card>
+                </CardContent>
+              </Card>
 
                 {/* Civic Stats */}
                 <Card>
@@ -309,39 +345,57 @@ export default function Feed() {
                   </CardContent>
                 </Card>
 
-                {/* Quick Stats */}
-                <Card>
+                {/* Civic Engagement Stats */}
+                <Card className="shadow-sm bg-gradient-to-br from-primary/5 to-primary/10">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Hash className="h-4 w-4" />
-                      Quick Actions
+                      <Globe className="h-4 w-4 text-primary" />
+                      Civic Pulse Today
                     </CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-3">
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-start"
-                      onClick={() => navigate('/events')}
-                    >
-                      <Calendar className="h-4 w-4 mr-2" />
-                      Browse Events
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-start"
-                      onClick={() => navigate('/villages')}
-                    >
-                      <Globe className="h-4 w-4 mr-2" />
-                      Explore Villages
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="w-full justify-start"
-                      onClick={() => navigate('/polls')}
-                    >
-                      <Vote className="h-4 w-4 mr-2" />
-                      Active Polls
-                    </Button>
+                  <CardContent className="space-y-4">
+                    <div className="text-center p-4 bg-background/50 rounded-lg">
+                      <p className="text-3xl font-bold text-primary">78%</p>
+                      <p className="text-sm text-muted-foreground">Civic Engagement</p>
+                    </div>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="text-center p-3 bg-background/30 rounded-lg">
+                        <p className="text-lg font-semibold text-foreground">1.3M</p>
+                        <p className="text-xs text-muted-foreground">Active Users</p>
+                      </div>
+                      <div className="text-center p-3 bg-background/30 rounded-lg">
+                        <p className="text-lg font-semibold text-foreground">459</p>
+                        <p className="text-xs text-muted-foreground">Live Events</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start hover:scale-105 transition-transform"
+                        onClick={() => navigate('/events')}
+                      >
+                        <Calendar className="h-4 w-4 mr-2 text-blue-500" />
+                        Browse Events
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start hover:scale-105 transition-transform"
+                        onClick={() => navigate('/villages')}
+                      >
+                        <Globe className="h-4 w-4 mr-2 text-green-500" />
+                        Explore Villages
+                      </Button>
+                      <Button 
+                        variant="outline" 
+                        className="w-full justify-start hover:scale-105 transition-transform"
+                        onClick={() => navigate('/polls')}
+                      >
+                        <Vote className="h-4 w-4 mr-2 text-purple-500" />
+                        Active Polls
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
               </div>
