@@ -29,7 +29,12 @@ import {
   Hospital,
   Vote,
   Loader2,
-  AlertCircle
+  AlertCircle,
+  Heart,
+  MessageCircle,
+  Calendar,
+  Home,
+  Plus
 } from 'lucide-react';
 
 // Static data for sidebars - will be replaced with real data in Phase 4
@@ -54,6 +59,8 @@ export default function Feed() {
   const { toast } = useToast();
   
   const [searchTerm, setSearchTerm] = useState('');
+  const [activeTab, setActiveTab] = useState('home');
+  const [showComposer, setShowComposer] = useState(false);
   
   // Use real data hooks
   const { 
@@ -282,17 +289,17 @@ export default function Feed() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {posts.slice(0, 3).map((post) => (
+                  {posts?.slice(0, 3).map((post) => (
                     <div key={post.id} className="p-2 hover:bg-muted/50 rounded cursor-pointer">
                       <p className="text-xs line-clamp-2 mb-1">{post.content}</p>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <Heart className="w-3 h-3" />
-                        <span>{post.likes}</span>
+                        <span>{post.like_count || 0}</span>
                         <MessageCircle className="w-3 h-3" />
-                        <span>{post.comments}</span>
+                        <span>{post.comment_count || 0}</span>
                       </div>
                     </div>
-                  ))}
+                  )) || []}
                 </CardContent>
               </Card>
 
