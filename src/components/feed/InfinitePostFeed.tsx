@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,7 +8,6 @@ import { PostCard } from './PostCard';
 import { PostSkeletonGrid } from './PostSkeleton';
 
 export const InfinitePostFeed: React.FC = () => {
-  console.log('[InfinitePostFeed] Component rendering');
   const {
     data,
     error,
@@ -28,13 +27,13 @@ export const InfinitePostFeed: React.FC = () => {
   });
 
   // Auto-fetch next page when load more element comes into view
-  React.useEffect(() => {
+  useEffect(() => {
     if (inView && hasNextPage && !isFetchingNextPage) {
       fetchNextPage();
     }
   }, [inView, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  // Memoize flattened posts to prevent unnecessary re-renders
+  // Memoize flattened posts to prevent unnecessary re-renders - EXACT same format as usePosts
   const posts = useMemo(() => {
     return data?.pages.flatMap(page => page.posts) || [];
   }, [data?.pages]);
@@ -43,10 +42,12 @@ export const InfinitePostFeed: React.FC = () => {
     refetch();
   }, [refetch]);
 
+  // Same loading state as SimpleInfiniteFeed
   if (isLoading) {
     return <PostSkeletonGrid count={5} />;
   }
 
+  // Same error state as SimpleInfiniteFeed  
   if (isError) {
     return (
       <Card className="bg-card border-border">
@@ -65,6 +66,7 @@ export const InfinitePostFeed: React.FC = () => {
     );
   }
 
+  // Same empty state as SimpleInfiniteFeed
   if (posts.length === 0) {
     return (
       <Card className="bg-card border-border">
@@ -81,11 +83,12 @@ export const InfinitePostFeed: React.FC = () => {
 
   return (
     <div className="space-y-6">
+      {/* Same post rendering as SimpleInfiniteFeed */}
       {posts.map((post) => (
         <PostCard key={post.id} post={post} />
       ))}
       
-      {/* Load more trigger */}
+      {/* Load more trigger - enhanced version of SimpleInfiniteFeed button */}
       <div ref={loadMoreRef} className="flex justify-center py-6">
         {isFetchingNextPage ? (
           <div className="flex items-center gap-2 text-muted-foreground">

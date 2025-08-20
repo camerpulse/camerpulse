@@ -33,8 +33,7 @@ interface PostCardProps {
   post: Post;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
-  console.log('[PostCard] Rendering post:', post.id);
+export const PostCard: React.FC<PostCardProps> = memo(({ post }) => {
   const { user } = useAuth();
   const [showComments, setShowComments] = useState(false);
   
@@ -249,4 +248,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       </CardContent>
     </Card>
   );
-};
+});
+
+PostCard.displayName = 'PostCard';

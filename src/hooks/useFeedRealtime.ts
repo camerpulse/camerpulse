@@ -31,14 +31,28 @@ export const useFeedRealtime = (limit = 20, offset = 0) => {
     const channel = supabase.channel(channelName);
     channelRef.current = channel;
 
-    // Helper: safely update post in cache with debouncing
+    // Helper: safely update post in cache with debouncing for both regular and infinite queries
     const updatePostInCache = (postId: string, updater: (p: Post) => Post) => {
       if (!mountedRef.current) return;
       
-      const queryKey = ['posts', limit, offset, user?.id];
-      queryClient.setQueryData(queryKey, (old: Post[] | undefined) => {
+      // Update regular posts query (for sidebar trending)
+      const regularQueryKey = ['posts', limit, offset, user?.id];
+      queryClient.setQueryData(regularQueryKey, (old: Post[] | undefined) => {
         if (!old) return old;
         return old.map(p => (p.id === postId ? updater(p) : p));
+      });
+
+      // Update infinite posts query (for main feed)
+      const infiniteQueryKey = ['posts', 'infinite', user?.id];
+      queryClient.setQueryData(infiniteQueryKey, (old: any) => {
+        if (!old?.pages) return old;
+        return {
+          ...old,
+          pages: old.pages.map((page: any) => ({
+            ...page,
+            posts: page.posts.map((p: Post) => (p.id === postId ? updater(p) : p))
+          }))
+        };
       });
     };
 
@@ -50,7 +64,7 @@ export const useFeedRealtime = (limit = 20, offset = 0) => {
         if (!mountedRef.current) return;
         
         try {
-          // Invalidate posts to refetch fresh data
+          // Invalidate both regular and infinite posts queries
           queryClient.invalidateQueries({ queryKey: ['posts'] });
         } catch (error) {
           console.warn('[Realtime] Error handling post changes:', error);
