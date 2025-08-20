@@ -7,11 +7,13 @@ import type { Post } from './usePosts';
 const PAGE_SIZE = 10;
 
 export const useInfinitePosts = () => {
+  console.log('[useInfinitePosts] Hook called');
   const { user } = useAuth();
 
   return useInfiniteQuery({
     queryKey: ['posts', 'infinite', user?.id],
     queryFn: async ({ pageParam = 0 }) => {
+      console.log('[useInfinitePosts] Fetching page:', pageParam);
       const offset = pageParam * PAGE_SIZE;
       
       const query = supabase
@@ -30,8 +32,12 @@ export const useInfinitePosts = () => {
         .range(offset, offset + PAGE_SIZE - 1);
 
       const { data: posts, error } = await query;
-      if (error) throw error;
+      if (error) {
+        console.error('[useInfinitePosts] Query error:', error);
+        throw error;
+      }
 
+      console.log('[useInfinitePosts] Fetched posts:', posts?.length || 0);
       if (!posts?.length) return { posts: [], hasMore: false };
 
       // Get interaction counts and user interactions in parallel

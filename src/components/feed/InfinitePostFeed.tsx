@@ -8,6 +8,7 @@ import { PostCard } from './PostCard';
 import { PostSkeletonGrid } from './PostSkeleton';
 
 export const InfinitePostFeed: React.FC = () => {
+  console.log('[InfinitePostFeed] Component rendering');
   const {
     data,
     error,

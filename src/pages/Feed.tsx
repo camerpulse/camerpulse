@@ -15,6 +15,7 @@ import { usePosts } from '@/hooks/usePosts';
 import { PostCard } from '@/components/feed/PostCard';
 import { PostComposer } from '@/components/feed/PostComposer';
 import { InfinitePostFeed } from '@/components/feed/InfinitePostFeed';
+import { SimpleInfiniteFeed } from '@/components/feed/SimpleInfiniteFeed';
 import { useFeedRealtime } from '@/hooks/useFeedRealtime';
 import {
   Users,
@@ -187,8 +188,8 @@ export default function Feed() {
               {/* Post Composer */}
               <PostComposer />
 
-              {/* Posts Feed with Infinite Scroll */}
-              <InfinitePostFeed />
+              {/* Posts Feed - Using Simple Feed for debugging */}
+              <SimpleInfiniteFeed />
             </div>
           </div>
 
