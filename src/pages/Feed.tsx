@@ -3,154 +3,36 @@
  * Mobile-first feed combining civic engagement and social interaction
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { PulseCard, UserAvatar, CivicTag, PollCard, OfficialCard } from '@/components/camerpulse';
-import type { Pulse, Poll, Official, Company, CivicUser } from '@/components/camerpulse/types';
+import { usePosts } from '@/hooks/usePosts';
+import { PostCard } from '@/components/feed/PostCard';
+import { PostComposer } from '@/components/feed/PostComposer';
 import {
-  Home,
-  Vote,
-  MessageCircle,
   Users,
-  Plus,
   Search,
   TrendingUp,
   Hash,
-  MapPin,
-  Calendar,
   BarChart3,
-  Bookmark,
   RefreshCw,
-  Camera,
-  Video,
-  Settings,
   Bell,
-  Filter,
   Zap,
   Globe,
   Building2,
   School,
   Hospital,
-  Heart
+  Vote,
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
 
-// Mock data - replace with real API calls
-const mockPulses: Pulse[] = [
-  {
-    id: '1',
-    user: {
-      id: '1',
-      name: 'Minister Paul Atanga Nji',
-      username: 'paulatanganji',
-      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e',
-      verified: true,
-      isDiaspora: false,
-      location: 'Bamenda, Northwest',
-      role: 'Minister'
-    },
-    content: 'Major infrastructure development announced for the Northwest region. This will create thousands of jobs and improve connectivity. What are your thoughts on this initiative? #Infrastructure #Development #NorthwestRegion',
-    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-    likes: 234,
-    comments: 45,
-    shares: 28,
-    sentiment: 'positive',
-    hashtags: ['Infrastructure', 'Development', 'NorthwestRegion'],
-    isLiked: false
-  },
-  {
-    id: '2',
-    user: {
-      id: '2',
-      name: 'Marie Tchoungui',
-      username: 'marietchoungui',
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b5b4',
-      verified: false,
-      isDiaspora: true,
-      location: 'Douala, Littoral'
-    },
-    content: 'Citizens of Douala are reporting water shortages in several neighborhoods. We need immediate action from CAMWATER. This affects thousands of families. #WaterCrisis #Douala #PublicServices',
-    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-    likes: 156,
-    comments: 67,
-    shares: 89,
-    sentiment: 'negative',
-    hashtags: ['WaterCrisis', 'Douala', 'PublicServices'],
-    isLiked: true
-  },
-  {
-    id: '3',
-    user: {
-      id: '3',
-      name: 'Cameroon Education Watch',
-      username: 'cameducationwatch',
-      avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a',
-      verified: true,
-      isDiaspora: false,
-      role: 'Organization'
-    },
-    content: 'Education budget allocation for 2024 shows 18% increase. This is a positive step towards improving our schools nationwide. We need to ensure proper implementation and monitoring. #Education #Budget2024',
-    timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-    likes: 89,
-    comments: 23,
-    shares: 34,
-    sentiment: 'positive',
-    hashtags: ['Education', 'Budget2024'],
-    isLiked: false
-  }
-];
-
-const mockPolls: Poll[] = [
-  {
-    id: 'poll1',
-    question: 'What should be the government\'s top priority for 2024?',
-    options: [
-      { id: '1', text: 'Infrastructure Development', votes: 342, percentage: 45 },
-      { id: '2', text: 'Healthcare Improvement', votes: 234, percentage: 31 },
-      { id: '3', text: 'Education Reform', votes: 123, percentage: 16 },
-      { id: '4', text: 'Economic Growth', votes: 61, percentage: 8 }
-    ],
-    totalVotes: 760,
-    endDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-    creator: { id: '1', name: 'CamerPulse Team', verified: true },
-    category: 'Government Policy'
-  }
-];
-
-const mockOfficials: Official[] = [
-  {
-    id: '1',
-    name: 'Paul Biya',
-    role: 'President',
-    region: 'National',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
-    approvalRating: 52,
-    civicScore: 7.2,
-    termStatus: 'active',
-    isCurrentlyInOffice: true,
-    party: 'CPDM'
-  },
-  {
-    id: '2',
-    name: 'Joseph Dion Ngute',
-    role: 'Prime Minister',
-    region: 'National',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e',
-    approvalRating: 48,
-    civicScore: 6.8,
-    termStatus: 'active',
-    isCurrentlyInOffice: true
-  }
-];
-
+// Static data for sidebars - will be replaced with real data in Phase 4
 const trendingTopics = [
   { name: 'Infrastructure', count: 1247 },
   { name: 'Education', count: 892 },
@@ -166,72 +48,24 @@ const suggestedFollows = [
   { id: '4', name: 'Central Hospital Yaounde', type: 'hospital', followers: 23000, verified: true }
 ];
 
+
 export default function Feed() {
   const { user } = useAuth();
   const { toast } = useToast();
   
-  const [posts, setPosts] = useState<Pulse[]>(mockPulses);
-  const [polls] = useState<Poll[]>(mockPolls);
-  const [officials] = useState<Official[]>(mockOfficials);
-  const [newPost, setNewPost] = useState('');
-  const [activeTab, setActiveTab] = useState('home');
-  const [showComposer, setShowComposer] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  
+  // Use real data hooks
+  const { 
+    data: posts, 
+    isLoading, 
+    error, 
+    refetch,
+    isFetching 
+  } = usePosts(20, 0);
 
-  // Auto-refresh every 30 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // In real app, fetch new posts here
-      console.log('Auto-refreshing feed...');
-    }, 30000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleCreatePost = () => {
-    if (!newPost.trim()) return;
-
-    const newPulse: Pulse = {
-      id: Date.now().toString(),
-      user: {
-        id: user?.id || 'current-user',
-        name: user?.user_metadata?.display_name || 'You',
-        username: user?.user_metadata?.username || 'you',
-        verified: false,
-        isDiaspora: false
-      },
-      content: newPost,
-      timestamp: new Date().toISOString(),
-      likes: 0,
-      comments: 0,
-      shares: 0,
-      sentiment: 'neutral',
-      hashtags: newPost.match(/#[a-zA-Z0-9_]+/g)?.map(tag => tag.slice(1)) || [],
-      isLiked: false
-    };
-
-    setPosts([newPulse, ...posts]);
-    setNewPost('');
-    setShowComposer(false);
-    
-    toast({
-      title: "Pulse published!",
-      description: "Your civic voice has been shared with the community."
-    });
-  };
-
-  const handleRefresh = async () => {
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: "Feed refreshed",
-        description: "Latest content loaded successfully."
-      });
-    }, 1000);
+  const handleRefresh = () => {
+    refetch();
   };
 
   return (
@@ -251,8 +85,8 @@ export default function Feed() {
               <Button variant="ghost" size="icon" className="lg:hidden">
                 <Search className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={loading}>
-                <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isFetching}>
+                <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
               </Button>
               <Button variant="ghost" size="icon">
                 <Bell className="w-4 h-4" />
@@ -338,152 +172,75 @@ export default function Feed() {
               </div>
 
               {/* Post Composer */}
-              <Card className="border-cm-red/20">
-                <CardContent className="p-4">
-                  {showComposer ? (
-                    <div className="space-y-4">
-                      <div className="flex gap-3">
-                        <UserAvatar 
-                          user={{
-                            id: 'current',
-                            name: user?.user_metadata?.display_name || 'You',
-                            avatar: user?.user_metadata?.avatar_url
-                          }} 
-                          size="default"
-                        />
-                        <div className="flex-1">
-                          <Textarea
-                            placeholder="What's happening in Cameroon? Share your civic thoughts..."
-                            value={newPost}
-                            onChange={(e) => setNewPost(e.target.value)}
-                            className="min-h-[100px] resize-none border-cm-red/20 focus:border-cm-red"
-                            maxLength={500}
-                          />
-                          <div className="flex justify-between items-center mt-2">
-                            <span className="text-xs text-muted-foreground">{newPost.length}/500</span>
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm">
-                                <Camera className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
-                                <Video className="w-4 h-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">
-                                <Vote className="w-4 h-4" />
-                              </Button>
+              <PostComposer />
+
+              {/* Posts Feed */}
+              {isLoading ? (
+                <div className="space-y-6">
+                  {[...Array(5)].map((_, i) => (
+                    <Card key={i} className="bg-card border-border">
+                      <CardContent className="p-4">
+                        <div className="flex gap-3">
+                          <div className="w-10 h-10 bg-muted rounded-full animate-pulse" />
+                          <div className="flex-1 space-y-3">
+                            <div className="flex items-center gap-2">
+                              <div className="h-4 bg-muted rounded animate-pulse w-24" />
+                              <div className="h-3 bg-muted rounded animate-pulse w-16" />
+                            </div>
+                            <div className="space-y-2">
+                              <div className="h-4 bg-muted rounded animate-pulse w-full" />
+                              <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
+                              <div className="h-4 bg-muted rounded animate-pulse w-1/2" />
+                            </div>
+                            <div className="flex items-center gap-4 pt-2">
+                              <div className="h-8 bg-muted rounded animate-pulse w-16" />
+                              <div className="h-8 bg-muted rounded animate-pulse w-16" />
+                              <div className="h-8 bg-muted rounded animate-pulse w-16" />
                             </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="flex justify-between">
-                        <Button variant="outline" onClick={() => setShowComposer(false)}>
-                          Cancel
-                        </Button>
-                        <Button 
-                          onClick={handleCreatePost}
-                          disabled={!newPost.trim()}
-                          className="bg-cm-green hover:bg-cm-green/90"
-                        >
-                          Share Pulse
-                        </Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div 
-                      className="flex items-center gap-3 p-3 rounded-lg border border-dashed border-cm-red/30 cursor-pointer hover:bg-muted/50 transition-colors"
-                      onClick={() => setShowComposer(true)}
-                    >
-                      <UserAvatar 
-                        user={{
-                          id: 'current',
-                          name: user?.user_metadata?.display_name || 'You',
-                          avatar: user?.user_metadata?.avatar_url
-                        }} 
-                        size="default"
-                      />
-                      <span className="flex-1 text-muted-foreground">What's happening in Cameroon?</span>
-                      <Button size="sm" className="bg-cm-red hover:bg-cm-red/90">
-                        <Plus className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              {/* Active Polls Section */}
-              {polls.length > 0 && (
-                <Card className="border-cm-green/20">
-                  <CardHeader className="pb-3">
-                    <CardTitle className="flex items-center gap-2 text-cm-green">
-                      <Vote className="w-5 h-5" />
-                      Active Civic Polls
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {polls.slice(0, 1).map((poll) => (
-                        <PollCard key={poll.id} poll={poll} />
-                      ))}
-                      <Button variant="outline" size="sm" className="w-full">
-                        View All Polls
-                      </Button>
-                    </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : error ? (
+                <Card className="bg-card border-border">
+                  <CardContent className="p-8 text-center">
+                    <AlertCircle className="w-12 h-12 mx-auto mb-4 text-destructive" />
+                    <h3 className="text-lg font-semibold mb-2">Failed to load posts</h3>
+                    <p className="text-muted-foreground mb-4">
+                      {error instanceof Error ? error.message : 'An unexpected error occurred'}
+                    </p>
+                    <Button onClick={handleRefresh} disabled={isFetching}>
+                      {isFetching && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                      Try Again
+                    </Button>
+                  </CardContent>
+                </Card>
+              ) : posts && posts.length > 0 ? (
+                <div className="space-y-6">
+                  {posts.map((post) => (
+                    <PostCard key={post.id} post={post} />
+                  ))}
+                  
+                  {/* Load More - Phase 3 will replace with infinite scroll */}
+                  <div className="flex justify-center py-6">
+                    <Button variant="outline" size="lg" disabled>
+                      Load Older Posts (Coming Soon)
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <Card className="bg-card border-border">
+                  <CardContent className="p-8 text-center">
+                    <Globe className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+                    <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
+                    <p className="text-muted-foreground">
+                      Be the first to share your civic voice with the community!
+                    </p>
                   </CardContent>
                 </Card>
               )}
-
-              {/* Posts Feed */}
-              <div className="space-y-6">
-                {posts.map((post, index) => (
-                  <div key={post.id}>
-                    <PulseCard 
-                      pulse={post}
-                      onLike={(id) => console.log('Liked:', id)}
-                      onComment={(id) => console.log('Comment:', id)}
-                      onShare={(id) => console.log('Share:', id)}
-                    />
-                    
-                    {/* Insert civic content every 3 posts */}
-                    {index === 2 && (
-                      <Card className="border-cm-yellow/20 bg-cm-yellow/5">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-sm flex items-center gap-2">
-                            <BarChart3 className="w-4 h-4" />
-                            Featured Officials
-                          </CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="grid gap-4">
-                            {officials.slice(0, 2).map((official) => (
-                              <div key={official.id} className="p-3 border rounded-lg">
-                                <div className="flex items-center gap-3 mb-2">
-                                  <UserAvatar user={official} size="sm" />
-                                  <div>
-                                    <p className="font-medium text-sm">{official.name}</p>
-                                    <p className="text-xs text-muted-foreground">{official.role}</p>
-                                  </div>
-                                  <CivicTag type="official" label="Official" size="sm" />
-                                </div>
-                                <div className="flex justify-between text-xs">
-                                  <span>Approval: {official.approvalRating}%</span>
-                                  <span>Civic Score: {official.civicScore}/10</span>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    )}
-                  </div>
-                ))}
-              </div>
-
-              {/* Load More */}
-              <div className="flex justify-center py-6">
-                <Button variant="outline" size="lg">
-                  Load Older Posts
-                </Button>
-              </div>
             </div>
           </div>
 
