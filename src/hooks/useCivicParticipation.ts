@@ -36,26 +36,49 @@ export function useCreatePetition() {
       target_institution: string;
       category: string;
       location?: string;
+      region?: string;
       goal_signatures?: number;
       deadline?: string;
     }) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Must be logged in to create a petition');
 
+      // Map only allowed columns and normalize location/region
+      const {
+        title,
+        description,
+        target_institution,
+        category,
+        deadline,
+        goal_signatures,
+        location,
+        region,
+      } = petition as any;
+
+      const insertPayload: any = {
+        title,
+        description,
+        target_institution,
+        category,
+        location: location ?? region ?? null,
+        goal_signatures: goal_signatures ?? 100,
+        deadline: deadline || null,
+        creator_id: user.id,
+        status: 'active',
+        current_signatures: 0,
+      };
+
+      console.time?.('createPetition');
       const { data, error } = await supabase
         .from('petitions')
-        .insert([{ 
-          ...petition, 
-          creator_id: user.id,
-          status: 'active',
-          current_signatures: 0
-        }])
+        .insert([insertPayload])
         .select()
         .single();
+      console.timeEnd?.('createPetition');
 
       if (error) {
         console.error('Database error:', error);
-        throw error;
+        throw new Error(error.message || 'Failed to create petition');
       }
       return data;
     },
@@ -63,9 +86,9 @@ export function useCreatePetition() {
       queryClient.invalidateQueries({ queryKey: ['petitions'] });
       toast.success('Petition created successfully!');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Create petition error:', error);
-      toast.error('Failed to create petition. Please try again.');
+      toast.error(error?.message || 'Failed to create petition. Please try again.');
     }
   });
 }

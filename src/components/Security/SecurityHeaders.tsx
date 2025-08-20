@@ -36,7 +36,7 @@ export const SecurityHeaders: React.FC = () => {
         httpEquiv="Content-Security-Policy" 
         content={[
           "default-src 'self'",
-          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.supabase.co https://fonts.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com",
+          "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://api.supabase.co https://fonts.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://cdn.gpteng.co",
           "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com",
           "font-src 'self' https://fonts.gstatic.com data:",
           "img-src 'self' data: blob: https: *.supabase.co *.unsplash.com *.googleusercontent.com *.gravatar.com",

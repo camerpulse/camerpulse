@@ -15,7 +15,6 @@ export const cspConfig = {
     'media-src': "'self' blob: *.supabase.co",
     'worker-src': "'self' blob:",
     'child-src': "'self' blob:",
-    'frame-ancestors': "'none'",
     'upgrade-insecure-requests': '',
   },
   reportUri: '/api/csp-report'
@@ -44,9 +43,7 @@ export function applySecurityHeaders() {
   const securityMetas = [
     { name: 'referrer', content: 'strict-origin-when-cross-origin' },
     { name: 'permissions-policy', content: 'camera=(), microphone=(), geolocation=()' },
-    { 'http-equiv': 'X-Content-Type-Options', content: 'nosniff' },
-    { 'http-equiv': 'X-Frame-Options', content: 'DENY' },
-    { 'http-equiv': 'X-XSS-Protection', content: '1; mode=block' }
+    { 'http-equiv': 'X-Content-Type-Options', content: 'nosniff' }
   ];
 
   securityMetas.forEach(meta => {

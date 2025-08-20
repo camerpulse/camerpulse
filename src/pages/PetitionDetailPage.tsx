@@ -14,9 +14,9 @@ import { PetitionReactions } from '@/components/petitions/PetitionReactions';
 import { PetitionSocialShare } from '@/components/petitions/PetitionSocialShare';
 import { ReportPetitionDialog } from '@/components/petitions/ReportPetitionDialog';
 import { PetitionAnalytics } from '@/components/petitions/PetitionAnalytics';
-import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/utils/auth';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
+import { parseSlugForId } from '@/utils/slug';
 
 interface Petition {
   id: string;
@@ -55,33 +55,40 @@ const PetitionDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [hasSigned, setHasSigned] = useState(false);
 
-  // Fetch petition data
-  useEffect(() => {
-    async function fetchPetition() {
-      if (!slug) return;
-      
-      try {
-        const { data, error } = await supabase
-          .from('petitions')
-          .select('*')
-          .eq('slug', slug)
-          .single();
+// Fetch petition data
+useEffect(() => {
+  async function fetchPetition() {
+    if (!slug) return;
+    try {
+      // Try by ID parsed from slug first for robustness
+      const id = parseSlugForId(slug);
+      let data: any = null;
+      let error: any = null;
 
-        if (error) {
-          setError('Petition not found');
-          return;
-        }
-
-        setPetition(data);
-      } catch (err) {
-        setError('Failed to load petition');
-      } finally {
-        setLoading(false);
+      if (id) {
+        const res = await supabase.from('petitions').select('*').eq('id', id).maybeSingle();
+        data = res.data; error = res.error;
       }
-    }
 
-    fetchPetition();
-  }, [slug]);
+      if (!data) {
+        const res2 = await supabase.from('petitions').select('*').eq('slug', slug).maybeSingle();
+        data = res2.data; error = res2.error;
+      }
+
+      if (error || !data) {
+        setError('Petition not found');
+        return;
+      }
+
+      setPetition(data);
+    } catch (err) {
+      setError('Failed to load petition');
+    } finally {
+      setLoading(false);
+    }
+  }
+  fetchPetition();
+}, [slug]);
 
   // Check if user has signed
   useEffect(() => {
@@ -247,9 +254,9 @@ const PetitionDetailPage: React.FC = () => {
           </Card>
 
           {/* Analytics (only visible to creator and admins) */}
-          {user && (user.id === petition.created_by) && (
-            <PetitionAnalytics petitionId={petition.id} />
-          )}
+{user && (user.id === (petition as any).creator_id) && (
+  <PetitionAnalytics petitionId={petition.id} />
+)}
 
           {/* Reactions */}
           <PetitionReactions petitionId={petition.id} />

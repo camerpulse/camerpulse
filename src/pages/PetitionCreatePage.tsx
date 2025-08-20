@@ -129,8 +129,13 @@ const PetitionCreatePage: React.FC = () => {
 
     try {
       const petition = await createPetitionMutation.mutateAsync({
-        ...formData,
-        deadline: formData.deadline || undefined
+        title: formData.title,
+        description: formData.description,
+        target_institution: formData.target_institution,
+        category: formData.category,
+        location: formData.region,
+        goal_signatures: formData.goal_signatures,
+        deadline: formData.deadline || undefined,
       });
 
       toast.success('Petition created successfully!');
