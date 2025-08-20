@@ -80,6 +80,7 @@ const ArtistEcosystem = lazy(() => import('@/pages/ArtistEcosystem'));
 
 // Civic Engagement
 const PetitionsPage = lazy(() => import('@/pages/PetitionsPage'));
+const PetitionCreatePage = lazy(() => import('@/pages/PetitionCreatePage'));
 const PetitionDetailPage = lazy(() => import('@/pages/PetitionDetailPage'));
 const PollsLandingPage = lazy(() => import('@/pages/PollsLandingPage'));
 const PollsDiscovery = lazy(() => import('@/pages/PollsDiscovery'));
@@ -491,6 +492,10 @@ export const AppRouter: React.FC = () => {
         <Route 
           path="/petitions" 
           element={<WrappedRoute element={PetitionsPage} routeName="Petitions" />} 
+        />
+        <Route 
+          path="/petitions/create" 
+          element={<WrappedRoute element={PetitionCreatePage} routeName="Create Petition" />} 
         />
         <Route 
           path="/petitions/:slug" 
