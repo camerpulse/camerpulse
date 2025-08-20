@@ -19,6 +19,7 @@ import { InfinitePostFeed } from '@/components/feed/InfinitePostFeed';
 import { AIRecommendations } from '@/components/feed/AIRecommendations';
 import { RealtimeNotifications } from '@/components/feed/RealtimeNotifications';
 import { SocialAnalytics } from '@/components/feed/SocialAnalytics';
+import { AdminDashboard } from '@/components/admin/AdminDashboard';
 import { useFeedRealtime } from '@/hooks/useFeedRealtime';
 import {
   Users,
@@ -69,15 +70,15 @@ export default function Feed() {
   const [activeTab, setActiveTab] = useState('home');
   const [showComposer, setShowComposer] = useState(false);
 
-  // Auto-navigate to civic education as "next page"
+  // Auto-navigate to admin panel for Phase 5
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/civic-education');
+      navigate('/admin');
       toast({
-        title: "Navigating to Civic Education Hub",
-        description: "Proceeding to learn about civic engagement and democracy.",
+        title: "Accessing Admin Panel",
+        description: "Phase 5: Advanced admin tools and content moderation system",
       });
-    }, 2000); // Navigate after 2 seconds
+    }, 2000);
 
     return () => clearTimeout(timer);
   }, [navigate, toast]);
@@ -203,11 +204,8 @@ export default function Feed() {
                 </div>
               </div>
 
-              {/* Post Composer */}
-              <PostComposer />
-
-              {/* Posts Feed with Infinite Scroll - Phase 3 */}
-              <InfinitePostFeed />
+              {/* Admin Dashboard - Phase 5 */}
+              <AdminDashboard />
             </div>
           </div>
 
