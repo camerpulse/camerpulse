@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { usePosts } from '@/hooks/usePosts';
 import { PostCard } from '@/components/feed/PostCard';
 import { PostComposer } from '@/components/feed/PostComposer';
+import { InfinitePostFeed } from '@/components/feed/InfinitePostFeed';
 import { useFeedRealtime } from '@/hooks/useFeedRealtime';
 import {
   Users,
@@ -64,19 +65,20 @@ export default function Feed() {
   const [showComposer, setShowComposer] = useState(false);
   
   // Use real data hooks
+  // Use infinite scroll instead of paginated posts
   const { 
-    data: posts, 
-    isLoading, 
-    error, 
-    refetch,
-    isFetching 
-  } = usePosts(20, 0);
+    data: legacyPosts, 
+    isLoading: legacyLoading, 
+    error: legacyError, 
+    refetch: legacyRefetch,
+    isFetching: legacyFetching 
+  } = usePosts(3, 0); // Only fetch 3 for trending sidebar
 
-  // Realtime sync for posts/interactions/comments
-  useFeedRealtime(20, 0);
+  // Realtime sync for posts/interactions/comments (still needed for trending)
+  useFeedRealtime(3, 0);
 
   const handleRefresh = () => {
-    refetch();
+    legacyRefetch();
   };
 
   return (
@@ -96,8 +98,8 @@ export default function Feed() {
               <Button variant="ghost" size="icon" className="lg:hidden">
                 <Search className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={isFetching}>
-                <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
+              <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={legacyFetching}>
+                <RefreshCw className={`w-4 h-4 ${legacyFetching ? 'animate-spin' : ''}`} />
               </Button>
               <Button variant="ghost" size="icon">
                 <Bell className="w-4 h-4" />
@@ -185,73 +187,8 @@ export default function Feed() {
               {/* Post Composer */}
               <PostComposer />
 
-              {/* Posts Feed */}
-              {isLoading ? (
-                <div className="space-y-6">
-                  {[...Array(5)].map((_, i) => (
-                    <Card key={i} className="bg-card border-border">
-                      <CardContent className="p-4">
-                        <div className="flex gap-3">
-                          <div className="w-10 h-10 bg-muted rounded-full animate-pulse" />
-                          <div className="flex-1 space-y-3">
-                            <div className="flex items-center gap-2">
-                              <div className="h-4 bg-muted rounded animate-pulse w-24" />
-                              <div className="h-3 bg-muted rounded animate-pulse w-16" />
-                            </div>
-                            <div className="space-y-2">
-                              <div className="h-4 bg-muted rounded animate-pulse w-full" />
-                              <div className="h-4 bg-muted rounded animate-pulse w-3/4" />
-                              <div className="h-4 bg-muted rounded animate-pulse w-1/2" />
-                            </div>
-                            <div className="flex items-center gap-4 pt-2">
-                              <div className="h-8 bg-muted rounded animate-pulse w-16" />
-                              <div className="h-8 bg-muted rounded animate-pulse w-16" />
-                              <div className="h-8 bg-muted rounded animate-pulse w-16" />
-                            </div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              ) : error ? (
-                <Card className="bg-card border-border">
-                  <CardContent className="p-8 text-center">
-                    <AlertCircle className="w-12 h-12 mx-auto mb-4 text-destructive" />
-                    <h3 className="text-lg font-semibold mb-2">Failed to load posts</h3>
-                    <p className="text-muted-foreground mb-4">
-                      {error instanceof Error ? error.message : 'An unexpected error occurred'}
-                    </p>
-                    <Button onClick={handleRefresh} disabled={isFetching}>
-                      {isFetching && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                      Try Again
-                    </Button>
-                  </CardContent>
-                </Card>
-              ) : posts && posts.length > 0 ? (
-                <div className="space-y-6">
-                  {posts.map((post) => (
-                    <PostCard key={post.id} post={post} />
-                  ))}
-                  
-                  {/* Load More - Phase 3 will replace with infinite scroll */}
-                  <div className="flex justify-center py-6">
-                    <Button variant="outline" size="lg" disabled>
-                      Load Older Posts (Coming Soon)
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <Card className="bg-card border-border">
-                  <CardContent className="p-8 text-center">
-                    <Globe className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                    <h3 className="text-lg font-semibold mb-2">No posts yet</h3>
-                    <p className="text-muted-foreground">
-                      Be the first to share your civic voice with the community!
-                    </p>
-                  </CardContent>
-                </Card>
-              )}
+              {/* Posts Feed with Infinite Scroll */}
+              <InfinitePostFeed />
             </div>
           </div>
 
@@ -293,7 +230,7 @@ export default function Feed() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  {posts?.slice(0, 3).map((post) => (
+                  {legacyPosts?.slice(0, 3).map((post) => (
                     <div key={post.id} className="p-2 hover:bg-muted/50 rounded cursor-pointer">
                       <p className="text-xs line-clamp-2 mb-1">{post.content}</p>
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">

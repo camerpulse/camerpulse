@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -27,12 +27,13 @@ import { useTogglePostInteraction, useSharePost } from '@/hooks/usePostInteracti
 import { useDeletePost } from '@/hooks/usePosts';
 import type { Post } from '@/hooks/usePosts';
 import { CommentsSection } from './CommentsSection';
+import { LazyImage } from './LazyImage';
 
 interface PostCardProps {
   post: Post;
 }
 
-export const PostCard: React.FC<PostCardProps> = ({ post }) => {
+export const PostCard: React.FC<PostCardProps> = memo(({ post }) => {
   const { user } = useAuth();
   const [showComments, setShowComments] = useState(false);
   
@@ -170,12 +171,11 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
             {post.media_urls && post.media_urls.length > 0 && (
               <div className="mt-3 grid grid-cols-2 gap-2 rounded-lg overflow-hidden">
                 {post.media_urls.slice(0, 4).map((url, index) => (
-                  <img
+                  <LazyImage
                     key={index}
                     src={url}
                     alt="Post media"
-                    className="w-full h-32 object-cover"
-                    loading="lazy"
+                    className="w-full h-32 object-cover rounded"
                   />
                 ))}
                 {post.media_urls.length > 4 && (
@@ -248,4 +248,6 @@ export const PostCard: React.FC<PostCardProps> = ({ post }) => {
       </CardContent>
     </Card>
   );
-};
+});
+
+PostCard.displayName = 'PostCard';
