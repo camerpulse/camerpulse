@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { AuthService } from '@/utils/auth';
 
 export interface Minister {
   id: string;
@@ -128,7 +129,7 @@ export function useUserMinisterRating(ministerId: string) {
   return useQuery({
     queryKey: ['user-minister-rating', ministerId],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await AuthService.getCurrentUser();
       if (!user) return null;
 
       const { data, error } = await supabase
@@ -162,8 +163,7 @@ export function useRateMinister() {
       comment?: string;
       is_anonymous?: boolean;
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to rate a Minister');
+      const user = await AuthService.requireAuth('You must be logged in to rate a Minister');
 
       const { data, error } = await supabase
         .from('minister_ratings')
@@ -205,7 +205,7 @@ export function useMinisterFollowing(ministerId: string) {
   const { data: isFollowing, isLoading } = useQuery({
     queryKey: ['minister-following', ministerId],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await AuthService.getCurrentUser();
       if (!user) return false;
 
       const { data, error } = await supabase
@@ -223,8 +223,7 @@ export function useMinisterFollowing(ministerId: string) {
 
   const followMutation = useMutation({
     mutationFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to follow a Minister');
+      const user = await AuthService.requireAuth('You must be logged in to follow a Minister');
 
       const { error } = await supabase
         .from('minister_followers')
@@ -253,8 +252,7 @@ export function useMinisterFollowing(ministerId: string) {
 
   const unfollowMutation = useMutation({
     mutationFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to unfollow a Minister');
+      const user = await AuthService.requireAuth('You must be logged in to unfollow a Minister');
 
       const { error } = await supabase
         .from('minister_followers')
