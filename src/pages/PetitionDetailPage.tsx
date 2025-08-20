@@ -12,17 +12,8 @@ import { PetitionComments } from '@/components/petitions/PetitionComments';
 import { PetitionUpdates } from '@/components/petitions/PetitionUpdates';
 import { PetitionReactions } from '@/components/petitions/PetitionReactions';
 import { PetitionSocialShare } from '@/components/petitions/PetitionSocialShare';
-import { 
-  Share2, 
-  Heart, 
-  MessageCircle, 
-  Calendar, 
-  MapPin, 
-  Users, 
-  Target,
-  TrendingUp,
-  Clock
-} from 'lucide-react';
+import { ReportPetitionDialog } from '@/components/petitions/ReportPetitionDialog';
+import { PetitionAnalytics } from '@/components/petitions/PetitionAnalytics';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/utils/auth';
 import { toast } from 'sonner';
@@ -40,6 +31,18 @@ interface Petition {
   created_at: string;
   updated_at: string;
 }
+
+const {
+  Share2, 
+  Heart, 
+  MessageCircle, 
+  Calendar, 
+  MapPin, 
+  Users, 
+  Target,
+  TrendingUp,
+  Clock
+} = require('lucide-react');
 
 /**
  * Individual petition detail page with full information and interaction options
@@ -243,6 +246,11 @@ const PetitionDetailPage: React.FC = () => {
             </CardContent>
           </Card>
 
+          {/* Analytics (only visible to creator and admins) */}
+          {user && (user.id === petition.created_by) && (
+            <PetitionAnalytics petitionId={petition.id} />
+          )}
+
           {/* Reactions */}
           <PetitionReactions petitionId={petition.id} />
 
@@ -350,6 +358,18 @@ const PetitionDetailPage: React.FC = () => {
                   <span className="text-sm">Progress</span>
                 </div>
                 <span className="font-medium">{Math.round(progressPercentage)}%</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Report Feature */}
+          <Card>
+            <CardContent className="p-4">
+              <div className="text-center">
+                <ReportPetitionDialog 
+                  petitionId={petition.id}
+                  petitionTitle={petition.title}
+                />
               </div>
             </CardContent>
           </Card>

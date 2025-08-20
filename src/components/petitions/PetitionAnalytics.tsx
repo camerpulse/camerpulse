@@ -1,90 +1,166 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/utils/auth';
 import { 
-  BarChart3, 
-  TrendingUp, 
+  BarChart, 
   Users, 
-  MapPin, 
+  TrendingUp, 
+  MessageCircle, 
+  Heart, 
+  Share2,
   Calendar,
-  Download,
-  Filter,
   Target,
-  Clock,
-  Award
+  Eye,
+  ArrowUpRight,
+  ArrowDownRight
 } from 'lucide-react';
 
+interface PetitionAnalyticsProps {
+  petitionId: string;
+}
+
 interface AnalyticsData {
-  signaturesByDay: { date: string; count: number }[];
-  signaturesByRegion: { region: string; count: number; percentage: number }[];
-  topPetitions: { id: string; title: string; signatures: number; growth: number }[];
-  demographics: { ageGroup: string; count: number; percentage: number }[];
-  performanceMetrics: {
-    averageSignaturesPerDay: number;
-    conversionRate: number;
-    averageTimeToGoal: number;
-    completionRate: number;
+  total_views: number;
+  unique_visitors: number;
+  total_signatures: number;
+  total_comments: number;
+  total_reactions: number;
+  total_shares: number;
+  conversion_rate: number;
+  engagement_score: number;
+  daily_data: Array<{
+    date: string;
+    views: number;
+    signatures: number;
+    comments: number;
+    reactions: number;
+  }>;
+  growth_metrics: {
+    views_growth: number;
+    signatures_growth: number;
+    engagement_growth: number;
   };
 }
 
-interface PetitionAnalyticsProps {
-  petitionId?: string;
-  timeRange?: '7d' | '30d' | '90d' | '1y' | 'all';
-}
-
-export function PetitionAnalytics({ petitionId, timeRange = '30d' }: PetitionAnalyticsProps) {
+export const PetitionAnalytics: React.FC<PetitionAnalyticsProps> = ({ petitionId }) => {
+  const { user } = useAuth();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedTimeRange, setSelectedTimeRange] = useState(timeRange);
+  const [timeframe, setTimeframe] = useState('7d');
 
   useEffect(() => {
     fetchAnalytics();
-  }, [petitionId, selectedTimeRange]);
+  }, [petitionId, timeframe]);
 
   const fetchAnalytics = async () => {
-    setLoading(true);
     try {
-      // Mock analytics data - in real implementation, this would fetch from Supabase
-      const mockData: AnalyticsData = {
-        signaturesByDay: Array.from({ length: 30 }, (_, i) => ({
-          date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-          count: Math.floor(Math.random() * 100) + 20
-        })),
-        signaturesByRegion: [
-          { region: 'Centre', count: 1250, percentage: 35.2 },
-          { region: 'Littoral', count: 890, percentage: 25.1 },
-          { region: 'West', count: 567, percentage: 16.0 },
-          { region: 'Northwest', count: 345, percentage: 9.7 },
-          { region: 'Southwest', count: 298, percentage: 8.4 },
-          { region: 'Other', count: 195, percentage: 5.5 }
-        ],
-        topPetitions: [
-          { id: '1', title: 'Improve Road Infrastructure in Douala', signatures: 2450, growth: 15.2 },
-          { id: '2', title: 'Better Healthcare Access in Rural Areas', signatures: 1890, growth: 22.1 },
-          { id: '3', title: 'Educational Reform Initiative', signatures: 1567, growth: 8.7 },
-          { id: '4', title: 'Environmental Protection Laws', signatures: 1234, growth: 31.4 },
-          { id: '5', title: 'Youth Employment Programs', signatures: 987, growth: 12.8 }
-        ],
-        demographics: [
-          { ageGroup: '18-25', count: 1420, percentage: 40.1 },
-          { ageGroup: '26-35', count: 1065, percentage: 30.1 },
-          { ageGroup: '36-45', count: 638, percentage: 18.0 },
-          { ageGroup: '46-55', count: 284, percentage: 8.0 },
-          { ageGroup: '55+', count: 134, percentage: 3.8 }
-        ],
-        performanceMetrics: {
-          averageSignaturesPerDay: 67.3,
-          conversionRate: 23.4,
-          averageTimeToGoal: 45,
-          completionRate: 68.2
-        }
+      // Calculate date range based on timeframe
+      const endDate = new Date();
+      const startDate = new Date();
+      switch (timeframe) {
+        case '7d':
+          startDate.setDate(endDate.getDate() - 7);
+          break;
+        case '30d':
+          startDate.setDate(endDate.getDate() - 30);
+          break;
+        case '90d':
+          startDate.setDate(endDate.getDate() - 90);
+          break;
+      }
+
+      // Fetch analytics data
+      const { data: analyticsData, error } = await supabase
+        .from('petition_analytics')
+        .select('*')
+        .eq('petition_id', petitionId)
+        .gte('date_tracked', startDate.toISOString().split('T')[0])
+        .lte('date_tracked', endDate.toISOString().split('T')[0])
+        .order('date_tracked', { ascending: true });
+
+      if (error) throw error;
+
+      // Aggregate data
+      const totalData = analyticsData?.reduce((acc, day) => ({
+        total_views: acc.total_views + (day.views_count || 0),
+        unique_visitors: acc.unique_visitors + (day.unique_visitors || 0),
+        total_signatures: acc.total_signatures + (day.signatures_added || 0),
+        total_comments: acc.total_comments + (day.comments_added || 0),
+        total_reactions: acc.total_reactions + (day.reactions_added || 0),
+        total_shares: acc.total_shares + (day.shares_count || 0),
+      }), {
+        total_views: 0,
+        unique_visitors: 0,
+        total_signatures: 0,
+        total_comments: 0,
+        total_reactions: 0,
+        total_shares: 0,
+      }) || {
+        total_views: 0,
+        unique_visitors: 0,
+        total_signatures: 0,
+        total_comments: 0,
+        total_reactions: 0,
+        total_shares: 0,
       };
 
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setAnalytics(mockData);
+      // Calculate conversion rate and engagement
+      const conversion_rate = totalData.total_views > 0 
+        ? (totalData.total_signatures / totalData.total_views) * 100 
+        : 0;
+
+      const engagement_score = totalData.total_views > 0 
+        ? ((totalData.total_comments + totalData.total_reactions + totalData.total_shares) / totalData.total_views) * 100 
+        : 0;
+
+      // Calculate growth metrics (compare with previous period)
+      const previousPeriodStart = new Date(startDate);
+      const periodDuration = endDate.getTime() - startDate.getTime();
+      previousPeriodStart.setTime(startDate.getTime() - periodDuration);
+
+      const { data: previousData } = await supabase
+        .from('petition_analytics')
+        .select('*')
+        .eq('petition_id', petitionId)
+        .gte('date_tracked', previousPeriodStart.toISOString().split('T')[0])
+        .lt('date_tracked', startDate.toISOString().split('T')[0]);
+
+      const previousTotal = previousData?.reduce((acc, day) => ({
+        views: acc.views + (day.views_count || 0),
+        signatures: acc.signatures + (day.signatures_added || 0),
+        engagement: acc.engagement + ((day.comments_added || 0) + (day.reactions_added || 0) + (day.shares_count || 0)),
+      }), { views: 0, signatures: 0, engagement: 0 }) || { views: 0, signatures: 0, engagement: 0 };
+
+      const growth_metrics = {
+        views_growth: previousTotal.views > 0 
+          ? ((totalData.total_views - previousTotal.views) / previousTotal.views) * 100 
+          : 0,
+        signatures_growth: previousTotal.signatures > 0 
+          ? ((totalData.total_signatures - previousTotal.signatures) / previousTotal.signatures) * 100 
+          : 0,
+        engagement_growth: previousTotal.engagement > 0 
+          ? (((totalData.total_comments + totalData.total_reactions + totalData.total_shares) - previousTotal.engagement) / previousTotal.engagement) * 100 
+          : 0,
+      };
+
+      setAnalytics({
+        ...totalData,
+        conversion_rate,
+        engagement_score,
+        daily_data: analyticsData?.map(day => ({
+          date: day.date_tracked,
+          views: day.views_count || 0,
+          signatures: day.signatures_added || 0,
+          comments: day.comments_added || 0,
+          reactions: day.reactions_added || 0,
+        })) || [],
+        growth_metrics
+      });
+
     } catch (error) {
       console.error('Error fetching analytics:', error);
     } finally {
@@ -92,287 +168,195 @@ export function PetitionAnalytics({ petitionId, timeRange = '30d' }: PetitionAna
     }
   };
 
-  const exportAnalytics = (format: 'csv' | 'pdf' | 'png') => {
-    console.log(`Exporting analytics as ${format}`);
-    // Mock export functionality
-  };
-
   if (loading) {
     return (
-      <div className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[1,2,3,4].map(i => (
-            <Card key={i} className="animate-pulse">
-              <CardContent className="p-6">
-                <div className="h-16 bg-muted rounded"></div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-        <Card className="animate-pulse">
-          <CardContent className="p-6">
-            <div className="h-64 bg-muted rounded"></div>
-          </CardContent>
-        </Card>
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Analytics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="animate-pulse space-y-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="h-20 bg-muted rounded"></div>
+              ))}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
-  if (!analytics) return null;
+  if (!analytics) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Analytics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8 text-muted-foreground">
+            <BarChart className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>No analytics data available</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const GrowthIndicator = ({ value }: { value: number }) => {
+    const isPositive = value > 0;
+    const isNeutral = value === 0;
+    
+    return (
+      <div className={`flex items-center gap-1 text-xs ${
+        isNeutral ? 'text-muted-foreground' : 
+        isPositive ? 'text-green-600' : 'text-red-600'
+      }`}>
+        {!isNeutral && (
+          isPositive ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />
+        )}
+        <span>{isNeutral ? '0%' : `${Math.abs(value).toFixed(1)}%`}</span>
+      </div>
+    );
+  };
 
   return (
-    <div className="space-y-6">
-      {/* Controls */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h2 className="text-2xl font-bold">Petition Analytics</h2>
-          <Select value={selectedTimeRange} onValueChange={(value) => setSelectedTimeRange(value as '7d' | '30d' | '90d' | '1y' | 'all')}>
-            <SelectTrigger className="w-32">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="7d">Last 7 days</SelectItem>
-              <SelectItem value="30d">Last 30 days</SelectItem>
-              <SelectItem value="90d">Last 90 days</SelectItem>
-              <SelectItem value="1y">Last year</SelectItem>
-              <SelectItem value="all">All time</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => exportAnalytics('csv')}>
-            <Download className="h-4 w-4 mr-2" />
-            CSV
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => exportAnalytics('pdf')}>
-            <Download className="h-4 w-4 mr-2" />
-            PDF
-          </Button>
-          <Button variant="outline" size="sm" onClick={() => exportAnalytics('png')}>
-            <Download className="h-4 w-4 mr-2" />
-            Chart
-          </Button>
-        </div>
-      </div>
-
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              <TrendingUp className="h-8 w-8 text-blue-500" />
-              <div>
-                <p className="text-sm text-muted-foreground">Avg. Daily Signatures</p>
-                <p className="text-2xl font-bold">{analytics.performanceMetrics.averageSignaturesPerDay}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              <Target className="h-8 w-8 text-green-500" />
-              <div>
-                <p className="text-sm text-muted-foreground">Conversion Rate</p>
-                <p className="text-2xl font-bold">{analytics.performanceMetrics.conversionRate}%</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              <Clock className="h-8 w-8 text-orange-500" />
-              <div>
-                <p className="text-sm text-muted-foreground">Avg. Time to Goal</p>
-                <p className="text-2xl font-bold">{analytics.performanceMetrics.averageTimeToGoal}d</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-6">
-            <div className="flex items-center gap-3">
-              <Award className="h-8 w-8 text-purple-500" />
-              <div>
-                <p className="text-sm text-muted-foreground">Success Rate</p>
-                <p className="text-2xl font-bold">{analytics.performanceMetrics.completionRate}%</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="signatures" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="signatures">Signature Trends</TabsTrigger>
-          <TabsTrigger value="regional">Regional Analysis</TabsTrigger>
-          <TabsTrigger value="demographics">Demographics</TabsTrigger>
-          <TabsTrigger value="performance">Performance</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="signatures">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5" />
-                Daily Signature Trends
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="h-64 flex items-center justify-center bg-muted/20 rounded">
-                <div className="text-center">
-                  <BarChart3 className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-                  <p className="text-muted-foreground">Signature trend chart would render here</p>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    Showing {analytics.signaturesByDay.length} days of data
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="regional">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5" />
-                Signatures by Region
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {analytics.signaturesByRegion.map((region, index) => (
-                  <div key={region.region} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full" style={{
-                        backgroundColor: `hsl(${index * 60}, 70%, 50%)`
-                      }}></div>
-                      <span className="font-medium">{region.region}</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-32 bg-muted rounded-full h-2">
-                        <div 
-                          className="h-2 rounded-full bg-primary"
-                          style={{ width: `${region.percentage}%` }}
-                        ></div>
-                      </div>
-                      <span className="text-sm text-muted-foreground w-16 text-right">
-                        {region.count} ({region.percentage}%)
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="demographics">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Age Demographics
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {analytics.demographics.map((demo, index) => (
-                  <div key={demo.ageGroup} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-3 h-3 rounded-full" style={{
-                        backgroundColor: `hsl(${index * 45 + 180}, 70%, 50%)`
-                      }}></div>
-                      <span className="font-medium">{demo.ageGroup} years</span>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-32 bg-muted rounded-full h-2">
-                        <div 
-                          className="h-2 rounded-full bg-secondary"
-                          style={{ width: `${demo.percentage}%` }}
-                        ></div>
-                      </div>
-                      <span className="text-sm text-muted-foreground w-16 text-right">
-                        {demo.count} ({demo.percentage}%)
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="performance">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Top Performing Petitions</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {analytics.topPetitions.map((petition, index) => (
-                    <div key={petition.id} className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-6 h-6 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
-                          {index + 1}
-                        </div>
-                        <div>
-                          <p className="font-medium line-clamp-1">{petition.title}</p>
-                          <p className="text-sm text-muted-foreground">
-                            {petition.signatures} signatures
-                          </p>
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-sm font-medium text-green-600">
-                          +{petition.growth}%
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Performance Insights</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="p-4 bg-blue-50 rounded-lg">
-                    <h4 className="font-medium text-blue-900">Peak Activity</h4>
-                    <p className="text-sm text-blue-700">
-                      Most signatures collected between 6-9 PM on weekdays
-                    </p>
-                  </div>
-                  
-                  <div className="p-4 bg-green-50 rounded-lg">
-                    <h4 className="font-medium text-green-900">Best Categories</h4>
-                    <p className="text-sm text-green-700">
-                      Infrastructure and healthcare petitions perform 40% better
-                    </p>
-                  </div>
-                  
-                  <div className="p-4 bg-orange-50 rounded-lg">
-                    <h4 className="font-medium text-orange-900">Optimization</h4>
-                    <p className="text-sm text-orange-700">
-                      Adding images increases signature rate by 65%
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+    <Card>
+      <CardHeader>
+        <div className="flex items-center justify-between">
+          <CardTitle className="flex items-center gap-2">
+            <BarChart className="w-5 h-5" />
+            Analytics
+          </CardTitle>
+          <div className="flex gap-2">
+            <Button 
+              variant={timeframe === '7d' ? 'default' : 'outline'} 
+              size="sm"
+              onClick={() => setTimeframe('7d')}
+            >
+              7D
+            </Button>
+            <Button 
+              variant={timeframe === '30d' ? 'default' : 'outline'} 
+              size="sm"
+              onClick={() => setTimeframe('30d')}
+            >
+              30D
+            </Button>
+            <Button 
+              variant={timeframe === '90d' ? 'default' : 'outline'} 
+              size="sm"
+              onClick={() => setTimeframe('90d')}
+            >
+              90D
+            </Button>
           </div>
-        </TabsContent>
-      </Tabs>
-    </div>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        {/* Key Metrics */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Eye className="w-4 h-4" />
+                Views
+              </div>
+              <GrowthIndicator value={analytics.growth_metrics.views_growth} />
+            </div>
+            <div className="text-2xl font-bold">{analytics.total_views.toLocaleString()}</div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Users className="w-4 h-4" />
+                Signatures
+              </div>
+              <GrowthIndicator value={analytics.growth_metrics.signatures_growth} />
+            </div>
+            <div className="text-2xl font-bold">{analytics.total_signatures.toLocaleString()}</div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <Target className="w-4 h-4" />
+              Conversion
+            </div>
+            <div className="text-2xl font-bold">{analytics.conversion_rate.toFixed(1)}%</div>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <TrendingUp className="w-4 h-4" />
+                Engagement
+              </div>
+              <GrowthIndicator value={analytics.growth_metrics.engagement_growth} />
+            </div>
+            <div className="text-2xl font-bold">{analytics.engagement_score.toFixed(1)}%</div>
+          </div>
+        </div>
+
+        {/* Engagement Breakdown */}
+        <Tabs defaultValue="engagement" className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="engagement">Engagement</TabsTrigger>
+            <TabsTrigger value="activity">Daily Activity</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="engagement" className="space-y-4">
+            <div className="grid grid-cols-3 gap-4">
+              <div className="text-center space-y-2">
+                <div className="flex items-center justify-center">
+                  <MessageCircle className="w-8 h-8 text-blue-500" />
+                </div>
+                <div className="text-2xl font-bold">{analytics.total_comments}</div>
+                <div className="text-sm text-muted-foreground">Comments</div>
+              </div>
+
+              <div className="text-center space-y-2">
+                <div className="flex items-center justify-center">
+                  <Heart className="w-8 h-8 text-red-500" />
+                </div>
+                <div className="text-2xl font-bold">{analytics.total_reactions}</div>
+                <div className="text-sm text-muted-foreground">Reactions</div>
+              </div>
+
+              <div className="text-center space-y-2">
+                <div className="flex items-center justify-center">
+                  <Share2 className="w-8 h-8 text-green-500" />
+                </div>
+                <div className="text-2xl font-bold">{analytics.total_shares}</div>
+                <div className="text-sm text-muted-foreground">Shares</div>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="activity" className="space-y-4">
+            <div className="space-y-3">
+              {analytics.daily_data.slice(-7).map((day, index) => (
+                <div key={day.date} className="flex items-center justify-between p-3 border rounded-lg">
+                  <div className="flex items-center gap-3">
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">
+                      {new Date(day.date).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric' 
+                      })}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-4 text-sm">
+                    <span>{day.views} views</span>
+                    <span>{day.signatures} signatures</span>
+                    <span>{day.comments + day.reactions} interactions</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </CardContent>
+    </Card>
   );
-}
+};

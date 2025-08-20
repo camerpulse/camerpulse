@@ -53,6 +53,42 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_activity_log: {
+        Row: {
+          action_details: Json | null
+          action_type: string
+          admin_user_id: string
+          id: string
+          ip_address: unknown | null
+          resource_id: string | null
+          resource_type: string
+          timestamp: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          action_details?: Json | null
+          action_type: string
+          admin_user_id: string
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type: string
+          timestamp?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          action_details?: Json | null
+          action_type?: string
+          admin_user_id?: string
+          id?: string
+          ip_address?: unknown | null
+          resource_id?: string | null
+          resource_type?: string
+          timestamp?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       admin_activity_logs: {
         Row: {
           action_details: Json | null
@@ -33765,6 +33801,62 @@ export type Database = {
           },
         ]
       }
+      petition_analytics: {
+        Row: {
+          comments_added: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          date_tracked: string
+          engagement_score: number | null
+          id: string
+          petition_id: string
+          reactions_added: number | null
+          shares_count: number | null
+          signatures_added: number | null
+          unique_visitors: number | null
+          updated_at: string | null
+          views_count: number | null
+        }
+        Insert: {
+          comments_added?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          date_tracked?: string
+          engagement_score?: number | null
+          id?: string
+          petition_id: string
+          reactions_added?: number | null
+          shares_count?: number | null
+          signatures_added?: number | null
+          unique_visitors?: number | null
+          updated_at?: string | null
+          views_count?: number | null
+        }
+        Update: {
+          comments_added?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          date_tracked?: string
+          engagement_score?: number | null
+          id?: string
+          petition_id?: string
+          reactions_added?: number | null
+          shares_count?: number | null
+          signatures_added?: number | null
+          unique_visitors?: number | null
+          updated_at?: string | null
+          views_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_analytics_petition_id_fkey"
+            columns: ["petition_id"]
+            isOneToOne: false
+            referencedRelation: "petitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       petition_comments: {
         Row: {
           comment_text: string
@@ -33773,6 +33865,8 @@ export type Database = {
           id: string
           is_approved: boolean | null
           is_flagged: boolean | null
+          moderated_at: string | null
+          moderated_by: string | null
           petition_id: string
           updated_at: string | null
           user_id: string
@@ -33784,6 +33878,8 @@ export type Database = {
           id?: string
           is_approved?: boolean | null
           is_flagged?: boolean | null
+          moderated_at?: string | null
+          moderated_by?: string | null
           petition_id: string
           updated_at?: string | null
           user_id: string
@@ -33795,6 +33891,8 @@ export type Database = {
           id?: string
           is_approved?: boolean | null
           is_flagged?: boolean | null
+          moderated_at?: string | null
+          moderated_by?: string | null
           petition_id?: string
           updated_at?: string | null
           user_id?: string
@@ -33860,6 +33958,74 @@ export type Database = {
         }
         Relationships: []
       }
+      petition_moderation_queue: {
+        Row: {
+          assigned_to: string | null
+          auto_flagged: boolean | null
+          created_at: string | null
+          escalated: boolean | null
+          escalated_at: string | null
+          flag_reasons: string[] | null
+          flags_count: number | null
+          id: string
+          metadata: Json | null
+          petition_id: string
+          priority: number | null
+          queue_type: string
+          review_notes: string | null
+          review_status: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          auto_flagged?: boolean | null
+          created_at?: string | null
+          escalated?: boolean | null
+          escalated_at?: string | null
+          flag_reasons?: string[] | null
+          flags_count?: number | null
+          id?: string
+          metadata?: Json | null
+          petition_id: string
+          priority?: number | null
+          queue_type?: string
+          review_notes?: string | null
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          auto_flagged?: boolean | null
+          created_at?: string | null
+          escalated?: boolean | null
+          escalated_at?: string | null
+          flag_reasons?: string[] | null
+          flags_count?: number | null
+          id?: string
+          metadata?: Json | null
+          petition_id?: string
+          priority?: number | null
+          queue_type?: string
+          review_notes?: string | null
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_moderation_queue_petition_id_fkey"
+            columns: ["petition_id"]
+            isOneToOne: false
+            referencedRelation: "petitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       petition_reactions: {
         Row: {
           created_at: string | null
@@ -33885,6 +34051,56 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "petition_reactions_petition_id_fkey"
+            columns: ["petition_id"]
+            isOneToOne: false
+            referencedRelation: "petitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      petition_reports: {
+        Row: {
+          created_at: string | null
+          id: string
+          petition_id: string
+          report_details: string | null
+          report_reason: string
+          reported_by: string
+          resolution: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          petition_id: string
+          report_details?: string | null
+          report_reason: string
+          reported_by: string
+          resolution?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          petition_id?: string
+          report_details?: string | null
+          report_reason?: string
+          reported_by?: string
+          resolution?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_reports_petition_id_fkey"
             columns: ["petition_id"]
             isOneToOne: false
             referencedRelation: "petitions"
@@ -33941,6 +34157,8 @@ export type Database = {
           created_by: string
           id: string
           is_published: boolean | null
+          moderated_at: string | null
+          moderated_by: string | null
           petition_id: string
           title: string
           updated_at: string | null
@@ -33952,6 +34170,8 @@ export type Database = {
           created_by: string
           id?: string
           is_published?: boolean | null
+          moderated_at?: string | null
+          moderated_by?: string | null
           petition_id: string
           title: string
           updated_at?: string | null
@@ -33963,6 +34183,8 @@ export type Database = {
           created_by?: string
           id?: string
           is_published?: boolean | null
+          moderated_at?: string | null
+          moderated_by?: string | null
           petition_id?: string
           title?: string
           updated_at?: string | null
@@ -33970,6 +34192,59 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "petition_updates_petition_id_fkey"
+            columns: ["petition_id"]
+            isOneToOne: false
+            referencedRelation: "petitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      petition_workflow_states: {
+        Row: {
+          assigned_moderator: string | null
+          auto_approval_eligible: boolean | null
+          created_at: string | null
+          escalation_count: number | null
+          id: string
+          metadata: Json | null
+          petition_id: string
+          priority_level: number | null
+          review_deadline: string | null
+          review_notes: string | null
+          updated_at: string | null
+          workflow_stage: string
+        }
+        Insert: {
+          assigned_moderator?: string | null
+          auto_approval_eligible?: boolean | null
+          created_at?: string | null
+          escalation_count?: number | null
+          id?: string
+          metadata?: Json | null
+          petition_id: string
+          priority_level?: number | null
+          review_deadline?: string | null
+          review_notes?: string | null
+          updated_at?: string | null
+          workflow_stage?: string
+        }
+        Update: {
+          assigned_moderator?: string | null
+          auto_approval_eligible?: boolean | null
+          created_at?: string | null
+          escalation_count?: number | null
+          id?: string
+          metadata?: Json | null
+          petition_id?: string
+          priority_level?: number | null
+          review_deadline?: string | null
+          review_notes?: string | null
+          updated_at?: string | null
+          workflow_stage?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_workflow_states_petition_id_fkey"
             columns: ["petition_id"]
             isOneToOne: false
             referencedRelation: "petitions"
