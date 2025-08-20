@@ -50380,8 +50380,16 @@ export type Database = {
         Args: { company_id_param: string }
         Returns: boolean
       }
+      is_company_owner: {
+        Args: { company_id_param: string }
+        Returns: boolean
+      }
       is_shipping_company_staff: {
         Args: { company_id_param: string }
+        Returns: boolean
+      }
+      is_vendor_of_order: {
+        Args: { order_id_param: string }
         Returns: boolean
       }
       learn_from_manual_fix: {
