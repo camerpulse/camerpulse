@@ -3,7 +3,7 @@ import { MapPin, Star, Phone, Clock, Shield, Users } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 import { useNavigation } from '@/hooks/useNavigation';
 
 interface Hospital {

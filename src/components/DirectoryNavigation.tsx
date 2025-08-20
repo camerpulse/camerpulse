@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 
 import { 
   School, 

@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MapPin, Users, Star, Eye, MessageSquare } from 'lucide-react';
 import { MP } from '@/hooks/useMPs';
 import { useNavigate } from 'react-router-dom';
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 
 interface MPCardProps {
   mp: MP;

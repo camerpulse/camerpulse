@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { MessagingModal } from './MessagingModal';
 import { RatingModal } from './RatingModal';
 import { cn } from '@/lib/utils';
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 
 interface UnifiedPoliticalCardProps {
   id: string;

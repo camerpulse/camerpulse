@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Star, MapPin } from 'lucide-react';
 import { Senator } from '@/hooks/useSenators';
 import { Link } from 'react-router-dom';
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 
 interface SenatorCardProps {
   senator: Senator;

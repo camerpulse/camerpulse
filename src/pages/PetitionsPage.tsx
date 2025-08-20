@@ -14,7 +14,7 @@ import {
   Target,
   Filter
 } from 'lucide-react';
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 
 /**
  * Petitions listing page with search, filtering, and categories

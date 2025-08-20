@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { getCanonicalURL } from '@/utils/slugUtils';
+import { getCanonicalURL } from '@/utils/slug';
 
 interface BaseEntity {
   id: string;

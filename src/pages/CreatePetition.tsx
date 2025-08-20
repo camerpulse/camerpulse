@@ -1,7 +1,7 @@
 import React from 'react';
 import { CreatePetitionForm } from '@/components/petitions/CreatePetitionForm';
 import { useNavigate } from 'react-router-dom';
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 
 export default function CreatePetition() {
   const navigate = useNavigate();

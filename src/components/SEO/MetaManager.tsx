@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useLocation } from 'react-router-dom';
-import { getCanonicalURL } from '@/utils/slugUtils';
+import { getCanonicalURL } from '@/utils/slug';
 
 interface MetaManagerProps {
   title?: string;

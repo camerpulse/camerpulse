@@ -6,7 +6,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { usePoliticalSearch, SearchResult } from "@/hooks/usePoliticalSearch";
 import { useNavigate } from "react-router-dom";
-import { URLBuilder } from "@/utils/slugUtils";
+import { URLBuilder } from "@/utils/slug";
 import { PoliticalErrorBoundary } from "./ErrorBoundary";
 import { SearchResultsSkeleton } from "./LoadingStates";
 import { sanitizeSearchQuery } from "./PoliticalValidation";

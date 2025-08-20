@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Progress } from '@/components/ui/progress';
 import { useTopRatedPoliticians } from '@/hooks/usePoliticalData';
 import { Star, TrendingUp, Award, Users } from 'lucide-react';
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 
 interface TopRatedPoliticiansProps {
   limit?: number;

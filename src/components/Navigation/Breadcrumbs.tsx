@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronRight, Home } from 'lucide-react';
-import { createBreadcrumbs } from '@/utils/slugUtils';
+import { createBreadcrumbs } from '@/utils/slug';
 
 interface BreadcrumbsProps {
   customItems?: Array<{ label: string; href: string }>;

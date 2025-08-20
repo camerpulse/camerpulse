@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Building, Users, Star, Eye, MessageSquare } from 'lucide-react';
 import { Minister } from '@/hooks/useMinisters';
 import { useNavigate } from 'react-router-dom';
-import { URLBuilder } from '@/utils/slugUtils';
+import { URLBuilder } from '@/utils/slug';
 
 interface MinisterCardProps {
   minister: Minister;

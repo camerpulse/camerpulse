@@ -22,7 +22,7 @@ import {
   Filter, Search, Grid3x3, List
 } from "lucide-react";
 import { PartyEmbed } from "@/components/AI/OfficialEmbedEngine";
-import { URLBuilder } from "@/utils/slugUtils";
+import { URLBuilder } from "@/utils/slug";
 
 interface PoliticalParty {
   id: string;
