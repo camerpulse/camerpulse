@@ -12,7 +12,7 @@ import { Eye, EyeOff, Users, Shield, Globe, AlertTriangle } from 'lucide-react';
 import { validatePasswordStrength } from '@/utils/authSecurity';
 import { advancedSanitizeInput } from '@/utils/security';
 
-export const AuthPage: React.FC = () => {
+const AuthPage: React.FC = () => {
   const navigate = useNavigate();
   const { user, signUp, signIn, loading } = useAuth();
   const { toast } = useToast();
@@ -379,3 +379,5 @@ export const AuthPage: React.FC = () => {
     </div>
   );
 };
+
+export default AuthPage;
