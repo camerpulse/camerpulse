@@ -45887,23 +45887,29 @@ export type Database = {
       }
       user_roles: {
         Row: {
+          expires_at: string | null
           granted_at: string | null
           granted_by: string | null
           id: string
+          is_active: boolean | null
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Insert: {
+          expires_at?: string | null
           granted_at?: string | null
           granted_by?: string | null
           id?: string
+          is_active?: boolean | null
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
         Update: {
+          expires_at?: string | null
           granted_at?: string | null
           granted_by?: string | null
           id?: string
+          is_active?: boolean | null
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
         }
@@ -49710,6 +49716,10 @@ export type Database = {
       can_upload_cover_photo: {
         Args: { user_id: string }
         Returns: boolean
+      }
+      check_auth_health: {
+        Args: { user_uuid: string }
+        Returns: Json
       }
       check_claim_renewals: {
         Args: Record<PropertyKey, never>

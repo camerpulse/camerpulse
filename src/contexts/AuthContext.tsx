@@ -106,26 +106,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       setUserRoles(data || []);
 
-      // Fetch permissions for user's roles
-      if (data && data.length > 0) {
-        const roleNames = data.map(role => role.role);
-        const { data: permissionsData, error: permError } = await supabase
-          .from('role_permissions')
-          .select(`
-            permissions (name)
-          `)
-          .in('role', roleNames);
-
-        if (permError) {
-          console.error('Error fetching permissions:', permError);
-          setPermissions([]);
-        } else {
-          const userPermissions = permissionsData?.map(p => p.permissions.name) || [];
-          setPermissions(userPermissions);
-        }
-      } else {
-        setPermissions([]);
-      }
+      // Permissions are currently managed via app-level RoleManager; skip DB fetch
+      setPermissions([]);
     } catch (error) {
       console.error('Error in fetchUserRoles:', error);
       setUserRoles([]);
