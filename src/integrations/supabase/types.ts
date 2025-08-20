@@ -33861,6 +33861,7 @@ export type Database = {
         Row: {
           category: string
           created_at: string
+          created_by: string
           creator_id: string
           current_signatures: number
           deadline: string | null
@@ -33877,6 +33878,7 @@ export type Database = {
         Insert: {
           category: string
           created_at?: string
+          created_by?: string
           creator_id: string
           current_signatures?: number
           deadline?: string | null
@@ -33893,6 +33895,7 @@ export type Database = {
         Update: {
           category?: string
           created_at?: string
+          created_by?: string
           creator_id?: string
           current_signatures?: number
           deadline?: string | null
