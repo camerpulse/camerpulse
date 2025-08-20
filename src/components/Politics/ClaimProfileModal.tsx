@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useClaimProfile } from '@/hooks/useProfileClaims';
 import { AuthGuard } from './AuthGuard';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 interface ClaimProfileModalProps {
   open: boolean;
@@ -27,6 +28,8 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
   const { toast } = useToast();
   const { user } = useAuth();
   const claimProfile = useClaimProfile();
+  const navigate = useNavigate();
+  const location = useLocation();
   const [showAuthGuard, setShowAuthGuard] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
@@ -95,15 +98,13 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
   const handleLogin = () => {
     setShowAuthGuard(false);
     onClose();
-    // Navigate to login page - you may need to adjust this based on your routing
-    window.location.href = '/auth?mode=login';
+    navigate('/auth?mode=login', { state: { from: location } });
   };
 
   const handleSignup = () => {
     setShowAuthGuard(false);
     onClose();
-    // Navigate to signup page - you may need to adjust this based on your routing
-    window.location.href = '/auth?mode=signup';
+    navigate('/auth?mode=signup', { state: { from: location } });
   };
 
   return (

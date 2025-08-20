@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -77,6 +78,8 @@ export const EditSuggestionModal = ({
 
   const submitSuggestion = useSubmitEditSuggestion();
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,7 +125,7 @@ export const EditSuggestionModal = ({
             <p className="text-muted-foreground mb-4">
               Please sign in to suggest profile edits
             </p>
-            <Button onClick={() => (window.location.href = '/auth')} className="w-full">
+            <Button onClick={() => navigate('/auth', { state: { from: location } })} className="w-full">
               Go to Sign In / Sign Up
             </Button>
           </div>
