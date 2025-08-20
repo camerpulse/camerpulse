@@ -103,22 +103,23 @@ export const CreatePetitionForm: React.FC<CreatePetitionFormProps> = ({
   };
 
   return (
-    <Card className="petition-form-card max-w-4xl mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="flex items-center justify-center gap-2 text-2xl">
-          <Megaphone className="h-6 w-6 text-primary" />
+    <Card className="petition-form-card max-w-4xl mx-auto shadow-heritage border-0 overflow-hidden">
+      <div className="bg-gradient-heritage p-8 text-white">
+        <CardTitle className="flex items-center justify-center gap-3 text-3xl font-bold mb-4">
+          <Megaphone className="h-8 w-8" />
           Create New Petition
         </CardTitle>
-        <p className="text-muted-foreground">
+        <p className="text-center text-white/90 text-lg">
           Start a movement for positive change in your community
         </p>
-      </CardHeader>
+      </div>
       
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-6">
+      <CardContent className="p-8">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* Title */}
-          <div className="space-y-2">
-            <Label htmlFor="title" className="text-base font-medium">
+          <div className="space-y-3 p-6 bg-gradient-card rounded-xl border border-border/50">
+            <Label htmlFor="title" className="text-lg font-semibold text-foreground flex items-center gap-2">
+              <FileText className="h-5 w-5 text-primary" />
               Petition Title *
             </Label>
             <Input
@@ -127,30 +128,30 @@ export const CreatePetitionForm: React.FC<CreatePetitionFormProps> = ({
               value={formData.title}
               onChange={(e) => updateFormData('title', e.target.value)}
               required
-              className="petition-input"
+              className="h-12 text-base border-border/50 focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground font-medium">
               Make it specific and action-oriented
             </p>
           </div>
 
           {/* Category */}
-          <div className="space-y-2">
-            <Label className="text-base font-medium">Category *</Label>
+          <div className="space-y-3 p-6 bg-gradient-card rounded-xl border border-border/50">
+            <Label className="text-lg font-semibold text-foreground">Category *</Label>
             <Select 
               value={formData.category} 
               onValueChange={(value) => updateFormData('category', value)}
               required
             >
-              <SelectTrigger className="petition-select">
+              <SelectTrigger className="h-12 text-base border-border/50 focus:ring-2 focus:ring-primary/20 focus:border-primary">
                 <SelectValue placeholder="Select petition category" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-80">
                 {PETITION_CATEGORIES.map((category) => (
-                  <SelectItem key={category.value} value={category.value}>
-                    <div className="flex items-center gap-2">
-                      <span>{category.icon}</span>
-                      {category.label}
+                  <SelectItem key={category.value} value={category.value} className="h-12">
+                    <div className="flex items-center gap-3">
+                      <span className="text-lg">{category.icon}</span>
+                      <span className="font-medium">{category.label}</span>
                     </div>
                   </SelectItem>
                 ))}
@@ -159,9 +160,9 @@ export const CreatePetitionForm: React.FC<CreatePetitionFormProps> = ({
           </div>
 
           {/* Target Institution */}
-          <div className="space-y-2">
-            <Label htmlFor="target" className="text-base font-medium flex items-center gap-2">
-              <Target className="h-4 w-4" />
+          <div className="space-y-3 p-6 bg-gradient-card rounded-xl border border-border/50">
+            <Label htmlFor="target" className="text-lg font-semibold text-foreground flex items-center gap-2">
+              <Target className="h-5 w-5 text-accent" />
               Target Institution/Authority *
             </Label>
             <Input
@@ -170,14 +171,14 @@ export const CreatePetitionForm: React.FC<CreatePetitionFormProps> = ({
               value={formData.target_institution}
               onChange={(e) => updateFormData('target_institution', e.target.value)}
               required
-              className="petition-input"
+              className="h-12 text-base border-border/50 focus:ring-2 focus:ring-accent/20 focus:border-accent"
             />
           </div>
 
           {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description" className="text-base font-medium flex items-center gap-2">
-              <FileText className="h-4 w-4" />
+          <div className="space-y-3 p-6 bg-gradient-card rounded-xl border border-border/50">
+            <Label htmlFor="description" className="text-lg font-semibold text-foreground flex items-center gap-2">
+              <FileText className="h-5 w-5 text-secondary" />
               Petition Description *
             </Label>
             <Textarea
@@ -187,74 +188,86 @@ export const CreatePetitionForm: React.FC<CreatePetitionFormProps> = ({
               onChange={(e) => updateFormData('description', e.target.value)}
               required
               rows={6}
-              className="petition-textarea"
+              className="text-base border-border/50 focus:ring-2 focus:ring-secondary/20 focus:border-secondary resize-none"
             />
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground font-medium">
               Explain the problem, its impact, and your proposed solution
             </p>
           </div>
 
-          {/* Location */}
-          <div className="space-y-2">
-            <Label htmlFor="location" className="text-base font-medium">
-              Location/Region
-            </Label>
-            <Input
-              id="location"
-              placeholder="e.g., Yaounde, Southwest Region, Nationwide..."
-              value={formData.location}
-              onChange={(e) => updateFormData('location', e.target.value)}
-              className="petition-input"
-            />
-          </div>
+          {/* Location & Goal Row */}
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-3 p-6 bg-gradient-card rounded-xl border border-border/50">
+              <Label htmlFor="location" className="text-lg font-semibold text-foreground">
+                Location/Region
+              </Label>
+              <Input
+                id="location"
+                placeholder="e.g., Yaounde, Southwest Region, Nationwide..."
+                value={formData.location}
+                onChange={(e) => updateFormData('location', e.target.value)}
+                className="h-12 text-base border-border/50 focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
 
-          {/* Goal Signatures */}
-          <div className="space-y-2">
-            <Label htmlFor="goal" className="text-base font-medium flex items-center gap-2">
-              <Users className="h-4 w-4" />
-              Signature Goal
-            </Label>
-            <Input
-              id="goal"
-              type="number"
-              min="10"
-              max="1000000"
-              value={formData.goal_signatures}
-              onChange={(e) => updateFormData('goal_signatures', parseInt(e.target.value))}
-              className="petition-input"
-            />
-            <p className="text-sm text-muted-foreground">
-              Set a realistic but ambitious goal
-            </p>
+            <div className="space-y-3 p-6 bg-gradient-card rounded-xl border border-border/50">
+              <Label htmlFor="goal" className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <Users className="h-5 w-5 text-cm-green" />
+                Signature Goal
+              </Label>
+              <Input
+                id="goal"
+                type="number"
+                min="10"
+                max="1000000"
+                value={formData.goal_signatures}
+                onChange={(e) => updateFormData('goal_signatures', parseInt(e.target.value))}
+                className="h-12 text-base border-border/50 focus:ring-2 focus:ring-cm-green/20 focus:border-cm-green"
+              />
+              <p className="text-sm text-muted-foreground font-medium">
+                Set a realistic but ambitious goal
+              </p>
+            </div>
           </div>
 
           {/* Draft Toggle */}
-          <div className="flex items-center space-x-2 p-4 bg-muted/30 rounded-lg">
-            <Switch
-              id="draft-mode"
-              checked={isDraft}
-              onCheckedChange={setIsDraft}
-            />
-            <Label htmlFor="draft-mode" className="text-sm">
-              Save as draft (you can publish later)
-            </Label>
+          <div className="flex items-center justify-between p-6 bg-gradient-cowrie rounded-xl border border-secondary/20">
+            <div className="flex items-center space-x-3">
+              <Switch
+                id="draft-mode"
+                checked={isDraft}
+                onCheckedChange={setIsDraft}
+                className="data-[state=checked]:bg-secondary"
+              />
+              <Label htmlFor="draft-mode" className="text-base font-semibold text-foreground">
+                Save as draft (you can publish later)
+              </Label>
+            </div>
+            <Badge variant={isDraft ? "secondary" : "outline"} className="ml-4">
+              {isDraft ? "Draft Mode" : "Review Mode"}
+            </Badge>
           </div>
 
           {/* Submit Buttons */}
-          <div className="flex gap-4 pt-4">
+          <div className="flex gap-4 pt-6">
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="petition-btn-primary flex-1"
+              className="petition-btn-primary flex-1 h-14 text-lg font-semibold bg-gradient-heritage hover:shadow-heritage transition-all duration-300 border-0"
             >
-              {isSubmitting ? 'Creating...' : isDraft ? 'Save Draft' : 'Submit for Review'}
+              {isSubmitting ? (
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  Creating...
+                </div>
+              ) : isDraft ? 'Save Draft' : 'Submit for Review'}
             </Button>
             {onCancel && (
               <Button
                 type="button"
                 variant="outline"
                 onClick={onCancel}
-                className="petition-btn-secondary"
+                className="petition-btn-secondary h-14 text-lg font-semibold border-2 border-border hover:bg-muted/50 transition-all duration-300"
               >
                 Cancel
               </Button>
@@ -262,13 +275,28 @@ export const CreatePetitionForm: React.FC<CreatePetitionFormProps> = ({
           </div>
 
           {/* Info Box */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm">
-            <h4 className="font-medium text-blue-900 mb-2">📋 Review Process</h4>
-            <ul className="text-blue-800 space-y-1">
-              <li>• Your petition will be reviewed within 24-48 hours</li>
-              <li>• We check for clarity, appropriateness, and community guidelines</li>
-              <li>• Once approved, your petition will be live and ready to collect signatures</li>
-              <li>• You'll receive email notifications about the status</li>
+          <div className="bg-gradient-card border border-primary/20 rounded-xl p-6 shadow-elegant">
+            <h4 className="font-bold text-primary mb-4 flex items-center gap-2">
+              <CalendarIcon className="h-5 w-5" />
+              📋 Review Process
+            </h4>
+            <ul className="text-foreground space-y-2 text-base">
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">•</span>
+                Your petition will be reviewed within 24-48 hours
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">•</span>
+                We check for clarity, appropriateness, and community guidelines
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">•</span>
+                Once approved, your petition will be live and ready to collect signatures
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">•</span>
+                You'll receive email notifications about the status
+              </li>
             </ul>
           </div>
         </form>

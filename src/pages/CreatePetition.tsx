@@ -15,8 +15,8 @@ export default function CreatePetition() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-8">
-      <div className="container mx-auto px-4">
+    <div className="min-h-screen bg-gradient-card">
+      <div className="container mx-auto px-4 py-8">
         <CreatePetitionForm 
           onSubmit={handleSubmit}
           onCancel={handleCancel}

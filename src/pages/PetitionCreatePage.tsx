@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { AlertCircle, FileText, Target, Users, Clock, ArrowLeft } from 'lucide-react';
+import { AlertCircle, FileText, Target, Users, Clock, ArrowLeft, Megaphone } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCreatePetition } from '@/hooks/useCivicParticipation';
 import { URLBuilder } from '@/utils/slug';
@@ -161,111 +161,129 @@ const PetitionCreatePage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-6 max-w-4xl">
-      {/* Header */}
-      <div className="mb-6">
-        <Button 
-          variant="ghost" 
-          onClick={() => navigate('/petitions')}
-          className="mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Petitions
-        </Button>
-        
-        <div>
-          <h1 className="text-3xl font-bold">Create a Petition</h1>
-          <p className="text-muted-foreground mt-2">
-            Start a petition to bring about change in your community and beyond
-          </p>
+    <div className="min-h-screen bg-gradient-card">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
+        {/* Hero Header */}
+        <div className="mb-8">
+          <Button 
+            variant="ghost" 
+            onClick={() => navigate('/petitions')}
+            className="mb-6 h-12 px-6 text-base font-medium hover:bg-primary/10 transition-all duration-300"
+          >
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to Petitions
+          </Button>
+          
+          <div className="text-center py-12 px-6 bg-gradient-heritage rounded-2xl shadow-heritage text-white mb-8">
+            <h1 className="text-5xl font-bold mb-4 text-gradient-patriotic">Create a Petition</h1>
+            <p className="text-xl text-white/90 max-w-2xl mx-auto">
+              Start a petition to bring about positive change in your community and beyond
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Guidelines */}
-      <Card className="mb-6 border-l-4 border-l-primary">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <AlertCircle className="w-5 h-5" />
-            Petition Guidelines
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm space-y-2">
-          <p>• Keep your petition focused on a specific, achievable goal</p>
-          <p>• Clearly explain why this issue matters and what you want to change</p>
-          <p>• Be respectful and factual in your language</p>
-          <p>• Target the right institution or authority that can make the change</p>
-          <p>• Set a realistic signature goal and deadline</p>
-        </CardContent>
-      </Card>
+        {/* Guidelines */}
+        <Card className="mb-8 border-0 shadow-elegant bg-gradient-cowrie overflow-hidden">
+          <CardHeader className="bg-gradient-heritage text-white">
+            <CardTitle className="flex items-center gap-3 text-xl">
+              <AlertCircle className="w-6 h-6" />
+              Petition Guidelines
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-6 text-base space-y-3">
+            <div className="grid md:grid-cols-2 gap-4">
+              <p className="flex items-start gap-2">
+                <span className="text-primary font-bold">•</span>
+                Keep your petition focused on a specific, achievable goal
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="text-primary font-bold">•</span>
+                Clearly explain why this issue matters and what you want to change
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="text-primary font-bold">•</span>
+                Be respectful and factual in your language
+              </p>
+              <p className="flex items-start gap-2">
+                <span className="text-primary font-bold">•</span>
+                Target the right institution or authority that can make the change
+              </p>
+              <p className="flex items-start gap-2 md:col-span-2">
+                <span className="text-primary font-bold">•</span>
+                Set a realistic signature goal and deadline
+              </p>
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid gap-6 lg:grid-cols-3">
-          {/* Main Form */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="w-5 h-5" />
-                  Petition Details
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="title">Title *</Label>
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          <div className="grid gap-8 lg:grid-cols-3">
+            {/* Main Form */}
+            <div className="lg:col-span-2 space-y-8">
+              <Card className="border-0 shadow-elegant bg-white/80 backdrop-blur-sm">
+                <CardHeader className="bg-gradient-patriotic text-white rounded-t-lg">
+                  <CardTitle className="flex items-center gap-3 text-xl">
+                    <FileText className="w-6 h-6" />
+                    Petition Details
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-6 p-8">
+                <div className="space-y-3">
+                  <Label htmlFor="title" className="text-lg font-semibold">Title *</Label>
                   <Input
                     id="title"
                     placeholder="What change do you want to see?"
                     value={formData.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    className={errors.title ? 'border-destructive' : ''}
+                    className={`h-12 text-base border-2 transition-all ${errors.title ? 'border-destructive focus:ring-destructive/20' : 'border-border/50 focus:ring-primary/20 focus:border-primary'}`}
                   />
                   {errors.title && (
-                    <p className="text-sm text-destructive mt-1">{errors.title}</p>
+                    <p className="text-sm text-destructive mt-1 font-medium">{errors.title}</p>
                   )}
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-sm text-muted-foreground font-medium">
                     {formData.title.length}/200 characters
                   </p>
                 </div>
 
-                <div>
-                  <Label htmlFor="description">Description *</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="description" className="text-lg font-semibold">Description *</Label>
                   <Textarea
                     id="description"
                     placeholder="Explain why this petition is important and what specific changes you want to see..."
                     value={formData.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
-                    className={`min-h-32 ${errors.description ? 'border-destructive' : ''}`}
+                    className={`min-h-40 text-base border-2 transition-all resize-none ${errors.description ? 'border-destructive focus:ring-destructive/20' : 'border-border/50 focus:ring-primary/20 focus:border-primary'}`}
                   />
                   {errors.description && (
-                    <p className="text-sm text-destructive mt-1">{errors.description}</p>
+                    <p className="text-sm text-destructive mt-1 font-medium">{errors.description}</p>
                   )}
-                  <p className="text-xs text-muted-foreground mt-1">
+                  <p className="text-sm text-muted-foreground font-medium">
                     {formData.description.length}/5000 characters
                   </p>
                 </div>
 
-                <div>
-                  <Label htmlFor="target_institution">Target Institution *</Label>
+                <div className="space-y-3">
+                  <Label htmlFor="target_institution" className="text-lg font-semibold">Target Institution *</Label>
                   <Input
                     id="target_institution"
                     placeholder="Who has the power to make this change? (e.g., Ministry of Health, Parliament, Mayor)"
                     value={formData.target_institution}
                     onChange={(e) => handleInputChange('target_institution', e.target.value)}
-                    className={errors.target_institution ? 'border-destructive' : ''}
+                    className={`h-12 text-base border-2 transition-all ${errors.target_institution ? 'border-destructive focus:ring-destructive/20' : 'border-border/50 focus:ring-primary/20 focus:border-primary'}`}
                   />
                   {errors.target_institution && (
-                    <p className="text-sm text-destructive mt-1">{errors.target_institution}</p>
+                    <p className="text-sm text-destructive mt-1 font-medium">{errors.target_institution}</p>
                   )}
                 </div>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Category & Location</CardTitle>
+            <Card className="border-0 shadow-elegant bg-white/80 backdrop-blur-sm">
+              <CardHeader className="bg-gradient-patriotic text-white rounded-t-lg">
+                <CardTitle className="text-xl">Category & Location</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6 p-8">
                 <div>
                   <Label htmlFor="category">Category *</Label>
                   <Select value={formData.category} onValueChange={(value) => handleInputChange('category', value)}>
@@ -308,15 +326,15 @@ const PetitionCreatePage: React.FC = () => {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="w-5 h-5" />
+          <div className="space-y-8">
+            <Card className="border-0 shadow-heritage bg-white/80 backdrop-blur-sm">
+              <CardHeader className="bg-gradient-heritage text-white rounded-t-lg">
+                <CardTitle className="flex items-center gap-3 text-xl">
+                  <Target className="w-6 h-6" />
                   Goals & Timeline
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-6 p-8">
                 <div>
                   <Label htmlFor="goal_signatures">Signature Goal *</Label>
                   <div className="flex items-center gap-2">
@@ -364,20 +382,21 @@ const PetitionCreatePage: React.FC = () => {
 
             {/* Preview */}
             {formData.title && formData.category && (
-              <Card>
-                <CardHeader>
-                  <CardTitle>Preview</CardTitle>
+              <Card className="border-0 shadow-glow bg-gradient-cowrie">
+                <CardHeader className="bg-gradient-royal text-white rounded-t-lg">
+                  <CardTitle className="text-xl">✨ Preview</CardTitle>
                 </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <Badge variant="secondary">
+                <CardContent className="p-6">
+                  <div className="space-y-4">
+                    <Badge variant="secondary" className="text-base px-3 py-1">
                       {CATEGORIES.find(c => c.value === formData.category)?.icon} {CATEGORIES.find(c => c.value === formData.category)?.label}
                     </Badge>
-                    <h3 className="font-semibold line-clamp-2">{formData.title}</h3>
+                    <h3 className="font-bold text-lg line-clamp-2 text-foreground">{formData.title}</h3>
                     <p className="text-sm text-muted-foreground line-clamp-3">
                       {formData.description || 'Add a description...'}
                     </p>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="text-sm font-semibold text-cm-green flex items-center gap-2">
+                      <Users className="w-4 h-4" />
                       Goal: {formData.goal_signatures.toLocaleString()} signatures
                     </div>
                   </div>
@@ -388,19 +407,31 @@ const PetitionCreatePage: React.FC = () => {
         </div>
 
         {/* Submit */}
-        <div className="flex gap-4 pt-6 border-t">
+        <div className="flex gap-6 pt-8 border-t-2 border-border/20">
           <Button
             type="button"
             variant="outline"
             onClick={() => navigate('/petitions')}
+            className="h-14 px-8 text-lg font-semibold border-2 hover:bg-muted/50 transition-all duration-300"
           >
             Cancel
           </Button>
           <Button
             type="submit"
             disabled={createPetitionMutation.isPending}
+            className="flex-1 h-14 text-lg font-bold bg-gradient-heritage hover:shadow-heritage transition-all duration-300 border-0"
           >
-            {createPetitionMutation.isPending ? 'Creating...' : 'Create Petition'}
+            {createPetitionMutation.isPending ? (
+              <div className="flex items-center gap-3">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white"></div>
+                Creating Petition...
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Megaphone className="w-5 h-5" />
+                Create Petition
+              </div>
+            )}
           </Button>
         </div>
       </form>
