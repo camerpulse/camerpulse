@@ -47,7 +47,9 @@ interface AuthContextType {
   updateProfile: (updates: Partial<Profile>) => Promise<{ error: any }>;
   refreshProfile: () => Promise<void>;
   hasRole: (role: string) => boolean;
+  hasPermission: (permission: string) => boolean;
   isAdmin: () => boolean;
+  isModerator: () => boolean;
   calculateProfileCompletion: () => Promise<number>;
 }
 
@@ -66,6 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [userRoles, setUserRoles] = useState<UserRole[]>([]);
+  const [permissions, setPermissions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchUserProfile = useCallback(async (userId: string) => {
@@ -102,9 +105,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
 
       setUserRoles(data || []);
+
+      // Fetch permissions for user's roles
+      if (data && data.length > 0) {
+        const roleNames = data.map(role => role.role);
+        const { data: permissionsData, error: permError } = await supabase
+          .from('role_permissions')
+          .select(`
+            permissions (name)
+          `)
+          .in('role', roleNames);
+
+        if (permError) {
+          console.error('Error fetching permissions:', permError);
+          setPermissions([]);
+        } else {
+          const userPermissions = permissionsData?.map(p => p.permissions.name) || [];
+          setPermissions(userPermissions);
+        }
+      } else {
+        setPermissions([]);
+      }
     } catch (error) {
       console.error('Error in fetchUserRoles:', error);
       setUserRoles([]);
+      setPermissions([]);
     }
   }, []);
 
@@ -125,8 +150,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   }, [userRoles]);
 
+  const hasPermission = useCallback((permission: string) => {
+    return permissions.includes(permission);
+  }, [permissions]);
+
   const isAdmin = useCallback(() => {
     return hasRole('admin');
+  }, [hasRole]);
+
+  const isModerator = useCallback(() => {
+    return hasRole('moderator') || hasRole('admin');
   }, [hasRole]);
 
   const calculateProfileCompletion = useCallback(async () => {
@@ -171,6 +204,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else {
           setProfile(null);
           setUserRoles([]);
+          setPermissions([]);
         }
         
         setLoading(false);
@@ -266,6 +300,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (!error) {
         setProfile(null);
         setUserRoles([]);
+        setPermissions([]);
         setUser(null);
         setSession(null);
       }
@@ -320,7 +355,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     updateProfile,
     refreshProfile,
     hasRole,
+    hasPermission,
     isAdmin,
+    isModerator,
     calculateProfileCompletion
   };
 

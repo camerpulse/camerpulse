@@ -19,7 +19,9 @@ import { InfinitePostFeed } from '@/components/feed/InfinitePostFeed';
 import { AIRecommendations } from '@/components/feed/AIRecommendations';
 import { RealtimeNotifications } from '@/components/feed/RealtimeNotifications';
 import { SocialAnalytics } from '@/components/feed/SocialAnalytics';
-import { AdminDashboard } from '@/components/admin/AdminDashboard';
+import { AdminDashboard, UserManagement, ContentAnalytics, AutoModerationTools } from '@/components/admin';
+import { SecurityAuditDashboard } from '@/components/security/SecurityAuditDashboard';
+import { RateLimitMonitor } from '@/components/security/RateLimitMonitor';
 import { useFeedRealtime } from '@/hooks/useFeedRealtime';
 import {
   Users,
@@ -70,13 +72,13 @@ export default function Feed() {
   const [activeTab, setActiveTab] = useState('home');
   const [showComposer, setShowComposer] = useState(false);
 
-  // Auto-navigate to admin panel for Phase 5
+  // Auto-navigate to security dashboard for Phase 6
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/admin');
+      navigate('/security');
       toast({
-        title: "Accessing Admin Panel",
-        description: "Phase 5: Advanced admin tools and content moderation system",
+        title: "Accessing Security Dashboard",
+        description: "Phase 6: Advanced security & permission system with audit logs",
       });
     }, 2000);
 
@@ -204,8 +206,12 @@ export default function Feed() {
                 </div>
               </div>
 
-              {/* Admin Dashboard - Phase 5 */}
-              <AdminDashboard />
+              {/* Phase 6: Advanced Security Dashboard */}
+              <div className="space-y-8">
+                <AdminDashboard />
+                <SecurityAuditDashboard />
+                <RateLimitMonitor />
+              </div>
             </div>
           </div>
 

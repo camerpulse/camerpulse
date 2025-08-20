@@ -33640,6 +33640,33 @@ export type Database = {
           },
         ]
       }
+      permissions: {
+        Row: {
+          action: string | null
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          resource_type: string | null
+        }
+        Insert: {
+          action?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          resource_type?: string | null
+        }
+        Update: {
+          action?: string | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          resource_type?: string | null
+        }
+        Relationships: []
+      }
       petition_alerts: {
         Row: {
           alert_message: string
@@ -39310,6 +39337,42 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          action_type: string
+          blocked_until: string | null
+          created_at: string | null
+          id: string
+          identifier_type: string
+          identifier_value: string
+          request_count: number | null
+          updated_at: string | null
+          window_start: string | null
+        }
+        Insert: {
+          action_type: string
+          blocked_until?: string | null
+          created_at?: string | null
+          id?: string
+          identifier_type: string
+          identifier_value: string
+          request_count?: number | null
+          updated_at?: string | null
+          window_start?: string | null
+        }
+        Update: {
+          action_type?: string
+          blocked_until?: string | null
+          created_at?: string | null
+          id?: string
+          identifier_type?: string
+          identifier_value?: string
+          request_count?: number | null
+          updated_at?: string | null
+          window_start?: string | null
+        }
+        Relationships: []
+      }
       rating_criteria: {
         Row: {
           created_at: string
@@ -40257,6 +40320,35 @@ export type Database = {
           target_user?: string
         }
         Relationships: []
+      }
+      role_permissions: {
+        Row: {
+          created_at: string | null
+          id: string
+          permission_id: string | null
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          permission_id?: string | null
+          role: Database["public"]["Enums"]["app_role"]
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          permission_id?: string | null
+          role?: Database["public"]["Enums"]["app_role"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "role_permissions_permission_id_fkey"
+            columns: ["permission_id"]
+            isOneToOne: false
+            referencedRelation: "permissions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       royalty_payments: {
         Row: {
@@ -49659,6 +49751,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      check_rate_limit_enhanced: {
+        Args: {
+          _action_type: string
+          _identifier_type: string
+          _identifier_value: string
+          _limit_per_hour?: number
+        }
+        Returns: boolean
+      }
       check_rate_limit_secure: {
         Args: {
           p_action_type: string
@@ -50484,6 +50585,10 @@ export type Database = {
       get_village_analytics_summary: {
         Args: { p_days?: number; p_village_id: string }
         Returns: Json
+      }
+      has_permission: {
+        Args: { _permission_name: string; _user_id: string }
+        Returns: boolean
       }
       has_role: {
         Args: {
