@@ -72,19 +72,6 @@ export default function Feed() {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('home');
   const [showComposer, setShowComposer] = useState(false);
-
-  // Auto-navigate to security dashboard for Phase 6
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate('/security');
-      toast({
-        title: "Accessing Security Dashboard",
-        description: "Phase 6: Advanced security & permission system with audit logs",
-      });
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [navigate, toast]);
   
   // Use real data hooks
   // Use infinite scroll instead of paginated posts
