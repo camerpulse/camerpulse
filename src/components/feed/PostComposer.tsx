@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
-import { useCreatePost } from '@/hooks/usePosts';
+import { useCreatePost } from '@/hooks/useProductionPostInteractions';
 import {
   ImageIcon,
   MapPin,

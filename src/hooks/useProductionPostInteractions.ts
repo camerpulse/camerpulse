@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import DOMPurify from 'dompurify';
 
 export const useProductionLikePost = () => {
   const { user } = useAuth();
@@ -78,6 +79,66 @@ export const useProductionLikePost = () => {
       toast({
         title: "Action failed",
         description: error instanceof Error ? error.message : "Failed to update like status",
+        variant: "destructive",
+      });
+    },
+  });
+};
+
+export const useCreatePost = () => {
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (data: { content: string; location?: string }) => {
+      if (!user) {
+        throw new Error('You must be logged in to create posts');
+      }
+
+      // Sanitize content
+      const sanitizedContent = DOMPurify.sanitize(data.content);
+      
+      // Extract hashtags
+      const hashtags = sanitizedContent.match(/#[a-zA-Z0-9_]+/g)?.map(tag => tag.slice(1)) || [];
+
+      const { data: post, error } = await supabase
+        .from('pulse_posts')
+        .insert({
+          user_id: user.id,
+          content: sanitizedContent,
+          hashtags,
+          location: data.location,
+        })
+        .select(`
+          *,
+          profiles!pulse_posts_user_id_fkey (
+            id,
+            username,
+            display_name,
+            avatar_url,
+            verified
+          )
+        `)
+        .single();
+
+      if (error) throw error;
+      return post;
+    },
+    onSuccess: (newPost) => {
+      // Invalidate the production feed cache
+      queryClient.invalidateQueries({ queryKey: ['production-feed'] });
+
+      toast({
+        title: "Post created!",
+        description: "Your civic voice has been shared with the community.",
+      });
+    },
+    onError: (error) => {
+      console.error('Post creation error:', error);
+      toast({
+        title: "Failed to create post",
+        description: error instanceof Error ? error.message : "An unexpected error occurred",
         variant: "destructive",
       });
     },

@@ -11,6 +11,34 @@ export interface RealSuggestedFollow {
   description?: string;
 }
 
+// Helper functions
+const determineProfileType = (profile: any): RealSuggestedFollow['type'] => {
+  const bio = profile.bio?.toLowerCase() || '';
+  const displayName = profile.display_name?.toLowerCase() || '';
+  
+  if (bio.includes('ministry') || bio.includes('government') || displayName.includes('ministry')) {
+    return 'government';
+  }
+  if (bio.includes('university') || bio.includes('school') || bio.includes('education')) {
+    return 'education';
+  }
+  if (bio.includes('hospital') || bio.includes('clinic') || bio.includes('health')) {
+    return 'hospital';
+  }
+  if (bio.includes('ngo') || bio.includes('organization') || bio.includes('foundation')) {
+    return 'ngo';
+  }
+  return 'verified';
+};
+
+const generateUsernameFromName = (name: string): string => {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, '')
+    .replace(/\s+/g, '_')
+    .substring(0, 20);
+};
+
 export const useRealSuggestedFollows = () => {
   return useQuery({
     queryKey: ['real-suggested-follows'],
@@ -33,10 +61,10 @@ export const useRealSuggestedFollows = () => {
                 id: profile.id,
                 name: profile.display_name,
                 username: profile.username,
-                type: this.determineProfileType(profile),
+                type: determineProfileType(profile),
                 verified: true,
                 avatar_url: profile.avatar_url,
-                description: profile.bio || `Verified ${this.determineProfileType(profile)} account`,
+                description: profile.bio || `Verified ${determineProfileType(profile)} account`,
               });
             }
           });
@@ -56,7 +84,7 @@ export const useRealSuggestedFollows = () => {
             suggestions.push({
               id: hospital.id,
               name: hospital.name,
-              username: this.generateUsernameFromName(hospital.name),
+              username: generateUsernameFromName(hospital.name),
               type: 'hospital',
               verified: true,
               description: `Verified healthcare facility in ${hospital.region}`,
@@ -77,7 +105,7 @@ export const useRealSuggestedFollows = () => {
             suggestions.push({
               id: mp.id,
               name: mp.full_name,
-              username: this.generateUsernameFromName(mp.full_name),
+              username: generateUsernameFromName(mp.full_name),
               type: 'government',
               verified: true,
               description: `Member of Parliament for ${mp.region}`,
@@ -156,32 +184,4 @@ export const useRealSuggestedFollows = () => {
     },
     staleTime: 15 * 60 * 1000, // 15 minutes
   });
-
-  // Helper methods (these would need to be defined outside the hook in practice)
-  function determineProfileType(profile: any): RealSuggestedFollow['type'] {
-    const bio = profile.bio?.toLowerCase() || '';
-    const displayName = profile.display_name?.toLowerCase() || '';
-    
-    if (bio.includes('ministry') || bio.includes('government') || displayName.includes('ministry')) {
-      return 'government';
-    }
-    if (bio.includes('university') || bio.includes('school') || bio.includes('education')) {
-      return 'education';
-    }
-    if (bio.includes('hospital') || bio.includes('clinic') || bio.includes('health')) {
-      return 'hospital';
-    }
-    if (bio.includes('ngo') || bio.includes('organization') || bio.includes('foundation')) {
-      return 'ngo';
-    }
-    return 'verified';
-  }
-
-  function generateUsernameFromName(name: string): string {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9\s]/g, '')
-      .replace(/\s+/g, '_')
-      .substring(0, 20);
-  }
 };

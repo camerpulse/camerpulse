@@ -64,6 +64,7 @@ const EventDetailPage = lazy(() => import('@/pages/EventDetailPage'));
 
 // Feeds & Social
 const Feed = lazy(() => import('@/pages/Feed'));
+const FeedTest = lazy(() => import('@/pages/FeedTest'));
 const MessengerPage = lazy(() => import('@/pages/MessengerPage'));
 
 // Transparency & Analytics
@@ -226,6 +227,11 @@ export const AppRouter: React.FC = () => {
         <Route 
           path="/feed" 
           element={<WrappedRoute element={Feed} routeName="CamerPulse Feed" />} 
+        />
+        {/* Test Feed Route for Debugging */}
+        <Route 
+          path="/feed-test" 
+          element={<WrappedRoute element={FeedTest} routeName="Feed Test" />} 
         />
         {/* Redirect old civic-feed to unified feed */}
         <Route 
