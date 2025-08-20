@@ -1,5 +1,6 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import {
   Sidebar,
   SidebarContent,
@@ -53,6 +54,7 @@ export const PetitionsSidebar: React.FC<PetitionsSidebarProps> = ({
 }) => {
   const { collapsed } = useSidebar();
   const location = useLocation();
+  const { user } = useAuth();
 
   const mainItems = [
     { id: 'active', label: 'Active Petitions', icon: TrendingUp, count: stats.active },
@@ -62,7 +64,7 @@ export const PetitionsSidebar: React.FC<PetitionsSidebarProps> = ({
   ];
 
   const quickActions = [
-    { id: 'create', label: 'Start Petition', icon: Plus, action: () => window.location.href = '/petitions/create' },
+    { id: 'create', label: 'Start Petition', icon: Plus, action: () => {} }, // Will be handled by Link component
     { id: 'my-petitions', label: 'My Petitions', icon: Users, action: () => console.log('My petitions') },
     { id: 'saved', label: 'Saved', icon: Star, action: () => console.log('Saved') }
   ];
@@ -107,7 +109,24 @@ export const PetitionsSidebar: React.FC<PetitionsSidebarProps> = ({
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {quickActions.map((action) => (
+              <SidebarMenuItem>
+                {user ? (
+                  <Link to="/petitions/create">
+                    <SidebarMenuButton className="w-full justify-start">
+                      <Plus className="w-4 h-4" />
+                      {!collapsed && <span>Start Petition</span>}
+                    </SidebarMenuButton>
+                  </Link>
+                ) : (
+                  <Link to="/auth?redirect=/petitions/create">
+                    <SidebarMenuButton className="w-full justify-start">
+                      <Plus className="w-4 h-4" />
+                      {!collapsed && <span>Start Petition</span>}
+                    </SidebarMenuButton>
+                  </Link>
+                )}
+              </SidebarMenuItem>
+              {quickActions.slice(1).map((action) => (
                 <SidebarMenuItem key={action.id}>
                   <SidebarMenuButton
                     onClick={action.action}

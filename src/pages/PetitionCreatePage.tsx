@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { AlertCircle, FileText, Target, Users, Clock, ArrowLeft } from 'lucide-react';
-import { useAuth } from '@/utils/auth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useCreatePetition } from '@/hooks/useCivicParticipation';
 import { URLBuilder } from '@/utils/slug';
 import { toast } from 'sonner';
@@ -47,7 +47,7 @@ const REGIONS = [
  */
 const PetitionCreatePage: React.FC = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const createPetitionMutation = useCreatePetition();
 
   const [formData, setFormData] = useState({
@@ -64,11 +64,11 @@ const PetitionCreatePage: React.FC = () => {
 
   // Redirect if not authenticated
   React.useEffect(() => {
-    if (!isAuthenticated) {
+    if (!user) {
       toast.error('Please log in to create a petition');
       navigate('/auth');
     }
-  }, [isAuthenticated, navigate]);
+  }, [user, navigate]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -151,7 +151,7 @@ const PetitionCreatePage: React.FC = () => {
     }
   };
 
-  if (!isAuthenticated) {
+  if (!user) {
     return null; // Will redirect
   }
 

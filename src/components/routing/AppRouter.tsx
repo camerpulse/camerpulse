@@ -495,7 +495,7 @@ export const AppRouter: React.FC = () => {
         />
         <Route 
           path="/petitions/create" 
-          element={<WrappedRoute element={PetitionCreatePage} routeName="Create Petition" />} 
+          element={<WrappedRoute element={PetitionCreatePage} routeName="Create Petition" requiresAuth />} 
         />
         <Route 
           path="/petitions/:slug" 

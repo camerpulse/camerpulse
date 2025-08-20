@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { URLBuilder } from '@/utils/slug';
 import { usePetitions } from '@/hooks/useCivicParticipation';
-import { useAuth } from '@/utils/auth';
+import { useAuth } from '@/contexts/AuthContext';
 import { PetitionList } from '@/components/petitions/PetitionList';
 import { PetitionSearchFilters } from '@/components/petitions/PetitionSearchFilters';
 import { PetitionsSidebar } from '@/components/petitions/PetitionsSidebar';
@@ -29,7 +29,8 @@ import { toast } from 'sonner';
  * Petitions listing page with search, filtering, and categories
  */
 const PetitionsPage: React.FC = () => {
-  const { user, isAuthenticated } = useAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('active');
   const [filters, setFilters] = useState({
     searchQuery: '',
@@ -74,12 +75,13 @@ const PetitionsPage: React.FC = () => {
   const { data: successfulPetitions } = usePetitions({ status: 'approved' });
 
   const handleStartPetition = () => {
-    if (!isAuthenticated) {
+    if (!user) {
       toast.error('Please log in to start a petition');
+      navigate('/auth?redirect=' + encodeURIComponent(URLBuilder.petitions.create()));
       return;
     }
     // Navigate to create petition page
-    window.location.href = URLBuilder.petitions.create();
+    navigate(URLBuilder.petitions.create());
   };
 
   // Calculate stats
