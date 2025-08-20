@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { AuthService } from '@/utils/auth';
 
 export interface MP {
   id: string;
@@ -130,7 +131,7 @@ export function useUserMPRating(mpId: string) {
   return useQuery({
     queryKey: ['user-mp-rating', mpId],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await AuthService.getCurrentUser();
       if (!user) return null;
 
       const { data, error } = await supabase
@@ -164,8 +165,7 @@ export function useRateMP() {
       comment?: string;
       is_anonymous?: boolean;
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to rate an MP');
+      const user = await AuthService.requireAuth('You must be logged in to rate an MP');
 
       const { data, error } = await supabase
         .from('mp_ratings')
@@ -207,7 +207,7 @@ export function useMPFollowing(mpId: string) {
   const { data: isFollowing, isLoading } = useQuery({
     queryKey: ['mp-following', mpId],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await AuthService.getCurrentUser();
       if (!user) return false;
 
       const { data, error } = await supabase
@@ -225,8 +225,7 @@ export function useMPFollowing(mpId: string) {
 
   const followMutation = useMutation({
     mutationFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to follow an MP');
+      const user = await AuthService.requireAuth('You must be logged in to follow an MP');
 
       const { error } = await supabase
         .from('mp_followers')
@@ -255,8 +254,7 @@ export function useMPFollowing(mpId: string) {
 
   const unfollowMutation = useMutation({
     mutationFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to unfollow an MP');
+      const user = await AuthService.requireAuth('You must be logged in to unfollow an MP');
 
       const { error } = await supabase
         .from('mp_followers')

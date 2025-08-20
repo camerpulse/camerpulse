@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { AuthService } from '@/utils/auth';
 
 export interface MinisterRating {
   id?: string;
@@ -38,7 +39,7 @@ export const useUserMinisterRating = (ministerId: string) => {
   return useQuery({
     queryKey: ['user-minister-rating', ministerId],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const user = await AuthService.getCurrentUser();
       if (!user) return null;
       
       const { data, error } = await supabase
@@ -88,8 +89,7 @@ export const useModerateRating = () => {
       action: 'remove' | 'flag' | 'approve'; 
       adminNotes: string 
     }) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to moderate ratings');
+      const user = await AuthService.requireAuth('You must be logged in to moderate ratings');
 
       if (action === 'remove') {
         const { error } = await supabase
@@ -130,8 +130,7 @@ export const useRateMinister = () => {
 
   return useMutation({
     mutationFn: async (rating: MinisterRating) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('You must be logged in to rate a minister');
+      const user = await AuthService.requireAuth('You must be logged in to rate a minister');
 
       const ratingData = {
         ...rating,
