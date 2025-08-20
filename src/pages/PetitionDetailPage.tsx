@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { SafeHtml } from '@/components/Security/SafeHtml';
+import { PetitionSignForm } from '@/components/petitions/PetitionSignForm';
 import { 
   Share2, 
   Heart, 
@@ -18,76 +19,130 @@ import {
   TrendingUp,
   Clock
 } from 'lucide-react';
-import { usePetitionSlug } from '@/hooks/useSlugResolver';
+import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/utils/auth';
 import { toast } from 'sonner';
+
+interface Petition {
+  id: string;
+  title: string;
+  description: string;
+  goal_signatures: number;
+  current_signatures: number;
+  status: string;
+  deadline?: string;
+  created_by: string;
+  slug?: string;
+  created_at: string;
+  updated_at: string;
+}
 
 /**
  * Individual petition detail page with full information and interaction options
  */
 const PetitionDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
-  const { entity: petition, loading, error } = usePetitionSlug();
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const [petition, setPetition] = useState<Petition | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [hasSigned, setHasSigned] = useState(false);
 
-  const handleSignPetition = () => {
-    if (!isAuthenticated) {
-      toast.error('Please log in to sign this petition');
-      return;
+  // Fetch petition data
+  useEffect(() => {
+    async function fetchPetition() {
+      if (!slug) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('petitions')
+          .select('*')
+          .eq('slug', slug)
+          .single();
+
+        if (error) {
+          setError('Petition not found');
+          return;
+        }
+
+        setPetition(data);
+      } catch (err) {
+        setError('Failed to load petition');
+      } finally {
+        setLoading(false);
+      }
     }
-    // TODO: Implement petition signing
-    toast.success('Petition signed successfully!');
+
+    fetchPetition();
+  }, [slug]);
+
+  // Check if user has signed
+  useEffect(() => {
+    async function checkSignature() {
+      if (!user || !petition) return;
+
+      const { data } = await supabase
+        .from('petition_signatures')
+        .select('id')
+        .eq('petition_id', petition.id)
+        .eq('user_id', user.id)
+        .single();
+
+      setHasSigned(!!data);
+    }
+
+    checkSignature();
+  }, [user, petition]);
+
+  // Subscribe to realtime updates
+  useEffect(() => {
+    if (!petition) return;
+
+    const channel = supabase
+      .channel('petition-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'petitions',
+          filter: `id=eq.${petition.id}`
+        },
+        (payload) => {
+          setPetition(prev => prev ? { ...prev, ...payload.new } : null);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [petition]);
+
+  const handleSignatureAdded = () => {
+    setHasSigned(true);
+    if (petition) {
+      setPetition(prev => prev ? {
+        ...prev,
+        current_signatures: prev.current_signatures + 1
+      } : null);
+    }
   };
 
-  // Mock data for demonstration when no real data
-  const mockPetition = {
-    id: '1',
-    title: 'Improve Public Healthcare Access in Rural Areas',
-    description: 'This petition calls for the establishment of more healthcare facilities in remote villages across Cameroon. Many communities currently travel hours to reach the nearest clinic, putting lives at risk during medical emergencies.',
-    fullContent: `
-      <h3>The Problem</h3>
-      <p>Rural communities in Cameroon face significant challenges accessing basic healthcare services. Currently, over 60% of rural villages are located more than 10km from the nearest health facility.</p>
-      
-      <h3>Our Solution</h3>
-      <p>We propose the establishment of at least one primary healthcare center per administrative division, staffed with qualified medical personnel and equipped with essential medical supplies.</p>
-      
-      <h3>Expected Impact</h3>
-      <ul>
-        <li>Reduced travel time to healthcare facilities</li>
-        <li>Lower maternal and infant mortality rates</li>
-        <li>Better management of chronic diseases</li>
-        <li>Improved emergency response capabilities</li>
-      </ul>
-    `,
-    signatures: 15420,
-    target: 25000,
-    category: 'Healthcare',
-    status: 'Active',
-    createdAt: '2024-01-15',
-    endDate: '2024-02-15',
-    location: 'National',
-    creator: {
-      name: 'Dr. Marie Ngono',
-      avatar: '',
-      verified: true
-    },
-    updates: [
-      {
-        date: '2024-01-20',
-        title: 'Ministry of Health Response',
-        content: 'The Ministry has acknowledged the petition and scheduled a meeting for next week.'
-      },
-      {
-        date: '2024-01-18',
-        title: '10,000 Signatures Reached!',
-        content: 'Thank you to everyone who has signed. We\'re gaining momentum!'
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: petition?.title,
+          url: window.location.href
+        });
+      } catch (error) {
+        // User cancelled sharing
       }
-    ],
-    recentSignatures: [
-      { name: 'Jean Paul K.', location: 'Yaounde', time: '2 hours ago' },
-      { name: 'Fatima M.', location: 'Douala', time: '4 hours ago' },
-      { name: 'Samuel T.', location: 'Bamenda', time: '6 hours ago' },
-    ]
+    } else {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success('Link copied to clipboard!');
+    }
   };
 
   if (loading) {
@@ -115,8 +170,12 @@ const PetitionDetailPage: React.FC = () => {
     );
   }
 
-  const data = petition || mockPetition;
-  const progressPercentage = (data.signatures / data.target) * 100;
+  if (!petition) return null;
+  
+  const progressPercentage = (petition.current_signatures / petition.goal_signatures) * 100;
+  const daysLeft = petition.deadline ? Math.max(0, Math.ceil(
+    (new Date(petition.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24)
+  )) : null;
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-6">
@@ -125,22 +184,22 @@ const PetitionDetailPage: React.FC = () => {
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <span>Petitions</span>
           <span>/</span>
-          <Badge variant="outline">{data.category}</Badge>
+          <Badge variant="outline">Civic</Badge>
         </div>
         
         <div>
-          <h1 className="text-3xl font-bold mb-2">{data.title}</h1>
+          <h1 className="text-3xl font-bold mb-2">{petition.title}</h1>
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Calendar className="w-4 h-4" />
-              Started {new Date(data.createdAt).toLocaleDateString()}
+              Started {new Date(petition.created_at).toLocaleDateString()}
             </div>
             <div className="flex items-center gap-1">
               <MapPin className="w-4 h-4" />
-              {data.location}
+              National
             </div>
-            <Badge variant={data.status === 'Active' ? 'default' : 'secondary'}>
-              {data.status}
+            <Badge variant={petition.status === 'active' ? 'default' : 'secondary'}>
+              {petition.status}
             </Badge>
           </div>
         </div>
@@ -155,12 +214,7 @@ const PetitionDetailPage: React.FC = () => {
               <CardTitle>Petition Details</CardTitle>
             </CardHeader>
             <CardContent className="prose max-w-none">
-              <p className="text-lg mb-4">{data.description}</p>
-              <SafeHtml 
-                allowedTags={['p', 'br', 'strong', 'em', 'ul', 'li', 'ol', 'h1', 'h2', 'h3', 'blockquote']}
-              >
-                {data.fullContent}
-              </SafeHtml>
+              <p className="text-lg mb-4">{petition.description}</p>
             </CardContent>
           </Card>
 
@@ -172,39 +226,16 @@ const PetitionDetailPage: React.FC = () => {
             <CardContent>
               <div className="flex items-center gap-3">
                 <Avatar>
-                  <AvatarImage src={data.creator.avatar} />
-                  <AvatarFallback>{data.creator.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                  <AvatarFallback>AC</AvatarFallback>
                 </Avatar>
                 <div>
                   <p className="font-medium flex items-center gap-2">
-                    {data.creator.name}
-                    {data.creator.verified && (
-                      <Badge variant="secondary" className="text-xs">Verified</Badge>
-                    )}
+                    Anonymous Citizen
+                    <Badge variant="secondary" className="text-xs">Verified</Badge>
                   </p>
                   <p className="text-sm text-muted-foreground">Petition Creator</p>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Updates */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Updates</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {data.updates.map((update, index) => (
-                <div key={index} className="border-l-2 border-primary pl-4">
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="font-medium">{update.title}</p>
-                    <Badge variant="outline" className="text-xs">
-                      {new Date(update.date).toLocaleDateString()}
-                    </Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{update.content}</p>
-                </div>
-              ))}
             </CardContent>
           </Card>
         </div>
@@ -218,26 +249,36 @@ const PetitionDetailPage: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="text-center">
-                <div className="text-3xl font-bold">{data.signatures.toLocaleString()}</div>
-                <div className="text-sm text-muted-foreground">of {data.target.toLocaleString()} goal</div>
+                <div className="text-3xl font-bold">{petition.current_signatures.toLocaleString()}</div>
+                <div className="text-sm text-muted-foreground">of {petition.goal_signatures.toLocaleString()} goal</div>
               </div>
               
               <Progress value={progressPercentage} className="w-full" />
               
               <div className="flex items-center justify-between text-sm">
                 <span>{Math.round(progressPercentage)}% complete</span>
-                <div className="flex items-center gap-1 text-muted-foreground">
-                  <Clock className="w-4 h-4" />
-                  15 days left
-                </div>
+                {daysLeft !== null && (
+                  <div className="flex items-center gap-1 text-muted-foreground">
+                    <Clock className="w-4 h-4" />
+                    {daysLeft} days left
+                  </div>
+                )}
               </div>
 
-              <Button className="w-full" size="lg" onClick={handleSignPetition}>
-                {isAuthenticated ? 'Sign This Petition' : 'Log in to Sign'}
-              </Button>
+              {isAuthenticated ? (
+                <PetitionSignForm 
+                  petitionId={petition.id}
+                  hasSigned={hasSigned}
+                  onSignatureAdded={handleSignatureAdded}
+                />
+              ) : (
+                <Button className="w-full" size="lg" asChild>
+                  <a href="/auth">Log in to Sign</a>
+                </Button>
+              )}
 
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1">
+                <Button variant="outline" size="sm" className="flex-1" onClick={handleShare}>
                   <Share2 className="w-4 h-4 mr-2" />
                   Share
                 </Button>
@@ -255,20 +296,10 @@ const PetitionDetailPage: React.FC = () => {
               <CardTitle>Recent Signatures</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              {data.recentSignatures.map((signature, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-sm">{signature.name}</p>
-                    <p className="text-xs text-muted-foreground">{signature.location}</p>
-                  </div>
-                  <span className="text-xs text-muted-foreground">{signature.time}</span>
-                </div>
-              ))}
-              <Separator />
-              <div className="text-center">
-                <Button variant="link" size="sm">
-                  View all signatures
-                </Button>
+              <div className="text-center text-muted-foreground">
+                <p className="text-sm">
+                  {petition.current_signatures} people have signed this petition
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -281,24 +312,24 @@ const PetitionDetailPage: React.FC = () => {
             <CardContent className="space-y-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">Daily signatures</span>
+                  <Target className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm">Goal</span>
                 </div>
-                <span className="font-medium">+250</span>
-              </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">Comments</span>
-                </div>
-                <span className="font-medium">89</span>
+                <span className="font-medium">{petition.goal_signatures.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Users className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">Shares</span>
+                  <span className="text-sm">Signatures</span>
                 </div>
-                <span className="font-medium">342</span>
+                <span className="font-medium">{petition.current_signatures.toLocaleString()}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="w-4 h-4 text-muted-foreground" />
+                  <span className="text-sm">Progress</span>
+                </div>
+                <span className="font-medium">{Math.round(progressPercentage)}%</span>
               </div>
             </CardContent>
           </Card>

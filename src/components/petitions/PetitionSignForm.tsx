@@ -17,6 +17,7 @@ interface PetitionSignFormProps {
 
 export function PetitionSignForm({ petitionId, hasSigned, onSignatureAdded }: PetitionSignFormProps) {
   const [loading, setLoading] = useState(false);
+  const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     signerName: '',
     signerEmail: '',
@@ -83,6 +84,7 @@ export function PetitionSignForm({ petitionId, hasSigned, onSignatureAdded }: Pe
       });
 
       onSignatureAdded();
+      setShowForm(false);
       
       // Reset form
       setFormData({
@@ -108,113 +110,95 @@ export function PetitionSignForm({ petitionId, hasSigned, onSignatureAdded }: Pe
 
   if (hasSigned) {
     return (
-      <Card>
-        <CardContent className="py-8 text-center">
-          <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-          <h3 className="text-lg font-semibold mb-2">Thank you!</h3>
-          <p className="text-muted-foreground">You have already signed this petition.</p>
-        </CardContent>
-      </Card>
+      <div className="text-center py-4">
+        <CheckCircle className="h-8 w-8 text-green-500 mx-auto mb-2" />
+        <p className="text-sm font-medium">Thank you!</p>
+        <p className="text-xs text-muted-foreground">You've signed this petition</p>
+      </div>
+    );
+  }
+
+  if (!showForm) {
+    return (
+      <Button 
+        className="w-full" 
+        size="lg" 
+        onClick={() => setShowForm(true)}
+      >
+        <PenTool className="h-4 w-4 mr-2" />
+        Sign This Petition
+      </Button>
     );
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <PenTool className="h-5 w-5" />
-          Sign this petition
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="signerName">Your name</Label>
-            <Input
-              id="signerName"
-              name="signerName"
-              value={formData.signerName}
-              onChange={handleInputChange}
-              placeholder="Enter your full name"
-              required
-            />
-          </div>
+    <div className="space-y-4 border rounded-lg p-4">
+      <div className="flex items-center justify-between">
+        <h4 className="font-medium">Sign this petition</h4>
+        <Button variant="ghost" size="sm" onClick={() => setShowForm(false)}>✕</Button>
+      </div>
+      
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div>
+          <Input
+            name="signerName"
+            value={formData.signerName}
+            onChange={handleInputChange}
+            placeholder="Your full name"
+            required
+            className="text-sm"
+          />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="signerEmail">Email address</Label>
-            <Input
-              id="signerEmail"
-              name="signerEmail"
-              type="email"
-              value={formData.signerEmail}
-              onChange={handleInputChange}
-              placeholder="Enter your email"
-              required
-            />
-          </div>
+        <div>
+          <Input
+            name="signerEmail"
+            type="email"
+            value={formData.signerEmail}
+            onChange={handleInputChange}
+            placeholder="Your email"
+            required
+            className="text-sm"
+          />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="phoneNumber">Phone number (optional)</Label>
-            <Input
-              id="phoneNumber"
-              name="phoneNumber"
-              type="tel"
-              value={formData.phoneNumber}
-              onChange={handleInputChange}
-              placeholder="Enter your phone number"
-            />
-          </div>
+        <div>
+          <Textarea
+            name="comment"
+            value={formData.comment}
+            onChange={handleInputChange}
+            placeholder="Why are you signing? (optional)"
+            rows={2}
+            className="text-sm"
+          />
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="organization">Organization (optional)</Label>
-            <Input
-              id="organization"
-              name="organization"
-              value={formData.organization}
-              onChange={handleInputChange}
-              placeholder="Your organization or affiliation"
-            />
-          </div>
+        <div className="flex items-center space-x-2">
+          <Checkbox
+            id="isPublic"
+            checked={formData.isPublic}
+            onCheckedChange={(checked) => 
+              setFormData(prev => ({ ...prev, isPublic: checked as boolean }))
+            }
+          />
+          <Label htmlFor="isPublic" className="text-xs">
+            Display my name publicly
+          </Label>
+        </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="comment">Comment (optional)</Label>
-            <Textarea
-              id="comment"
-              name="comment"
-              value={formData.comment}
-              onChange={handleInputChange}
-              placeholder="Why are you signing this petition?"
-              rows={3}
-            />
-          </div>
+        <Button 
+          type="submit" 
+          className="w-full" 
+          disabled={loading}
+          size="sm"
+        >
+          {loading ? 'Signing...' : 'Sign Petition'}
+        </Button>
 
-          <div className="flex items-center space-x-2">
-            <Checkbox
-              id="isPublic"
-              checked={formData.isPublic}
-              onCheckedChange={(checked) => 
-                setFormData(prev => ({ ...prev, isPublic: checked as boolean }))
-              }
-            />
-            <Label htmlFor="isPublic" className="text-sm">
-              Display my name publicly on this petition
-            </Label>
-          </div>
-
-          <Button 
-            type="submit" 
-            className="w-full" 
-            disabled={loading}
-            size="lg"
-          >
-            {loading ? 'Signing...' : 'Sign this petition'}
-          </Button>
-
-          <p className="text-xs text-muted-foreground text-center">
-            By signing, you accept our terms and conditions and privacy policy.
-          </p>
-        </form>
-      </CardContent>
-    </Card>
+        <p className="text-xs text-muted-foreground text-center">
+          By signing, you accept our terms and privacy policy.
+        </p>
+      </form>
+    </div>
   );
 }
