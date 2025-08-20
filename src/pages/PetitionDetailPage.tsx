@@ -238,6 +238,15 @@ const PetitionDetailPage: React.FC = () => {
               </div>
             </CardContent>
           </Card>
+
+          {/* Reactions */}
+          <PetitionReactions petitionId={petition.id} />
+
+          {/* Updates */}
+          <PetitionUpdates petitionId={petition.id} />
+
+          {/* Comments */}
+          <PetitionComments petitionId={petition.id} />
         </div>
 
         {/* Sidebar */}

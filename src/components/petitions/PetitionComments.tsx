@@ -15,6 +15,7 @@ interface Comment {
   comment_text: string;
   is_approved: boolean;
   created_at: string;
+  avatar_url?: string;
 }
 
 interface PetitionCommentsProps {
@@ -40,29 +41,39 @@ export function PetitionComments({ petitionId }: PetitionCommentsProps) {
 
   const fetchComments = async () => {
     try {
-      // Mock comments data for now
-      const mockComments = [
-        {
-          id: '1',
-          petition_id: petitionId,
-          user_id: 'user1',
-          commenter_name: 'John Doe',
-          comment_text: 'This is an important cause that affects our entire community. I strongly support this petition.',
-          is_approved: true,
-          created_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-        {
-          id: '2',
-          petition_id: petitionId,
-          user_id: 'user2',
-          commenter_name: 'Jane Smith',
-          comment_text: 'Thank you for starting this petition. We need more people speaking up about these issues.',
-          is_approved: true,
-          created_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-      ];
+      const { data, error } = await supabase
+        .from('petition_comments')
+        .select(`
+          id,
+          petition_id,
+          user_id,
+          comment_text,
+          is_approved,
+          created_at,
+          profiles!petition_comments_user_id_fkey (
+            display_name,
+            avatar_url
+          )
+        `)
+        .eq('petition_id', petitionId)
+        .eq('is_approved', true)
+        .eq('is_flagged', false)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const formattedComments = data?.map(comment => ({
+        id: comment.id,
+        petition_id: comment.petition_id,
+        user_id: comment.user_id,
+        commenter_name: comment.profiles?.display_name || 'Anonymous User',
+        comment_text: comment.comment_text,
+        is_approved: comment.is_approved,
+        created_at: comment.created_at,
+        avatar_url: comment.profiles?.avatar_url
+      })) || [];
       
-      setComments(mockComments);
+      setComments(formattedComments);
     } catch (error) {
       console.error('Error fetching comments:', error);
     } finally {
@@ -76,15 +87,38 @@ export function PetitionComments({ petitionId }: PetitionCommentsProps) {
 
     setSubmitting(true);
     try {
-      // Mock adding comment
+      const { data, error } = await supabase
+        .from('petition_comments')
+        .insert({
+          petition_id: petitionId,
+          user_id: user.id,
+          comment_text: newComment.trim()
+        })
+        .select(`
+          id,
+          petition_id,
+          user_id,
+          comment_text,
+          is_approved,
+          created_at,
+          profiles!petition_comments_user_id_fkey (
+            display_name,
+            avatar_url
+          )
+        `)
+        .single();
+
+      if (error) throw error;
+
       const newCommentObj = {
-        id: Date.now().toString(),
-        petition_id: petitionId,
-        user_id: user.id,
-        commenter_name: user.email?.split('@')[0] || 'Anonymous',
-        comment_text: newComment.trim(),
-        is_approved: true,
-        created_at: new Date().toISOString(),
+        id: data.id,
+        petition_id: data.petition_id,
+        user_id: data.user_id,
+        commenter_name: data.profiles?.display_name || 'Anonymous User',
+        comment_text: data.comment_text,
+        is_approved: data.is_approved,
+        created_at: data.created_at,
+        avatar_url: data.profiles?.avatar_url
       };
 
       setComments(prev => [newCommentObj, ...prev]);
@@ -180,6 +214,9 @@ export function PetitionComments({ petitionId }: PetitionCommentsProps) {
             {comments.map((comment) => (
               <div key={comment.id} className="flex space-x-3">
                 <Avatar className="h-8 w-8">
+                  {comment.avatar_url && (
+                    <AvatarImage src={comment.avatar_url} alt={comment.commenter_name} />
+                  )}
                   <AvatarFallback>
                     {comment.commenter_name?.charAt(0)?.toUpperCase() || 'A'}
                   </AvatarFallback>

@@ -33765,6 +33765,50 @@ export type Database = {
           },
         ]
       }
+      petition_comments: {
+        Row: {
+          comment_text: string
+          created_at: string | null
+          flagged_reason: string | null
+          id: string
+          is_approved: boolean | null
+          is_flagged: boolean | null
+          petition_id: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          comment_text: string
+          created_at?: string | null
+          flagged_reason?: string | null
+          id?: string
+          is_approved?: boolean | null
+          is_flagged?: boolean | null
+          petition_id: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          comment_text?: string
+          created_at?: string | null
+          flagged_reason?: string | null
+          id?: string
+          is_approved?: boolean | null
+          is_flagged?: boolean | null
+          petition_id?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_comments_petition_id_fkey"
+            columns: ["petition_id"]
+            isOneToOne: false
+            referencedRelation: "petitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       petition_connections: {
         Row: {
           auto_created: boolean
@@ -33816,6 +33860,38 @@ export type Database = {
         }
         Relationships: []
       }
+      petition_reactions: {
+        Row: {
+          created_at: string | null
+          id: string
+          petition_id: string
+          reaction_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          petition_id: string
+          reaction_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          petition_id?: string
+          reaction_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_reactions_petition_id_fkey"
+            columns: ["petition_id"]
+            isOneToOne: false
+            referencedRelation: "petitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       petition_signatures: {
         Row: {
           comment: string | null
@@ -33850,6 +33926,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "petition_signatures_petition_id_fkey"
+            columns: ["petition_id"]
+            isOneToOne: false
+            referencedRelation: "petitions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      petition_updates: {
+        Row: {
+          attachments: string[] | null
+          content: string
+          created_at: string | null
+          created_by: string
+          id: string
+          is_published: boolean | null
+          petition_id: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          attachments?: string[] | null
+          content: string
+          created_at?: string | null
+          created_by: string
+          id?: string
+          is_published?: boolean | null
+          petition_id: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          attachments?: string[] | null
+          content?: string
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          is_published?: boolean | null
+          petition_id?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "petition_updates_petition_id_fkey"
             columns: ["petition_id"]
             isOneToOne: false
             referencedRelation: "petitions"

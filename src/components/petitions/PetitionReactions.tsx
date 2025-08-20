@@ -57,14 +57,26 @@ export function PetitionReactions({ petitionId }: PetitionReactionsProps) {
 
   const fetchReactions = async () => {
     try {
-      // Since petition_reactions table might not exist in types, we'll use a simpler approach
+      const { data, error } = await supabase
+        .from('petition_reactions')
+        .select('reaction_type, user_id')
+        .eq('petition_id', petitionId);
+
+      if (error) throw error;
+
+      // Count reactions by type
+      const reactionCounts = data?.reduce((acc, reaction) => {
+        acc[reaction.reaction_type] = (acc[reaction.reaction_type] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>) || {};
+
       const reactionTypes = ['support', 'heart', 'fire', 'clap', 'thinking'];
-      const mockReactions = reactionTypes.map(type => ({
+      const formattedReactions = reactionTypes.map(type => ({
         reaction_type: type,
-        count: Math.floor(Math.random() * 50) + 1 // Mock data for now
+        count: reactionCounts[type] || 0
       }));
       
-      setReactions(mockReactions);
+      setReactions(formattedReactions);
     } catch (error) {
       console.error('Error fetching reactions:', error);
     } finally {
@@ -76,8 +88,16 @@ export function PetitionReactions({ petitionId }: PetitionReactionsProps) {
     if (!user) return;
     
     try {
-      // Mock user reactions for now
-      setUserReactions([]);
+      const { data, error } = await supabase
+        .from('petition_reactions')
+        .select('reaction_type')
+        .eq('petition_id', petitionId)
+        .eq('user_id', user.id);
+
+      if (error) throw error;
+
+      const userReactionTypes = data?.map(r => r.reaction_type) || [];
+      setUserReactions(userReactionTypes);
     } catch (error) {
       console.error('Error fetching user reactions:', error);
     }
@@ -97,7 +117,16 @@ export function PetitionReactions({ petitionId }: PetitionReactionsProps) {
       const hasReacted = userReactions.includes(reactionType);
       
       if (hasReacted) {
-        // Remove reaction (mock for now)
+        // Remove reaction
+        const { error } = await supabase
+          .from('petition_reactions')
+          .delete()
+          .eq('petition_id', petitionId)
+          .eq('user_id', user.id)
+          .eq('reaction_type', reactionType);
+
+        if (error) throw error;
+
         setUserReactions(prev => prev.filter(r => r !== reactionType));
         setReactions(prev => prev.map(r => 
           r.reaction_type === reactionType 
@@ -110,7 +139,17 @@ export function PetitionReactions({ petitionId }: PetitionReactionsProps) {
           description: `Removed your ${reactionLabels[reactionType]} reaction`,
         });
       } else {
-        // Add reaction (mock for now)
+        // Add reaction
+        const { error } = await supabase
+          .from('petition_reactions')
+          .insert({
+            petition_id: petitionId,
+            user_id: user.id,
+            reaction_type: reactionType
+          });
+
+        if (error) throw error;
+
         setUserReactions(prev => [...prev, reactionType]);
         setReactions(prev => prev.map(r => 
           r.reaction_type === reactionType 

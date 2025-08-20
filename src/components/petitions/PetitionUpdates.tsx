@@ -12,6 +12,7 @@ interface Update {
   content: string;
   attachments: string[];
   created_at: string;
+  creator_name?: string;
 }
 
 interface PetitionUpdatesProps {
@@ -28,29 +29,39 @@ export function PetitionUpdates({ petitionId }: PetitionUpdatesProps) {
 
   const fetchUpdates = async () => {
     try {
-      // Mock updates data for now since the table might not be available in types
-      const mockUpdates = [
-        {
-          id: '1',
-          petition_id: petitionId,
-          created_by: 'creator',
-          title: 'Petition Update: Progress Report',
-          content: 'Thank you to everyone who has signed this petition so far. We have made significant progress and are now working with local authorities to address the concerns raised.',
-          attachments: [],
-          created_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(), // 2 days ago
-        },
-        {
-          id: '2',
-          petition_id: petitionId,
-          created_by: 'creator',
-          title: 'Meeting Scheduled with Officials',
-          content: 'Great news! We have secured a meeting with city officials next week to discuss the petition demands. Your continued support is making a difference.',
-          attachments: [],
-          created_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(), // 5 days ago
-        },
-      ];
+      const { data, error } = await supabase
+        .from('petition_updates')
+        .select(`
+          id,
+          petition_id,
+          created_by,
+          title,
+          content,
+          attachments,
+          created_at,
+          profiles!petition_updates_created_by_fkey (
+            display_name,
+            avatar_url
+          )
+        `)
+        .eq('petition_id', petitionId)
+        .eq('is_published', true)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const formattedUpdates = data?.map(update => ({
+        id: update.id,
+        petition_id: update.petition_id,
+        created_by: update.created_by,
+        title: update.title,
+        content: update.content,
+        attachments: update.attachments || [],
+        created_at: update.created_at,
+        creator_name: update.profiles?.display_name || 'Petition Creator'
+      })) || [];
       
-      setUpdates(mockUpdates);
+      setUpdates(formattedUpdates);
     } catch (error) {
       console.error('Error fetching updates:', error);
     } finally {
@@ -119,13 +130,15 @@ export function PetitionUpdates({ petitionId }: PetitionUpdatesProps) {
                       </Badge>
                     </div>
                     
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground mb-2">
                       <Calendar className="h-3 w-3" />
                       {new Date(update.created_at).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
                         day: 'numeric'
                       })}
+                      <span className="mx-2">•</span>
+                      <span>by {update.creator_name}</span>
                     </div>
                     
                     <p className="text-sm text-muted-foreground leading-relaxed">
