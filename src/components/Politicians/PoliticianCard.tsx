@@ -7,6 +7,7 @@ import { URLBuilder } from '@/utils/slug';
 import { Link } from 'react-router-dom';
 import { VerificationBadge } from '@/components/AI/VerificationBadge';
 import { AIVerificationModal } from '@/components/AI/AIVerificationModal';
+import { VerificationBadge as ClaimedBadge } from '@/components/Politics/VerificationBadge';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -79,12 +80,11 @@ export const PoliticianCard = ({ politician }: { politician: PoliticianProps }) 
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               <h3 className="text-lg font-bold text-foreground">{politician.name}</h3>
-              {politician.isVerified && (
-                <Badge className="bg-cm-yellow text-cm-yellow-foreground px-2 py-1">
-                  <Shield className="w-3 h-3 mr-1" />
-                  Verified
-                </Badge>
-              )}
+              <ClaimedBadge 
+                isClaimed={politician.isClaimed}
+                isVerified={politician.isVerified}
+                size="sm"
+              />
               {politician.termStatus && politician.isCurrentlyInOffice !== undefined && (
                 <Badge 
                   variant={
