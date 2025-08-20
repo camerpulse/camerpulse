@@ -66,13 +66,13 @@ export default function Feed() {
   const [activeTab, setActiveTab] = useState('home');
   const [showComposer, setShowComposer] = useState(false);
 
-  // Auto-navigate to civic dashboard as "next page"
+  // Auto-navigate to civic education as "next page"
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/civic-dashboard');
+      navigate('/civic-education');
       toast({
-        title: "Navigating to Civic Dashboard",
-        description: "Proceeding to the next page as requested.",
+        title: "Navigating to Civic Education Hub",
+        description: "Proceeding to learn about civic engagement and democracy.",
       });
     }, 2000); // Navigate after 2 seconds
 
