@@ -5,7 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Upload, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 import { useClaimProfile } from '@/hooks/useProfileClaims';
+import { AuthGuard } from './AuthGuard';
 
 interface ClaimProfileModalProps {
   open: boolean;
@@ -23,7 +25,9 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
   profileType
 }) => {
   const { toast } = useToast();
+  const { user } = useAuth();
   const claimProfile = useClaimProfile();
+  const [showAuthGuard, setShowAuthGuard] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -44,6 +48,13 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Check authentication first
+    if (!user) {
+      setShowAuthGuard(true);
+      return;
+    }
+
     if (!formData.fullName || !formData.email || !formData.verificationReason) {
       toast({
         title: "Missing Information",
@@ -81,12 +92,27 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
     }
   };
 
+  const handleLogin = () => {
+    setShowAuthGuard(false);
+    onClose();
+    // Navigate to login page - you may need to adjust this based on your routing
+    window.location.href = '/auth?mode=login';
+  };
+
+  const handleSignup = () => {
+    setShowAuthGuard(false);
+    onClose();
+    // Navigate to signup page - you may need to adjust this based on your routing
+    window.location.href = '/auth?mode=signup';
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle>Claim Profile: {profileName}</DialogTitle>
-        </DialogHeader>
+    <>
+      <Dialog open={open} onOpenChange={onClose}>
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Claim Profile: {profileName}</DialogTitle>
+          </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -218,7 +244,16 @@ export const ClaimProfileModal: React.FC<ClaimProfileModalProps> = ({
             </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+        </DialogContent>
+      </Dialog>
+
+      <AuthGuard
+        open={showAuthGuard}
+        onClose={() => setShowAuthGuard(false)}
+        onLogin={handleLogin}
+        onSignup={handleSignup}
+        action="claim this profile"
+      />
+    </>
   );
 };
