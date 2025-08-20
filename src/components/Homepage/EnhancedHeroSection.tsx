@@ -71,9 +71,9 @@ const FloatingCard: React.FC<{
 };
 
 export const EnhancedHeroSection: React.FC = () => {
-  console.log('EnhancedHeroSection rendering...');
   const { user } = useAuth();
   const [currentFeature, setCurrentFeature] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const features = [
     { 
@@ -114,6 +114,9 @@ export const EnhancedHeroSection: React.FC = () => {
   ];
 
   useEffect(() => {
+    // Mark component as loaded for performance tracking
+    setIsLoaded(true);
+    
     const interval = setInterval(() => {
       setCurrentFeature((prev) => (prev + 1) % features.length);
     }, 4000);
@@ -121,7 +124,11 @@ export const EnhancedHeroSection: React.FC = () => {
   }, [features.length]);
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-background via-muted/30 to-primary/5 flex items-center overflow-hidden">
+    <section 
+      className="relative min-h-screen bg-gradient-to-br from-background via-muted/30 to-primary/5 flex items-center overflow-hidden"
+      itemScope 
+      itemType="https://schema.org/WebPageElement"
+    >
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse"></div>

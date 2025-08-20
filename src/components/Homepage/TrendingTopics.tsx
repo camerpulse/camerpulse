@@ -238,7 +238,6 @@ const TopicCard: React.FC<{ topic: Topic; index: number }> = ({ topic, index }) 
 };
 
 export const TrendingTopics: React.FC = () => {
-  console.log('TrendingTopics rendering...');
   const [topics, setTopics] = useState(mockTopics);
   const [activeFilter, setActiveFilter] = useState<'all' | 'rising' | 'hot'>('all');
 
