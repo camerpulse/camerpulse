@@ -8,6 +8,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Separator } from '@/components/ui/separator';
 import { SafeHtml } from '@/components/Security/SafeHtml';
 import { PetitionSignForm } from '@/components/petitions/PetitionSignForm';
+import { PetitionComments } from '@/components/petitions/PetitionComments';
+import { PetitionUpdates } from '@/components/petitions/PetitionUpdates';
+import { PetitionReactions } from '@/components/petitions/PetitionReactions';
+import { PetitionSocialShare } from '@/components/petitions/PetitionSocialShare';
 import { 
   Share2, 
   Heart, 
@@ -287,10 +291,17 @@ const PetitionDetailPage: React.FC = () => {
               )}
 
               <div className="flex gap-2">
-                <Button variant="outline" size="sm" className="flex-1" onClick={handleShare}>
-                  <Share2 className="w-4 h-4 mr-2" />
-                  Share
-                </Button>
+                <PetitionSocialShare 
+                  petition={{
+                    id: petition.id,
+                    title: petition.title,
+                    description: petition.description,
+                    current_signatures: petition.current_signatures,
+                    goal_signatures: petition.goal_signatures,
+                    slug: petition.slug
+                  }}
+                  currentUrl={window.location.href}
+                />
                 <Button variant="outline" size="sm" className="flex-1">
                   <Heart className="w-4 h-4 mr-2" />
                   Support

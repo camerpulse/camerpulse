@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { CreateUpdateDialog } from '@/components/petitions/CreateUpdateDialog';
+import { useAuth } from '@/utils/auth';
 import { Calendar, FileText } from 'lucide-react';
 
 interface Update {
@@ -20,12 +22,55 @@ interface PetitionUpdatesProps {
 }
 
 export function PetitionUpdates({ petitionId }: PetitionUpdatesProps) {
+  const { user } = useAuth();
   const [updates, setUpdates] = useState<Update[]>([]);
   const [loading, setLoading] = useState(true);
+  const [petitionData, setPetitionData] = useState<{ title: string; created_by: string } | null>(null);
 
   useEffect(() => {
+    fetchPetitionData();
     fetchUpdates();
   }, [petitionId]);
+
+  // Subscribe to realtime updates
+  useEffect(() => {
+    if (!petitionId) return;
+
+    const channel = supabase
+      .channel('petition-updates')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'petition_updates',
+          filter: `petition_id=eq.${petitionId}`
+        },
+        () => {
+          fetchUpdates();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [petitionId]);
+
+  const fetchPetitionData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('petitions')
+        .select('title, created_by')
+        .eq('id', petitionId)
+        .single();
+
+      if (error) throw error;
+      setPetitionData(data);
+    } catch (error) {
+      console.error('Error fetching petition data:', error);
+    }
+  };
 
   const fetchUpdates = async () => {
     try {
@@ -69,6 +114,12 @@ export function PetitionUpdates({ petitionId }: PetitionUpdatesProps) {
     }
   };
 
+  const handleUpdateCreated = () => {
+    fetchUpdates();
+  };
+
+  const isCreator = user && petitionData && user.id === petitionData.created_by;
+
   if (loading) {
     return (
       <Card>
@@ -96,9 +147,18 @@ export function PetitionUpdates({ petitionId }: PetitionUpdatesProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="h-5 w-5" />
-          Updates ({updates.length})
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <FileText className="h-5 w-5" />
+            Updates ({updates.length})
+          </div>
+          {isCreator && (
+            <CreateUpdateDialog
+              petitionId={petitionId}
+              petitionTitle={petitionData?.title || ''}
+              onUpdateCreated={handleUpdateCreated}
+            />
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>

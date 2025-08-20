@@ -20,6 +20,7 @@ import { URLBuilder } from '@/utils/slug';
 import { usePetitions } from '@/hooks/useCivicParticipation';
 import { useAuth } from '@/utils/auth';
 import { PetitionList } from '@/components/petitions/PetitionList';
+import { PetitionSearchFilters } from '@/components/petitions/PetitionSearchFilters';
 import { toast } from 'sonner';
 
 /**
@@ -27,38 +28,44 @@ import { toast } from 'sonner';
  */
 const PetitionsPage: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedLocation, setSelectedLocation] = useState('all');
   const [activeTab, setActiveTab] = useState('active');
+  const [filters, setFilters] = useState({
+    searchQuery: '',
+    category: 'all',
+    region: 'all',
+    status: 'all',
+    sortBy: 'recent',
+    minSignatures: 'all',
+    timeframe: 'all'
+  });
 
   // Get petitions based on active tab and filters
-  const getFilters = () => {
-    const filters: { status?: string; category?: string } = {};
+  const getQueryFilters = () => {
+    const queryFilters: { status?: string; category?: string } = {};
     
     switch (activeTab) {
       case 'active':
-        filters.status = 'active';
+        queryFilters.status = 'active';
         break;
       case 'successful':
-        filters.status = 'approved';
+        queryFilters.status = 'approved';
         break;
       case 'trending':
-        filters.status = 'active';
+        queryFilters.status = 'active';
         break;
       case 'recent':
-        filters.status = 'active';
+        queryFilters.status = 'active';
         break;
     }
     
-    if (selectedCategory !== 'all') {
-      filters.category = selectedCategory;
+    if (filters.category !== 'all') {
+      queryFilters.category = filters.category;
     }
     
-    return filters;
+    return queryFilters;
   };
 
-  const { data: petitions = [], isLoading, error } = usePetitions(getFilters());
+  const { data: petitions = [], isLoading, error } = usePetitions(getQueryFilters());
 
   // Stats query for displaying numbers
   const { data: activePetitions } = usePetitions({ status: 'active' });
@@ -135,68 +142,21 @@ const PetitionsPage: React.FC = () => {
         </Card>
       </div>
 
-      {/* Search and Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Find Petitions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col gap-4 md:flex-row">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input 
-                  placeholder="Search petitions..." 
-                  className="pl-10" 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                <SelectTrigger className="w-[140px]">
-                  <SelectValue placeholder="Category" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="governance">Governance</SelectItem>
-                  <SelectItem value="justice">Justice</SelectItem>
-                  <SelectItem value="education">Education</SelectItem>
-                  <SelectItem value="health">Health</SelectItem>
-                  <SelectItem value="agriculture">Agriculture</SelectItem>
-                  <SelectItem value="digital_rights">Digital Rights</SelectItem>
-                  <SelectItem value="local_issues">Local Issues</SelectItem>
-                  <SelectItem value="corruption">Corruption</SelectItem>
-                  <SelectItem value="security">Security</SelectItem>
-                  <SelectItem value="environment">Environment</SelectItem>
-                  <SelectItem value="traditional_authority">Traditional Authority</SelectItem>
-                  <SelectItem value="others">Others</SelectItem>
-                </SelectContent>
-              </Select>
-              <Select value={selectedLocation} onValueChange={setSelectedLocation}>
-                <SelectTrigger className="w-[120px]">
-                  <SelectValue placeholder="Location" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Regions</SelectItem>
-                  <SelectItem value="national">National</SelectItem>
-                  <SelectItem value="centre">Centre</SelectItem>
-                  <SelectItem value="north">North</SelectItem>
-                  <SelectItem value="south">South</SelectItem>
-                  <SelectItem value="east">East</SelectItem>
-                  <SelectItem value="west">West</SelectItem>
-                  <SelectItem value="southwest">Southwest</SelectItem>
-                  <SelectItem value="northwest">Northwest</SelectItem>
-                  <SelectItem value="littoral">Littoral</SelectItem>
-                  <SelectItem value="adamawa">Adamawa</SelectItem>
-                  <SelectItem value="far_north">Far North</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Advanced Search and Filters */}
+      <PetitionSearchFilters
+        filters={filters}
+        onFiltersChange={setFilters}
+        onClearFilters={() => setFilters({
+          searchQuery: '',
+          category: 'all',
+          region: 'all',
+          status: 'all',
+          sortBy: 'recent',
+          minSignatures: 'all',
+          timeframe: 'all'
+        })}
+        resultCount={petitions?.length}
+      />
 
       {/* Petitions Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
@@ -232,8 +192,8 @@ const PetitionsPage: React.FC = () => {
             </Card>
           ) : (
             <PetitionList 
-              category={selectedCategory !== 'all' ? selectedCategory : undefined}
-              searchQuery={searchQuery}
+              category={filters.category !== 'all' ? filters.category : undefined}
+              searchQuery={filters.searchQuery}
               limit={20}
             />
           )}
@@ -256,8 +216,8 @@ const PetitionsPage: React.FC = () => {
             </div>
           ) : (
             <PetitionList 
-              category={selectedCategory !== 'all' ? selectedCategory : undefined}
-              searchQuery={searchQuery}
+              category={filters.category !== 'all' ? filters.category : undefined}
+              searchQuery={filters.searchQuery}
               limit={20}
             />
           )}
@@ -280,8 +240,8 @@ const PetitionsPage: React.FC = () => {
             </div>
           ) : (
             <PetitionList 
-              category={selectedCategory !== 'all' ? selectedCategory : undefined}
-              searchQuery={searchQuery}
+              category={filters.category !== 'all' ? filters.category : undefined}
+              searchQuery={filters.searchQuery}
               limit={20}
             />
           )}
@@ -304,8 +264,8 @@ const PetitionsPage: React.FC = () => {
             </div>
           ) : (
             <PetitionList 
-              category={selectedCategory !== 'all' ? selectedCategory : undefined}
-              searchQuery={searchQuery}
+              category={filters.category !== 'all' ? filters.category : undefined}
+              searchQuery={filters.searchQuery}
               limit={20}
             />
           )}

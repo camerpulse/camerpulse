@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useAuth } from '@/utils/auth';
 import { useToast } from '@/hooks/use-toast';
 import { Heart, ThumbsUp, Flame, Users, Brain } from 'lucide-react';
 
@@ -39,21 +40,46 @@ const reactionLabels = {
 };
 
 export function PetitionReactions({ petitionId }: PetitionReactionsProps) {
+  const { user } = useAuth();
   const [reactions, setReactions] = useState<ReactionCount[]>([]);
   const [userReactions, setUserReactions] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState(null);
   const { toast } = useToast();
 
   useEffect(() => {
-    // Check auth state
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
-
     fetchReactions();
-    fetchUserReactions();
-  }, [petitionId]);
+    if (user) {
+      fetchUserReactions();
+    }
+  }, [petitionId, user]);
+
+  // Subscribe to realtime reactions
+  useEffect(() => {
+    if (!petitionId) return;
+
+    const channel = supabase
+      .channel('petition-reactions')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'petition_reactions',
+          filter: `petition_id=eq.${petitionId}`
+        },
+        () => {
+          fetchReactions();
+          if (user) {
+            fetchUserReactions();
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [petitionId, user]);
 
   const fetchReactions = async () => {
     try {
