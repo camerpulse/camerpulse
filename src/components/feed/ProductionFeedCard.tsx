@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { useNavigate } from 'react-router-dom';
 import { ProductionFeedItem } from '@/hooks/useProductionFeed';
 import { formatDistanceToNow } from 'date-fns';
+import { EnhancedInteractionBar } from './EnhancedInteractionBar';
 import {
   Heart,
   MessageCircle,
@@ -275,50 +276,14 @@ export const ProductionFeedCard: React.FC<ProductionFeedCardProps> = ({
         
         {/* Engagement Actions - only for posts */}
         {item.type === 'pulse_post' && (
-          <div className="flex items-center justify-between pt-3 border-t bg-muted/30 rounded-lg p-3 -mx-3">
-            <div className="flex items-center gap-6">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleLike}
-                className={`flex items-center gap-2 hover:scale-105 transition-all ${
-                  item.engagement.user_has_liked 
-                    ? 'text-red-500 hover:text-red-600' 
-                    : 'text-muted-foreground hover:text-red-500'
-                }`}
-              >
-                <Heart className={`h-4 w-4 ${item.engagement.user_has_liked ? 'fill-current' : ''}`} />
-                <span className="font-medium">{item.engagement.likes}</span>
-              </Button>
-              
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleItemClick}
-                className="flex items-center gap-2 text-muted-foreground hover:text-blue-500 hover:scale-105 transition-all"
-              >
-                <MessageCircle className="h-4 w-4" />
-                <span className="font-medium">{item.engagement.comments}</span>
-              </Button>
-              
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleShare}
-                className="flex items-center gap-2 text-muted-foreground hover:text-green-500 hover:scale-105 transition-all"
-              >
-                <Share2 className="h-4 w-4" />
-                <span className="font-medium">{item.engagement.shares}</span>
-              </Button>
-            </div>
-            
-            {item.metadata?.location && (
-              <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                <MapPin className="h-3 w-3" />
-                <span>{item.metadata.location}</span>
-              </div>
-            )}
-          </div>
+          <EnhancedInteractionBar
+            postId={item.id}
+            originalId={item.original_id}
+            engagement={item.engagement}
+            onLike={handleLike}
+            onComment={handleItemClick}
+            onShare={handleShare}
+          />
         )}
 
         {/* Non-post engagement info */}
