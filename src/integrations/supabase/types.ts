@@ -39275,6 +39275,51 @@ export type Database = {
           },
         ]
       }
+      pulse_post_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          parent_comment_id: string | null
+          post_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          parent_comment_id?: string | null
+          post_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          parent_comment_id?: string | null
+          post_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pulse_post_comments_parent_comment_id_fkey"
+            columns: ["parent_comment_id"]
+            isOneToOne: false
+            referencedRelation: "pulse_post_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pulse_post_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "pulse_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pulse_post_likes: {
         Row: {
           created_at: string

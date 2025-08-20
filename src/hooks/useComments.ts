@@ -10,12 +10,11 @@ export interface Comment {
   user_id: string;
   parent_comment_id?: string;
   content: string;
-  is_edited: boolean;
   created_at: string;
   updated_at: string;
   
   // Joined data
-  profiles?: {
+  user?: {
     id: string;
     username: string;
     display_name: string;
@@ -40,10 +39,10 @@ export const useComments = (postId: string) => {
     queryKey: [COMMENTS_QUERY_KEY, postId],
     queryFn: async () => {
       const { data: comments, error } = await supabase
-        .from('comments')
+        .from('pulse_post_comments')
         .select(`
           *,
-          profiles!comments_user_id_fkey (
+          user:profiles!pulse_post_comments_user_id_fkey (
             id,
             username,
             display_name,
@@ -106,7 +105,7 @@ export const useCreateComment = () => {
       const sanitizedContent = DOMPurify.sanitize(data.content);
 
       const { data: comment, error } = await supabase
-        .from('comments')
+        .from('pulse_post_comments')
         .insert({
           post_id: data.post_id,
           user_id: user.id,
@@ -115,7 +114,7 @@ export const useCreateComment = () => {
         })
         .select(`
           *,
-          profiles!comments_user_id_fkey (
+          user:profiles!pulse_post_comments_user_id_fkey (
             id,
             username,
             display_name,
@@ -131,15 +130,7 @@ export const useCreateComment = () => {
     onSuccess: (newComment, variables) => {
       // Invalidate comments query to refetch with new comment
       queryClient.invalidateQueries({ queryKey: [COMMENTS_QUERY_KEY, variables.post_id] });
-      
-      // Update post comment count in posts cache
-      queryClient.setQueryData(['posts', 20, 0, user?.id], (oldData: any[] | undefined) => {
-        return oldData?.map(post => 
-          post.id === variables.post_id 
-            ? { ...post, comment_count: (post.comment_count || 0) + 1 }
-            : post
-        ) || [];
-      });
+      queryClient.invalidateQueries({ queryKey: ['production-feed'] });
 
       toast({
         title: "Comment posted!",
@@ -169,16 +160,15 @@ export const useUpdateComment = () => {
       const sanitizedContent = DOMPurify.sanitize(content);
 
       const { data: comment, error } = await supabase
-        .from('comments')
+        .from('pulse_post_comments')
         .update({ 
           content: sanitizedContent,
-          is_edited: true,
         })
         .eq('id', commentId)
         .eq('user_id', user.id) // Ensure user can only edit their own comments
         .select(`
           *,
-          profiles!comments_user_id_fkey (
+          user:profiles!pulse_post_comments_user_id_fkey (
             id,
             username,
             display_name,
@@ -220,7 +210,7 @@ export const useDeleteComment = () => {
       if (!user) throw new Error('Authentication required');
 
       const { error } = await supabase
-        .from('comments')
+        .from('pulse_post_comments')
         .delete()
         .eq('id', commentId)
         .eq('user_id', user.id); // Ensure user can only delete their own comments
@@ -231,15 +221,7 @@ export const useDeleteComment = () => {
     onSuccess: (postId) => {
       // Refetch comments to remove deleted comment
       queryClient.invalidateQueries({ queryKey: [COMMENTS_QUERY_KEY, postId] });
-      
-      // Update post comment count in posts cache
-      queryClient.setQueryData(['posts', 20, 0, user?.id], (oldData: any[] | undefined) => {
-        return oldData?.map(post => 
-          post.id === postId 
-            ? { ...post, comment_count: Math.max(0, (post.comment_count || 0) - 1) }
-            : post
-        ) || [];
-      });
+      queryClient.invalidateQueries({ queryKey: ['production-feed'] });
 
       toast({
         title: "Comment deleted",
