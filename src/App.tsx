@@ -20,6 +20,10 @@ import { queryClient } from "./services/api";
 import { setupGlobalErrorHandling } from "./utils/errorHandling";
 import { setupLogging } from "./utils/logger";
 import { performanceMonitor } from "./utils/performance";
+import { replaceConsoleInProduction } from "./utils/productionLogger";
+import { initializePerformanceOptimizations } from "./utils/performanceOptimizer";
+import { SecurityHeaders } from "./components/Security/SecurityHeaders";
+import ProductionErrorBoundary from "./components/common/ProductionErrorBoundary";
 
 import "./App.css";
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -29,9 +33,13 @@ import "mapbox-gl/dist/mapbox-gl.css";
 setupGlobalErrorHandling();
 setupLogging();
 
-// Initialize performance monitoring
+// Initialize production logging
+replaceConsoleInProduction();
+
+// Initialize performance monitoring and optimizations
 if (typeof window !== 'undefined') {
   performanceMonitor.init();
+  initializePerformanceOptimizations();
   // Set document language to English globally
   document.documentElement.lang = 'en';
 }
@@ -43,8 +51,9 @@ if (typeof window !== 'undefined') {
 const App: React.FC = () => {
   return (
     <React.StrictMode>
-      <ErrorBoundary>
+      <ProductionErrorBoundary>
         <HelmetProvider>
+          <SecurityHeaders />
           <QueryClientProvider client={queryClient}>
             <BrowserRouter>
               <TooltipProvider>
@@ -65,7 +74,7 @@ const App: React.FC = () => {
             </BrowserRouter>
           </QueryClientProvider>
         </HelmetProvider>
-      </ErrorBoundary>
+      </ProductionErrorBoundary>
     </React.StrictMode>
   );
 };

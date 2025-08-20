@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { createProductionLogger } from "@/utils/productionLogger";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -49,6 +50,8 @@ const NAVIGATION_ITEMS = [
  * - Reduced re-renders with React.memo
  * - Optimized dropdown structure
  */
+const logger = createProductionLogger('OptimizedHeader');
+
 export const OptimizedHeader: React.FC = React.memo(() => {
   const { user, signOut } = useAuth();
   const { state: { isLoading } } = useAppState();
@@ -58,10 +61,15 @@ export const OptimizedHeader: React.FC = React.memo(() => {
   // Memoized handlers
   const handleSignOut = useCallback(async () => {
     try {
+      logger.info('User initiated sign out');
       await signOut();
       navigate('/');
+      logger.info('User successfully signed out');
     } catch (error) {
-      console.error('Error signing out:', error);
+      logger.error('Error signing out', {
+        error: error instanceof Error ? error.message : 'Unknown error',
+        stack: error instanceof Error ? error.stack : undefined
+      });
     }
   }, [signOut, navigate]);
 
