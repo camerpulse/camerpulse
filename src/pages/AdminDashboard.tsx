@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useUserProfileClaims, useUpdateClaimStatus } from '@/hooks/useProfileClaims';
 import { useUserEditSuggestions, useUpdateSuggestionStatus } from '@/hooks/useEditSuggestions';
 import { useAllRatings, useModerateRating } from '@/hooks/useMinisterRatings';
+import { ClaimReviewPanel } from '@/components/Admin/ClaimReviewPanel';
+import { EditSuggestionReviewPanel } from '@/components/Admin/EditSuggestionReviewPanel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
