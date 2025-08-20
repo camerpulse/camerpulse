@@ -16,6 +16,9 @@ import { usePosts } from '@/hooks/usePosts';
 import { PostCard } from '@/components/feed/PostCard';
 import { PostComposer } from '@/components/feed/PostComposer';
 import { InfinitePostFeed } from '@/components/feed/InfinitePostFeed';
+import { AIRecommendations } from '@/components/feed/AIRecommendations';
+import { RealtimeNotifications } from '@/components/feed/RealtimeNotifications';
+import { SocialAnalytics } from '@/components/feed/SocialAnalytics';
 import { useFeedRealtime } from '@/hooks/useFeedRealtime';
 import {
   Users,
@@ -116,9 +119,7 @@ export default function Feed() {
               <Button variant="ghost" size="icon" onClick={handleRefresh} disabled={legacyFetching}>
                 <RefreshCw className={`w-4 h-4 ${legacyFetching ? 'animate-spin' : ''}`} />
               </Button>
-              <Button variant="ghost" size="icon">
-                <Bell className="w-4 h-4" />
-              </Button>
+              <RealtimeNotifications />
             </div>
           </div>
         </div>
@@ -159,6 +160,9 @@ export default function Feed() {
                   ))}
                 </CardContent>
               </Card>
+
+              {/* AI Recommendations */}
+              <AIRecommendations />
 
               {/* Trending Topics */}
               <Card>
@@ -258,6 +262,9 @@ export default function Feed() {
                   )) || []}
                 </CardContent>
               </Card>
+
+              {/* Social Analytics */}
+              <SocialAnalytics />
 
               {/* Events */}
               <Card>
