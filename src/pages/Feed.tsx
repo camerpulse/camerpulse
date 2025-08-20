@@ -3,8 +3,9 @@
  * Mobile-first feed combining civic engagement and social interaction
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -59,10 +60,24 @@ const suggestedFollows = [
 export default function Feed() {
   const { user } = useAuth();
   const { toast } = useToast();
+  const navigate = useNavigate();
   
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('home');
   const [showComposer, setShowComposer] = useState(false);
+
+  // Auto-navigate to civic dashboard as "next page"
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate('/civic-dashboard');
+      toast({
+        title: "Navigating to Civic Dashboard",
+        description: "Proceeding to the next page as requested.",
+      });
+    }, 2000); // Navigate after 2 seconds
+
+    return () => clearTimeout(timer);
+  }, [navigate, toast]);
   
   // Use real data hooks
   // Use infinite scroll instead of paginated posts
