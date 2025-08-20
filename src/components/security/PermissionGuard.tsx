@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent } from '@/components/ui/card';
 import { Shield, Lock } from 'lucide-react';
 
@@ -18,7 +18,7 @@ export const PermissionGuard: React.FC<PermissionGuardProps> = ({
   children,
   fallback
 }) => {
-  const { hasPermission, userRole, loading } = useAuth();
+  const { hasPermission, hasRole, loading } = useAuth();
 
   if (loading) {
     return (
@@ -33,7 +33,7 @@ export const PermissionGuard: React.FC<PermissionGuardProps> = ({
   // Check role-based access
   if (role) {
     const roleHierarchy = { admin: 3, moderator: 2, user: 1 };
-    const userLevel = userRole ? roleHierarchy[userRole as keyof typeof roleHierarchy] || 0 : 0;
+    const userLevel = hasRole('admin') ? 3 : hasRole('moderator') ? 2 : hasRole('user') ? 1 : 0;
     const requiredLevel = roleHierarchy[role];
     
     hasAccess = userLevel >= requiredLevel;

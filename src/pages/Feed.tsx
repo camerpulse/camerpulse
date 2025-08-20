@@ -8,6 +8,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { AppLayout } from '@/components/Layout/AppLayout';
 import { Button } from '@/components/ui/button';
+import { Shield } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -64,7 +65,7 @@ const suggestedFollows = [
 
 
 export default function Feed() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
   
@@ -205,6 +206,20 @@ export default function Feed() {
                   />
                 </div>
               </div>
+
+              {/* Security Dashboard Access */}
+              {isAdmin() && (
+                <div className="mb-6">
+                  <Button
+                    onClick={() => navigate('/admin/security')}
+                    variant="outline"
+                    className="w-full flex items-center gap-2"
+                  >
+                    <Shield className="h-4 w-4" />
+                    Security Dashboard
+                  </Button>
+                </div>
+              )}
 
               {/* Phase 6: Advanced Security Dashboard */}
               <div className="space-y-8">

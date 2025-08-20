@@ -106,6 +106,7 @@ const PriorityAssessmentDashboard = lazy(() => import('@/pages/admin/PriorityAss
 const UserMigrationAdminPage = lazy(() => import('@/pages/admin/UserMigrationAdminPage'));
 const PerformanceMonitoringPage = lazy(() => import('@/pages/PerformanceMonitoringPage'));
 const ProductionReadinessPage = lazy(() => import('@/pages/ProductionReadinessPage'));
+const SecurityDashboard = lazy(() => import('@/components/admin/SecurityDashboard'));
 
 // === ROUTE LOADING COMPONENT ===
 const RouteLoading = ({ routeName }: { routeName: string }) => (
@@ -541,6 +542,10 @@ export const AppRouter: React.FC = () => {
         <Route 
           path="/admin/user-migration" 
           element={<WrappedRoute element={UserMigrationAdminPage} routeName="User Migration" requiresAdmin />} 
+        />
+        <Route 
+          path="/admin/security" 
+          element={<WrappedRoute element={SecurityDashboard} routeName="Security Dashboard" requiresAdmin />} 
         />
         <Route 
           path="/performance" 

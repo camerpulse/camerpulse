@@ -10,6 +10,7 @@ import { AppProvider } from "./contexts/AppContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { MobileProvider } from "./contexts/MobileContext";
 import { PanAfricaProvider } from "./contexts/PanAfricaContext";
+import { SecurityProvider } from "./components/security/SecurityProvider";
 
 import { AppRouter } from "./components/routing/AppRouter";
 import { ErrorBoundary } from "./components/common/ErrorBoundary";
@@ -59,15 +60,17 @@ const App: React.FC = () => {
               <TooltipProvider>
                 <AppProvider>
                   <AuthProvider>
-                    <PanAfricaProvider>
-                      <MobileProvider>
+                    <SecurityProvider>
+                      <PanAfricaProvider>
+                        <MobileProvider>
                         <Toaster />
                         <Sonner />
-                        <PWAInstallPrompt />
-                        <SecurityMonitor />
-                        <AppRouter />
-                      </MobileProvider>
-                    </PanAfricaProvider>
+                          <PWAInstallPrompt />
+                          <SecurityMonitor />
+                          <AppRouter />
+                        </MobileProvider>
+                      </PanAfricaProvider>
+                    </SecurityProvider>
                   </AuthProvider>
                 </AppProvider>
               </TooltipProvider>
