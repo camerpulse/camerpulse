@@ -19,6 +19,8 @@ import {
   Clock
 } from 'lucide-react';
 import { usePetitionSlug } from '@/hooks/useSlugResolver';
+import { useAuth } from '@/utils/auth';
+import { toast } from 'sonner';
 
 /**
  * Individual petition detail page with full information and interaction options
@@ -26,8 +28,18 @@ import { usePetitionSlug } from '@/hooks/useSlugResolver';
 const PetitionDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const { entity: petition, loading, error } = usePetitionSlug();
+  const { isAuthenticated } = useAuth();
 
-  // Mock data for demonstration
+  const handleSignPetition = () => {
+    if (!isAuthenticated) {
+      toast.error('Please log in to sign this petition');
+      return;
+    }
+    // TODO: Implement petition signing
+    toast.success('Petition signed successfully!');
+  };
+
+  // Mock data for demonstration when no real data
   const mockPetition = {
     id: '1',
     title: 'Improve Public Healthcare Access in Rural Areas',
@@ -220,8 +232,8 @@ const PetitionDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              <Button className="w-full" size="lg">
-                Sign This Petition
+              <Button className="w-full" size="lg" onClick={handleSignPetition}>
+                {isAuthenticated ? 'Sign This Petition' : 'Log in to Sign'}
               </Button>
 
               <div className="flex gap-2">

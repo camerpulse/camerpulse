@@ -1,5 +1,6 @@
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -12,49 +13,70 @@ import {
   Clock, 
   Users, 
   Target,
-  Filter
+  Filter,
+  AlertCircle
 } from 'lucide-react';
 import { URLBuilder } from '@/utils/slug';
+import { usePetitions } from '@/hooks/useCivicParticipation';
+import { useAuth } from '@/utils/auth';
+import { PetitionList } from '@/components/petitions/PetitionList';
+import { toast } from 'sonner';
 
 /**
  * Petitions listing page with search, filtering, and categories
  */
 const PetitionsPage: React.FC = () => {
-  const mockPetitions = [
-    {
-      id: '1',
-      title: 'Improve Public Healthcare Access in Rural Areas',
-      description: 'Petition to establish more healthcare facilities in remote villages across Cameroon.',
-      signatures: 15420,
-      target: 25000,
-      category: 'Healthcare',
-      status: 'Active',
-      timeLeft: '15 days',
-      location: 'National'
-    },
-    {
-      id: '2',
-      title: 'Better Road Infrastructure for Northern Regions',
-      description: 'Calling for improved road networks to connect rural communities.',
-      signatures: 8750,
-      target: 15000,
-      category: 'Infrastructure',
-      status: 'Active',
-      timeLeft: '8 days',
-      location: 'North Region'
-    },
-    {
-      id: '3',
-      title: 'Education Funding Reform',
-      description: 'Increase budget allocation for primary and secondary education.',
-      signatures: 22100,
-      target: 20000,
-      category: 'Education',
-      status: 'Successful',
-      timeLeft: 'Completed',
-      location: 'National'
+  const { user, isAuthenticated } = useAuth();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedLocation, setSelectedLocation] = useState('all');
+  const [activeTab, setActiveTab] = useState('active');
+
+  // Get petitions based on active tab and filters
+  const getFilters = () => {
+    const filters: { status?: string; category?: string } = {};
+    
+    switch (activeTab) {
+      case 'active':
+        filters.status = 'active';
+        break;
+      case 'successful':
+        filters.status = 'approved';
+        break;
+      case 'trending':
+        filters.status = 'active';
+        break;
+      case 'recent':
+        filters.status = 'active';
+        break;
     }
-  ];
+    
+    if (selectedCategory !== 'all') {
+      filters.category = selectedCategory;
+    }
+    
+    return filters;
+  };
+
+  const { data: petitions = [], isLoading, error } = usePetitions(getFilters());
+
+  // Stats query for displaying numbers
+  const { data: activePetitions } = usePetitions({ status: 'active' });
+  const { data: successfulPetitions } = usePetitions({ status: 'approved' });
+
+  const handleStartPetition = () => {
+    if (!isAuthenticated) {
+      toast.error('Please log in to start a petition');
+      return;
+    }
+    // Navigate to create petition page
+    window.location.href = URLBuilder.petitions.create();
+  };
+
+  // Calculate stats
+  const totalActivePetitions = activePetitions?.length || 0;
+  const totalSuccessfulPetitions = successfulPetitions?.length || 0;
+  const totalSignatures = petitions?.reduce((sum, petition) => sum + (petition.current_signatures || 0), 0) || 0;
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-6">
@@ -65,7 +87,7 @@ const PetitionsPage: React.FC = () => {
             Make your voice heard on issues that matter to your community
           </p>
         </div>
-        <Button>
+        <Button onClick={handleStartPetition}>
           <Plus className="w-4 h-4 mr-2" />
           Start a Petition
         </Button>
@@ -79,9 +101,9 @@ const PetitionsPage: React.FC = () => {
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">156</div>
+            <div className="text-2xl font-bold">{totalActivePetitions}</div>
             <p className="text-xs text-muted-foreground">
-              +12 from last month
+              Currently active
             </p>
           </CardContent>
         </Card>
@@ -92,9 +114,9 @@ const PetitionsPage: React.FC = () => {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">284K</div>
+            <div className="text-2xl font-bold">{totalSignatures.toLocaleString()}</div>
             <p className="text-xs text-muted-foreground">
-              +18K from last month
+              Across all petitions
             </p>
           </CardContent>
         </Card>
@@ -105,9 +127,9 @@ const PetitionsPage: React.FC = () => {
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">42</div>
+            <div className="text-2xl font-bold">{totalSuccessfulPetitions}</div>
             <p className="text-xs text-muted-foreground">
-              +3 from last month
+              Goals achieved
             </p>
           </CardContent>
         </Card>
@@ -123,23 +145,36 @@ const PetitionsPage: React.FC = () => {
             <div className="flex-1">
               <div className="relative">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search petitions..." className="pl-10" />
+                <Input 
+                  placeholder="Search petitions..." 
+                  className="pl-10" 
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
               </div>
             </div>
             <div className="flex gap-2">
-              <Select>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
                 <SelectTrigger className="w-[140px]">
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  <SelectItem value="healthcare">Healthcare</SelectItem>
+                  <SelectItem value="governance">Governance</SelectItem>
+                  <SelectItem value="justice">Justice</SelectItem>
                   <SelectItem value="education">Education</SelectItem>
-                  <SelectItem value="infrastructure">Infrastructure</SelectItem>
+                  <SelectItem value="health">Health</SelectItem>
+                  <SelectItem value="agriculture">Agriculture</SelectItem>
+                  <SelectItem value="digital_rights">Digital Rights</SelectItem>
+                  <SelectItem value="local_issues">Local Issues</SelectItem>
+                  <SelectItem value="corruption">Corruption</SelectItem>
+                  <SelectItem value="security">Security</SelectItem>
                   <SelectItem value="environment">Environment</SelectItem>
+                  <SelectItem value="traditional_authority">Traditional Authority</SelectItem>
+                  <SelectItem value="others">Others</SelectItem>
                 </SelectContent>
               </Select>
-              <Select>
+              <Select value={selectedLocation} onValueChange={setSelectedLocation}>
                 <SelectTrigger className="w-[120px]">
                   <SelectValue placeholder="Location" />
                 </SelectTrigger>
@@ -149,18 +184,22 @@ const PetitionsPage: React.FC = () => {
                   <SelectItem value="centre">Centre</SelectItem>
                   <SelectItem value="north">North</SelectItem>
                   <SelectItem value="south">South</SelectItem>
+                  <SelectItem value="east">East</SelectItem>
+                  <SelectItem value="west">West</SelectItem>
+                  <SelectItem value="southwest">Southwest</SelectItem>
+                  <SelectItem value="northwest">Northwest</SelectItem>
+                  <SelectItem value="littoral">Littoral</SelectItem>
+                  <SelectItem value="adamawa">Adamawa</SelectItem>
+                  <SelectItem value="far_north">Far North</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" size="icon">
-                <Filter className="h-4 w-4" />
-              </Button>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Petitions Tabs */}
-      <Tabs defaultValue="active" className="w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="active">Active</TabsTrigger>
           <TabsTrigger value="trending">Trending</TabsTrigger>
@@ -169,72 +208,107 @@ const PetitionsPage: React.FC = () => {
         </TabsList>
 
         <TabsContent value="active" className="space-y-4">
-          <div className="grid gap-4">
-            {mockPetitions.map((petition) => (
-              <Card key={petition.id} className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg mb-2">{petition.title}</CardTitle>
-                      <CardDescription className="text-sm">
-                        {petition.description}
-                      </CardDescription>
+          {isLoading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardContent className="p-6">
+                    <div className="space-y-3">
+                      <div className="h-6 bg-muted rounded w-3/4" />
+                      <div className="h-4 bg-muted rounded w-full" />
+                      <div className="h-4 bg-muted rounded w-2/3" />
                     </div>
-                    <div className="flex flex-col items-end gap-2">
-                      <Badge variant={petition.status === 'Successful' ? 'default' : 'secondary'}>
-                        {petition.status}
-                      </Badge>
-                      <Badge variant="outline">{petition.category}</Badge>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div>
-                      <div className="flex justify-between text-sm mb-2">
-                        <span>{petition.signatures.toLocaleString()} signatures</span>
-                        <span>{petition.target.toLocaleString()} target</span>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-primary h-2 rounded-full" 
-                          style={{ width: `${(petition.signatures / petition.target) * 100}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <div className="flex items-center gap-1">
-                          <Clock className="w-4 h-4" />
-                          {petition.timeLeft}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <Target className="w-4 h-4" />
-                          {petition.location}
-                        </div>
-                      </div>
-                      <Button size="sm">
-                        Sign Petition
-                      </Button>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : error ? (
+            <Card>
+              <CardContent className="text-center py-12">
+                <AlertCircle className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="text-lg font-medium mb-2">Error Loading Petitions</h3>
+                <p className="text-muted-foreground">There was an error loading the petitions. Please try again later.</p>
+              </CardContent>
+            </Card>
+          ) : (
+            <PetitionList 
+              category={selectedCategory !== 'all' ? selectedCategory : undefined}
+              searchQuery={searchQuery}
+              limit={20}
+            />
+          )}
         </TabsContent>
 
         <TabsContent value="trending" className="space-y-4">
-          <p className="text-muted-foreground">Trending petitions will be displayed here...</p>
+          {isLoading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardContent className="p-6">
+                    <div className="space-y-3">
+                      <div className="h-6 bg-muted rounded w-3/4" />
+                      <div className="h-4 bg-muted rounded w-full" />
+                      <div className="h-4 bg-muted rounded w-2/3" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <PetitionList 
+              category={selectedCategory !== 'all' ? selectedCategory : undefined}
+              searchQuery={searchQuery}
+              limit={20}
+            />
+          )}
         </TabsContent>
 
         <TabsContent value="successful" className="space-y-4">
-          <p className="text-muted-foreground">Successful petitions will be displayed here...</p>
+          {isLoading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardContent className="p-6">
+                    <div className="space-y-3">
+                      <div className="h-6 bg-muted rounded w-3/4" />
+                      <div className="h-4 bg-muted rounded w-full" />
+                      <div className="h-4 bg-muted rounded w-2/3" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <PetitionList 
+              category={selectedCategory !== 'all' ? selectedCategory : undefined}
+              searchQuery={searchQuery}
+              limit={20}
+            />
+          )}
         </TabsContent>
 
         <TabsContent value="recent" className="space-y-4">
-          <p className="text-muted-foreground">Recent petitions will be displayed here...</p>
+          {isLoading ? (
+            <div className="space-y-4">
+              {[...Array(3)].map((_, i) => (
+                <Card key={i} className="animate-pulse">
+                  <CardContent className="p-6">
+                    <div className="space-y-3">
+                      <div className="h-6 bg-muted rounded w-3/4" />
+                      <div className="h-4 bg-muted rounded w-full" />
+                      <div className="h-4 bg-muted rounded w-2/3" />
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <PetitionList 
+              category={selectedCategory !== 'all' ? selectedCategory : undefined}
+              searchQuery={searchQuery}
+              limit={20}
+            />
+          )}
         </TabsContent>
       </Tabs>
     </div>

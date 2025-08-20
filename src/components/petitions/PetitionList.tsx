@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Users, Clock, MapPin, Target, TrendingUp } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/utils/auth';
 import { toast } from 'sonner';
 
 interface Petition {
@@ -37,6 +38,7 @@ export const PetitionList: React.FC<PetitionListProps> = ({
 }) => {
   const [petitions, setPetitions] = useState<Petition[]>([]);
   const [loading, setLoading] = useState(true);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     fetchPetitions();
@@ -219,7 +221,7 @@ export const PetitionList: React.FC<PetitionListProps> = ({
               <div className="flex gap-3 pt-2">
                 <Link to={URLBuilder.petitions.detail({ id: petition.id, title: petition.title })} className="flex-1">
                   <Button variant="default" className="w-full petition-btn-sign">
-                    Sign Petition
+                    {isAuthenticated ? 'Sign Petition' : 'View & Sign'}  
                   </Button>
                 </Link>
                 <Button variant="outline" size="sm" className="petition-btn-share">
