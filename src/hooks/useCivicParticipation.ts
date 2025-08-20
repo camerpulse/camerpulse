@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 // Petitions
 export function usePetitions(filters?: { status?: string; category?: string }) {
@@ -28,7 +28,6 @@ export function usePetitions(filters?: { status?: string; category?: string }) {
 
 export function useCreatePetition() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async (petition: {
@@ -45,26 +44,34 @@ export function useCreatePetition() {
 
       const { data, error } = await supabase
         .from('petitions')
-        .insert([{ ...petition, creator_id: user.id }])
+        .insert([{ 
+          ...petition, 
+          creator_id: user.id,
+          status: 'active',
+          current_signatures: 0
+        }])
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Database error:', error);
+        throw error;
+      }
       return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['petitions'] });
-      toast({
-        title: "Petition Created",
-        description: "Your petition has been created successfully.",
-      });
+      toast.success('Petition created successfully!');
+    },
+    onError: (error) => {
+      console.error('Create petition error:', error);
+      toast.error('Failed to create petition. Please try again.');
     }
   });
 }
 
 export function useSignPetition() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async (signatureData: {
@@ -89,10 +96,10 @@ export function useSignPetition() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['petitions'] });
       queryClient.invalidateQueries({ queryKey: ['petition-signatures'] });
-      toast({
-        title: "Petition Signed",
-        description: "Thank you for signing this petition!",
-      });
+      toast.success('Thank you for signing this petition!');
+    },
+    onError: () => {
+      toast.error('Failed to sign petition. Please try again.');
     }
   });
 }
@@ -137,7 +144,6 @@ export function useForumTopics(categoryId?: string) {
 
 export function useCreateForumTopic() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async (topic: {
@@ -160,10 +166,10 @@ export function useCreateForumTopic() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['forum-topics'] });
-      toast({
-        title: "Topic Created",
-        description: "Your topic has been posted successfully.",
-      });
+      toast.success('Your topic has been posted successfully.');
+    },
+    onError: () => {
+      toast.error('Failed to create topic. Please try again.');
     }
   });
 }
@@ -194,7 +200,6 @@ export function useCommunityEvents(filters?: { status?: string; event_type?: str
 
 export function useCreateEvent() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async (event: {
@@ -225,17 +230,16 @@ export function useCreateEvent() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['community-events'] });
-      toast({
-        title: "Event Created",
-        description: "Your event has been created successfully.",
-      });
+      toast.success('Your event has been created successfully.');
+    },
+    onError: () => {
+      toast.error('Failed to create event. Please try again.');
     }
   });
 }
 
 export function useRegisterForEvent() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async (eventId: string) => {
@@ -253,10 +257,10 @@ export function useRegisterForEvent() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['community-events'] });
-      toast({
-        title: "Registration Successful",
-        description: "You have successfully registered for this event.",
-      });
+      toast.success('You have successfully registered for this event.');
+    },
+    onError: () => {
+      toast.error('Failed to register for event. Please try again.');
     }
   });
 }
@@ -287,7 +291,6 @@ export function useVolunteerOpportunities(filters?: { category?: string; status?
 
 export function useCreateVolunteerOpportunity() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async (opportunity: {
@@ -316,17 +319,16 @@ export function useCreateVolunteerOpportunity() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['volunteer-opportunities'] });
-      toast({
-        title: "Opportunity Created",
-        description: "Your volunteer opportunity has been posted.",
-      });
+      toast.success('Your volunteer opportunity has been posted.');
+    },
+    onError: () => {
+      toast.error('Failed to create opportunity. Please try again.');
     }
   });
 }
 
 export function useApplyForVolunteer() {
   const queryClient = useQueryClient();
-  const { toast } = useToast();
 
   return useMutation({
     mutationFn: async (application: {
@@ -347,10 +349,10 @@ export function useApplyForVolunteer() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['volunteer-opportunities'] });
-      toast({
-        title: "Application Submitted",
-        description: "Your volunteer application has been submitted.",
-      });
+      toast.success('Your volunteer application has been submitted.');
+    },
+    onError: () => {
+      toast.error('Failed to submit application. Please try again.');
     }
   });
 }

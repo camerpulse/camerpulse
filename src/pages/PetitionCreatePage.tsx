@@ -130,7 +130,7 @@ const PetitionCreatePage: React.FC = () => {
     try {
       const petition = await createPetitionMutation.mutateAsync({
         ...formData,
-        deadline: formData.deadline || null
+        deadline: formData.deadline || undefined
       });
 
       toast.success('Petition created successfully!');
@@ -138,9 +138,9 @@ const PetitionCreatePage: React.FC = () => {
         id: petition.id, 
         title: petition.title 
       }));
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating petition:', error);
-      toast.error('Failed to create petition. Please try again.');
+      toast.error(error?.message || 'Failed to create petition. Please try again.');
     }
   };
 
