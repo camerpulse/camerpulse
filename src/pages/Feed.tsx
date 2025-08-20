@@ -14,6 +14,7 @@ import { useToast } from '@/hooks/use-toast';
 import { usePosts } from '@/hooks/usePosts';
 import { PostCard } from '@/components/feed/PostCard';
 import { PostComposer } from '@/components/feed/PostComposer';
+import { useFeedRealtime } from '@/hooks/useFeedRealtime';
 import {
   Users,
   Search,
@@ -70,6 +71,9 @@ export default function Feed() {
     refetch,
     isFetching 
   } = usePosts(20, 0);
+
+  // Realtime sync for posts/interactions/comments
+  useFeedRealtime(20, 0);
 
   const handleRefresh = () => {
     refetch();
