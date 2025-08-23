@@ -81,9 +81,9 @@ export const SecurityAuditManager: React.FC<SecurityAuditManagerProps> = ({
           type: 'high',
           title: 'Infinite Recursion in RLS Policies',
           category: 'Database Security',
-          description: 'Detected infinite recursion in shipping_company_staff and related table policies',
+          description: 'Detected infinite recursion in related table policies',
           recommendation: 'Refactor RLS policies to use security definer functions',
-          affected_resource: 'shipping_company_staff, marketplace_orders',
+          affected_resource: 'civic_complaints, user_roles',
           status: 'acknowledged',
           created_at: new Date(Date.now() - 86400000).toISOString(),
           updated_at: new Date().toISOString()

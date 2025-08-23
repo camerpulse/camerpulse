@@ -161,7 +161,7 @@ export const SecurityAuditSuite: React.FC<SecurityAuditSuiteProps> = ({
     // Category 7: Admin Function Security
     const adminFunctions = [
       'users', 'content', 'analytics', 'security', 'legal', 'finance',
-      'elections', 'marketplace', 'promises', 'donations', 'news'
+      'elections', 'promises', 'donations', 'news'
     ];
 
     adminFunctions.forEach(func => {

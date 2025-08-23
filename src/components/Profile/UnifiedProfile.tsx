@@ -56,7 +56,6 @@ export const UnifiedProfile: React.FC<UnifiedProfileProps> = ({
     profile,
     musicProfile,
     jobProfile,
-    marketplaceProfile,
     healthcareProfile,
     villageMemberships,
     loading,
@@ -196,15 +195,6 @@ export const UnifiedProfile: React.FC<UnifiedProfileProps> = ({
               </TabsTrigger>
             )}
 
-            {marketplaceProfile && (
-              <TabsTrigger 
-                value="marketplace" 
-                className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
-              >
-                <ShoppingBag className="h-4 w-4" />
-                <span className="hidden sm:inline">Business</span>
-              </TabsTrigger>
-            )}
 
             {healthcareProfile && (
               <TabsTrigger 
@@ -224,7 +214,6 @@ export const UnifiedProfile: React.FC<UnifiedProfileProps> = ({
             <ProfileModules 
               musicProfile={musicProfile}
               jobProfile={jobProfile}
-              marketplaceProfile={marketplaceProfile}
               healthcareProfile={healthcareProfile}
               villageMemberships={villageMemberships}
             />
@@ -318,44 +307,6 @@ export const UnifiedProfile: React.FC<UnifiedProfileProps> = ({
             )}
           </TabsContent>
 
-          <TabsContent value="marketplace" className="space-y-6">
-            {marketplaceProfile ? (
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Building className="h-5 w-5 text-primary" />
-                    <h3 className="text-lg font-semibold">Marketplace Profile</h3>
-                  </div>
-                  <div className="space-y-4">
-                    {marketplaceProfile.business_name && (
-                      <div>
-                        <h4 className="font-medium mb-2">Business Name</h4>
-                        <p className="text-muted-foreground">{marketplaceProfile.business_name}</p>
-                      </div>
-                    )}
-                    {marketplaceProfile.business_type && (
-                      <div>
-                        <h4 className="font-medium mb-2">Business Type</h4>
-                        <p className="text-muted-foreground">{marketplaceProfile.business_type}</p>
-                      </div>
-                    )}
-                    {marketplaceProfile.business_description && (
-                      <div>
-                        <h4 className="font-medium mb-2">Description</h4>
-                        <p className="text-muted-foreground">{marketplaceProfile.business_description}</p>
-                      </div>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="text-center py-12">
-                <Building className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                <h3 className="text-lg font-medium text-foreground mb-2">No Marketplace Profile</h3>
-                <p className="text-muted-foreground">This user hasn't set up a marketplace profile yet.</p>
-              </div>
-            )}
-          </TabsContent>
 
           <TabsContent value="healthcare" className="space-y-6">
             {healthcareProfile ? (

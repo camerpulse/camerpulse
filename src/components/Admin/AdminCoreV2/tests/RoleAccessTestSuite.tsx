@@ -82,7 +82,7 @@ export const RoleAccessTestSuite: React.FC<RoleAccessTestSuiteProps> = ({
     // Test 4: Module Access Control
     const modules = [
       'users', 'content', 'analytics', 'security', 'legal', 'finance',
-      'elections', 'marketplace', 'promises', 'donations', 'news', 
+      'elections', 'promises', 'donations', 'news', 
       'political_parties', 'regional_analytics'
     ];
 

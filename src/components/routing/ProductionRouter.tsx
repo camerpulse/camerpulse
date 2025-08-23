@@ -33,11 +33,6 @@ import {
   LazySchoolsDirectory,
   LazyHospitalsDirectory,
   LazyCompanyProfile,
-  LazyMarketplace,
-  LazyMarketplaceProducts,
-  LazyMarketplaceVendors,
-  LazyVendorDetailPage,
-  LazyProductDetailPage,
   LazyJobBoard,
   LazyJobDetailPage,
   LazyCompanyDashboard,
@@ -55,7 +50,6 @@ import {
   LazyMusicProfile,
   LazyJobProfile,
   LazyVillageMemberProfile,
-  LazyMarketplaceProfile,
   LazyMessengerPage,
   LazyNotificationSettingsPage,
   LazyAdvancedSearchPage,
@@ -338,48 +332,6 @@ export const ProductionRouter: React.FC = () => {
           } 
         />
         
-        {/* Marketplace */}
-        <Route 
-          path="/marketplace" 
-          element={
-            <Suspense fallback={<ProductionLoadingFallback message="Loading marketplace..." />}>
-              <LazyMarketplace />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/marketplace/products" 
-          element={
-            <Suspense fallback={<ProductionLoadingFallback message="Loading products..." />}>
-              <LazyMarketplaceProducts />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/marketplace/vendors" 
-          element={
-            <Suspense fallback={<ProductionLoadingFallback message="Loading vendors..." />}>
-              <LazyMarketplaceVendors />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/marketplace/vendors/:vendorSlug" 
-          element={
-            <Suspense fallback={<ProductionLoadingFallback message="Loading vendor..." />}>
-              <LazyVendorDetailPage />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/marketplace/products/:productSlug-:id" 
-          element={
-            <Suspense fallback={<ProductionLoadingFallback message="Loading product..." />}>
-              <LazyProductDetailPage />
-            </Suspense>
-          } 
-        />
-        
         {/* Jobs */}
         <Route 
           path="/jobs" 
@@ -498,14 +450,6 @@ export const ProductionRouter: React.FC = () => {
           element={
             <Suspense fallback={<ProductionLoadingFallback message="Loading village member..." />}>
               <LazyVillageMemberProfile />
-            </Suspense>
-          } 
-        />
-        <Route 
-          path="/marketplace/vendors/:username-:id" 
-          element={
-            <Suspense fallback={<ProductionLoadingFallback message="Loading vendor profile..." />}>
-              <LazyMarketplaceProfile />
             </Suspense>
           } 
         />

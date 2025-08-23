@@ -22,7 +22,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 
-type UserRole = 'admin' | 'moderator' | 'verified_politician' | 'verified_vendor' | 'user';
+type UserRole = 'admin' | 'moderator' | 'verified_politician' | 'user';
 
 interface UserWithRole {
   id: string;
@@ -55,7 +55,6 @@ const rolePermissions: RolePermissions = {
       'Access admin dashboard',
       'Manage CamerPulse Intelligence',
       'Handle civic alerts',
-      'Manage marketplace',
       'Access security logs',
       'Manage system settings'
     ]
@@ -85,18 +84,6 @@ const rolePermissions: RolePermissions = {
       'View analytics'
     ]
   },
-  verified_vendor: {
-    name: 'Verified Vendor',
-    description: 'Verified marketplace vendor',
-    icon: <CheckCircle className="h-4 w-4" />,
-    color: 'bg-green-500 text-white',
-    permissions: [
-      'Manage vendor profile',
-      'List products',
-      'Process orders',
-      'Access vendor analytics'
-    ]
-  },
   user: {
     name: 'User',
     description: 'Standard user access',
@@ -106,7 +93,6 @@ const rolePermissions: RolePermissions = {
       'View content',
       'Create posts',
       'Vote in polls',
-      'Use marketplace',
       'Send messages'
     ]
   }

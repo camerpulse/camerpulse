@@ -47,7 +47,7 @@ export const CamerJobsFooter = () => {
               <li>
                 <Link to="/experts" className="text-muted-foreground hover:text-primary flex items-center">
                   <Star className="mr-2 h-4 w-4" />
-                  Expert Marketplace
+                  Civic Expert Platform
                 </Link>
               </li>
               <li>

@@ -119,27 +119,3 @@ export const JobPageWrapper: React.FC<{ children: React.ReactNode; job?: any }> 
     {children}
   </SEOPageWrapper>
 );
-
-export const MarketplacePageWrapper: React.FC<{ children: React.ReactNode; product?: any }> = ({ 
-  children, 
-  product 
-}) => (
-  <SEOPageWrapper
-    title={product ? `${product.name} - ${product.vendor} | CamerPulse Marketplace` : 'Marketplace - CamerPulse'}
-    description={product ? 
-      `${product.name} by ${product.vendor}. ${product.description} Available in ${product.location}. Shop local products on CamerPulse.` :
-      'Discover local products and services from verified vendors across Cameroon. Support local businesses and find quality goods.'
-    }
-    keywords="marketplace, local products, vendors, shopping, cameroon, local business"
-    structuredData={product ? {
-      "@context": "https://schema.org",
-      "@type": "Product",
-      "name": product.name,
-      "description": product.description,
-      "offers": { "@type": "Offer", "price": product.price, "priceCurrency": "XAF" },
-      "brand": { "@type": "Organization", "name": product.vendor }
-    } : undefined}
-  >
-    {children}
-  </SEOPageWrapper>
-);

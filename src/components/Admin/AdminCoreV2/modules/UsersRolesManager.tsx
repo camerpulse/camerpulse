@@ -121,7 +121,6 @@ export const UsersRolesManager: React.FC<UsersRolesManagerProps> = ({
                 <SelectItem value="moderator">Moderator</SelectItem>
                 <SelectItem value="user">User</SelectItem>
                 <SelectItem value="verified_politician">Politician</SelectItem>
-                <SelectItem value="verified_vendor">Vendor</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -176,7 +175,7 @@ export const UsersRolesManager: React.FC<UsersRolesManagerProps> = ({
                         <SelectItem value="moderator">Moderator</SelectItem>
                         <SelectItem value="admin">Admin</SelectItem>
                         <SelectItem value="verified_politician">Politician</SelectItem>
-                        <SelectItem value="verified_vendor">Vendor</SelectItem>
+                        
                       </SelectContent>
                     </Select>
                     
