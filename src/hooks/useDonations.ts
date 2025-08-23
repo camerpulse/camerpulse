@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface DonationCause {
@@ -51,6 +52,30 @@ export function useDonationCauses() {
 
 export function useDonationsAdmin() {
   const queryClient = useQueryClient();
+  
+  // Set up real-time subscription for donations
+  useEffect(() => {
+    const channel = supabase
+      .channel('donations-realtime')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'donations'
+        },
+        () => {
+          // Invalidate donations query when any change occurs
+          queryClient.invalidateQueries({ queryKey: ['donations', 'admin'] });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient]);
+
   const donationsQuery = useQuery({
     queryKey: ['donations', 'admin'],
     queryFn: async (): Promise<DonationItem[]> => {
