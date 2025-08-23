@@ -2,7 +2,8 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Heart, DollarSign, Users, TrendingUp } from 'lucide-react';
+import { Heart, DollarSign, Users, TrendingUp, Loader2 } from 'lucide-react';
+import { useDonationsAdmin } from '@/hooks/useDonations';
 
 interface DonationsManagerProps {
   hasPermission: (permission: string) => boolean;
@@ -15,32 +16,11 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
   logActivity,
   stats
 }) => {
-  // Mock data for donations
-  const donations = [
-    {
-      id: '1',
-      donor_name: 'Anonymous',
-      amount: 50000,
-      currency: 'FCFA',
-      cause: 'Education Development',
-      status: 'completed',
-      created_at: '2024-01-15T10:00:00Z'
-    },
-    {
-      id: '2',
-      donor_name: 'John Doe',
-      amount: 25000,
-      currency: 'FCFA',
-      cause: 'Healthcare Support',
-      status: 'pending',
-      created_at: '2024-01-14T15:30:00Z'
-    }
-  ];
+  // Load donations from Supabase (admin view)
+  const { donations, stats: donationStats, isLoading, processDonation, processing } = useDonationsAdmin();
 
-  const totalDonations = donations.reduce((sum, d) => sum + d.amount, 0);
-  const completedDonations = donations.filter(d => d.status === 'completed');
-
-  const handleProcessDonation = (donationId: string) => {
+  const handleProcessDonation = async (donationId: string) => {
+    await processDonation(donationId);
     logActivity('donation_processed', { donation_id: donationId });
   };
 
@@ -60,7 +40,7 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
             <div className="flex items-center space-x-2">
               <DollarSign className="h-5 w-5 text-green-600" />
               <div>
-                <p className="text-2xl font-bold">{totalDonations.toLocaleString()}</p>
+                <p className="text-2xl font-bold">{donationStats.totalAmount.toLocaleString()}</p>
                 <p className="text-sm text-muted-foreground">Total FCFA</p>
               </div>
             </div>
@@ -84,7 +64,7 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
             <div className="flex items-center space-x-2">
               <Users className="h-5 w-5 text-blue-600" />
               <div>
-                <p className="text-2xl font-bold">{completedDonations.length}</p>
+                <p className="text-2xl font-bold">{donationStats.completedCount}</p>
                 <p className="text-sm text-muted-foreground">Completed</p>
               </div>
             </div>
@@ -97,7 +77,7 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
               <TrendingUp className="h-5 w-5 text-purple-600" />
               <div>
                 <p className="text-2xl font-bold">
-                  {donations.length > 0 ? Math.round(totalDonations / donations.length).toLocaleString() : 0}
+                  {donations.length > 0 ? donationStats.avgAmount.toLocaleString() : 0}
                 </p>
                 <p className="text-sm text-muted-foreground">Avg Amount</p>
               </div>
@@ -113,13 +93,16 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {donations.map((donation) => (
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8 text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading donations...</div>
+            ) : (
+              donations.map((donation) => (
               <div key={donation.id} className="flex items-center justify-between p-4 border rounded-lg">
                 <div className="flex items-center space-x-4">
                   <div>
                     <h3 className="font-semibold">{donation.donor_name}</h3>
                     <p className="text-sm text-muted-foreground">
-                      {donation.amount.toLocaleString()} {donation.currency} • {donation.cause}
+                      {donation.amount.toLocaleString()} {donation.currency} • {donation.cause?.name || '—'}
                     </p>
                   </div>
                   <Badge variant={donation.status === 'completed' ? 'default' : 'secondary'}>
@@ -141,9 +124,9 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
                 </div>
               </div>
             ))}
+          )}
           </div>
-
-          {donations.length === 0 && (
+          {!isLoading && donations.length === 0 && (
             <div className="text-center py-12">
               <Heart className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-lg font-semibold mb-2">No Donations Yet</h3>

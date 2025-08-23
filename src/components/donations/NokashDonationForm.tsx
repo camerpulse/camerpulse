@@ -12,6 +12,8 @@ import { useNokashPayment } from '@/hooks/useNokashPayment';
 import { PaymentStatusModal } from './PaymentStatusModal';
 import { TransactionHistory } from './TransactionHistory';
 import { Loader2, Smartphone, CreditCard, CheckCircle, Eye, History } from 'lucide-react';
+import { CauseSelector } from './CauseSelector';
+import { useDonationCauses } from '@/hooks/useDonations';
 
 interface NokashConfig {
   supported_networks: string[];
@@ -33,6 +35,8 @@ export const NokashDonationForm: React.FC = () => {
   const [currentOrderId, setCurrentOrderId] = useState<string | null>(null);
   const [showStatusModal, setShowStatusModal] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [causeId, setCauseId] = useState<string>('');
+  const { causes } = useDonationCauses();
   
   const { toast } = useToast();
   const { user } = useAuth();
@@ -91,7 +95,7 @@ export const NokashDonationForm: React.FC = () => {
 
     const finalAmount = customAmount || amount;
     
-    if (!phone || !finalAmount || !paymentMethod) {
+    if (!phone || !finalAmount || !paymentMethod || !causeId) {
       toast({
         title: "Missing Information",
         description: "Please fill in all required fields",
@@ -126,6 +130,21 @@ export const NokashDonationForm: React.FC = () => {
       const orderId = generateOrderId();
       const formattedPhone = formatPhoneNumber(phone);
 
+      // Create donation record (pending)
+      await supabase.from('donations').insert({
+        user_id: user?.id ?? null,
+        cause_id: causeId,
+        amount: amountNum,
+        currency: 'FCFA',
+        payment_method: paymentMethod,
+        phone_number: formattedPhone,
+        donor_name: user?.user_metadata?.full_name ?? null,
+        donor_email: user?.email ?? null,
+        message,
+        status: 'pending',
+        nokash_order_id: orderId,
+      });
+
       const result = await initiateMobileMoneyPayment({
         order_id: orderId,
         amount: amountNum,
@@ -143,8 +162,9 @@ export const NokashDonationForm: React.FC = () => {
         setPhone('');
         setAmount('');
         setCustomAmount('');
+        setCauseId('');
         
-        // Start polling for status updates
+        // Start polling for status updates (status updates handled by admin/reconciliation)
         pollTransactionStatus(result.order_id!, (status) => {
           if (status.status === 'SUCCESS') {
             toast({
@@ -231,6 +251,20 @@ export const NokashDonationForm: React.FC = () => {
               <p className="text-xs text-muted-foreground">
                 Enter your mobile money number (without country code)
               </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Cause</Label>
+              <Select value={causeId} onValueChange={setCauseId}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a cause" />
+                </SelectTrigger>
+                <SelectContent>
+                  {causes.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="space-y-2">
