@@ -62,12 +62,6 @@ export const ROUTES = {
       LEADERBOARD: '/jobs/leaderboard',
       DETAIL: '/jobs/:jobSlug-:id',
     },
-    MARKETPLACE: {
-      HOME: '/marketplace',
-      VENDORS: '/marketplace/vendors',
-      VENDOR_DETAIL: '/marketplace/vendors/:vendorSlug-:id',
-      PRODUCT_DETAIL: '/marketplace/:productSlug-:id',
-    },
     MUSIC: '/music',
   },
   

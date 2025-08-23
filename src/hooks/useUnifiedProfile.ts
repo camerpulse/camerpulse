@@ -61,20 +61,6 @@ export interface JobProfile {
   updated_at: string;
 }
 
-export interface MarketplaceProfile {
-  id: string;
-  user_id: string;
-  business_name?: string;
-  business_type?: string;
-  business_description?: string;
-  business_category?: string[];
-  is_verified_vendor: boolean;
-  total_sales?: number;
-  average_rating?: number;
-  created_at: string;
-  updated_at: string;
-}
-
 export interface HealthcareProfile {
   id: string;
   user_id: string;
@@ -103,7 +89,6 @@ export const useUnifiedProfile = (userId?: string, username?: string) => {
   const [profile, setProfile] = useState<UnifiedProfile | null>(null);
   const [musicProfile, setMusicProfile] = useState<MusicProfile | null>(null);
   const [jobProfile, setJobProfile] = useState<JobProfile | null>(null);
-  const [marketplaceProfile, setMarketplaceProfile] = useState<MarketplaceProfile | null>(null);
   const [healthcareProfile, setHealthcareProfile] = useState<HealthcareProfile | null>(null);
   const [villageMemberships, setVillageMemberships] = useState<VillageMembership[]>([]);
   const [loading, setLoading] = useState(false);
@@ -141,20 +126,17 @@ export const useUnifiedProfile = (userId?: string, username?: string) => {
       const [
         { data: music },
         { data: job },
-        { data: marketplace },
         { data: healthcare },
         { data: villages }
       ] = await Promise.all([
         supabase.from('music_profiles').select('*').eq('user_id', targetUserId).maybeSingle(),
         supabase.from('job_profiles').select('*').eq('user_id', targetUserId).maybeSingle(),
-        supabase.from('marketplace_profiles').select('*').eq('user_id', targetUserId).maybeSingle(),
         supabase.from('healthcare_profiles').select('*').eq('user_id', targetUserId).maybeSingle(),
         supabase.from('village_memberships').select('*').eq('user_id', targetUserId)
       ]);
       
       setMusicProfile(music);
       setJobProfile(job);
-      setMarketplaceProfile(marketplace);
       setHealthcareProfile(healthcare);
       setVillageMemberships(villages || []);
       
@@ -222,7 +204,6 @@ export const useUnifiedProfile = (userId?: string, username?: string) => {
     profile,
     musicProfile,
     jobProfile,
-    marketplaceProfile,
     healthcareProfile,
     villageMemberships,
     loading,
