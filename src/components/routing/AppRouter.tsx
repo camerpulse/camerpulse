@@ -16,6 +16,7 @@ import { ROUTES } from '@/config/routes';
 const Index = lazy(() => import('@/pages/Index'));
 const AboutUs = lazy(() => import('@/pages/AboutUs'));
 const AuthPage = lazy(() => import('@/pages/AuthPage'));
+const UnifiedAuthPage = lazy(() => import('@/pages/UnifiedAuthPage'));
 const ResetPasswordPage = lazy(() => import('@/pages/ResetPasswordPage'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
@@ -208,15 +209,19 @@ export const AppRouter: React.FC = () => {
         {/* === AUTHENTICATION === */}
         <Route 
           path="/login" 
-          element={<WrappedRoute element={AuthPage} routeName="Login" />} 
+          element={<WrappedRoute element={UnifiedAuthPage} routeName="Login" />} 
         />
         <Route 
           path="/register" 
-          element={<WrappedRoute element={AuthPage} routeName="Register" />} 
+          element={<WrappedRoute element={UnifiedAuthPage} routeName="Register" />} 
         />
         <Route 
           path="/auth" 
-          element={<WrappedRoute element={AuthPage} routeName="Authentication" />} 
+          element={<WrappedRoute element={UnifiedAuthPage} routeName="Authentication" />} 
+        />
+        <Route 
+          path="/diaspora-auth" 
+          element={<WrappedRoute element={UnifiedAuthPage} routeName="Diaspora Authentication" />} 
         />
         <Route 
           path="/auth/reset-password" 

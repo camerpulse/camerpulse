@@ -288,12 +288,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       if (!error) {
         console.log('[Auth] SignOut successful, clearing state...');
-        // Clear all user-related state
+        // Clear all user-related state immediately
         setProfile(null);
         setUserRoles([]);
         setPermissions([]);
         setUser(null);
         setSession(null);
+        
+        console.log('[Auth] All state cleared successfully');
       } else {
         console.error('[Auth] SignOut error:', error);
       }

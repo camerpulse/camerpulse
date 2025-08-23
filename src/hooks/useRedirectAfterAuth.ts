@@ -8,18 +8,20 @@ export const useRedirectAfterAuth = () => {
   const { user, profile } = useAuth();
 
   useEffect(() => {
-    if (user && profile) {
-      // Get the intended destination from location state
-      const from = (location.state as any)?.from?.pathname || '/';
+    if (user) {
+      // Get the intended destination from location state or URL params
+      const urlParams = new URLSearchParams(location.search);
+      const redirectParam = urlParams.get('redirect');
+      const from = redirectParam || (location.state as any)?.from?.pathname || '/';
       
       // Smart redirect logic
-      if (from === '/auth' || from === '/login' || from === '/register') {
-        // If coming from auth pages, redirect to feed
+      if (from === '/auth' || from === '/login' || from === '/register' || from === '/diaspora-auth' || from === '/') {
+        // If coming from auth pages or home, redirect to feed
         navigate('/feed', { replace: true });
       } else {
         // Redirect to the originally intended page
         navigate(from, { replace: true });
       }
     }
-  }, [user, profile, navigate, location]);
+  }, [user, navigate, location]);
 };
