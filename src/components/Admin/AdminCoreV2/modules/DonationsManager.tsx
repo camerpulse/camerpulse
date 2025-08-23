@@ -94,37 +94,39 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
         <CardContent>
           <div className="space-y-4">
             {isLoading ? (
-              <div className="flex items-center justify-center py-8 text-muted-foreground"><Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading donations...</div>
+              <div className="flex items-center justify-center py-8 text-muted-foreground">
+                <Loader2 className="h-5 w-5 animate-spin mr-2" /> Loading donations...
+              </div>
             ) : (
               donations.map((donation) => (
-              <div key={donation.id} className="flex items-center justify-between p-4 border rounded-lg">
-                <div className="flex items-center space-x-4">
-                  <div>
-                    <h3 className="font-semibold">{donation.donor_name}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {donation.amount.toLocaleString()} {donation.currency} • {donation.cause?.name || '—'}
-                    </p>
+                <div key={donation.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div className="flex items-center space-x-4">
+                    <div>
+                      <h3 className="font-semibold">{donation.donor_name}</h3>
+                      <p className="text-sm text-muted-foreground">
+                        {donation.amount.toLocaleString()} {donation.currency} • {donation.cause?.name || '—'}
+                      </p>
+                    </div>
+                    <Badge variant={donation.status === 'completed' ? 'default' : 'secondary'}>
+                      {donation.status}
+                    </Badge>
                   </div>
-                  <Badge variant={donation.status === 'completed' ? 'default' : 'secondary'}>
-                    {donation.status}
-                  </Badge>
-                </div>
-                <div className="flex items-center space-x-2">
-                  {donation.status === 'pending' && (
-                    <Button
-                      size="sm"
-                      onClick={() => handleProcessDonation(donation.id)}
-                    >
-                      Process
+                  <div className="flex items-center space-x-2">
+                    {donation.status === 'pending' && (
+                      <Button
+                        size="sm"
+                        onClick={() => handleProcessDonation(donation.id)}
+                      >
+                        Process
+                      </Button>
+                    )}
+                    <Button variant="outline" size="sm">
+                      View Details
                     </Button>
-                  )}
-                  <Button variant="outline" size="sm">
-                    View Details
-                  </Button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          )}
+              ))
+            )}
           </div>
           {!isLoading && donations.length === 0 && (
             <div className="text-center py-12">
