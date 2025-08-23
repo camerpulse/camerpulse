@@ -151,6 +151,7 @@ export const mockPoliticians = [
 
 
 
+// Marketplace vendors removed - no longer needed
 export const mockVendors = [
   {
     id: '1',

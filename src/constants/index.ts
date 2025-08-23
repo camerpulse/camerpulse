@@ -309,5 +309,5 @@ export const FEATURE_FLAGS = {
   ENABLE_CHAT: true,
   ENABLE_POLLS: true,
   ENABLE_EVENTS: true,
-  ENABLE_MARKETPLACE: true,
+  ENABLE_MARKETPLACE: false,
 } as const;

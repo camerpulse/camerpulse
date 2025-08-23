@@ -136,7 +136,7 @@ export const ROUTE_PROTECTION = {
     ROUTES.CIVIC.FEED,
     ROUTES.POLITICAL.POLITICIANS,
     ROUTES.DIRECTORIES.VILLAGES,
-    ROUTES.COMMUNITY.MARKETPLACE.HOME,
+    
     ROUTES.UTILITY.ABOUT,
     ROUTES.UTILITY.CONTACT,
     ROUTES.LEGAL.PRIVACY,
@@ -183,11 +183,6 @@ export const getRouteMetadata = (path: string) => {
       title: 'Jobs Board - CamerPulse',
       description: 'Find opportunities and connect with employers across Africa.',
       breadcrumb: 'Jobs',
-    },
-    [ROUTES.COMMUNITY.MARKETPLACE.HOME]: {
-      title: 'Marketplace - CamerPulse',
-      description: 'Discover local products and services from verified vendors across Cameroon.',
-      breadcrumb: 'Marketplace',
     },
   } as const;
 

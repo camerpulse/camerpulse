@@ -66,8 +66,6 @@ export const VillageChat: React.FC = () => {
       lastActivity: '15 minutes ago'
     },
     {
-      id: 'marketplace',
-      name: 'Village Marketplace',
       description: 'Buy, sell, and trade within the village',
       memberCount: 178,
       lastActivity: '5 minutes ago'
