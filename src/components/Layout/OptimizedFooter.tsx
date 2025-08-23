@@ -88,7 +88,7 @@ const FOOTER_SECTIONS = [
     icon: ShoppingBag,
     links: [
       { path: '/jobs', label: 'Jobs Portal', icon: Briefcase },
-      { path: '/marketplace', label: 'Marketplace', icon: ShoppingBag },
+      
       { path: '/music', label: 'Music Platform', icon: Music },
       { path: '/auth', label: 'Sign In / Register', icon: UserCheck },
       { path: '/help', label: 'Help Center', icon: HelpCircle },

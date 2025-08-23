@@ -36,7 +36,7 @@ const NAVIGATION_ITEMS = [
   { path: "/politicians", label: "Politicians", emoji: "👥" },
   { path: "/senators", label: "Senators", emoji: "🏛️" },
   { path: "/villages", label: "Villages", emoji: "🏘️" },
-  { path: "/marketplace", label: "Marketplace", emoji: "🛒" },
+  
   { path: "/jobs", label: "Jobs", emoji: "💼" },
   { path: "/messages", label: "Messenger", emoji: "💬" },
   { path: "/civic-contributions", label: "Contributions", emoji: "🤝" },

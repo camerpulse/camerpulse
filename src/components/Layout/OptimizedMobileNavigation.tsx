@@ -37,7 +37,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { id: 'polls', label: 'Polls', icon: Vote, path: '/polls' },
   { id: 'civic-shield', label: 'Shield', icon: Shield, path: '/civic-shield' },
   { id: 'diaspora', label: 'Diaspora', icon: Globe, path: '/diaspora-connect' },
-  { id: 'marketplace', label: 'Shop', icon: ShoppingBag, path: '/marketplace' },
+  
   { id: 'profile', label: 'Profile', icon: User, path: '/social' },
   { id: 'admin', label: 'Admin', icon: Settings, path: '/admin/core' },
 ] as const;

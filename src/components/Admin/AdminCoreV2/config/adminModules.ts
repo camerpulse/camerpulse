@@ -94,15 +94,6 @@ export const adminModules: AdminModule[] = [
     description: 'Monitor national debt'
   },
   { 
-    id: 'marketplace', 
-    label: 'Marketplace', 
-    icon: Store, 
-    color: 'text-green-600', 
-    permission: 'marketplace',
-    category: 'finance',
-    description: 'Manage marketplace transactions'
-  },
-  { 
     id: 'donations', 
     label: 'Donations', 
     icon: Heart, 
@@ -139,42 +130,6 @@ export const adminModules: AdminModule[] = [
     permission: 'politics',
     category: 'civic',
     description: 'Manage political parties'
-  },
-  { 
-    id: 'political-management', 
-    label: 'Political Management', 
-    icon: Users, 
-    color: 'text-purple-600', 
-    permission: 'politics',
-    category: 'civic',
-    description: 'Advanced political management'
-  },
-  { 
-    id: 'elections', 
-    label: 'Elections', 
-    icon: Vote, 
-    color: 'text-purple-600', 
-    permission: 'elections',
-    category: 'civic',
-    description: 'Manage elections and voting'
-  },
-  { 
-    id: 'legal-documents', 
-    label: 'Legal Documents', 
-    icon: Scale, 
-    color: 'text-blue-600', 
-    permission: 'legal',
-    category: 'civic',
-    description: 'Manage legal documents'
-  },
-  { 
-    id: 'promises', 
-    label: 'Promises Tracker', 
-    icon: Target, 
-    color: 'text-green-600', 
-    permission: 'tracking',
-    category: 'civic',
-    description: 'Track political promises'
   },
 
   // System modules
@@ -240,80 +195,6 @@ export const adminModules: AdminModule[] = [
     permission: 'all',
     category: 'system',
     description: 'Security audit and management'
-  },
-  { 
-    id: 'backup-recovery', 
-    label: 'Backup & Recovery', 
-    icon: Database, 
-    color: 'text-purple-600', 
-    permission: 'all',
-    category: 'system',
-    description: 'Data backup and recovery'
-  },
-  { 
-    id: 'error-monitoring', 
-    label: 'Error Monitoring', 
-    icon: AlertTriangle, 
-    color: 'text-red-600', 
-    permission: 'all',
-    category: 'system',
-    description: 'Monitor system errors'
-  },
-  { 
-    id: 'performance-analytics', 
-    label: 'Performance Analytics', 
-    icon: BarChart3, 
-    color: 'text-blue-600', 
-    permission: 'all',
-    category: 'system',
-    description: 'System performance metrics'
-  },
-  { 
-    id: 'cleanup-review', 
-    label: 'Cleanup Review', 
-    icon: ListChecks, 
-    color: 'text-red-600', 
-    permission: 'admin_only',
-    category: 'system',
-    description: 'Review and cleanup system data'
-  },
-  { 
-    id: 'settings-sync', 
-    label: 'Settings & Sync', 
-    icon: Settings, 
-    color: 'text-gray-500', 
-    permission: 'all',
-    category: 'system',
-    description: 'Global settings and sync'
-  },
-
-  // Testing and security
-  { 
-    id: 'role-access-test', 
-    label: 'Role Access Test', 
-    icon: Shield, 
-    color: 'text-orange-600', 
-    permission: 'all',
-    category: 'system',
-    description: 'Test role access permissions'
-  },
-  { 
-    id: 'security-audit', 
-    label: 'Security Audit', 
-    icon: Shield, 
-    color: 'text-red-600', 
-    permission: 'all',
-    category: 'system',
-    description: 'Comprehensive security audit'
-  },
-  { 
-    id: 'priority-assessment', 
-    label: 'Priority Assessment', 
-    icon: TrendingUp, 
-    color: 'text-amber-600', 
-    permission: 'all',
-    category: 'system',
-    description: 'Priority assessment dashboard'
   },
 ];
 

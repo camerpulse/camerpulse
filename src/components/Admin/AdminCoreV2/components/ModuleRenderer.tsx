@@ -15,14 +15,9 @@ import { AnalyticsLogsManager } from '../modules/AnalyticsLogsManager';
 import { SettingsSyncManager } from '../modules/SettingsSyncManager';
 import { IntelligencePanel } from '../modules/IntelligencePanel';
 import { PoliticalPartiesManager } from '../modules/PoliticalPartiesManager';
-import { PoliticalManagement } from '../../PoliticalManagement';
 import { NewsSystemManager } from '../modules/NewsSystemManager';
-import { MarketplaceManager } from '../modules/MarketplaceManager';
-import { ElectionManager } from '../modules/ElectionManager';
-import { LegalDocumentsManager } from '../modules/LegalDocumentsManager';
 import { DonationsManager } from '../modules/DonationsManager';
 import { NokashConfigPanel } from '../../PaymentConfig/NokashConfigPanel';
-import { PromisesManager } from '../modules/PromisesManager';
 import { RegionalAnalyticsManager } from '../modules/RegionalAnalyticsManager';
 import RoleAccessTestSuite from '../tests/RoleAccessTestSuite';
 import SecurityAuditSuite from '../security/SecurityAuditSuite';
@@ -80,18 +75,10 @@ export const ModuleRenderer: React.FC<ModuleRendererProps> = ({ activeModule }) 
         return <PoliticalManagement />;
       case 'news-system':
         return <NewsSystemManager {...moduleProps} />;
-      case 'marketplace':
-        return <MarketplaceManager {...moduleProps} />;
-      case 'elections':
-        return <ElectionManager {...moduleProps} />;
-      case 'legal-documents':
-        return <LegalDocumentsManager {...moduleProps} />;
       case 'donations':
         return <DonationsManager {...moduleProps} />;
       case 'nokash-payments':
         return <NokashConfigPanel />;
-      case 'promises':
-        return <PromisesManager {...moduleProps} />;
       case 'regional-analytics':
         return <RegionalAnalyticsManager {...moduleProps} />;
       case 'role-access-test':

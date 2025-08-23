@@ -32,14 +32,6 @@ import { AnalyticsLogsManager } from './modules/AnalyticsLogsManager';
 import { SettingsSyncManager } from './modules/SettingsSyncManager';
 import { IntelligencePanel } from './modules/IntelligencePanel';
 import { PoliticalPartiesManager } from './modules/PoliticalPartiesManager';
-import { PoliticalManagement } from '../PoliticalManagement';
-import { NewsSystemManager } from './modules/NewsSystemManager';
-import { MarketplaceManager } from './modules/MarketplaceManager';
-import { ElectionManager } from './modules/ElectionManager';
-import { LegalDocumentsManager } from './modules/LegalDocumentsManager';
-import { DonationsManager } from './modules/DonationsManager';
-import { NokashConfigPanel } from '../PaymentConfig/NokashConfigPanel';
-import { PromisesManager } from './modules/PromisesManager';
 import { RegionalAnalyticsManager } from './modules/RegionalAnalyticsManager';
 import RoleAccessTestSuite from './tests/RoleAccessTestSuite';
 import SecurityAuditSuite from './security/SecurityAuditSuite';
@@ -271,14 +263,9 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'analytics-logs', label: 'Analytics & Logs', icon: Database, color: 'text-gray-600', permission: 'analytics' },
     { id: 'cleanup-review', label: 'Cleanup Review', icon: ListChecks, color: 'text-red-600', permission: 'admin_only' },
     { id: 'political-parties', label: 'Political Parties', icon: Flag, color: 'text-blue-600', permission: 'politics' },
-    { id: 'political-management', label: 'Political Management', icon: Users, color: 'text-purple-600', permission: 'politics' },
     { id: 'news-system', label: 'News System', icon: Newspaper, color: 'text-blue-600', permission: 'content' },
-    { id: 'marketplace', label: 'Marketplace', icon: Store, color: 'text-green-600', permission: 'marketplace' },
-    { id: 'elections', label: 'Elections', icon: Vote, color: 'text-purple-600', permission: 'elections' },
-    { id: 'legal-documents', label: 'Legal Documents', icon: Scale, color: 'text-blue-600', permission: 'legal' },
     { id: 'donations', label: 'Donations', icon: Heart, color: 'text-red-500', permission: 'finance' },
     { id: 'nokash-payments', label: 'Nokash Payments', icon: CreditCard, color: 'text-green-600', permission: 'finance' },
-    { id: 'promises', label: 'Promises Tracker', icon: Target, color: 'text-green-600', permission: 'tracking' },
     { id: 'regional-analytics', label: 'Regional Analytics', icon: MapPin, color: 'text-blue-600', permission: 'analytics' },
     { id: 'role-access-test', label: 'Role Access Test', icon: Shield, color: 'text-orange-600', permission: 'all' },
     { id: 'security-audit', label: 'Security Audit', icon: Shield, color: 'text-red-600', permission: 'all' },
@@ -291,7 +278,7 @@ export const AdminCoreV2: React.FC = () => {
     { id: 'backup-recovery', label: 'Backup & Recovery', icon: Database, color: 'text-purple-600', permission: 'all' },
     { id: 'error-monitoring', label: 'Error Monitoring', icon: AlertTriangle, color: 'text-red-600', permission: 'all' },
     { id: 'performance-analytics', label: 'Performance Analytics', icon: BarChart3, color: 'text-blue-600', permission: 'all' },
-    { id: 'api-configuration', label: 'API Configuration', icon: Key, color: 'text-green-600', permission: 'all' },
+    { id: 'api-configuration', label: 'API Configuration', icon: Settings, color: 'text-green-600', permission: 'all' },
   ].filter(module => hasPermission(module.permission));
 
   useEffect(() => {
@@ -335,22 +322,12 @@ export const AdminCoreV2: React.FC = () => {
         return <IntelligencePanel {...moduleProps} />;
       case 'political-parties':
         return <PoliticalPartiesManager {...moduleProps} />;
-      case 'political-management':
-        return <PoliticalManagement />;
       case 'news-system':
         return <NewsSystemManager {...moduleProps} />;
-      case 'marketplace':
-        return <MarketplaceManager {...moduleProps} />;
-      case 'elections':
-        return <ElectionManager {...moduleProps} />;
-      case 'legal-documents':
-        return <LegalDocumentsManager {...moduleProps} />;
       case 'donations':
         return <DonationsManager {...moduleProps} />;
       case 'nokash-payments':
         return <NokashConfigPanel />;
-      case 'promises':
-        return <PromisesManager {...moduleProps} />;
       case 'regional-analytics':
         return <RegionalAnalyticsManager {...moduleProps} />;
       case 'role-access-test':
