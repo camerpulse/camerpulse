@@ -20320,6 +20320,39 @@ export type Database = {
           },
         ]
       }
+      donation_causes: {
+        Row: {
+          created_at: string
+          current_amount: number | null
+          description: string | null
+          id: string
+          name: string
+          status: string | null
+          target_amount: number | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_amount?: number | null
+          description?: string | null
+          id?: string
+          name: string
+          status?: string | null
+          target_amount?: number | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_amount?: number | null
+          description?: string | null
+          id?: string
+          name?: string
+          status?: string | null
+          target_amount?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       donations: {
         Row: {
           amount: number
