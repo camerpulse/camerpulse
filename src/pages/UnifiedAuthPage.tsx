@@ -31,15 +31,25 @@ export const UnifiedAuthPage = () => {
   const [activeTab, setActiveTab] = useState('signin');
 
 
-  // Set initial tab based on URL
+  // Set initial tab based on URL and handle verified parameter
   useEffect(() => {
     const path = location.pathname;
+    const verified = searchParams.get('verified');
+    
     if (path.includes('register') || path.includes('signup')) {
       setActiveTab('signup');
     } else {
       setActiveTab('signin');
     }
-  }, [location.pathname]);
+
+    // Show verification success message if coming back from email verification
+    if (verified === 'true' && user) {
+      toast({
+        title: "Email Verified!",
+        description: "Your email has been verified successfully. You are now logged in."
+      });
+    }
+  }, [location.pathname, searchParams, user]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();

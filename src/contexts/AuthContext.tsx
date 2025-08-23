@@ -170,8 +170,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       async (event, session) => {
         if (!mounted) return;
 
-        // Auth state change debug
-        try { console.log('[Auth] onAuthStateChange:', event, { hasSession: !!session, userId: session?.user?.id }); } catch {}
+        console.log('[Auth] onAuthStateChange:', event, { hasSession: !!session, userId: session?.user?.id });
 
         setSession(session);
         setUser(session?.user ?? null);
@@ -180,39 +179,59 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           // Defer data fetching to avoid callback complications
           setTimeout(async () => {
             if (mounted) {
-              await Promise.all([
-                fetchUserProfile(session.user.id),
-                fetchUserRoles(session.user.id)
-              ]);
+              try {
+                await Promise.all([
+                  fetchUserProfile(session.user.id),
+                  fetchUserRoles(session.user.id)
+                ]);
+              } catch (error) {
+                console.error('[Auth] Error fetching user data:', error);
+              }
             }
           }, 0);
 
-          // Handle post-login navigation
-          setTimeout(() => {
-            const currentPath = window.location.pathname;
-            const urlParams = new URLSearchParams(window.location.search);
-            const redirectParam = urlParams.get('redirect');
-            
-            // Only redirect if on auth pages
-            if (currentPath === '/auth' || currentPath === '/login' || currentPath === '/register' || currentPath === '/diaspora-auth') {
-              const redirectTo = redirectParam || '/feed';
-              window.history.replaceState({}, '', redirectTo);
-            }
-          }, 100);
+          // Handle post-login navigation - only redirect from auth pages
+          if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+            setTimeout(() => {
+              const currentPath = window.location.pathname;
+              const urlParams = new URLSearchParams(window.location.search);
+              const redirectParam = urlParams.get('redirect');
+              
+              // Only redirect if on auth pages
+              const authPages = ['/auth', '/login', '/register', '/diaspora-auth'];
+              if (authPages.includes(currentPath)) {
+                const redirectTo = redirectParam || '/feed';
+                console.log('[Auth] Redirecting authenticated user to:', redirectTo);
+                window.location.replace(redirectTo);
+              }
+            }, 100);
+          }
         } else {
-          // Handle logout navigation - redirect to home if on protected pages
-          setTimeout(() => {
-            const currentPath = window.location.pathname;
-            const publicPaths = ['/', '/auth', '/login', '/register', '/diaspora-auth', '/about', '/contact'];
-            
-            if (!publicPaths.includes(currentPath) && !currentPath.startsWith('/politicians') && !currentPath.startsWith('/political-parties')) {
-              window.history.replaceState({}, '', '/');
-            }
-          }, 100);
-          
+          // Clear user data immediately on logout
           setProfile(null);
           setUserRoles([]);
           setPermissions([]);
+
+          // Handle logout navigation - redirect to home if on protected pages
+          if (event === 'SIGNED_OUT') {
+            setTimeout(() => {
+              const currentPath = window.location.pathname;
+              const publicPaths = [
+                '/', '/auth', '/login', '/register', '/diaspora-auth', 
+                '/about', '/contact', '/politicians', '/political-parties',
+                '/villages', '/mps', '/senators', '/ministers', '/fons'
+              ];
+              
+              const isPublicPath = publicPaths.some(path => 
+                currentPath === path || currentPath.startsWith(path + '/')
+              );
+              
+              if (!isPublicPath) {
+                console.log('[Auth] Redirecting logged out user to home');
+                window.location.replace('/');
+              }
+            }, 100);
+          }
         }
         
         setLoading(false);
@@ -255,10 +274,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [fetchUserProfile, fetchUserRoles]);
 
   const signUp = async (email: string, password: string, userData?: any) => {
-    setLoading(true);
-    
     try {
-      const redirectUrl = `${window.location.origin}/`;
+      const redirectUrl = `${window.location.origin}/auth?verified=true`;
       
       const { data, error } = await supabase.auth.signUp({
         email,
@@ -269,53 +286,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       });
 
+      if (data?.user && !error) {
+        console.log('[Auth] User signed up successfully:', data.user.email);
+      } else if (error) {
+        console.error('[Auth] SignUp error:', error);
+      }
+
       return { data, error };
     } catch (error) {
+      console.error('[Auth] SignUp exception:', error);
       return { error };
-    } finally {
-      setLoading(false);
     }
   };
 
   const signIn = async (email: string, password: string) => {
-    setLoading(true);
-    
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password
       });
 
-      // Enhanced success handling
       if (data?.user && !error) {
-        // Profile will be fetched automatically via onAuthStateChange
-        console.log('User signed in successfully:', data.user.email);
+        console.log('[Auth] User signed in successfully:', data.user.email);
+        // onAuthStateChange will handle loading state and navigation
+      } else if (error) {
+        console.error('[Auth] SignIn error:', error);
       }
 
       return { data, error };
     } catch (error) {
-      console.error('SignIn error:', error);
+      console.error('[Auth] SignIn exception:', error);
       return { error };
-    } finally {
-      setLoading(false);
     }
   };
 
   const signOut = async () => {
+    setLoading(true);
+    
     try {
       console.log('[Auth] Starting signOut process...');
       
       const { error } = await supabase.auth.signOut();
       
-      if (!error) {
-        console.log('[Auth] SignOut successful - onAuthStateChange will handle state clearing');
-      } else {
+      if (error) {
         console.error('[Auth] SignOut error:', error);
+        setLoading(false); // Reset loading on error
       }
+      // Don't set loading to false on success - onAuthStateChange will handle it
       
       return { error };
     } catch (error) {
       console.error('[Auth] SignOut exception:', error);
+      setLoading(false);
       return { error };
     }
   };
