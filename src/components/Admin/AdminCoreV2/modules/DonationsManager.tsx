@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Heart, DollarSign, Users, TrendingUp, Loader2 } from 'lucide-react';
+import { Heart, DollarSign, Users, TrendingUp, Loader2, Eye } from 'lucide-react';
 import { useDonationsAdmin } from '@/hooks/useDonations';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface DonationsManagerProps {
   hasPermission: (permission: string) => boolean;
@@ -18,6 +21,69 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
 }) => {
   // Load donations from Supabase (admin view)
   const { donations, stats: donationStats, isLoading, processDonation, processing } = useDonationsAdmin();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [onlineUsers, setOnlineUsers] = useState<any[]>([]);
+
+  // Set up realtime presence for admin monitoring
+  useEffect(() => {
+    if (!user) return;
+
+    const channel = supabase.channel('donations-admin-presence');
+    
+    channel
+      .on('presence', { event: 'sync' }, () => {
+        const newState = channel.presenceState();
+        const users = Object.values(newState).flat();
+        setOnlineUsers(users);
+      })
+      .on('presence', { event: 'join' }, ({ key, newPresences }) => {
+        console.log('Admin joined donations monitoring:', key, newPresences);
+      })
+      .on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+        console.log('Admin left donations monitoring:', key, leftPresences);
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          await channel.track({
+            user_id: user.id,
+            user_name: user.user_metadata?.full_name || user.email,
+            viewing_at: new Date().toISOString(),
+          });
+        }
+      });
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user]);
+
+  // Set up realtime notifications for new donations
+  useEffect(() => {
+    const channel = supabase
+      .channel('new-donations-notifications')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'donations'
+        },
+        (payload) => {
+          const donation = payload.new as any;
+          toast({
+            title: "New Donation Received! 💝",
+            description: `${donation.amount.toLocaleString()} ${donation.currency} from ${donation.donor_name || 'Anonymous'}`,
+            duration: 5000,
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [toast]);
 
   const handleProcessDonation = async (donationId: string) => {
     await processDonation(donationId);
@@ -27,11 +93,21 @@ export const DonationsManager: React.FC<DonationsManagerProps> = ({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold flex items-center">
-          <Heart className="h-6 w-6 mr-2 text-red-500" />
-          Donations Management
-        </h2>
-        <p className="text-muted-foreground">Monitor and manage platform donations and contributions</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold flex items-center">
+              <Heart className="h-6 w-6 mr-2 text-red-500" />
+              Donations Management
+            </h2>
+            <p className="text-muted-foreground">Monitor and manage platform donations and contributions</p>
+          </div>
+          {onlineUsers.length > 0 && (
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <Eye className="h-4 w-4" />
+              <span>{onlineUsers.length} admin{onlineUsers.length !== 1 ? 's' : ''} monitoring</span>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
