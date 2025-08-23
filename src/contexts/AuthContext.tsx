@@ -282,18 +282,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setLoading(true);
     
     try {
+      console.log('[Auth] Starting signOut process...');
+      
       const { error } = await supabase.auth.signOut();
       
       if (!error) {
+        console.log('[Auth] SignOut successful, clearing state...');
+        // Clear all user-related state
         setProfile(null);
         setUserRoles([]);
         setPermissions([]);
         setUser(null);
         setSession(null);
+      } else {
+        console.error('[Auth] SignOut error:', error);
       }
       
       return { error };
     } catch (error) {
+      console.error('[Auth] SignOut exception:', error);
       return { error };
     } finally {
       setLoading(false);

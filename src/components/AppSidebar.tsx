@@ -44,6 +44,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigation } from '@/hooks/useNavigation';
+import { toast } from '@/hooks/use-toast';
 
 // Main navigation items
 const mainNavItems = [
@@ -121,7 +123,8 @@ const toolsItems = [
 export function AppSidebar() {
   const { collapsed } = useSidebar();
   const location = useLocation();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, loading } = useAuth();
+  const { goHome } = useNavigation();
   const currentPath = location.pathname;
 
   const isActive = (path: string) => currentPath === path || currentPath.startsWith(path + '/');
@@ -133,7 +136,33 @@ export function AppSidebar() {
     isActive ? 'bg-sidebar-accent text-sidebar-accent-foreground' : '';
 
   const handleSignOut = async () => {
-    await signOut();
+    try {
+      console.log('[AppSidebar] Starting logout process...');
+      const { error } = await signOut();
+      
+      if (error) {
+        console.error('[AppSidebar] Logout error:', error);
+        toast({
+          variant: "destructive",
+          title: "Logout Failed",
+          description: error.message || "Failed to logout. Please try again."
+        });
+      } else {
+        console.log('[AppSidebar] Logout successful, redirecting to home...');
+        toast({
+          title: "Logged Out",
+          description: "You have been successfully logged out."
+        });
+        goHome();
+      }
+    } catch (error) {
+      console.error('[AppSidebar] Unexpected logout error:', error);
+      toast({
+        variant: "destructive",
+        title: "Logout Failed",
+        description: "An unexpected error occurred. Please try again."
+      });
+    }
   };
 
   return (
@@ -286,9 +315,9 @@ export function AppSidebar() {
                     </NavLink>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
+                  <DropdownMenuItem onClick={handleSignOut} disabled={loading}>
                     <LogOut className="mr-2 h-4 w-4" />
-                    Sign out
+                    {loading ? 'Signing out...' : 'Sign out'}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
