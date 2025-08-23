@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { useRedirectAfterAuth } from '@/hooks/useRedirectAfterAuth';
+
 import { toast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -17,9 +17,6 @@ export const UnifiedAuthPage = () => {
   const [searchParams] = useSearchParams();
   const { signIn, signUp, user, loading } = useAuth();
   
-  // Use redirect hook
-  useRedirectAfterAuth();
-  
   // Form states
   const [signInForm, setSignInForm] = useState({ email: '', password: '' });
   const [signUpForm, setSignUpForm] = useState({ 
@@ -33,13 +30,6 @@ export const UnifiedAuthPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('signin');
 
-  // Redirect authenticated users
-  useEffect(() => {
-    if (user && !loading) {
-      const redirectTo = searchParams.get('redirect') || location.state?.from?.pathname || '/feed';
-      navigate(redirectTo, { replace: true });
-    }
-  }, [user, loading, navigate, searchParams, location.state]);
 
   // Set initial tab based on URL
   useEffect(() => {

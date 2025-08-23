@@ -165,7 +165,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     let mounted = true;
 
-    // Set up auth state listener
+    // Set up auth state listener with centralized navigation
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         if (!mounted) return;
@@ -186,7 +186,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               ]);
             }
           }, 0);
+
+          // Handle post-login navigation
+          setTimeout(() => {
+            const currentPath = window.location.pathname;
+            const urlParams = new URLSearchParams(window.location.search);
+            const redirectParam = urlParams.get('redirect');
+            
+            // Only redirect if on auth pages
+            if (currentPath === '/auth' || currentPath === '/login' || currentPath === '/register' || currentPath === '/diaspora-auth') {
+              const redirectTo = redirectParam || '/feed';
+              window.history.replaceState({}, '', redirectTo);
+            }
+          }, 100);
         } else {
+          // Handle logout navigation - redirect to home if on protected pages
+          setTimeout(() => {
+            const currentPath = window.location.pathname;
+            const publicPaths = ['/', '/auth', '/login', '/register', '/diaspora-auth', '/about', '/contact'];
+            
+            if (!publicPaths.includes(currentPath) && !currentPath.startsWith('/politicians') && !currentPath.startsWith('/political-parties')) {
+              window.history.replaceState({}, '', '/');
+            }
+          }, 100);
+          
           setProfile(null);
           setUserRoles([]);
           setPermissions([]);
@@ -279,23 +302,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signOut = async () => {
-    setLoading(true);
-    
     try {
       console.log('[Auth] Starting signOut process...');
       
       const { error } = await supabase.auth.signOut();
       
       if (!error) {
-        console.log('[Auth] SignOut successful, clearing state...');
-        // Clear all user-related state immediately
-        setProfile(null);
-        setUserRoles([]);
-        setPermissions([]);
-        setUser(null);
-        setSession(null);
-        
-        console.log('[Auth] All state cleared successfully');
+        console.log('[Auth] SignOut successful - onAuthStateChange will handle state clearing');
       } else {
         console.error('[Auth] SignOut error:', error);
       }
@@ -304,8 +317,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error('[Auth] SignOut exception:', error);
       return { error };
-    } finally {
-      setLoading(false);
     }
   };
 

@@ -148,12 +148,11 @@ export function AppSidebar() {
           description: error.message || "Failed to logout. Please try again."
         });
       } else {
-        console.log('[AppSidebar] Logout successful, redirecting to home...');
+        console.log('[AppSidebar] Logout successful - AuthContext will handle navigation');
         toast({
           title: "Logged Out",
           description: "You have been successfully logged out."
         });
-        goHome();
       }
     } catch (error) {
       console.error('[AppSidebar] Unexpected logout error:', error);
