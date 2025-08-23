@@ -18,7 +18,6 @@ interface ProfileTabsProps {
   onTabChange: (tab: string) => void;
   hasMusic: boolean;
   hasJob: boolean;
-  hasMarketplace: boolean;
   hasHealthcare: boolean;
   hasVillage: boolean;
 }
@@ -28,7 +27,6 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
   onTabChange,
   hasMusic,
   hasJob,
-  hasMarketplace,
   hasHealthcare,
   hasVillage
 }) => {
@@ -71,15 +69,6 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({
           </TabsTrigger>
         )}
 
-        {hasMarketplace && (
-          <TabsTrigger 
-            value="marketplace" 
-            className="flex items-center gap-2 data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none"
-          >
-            <Building className="h-4 w-4" />
-            <span className="hidden sm:inline">Business</span>
-          </TabsTrigger>
-        )}
 
         {hasHealthcare && (
           <TabsTrigger 

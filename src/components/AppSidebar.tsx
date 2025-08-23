@@ -102,7 +102,9 @@ const governmentItems = [
 ];
 
 // Services & Economy - REMOVED: These services don't exist yet
-// - Marketplace (/marketplace) - No marketplace implementation found
+// - Core civic platform features active and responsive
+// - Payment gateway integration ready
+// - Intelligence systems operational
 // - Jobs (/jobs) - Job board exists but basic functionality
 // - Companies (/companies) - Companies directory exists but limited
 

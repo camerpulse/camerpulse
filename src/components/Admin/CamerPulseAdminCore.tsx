@@ -24,7 +24,7 @@ interface DashboardStats {
   politicians: number;
   polls: number;
   posts: number;
-  vendors: number;
+  
   reports: number;
 }
 
@@ -74,12 +74,11 @@ export const CamerPulseAdminCore: React.FC = () => {
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['admin_dashboard_stats'],
     queryFn: async (): Promise<DashboardStats> => {
-      const [users, politicians, polls, posts, vendors, reports] = await Promise.all([
+      const [users, politicians, polls, posts, reports] = await Promise.all([
         supabase.from('profiles').select('id', { count: 'exact' }),
         supabase.from('politicians').select('id', { count: 'exact' }),
         supabase.from('polls').select('id', { count: 'exact' }),
         supabase.from('pulse_posts').select('id', { count: 'exact' }),
-        supabase.from('marketplace_vendors').select('id', { count: 'exact' }),
         supabase.from('civic_complaints').select('id', { count: 'exact' })
       ]);
 
@@ -88,7 +87,7 @@ export const CamerPulseAdminCore: React.FC = () => {
         politicians: politicians.count || 0,
         polls: polls.count || 0,
         posts: posts.count || 0,
-        vendors: vendors.count || 0,
+        
         reports: reports.count || 0
       };
     },
@@ -125,7 +124,7 @@ export const CamerPulseAdminCore: React.FC = () => {
     { id: 'politicians', label: 'Politicians', icon: UserCheck, color: 'text-cm-red' },
     { id: 'civic-tools', label: 'Civic Tools', icon: Eye, color: 'text-cm-yellow' },
     { id: 'polls', label: 'Polls', icon: BarChart3, color: 'text-purple-600' },
-    { id: 'marketplace', label: 'Marketplace', icon: Building2, color: 'text-orange-600' },
+    
     { id: 'financials', label: 'Financials', icon: CreditCard, color: 'text-green-600' },
     { id: 'security', label: 'Security', icon: ShieldCheck, color: 'text-red-600' },
     { id: 'intelligence', label: 'Intelligence', icon: Bot, color: 'text-indigo-600' },
@@ -264,21 +263,21 @@ export const CamerPulseAdminCore: React.FC = () => {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-l-4 border-l-blue-500 hover:shadow-lg transition-shadow">
+                  <Card className="border-l-4 border-l-purple-500 hover:shadow-lg transition-shadow">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-sm font-medium text-muted-foreground">
-                        Vendors
+                        Civic Reports
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center justify-between">
                         <div className="text-2xl font-bold text-foreground">
-                          {statsLoading ? '...' : stats?.vendors.toLocaleString()}
+                          {statsLoading ? '...' : stats?.reports.toLocaleString()}
                         </div>
-                        <Building2 className="h-8 w-8 text-blue-500" />
+                        <FileText className="h-8 w-8 text-purple-500" />
                       </div>
                       <p className="text-xs text-muted-foreground mt-1">
-                        CM-ID System Active
+                        Active complaints tracked
                       </p>
                     </CardContent>
                   </Card>

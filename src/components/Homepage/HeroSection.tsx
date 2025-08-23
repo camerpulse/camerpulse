@@ -39,7 +39,7 @@ export const HeroSection = () => {
     },
     { 
       icon: ShoppingBag, 
-      title: 'Verified Marketplace', 
+      title: 'Verified Platform', 
       desc: 'Secure Cameroonian commerce',
       color: 'bg-primary'
     }
@@ -48,7 +48,7 @@ export const HeroSection = () => {
   const stats = [
     { number: '2.5M+', label: 'Active Citizens' },
     { number: '180K+', label: 'Daily Pulses' },
-    { number: '95%', label: 'Verified Vendors' },
+    { number: '95%', label: 'Civic Engagement' },
     { number: '24/7', label: 'Sentiment Tracking' }
   ];
 

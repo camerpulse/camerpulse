@@ -14,7 +14,6 @@ import {
 import type { 
   MusicProfile,
   JobProfile,
-  MarketplaceProfile,
   HealthcareProfile,
   VillageMembership
 } from '@/hooks/useUnifiedProfile';
@@ -22,7 +21,6 @@ import type {
 interface ProfileModulesProps {
   musicProfile?: MusicProfile;
   jobProfile?: JobProfile;
-  marketplaceProfile?: MarketplaceProfile;
   healthcareProfile?: HealthcareProfile;
   villageMemberships: VillageMembership[];
 }
@@ -30,14 +28,12 @@ interface ProfileModulesProps {
 export const ProfileModules: React.FC<ProfileModulesProps> = ({
   musicProfile,
   jobProfile,
-  marketplaceProfile,
   healthcareProfile,
   villageMemberships
 }) => {
   const activeModules = [
     musicProfile && 'music',
     jobProfile && 'professional',
-    marketplaceProfile && 'marketplace',
     healthcareProfile && 'healthcare',
     villageMemberships.length > 0 && 'village'
   ].filter(Boolean);
@@ -125,39 +121,6 @@ export const ProfileModules: React.FC<ProfileModulesProps> = ({
           </Card>
         )}
 
-        {/* Marketplace Module */}
-        {marketplaceProfile && (
-          <Card className="hover:shadow-md transition-shadow">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="p-2 bg-primary/10 rounded-lg">
-                  <Building className="h-5 w-5 text-primary" />
-                </div>
-                <h4 className="font-medium">Business Profile</h4>
-              </div>
-              <div className="space-y-2">
-                {marketplaceProfile.business_name && (
-                  <div>
-                    <span className="text-sm font-medium">Business:</span>
-                    <span className="text-sm text-muted-foreground ml-2">{marketplaceProfile.business_name}</span>
-                  </div>
-                )}
-                {marketplaceProfile.business_type && (
-                  <div>
-                    <span className="text-sm font-medium">Type:</span>
-                    <span className="text-sm text-muted-foreground ml-2">{marketplaceProfile.business_type}</span>
-                  </div>
-                )}
-                {marketplaceProfile.is_verified_vendor && (
-                  <Badge variant="default" className="text-xs">
-                    <Star className="h-3 w-3 mr-1" />
-                    Verified Vendor
-                  </Badge>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        )}
 
         {/* Healthcare Module */}
         {healthcareProfile && (

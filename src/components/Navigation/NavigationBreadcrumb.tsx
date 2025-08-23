@@ -14,7 +14,7 @@ const routeLabels: Record<string, string> = {
   '/auth': 'Authentication',
   '/feed': 'Feed',
   '/polls': 'Polls',
-  '/marketplace': 'Marketplace',
+  
   '/news': 'News',
   '/social': 'Social',
   '/security': 'Security'

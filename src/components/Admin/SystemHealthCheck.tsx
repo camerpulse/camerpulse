@@ -66,7 +66,7 @@ const CORE_MODULES = [
   { module: "Politicians Directory", route: "/politicians", component: "Politicians", priority: "high", category: "page" },
   { module: "Political Parties", route: "/political-parties", component: "PoliticalParties", priority: "high", category: "page" },
   { module: "News Feed", route: "/news", component: "News", priority: "high", category: "page" },
-  { module: "Marketplace", route: "/marketplace", component: "Marketplace", priority: "medium", category: "page" },
+  
   { module: "Polls", route: "/polls", component: "Polls", priority: "medium", category: "page" },
   { module: "Donations", route: "/donate", component: "Donations", priority: "medium", category: "page" },
   { module: "Social Hub", route: "/social", component: "Social", priority: "medium", category: "page" },
